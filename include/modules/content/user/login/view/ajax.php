@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd		New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.02.2012 19:32:25] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 17:04:31] --> $
  * @author     Alexander Book
  */
 

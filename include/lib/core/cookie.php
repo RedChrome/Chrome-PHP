@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd		New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.08.2011 11:18:14] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 16:59:38] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -25,7 +25,7 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Cookie
- */ 
+ */
 class Chrome_Cookie implements ArrayAccess
 {
     /**
@@ -45,9 +45,9 @@ class Chrome_Cookie implements ArrayAccess
 
     /**
      * The default path on the server in which the cookie will be available on
-     * 
+     *
      * @var string
-     */ 
+     */
     const CHROME_COOKIE_DEFAULT_PATH = ROOT_URL;
 
     /**
@@ -116,7 +116,7 @@ class Chrome_Cookie implements ArrayAccess
         if($path === null OR $path === false) {
             $path = self::CHROME_COOKIE_DEFAULT_PATH;
         }
-        
+
         if(!headers_sent()) {
 
             if($expire < 0) {
@@ -161,8 +161,8 @@ class Chrome_Cookie implements ArrayAccess
         if($path === null OR $path === false) {
             $path = self::CHROME_COOKIE_DEFAULT_PATH;
         }
-        
-        
+
+
         if(!headers_sent()) {
             setCookie($name, 0, CHROME_TIME - self::CHROME_COOKIE_COOKIE_NO_EXPIRE, $path, $domain, $secure, $httponly);
         }

@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd		New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 14:43:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 16:56:26] --> $
  * @author     Alexander Book
  */
 
@@ -31,8 +31,8 @@ if(CHROME_PHP !== true)
 
 define('CHROME_DATABASE', 'MySQL'); #Database... default: MySQL
 define('DB_HOST', 'localhost'); #SQL-Host
-define('DB_PASS', 'password'); #SQL-Password
-define('DB_USER', 'root'); #SQL-Username
+define('DB_PASS', 'chrome-php-password'); #SQL-Password
+define('DB_USER', 'chrome-php'); #SQL-Username
 define('DB_NAME', 'chrome_2'); #SQL-Name = Databasename
 define('DB_PREFIX', 'cp1'); #SQL-Prefix
 define('DB_FORCE_CONNECTION', true); #every request to the website needs an established database connection, even if it's not needed

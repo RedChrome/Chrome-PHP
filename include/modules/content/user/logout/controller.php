@@ -14,30 +14,30 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.Form
+ * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd		New BSD License
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 16:07:30] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 16:47:21] --> $
+ * @author     Alexander Book
  */
+
 if(CHROME_PHP !== true)
     die();
 
 /**
  * @package CHROME-PHP
- * @subpackage Chrome.Form
+ * @subpackage Chrome.User
  */
-class Chrome_Form_Decorator_Submit_Default extends Chrome_Form_Decorator_Abstract
+class Chrome_Controller_Content_Logout extends Chrome_Controller_Content_Abstract
 {
-   private $_int = 0;
+	protected function _execute() {
 
-    public function render() {
+        $auth = Chrome_Authentication::getInstance();
 
-        $array = $this->_formElement->getOptions(Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_SUBMIT_VALUES);
+        $auth->deAuthenticate();
 
-        $value = $array[$this->_int];
+        // redirect
+        Chrome_Redirection::redirectToPreviousPage();
 
-        $this->_int = (++$this->_int) % ($array);
-
-        return '<input type="submit" name="'.$this->_formElement->getID().'" value="'.$value.'" '.$this->_getPreparedAttrs().'/>';
-    }
+	}
 }

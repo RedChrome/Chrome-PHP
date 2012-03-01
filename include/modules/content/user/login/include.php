@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd		New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 12:27:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 17:03:31] --> $
  * @author     Alexander Book
  */
 
@@ -67,8 +67,8 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $this->setAttribute('action', 'login.html');
 
         // this element has to be set in every form!
-        // max time, this form is valid is 120 sec
-        $this->_elements[$this->_id] = new Chrome_Form_Element_Form($this, $this->_id, array(Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME => 120));
+        // max time, this form is valid is 300 sec
+        $this->_elements[$this->_id] = new Chrome_Form_Element_Form($this, $this->_id, array(Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME => 300));
 
         // this is the 'username' input
         // it is required, of course, to login

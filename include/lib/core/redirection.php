@@ -17,7 +17,7 @@
  * @subpackage Chrome.Session
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd		New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.02.2012 23:34:41] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 16:57:11] --> $
  * @author     Alexander Book
  */
 
@@ -40,9 +40,18 @@ interface Chrome_Redirection_Interface
 class Chrome_Redirection implements Chrome_Redirection_Interface
 {
     public static function redirectToPreviousPage() {
+        Chrome_Response::getInstance()->addHeader('Location', self::getPreviousPage());
+    }
 
-        echo 'that should redirect to the previous page, ... not implemented yet';
+    public static function getPreviousPage() {
 
+        if(isset($_SERVER['HTTP_REFERER'])) {
+            return $_SERVER['HTTP_REFERER'];
+        } else {
+
+            // we dont know where the user came, so get to the index.php
+            return ROOT_URL;
+        }
     }
 
 }
