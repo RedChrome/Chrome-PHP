@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * CHROME-PHP CMS
+ *
+ * LICENSE
+ *
+ * This source file is subject to the new BSD license that is bundled
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://chrome-php.de/license/new-bsd
+ * If you did not receive a copy of the license AND are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@chrome-php.de so we can send you a copy immediately.
+ *
+ * @package    CHROME-PHP
+ * @subpackage Chrome.Design
+ * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
+ * @license    http://chrome-php.de/license/new-bsd		New BSD License
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2012 16:41:33] --> $
+ * @author     Alexander Book
+ */
+
+if(CHROME_PHP !== true)
+    die();
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Design
+ */
+class Chrome_Design_Composite_Laconic extends Chrome_Design_Composite_Abstract
+{
+    private static $_instance = null;
+
+    protected function __construct() {
+        parent::__construct();
+
+        Chrome_Design::getInstance()->setComposite($this);
+        $this->_composite = new Chrome_Design_Composite_Container_Box('', '');
+    }
+
+    public static function getInstance() {
+        if(self::$_instance === null) {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
+    }
+
+    public function render() {
+
+        $views = $this->_composite->getViews();
+
+        $array = array();
+
+        foreach($views as $view) {
+            $array = array_merge($array, $view->render());
+        }
+
+        return $array;
+
+    }
+
+
+}

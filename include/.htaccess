@@ -1,0 +1,9 @@
+<Limit GET PUT POST>
+	order deny,allow
+	deny from all
+</Limit>
+
+<Files *.*>	
+    order allow,deny
+    deny from all
+</Files>

@@ -1,0 +1,1 @@
+Could not connect to server "<?php echo $SERVER;?>" through adapter "<?php echo $ADAPTER;?>"

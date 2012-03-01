@@ -1,0 +1,21 @@
+<Files *.*>
+Header add "Cache-Control" "max-age=604800"
+</Files>
+
+<FilesMatch "\.(gif|flv|jpg|jpeg|png|gif|swf)$">
+       FileETag -INode MTime Size
+        # if you use ETags, you should unset Last-Modified
+       Header unset Last-Modified
+       Header set Cache-Control "max-age=86400, public, must-revalidate"
+       Header set Expires "Thu, 31 Dec 2010 20:00:00 GMT"
+</FilesMatch>
+<FilesMatch "\.(htm|html|php)$">
+        FileETag None
+        Header set Cache-Control "max-age=86400, public, must-revalidate"
+</FilesMatch>
+
+<FilesMatch "\.(js|css)$">
+        FileETag None
+        Header set Cache-Control "max-age=604800, public, must-revalidate"
+        Header set Expires "Thu, 31 Dec 2010 20:00:00 GMT"
+</FilesMatch>

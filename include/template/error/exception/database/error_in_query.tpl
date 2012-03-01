@@ -1,0 +1,1 @@
+You have an error in your query "<?php echo $QUERY;?>"

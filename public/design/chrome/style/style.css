@@ -1,0 +1,134 @@
+body {
+    color: black;
+	background-color: white;
+    font-size: 100%;
+    font-family: Helvetica,Arial,sans-serif;
+    margin: 0; padding: 1em;
+	border: none;
+    min-width: 41em; /* Mindestbreite verhindert Umbruch und Anzeigefehler in modernen Browsern */
+}
+
+div#Site {
+  	text-align: center;
+  	width: 65em;
+  	margin: 0 auto;      /* standardkonforme horizontale Zentrierung */
+
+}
+
+div#Header {
+  	/*background-image:  url;*/
+
+}
+
+div#lNavi {
+  	font-size: 0.83em;
+    float: left;
+	width: 12em;
+    margin: 0 0 1.2em;
+	padding: 0;
+}
+
+div#rNavi {
+  	font-size: 0.83em;
+    float: right;
+	width: 12em;
+    margin: 0 0 1.2em;
+	padding: 0;
+}
+
+div.Navi {
+	background: url(../images/green/box_fr.png) 100% 100% no-repeat;
+}
+
+div.Navi div {
+	background: url(../images/green/box_fl.png) 0 100% no-repeat;
+}
+
+div.Navi div div div div{
+	background: url(../images/green/box_tr.png) 100% 0 no-repeat;
+}
+
+div.Navi div div  {
+	/*background: url(../images/Box_Head_m.png) 0 0% repeat-x;*/
+}
+
+div.Navi div div div {
+	padding-left: 0.5em;
+	padding-bottom: 1em;
+	background: url(../images/green/box_tl.png) 0 0 no-repeat;
+}
+
+div#Content{
+  	margin: 0 1em 0 12em;
+    /*padding: 0 1em;*/
+    /*border: 1px dashed silver;*/
+    width: 48em;
+    font-size: 90%;
+}
+
+* html div#Content {
+    height: 1em;  /* Workaround gegen den 3-Pixel-Bug des Internet Explorer bis Version 6 */
+}
+
+div#Footer{
+  	clear:both;
+
+}
+
+img {
+	border: 0;
+}
+
+a {
+	color: #A2A2A2;
+	text-decoration: none;
+}
+
+a:hover {
+		color: black;
+		text-decoration: underline;
+}
+
+h1 {
+    font-size: 1.5em;
+    margin: 0 0 0.7em; padding: 0.3em;
+    text-align: center;
+    border: 2px dashed silver;
+}
+
+div#test {
+    border: 2px dashed silver;
+    margin: 0 0 0.7em; padding: 0.3em;
+}
+
+h3.title {
+	padding-top: 0.45em;
+	margin-left: 0.5em;
+	font-size: 1.1em;
+	text-align: left;
+	color: white;
+}
+
+.highlight {
+	background-color:  red;
+	text-decoration: none;
+}
+
+.highlight:hover {
+	background-color: #F40000;
+	text-decoration: underline;
+}
+
+.blink {
+	text-decoration: blink;
+}
+
+.wrongInput {
+	color: red;
+}
+.wrongInput:hover {
+	color: silver;
+}
+.invisible {
+	display: none;
+}

@@ -1,0 +1,1 @@
+Sie können sich nicht erneut registrieren, wenn sie bereits angemeldet sind!

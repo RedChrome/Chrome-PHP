@@ -1,0 +1,1 @@
+Could not select database "<?php echo $DATABASE;?>" on server "<?php echo $SERVER;?>" through adapter "<?php echo $ADAPTER;?>}"

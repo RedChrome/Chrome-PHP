@@ -1,0 +1,28 @@
+<Site>
+    <addControllers>
+        <controller name="Chrome_Controller_Header_HTML_Head" action="" />
+        <controller name="Chrome_Controller_Header_HTML_JS" action="" />
+    </addControllers>
+
+    <onController name="Chrome_Controller_User_Login">
+        <addControllers>
+            <controller name="Chrome_Controller_User_Login_Box" action="" />
+        </addControllers>
+        <removeControllers>
+            <controller name="Chrome_Controller_User_Login_Box" />
+        </removeControllers>
+
+        <onAction name="login">
+            <addControllers>
+                <controller name="Chrome_Controller_User_Login_Box" action="login" />
+            </addControllers>
+        </onAction>
+        <onAction name="logout">
+            <addControllers>
+                <controller name="Chrome_Controller_User_Login_Box" action="logout" />
+            </addControllers>
+        </onAction>
+
+    </onController>
+
+</Site>

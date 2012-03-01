@@ -1,0 +1,51 @@
+<Files *.log>
+	Order Deny,Allow
+	Deny from All
+</Files>
+<Files .htaccess>
+	Order Deny,Allow
+	Deny from All
+</Files>
+<Files *.ini>
+	Order Deny,Allow
+	Deny from All
+</Files>
+<Files *.xml>
+	Order Deny,Allow
+	Deny from All
+</Files>
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+
+    RewriteCond %{REQUEST_URI} ![^/]*public
+	RewriteRule !\.(js|ico|gif|jpeg|png|css)$ index.php [L]
+
+</IfModule>
+
+<IfModule mod_deflate.c>
+	# Insert filter
+	SetOutputFilter DEFLATE
+
+	AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/x-javascript text/javascript application/javascript
+
+	# Netscape 4.x has some problems...
+	BrowserMatch ^Mozilla/4 gzip-only-text/html
+
+	# Netscape 4.06-4.08 have some more problems
+	BrowserMatch ^Mozilla/4\.0[678] no-gzip
+
+	# MSIE masquerades AS Netscape, but it is fine
+	# BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+	# NOTE: Due to a bug in mod_setenvif up to Apache 2.0.48
+	# the above regex won't work. You can use the following
+	# workaround to get the desired effect:
+	BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+
+	# Don't compress ../images
+	SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|ico)$ no-gzip dont-vary
+
+	# Make sure proxies don't deliver the wrong content
+	#Header set Vary *
+</IfModule>
