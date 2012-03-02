@@ -25,12 +25,12 @@
             <tr>
                 <td>Geburtstag:</td>
                 <td><?php echo $FORM->render('birthday'); ?></td>
-            
+
             </tr>
             <tr>
                 <td>Captcha:</td>
                 <td><?php echo $FORM->render('captcha'); ?></td>
-                <td><?php if($FORM->hasErrors('captcha')) {
+                <td><?php if($FORM->hasValidationErrors('captcha')) {
                     echo $LANG->get('captcha_wrong');
                 }  ?></td>
             </tr>
@@ -39,6 +39,6 @@
                 <td colspan="2"><?php echo $FORM->render('submit'); ?></td>
             </tr>
         </table>
-        
+
     <?php echo $FORM->render('Register_StepTwo'); ?>
 </fieldset>

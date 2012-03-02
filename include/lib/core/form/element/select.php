@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.02.2012 17:26:34] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 21:57:54] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -35,10 +35,11 @@ class Chrome_Form_Element_Select extends Chrome_Form_Element_Abstract
     const CHROME_FORM_ELEMENT_SELECT_ERROR_MULTIPLE = 'ERRORMULTIPLE';
 
     protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
-                                       self::CHROME_FORM_ELEMENT_SELECT_MULTIPLE => false,
-                                       self::CHROME_FORM_ELEMENT_DEFAULT_SELECTION => null);
+                                       self::CHROME_FORM_ELEMENT_SELECT_MULTIPLE => false);
 
-     protected $_data = null;
+    protected $_isValid = null;
+
+    protected $_data = null;
 
 
     public function isCreated() {
@@ -47,10 +48,18 @@ class Chrome_Form_Element_Select extends Chrome_Form_Element_Abstract
 
     public function isValid()
     {
+        // cache
+        if($this->_isValid !== null) {
+            return $this->_isValid;
+        }
+
+        $isValid = true;
+
         $data = $this->_form->getSentData($this->_id);
 
         if($this->_options[self::CHROME_FORM_ELEMENT_SELECT_MULTIPLE] === false AND is_array($data)) {
             $this->_errors[] = self::CHROME_FORM_ELEMENT_SELECT_ERROR_MULTIPLE;
+            $this->_isValid = false;
             return false;
         }
 
@@ -58,8 +67,19 @@ class Chrome_Form_Element_Select extends Chrome_Form_Element_Abstract
             $data = array($data);
         }
 
-        foreach($data AS $value) {
+        $_isValid;
 
+        foreach($data AS $key => $value) {
+
+            $isValid = true;
+
+            // dont accept readonly input
+            if($this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true OR in_array($value, $this->_options[self::CHROME_FORM_ELEMENT_READONLY])) {
+                $isValid = false;
+                $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_READONLY;
+            }
+
+            // if it's not defined as input, then its invalid
             if(!in_array($value, $this->_options[self::CHROME_FORM_ELEMENT_SELECTION_OPTIONS])) {
                 $isValid = false;
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_WRONG_SELECTION;
@@ -75,7 +95,19 @@ class Chrome_Form_Element_Select extends Chrome_Form_Element_Abstract
                     $isValid = false;
                 }
             }
+
+            if($isValid === false) {
+                $_isValid = false;
+                $this->_unSave($key);
+            }
         }
+
+        $isValid = $_isValid;
+
+        $this->_isValid = $isValid;
+
+
+        return $this->_isValid;
     }
 
     public function isSent()
@@ -96,24 +128,25 @@ class Chrome_Form_Element_Select extends Chrome_Form_Element_Abstract
 
     public function getData() {
 
+        // cache
         if($this->_data !== null) {
             return $this->_data;
         }
 
         $data = $this->_form->getSentData($this->_id);
 
+        /*
         if($data === null AND $this->_options[self::CHROME_FORM_ELEMENT_DEFAULT_SELECTION] !== null AND $this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === false) {
             return $this->_options[self::CHROME_FORM_ELEMENT_DEFAULT];
-        }
+        }*/
 
         if(!is_array($data)) {
             $data = array($data);
         }
 
         foreach($data AS $key => $value) {
-
             foreach($this->_converters AS $converter) {
-                $data[$key] = Chrome_Converter::getInstance()->convert($converter, $value);
+                $data[$key] = Chrome_Converter::getInstance()->convert($converter, $data[$key]);
             }
         }
 
@@ -137,17 +170,31 @@ class Chrome_Form_Element_Select extends Chrome_Form_Element_Abstract
             return;
         }
 
+        if($this->_options[self::CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA] === true) {
+            if($this->getData() === null) {
+                return;
+            }
+        }
+
         $session = Chrome_Session::getInstance();
 
         $array = $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
-        $array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_SELECT_SESSION_NAMESPACE] = $this->getData();
+        $array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_SELECT_SESSION_NAMESPACE][$this->getID()] = $this->getData();
         $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE] = $array;
+    }
+
+    protected function _unSave($key) {
+
+        $session = Chrome_Session::getInstance();
+
+        $array = $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+        $array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_SELECT_SESSION_NAMESPACE][$this->getID()][$key] = null;
     }
 
     public function getSavedData() {
 
         $session = Chrome_Session::getInstance();
 
-        return (isset($session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_SELECT_SESSION_NAMESPACE])) ? $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_SELECT_SESSION_NAMESPACE] : null;
+        return (isset($session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_SELECT_SESSION_NAMESPACE][$this->getID()])) ? $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_SELECT_SESSION_NAMESPACE][$this->getID()] : null;
     }
 }

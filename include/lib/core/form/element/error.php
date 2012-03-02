@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.08.2011 22:20:20] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 15:14:18] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -26,11 +26,12 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
- */ 
+ */
 class Chrome_Form_Element_Error extends Chrome_Form_Element_Abstract
 {
-    protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => false);
-    
+
+    //protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => false);
+
     public function isCreated() {
         return true;
     }
@@ -51,17 +52,17 @@ class Chrome_Form_Element_Error extends Chrome_Form_Element_Abstract
     {
         return null;
     }
-    
+
     public function getDecorator() {
         if($this->_decorator === null) {
             $this->_decorator = new Chrome_Form_Decorator_Error_Default($this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS], $this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES]);
             $this->_decorator->setFormElement($this);
         }
-        
+
         return $this->_decorator;
     }
-    
+
     public function save() {
-        
+
     }
 }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.02.2012 19:30:08] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 15:27:30] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -49,9 +49,12 @@ interface Chrome_Form_Decorator_Interface
 
 abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_Interface
 {
+    const CHROME_FORM_DECORATOR_SELECTION_DISPLAY = 'SELECTIONDISPLAY';
+    const CHROME_FORM_DECORATOR_DEFAULT_INPUT = 'DEFAULTINPUT';
+
     protected $_options = array();
 
-    protected $_defaultOptions = array();
+    protected $_defaultOptions = array(self::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array());
 
     protected $_formElement = null;
 

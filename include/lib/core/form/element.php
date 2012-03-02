@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 12:00:51] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 17:58:33] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -197,24 +197,22 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     const CHROME_FORM_ELEMENT_IS_REQUIRED = 'ISREQUIRED';
     const CHROME_FORM_ELEMENT_ERROR_NOT_SENT = 'ERRORNOTSENT';
 
-    const CHROME_FORM_ELEMENT_DEFAULT_SELECTION = 'DEFAULTSELECTION';
     const CHROME_FORM_ELEMENT_SELECTION_OPTIONS = 'SELECTIONOPTIONS';
     const CHROME_FORM_ELEMENT_ERROR_WRONG_SELECTION = 'ERRORWRONGSELECTION';
-
-    const CHROME_FORM_ELEMENT_HAS_DEFAULT = 'HASDEFAULT';
-    const CHROME_FORM_ELEMENT_DEFAULT = 'DEFAULT';
-    const CHROME_FORM_ELEMENT_ERROR_DEFAULT = 'ERRORDEFAULT';
 
     const CHROME_FORM_ELEMENT_SUBMIT_VALUES = 'SUBMITVALUES';
     const CHROME_FORM_ELEMENT_ERROR_WRONG_SUBMIT = 'ERRORWRONGSUBMIT';
 
-    const CHROME_FORM_ELEMENT_IS_READONLY = 'ISREADONLY';
+    const CHROME_FORM_ELEMENT_READONLY = 'READONLY';
     const CHROME_FORM_ELEMENT_ERROR_READONLY = 'ERRORREADONLY';
 
     const CHROME_FORM_ELEMENT_DECORATOR_OPTIONS = 'DECORATOROPTIONS';
     const CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES = 'DECORATORATTRIBUTES';
 
+    // saves the input into session
     const CHROME_FORM_ELEMENT_SAVE_DATA = 'SAVEDATA';
+    // doesn't saves null data. => on reload, the saved input is still visible
+    const CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA = 'NOTSAVENULLDATA';
 
     const CHROME_FORM_ELEMENT_ERROR_WRONG_INPUT = 'ERRORWRONGINPUT';
 
@@ -232,7 +230,8 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
                                        self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS   => array(),
                                        self::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES   => array(),
                                        self::CHROME_FORM_ELEMENT_SAVE_DATA => true,
-                                       self::CHROME_FORM_ELEMENT_IS_READONLY => false);
+                                       self::CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA => false,
+                                       self::CHROME_FORM_ELEMENT_READONLY => false);
 
     /**
      * default options for all child elements, but the child elements override these options

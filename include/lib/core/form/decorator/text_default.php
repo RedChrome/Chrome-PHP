@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.08.2011 15:32:02] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 16:24:15] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -25,25 +25,29 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
- */ 
+ */
 class Chrome_Form_Decorator_Text_Default extends Chrome_Form_Decorator_Abstract
 {
     public function render() {
-        
-        $value = $this->_formElement->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DEFAULT);
-        
+
+        $value = $this->getOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT);
+
         $data = $this->_formElement->getSavedData();
-        
+
+        if($value === array()) {
+            $value = '';
+        }
+
         if($data !== null) {
             $value = $data;
         }
-        
+
         $class = '';
-        
+
         if($this->_formElement->getForm()->hasValidationErrors($this->_formElement->getID())) {
             $class = ' class="wrongInput"';
         }
-                            
+
         return '<input type="text" name="'.$this->_formElement->getID().'" value="'.$value.'"'.$class.''.$this->_getPreparedAttrs().'/>';
-    }   
+    }
 }

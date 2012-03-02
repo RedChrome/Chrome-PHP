@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.02.2012 17:22:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 21:59:11] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -33,6 +33,8 @@ class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract
 
     protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
                                        self::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array());
+
+    protected $_isValid = null;
 
     protected $_data = null;
 
@@ -55,8 +57,26 @@ class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract
 
     public function isValid()
     {
+        // cache
+        if($this->_isValid !== null) {
+            return $this->_isValid;
+        }
+
+        // every input is readonly, so its valid because we expect and accept no data
+        if($this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true) {
+            $this->_isValid = true;
+            return true;
+        }
+
         $data = $this->_form->getSentData($this->_id);
         $isValid = true;
+
+        // if user sent an readonly marked input, then its invalid
+        if(is_array($this->_options[self::CHROME_FORM_ELEMENT_READONLY]) AND in_array($data, $this->_options[self::CHROME_FORM_ELEMENT_READONLY])) {
+            $this->_isValid = false;
+            $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_READONLY;
+            return false;
+        }
 
         if($data === null AND $this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === false) {
             return true;
@@ -78,6 +98,12 @@ class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract
             }
         }
 
+        if($isValid === false) {
+            $this->_unSave();
+        }
+
+        $this->_isValid = $isValid;
+
         return $isValid;
     }
 
@@ -92,11 +118,16 @@ class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract
             return $this->_data;
         }
 
+        if($this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true) {
+            return null;
+        }
+
         $data = $this->_form->getSentData($this->_id);
 
+        /*
         if($data === null AND $this->_options[self::CHROME_FORM_ELEMENT_DEFAULT_SELECTION] !== null AND $this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === false) {
             return $this->_options[self::CHROME_FORM_ELEMENT_DEFAULT];
-        }
+        }*/
 
         foreach($this->_converters AS $converter) {
             $data = Chrome_Converter::getInstance()->convert($converter, $data);
@@ -121,17 +152,29 @@ class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract
             return;
         }
 
+        if($this->_options[self::CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA] === true) {
+            if($this->getData() === null) {
+                return;
+            }
+        }
+
         $session = Chrome_Session::getInstance();
 
         $array = $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
-        $array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_RADIO_SESSION_NAMESPACE] = $this->getData();
+        $array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_RADIO_SESSION_NAMESPACE][$this->getID()] = $this->getData();
         $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE] = $array;
+    }
+
+    protected function _unSave() {
+        $session = Chrome_Session::getInstance();
+
+        $array = $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+        $array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_RADIO_SESSION_NAMESPACE][$this->getID()] = null;
     }
 
     public function getSavedData() {
 
         $session = Chrome_Session::getInstance();
-
-        return (isset($session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_RADIO_SESSION_NAMESPACE])) ? $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_RADIO_SESSION_NAMESPACE] : null;
+        return (isset($session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_RADIO_SESSION_NAMESPACE][$this->getID()])) ? $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_RADIO_SESSION_NAMESPACE][$this->getID()] : null;
     }
 }

@@ -6,7 +6,7 @@ if(CHROME_PHP !== true)
 class Chrome_View_Index extends Chrome_View_Abstract
 {
     protected function _preConstruct() {
-        
+
         $this->addTitle('Form');
     }
 
@@ -80,15 +80,16 @@ class Chrome_View_Index_STHOTHER extends Chrome_View_Abstract
     protected $data;
 
     public function render() {
-        
+
         $form = $this->_controller->getForm();
 
         $formElement = $form->getElements();
-        $options = $formElement[0]->getOptions();
+        $options = $formElement['Index']->getOptions();
 
         if(isset($options[Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_TOKEN])) {
             $template = new Chrome_Template();
             $template->assignTemplate('modules/content/index/form');
+            $template->assign('FORM', $this->_controller->getForm());
             $template->assign('TOKEN', $options[Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_TOKEN]);
             return $template->render();
         } else {
@@ -100,9 +101,9 @@ class Chrome_View_Index_STHOTHER extends Chrome_View_Abstract
 class Chrome_View_Index_TODO extends Chrome_View_Abstract
 {
     public function render() {
-        
+
         return '<div align="left">TODO LIST:<br>
-        
+
             1. Registrieren<br>
             2. Log In<br>
             3. Rechte<br>
@@ -110,14 +111,14 @@ class Chrome_View_Index_TODO extends Chrome_View_Abstract
             5. Admin Bereich<br>
             6. Andere Module<br>
             7. Sidebars<br>
-            8. ...<br></div>    
-            
-        
+            8. ...<br></div>
+
+
         ';
-        
-        
-        
+
+
+
     }
-    
-    
+
+
 }

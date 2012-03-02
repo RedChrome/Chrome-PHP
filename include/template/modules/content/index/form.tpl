@@ -1,28 +1,24 @@
 
 <br />
-<form name="Index" method="POST" action="">
+<?php echo $FORM->render('Index'); ?>
 
     <input type="text" name="text" value="<?php echo $TOKEN;?>" size="35"/>
-    <br />Password <input type="password" name="password" value="" />
-    <input type="hidden" name="Index" value="<?php echo $TOKEN;?>" />
+    <br />Password <?php echo $FORM->render('password'); ?>
     <br /><br />
-    <input type="radio" name="radio" value="test" /> Test<br />
-    <input type="radio" name="radio" value="test2" /> Test2<br />
+    <?php echo $FORM->render('radio'); ?>Test<br />
+    <?php echo $FORM->render('radio'); ?>Test2<br />
 
 
     <br />
-    <input type="checkbox" name="checkbox[]" value="Value1" /> Value 1<br />
-    <input type="checkbox" name="checkbox[]" value="Value2" /> Value 2<br />
-    <input type="checkbox" name="checkbox[]" value="Value3" /> Value 3<br />
+    <?php echo $FORM->render('checkbox'); ?> Value 1<br />
+    <?php echo $FORM->render('checkbox'); ?> Value 2<br />
+    <?php echo $FORM->render('checkbox'); ?> Value 3<br />
 
-    <select size="3" name="select[]" multiple="multiple">
-        <option value="Value1">Value1</option>
-        <option value="Value2">Value2</option>
-        <option value="Value3">Value3</option>
-    </select>
+
+    <?php echo $FORM->render('select'); ?>
+
     <br />
     <br />
-    <input type="submit" name="submit" value="Absenden" />
+    <?php echo $FORM->render('submit'); ?>
 
-
-</form>
+<?php echo $FORM->render('Index'); ?>

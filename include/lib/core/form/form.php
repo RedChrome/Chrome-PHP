@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 12:29:30] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 08:52:17] --> $
  * @author     Alexander Book
  */
 
@@ -677,10 +677,10 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
                         $handler->isNot($this);
                     }
                 }
-
             }
         }
 
+        // saves the sent data (or the "not sent" data)
         foreach($this->_elements as $formElement) {
             $formElement->save();
         }

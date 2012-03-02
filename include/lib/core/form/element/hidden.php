@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.08.2011 22:20:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 15:01:00] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -26,16 +26,29 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
- */ 
+ */
 class Chrome_Form_Element_Hidden extends Chrome_Form_Element_Abstract
 {
+    const CHROME_FORM_ELEMENT_HAS_DEFAULT = 'HASDEFAULT';
+
+    const CHROME_FORM_ELEMENT_DEFAULT = 'DEFAULT';
+    const CHROME_FORM_ELEMENT_ERROR_DEFAULT = 'ERRORDEFAULT';
+
     protected $_data = null;
-    
+
+    protected $_isValid = null;
+
     public function isCreated() {
         return true;
     }
 
     public function isValid() {
+
+        // cache;
+        if($this->_isValid !== null) {
+            return $this->_isValid;
+        }
+
         $data = $this->_form->getSentData($this->_id);
 
         $isValid = true;
@@ -44,6 +57,7 @@ class Chrome_Form_Element_Hidden extends Chrome_Form_Element_Abstract
         if($this->_options[self::CHROME_FORM_ELEMENT_HAS_DEFAULT] === true) {
             if($data !== $this->_options[self::CHROME_FORM_ELEMENT_DEFAULT]) {
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_DEFAULT;
+                $isValid = false;
             }
         }
 
@@ -57,6 +71,8 @@ class Chrome_Form_Element_Hidden extends Chrome_Form_Element_Abstract
                 $isValid = false;
             }
         }
+
+        $this->_isValid = $isValid;
 
         return $isValid;
     }
@@ -81,27 +97,28 @@ class Chrome_Form_Element_Hidden extends Chrome_Form_Element_Abstract
         if($this->_data !== null) {
             return $this->_data;
         }
-        
+
         $data = $this->_form->getSentData($this->_id);
 
         foreach($this->_converters AS $converter) {
             $data = Chrome_Converter::getInstance()->convert($converter, $data);
         }
+
         $this->_data = $data;
 
         return $data;
     }
-    
+
     public function getDecorator() {
         if($this->_decorator === null) {
             $this->_decorator = new Chrome_Form_Decorator_Hidden_Default($this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS], $this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES]);
             $this->_decorator->setFormElement($this);
         }
-        
+
         return $this->_decorator;
     }
-    
+
     public function save() {
-        
+
     }
 }

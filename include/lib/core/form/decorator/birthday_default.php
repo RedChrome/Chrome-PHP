@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.08.2011 00:05:59] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 22:08:11] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -25,34 +25,30 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
- */ 
+ */
 class Chrome_Form_Decorator_Birthday_Default extends Chrome_Form_Decorator_Abstract
 {
     public function render() {
-        
+
         $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_DEFAULT_LANGUAGE);
-        
+
         $date = new Chrome_Date();
-        
+
         $data = $this->_formElement->getSavedData();
-        
+
         // MONTH
         $months = array($lang->get('month'));
-        
+
         $months = array_merge($months, $date->getMonths());
 
         $selected = '';
-        
+
         if(!isset($data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_MONTH])) {
             $selected = 'selected="selected"';
         }
-        
+
         $class = '';
-        /*
-        if($this->_formElement->getForm()->hasValidationErrors($this->_formElement->getID())) {
-            $class = ' class="wrongInput"';
-        }
-        */
+
         $return = '<select name="'.$this->_formElement->getID().'_m"'.$class.'>'."\n";
         foreach($months AS $key => $month) {
             if($data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_MONTH] == $key) {
@@ -62,18 +58,18 @@ class Chrome_Form_Decorator_Birthday_Default extends Chrome_Form_Decorator_Abstr
             $selected = '';
         }
         $return .= '</select>';
-        
+
         // DAY
         $days = array($lang->get('day'));
-        
+
         $days = array_merge($days, $date->getDays());
-        
+
         $selected = '';
-        
+
         if(!isset($data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_DAY])) {
             $selected = 'selected="selected"';
         }
-        
+
         $return .= "\n".'<select name="'.$this->_formElement->getID().'_d">'."\n";
         foreach($days AS $key => $day) {
             if($data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_DAY] == $key) {
@@ -83,18 +79,18 @@ class Chrome_Form_Decorator_Birthday_Default extends Chrome_Form_Decorator_Abstr
             $selected = '';
         }
         $return .= "\n".'</select>';
-        
+
         // YEAR
         $years = array($lang->get('year'));
-        
+
         $years = array_merge($years, $date->getYears());
-        
+
         $selected = '';
-        
+
         if(!isset($data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_YEAR])) {
             $selected = 'selected="selected"';
         }
-        
+
         $return .= "\n".'<select name="'.$this->_formElement->getID().'_y">'."\n";
         foreach($years AS $key => $year) {
             if($data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_YEAR] == $year) {
@@ -104,7 +100,7 @@ class Chrome_Form_Decorator_Birthday_Default extends Chrome_Form_Decorator_Abstr
             $selected = '';
         }
         $return .= "\n".'</select>';
-        
+
         return $return;
-    }   
+    }
 }

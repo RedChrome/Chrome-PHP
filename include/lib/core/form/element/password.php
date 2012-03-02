@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.08.2011 22:26:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 14:51:42] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -26,7 +26,7 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
- */ 
+ */
 class Chrome_Form_Element_Password extends Chrome_Form_Element_Abstract
 {
     protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => true);
@@ -37,7 +37,12 @@ class Chrome_Form_Element_Password extends Chrome_Form_Element_Abstract
         return true;
     }
 
-    public function isValid() {
+    public function isValid()
+    {
+        if($this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true) {
+            return true;
+        }
+
         $data = $this->_form->getSentData($this->_id);
 
         $isValid = true;
@@ -57,6 +62,11 @@ class Chrome_Form_Element_Password extends Chrome_Form_Element_Abstract
     }
 
     public function isSent() {
+
+        if($this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true) {
+            return true;
+        }
+
         if($this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === true) {
             if($this->_form->getSentData($this->_id) === null) {
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
@@ -76,26 +86,30 @@ class Chrome_Form_Element_Password extends Chrome_Form_Element_Abstract
         if($this->_data !== null) {
             return $this->_data;
         }
-        
+
+        if($this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true) {
+            return null;
+        }
+
         $data = $this->_form->getSentData($this->_id);
 
         foreach($this->_converters AS $converter) {
             $data = Chrome_Converter::getInstance()->convert($converter, $data);
         }
-        
+
         $this->_data = $data;
 
         return $data;
     }
-    
+
     public function getDecorator() {
         if($this->_decorator === null) {
             $this->_decorator = new Chrome_Form_Decorator_Password_Default($this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS], $this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES]);
             $this->_decorator->setFormElement($this);
         }
-        
+
         return $this->_decorator;
     }
-    
+
     public function save() {}
 }
