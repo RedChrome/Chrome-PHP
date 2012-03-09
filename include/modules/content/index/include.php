@@ -11,8 +11,6 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 		$this->setAttribute( 'name', $this->_id );
 		$this->setAttribute( 'method', self::CHROME_FORM_METHOD_POST );
 		$this->setAttribute( 'id', 'Index' );
-        $this->setOptionDeletingAfterReceiving(false);
-
 
 		$lengthValidator = new Chrome_Validator_Form_Length();
 		$lengthValidator->setOptions( array( Chrome_Validator_Form_Length::CHROME_VALIDATOR_FORM_LENGTH_MAX =>
@@ -65,5 +63,7 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $this->_elements['submit'] = new Chrome_Form_Element_Submit($this, 'submit', array(
             Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_SUBMIT_VALUES => array('Absenden')
         ));
+
+        //$this->addReceivingHandler(new Chrome_Form_Handler_Delete());
 	}
 }

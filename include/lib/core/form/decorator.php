@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 15:27:30] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2012 23:30:30] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -89,6 +89,10 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
     }
 
     public function setAttribute($key, $value) {
+        if($value === null) {
+            unset($this->_attribute[$key]);
+            return $this;
+        }
         $this->_attribute[$key] = $value;
         return $this;
     }

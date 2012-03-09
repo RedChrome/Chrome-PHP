@@ -10,6 +10,9 @@
 $FORM->getElement('submit')->getDecorator()->setAttribute('onclick', 'javascript:AJAX_send_login();return false');
 
 echo $FORM->render('submit');
+// we have to unset all additional attributes, cause this is a global form!
+$FORM->getElement('submit')->getDecorator()->setAttribute('onclick', null);
+
 ?>
 
 <img name="login_ajax_waiting" src="<?php echo IMAGE; ?>ajax/Bert.gif" class="invisible"/>

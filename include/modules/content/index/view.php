@@ -12,14 +12,8 @@ class Chrome_View_Index extends Chrome_View_Abstract
 
     public function doSTH()
     {
-        //Chrome_Design_Composite_Left_Box::getInstance();
-        //Chrome_Design_Composite_Content::getInstance()->add(new Chrome_View_Index_STHOTHER($this->_controller));
         Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Index_TODO($this->_controller));
         Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Index_STHOTHER($this->_controller));
-        /*
-        Chrome_Design_Composite_Right_Box::getInstance();
-        Chrome_Design_Composite_Footer::getInstance();
-        Chrome_Design_Composite_Header::getInstance();*/
     }
 
     public function formIsValid() {
@@ -103,22 +97,15 @@ class Chrome_View_Index_TODO extends Chrome_View_Abstract
     public function render() {
 
         return '<div align="left">TODO LIST:<br>
-
-            1. Registrieren<br>
-            2. Log In<br>
-            3. Rechte<br>
-            4. Modul (News)<br>
-            5. Admin Bereich<br>
-            6. Andere Module<br>
-            7. Sidebars<br>
-            8. ...<br></div>
+            0. Rechte per SQL abfragen!!<br>
+            1. User Bereich<br>
+            2. Modul (News)<br>
+            3. Admin Bereich<br>
+            4. Andere Module<br>
+            5. Sidebars<br>
+            6. ...<br></div>
 
 
         ';
-
-
-
     }
-
-
 }

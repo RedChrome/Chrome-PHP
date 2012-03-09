@@ -17,7 +17,7 @@
  * @subpackage Chrome.Session
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.09.2011 13:32:44] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2012 14:34:28] --> $
  * @author     Alexander Book
  */
 
@@ -27,7 +27,7 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Session
- */ 
+ */
 interface Chrome_Session_Interface
 {
     /**
@@ -117,22 +117,22 @@ interface Chrome_Session_Interface
      * @return void
      */
     public function close();
-    
+
     /**
      * isClosed
-     * 
+     *
      * Is the input for the session closed?
-     * 
+     *
      * @return bool
      */
-     public function isClosed(); 
+     public function isClosed();
 }
 
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Session
- */ 
+ */
 class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
 {
         /**
@@ -147,7 +147,7 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
          *
          * @var int
          */
-    const CHROME_SESSION_GARBAGE_COLLECTOR_PROBABILITY  = 5;
+    const CHROME_SESSION_GARBAGE_COLLECTOR_PROBABILITY  = 20;
 
         /**
          * Lifetime for a session
@@ -225,11 +225,14 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
         // do not use cookies... we have an own implementation
         @ini_set('session.use_cookies', 0);
 
-        if(!_isDir(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH)) {
-            Chrome_Dir::createDir(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH);
+        if(self::CHROME_SESSION_SESSION_SAVE_PATH !== null) {
+
+            if(!_isDir(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH)) {
+                Chrome_Dir::createDir(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH);
+            }
+            // specific path to session, protection against hijacking
+            @ini_set('session.save_path', TMP.self::CHROME_SESSION_SESSION_SAVE_PATH);
         }
-        // specific path to session, protection against hijacking
-        @ini_set('session.save_path', TMP.self::CHROME_SESSION_SESSION_SAVE_PATH);
 
         $this->garbageCollector();
         $this->_start();
@@ -261,11 +264,11 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
 
             // start the session
             session_id($cookie->get(self::CHROME_SESSION_COOKIE_NAMESPACE));
-            
+
             if(isset($_GET['SID'])) {
                 session_id($_GET['SID']);
             }
-            
+
             session_start();
 
             $this->_SESSION = $_SESSION;
@@ -381,7 +384,7 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
         if($this->_isClosed === true) {
             return;
         }
-        
+
         $this->_SESSION[$key] = $value;
     }
 
@@ -485,19 +488,19 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
     {
         $this->_isClosed = true;
     }
-    
+
     /**
      * Chrome_Session::isClosed()
-     * 
+     *
      * is the input closed?
-     * 
+     *
      * @return bool
-     */ 
+     */
     public function isClosed()
     {
         return $this->_isClosed;
     }
-    
+
 
     /**
      * Chrome_Session::garbageCollector()
@@ -534,9 +537,9 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
         array_shift($files);
 
         $time = CHROME_TIME - self::CHROME_SESSION_SESSION_LIFETIME;
-        
+
         clearstatcache();
-        
+
         foreach($files AS $file) {
 
             if(fileatime(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH.'/'.$file) < $time) {

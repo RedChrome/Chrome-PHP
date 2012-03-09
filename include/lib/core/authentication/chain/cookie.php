@@ -19,7 +19,7 @@
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
  * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2011 14:02:52] --> $
  */
- 
+
 if(CHROME_PHP !== true)
     die();
 
@@ -32,14 +32,14 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
     protected $_options = array('cookie_namespace' => '_AUTH', 'dbInterface' => null, 'dbTable' => 'authenticate', 'cookie_renew_probability' => 10);
 
     /**
-     * 
+     *
      * @var array $options:
      *                  - cookie_namespace: (string) Namespace of the cookie, default: _AUTH
      *                  - dbInterface: (Chrome_DB_Interface_Abstract) Instance of an db connection, default: null (creates a default connection)
      *                  - dbTable: (string) Name of the db-table, containing the cookie-token and id, default: authenticate
      *                  - cookie_renew_probability: (int) probability (1:x) when the cookie gets renewed, e.g.
-     *                                              probability is set to 10, then the probability is 10%, default: 10
-     * 
+     *                                              probability is set to 20, then the probability is 5% = 1/20, default: 10
+     *
      * @return Chrome_Authentication_Chain_Cookie
      */
     public function __construct(array $options = array())
@@ -54,7 +54,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
         $data = $cookie->get($this->_options['cookie_namespace']);
 
         if($data !== null) {
-            
+
             if(mt_rand(1, $this->_options['cookie_renew_probability']) === 1) {
                 $this->_renewCookie($return->getID());
             }
@@ -112,10 +112,10 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
                     ->where('id = "'.$id.'" AND cookie_token = "'.$tokenEscaped.'"')
                     ->limit(0, 1)
                     ->execute();
-        
+
 
         $result = $dbInterface->next();
-        
+
         // no entry found
         if($result == false or empty($result)) {
             return $this->_chain->authenticate($resource);
@@ -138,7 +138,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
     private function _clearCookie()
     {
         $this->_deAuthenticate();
-        
+
         return new Chrome_Authentication_Data_Container();
     }
 

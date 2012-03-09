@@ -17,7 +17,7 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2011 23:43:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2012 18:51:30] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -26,14 +26,14 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
- */ 
+ */
 interface Chrome_Cache_Files_Interface
 {
     public function isCached($file);
 
-    public function getCache($file);
+    public function load($file);
 
-    public function cache($file, $data);
+    public function save($file, $data);
 
     public function removeCache($file);
 }
@@ -41,7 +41,7 @@ interface Chrome_Cache_Files_Interface
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
- */ 
+ */
 class Chrome_Cache_Files extends Chrome_Cache_Abstract implements Chrome_Cache_Files_Interface
 {
     private $_dir = null;
@@ -77,7 +77,7 @@ class Chrome_Cache_Files extends Chrome_Cache_Abstract implements Chrome_Cache_F
         return _isFile($this->_dir.$file.$this->_extension);
     }
 
-    public function getCache($file)
+    public function load($file)
     {
         if($this->isCached($file)) {
             return file_get_contents($this->_dir.$file.$this->_extension);
@@ -91,12 +91,12 @@ class Chrome_Cache_Files extends Chrome_Cache_Abstract implements Chrome_Cache_F
         return _rmFile($this->_dir.$file.$this->_extension);
     }
 
-    public function clearCache()
+    public function clear()
     {
         return _rmDir($this->_dir);
     }
 
-    public function cache($file, $content)
+    public function save($file, $content)
     {
         return file_put_contents($this->_dir.$file.$this->_extension, $content);
     }

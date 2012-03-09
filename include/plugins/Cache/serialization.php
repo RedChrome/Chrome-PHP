@@ -17,7 +17,7 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2011 23:42:08] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2012 18:22:34] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -153,15 +153,18 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
 
         // set lifetime for the cache
         $this->_lifetime    = ($lifetime >= 0) ? $lifetime : 0;
+
+        // be lazy! open the file, if we really change the cache!
+
         // set file pointer
-        $this->_filePointer = fopen($file, 'r+b');
+        //$this->_filePointer = fopen($file, 'r+b');
         // set file name
         $this->_fileName    = $file;
 
         // is the file opened?
-        if(!is_resource($this->_filePointer)) {
-            throw new Chrome_Exception('Unexpected error in Chrome_Cache_Serialization! File pointer is not a resource in Chrome_Cache_Serialization::__construct()!');
-        }
+        //if(!is_resource($this->_filePointer)) {
+        //    throw new Chrome_Exception('Unexpected error in Chrome_Cache_Serialization! File pointer is not a resource in Chrome_Cache_Serialization::__construct()!');
+        //}
 
         // get cached data
         $this->_loadData();
@@ -198,7 +201,7 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
     public function save($name, $data)
     {
         $this->_data[$name] = $data;
-        $this->_dataChanged = true;
+        $this->_dataChanged();
 
         return true;
     }
@@ -227,7 +230,7 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
     public function remove($name)
     {
         unset($this->_data[$name]);
-        $this->_dataChanged = true;
+        $this->_dataChanged();
 
         return true;
     }
@@ -294,17 +297,33 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
     {
         $data = '';
 
-        while(!feof($this->_filePointer)) {
+        /*while(!feof($this->_filePointer)) {
             $data .= fgets($this->_filePointer, 8192);
-        }
+        }*/
+
+        $data = @file_get_contents($this->_fileName);
 
         if($data === '') {
             $data = array();
             return;
         }
-
         $this->_data = unserialize($data);
     }
+
+    /**
+     * Chrome_Cache_Serialization::_dataChanged()
+     *
+     * Sets the $_dataChanged() var
+     *
+     * @return void
+     */
+     protected function _dataChanged()
+     {
+        $this->_dataChanged = true;
+
+        // now we need to open the file!
+        $this->_filePointer = fopen($this->_fileName, 'r+b');
+     }
 
     /**
      * Chrome_Cache_Serialization::_isValid()

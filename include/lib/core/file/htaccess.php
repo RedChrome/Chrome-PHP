@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.05.2009 21:41:25] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 12:13:35] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -26,12 +26,10 @@ if(CHROME_PHP !== true)
  * Chrome_Htaccess
  *
  * Class for creating AND modifieing a .htaccess file
- * 
+ *
  * @author		Alexander Book
  * @package		CHROME-PHP
- * @copyright   Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license     http://chrome-php.de/license/new-bsd		New BSD License
- * @version		2009/04/08/15/25
+ * @copyright   Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  */
 class Chrome_Htaccess
 {

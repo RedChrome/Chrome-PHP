@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 15:35:39] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2012 23:32:25] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -70,13 +70,13 @@ class Chrome_Form_Decorator_Checkbox_Default extends Chrome_Form_Decorator_Abstr
         $arrayMerged = array();
 
         if($savedValues !== array(null)) {
-            $arrayMerged = array_merge(array_flip($savedValues), $arrayMerged);
+            $arrayMerged = @array_merge(array_flip($savedValues), $arrayMerged);
         }
         if($sentValues !== array(null)) {
-            $arrayMerged = array_merge(array_flip($sentValues), $arrayMerged);
+            $arrayMerged = @array_merge(array_flip($sentValues), $arrayMerged);
         }
         if($arrayMerged === array() AND $defaultSelection !== array(null)) {
-            $arrayMerged = array_merge(array_flip($defaultSelection), $arrayMerged);
+            $arrayMerged = @array_merge(array_flip($defaultSelection), $arrayMerged);
         }
 
         if(isset($arrayMerged[$value])) {
@@ -94,21 +94,13 @@ class Chrome_Form_Decorator_Checkbox_Default extends Chrome_Form_Decorator_Abstr
             $readOnly = array();
         }
 
-        $readOnly = array_flip($readOnly);
+        $readOnly = @array_flip($readOnly);
 
         if(isset($readOnly[$value])) {
             $readOnly = 'disabled="disabled"';
         } else {
             $readOnly = '';
         }
-
-        /*
-        if(in_array($value, (array) $data) OR in_array($value, (array) $this->_formElement->getSavedData())) {
-            $checked = 'checked="checked" ';
-        } else {
-            $checked = '';
-        }*/
-
         // important ;)
         $this->_int++;
 

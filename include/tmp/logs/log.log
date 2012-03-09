@@ -1,0 +1,18 @@
+2012/03/09 13:35:52	ERROR:	There was an error in the database: (2002) Es konnte keine Verbindung hergestellt werden, da der Zielcomputer die Verbindung verweigerte.
+
+#0 E:\Server\xampp\htdocs\root\CHROME_2\include\lib\core\database\registry.php(120): Chrome_DB_Adapter_MySQL->createConnection('localhost', 'chrome_2', 'chrome-php', 'chrome-php-pass...')
+#1 E:\Server\xampp\htdocs\root\CHROME_2\include\lib\core\database\adapter.php(342): Chrome_DB_Registry->createConnection(Object(Chrome_DB_Adapter_MySQL), 'localhost', 'chrome_2', 'chrome-php', 'chrome-php-pass...')
+#2 E:\Server\xampp\htdocs\root\CHROME_2\include\lib\core\database\adapter.php(322): Chrome_DB_Adapter_Abstract::_initAdapter('MySQL')
+#3 [internal function]: Chrome_DB_Adapter_Abstract->initDefaultConnection(Object(Chrome_DB_Interface_Interface))
+#4 E:\Server\xampp\htdocs\root\CHROME_2\include\lib\core\database\adapter.php(216): call_user_func_array(Array, Array)
+#5 E:\Server\xampp\htdocs\root\CHROME_2\include\lib\core\database\adapter.php(164): Chrome_DB_Adapter_Abstract::_callMethod('initDefaultConn...', Array, 1)
+#6 [internal function]: Chrome_DB_Adapter_Abstract::__callStatic('initDefaultConn...', Array)
+#7 E:\Server\xampp\htdocs\root\CHROME_2\include\lib\core\database\interface.php(135): call_user_func_array(Array, Array)
+#8 E:\Server\xampp\htdocs\root\CHROME_2\include\lib\core\database\connection.php(30): Chrome_DB_Interface_Abstract->__call('initDefaultConn...', Array)
+#9 E:\Server\xampp\htdocs\root\CHROME_2\include\lib\core\database\connection.php(30): Chrome_DB_Interface_Interface->initDefaultConnection()
+#10 E:\Server\xampp\htdocs\root\CHROME_2\include\lib\core\database\database.php(52): require_once('E:\Server\xampp...')
+#11 E:\Server\xampp\htdocs\root\CHROME_2\include\lib\core\core.php(70): require_once('E:\Server\xampp...')
+#12 E:\Server\xampp\htdocs\root\CHROME_2\include\main.php(38): require_once('E:\Server\xampp...')
+#13 E:\Server\xampp\htdocs\root\CHROME_2\index.php(35): require_once('E:\Server\xampp...')
+#14 {main}
+

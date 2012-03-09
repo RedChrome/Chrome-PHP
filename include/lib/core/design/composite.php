@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.08.2011 12:03:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2012 23:19:12] --> $
  * @author     Alexander Book
  */
 
@@ -56,7 +56,7 @@ abstract class Chrome_Design_Composite_Abstract implements Chrome_Design_Composi
     protected $_preComposite = null;
 
     protected $_postComposite = null;
-    
+
     protected function __construct()
     {
     }
@@ -93,7 +93,7 @@ abstract class Chrome_Design_Composite_Abstract implements Chrome_Design_Composi
 
     public function render()
     {
-        
+
         $return = '';
 
         if($this->_preComposite !== null) {
@@ -107,7 +107,7 @@ abstract class Chrome_Design_Composite_Abstract implements Chrome_Design_Composi
         if($this->_postComposite !== null) {
             $return .= $this->_postComposite->render();
         }
-        
+
         return $return;
     }
 }

@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [12.08.2011 00:11:22] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 12:13:22] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -24,47 +24,45 @@ if(CHROME_PHP !== true)
 
 /**
  * load basic class for file AND dir manipulation
- */ 
+ */
 require_once 'file.php';
 
 /**
  * Chrome_File_Backup
- * 
+ *
  * Creats a backup of a dir AND all subdirs AND files in it
- * 
+ *
  * Usage:
  * <code>
  * require_once 'backup.php';
- * 
+ *
  * $BACKUP = Chrome_File_Backup::getInstance();
  * $BACKUP->_new('backup_file');	// save whole CMS AS backup_file.zip
- * 
+ *
  * $BACKUP->_new('backup_file2','../')	// save only parent dir AS backup_file2.zip
  * </code>
- * 
+ *
  * @todo 1. add bzip2 support AND test it
  * 		 2. add zlib support
  * 		 3. add normal file support (no archive)
  * 		 4. add recover function
  * @author		Alexander Book
  * @package		CHROME-PHP
- * @copyright   Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license     http://chrome-php.de/license/new-bsd		New BSD License
- * @version		2009/04/08/15/25
+ * @copyright   Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  */
 class Chrome_File_Backup
 {
 	private static $_instance = false;
 
 	private static $_archive = false;
-    
+
     public $_neededFileExtension = array('php', 'js', 'css', 'gif', 'jpg', 'png', 'jpeg', 'sql', 'htaccess');
-    
+
 	/**
 	 * Chrome_File_Backup::__construct()
-	 * 
+	 *
 	 * Singleton Pattern
-	 * 
+	 *
 	 * @access private
 	 * @return new Chrome_File_Backup object
 	 */
@@ -74,7 +72,7 @@ class Chrome_File_Backup
 
 	/**
 	 * Chrome_File_Backup::getInstance()
-	 * 
+	 *
 	 * @return Chrome_File_Backup object
 	 */
 	public static function getInstance()
@@ -86,9 +84,9 @@ class Chrome_File_Backup
 
 	/**
 	 * Chrome_File_Backup::_new()
-	 * 
+	 *
 	 * Creates a new Backup
-	 * 
+	 *
 	 * @param string $file filename of a new backup
 	 * @param string $dir dir (and all subdirs) which get saved. default= ../../../../, the whole Chrome-PHP folder get saved
 	 * @throws Chrome_Exception
@@ -118,9 +116,9 @@ class Chrome_File_Backup
 
 	/**
 	 * Chrome_File_Backup::_newZipArchive()
-	 * 
+	 *
 	 * Creats a new file AND sets archive handler
-	 * 
+	 *
 	 * @access private
 	 * @param mixed $file filename
 	 * @return bool true on success
@@ -140,9 +138,9 @@ class Chrome_File_Backup
 
 	/**
 	 * Chrome_File_Backup::_closeZipArchive()
-	 * 
+	 *
 	 * Closes a Zip-file
-	 * 
+	 *
 	 * @access private
 	 * @return bool true on success
 	 */
@@ -156,10 +154,10 @@ class Chrome_File_Backup
 
 	/**
 	 * Chrome_File_Backup::_addFolderToZip()
-	 * 
+	 *
 	 * adds a folder to backup file
-	 * 
-	 * @param mixed $dir 
+	 *
+	 * @param mixed $dir
 	 * @param string $zipdir
 	 * @return bool true
 	 */
@@ -185,7 +183,7 @@ class Chrome_File_Backup
 				}
 			}
 			else {
-			     if($this->_isNeededFile($file) === true)             
+			     if($this->_isNeededFile($file) === true)
 				// Add the files
 				self::$_archive->addFile($dir.$file, $zipdir.$file);
 			}
@@ -193,19 +191,19 @@ class Chrome_File_Backup
 
 		return true;
 	}
-    
+
     private function _isNeededFile($file)
     {
         if(Chrome_File::hasExt($file)) {
-            
+
             if(in_array(Chrome_File::getExt($file), $this->_neededFileExtensions))
                 return true;
-            else 
-                return false;  
-            
+            else
+                return false;
+
         } else {
             return false;
-        }      
+        }
     }
 
 	private function _newBzip2Archive($file)

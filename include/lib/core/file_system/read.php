@@ -17,7 +17,7 @@
  * @subpackage Chrome.File_System
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.09.2011 13:28:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2012 18:31:16] --> $
  * @author     Alexander Book
  */
 
@@ -198,7 +198,6 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	{
 	    clearstatcache();
 
-
 		$this->_cache = array_merge($this->readCache(), $this->_cache);
 	}
 
@@ -224,7 +223,6 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	 */
 	public static function getInstance()
 	{
-
 		if(self::$_instance === null) {
 			self::$_instance = new self();
 		}
@@ -240,20 +238,22 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	 */
 	public function readCache()
 	{
-		$content = @file_get_contents(TMP.self::FILE_SYSTEM_READ_CACHE);
+        $this->_fileHandler = @fopen(TMP.self::FILE_SYSTEM_READ_CACHE, 'r+b');
 
-		$this->_fileHandler = @fopen(TMP.self::FILE_SYSTEM_READ_CACHE, 'r+b');
-
-		if($content === false OR empty($content)) {
-			require_once LIB.'core/file/file.php';
+        if($this->_fileHandler === false) {
+            require_once LIB.'core/file/file.php';
 			Chrome_File::mkFile(TMP.self::FILE_SYSTEM_READ_CACHE, 0777);
 			$this->_fileHandler = @fopen(TMP.self::FILE_SYSTEM_READ_CACHE, 'wb');
 			return array();
-		}
+        }
 
-		$return = unserialize($content);
+		$content = @file_get_contents(TMP.self::FILE_SYSTEM_READ_CACHE);
 
-		return $return;
+        if($content == null) {
+            return array();
+        }
+
+		return unserialize($content);
 	}
 
 	/**
@@ -557,14 +557,14 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 			return;
 
 		if(!isset($this->_cache[$path][self::FILE_SYSTEM_KEY_TIMESTAMP])) {
-			echo $path;
 			$this->_cache[$path][self::FILE_SYSTEM_KEY_TIMESTAMP] = CHROME_TIME;
             $this->_change = true;
 			return;
 		}
 
-		if($this->_cache[$path][self::FILE_SYSTEM_KEY_TIMESTAMP] + self::FILE_SYSTEM_READ_UPDATE_TIME > CHROME_TIME)
+		if($this->_cache[$path][self::FILE_SYSTEM_KEY_TIMESTAMP] + self::FILE_SYSTEM_READ_UPDATE_TIME > CHROME_TIME) {
 			return;
+        }
 
 		if(!file_exists($path)) {
 			$this->_notExisting($path);

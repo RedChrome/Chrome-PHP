@@ -41,6 +41,9 @@ class Chrome_Controller_Index extends Chrome_Controller_Content_Abstract
 
 		$this->view->doSTH();
 
+        $obj = new Chrome_Controller_User_Login_Page();
+        $obj->execute();
+
 		$this->view->render();
 	}
 }

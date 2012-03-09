@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 08:52:17] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 14:08:07] --> $
  * @author     Alexander Book
  */
 
@@ -112,16 +112,6 @@ interface Chrome_Form_Interface
      * @return void
      */
     public function setSentData(array $data);
-
-    /**
-     * setOptionDeletingAfterReceiving()
-     *
-     * Shall the form get delete after the form received all converter and validated data
-     *
-     * @param bool $delete
-     * @return void
-     */
-    public function setOptionDeletingAfterReceiving($delete);
 
     /**
      * delete()
@@ -458,13 +448,6 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     protected $_attribts = array();
 
     /**
-     * Shall the form get deleted after receiving all data?
-     *
-     * @var bool
-     */
-    protected $_deleteAfterReceiving = true;
-
-    /**
      * Receiving Handler, gets called after isSent()
      *
      * @var Chrome_Form_Handler_Interface
@@ -493,20 +476,6 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      * @return Chrome_Form_Abstract
      */
     abstract protected function __construct();
-
-    /**
-     * Chrome_Form_Abstract::__destruct()
-     *
-     * Destructor
-     *
-     * @return void
-     */
-    public function __destruct()
-    {
-        if($this->_deleteAfterReceiving === true) {
-            $this->delete();
-        }
-    }
 
     /**
      * Chrome_Form_Abstract::isCreated()
@@ -561,19 +530,6 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         }
 
         return true;
-    }
-
-    /**
-     * Chrome_Form_Abstract::setOptionsDeletingAfterReceiving
-     *
-     * Shall the form get delete after the form received all converter and validated data
-     *
-     * @param bool $delete
-     * @return void
-     */
-    public function setOptionDeletingAfterReceiving($delete)
-    {
-        $this->_deleteAfterReceiving = (bool)$delete;
     }
 
     /**

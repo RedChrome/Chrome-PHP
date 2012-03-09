@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 15:23:02] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 14:07:29] --> $
  * @author     Alexander Book
  */
 
@@ -57,8 +57,6 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
     {
         // get lang obj for this module
         $LANG = new Chrome_Language('modules/content/user/login');
-
-        $this->setOptionDeletingAfterReceiving(true);
 
         $this->_id = 'login';
         $this->setAttribute('name', $this->_id);
@@ -121,5 +119,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
 
         // adds the renew handler, every ~10 request renew => renews the token
         $this->addReceivingHandler(new Chrome_Form_Handler_Renew(10));
+        // deletes the input when the form is destroyed
+        $this->addReceivingHandler(new Chrome_Form_Handler_Delete());
     }
 }

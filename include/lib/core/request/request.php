@@ -17,7 +17,7 @@
  * @subpackage Chrome.Request
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 14:45:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 23:05:19] --> $
  * @author     Alexander Book
  */
 
@@ -27,7 +27,7 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Request
- */ 
+ */
 final class Chrome_Request
 {
 	/**
@@ -35,7 +35,7 @@ final class Chrome_Request
 	 *
 	 * @var string
 	 */
-	const CHROME_REQUEST_CLASS_PATH = 'core/request';
+	const CHROME_REQUEST_CLASS_PATH = 'core/request/';
 
 	/**
 	 * Contains the used Request instance
@@ -103,13 +103,14 @@ final class Chrome_Request
 
     private static function _loadRequestClass()
     {
-        $dir = LIB.self::CHROME_REQUEST_CLASS_PATH;
+        /*$dir = LIB.self::CHROME_REQUEST_CLASS_PATH;
 
         // check wheter dir exists
         if(_isDir($dir) === false) {
             throw new Chrome_Exception('Cannot load any Chrome_Request classes, because dir '.LIB.self::CHROME_REQUEST_CLASS_PATH.' does not exist in Chrome_Request::_loadRequestClass()!');
-        }
+        }*/
 
+        /*
         $files = _getFilesInDir($dir);
 
         foreach($files AS $file) {
@@ -118,7 +119,18 @@ final class Chrome_Request
                 require_once $dir.'/'.$file;
                 return;
             }
+        }*/
+
+        $class = self::$_requestClass.'.php';
+
+        // faster
+        if(!_isFile(LIB.self::CHROME_REQUEST_CLASS_PATH.$class)) {
+            throw new Chrome_Exception('Cannot find file '.LIB.self::CHROME_REQUEST_CLASS_PATH.$class.' in Chrome_Request::_loadRequestClass()!');
+        } else {
+            require_once LIB.self::CHROME_REQUEST_CLASS_PATH.$class;
+            return;
         }
+
 
         throw new Chrome_Exception('Could not find file for class Chrome_Request_'.self::$_requestClass.'! Cannot load this class!');
     }
@@ -131,14 +143,14 @@ final class Chrome_Request
 	 */
 	public static function setRequestClass($class)
 	{
-		self::$_requestClass = $class;
+		self::$_requestClass = strtoupper($class);
 	}
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Request
- */ 
+ */
 interface Chrome_Request_Interface
 {
     public function &getParameters();
@@ -175,5 +187,5 @@ interface Chrome_Request_Interface
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Request
- */ 
+ */
 abstract class Chrome_Request_Abstract implements Chrome_Request_Interface {}

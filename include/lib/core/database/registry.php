@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [12.08.2011 13:08:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2012 14:55:30] --> $
  * @author     Alexander Book
  */
 
@@ -44,6 +44,13 @@ class Chrome_DB_Registry
 	 * @var array
 	 */
 	private $_connections;
+
+    /**
+     * Contains the id of the last created connection
+     *
+     * @var int
+     */
+    private $_connectionID = 0;
 
 	/**
 	 * Constructor, used for singleton pattern
@@ -110,20 +117,25 @@ class Chrome_DB_Registry
 	public function createConnection(Chrome_DB_Adapter_Abstract &$obj, $server, $database, $user, $pass)
 	{
 		// try to connect to database, using the adapter
-        $this->_connections[] = $obj->createConnection($server, $database, $user, $pass);
+        $this->_connections[$this->_connectionID] = $obj->createConnection($server, $database, $user, $pass);
+
+        return $this->_connectionID++;
 
 		// returns the connection ID
-		return sizeof($this->_connections) - 1;
+		//return sizeof($this->_connections) - 1;
 	}
 
 	/**
 	 * Get a connection by ID
 	 *
-	 * @param int $connectionID connection ID
+	 * @param int $connectionID [optional] connection ID, if not set, then the last created connection is used
 	 * @return resource, connection to database
 	 */
-	public function getConnection($connectionID)
+	public function getConnection($connectionID = null)
 	{
+	    if($connectionID === null) {
+	       $connectionID = $this->_connectionID;
+	    }
 		return $this->_getConnection($connectionID);
 	}
 }

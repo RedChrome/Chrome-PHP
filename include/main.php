@@ -18,7 +18,7 @@
  * @subpackage Chrome.FrontController
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2012 00:33:31] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2012 01:00:15] --> $
  * @author     Alexander Book
  */
 
@@ -208,11 +208,25 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             }
 
             // startup filters
+            import(array('Chrome_Filter_Chain_Preprocessor', 'Chrome_Filter_Chain_Postprocessor'));
+
             $this->_preprocessor = new Chrome_Filter_Chain_Preprocessor();
             $this->_postprocessor = new Chrome_Filter_Chain_Postprocessor();
 
             // setting up authentication, authorisation service
             {
+
+                $classes = array('Chrome_Exception_Handler_Authentication',
+                               'Chrome_Authentication',
+                               'Chrome_Model_Authentication_Database',
+                               'Chrome_Authentication_Chain_Database',
+                               'Chrome_Authentication_Chain_Cookie',
+                               'Chrome_Authentication_Chain_Session',
+                               'Chrome_Authorisation',
+                               'Chrome_RBAC');
+
+                import($classes);
+
                 $handler = new Chrome_Exception_Handler_Authentication();
 
                 $authentication = Chrome_Authentication::getInstance();
@@ -246,6 +260,8 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
 
             // enable route matching
             {
+
+                import(array('Chrome_Route_Static', 'Chrome_Route_Dynamic') );
                 // matches static routes
                 new Chrome_Route_Static(Chrome_Model_Route_Static::getInstance());
                 // matches dynamic created routes

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2011 22:06:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2012 00:09:37] --> $
  * @author     Alexander Book
  */
 
@@ -32,23 +32,23 @@ interface Chrome_Controller_Interface
 {
     /**
      * getRequest()
-     * 
+     *
      * @return Chrome_Request_Interface
-     */ 
+     */
     public function getRequest();
 
     /**
      * getResponse()
-     * 
+     *
      * @return Chrome_Response_Interface
-     */ 
+     */
     public function getResponse();
-    
+
     /**
      * execute()
-     * 
+     *
      * @return void
-     */ 
+     */
     public function execute();
 }
 
@@ -58,20 +58,20 @@ interface Chrome_Controller_Interface
  */
 abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface, Chrome_Exception_Processable_Interface
 {
-    
+
     /**
      * specific ACE for this controller
-     * 
-     * 
+     *
+     *
      * @deprecated
      * @var Chrome_Authorisation_Resource_Interface
-     */ 
+     */
     protected $ACE = null;
 
     /**
      * @deprecated
      * @var array
-     */ 
+     */
     protected $errorHandler = array();
 
     /**
@@ -82,140 +82,140 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      *      $this->_exceptionHandler->exception($e);
      * }
      * </code>
-     * 
+     *
      * @var Chrome_Exception_Handler_Interface
-     */ 
+     */
     protected $exceptionHandler = null;
 
     /**
      * Requires all classes/files
-     * 
+     *
      * structure:
      * array('class' => array('class1', 'class2'), 'file' => array('include/lib/file.php'))
-     * 
+     *
      * @var array
-     */ 
+     */
     protected $require = array();
 
     /**
      * this var contains all unescaped parameter($_GET, $_POST, etc..)
-     * 
+     *
      * structure:
      * array('GET' => $_GET, 'POST' => $_POST, etc...)
-     * 
+     *
      * @var array
-     */ 
+     */
     protected $data = array();
 
     /**
      * @deprecated
      * @var Chrome_Router_Interface
-     */ 
+     */
     protected $router = false;
 
     /**
      * contains a Chrome_Request_Interface object
-     * 
+     *
      * @var Chrome_Request_Interface
-     */ 
+     */
     protected $request = null;
 
     /**
      * contains an instance of Chrome_Responde_Interface
-     * 
+     *
      * @var Chrome_Response_Interface
-     */ 
+     */
     protected $response = null;
 
     /**
      * contains an instance of Chrome_Model_Abstract
-     * 
+     *
      * @var Chrome_Model_Abstract
-     */ 
+     */
     protected $model = array();
 
     /**
-     * 
+     *
      * @var Chrome_View_Interface
-     */ 
+     */
     protected $view = null;
 
     /**
      * array of filters
-     * 
-     * structure: 
+     *
+     * structure:
      * array('filterChainName' => array($filterObj), $filterChainObj => array($filterObj2, $filterObj3))
-     * 
+     *
      * @var array
-     */ 
+     */
     protected $filter = null;
 
     /**
-     * 
+     *
      * @var Chrome_Form_Interface
-     */ 
+     */
     protected $form = null;
 
     /**
-     * 
+     *
      * @var Chrome_Design_Composite_Interface
-     */ 
+     */
     protected $design = null;
 
     /**
      * _initialize()
-     * 
+     *
      * @return void
-     */ 
+     */
     abstract protected function _initialize();
 
     /**
      * _execute()
-     * 
+     *
      * @return void
-     */ 
+     */
     abstract protected function _execute();
 
     /**
      * _shutdown()
-     * 
+     *
      * @retrun void
-     */ 
+     */
     abstract protected function _shutdown();
-    
+
     /**
      * __construct()
-     * 
+     *
      * @return Chrome_Controller_Abstract
-     */ 
+     */
     abstract public function __construct();
-    
+
     /**
      * singletone pattern
-     */ 
+     */
     final private function __clone()
     {
     }
 
     /**
      * _authorize()
-     * 
+     *
      * @return void
-     */ 
+     */
     protected function _authorize()
     {
         if($this->ACE === null OR $this->ACE === false) {
             return true;
         }
-        
+
         return Chrome_Authorisation::getInstance()->isAllowed($this->ACE);
     }
 
     /**
      * _require()
-     * 
+     *
      * @return void
-     */ 
+     */
     protected function _require()
     {
         if(isset($this->require['file'])) {
@@ -230,16 +230,16 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
 
         if(isset($this->require['class'])) {
             foreach($this->require['class'] AS $class) {
-                classLoad($class);                
+                classLoad($class);
             }
         }
     }
 
     /**
      * _validate()
-     * 
+     *
      * @return void
-     */ 
+     */
     protected function _validate()
     {
         $this->data = &$this->getRequest()->getParameters();
@@ -247,9 +247,9 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
 
     /**
      * _setFilter()
-     * 
+     *
      * @return void
-     */ 
+     */
     protected function _setFilter()
     {
         if(!is_array($this->filter)) {

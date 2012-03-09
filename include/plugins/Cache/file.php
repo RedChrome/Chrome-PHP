@@ -17,7 +17,7 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2011 23:42:37] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2012 18:49:36] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -26,13 +26,13 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
- */ 
+ */
 class Chrome_Cache_File extends Chrome_Cache_Abstract
 {
     private $_cacheInstance = null;
 
     private $_defaultFrontendOptions = array('liftetime' => CHROME_CACHE_LIFETIME, 'automatic_serialization' => false,
-        'cache_id_prefix' => CHROME_CACHE_PREFIX, 'caching' => true, 'write_control' => false);
+        'cache_id_prefix' => 'id_', 'caching' => true, 'write_control' => false);
 
     private $_defaultBackendOptions = array('file_locking' => false);
 
@@ -43,6 +43,8 @@ class Chrome_Cache_File extends Chrome_Cache_Abstract
 
     public function __construct($file, $frontendOptions = array(), $backendOptions = array())
     {
+        require_once LIB.'Zend/Cache.php';
+
         if (!is_array($frontendOptions)) {
             $frontendOptions = $this->_defaultFrontendOptions;
         } else {
@@ -57,12 +59,12 @@ class Chrome_Cache_File extends Chrome_Cache_Abstract
 
         $backendOptions['cache_dir'] = $file;
 
-        $_cacheInstance = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+        $this->_cacheInstance = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
     }
 
     public function __call($function, $args)
     {
-        return call_user_func_array(array($this->_cacheInstance, $function), $args);
+        var_dump( call_user_func_array(array($this->_cacheInstance, $function), $args) );
     }
 
     public function clear()

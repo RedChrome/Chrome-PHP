@@ -1,5 +1,33 @@
 <?php
 
+/**
+ * CHROME-PHP CMS
+ *
+ * LICENSE
+ *
+ * This source file is subject to the Creative Commons license that is bundled
+ * with this package in the file LICENSE.
+ * It is also available through the world-wide-web at this URL:
+ * http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * If you did not receive a copy of the license AND are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@chrome-php.de so we can send you a copy immediately.
+ *
+ * @package    CHROME-PHP
+ * @subpackage Chrome.User
+ * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2012 15:40:39] --> $
+ * @author     Alexander Book
+ */
+
+if(CHROME_PHP !== true)
+    die();
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.User
+ */
 class Chrome_View_User_Login_Default extends Chrome_View_Abstract
 {
     protected function _preConstruct() {
@@ -49,7 +77,6 @@ class Chrome_View_User_Default_FormNotValid extends Chrome_View_Abstract {
 
 class Chrome_View_User_Default_ShowForm extends Chrome_View_Abstract {
     public function render() {
-
         $lang = new Chrome_Language('modules/content/user/login');
 
         $template = new Chrome_Template();
@@ -57,8 +84,5 @@ class Chrome_View_User_Default_ShowForm extends Chrome_View_Abstract {
         $template->assign('LANG', $lang);
         $template->assign('FORM', $this->_controller->getForm());
         return $template->render();
-
-
-
     }
 }

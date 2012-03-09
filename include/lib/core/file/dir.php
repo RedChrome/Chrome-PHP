@@ -17,14 +17,14 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.08.2011 13:42:03] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 12:12:59] --> $
  */
 
 if(CHROME_PHP !== true)
 	die();
 /**
  * load file_system class
- */ 
+ */
 require_once LIB.'core/file_system/file_system.php';
 
 /**
@@ -53,9 +53,7 @@ require_once LIB.'core/file_system/file_system.php';
  *
  * @author		Alexander Book
  * @package		CHROME-PHP
- * @copyright   Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license     http://chrome-php.de/license/new-bsd		New BSD License
- * @version		2009/04/08/15/25
+ * @copyright   Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  */
 
 class Chrome_Dir

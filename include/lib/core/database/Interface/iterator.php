@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB.Interface
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 15:41:37] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2012 14:16:12] --> $
  * @author     Alexander Book
  */
 
@@ -53,8 +53,11 @@ class Chrome_DB_Interface_Iterator extends Chrome_DB_Interface_Abstract implemen
 		if($this->_iteratorLastPosition + 1  == $this->_iteratorPointer) {
 
 			$this->_iteratorLastPosition = $this->_iteratorPointer;
+
+            $this->_iteratorArray[$this->_iteratorPointer] = Chrome_DB_Adapter_Abstract::__callStatic('fetchResult', array(&$this));
+
 			// fetch next result from adapter
-			$this->_iteratorArray[$this->_iteratorPointer] = call_user_func_array(array('Chrome_DB_Adapter_Abstract', '__callStatic'), array('fetchResult', array(&$this)));
+			//$this->_iteratorArray[$this->_iteratorPointer] = call_user_func_array(array('Chrome_DB_Adapter_Abstract', '__callStatic'), array('fetchResult', array(&$this)));
 		}
 	}
 

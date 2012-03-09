@@ -27,7 +27,7 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Response
- */ 
+ */
 class Chrome_Response_HTTP extends Chrome_Response_Abstract
 {
 	private static $_instance = null;
@@ -60,7 +60,7 @@ class Chrome_Response_HTTP extends Chrome_Response_Abstract
 	{
 	    if(!headers_sent()) {
     		header('HTTP/1.0 '.$this->_status);
-            
+
             if(!empty($this->_headers))
         		foreach($this->_headers AS $key => $value) {
         			header($key.': '.$value);

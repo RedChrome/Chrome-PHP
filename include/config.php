@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 16:56:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2012 14:35:39] --> $
  * @author     Alexander Book
  */
 
@@ -58,14 +58,14 @@ define('CHROME_DISPLAY_ERRORS', E_ALL | E_STRICT); #E_ALL | E_STRICT | E_DEPRECA
 
 define('CHROME_CACHE_DIR', 'tmp/cache/');
 define('CHROME_CACHE_LIFETIME', 7200);
-define('CHROME_ENABLE_CACHING', false);
+define('CHROME_ENABLE_CACHING', true);
 define('CHROME_FILE_NAME_PREFIX', null);
 
 ########### SECURITY ###########
 
 define('CHROME_DEVELOPER_STATUS', true); # Developer status. ONLY FOR DEVELOPERS!
 define('CHROME_SESSION_LIFETIME', 600); # Lifetime for a Session in sec
-define('CHROME_SESSION_SAVE_PATH', 'session/'); # path where all session are saved(if ini_set is on)
+define('CHROME_SESSION_SAVE_PATH', 'session/'); # path where all session are saved subdir of tmp. if null, the php's default path is used
 define('CHROME_SESSION_RENEWTIME', 30);    # Time for a session to renew its id
 
 # algorithm which hashes the cookie

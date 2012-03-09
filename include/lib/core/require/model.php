@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [12.08.2011 12:48:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2012 18:53:25] --> $
  * @author     Alexander Book
  */
 
@@ -69,6 +69,18 @@ class Chrome_Model_Require extends Chrome_Model_Abstract
 
         return self::$_instance;
     }
+
+    public function setClass($class, $file) {
+        return $this->_decorator->setClass($class, $file);
+    }
+
+    public function getClasses() {
+        return $this->_decorator->getClasses();
+    }
+
+    public function getClass($name) {
+        return $this->_decorator->getClass($name);
+    }
 }
 
 /**
@@ -110,7 +122,7 @@ class Chrome_Model_Require_DB extends Chrome_Model_DB_Abstract
                 ->where('activated = "1"')
                 ->orderBy('r.order', 'ASC')
                 ->execute();
-        
+
         // loop through every result
         foreach($this->_dbInterfaceInstance AS $value) {
             $require[] = $value;
@@ -118,7 +130,7 @@ class Chrome_Model_Require_DB extends Chrome_Model_DB_Abstract
 
         // clear DB interface, to re-use it
         $this->_dbInterfaceInstance->clear();
-  
+
         return $require;
     }
 
@@ -130,8 +142,8 @@ class Chrome_Model_Require_DB extends Chrome_Model_DB_Abstract
     public function getClasses()
     {
         $_class = array();
-        
-        
+
+
         // create sql query
         $this->_dbInterfaceInstance
                 ->initDefaultConnection()
@@ -146,7 +158,7 @@ class Chrome_Model_Require_DB extends Chrome_Model_DB_Abstract
 
         // clear DB Interface, to re-use it
         $this->_dbInterfaceInstance->clear();
- 
+
         return $_class;
     }
 
@@ -237,7 +249,7 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      *
      * @var string
      */
-    const CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE = 'tmp/cache/_require.cache';
+    const CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE = 'cache';
 
     /**
      * Namespace
@@ -255,7 +267,7 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      */
     protected function _cache()
     {
-        $this->_cache = parent::$_cacheFactory->forceCaching()->factory('serialization', self::CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE);
+        $this->_cache = parent::$_cacheFactory->forceCaching()->factory('serialization', TMP.self::CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE);
     }
 
     /**

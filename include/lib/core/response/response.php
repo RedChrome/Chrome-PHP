@@ -17,7 +17,7 @@
  * @subpackage Chrome.Response
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2012 12:46:49] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 23:01:54] --> $
  * @author     Alexander Book
  */
 
@@ -76,13 +76,13 @@ final class Chrome_Response
 	}
 
 	public static function setResponseClass($class) {
-	    $class = strtolower($class);
+	    $class = strtoupper($class);
 		$_class = 'Chrome_Response_'.$class;
 		$class .= '.php';
 		if(!_isDir(LIB.self::CHROME_RESPONSE_CLASS_PATH)) {
 			throw new Chrome_Exception('Cannot find include path for Chrome_Response classes in Chrome_Response::setResponseClass()!');
 		}
-        
+
         /**
         $files = _getFilesInDir(LIB.self::CHROME_RESPONSE_CLASS_PATH);
 
@@ -91,7 +91,7 @@ final class Chrome_Response
 		} else {
 			require_once $files[$key];
 		}*/
-        
+
         // faster
         if(!_isFile(LIB.self::CHROME_RESPONSE_CLASS_PATH.$class)) {
             throw new Chrome_Exception('Cannot find file '.LIB.self::CHROME_RESPONSE_CLASS_PATH.$class.' in Chrome_Response::setResponseClass()!');

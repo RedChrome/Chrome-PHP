@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.09.2011 14:36:47] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2012 14:58:46] --> $
  * @author     Alexander Book
  */
 
@@ -259,7 +259,7 @@ class Chrome_Require implements Chrome_Require_Interface
 		// $rClass -> $requireClass
 		foreach($this->_requireClass AS $rClass) {
 		    try {
-    			if( ($file = call_user_func(array($rClass, 'getInstance'))->classLoad($name)) !== false AND $file !== null) {
+    			if( ($file = $rClass::getInstance()->classLoad($name)) !== false AND $file !== null) {
     				$this->_model->setClass($name, $file);
 
                     require_once $file;
@@ -273,7 +273,7 @@ class Chrome_Require implements Chrome_Require_Interface
         // cannot throw an exception, because this function gets called mostly via __autoload
 		die('Could not load class "'.$name.'"! No extension is matching AND class is not defined in table '.DB_PREFIX.'_class!');
 	}
-    
+
     /**
 	 * Chrome_Require::classLoadWithoutDieing()
 	 *
@@ -296,7 +296,6 @@ class Chrome_Require implements Chrome_Require_Interface
 		}
 
         foreach($this->_require AS $array) {
-
             if($array['name'] == $name) {
                 return true;
             }
@@ -312,19 +311,18 @@ class Chrome_Require implements Chrome_Require_Interface
 		    try {
     			if( ($file = call_user_func(array($rClass, 'getInstance'))->classLoad($name)) !== false AND $file !== null) {
     				$this->_model->setClass($name, $file);
-
                     require_once $file;
                     return true;
     			}
             } catch (Chrome_Exception $e) {
-                die($e);
+                throw $e;
             }
 		}
 
 		throw new Chrome_Exception('Could not load class "'.$name.'"! No extension is matching AND class is not defined in table '.DB_PREFIX.'_class!');
     }
-    
-    
+
+
 	/**
 	 * Chrome_Require::addClass()
 	 *
@@ -346,15 +344,37 @@ class Chrome_Require implements Chrome_Require_Interface
 
 function __autoload($name)
 {
-    Chrome_Require::getInstance()->classLoad($name);
+    static $_instance;
+    if($_instance === null) {
+        $_instance = Chrome_Require::getInstance();
+    }
+
+    $_instance->classLoad($name);
 }
 
 function classLoad($name)
 {
+    static $_instance;
+
+    if($_instance === null) {
+        $_instance = Chrome_Require::getInstance();
+    }
+
 	return Chrome_Require::getInstance()->classLoad($name);
 }
 
-function import($name)
+function import($array)
 {
-	return Chrome_Require::getInstance()->classLoadWithoutDieing($name);
+    static $_instance;
+
+    if($_instance === null) {
+        $_instance = Chrome_Require::getInstance();
+    }
+
+    if(!is_array($array)) {
+        $array = array($array);
+    }
+    foreach($array as $class) {
+	   $_instance->classLoadWithoutDieing($class);
+    }
 }
