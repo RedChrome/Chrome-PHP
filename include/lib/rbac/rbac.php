@@ -17,7 +17,7 @@
  * @subpackage Chrome.RBAC
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2012 00:33:17] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2012 17:11:00] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -76,7 +76,9 @@ class Chrome_RBAC implements Chrome_RBAC_Interface
 
     protected $_model = null;
 
-    public function __construct() {
+
+    // of course private
+    private function __construct() {
 
     }
 
@@ -132,6 +134,9 @@ class Chrome_RBAC implements Chrome_RBAC_Interface
         $this->_groups[$group->getID()] = $group;
     }
 
+    /**
+     * @todo isAllowed unabhängig von $role, $transformation machen! nurnoch abhängigkeit von $id
+     */
     public function isAllowed(Chrome_Authorisation_Resource_Interface $resource) {
 
         $role = $resource->getRole();

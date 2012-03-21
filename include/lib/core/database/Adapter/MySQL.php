@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB.Adapter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2011 13:22:43] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2012 00:30:58] --> $
  * @author     Alexander Book
  */
 
@@ -188,22 +188,22 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 	public function createConnection($server, $database, $user, $pass)
 	{
 		$connection = @mysql_pconnect($server, $user, $pass);
-        
+
 		if($connection === false) {
             switch(mysql_errno()) {
-                
+
                 case 2003:
                 case 2005: {
                     throw new Chrome_Exception('Could not establish connection to server  on "'.$server.'"! Server is not responding!', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER);
                 }
-                
+
                 case 1045: {
                     throw new Chrome_Exception('Could not establish connection to server  on "'.$server.'"! Username and/or password is wrong', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD);
                 }
-                
+
                 default: {
                     throw new Chrome_Exception('('.mysql_errno().') '.mysql_error(), Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_UNKNOWN);
-                }   
+                }
             }
 		}
 
@@ -212,7 +212,7 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
                 case 1049: {
                     throw new Chrome_Exception('Could not select database '.$database.'!', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE);
                 }
-                
+
                 default: {
                     throw new Chrome_Exception('('.mysql_errno().') '.mysql_error(), Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_UNKNOWN);
                 }
@@ -253,6 +253,10 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 
 			case 'select': {
 
+                if(isset($this->_statementOption[$IID]['hasRight']['column'])) {
+                    $this->_statementOption[$IID] = self::$_rightHandler->_addHasRight($this->_statementOption[$IID], $this->_statementOption[$IID]['hasRight']['resource']);
+                }
+
 				$this->_statement[$IID] .= 'SELECT ';
 
 				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['select']['distinct']) ? $this->_statementOption[$IID]['select']['distinct'].' ' : '';
@@ -268,8 +272,8 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
                 $this->_statement[$IID] .= isset($this->_statement[$IID]['hashRight']['colomnName']) ? ' ,'.DB_PREFIX.'_ace AS ace' : '';
 
 				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['where']['condition']) ? 'WHERE '.$this->_statementOption[$IID]['where']['condition'].' ' : '';
-            
-                if(isset($this->_statementOption[$IID]['hashRight']['colomnName'])) {
+
+                /*if(isset($this->_statementOption[$IID]['hashRight']['colomnName'])) {
                     $this->_statement[$IID] .= isset($this->_statementOption[$IID]['where']['condition']) ? 'AND ' : ' ';
                     $groupID = isset($this->_statementOption[$IID]['hasRight']['groupID']) ? $this->_statementOption[$IID]['hasRight']['groupID'] : $_SESSION['group'];
                     $this->_statement[$IID] .= $this->_statementOption[$IID]['hasRight']['colomName'].' = ace.id
@@ -279,7 +283,7 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 					OR (ace.allow LIKE "'.CHROME_ACE::ACE_ALLOW_ALL.'|%" AND ace.deny NOT LIKE "%|'.$groupID.'|%" )
 					OR ace.deny LIKE "'.CHROME_ACE::ACE_DENY_NONE.'|%"
  					) ';
-                }
+                }*/
 
 				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['groupBy']['group']) ? 'GROUP BY '.$this->_statementOption[$IID]['groupBy']['group'].' '.$this->_statementOption[$IID]['groupBy']['groupType'].' ' : '';
 
@@ -288,6 +292,10 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['orderBy']['field']) ? 'ORDER BY '.$this->_statementOption[$IID]['orderBy']['field'].' '.$this->_statementOption[$IID]['orderBy']['orderType'].' ' : '';
 
 				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['limit']['offset']) ? 'LIMIT '.$this->_statementOption[$IID]['limit']['offset'].', '.$this->_statementOption[$IID]['limit']['rowCount'].' ' : '';
+
+                if(isset($this->_statementOption[$IID]['hasRight']['column'])) {
+                    $this->_statement[$IID] = self::$_rightHandler->addHasRight($this->_statement[$IID], $this->_statementOption[$IID]['hasRight']['resource'], $this->_statementOption[$IID]['hasRight']['column']);
+                }
 
 				break;
 			}
@@ -719,10 +727,10 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
            if($this->_connectionID === null) {
                 throw new Chrome_Exception('Cannot execute query if no connection is set!', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_NO_CONNECTION_SET);
            } else {
-                $this->_connection = self::$_registryInstance->getConnection($this->_connectionID); 
+                $this->_connection = self::$_registryInstance->getConnection($this->_connectionID);
            }
 	    }
-       
+
 		$query = mysql_query($query, $this->_connection);
 		if($query === false) {
             throw new Chrome_Exception('Error while sending a query to database!', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_ERROR_IN_QUERY);

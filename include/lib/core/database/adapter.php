@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB.Adapter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2012 14:55:40] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2012 00:33:44] --> $
  * @author     Alexander Book
  */
 
@@ -57,6 +57,14 @@ abstract class Chrome_DB_Adapter_Abstract
 	 * @var array
 	 */
 	private static $_sqlStatements = array();
+
+    /**
+     *
+     * An Instance of a handler, which generates a sql statement with rights
+     *
+     * @var Chrome_Database_Right_Handler_Interface
+     */
+    protected static $_rightHandler = null;
 
 	/**
 	 * Instance of Chrome_DB_Registry
@@ -660,10 +668,19 @@ abstract class Chrome_DB_Adapter_Abstract
 	{
 	}
 
-    protected function _hasRight(Chrome_DB_Interface_Abstract & $obj = null, $colomnName, $groupID = null)
+    protected function _hasRight(Chrome_DB_Interface_Abstract & $obj = null, $dbColumn = 'resource_id', Chrome_Authorisation_Resource_Interface $resource)
     {
+        if(self::$_rightHandler == null) {
+            self::$_rightHandler = Chrome_Registry::getInstance()->get('database', 'right_handler');
+
+            // should not happen!
+            if(self::$_rightHandler == null) {
+                throw new Chrome_Exception('Cannot get an Chrome_Database_Right_Handler instance from Registry!');
+            }
+        }
+
         $interfaceID = $obj->getID();
-        $this->_statementOption[$interfaceID]['hasRight'] = array('colomnName' => $colomnName, 'groupID' => $groupID);
+        $this->_statementOption[$interfaceID]['hasRight'] = array('resource' => $resource, 'column' => $dbColumn);
     }
 
 	/**
@@ -728,6 +745,16 @@ abstract class Chrome_DB_Adapter_Abstract
 
 		$this->_SQLType[$interfaceID] = $type;
 	}
+
+    /**
+     *
+     * Sets the 'RightHandler', this is needed for the method hasRight()!
+     *
+     * @return void
+     */
+    public static function setRightHandler(Chrome_Database_Right_Hander_Interface $obj) {
+        self::$_rightHandler = $obj;
+    }
 
 	/**
 	 *

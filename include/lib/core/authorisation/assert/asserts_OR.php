@@ -14,10 +14,10 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.RBAC
+ * @subpackage Chrome.Authorisation
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.10.2011 23:44:51] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2012 18:13:22] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -25,17 +25,17 @@ if(CHROME_PHP !== true)
 
 /**
  * @package    CHROME-PHP
- * @subpackage Chrome.RBAC
- */ 
-abstract class Chrome_RBAC_Asserts_OR extends Chrome_RBAC_Asserts_Abstract
+ * @subpackage Chrome.Authorisation
+ */
+abstract class Chrome_Authorisation_Asserts_OR extends Chrome_Authorisation_Assert_Abstract
 {
     public function assert(Chrome_Authorisation_Resource_Interface $authResource)
     {
-        // a  logical interconnection of OR 
+        // a  logical interconnection of OR
         foreach($this->_asserts as $assert) {
             if($assert->assert($authResource) === true) {
                 return true;
             }
-        }   
-    }    
+        }
+    }
 }

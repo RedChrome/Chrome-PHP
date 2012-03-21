@@ -17,7 +17,7 @@
  * @subpackage Chrome.RBAC
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2011 22:32:13] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2012 14:51:17] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -26,63 +26,36 @@ if(CHROME_PHP !== true)
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.RBAC
- */ 
+ */
 interface Chrome_RBAC_Resource_Interface extends Chrome_Authorisation_Resource_Interface
 {
-    public function __construct($role = null, $transformation = null, Chrome_RBAC_Assert_Interface $obj = null);
-    
+    public function __construct($id, $role = null, $transformation = null, Chrome_Authorisation_Assert_Interface $obj = null);
+
     public function getRole();
-    
-    public function getTransformation();
-    
-    public function getAssertObj();
-    
+
     public function setRole($role);
-    
-    public function setTransformation($transformation);
-    
-    public function setAssertObj(Chrome_RBAC_Assert_Interface $obj);
 }
 
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.RBAC
- */ 
-class Chrome_RBAC_Resource implements Chrome_RBAC_Resource_Interface
+ */
+class Chrome_RBAC_Resource extends Chrome_Authorisation_Resource implements Chrome_RBAC_Resource_Interface
 {
     protected $_role = null;
-    
-    protected $_transformation = null;
-    
-    protected $_assertObj = null;
-    
-    public function __construct($role = null, $transformation = null, Chrome_RBAC_Assert_Interface $obj = null) {
+
+    public function __construct($id, $role = null, $transformation = null, Chrome_Authorisation_Assert_Interface $obj = null) {
+        $this->_id = $id;
         $this->_role = $role;
         $this->_transformation = $transformation;
-        $this->_assertObj = $obj;
+        $this->_assert = $obj;
     }
-    
+
     public function getRole() {
         return $this->_role;
     }
-    
-    public function getTransformation() {
-        return $this->_transformation;
-    }
-    
-    public function getAssertObj() {
-        return $this->_assertObj;
-    }
-    
+
     public function setRole($role) {
         $this->_role = $role;
-    }
-    
-    public function setTransformation($transformation) {
-        $this->_transformation = $transformation;
-    }
-    
-    public function setAssertObj(Chrome_RBAC_Assert_Interface $obj) {
-        $this->_assertObj = $obj;
     }
 }

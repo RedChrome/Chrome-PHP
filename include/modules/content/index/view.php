@@ -97,7 +97,6 @@ class Chrome_View_Index_TODO extends Chrome_View_Abstract
     public function render() {
 
         return '<div align="left">TODO LIST:<br>
-            0. Rechte per SQL abfragen!!<br>
             1. User Bereich<br>
             2. Modul (News)<br>
             3. Admin Bereich<br>

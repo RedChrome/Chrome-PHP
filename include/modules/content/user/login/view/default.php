@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2012 15:40:39] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2012 16:17:35] --> $
  * @author     Alexander Book
  */
 
@@ -47,6 +47,10 @@ class Chrome_View_User_Login_Default extends Chrome_View_Abstract
     public function showForm() {
         Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_User_Default_ShowForm($this->_controller));
     }
+
+    public function errorWhileLoggingIn() {
+        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_User_Default_WrongPassword($this->_controller));
+    }
 }
 
 class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract {
@@ -57,9 +61,7 @@ class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract {
         $template->assign('LANG', new Chrome_Language('modules/content/user/login'));
         $template->assign('FORM', $this->_controller->getForm());
         return $template->render();
-
-
-        return 'you`re already logged in!';
+        //return 'you`re already logged in!';
     }
 }
 
@@ -84,5 +86,11 @@ class Chrome_View_User_Default_ShowForm extends Chrome_View_Abstract {
         $template->assign('LANG', $lang);
         $template->assign('FORM', $this->_controller->getForm());
         return $template->render();
+    }
+}
+
+class Chrome_View_User_Default_WrongPassword extends Chrome_View_Abstract{
+    public function render() {
+        return 'wrong password or username!';
     }
 }

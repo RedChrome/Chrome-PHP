@@ -18,7 +18,7 @@
  * @subpackage Chrome.FrontController
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2012 01:00:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2012 15:20:21] --> $
  * @author     Alexander Book
  */
 
@@ -223,7 +223,7 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
                                'Chrome_Authentication_Chain_Cookie',
                                'Chrome_Authentication_Chain_Session',
                                'Chrome_Authorisation',
-                               'Chrome_RBAC');
+                               'Chrome_Authorisation_Adapter_Default');
 
                 import($classes);
 
@@ -245,8 +245,15 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
                                ->addChain($cookie)
                                ->addChain($db);
 
-                // set authorisation service, default is RBAC
-                Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB()));
+                // set authorisation service
+                //Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB())); // better one, but not finished ;)
+                $adapter = Chrome_Authorisation_Adapter_Default::getInstance();
+                $adapter->setModel(new Chrome_Model_Authorisation_Default_DB());
+
+                Chrome_Authorisation::setAuthorisationAdapter($adapter);
+
+                // needed for the database, because it fetches there the rightHandler instance
+                $registry->set('database', 'right_handler', new Chrome_Database_Right_Handler_Default(), true);
 
                 // first authentication
                 // user gets authenticated if session or cookie is set

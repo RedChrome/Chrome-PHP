@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2012 18:53:25] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.03.2012 13:43:41] --> $
  * @author     Alexander Book
  */
 
@@ -249,7 +249,7 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      *
      * @var string
      */
-    const CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE = 'cache';
+    const CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE = 'tmp/cache/_require.cache';
 
     /**
      * Namespace
@@ -267,7 +267,7 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      */
     protected function _cache()
     {
-        $this->_cache = parent::$_cacheFactory->forceCaching()->factory('serialization', TMP.self::CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE);
+        $this->_cache = parent::$_cacheFactory->forceCaching()->factory('serialization', self::CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE);
     }
 
     /**

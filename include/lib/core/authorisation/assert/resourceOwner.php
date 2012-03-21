@@ -14,10 +14,10 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.RBAC
+ * @subpackage Chrome.Authorisation
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.10.2011 23:28:58] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2012 18:18:40] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -25,24 +25,34 @@ if(CHROME_PHP !== true)
 
 /**
  * @package    CHROME-PHP
- * @subpackage Chrome.RBAC
- */ 
-class Chrome_RBAC_Assert_Resource_Owner implements Chrome_RBAC_Assert_Interface
+ * @subpackage Chrome.Authorisation
+ */
+class Chrome_Authorisation_Assert_Resource_Owner implements Chrome_Authorisation_Assert_Abstract
 {
     private $_userID = null;
-    
+
     private $_rUserID = null;
-    
+
     public function __construct($userID) {
         $this->_userID = $userID;
     }
-    
+
     public function assert(Chrome_Authorisation_Resource_Interface $authResource) {
-        return $this->_userID == $this->_rUserID;  
+
+
+        // current user has to be the resource owner and must not be a guest
+        $return = ($this->_userID == $this->_rUserID) AND ($this->_userID != 0);
+
+        // if it's the owner, then he has the right
+        if($return === true) {
+            $this->setOption('return', true);
+        }
+
+        return $return;
     }
-    
+
     public function setResourceUserID($userID) {
         $this->_rUserID = $userID;
     }
-    
+
 }

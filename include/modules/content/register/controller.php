@@ -15,7 +15,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 
     protected function _execute()
     {
-        if(Chrome_Authorisation::getInstance()->isAllowed(new Chrome_RBAC_Resource('register', 'register')) === false) {
+        if(Chrome_Authorisation::getInstance()->isAllowed(new Chrome_Authorisation_Resource('register', 'register')) === false) {
             $this->view->alreadyRegistered();
             //$this->view->setError(403);
             $this->view->render();

@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2012 14:35:39] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2012 15:15:14] --> $
  * @author     Alexander Book
  */
 
@@ -73,7 +73,7 @@ define('CHROME_HASH_ALGORITHM', 'tiger192,3'); # default hash algorithm, availab
 define('CHROME_CRYPT_ALGORITHM', 'BLOWFISH'); # default crypt algorithm, if mcrypt extension isn't loaded, available: XTEA & BLOWFISH
 
 ########### AUTHORISATION ########
-define('CHROME_AUTHORISATION_DEFAULT_ADAPTER', 'Chrome_RBAC');
+define('CHROME_AUTHORISATION_DEFAULT_ADAPTER', 'Chrome_Authorisation_Adapter_Default');
 
 
 ########### OTHERS ###########
