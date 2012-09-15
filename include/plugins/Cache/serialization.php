@@ -17,7 +17,7 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2012 18:22:34] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.08.2012 17:54:03] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -280,8 +280,8 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
         $this->_data[self::CHROME_CACHE_SERIALIZATION_TIMESTAMP_KEY] = CHROME_TIME;
 
         // truncate file AND seek to position 0
-        ftruncate($this->_filePointer, 0);
-        fseek($this->_filePointer, 0);
+        //ftruncate($this->_filePointer, 0);
+        //fseek($this->_filePointer, 0);
         // write the serialized data
         fwrite($this->_filePointer, serialize($this->_data));
     }
@@ -322,7 +322,7 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
         $this->_dataChanged = true;
 
         // now we need to open the file!
-        $this->_filePointer = fopen($this->_fileName, 'r+b');
+        $this->_filePointer = fopen($this->_fileName, 'wb');
      }
 
     /**

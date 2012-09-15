@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 12:00:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 16:05:38] --> $
  * @author     Alexander Book
  */
 

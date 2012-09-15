@@ -17,7 +17,7 @@
  * @subpackage Chrome.URI
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 14:23:16] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 02:10:30] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -26,7 +26,7 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.URI
- */ 
+ */
 interface Chrome_URI_Interface
 {
     const CHROME_URI_AUTHORITY_HOST = 'HOST',
@@ -63,12 +63,12 @@ interface Chrome_URI_Interface
 
 /**
  * Chrome_URI
- * 
+ *
  * Class to create URLs AND retrieve information from URLs
- * 
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.URI
- */ 
+ */
 class Chrome_URI implements Chrome_URI_Interface
 {
     protected $_protocol = 'http';
@@ -88,13 +88,16 @@ class Chrome_URI implements Chrome_URI_Interface
 
     public function __construct($useCurrentURI = true) {
         if($useCurrentURI === true) {
-            $this->setURL('http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']);
+
+            $requestData = Chrome_Request::getInstance()->getRequestDataObject();
+
+            $this->setURL('http://'.$requestData->getSERVER('SERVER_NAME').$requestData->getSERVER('REQUEST_URI'));
         }
     }
 
     public function setProtocol($protocol)
     {
-        $this->_protocol = $protocol;
+        $this->_protocol = rtrim($protocol, '://');
     }
 
     public function getProtocol()
@@ -104,7 +107,7 @@ class Chrome_URI implements Chrome_URI_Interface
 
     public function setAuthority($host, $port = null, $user = '', $password = '')
     {
-        $this->_authority = array(self::CHROME_URI_AUTHORITY_HOST => $host,
+        $this->_authority = array(self::CHROME_URI_AUTHORITY_HOST => rtrim($host, '/'),
                                   self::CHROME_URI_AUTHORITY_PORT => $port,
                                   self::CHROME_URI_AUTHORITY_USER => $user,
                                   self::CHROME_URI_AUTHORITY_PASSWORD => $password);
@@ -117,7 +120,7 @@ class Chrome_URI implements Chrome_URI_Interface
 
     public function setPath($path)
     {
-        $this->_path = $path;
+        $this->_path = trim($path, '/');
     }
 
     public function getPath()
@@ -127,8 +130,7 @@ class Chrome_URI implements Chrome_URI_Interface
 
     public function setQuery($query)
     {
-
-        parse_str($query, $this->_query);
+        parse_str(ltrim($query, '?'), $this->_query);
     }
 
     public function setQueryViaArray(array $query)
@@ -143,7 +145,7 @@ class Chrome_URI implements Chrome_URI_Interface
 
     public function setFragment($fragment)
     {
-        $this->_fragment = $fragment;
+        $this->_fragment = ltrim($fragment, '#');
     }
 
     public function getFragment()
@@ -153,7 +155,6 @@ class Chrome_URI implements Chrome_URI_Interface
 
     public function setURL($url)
     {
-
         if(($data = @parse_url($url)) === false) {
             throw new Chrome_Exception('Invalid URL "'.$url.'" given in Chrome_URI::setURL()!');
         } else {
@@ -182,6 +183,8 @@ class Chrome_URI implements Chrome_URI_Interface
 
         if(isset($this->_protocol)) {
             $url .= $this->_protocol.'://';
+        } else {
+            throw new Chrome_Exception('Cannot create url without a protocoll!');
         }
 
         if(!empty($this->_authority[self::CHROME_URI_AUTHORITY_HOST])) {
@@ -198,10 +201,16 @@ class Chrome_URI implements Chrome_URI_Interface
             if(!empty($this->_authority[self::CHROME_URI_AUTHORITY_PORT])) {
                 $url .= ':'.$this->_authority[self::CHROME_URI_AUTHORITY_PORT];
             }
+        } else {
+            throw new Chrome_Exception('Cannot create url without a host');
         }
+
+        $url .= '/';
 
         if(!empty($this->_path)) {
             $url .= $this->_path;
+        } else {
+            throw new Chrome_Exception('Cannot create url without a path!');
         }
 
         if(!empty($this->_query)) {

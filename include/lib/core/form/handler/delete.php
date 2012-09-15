@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 14:23:36] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2012 16:38:44] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -30,7 +30,7 @@ if(CHROME_PHP !== true)
  * Deletes the input and other data, if the form is getting destroyed
  *
  * You can use this as Creation/Receiving/Validation Handler, but i think it's
- * most usefull as receiving hanlder ;)
+ * most usefull as receiving handler ;)
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form

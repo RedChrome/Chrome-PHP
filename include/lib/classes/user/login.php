@@ -43,8 +43,6 @@ class Chrome_User_Login implements Chrome_User_Login_Interface
 
     public function isLoggedIn() {
 
-
-
         $authenticate = Chrome_Authentication::getInstance();
 
         if($authenticate->isAuthenticated() == false) {
@@ -59,7 +57,6 @@ class Chrome_User_Login implements Chrome_User_Login_Interface
         }
 
         return false;
-
     }
 
     public function checkIsLoggedIn() {

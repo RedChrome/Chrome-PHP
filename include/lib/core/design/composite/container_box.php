@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.08.2011 14:03:37] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2012 16:31:46] --> $
  * @author     Alexander Book
  */
 
@@ -63,8 +63,10 @@ class Chrome_Design_Composite_Container_Box extends Chrome_Design_Composite_Cont
 
         $return = '';
 
+        $design = Chrome_Design::getInstance();
+
         foreach($this->_views AS $view) {
-            $return .= Chrome_Design::getInstance()->get($this->_start, $view).$view->render().Chrome_Design::getInstance()->get($this->_end, $view);
+            $return .= $design->get($this->_start, $view).$view->render().$design->get($this->_end, $view);
         }
 
         return $return;

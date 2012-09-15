@@ -1,5 +1,5 @@
 <?php
-$FORM->getElement('credential')->getDecorator()
+$FORM->getElement('identity')->getDecorator()
         ->setAttribute('size', 25);
 
 $FORM->getElement('password')->getDecorator()
@@ -12,7 +12,7 @@ $FORM->getElement('password')->getDecorator()
 <table align="center">
     <tr>
         <td align="left"><?php echo $LANG->get('email_address'); ?>:</td>
-        <td><?php echo $FORM->render('credential'); ?></td>
+        <td><?php echo $FORM->render('identity'); ?></td>
     </tr>
     <tr>
         <td align="left"><?php echo $LANG->get('password'); ?>:</td>

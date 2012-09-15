@@ -13,179 +13,291 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
+ * @category   CHROME-PHP
  * @package    CHROME-PHP
  * @subpackage Chrome.Request
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 23:05:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 17:18:47] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
-
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.Request
- */
-final class Chrome_Request
-{
-	/**
-	 * Path where all Request files are placed
-	 *
-	 * @var string
-	 */
-	const CHROME_REQUEST_CLASS_PATH = 'core/request/';
-
-	/**
-	 * Contains the used Request instance
-	 *
-	 * @var Chrome_Request_Abstract
-	 */
-	private static $_requestInstance = null;
-
-    /**
-     * Which request class gets used
-     *
-     * @var string
-     */
-    private static $_requestClass = 'HTTP';
-
-    /**
-     * Contains all created request instances
-     *
-     * @var array
-     */
-    private static $_requestInstances = array();
-
-	/**
-	 * Singleton
-	 *
-	 * @return Chrome_Request
-	 */
-	private function __construct() {}
-
-	/**
-	 * Singleton
-	 *
-	 * @return void
-	 */
-	private function __clone() {}
-
-	/**
-	 * Singleton
-	 *
-	 * @return Chrome_Request_Abstract object
-	 */
-	public static function getInstance()
-	{
-		if(self::$_requestInstance === null) {
-			// get the Request object, create it
-			self::$_requestInstance = self::_createRequestInstance();
-		}
-		return self::$_requestInstance;
-	}
-
-    private static function _createRequestInstance()
-    {
-        if(isset(self::$_requestInstances[self::$_requestClass])) {
-            return self::$_requestInstances[self::$_requestClass];
-        } else {
-
-            self::_loadRequestClass();
-
-            $class = 'Chrome_Request_'.self::$_requestClass;
-
-            self::$_requestInstances[self::$_requestClass] = new $class();
-            return self::$_requestInstances[self::$_requestClass];
-        }
-    }
-
-    private static function _loadRequestClass()
-    {
-        /*$dir = LIB.self::CHROME_REQUEST_CLASS_PATH;
-
-        // check wheter dir exists
-        if(_isDir($dir) === false) {
-            throw new Chrome_Exception('Cannot load any Chrome_Request classes, because dir '.LIB.self::CHROME_REQUEST_CLASS_PATH.' does not exist in Chrome_Request::_loadRequestClass()!');
-        }*/
-
-        /*
-        $files = _getFilesInDir($dir);
-
-        foreach($files AS $file) {
-
-            if($file == self::$_requestClass.'.php') {
-                require_once $dir.'/'.$file;
-                return;
-            }
-        }*/
-
-        $class = self::$_requestClass.'.php';
-
-        // faster
-        if(!_isFile(LIB.self::CHROME_REQUEST_CLASS_PATH.$class)) {
-            throw new Chrome_Exception('Cannot find file '.LIB.self::CHROME_REQUEST_CLASS_PATH.$class.' in Chrome_Request::_loadRequestClass()!');
-        } else {
-            require_once LIB.self::CHROME_REQUEST_CLASS_PATH.$class;
-            return;
-        }
+//TODO: Add documentation
 
 
-        throw new Chrome_Exception('Could not find file for class Chrome_Request_'.self::$_requestClass.'! Cannot load this class!');
-    }
-
-	/**
-	 * Sets $this->_requestClass
-	 *
-	 * @param string $class name of the request class without prefix 'Chrome_Request_'
-	 * @return void
-	 */
-	public static function setRequestClass($class)
-	{
-		self::$_requestClass = strtoupper($class);
-	}
-}
-
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.Request
- */
 interface Chrome_Request_Interface
 {
-    public function &getParameters();
+	/**
+	 * @return Chrome_Request_Interface
+	 */
+	public static function getInstance();
 
-	public function getPrameterNames();
 
-	public function issetParameter($name);
+	/**
+	 * @return Chrome_Request_Handler_Interface
+	 */
+	public function getRequest();
 
-	public function getParameter($name);
+	/**
+	 * @param Chrome_Request_Handler_Interface $obj
+	 * @return void
+	 */
+	public function addRequestObject( Chrome_Request_Handler_Interface $obj );
 
-	public function issetHeader($name);
+	/**
+	 * @retur Chrome_Request_Data_Interface
+	 */
+	public function getRequestDataObject();
+}
 
-	public function getHeader($name);
+interface Chrome_Request_Handler_Interface
+{
+	/**
+	 * @return boolean
+	 */
+	public function canHandleRequest();
 
-	public function getGET($name);
-
-	public function getPOST($name);
-
-	public function issetGET($name);
-
-	public function issetPOST($name);
-
-	public function &getGETParameter();
-
-	public function &getPOSTParameter();
-
-	public function setParams();
-
-	public function setPOSTParameter($name, $data);
-
-	public function setGETParameter($name, $data);
+	/**
+	 * @return Chrome_Request_Data_Interface
+	 */
+	public function getRequestData();
 }
 
 /**
- * @package CHROME-PHP
- * @subpackage Chrome.Request
+ * This class saves the required global data $_SERVER, $_GET, etc.. which is for
+ * the specific request needed. E.g. Ajax request cant send a file
+ *
  */
-abstract class Chrome_Request_Abstract implements Chrome_Request_Interface {}
+interface Chrome_Request_Data_Interface
+{
+	/**
+	 * @return Chrome_Request_Data_Interface
+	 */
+	public static function getInstance();
+
+	public function getData();
+
+	public function getGET( $key = null );
+
+	public function getPOST( $key = null );
+
+	public function getSERVER( $key = null );
+
+	public function getFILES( $key = null );
+
+	public function getCOOKIE( $key = null );
+
+	public function getSESSION( $key = null );
+
+	public function getREQUEST( $key = null );
+
+	public function getENV( $key = null );
+}
+
+abstract class Chrome_Request_Data_Abstract implements Chrome_Request_Data_Interface
+{
+
+	protected $_vars = array();
+
+	protected function __construct()
+	{
+		$this->_vars = array(
+			'SERVER' => $_SERVER,
+			'GET' => $_GET,
+			'POST' => $_POST,
+			'FILES' => $_FILES,
+			'COOKIE' => $_COOKIE,
+			'SESSION' => $_SESSION,
+			'REQUEST' => $_REQUEST,
+			'ENV' => $_ENV );
+	}
+
+	public static function getInstance()
+	{
+		if( self::$_instance === null ) {
+			self::$_instance = new self();
+		}
+
+		return self::$_instance;
+	}
+
+	public function getGET( $key = null )
+	{
+
+		if( $key === null ) {
+			return $this->_vars['GET'];
+		} else
+			if( isset( $this->_vars['GET'][$key] ) ) {
+				return $this->_vars['GET'][$key];
+			}
+
+	}
+
+	public function getPOST( $key = null )
+	{
+		if( $key === null ) {
+			return $this->_vars['POST'];
+		} else
+			if( isset( $this->_vars['POST'][$key] ) ) {
+				return $this->_vars['POST'][$key];
+			}
+	}
+
+	public function getSERVER( $key = null )
+	{
+		if( $key === null ) {
+			return $this->_vars['SERVER'];
+		} else
+			if( isset( $this->_vars['SERVER'][$key] ) ) {
+				return $this->_vars['SERVER'][$key];
+			}
+	}
+
+	public function getFILES( $key = null )
+	{
+		if( $key === null ) {
+			return $this->_vars['FILES'];
+		} else
+			if( isset( $this->_vars['FILES'][$key] ) ) {
+				return $this->_vars['FILES'][$key];
+			}
+	}
+
+	public function getCOOKIE( $key = null )
+	{
+		if( $key === null ) {
+			return $this->_vars['COOKIE'];
+		} else
+			if( isset( $this->_vars['COOKIE'][$key] ) ) {
+				return $this->_vars['COOKIE'][$key];
+			}
+	}
+
+	public function getSESSION( $key = null )
+	{
+		if( $key === null ) {
+			return $this->_vars['SESSION'];
+		} else
+			if( isset( $this->_vars['SESSION'][$key] ) ) {
+				return $this->_vars['SESSION'][$key];
+			}
+	}
+
+	public function getREQUEST( $key = null )
+	{
+		if( $key === null ) {
+			return $this->_vars['REQUEST'];
+		} else
+			if( isset( $this->_vars['REQUEST'][$key] ) ) {
+				return $this->_vars['REQUEST'][$key];
+			}
+	}
+
+	public function getENV( $key = null )
+	{
+		if( $key === null ) {
+			return $this->_vars['ENV'];
+		} else
+			if( isset( $this->_vars['ENV'][$key] ) ) {
+				return $this->_vars['ENV'][$key];
+			}
+	}
+
+	public function getData()
+	{
+		return $this->_vars;
+	}
+}
+
+
+class Chrome_Request implements Chrome_Request_Interface
+{
+	/**
+	 * @var Chrome_Request
+	 */
+	private static $_instance = null;
+
+	/**
+	 * The currently used request object
+	 *
+	 * @var Chrome_Request_Handler_Interface
+	 */
+	private $_request = null;
+
+	/**
+	 * A list of all request objects
+	 *
+	 * @var array
+	 */
+	private $_requests = array();
+
+	/**
+	 * @var Chrome_Request_Data_Interface
+	 */
+	private $_requestData = null;
+
+
+	private function __construct()
+	{
+
+	}
+
+	public function getRequestDataObject()
+	{
+		// the if is always true, well it should be...
+		return ( $this->_requestData === null or $this->getRequest() != null ) ? $this->_requestData : $this->_requestData;
+	}
+
+	public static function getInstance()
+	{
+		if( self::$_instance === null ) {
+			self::$_instance = new self();
+		}
+
+		return self::$_instance;
+	}
+
+	public function getRequest()
+	{
+		if( $this->_request !== null ) {
+			return $this->_request;
+		}
+
+		// figure out which class can handle the request
+		// there must at least one obj which can handle..
+		foreach( $this->_requests as $key => $requestObj ) {
+
+			if( $requestObj->canHandleRequest() === true ) {
+				$this->_request = $requestObj;
+				$this->_requestData = $requestObj->getRequestData();
+
+				break;
+			}
+		}
+
+		// well that should never happen. every Chrome_Request_Handler_Interface has to return an object of Chrome_Request_Data_Interface
+		// null is also not allowed!
+		if( !( $this->_requestData instanceof Chrome_Request_Data_Interface ) or $this->_requestData === null ) {
+			throw new Chrome_Exception( 'Unexpected return value of "' . get_class( $this->_request ) .
+				'" in method getRequestData()! Expected an object of interface Chrome_Request_Data_Interface, actual="' .
+				get_class( $this->_requestData ) . '"! Violation of interface declaration!' );
+		}
+
+		// unset all global data, but DO NOT UNSET SESSION!!! http://php.net/manual/de/function.unset.php#77926
+		unset( $_SERVER, $_GET, $_POST, $_FILES, $_COOKIE, $_REQUEST, $_ENV, $GLOBALS );
+        $_SESSION = array();
+
+		// now we dont need them any more
+		unset( $this->_requests );
+
+		return $this->_request;
+	}
+
+	public function addRequestObject( Chrome_Request_Handler_Interface $obj )
+	{
+		// only add a request, if we havent decided which request is sent...
+		if( $this->_request === null ) {
+			$this->_requests[] = $obj;
+		}
+	}
+}

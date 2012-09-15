@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 16:59:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 16:49:07] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -73,7 +73,7 @@ class Chrome_Cookie implements ArrayAccess
      */
     private function __construct()
     {
-        $this->_COOKIE = &$_COOKIE;
+        $this->_COOKIE = $_COOKIE;
 
         $this->_validateCookie();
     }
@@ -164,7 +164,7 @@ class Chrome_Cookie implements ArrayAccess
 
 
         if(!headers_sent()) {
-            setCookie($name, 0, CHROME_TIME - self::CHROME_COOKIE_COOKIE_NO_EXPIRE, $path, $domain, $secure, $httponly);
+            setCookie($name, "", CHROME_TIME - self::CHROME_COOKIE_COOKIE_NO_EXPIRE, $path, $domain, $secure, $httponly);
         }
         unset($this->_COOKIE[$name]);
     }

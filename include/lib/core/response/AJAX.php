@@ -17,7 +17,7 @@
  * @subpackage Chrome.Response
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.02.2012 19:35:11] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.08.2012 18:41:38] --> $
  * @author     Alexander Book
  */
 
@@ -69,9 +69,10 @@ class Chrome_Response_AJAX extends Chrome_Response_Abstract implements Chrome_Re
 	{
 		if(!headers_sent()) {
     		header('HTTP/1.0 '.$this->_status);
-    		foreach($this->_headers AS $key => $value) {
-    			header($key.': '.$value);
-    		}
+
+        	foreach($this->_headers AS $key => $value) {
+        	   header($key.': '.$value);
+            }
         }
 
         // indeed $_body is an array, but if were using AJAX, then
@@ -83,7 +84,7 @@ class Chrome_Response_AJAX extends Chrome_Response_Abstract implements Chrome_Re
             echo $this->_body;
         }
 
-		$this->_headers = null;
+		$this->_headers = array();
 		$this->_body = null;
 	}
 

@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 14:07:29] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.03.2012 16:24:58] --> $
  * @author     Alexander Book
  */
 
@@ -71,7 +71,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         // this is the 'username' input
         // it is required, of course, to login
         // set onblur, and onfocus
-        $this->_elements['credential'] = new Chrome_Form_Element_Text($this, 'credential', array(
+        $this->_elements['identity'] = new Chrome_Form_Element_Text($this, 'identity', array(
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
                 Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => $LANG->get('email')

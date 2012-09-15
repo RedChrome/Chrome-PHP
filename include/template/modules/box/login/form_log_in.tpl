@@ -1,5 +1,5 @@
 <?php echo $FORM->render('login'); ?>
-<?php echo $FORM->render('credential'); ?>
+<?php echo $FORM->render('identity'); ?>
 
 <?php echo $FORM->render('password'); ?>
 

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 14:08:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 13:09:32] --> $
  * @author     Alexander Book
  */
 
@@ -921,18 +921,17 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     {
         $this->_attribts[$key] = $value;
 
-
         if($key == 'method') {
             switch(strtoupper($value)) {
                 case self::CHROME_FORM_METHOD_POST:
                     {
-                        $this->setSentData(Chrome_Request::getInstance()->getPOSTParameter());
+                        $this->setSentData(Chrome_Request::getInstance()->getRequestDataObject()->getPOST());
                         break;
                     }
 
                 case self::CHROME_FORM_METHOD_GET:
                     {
-                        $this->setSentData(Chrome_Request::getInstance()->getGETParameter());
+                        $this->setSentData(Chrome_Request::getInstance()->getRequestDataObject()->getGET());
                         break;
                     }
 

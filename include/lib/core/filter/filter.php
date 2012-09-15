@@ -17,7 +17,7 @@
  * @subpackage Chrome.Filter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 15:31:40] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 14:55:02] --> $
  * @author     Alexander Book
  */
 
@@ -57,7 +57,7 @@ abstract class Chrome_Filter_Chain_Abstract
 	 * @param Chrome_Filter_Abstract $filter
 	 * @return void
 	 */
-	public function addFilter(Chrome_Filter_Abstract $filter)
+	public function addFilter(Chrome_Filter_Interface $filter)
 	{
 		$this->_filters[] = $filter;
 	}
@@ -67,11 +67,11 @@ abstract class Chrome_Filter_Chain_Abstract
 	 *
 	 * run through all filters
 	 *
-	 * @param Chrome_Request_Abstract $req
-	 * @param Chrome_Response_Abstract $res
+	 * @param Chrome_Request_Data_Interface $req
+	 * @param Chrome_Response_Interface $res
 	 * @return void
 	 */
-	public function processFilters(Chrome_Request_Abstract $req, Chrome_Response_Abstract $res)
+	public function processFilters(Chrome_Request_Data_Interface $req, Chrome_Response_Interface $res)
 	{
 	    // loop through every filter
 		foreach($this->_filters AS $filter) {
@@ -106,11 +106,5 @@ interface Chrome_Filter_Interface
 	 * @param Chrome_Response_Abstract $res
 	 * @return void
 	 */
-	public function execute(Chrome_Request_Abstract $req, Chrome_Response_Abstract $res);
+	public function execute(Chrome_Request_Data_Interface $req, Chrome_Response_Interface $res);
 }
-
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.Filter
- */
-abstract class Chrome_Filter_Abstract implements Chrome_Filter_Interface {}

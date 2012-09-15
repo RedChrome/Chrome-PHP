@@ -17,12 +17,11 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 16:43:31] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 14:53:02] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+if( CHROME_PHP !== true ) die();
 
 /**
  * @package CHROME-PHP
@@ -30,64 +29,86 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Controller_Content_Login extends Chrome_Controller_Content_Abstract
 {
-	protected function _initialize() {
+	protected function _initialize()
+	{
 	}
 
 
-    protected function _execute()
-    {
-        if(isset($this->_GET['request'])) {
-            $request = $this->_GET['request'];
-        } else if(isset($this->_POST['request'])) {
-            $request  =$this->_POST['request'];
-        } else {
-            $request = '';
-        }
+	protected function _execute()
+	{
+		if( Chrome_Request::getInstance()->getRequest() instanceof Chrome_Request_Handler_AJAX ) {
+			require_once 'controller/ajax.php';
+			$controller = new Chrome_Controller_Content_Login_AJAX();
+		} else {
+			require_once 'controller/default.php';
+			$controller = new Chrome_Controller_Content_Login_Default();
+		}
 
-        switch($request) {
 
-            case 'ajax': {
-                require_once 'controller/ajax.php';
-                $controller = new Chrome_Controller_Content_Login_AJAX();
-                break;
-            }
+		/*
+		if(isset($this->_GET['request'])) {
+		$request = $this->_GET['request'];
+		} else if(isset($this->_POST['request'])) {
+		$request  =$this->_POST['request'];
+		} else {
+		$request = '';
+		}
 
-            default: {
-                 require_once 'controller/default.php';
-                 $controller = new Chrome_Controller_Content_Login_Default();
-            }
+		switch($request) {
 
-        }
+		case 'ajax': {
+		require_once 'controller/ajax.php';
+		$controller = new Chrome_Controller_Content_Login_AJAX();
+		break;
+		}
 
-        $controller->execute();
-    }
+		default: {
+		require_once 'controller/default.php';
+		$controller = new Chrome_Controller_Content_Login_Default();
+		}
 
-    public function getResponse() {
+		}*/
 
-        /**
-         * not good, but it works ;)
-         */
-        if(isset($_GET['request'])) {
-            $request = $_GET['request'];
-        } else if(isset($_POST['request'])) {
-            $request  =$_POST['request'];
-        } else {
-            $request = '';
-        }
+		$controller->execute();
+	}
 
-        switch($request) {
-
-            case 'ajax': {
-                Chrome_Response::setResponseClass('ajax');
-                break;
-            }
-
-            default: {
-                // do nothing special
-            }
-
+	public function getResponse()
+	{
+        if(Chrome_Request::getInstance()->getRequest() instanceof Chrome_Request_Handler_AJAX) {
+            Chrome_Response::setResponseClass( 'ajax' );
         }
 
         return parent::getResponse();
-    }
+        /*
+
+		/**
+		 * not good, but it works ;)
+		 *
+		if( isset( $_GET['request'] ) ) {
+			$request = $_GET['request'];
+		} else
+			if( isset( $_POST['request'] ) ) {
+				$request = $_POST['request'];
+			} else {
+				$request = '';
+			}
+
+			switch( $request ) {
+
+				case 'ajax':
+					{
+						Chrome_Response::setResponseClass( 'ajax' );
+						break;
+					}
+
+				default:
+					{
+						// do nothing special
+					}
+
+			}
+
+		return parent::getResponse();
+        */
+	}
 }

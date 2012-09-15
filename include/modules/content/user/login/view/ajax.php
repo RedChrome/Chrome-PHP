@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 17:04:31] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 17:20:12] --> $
  * @author     Alexander Book
  */
 
@@ -82,6 +82,7 @@ class Chrome_View_User_Ajax_FormNotValid extends Chrome_View_Abstract {
 
 class Chrome_View_User_Ajax_ShowForm extends Chrome_View_Abstract {
     public function render() {
+
         return array('success' => false, 'message' => 'Login failed:<br>Form is invalid, reload!', 'reloadDelay' => Chrome_View_User_Login_Ajax::CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY);
     }
 }

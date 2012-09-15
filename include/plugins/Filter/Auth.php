@@ -17,7 +17,7 @@
  * @subpackage Chrome.Filter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 15:32:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 15:04:29] --> $
  * @author     Alexander Book
  */
 
@@ -28,7 +28,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Filter
  */
-class Chrome_Filter_Auth extends Chrome_Filter_Abstract
+class Chrome_Filter_Auth implements Chrome_Filter_Interface
 {
 
     protected $_loginControllerClass = 'Chrome_Controller_User_Login_Explicit';
@@ -41,7 +41,7 @@ class Chrome_Filter_Auth extends Chrome_Filter_Abstract
         return $this->_loginControllerClass;
     }
 
-    public function execute(Chrome_Request_Abstract $req, Chrome_Response_Abstract $res)
+    public function execute(Chrome_Request_Data_Interface $req, Chrome_Response_Interface $res)
     {
         $frontController = Chrome_Front_Controller::getInstance();
 

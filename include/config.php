@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2012 15:15:14] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 13:14:29] --> $
  * @author     Alexander Book
  */
 
@@ -120,6 +120,9 @@ define('TEMPLATE', BASEDIR.'template/');
 define('TMP', BASEDIR.'tmp/');
 define('CACHE', TMP.'cache/');
 define('PLUGIN', BASEDIR.'plugins/');
+
+// not needed anymore
+unset($file_level, $file_level_int, $rooturl, $found);
 
 /** SET SOME .INI VARS ***/
 @ini_set('zlib.output_compression', true);

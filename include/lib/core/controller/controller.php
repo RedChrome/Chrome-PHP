@@ -17,12 +17,14 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2012 00:09:37] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 02:18:34] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true)
     die();
+
+//TODO: Clean up all this stuff
 
 /**
  * @package CHROME-PHP
@@ -35,7 +37,7 @@ interface Chrome_Controller_Interface
      *
      * @return Chrome_Request_Interface
      */
-    public function getRequest();
+    //public function getRequest();
 
     /**
      * getResponse()
@@ -242,7 +244,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      */
     protected function _validate()
     {
-        $this->data = &$this->getRequest()->getParameters();
+        //$this->data = &$this->getRequest()->getParameters();
     }
 
     /**
@@ -300,14 +302,14 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         return $this->ACE;
     }
 
-    public function getRequest()
+    /*public function getRequest()
     {
         if($this->request === null) {
             $this->request = Chrome_Request::getInstance();
         }
 
         return $this->request;
-    }
+    }*/
 
     public function getResponse()
     {

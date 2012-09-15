@@ -17,17 +17,19 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2011 23:35:17] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 13:05:00] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true)
     die();
 
+//TODO: use Chrome_Request_Data_Interface $data
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Router
- */ 
+ */
 class Chrome_Route_Static implements Chrome_Router_Route_Interface
 {
     protected $_resource = null;
@@ -45,23 +47,23 @@ class Chrome_Route_Static implements Chrome_Router_Route_Interface
         }
     }
 
-    public function match(Chrome_URI_Interface $url) {
+    public function match(Chrome_URI_Interface $url,Chrome_Request_Data_Interface $data) {
 
         $row = $this->_model->getRoute($url->getPath());
 
         if($row == false) {
             return false;
         } else {
-            
+
             $this->_resource = new Chrome_Router_Resource();
-            
+
             $this->_resource->setFile($row['file']);
             $this->_resource->setClass($row['class']);
-            
+
             if($row['GET_key'] !== '' AND $row['GET_value'] !== '') {
                 $this->_resource->setGET(array_combine(explode(',', $row['GET_key']), explode(',', $row['GET_value'])));
             }
-            
+
             return true;
         }
     }
@@ -70,11 +72,11 @@ class Chrome_Route_Static implements Chrome_Router_Route_Interface
     {
         return $this->_resource;
     }
-    
+
     public function url($name, array $options)
     {
         $row = $this->_model->findRoute($name);
-        
+
         if($row == false) {
             return $row;
         } else {
@@ -86,7 +88,7 @@ class Chrome_Route_Static implements Chrome_Router_Route_Interface
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Router
- */ 
+ */
 class Chrome_Model_Route_Static extends Chrome_Model_Abstract
 {
     private static $_instance = null;
@@ -109,7 +111,7 @@ class Chrome_Model_Route_Static extends Chrome_Model_Abstract
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Router
- */ 
+ */
 class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
 {
     const CHROME_MODEL_ROUTE_STATIC_CACHE_CACHE_FILE = 'tmp/cache/router/_static.cache';
@@ -132,7 +134,7 @@ class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
 
         return $return;
     }
-    
+
     public function findRoute($search) {
 
         if(($return = $this->_cache->load('findRoute_'.$search)) === null) {
@@ -151,7 +153,7 @@ class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Router
- */ 
+ */
 class Chrome_Model_Route_Static_DB extends Chrome_Model_DB_Abstract
 {
     protected $_dbInterface = 'interface';
@@ -174,9 +176,9 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_DB_Abstract
 
         return $row;
     }
-    
+
     public function findRoute($name) {
-        
+
         $this->_dbInterfaceInstance
                 ->select('search')
                 ->from('route_static')

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Session
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2012 14:34:28] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 17:20:02] --> $
  * @author     Alexander Book
  */
 
@@ -427,6 +427,7 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
                                                                         self::CHROME_SESSION_USER_AGENT_NAMESPACE => $userAgent,
                                                                         self::CHROME_SESSION_REMOTE_ADDR_NAMESPACE => $remoteAddr,
                                                                         self::CHROME_SESSION_SESSION_TIME => CHROME_TIME);
+
     }
 
     /**
@@ -438,7 +439,7 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
     {
         $hash = Chrome_Hash::getInstance();
 
-        // create new ID AND salt
+        // create new ID and salt
         $uniqid = $hash->hash(uniqid(mt_rand(), true));
         $salt = $hash->hash(uniqid(mt_rand(), true));
         $userAgent = $hash->hash($_SERVER['HTTP_USER_AGENT'], $salt);
@@ -470,6 +471,8 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
     public function destroy($renew = true)
     {
         $this->_SESSION = array();
+        $_SESSION = array();
+        Chrome_Cookie::getInstance()->unsetCookie(self::CHROME_SESSION_COOKIE_NAMESPACE);
         session_destroy();
 
         if($renew === true) {

@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.02.2012 12:31:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 15:05:11] --> $
  * @author     Alexander Book
  */
 
@@ -66,6 +66,7 @@ class Chrome_Controller_Content_Login_AJAX extends Chrome_Controller_Content_Abs
                         }
 
                     } else {
+                        var_dump($this->form->getValidationErrors());
                         $this->form->delete();
                         $this->form->create();
                         $this->view->formNotValid();

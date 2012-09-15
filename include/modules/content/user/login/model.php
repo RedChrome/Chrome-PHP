@@ -16,19 +16,16 @@ class Chrome_Model_Login extends Chrome_Model_Form_Abstract
         try {
 
             $password = $this->_form->get('password');
-            $credential = $this->_form->get('credential');
+            $identity = $this->_form->get('identity');
             $stayLoggedIn = $this->_form->getSentData('stay_loggedin');
 
+            $authenticate = Chrome_Authentication::getInstance();
 
-            Chrome_User_Login::getInstance()->login($credential, $password, $stayLoggedIn);
+            $authenticate->authenticate(new Chrome_Authentication_Resource_Database($identity, $password, $stayLoggedIn));
 
-            $this->_loginSuccess = Chrome_User_Login::getInstance()->isLoggedIn();
+            $this->_loginSuccess = $authenticate->isUser();
 
         } catch(Chrome_Exception $e) {
-
-            // we received neither password or credential
-            // so we cannot continue
-            // => login failed
 
             $this->_loginSuccess = false;
         }
@@ -42,5 +39,4 @@ class Chrome_Model_Login extends Chrome_Model_Form_Abstract
     public function isLoggedIn() {
         return Chrome_User_Login::getInstance()->isLoggedIn();
     }
-
 }

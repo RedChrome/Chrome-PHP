@@ -17,17 +17,17 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 14:42:30] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 13:05:13] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true)
     die();
-
+//TODO: use Chrome_Request_Data_Interface $data
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Router
- */ 
+ */
 class Chrome_Route_Regex implements Chrome_Router_Route_Interface
 {
     /**
@@ -36,21 +36,21 @@ class Chrome_Route_Regex implements Chrome_Router_Route_Interface
      * @var int
      */
     const CHROME_ROUTE_REGEX_MAX_LEVEL = 20;
-    
+
     private static $_instance = null;
-    
+
     private $_resources = array();
-    
-    
-    
-    
+
+
+
+
     protected $_controllerClass = null;
 
-   
+
     private function __construct() {
-        Chrome_Router::getInstance()->addRouterClass($this);        
+        Chrome_Router::getInstance()->addRouterClass($this);
     }
-    
+
     public static function getInstance() {
 
         if(self::$_instance === null) {
@@ -59,28 +59,28 @@ class Chrome_Route_Regex implements Chrome_Router_Route_Interface
 
         return self::$_instance;
     }
-    
-    public function match(Chrome_URI_Interface $url) {
+
+    public function match(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data) {
 
         $array = explode('/', $url->getPath(), self::CHROME_ROUTE_REGEX_MAX_LEVEL);
-        
+
         if(sizeof($array) <= 1) {
             return false;
         }
-           
+
         $this->_resource->search($array);
-        
+
         if($this->_resource->hasFound() === true) {
-            // found resource   
-         
+            // found resource
+
             $this->_controllerClass = $this->_resources->getControllerClass();
-         
-            
+
+
         } else {
             return false;
         }
     }
-        
+
     /*
 	public static function _match($url, $data)
 	{

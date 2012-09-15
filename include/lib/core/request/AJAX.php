@@ -17,113 +17,54 @@
  * @subpackage Chrome.Request
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 14:45:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 14:50:00] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+if( CHROME_PHP !== true ) die();
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Request
- */ 
-class Chrome_Request_AJAX extends Chrome_Request_Abstract
+ */
+class Chrome_Request_Handler_AJAX implements Chrome_Request_Handler_Interface
 {
-	private $_parameters;
-
-	private $_POST;
-
-	private $_HEADER;
-
-    private $_COOKIE;
-
-    private $_GET;
-
-    private $_data;
-
-	public function __construct() {
-	   $this->setParams();
-	}
-
-	public function setParams()
+	public function __construct()
 	{
-		$this->_parameters = &$_REQUEST;
-		$this->_POST = &$_POST;
-		$this->_HEADER = &$_SERVER;
-        $this->_COOKIE = &$_COOKIE;
-        $this->_GET = &$_GET;
-        
-        $this->_data = array('POST' => &$this->_POST, 'GET' => &$this->_GET, 'HEADER' => &$this->_HEADER, 'COOKIE' => &$this->_COOKIE);
+
 	}
 
-	public function getPrameterNames()
+	public function canHandleRequest()
 	{
-		return array_keys($this->_parameters);
+		if( (isset( $_GET['request'] ) AND strtoupper( $_GET['request'] ) === 'AJAX') OR (isset($_POST['request']) AND strtoupper($_POST['request']) === 'AJAX')) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
-	public function issetParameter($name)
+	public function getRequestData()
 	{
-		return isset($this->_parameters[$name]);
+		return Chrome_Request_Data_HTTP::getInstance();
 	}
+}
 
-	public function getParameter($name)
+class Chrome_Request_Data_AJAX extends Chrome_Request_Data_Abstract
+{
+	private static $_instance;
+
+	protected function __construct()
 	{
-		return isset($this->_parameters[$name]) ? $this->_parameters[$name] : null;
+		parent::__construct();
+		$this->_vars['FILES'] = null;
 	}
 
-	public function issetHeader($name)
+	public static function getInstance()
 	{
-		return isset($this->_HEADER[$name]);
-	}
+		if( self::$_instance === null ) {
+			self::$_instance = new self();
+		}
 
-	public function getHeader($name)
-	{
-		return isset($this->_HEADER[$name]) ? $this->_HEADER[$name] : null;
+		return self::$_instance;
 	}
-
-	public function getGET($name)
-	{
-		return (isset($this->_GET[$name])) ? $this->_GET[$name] : null;
-	}
-
-	public function setGETParameter($name, $data)
-	{
-		return $this->_GET[$name] = $value;
-	}
-
-	public function setPOSTParameter($name, $data)
-	{
-		$this->_POST[$name] = $data;
-	}
-
-	public function getPOST($name)
-	{
-		return isset($this->_POST[$name]) ? $this->_POST[$name] : null;
-	}
-
-	public function issetGET($name)
-	{
-		return isset($this->_GET[$name]);
-	}
-
-	public function issetPOST($name)
-	{
-		return isset($this->_POST[$name]);
-	}
-
-	public function &getGETParameter()
-	{
-		return $this->_GET;
-	}
-
-	public function &getPOSTParameter()
-	{
-		return $this->_POST;
-	}
-
-    public function &getParameters()
-    {
-        return $this->_data;
-    }
 }

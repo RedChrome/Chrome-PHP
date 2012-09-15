@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2012 14:58:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2012 19:20:06] --> $
  * @author     Alexander Book
  */
 
@@ -230,12 +230,12 @@ class Chrome_Require implements Chrome_Require_Interface
 	 * Loads the file, containing the class
 	 *
 	 * @param string $name name of the class
-	 * @throws Chrome_Exception if class isn't defined OR file doesnt exist
+	 * @throws Chrome_Exception if class isn't defined or file doesnt exist
 	 * @return boolean
 	 */
 	public function classLoad($name)
 	{
-		if(isset($this->_class[$name])) {
+	    if(isset($this->_class[$name])) {
 			if(_isFile(BASEDIR.$this->_class[$name])) {
 				require_once BASEDIR.$this->_class[$name];
 				return true;
@@ -271,7 +271,7 @@ class Chrome_Require implements Chrome_Require_Interface
 		}
 
         // cannot throw an exception, because this function gets called mostly via __autoload
-		die('Could not load class "'.$name.'"! No extension is matching AND class is not defined in table '.DB_PREFIX.'_class!');
+		die('Could not load class "'.$name.'"! No extension is matching and class is not defined in table '.DB_PREFIX.'_class!');
 	}
 
     /**

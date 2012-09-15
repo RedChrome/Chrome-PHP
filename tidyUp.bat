@@ -1,0 +1,1 @@
+rmdir include\tmp /Q /S
