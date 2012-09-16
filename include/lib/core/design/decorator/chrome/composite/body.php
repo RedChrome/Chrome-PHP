@@ -23,7 +23,7 @@ if(CHROME_PHP !== true)
 
 class Chrome_Design_Decorator_Chrome_Body extends Chrome_Design_Decorator_Abstract
 {            
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         
         if($this->_decorate === null) {
             throw new Chrome_Exception('No decorateable object set in Chrome_Design_Decorator_Content::render()!');

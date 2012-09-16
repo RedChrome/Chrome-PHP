@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.08.2011 14:04:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:11:38] --> $
  * @author     Alexander Book
  */
 
@@ -92,36 +92,36 @@ class Chrome_Design_Composite_Layout extends Chrome_Design_Composite_Abstract
         return $this->_footer;
     }
 
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
 
         $return = '';
 
         if($this->_preComposite !== null) {
-            $return .= $this->_preComposite->render();
+            $return .= $this->_preComposite->render($controller);
         }
 
         if($this->_header !== null) {
-            $return .= $this->_header->render();
+            $return .= $this->_header->render($controller);
         }
 
         if($this->_leftBox !== null) {
-            $return .= $this->_leftBox->render();
+            $return .= $this->_leftBox->render($controller);
         }
 
         if($this->_rightBox !== null) {
-            $return .= $this->_rightBox->render();
+            $return .= $this->_rightBox->render($controller);
         }
 
         if($this->_content !== null) {
-            $return .= $this->_content->render();
+            $return .= $this->_content->render($controller);
         }
 
         if($this->_footer !== null) {
-            $return .= $this->_footer->render();
+            $return .= $this->_footer->render($controller);
         }
 
         if($this->_postComposite !== null) {
-            $return .= $this->_postComposite->render();
+            $return .= $this->_postComposite->render($controller);
         }
 
         return $return;

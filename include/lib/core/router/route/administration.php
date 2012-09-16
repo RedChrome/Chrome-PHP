@@ -17,12 +17,13 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 13:11:05] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 13:42:40] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true)
     die();
+//TODO: finish this class
 //TODO: use Chrome_Request_Data_Interface $data
 /**
  * @package CHROME-PHP
@@ -87,7 +88,7 @@ class Chrome_Route_Administration implements Chrome_Router_Route_Interface
 class Chrome_Router_Resource_Administration extends Chrome_Router_Resource
 {
 
-    public function initClass() {
+    public function initClass(Chrome_Request_Handler_Interface $requestHandler) {
 
     }
 

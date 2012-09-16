@@ -54,7 +54,7 @@ class Chrome_View_User_Login_Default extends Chrome_View_Abstract
 }
 
 class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
 
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/user/login/already_logged_in');
@@ -66,19 +66,19 @@ class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract {
 }
 
 class Chrome_View_User_Default_successfullyLoggedIn extends Chrome_View_Abstract {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         return 'successfully logged in!';
     }
 }
 
 class Chrome_View_User_Default_FormNotValid extends Chrome_View_Abstract {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         return 'form was not valid!';
     }
 }
 
 class Chrome_View_User_Default_ShowForm extends Chrome_View_Abstract {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         $lang = new Chrome_Language('modules/content/user/login');
 
         $template = new Chrome_Template();
@@ -90,7 +90,7 @@ class Chrome_View_User_Default_ShowForm extends Chrome_View_Abstract {
 }
 
 class Chrome_View_User_Default_WrongPassword extends Chrome_View_Abstract{
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         return 'wrong password or username!';
     }
 }

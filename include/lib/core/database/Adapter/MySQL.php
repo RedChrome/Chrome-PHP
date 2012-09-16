@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB.Adapter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2012 00:30:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 00:06:37] --> $
  * @author     Alexander Book
  */
 
@@ -192,6 +192,7 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 		if($connection === false) {
             switch(mysql_errno()) {
 
+                case 2002:
                 case 2003:
                 case 2005: {
                     throw new Chrome_Exception('Could not establish connection to server  on "'.$server.'"! Server is not responding!', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER);

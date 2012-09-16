@@ -13,7 +13,7 @@ class Chrome_View_Content_User_Login extends Chrome_View_Abstract
 
 class Chrome_View_Content_User_Login_Successfully_Logged_In extends Chrome_View_Abstract
 {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
 
         $tpl = new Chrome_Template();
 

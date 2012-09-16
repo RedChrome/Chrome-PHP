@@ -17,56 +17,61 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 15:54:36] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:07:10] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+if( CHROME_PHP !== true ) die();
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
- */ 
+ */
 class Chrome_Controller_Box_Abstract extends Chrome_Controller_Abstract
 {
-    public function __construct() {
-        
+	public function __construct( Chrome_Request_Handler_Interface $reqHandler )
+	{
+
+		parent::__construct( $reqHandler );
+
         $this->_initialize();
-        
-        $this->_require();
-        
-        $this->_validate();
-        
-        $this->execute();
-    }
-    
-    protected function _initialize()
-    {
-        
-    }
-    
-    protected function _shutdown() {
-        
-    }
-    
-    protected function _execute() {
-        
-    }
-    
-    public function execute() {
-        $this->_execute();
-        
-        $this->_shutdown();
-    }
-    
-    public function getResponse()
-    {
-        return Chrome_Response::getInstance();
-    }
-    
-    public function getRequest() 
-    {
-        return Chrome_Request::getInstance();
-    }    
+
+		$this->_require();
+
+		$this->_validate();
+
+		$this->execute();
+	}
+
+	protected function _initialize()
+	{
+
+	}
+
+	protected function _shutdown()
+	{
+
+	}
+
+	protected function _execute()
+	{
+
+	}
+
+	public function execute()
+	{
+		$this->_execute();
+
+		$this->_shutdown();
+	}
+
+	public function getResponse()
+	{
+		return Chrome_Response::getInstance();
+	}
+
+	public function getRequest()
+	{
+		return Chrome_Request::getInstance();
+	}
 }

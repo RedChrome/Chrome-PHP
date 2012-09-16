@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.08.2011 14:00:34] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:48:55] --> $
  * @author     Alexander Book
  */
 
@@ -101,7 +101,8 @@ class Chrome_Model_Design_Factory extends Chrome_Model_Abstract
 
         return self::$_instance;
     }
-
+    //TODO: move this to any other class, but NOT IN Model_Design...
+    /*
     public function getUserDesign()
     {
         $design = base64_decode(Chrome_Cookie::getInstance()->getCookie(self::CHROME_MODEL_DESIGN_USER_DESIGN_COOKIE_KEY));
@@ -116,12 +117,12 @@ class Chrome_Model_Design_Factory extends Chrome_Model_Abstract
         }
 
         return $design;
-    }
+    }*
 
     public function setUserDesign($design)
     {
         Chrome_Cookie::getInstance()->setCookie(self::CHROME_MODEL_DESIGN_USER_DESIGN_COOKIE_KEY, base64_encode($design));
-    }
+    }*/
 
     public function getDefaultDesign()
     {
@@ -130,6 +131,8 @@ class Chrome_Model_Design_Factory extends Chrome_Model_Abstract
 
     public function getDesign()
     {
-        return $this->getUserDesign();
+        //TODO: make a db request
+        return $this->getDefaultDesign();
+        #return $this->getUserDesign();
     }
 }

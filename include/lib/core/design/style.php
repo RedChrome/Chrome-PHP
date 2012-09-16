@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.02.2012 01:15:14] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:08:30] --> $
  * @author     Alexander Book
  */
 
@@ -32,7 +32,7 @@ interface Chrome_Design_Style_Interface
 
     public function removeAllStyles();
 
-    public function apply();
+    public function apply(Chrome_Controller_Interface $controller);
 }
 
 class Chrome_Design_Style implements Chrome_Design_Style_Interface
@@ -59,7 +59,7 @@ class Chrome_Design_Style implements Chrome_Design_Style_Interface
         $this->_styles = array();
     }
 
-    public function apply() {
+    public function apply(Chrome_Controller_Interface $controller) {
 
         if(in_array('ajax', $this->_styles)) {
 
@@ -76,14 +76,20 @@ class Chrome_Design_Style implements Chrome_Design_Style_Interface
         if(in_array('default', $this->_styles)) {
 
             require_once BASEDIR.'modules/footer/benchmark/benchmark.php';
-            new Chrome_Controller_Footer_Benchmark();
+            new Chrome_Controller_Footer_Benchmark($controller->getRequestHandler());
 
             require_once BASEDIR.'modules/html/head/view.php';
+            new Chrome_Controller_Header_HTML_Head($controller->getRequestHandler());
             require_once BASEDIR.'modules/html/body/view.php';
+            new Chrome_Controller_Header_HTML_JS($controller->getRequestHandler());
             require_once BASEDIR.'modules/header/header/header.php';
+            new Chrome_Controller_Header_Header($controller->getRequestHandler());
             require_once BASEDIR.'modules/box/login/controller.php';
-            new Chrome_Controller_Box_Login();
+            new Chrome_Controller_Box_Login($controller->getRequestHandler());
             require_once BASEDIR.'modules/box/test/test.php';
+
+            new Chrome_Controller_Box_Test($controller->getRequestHandler());
+            new Chrome_Controller_Box_Test($controller->getRequestHandler());
 
         }
 

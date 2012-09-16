@@ -2,7 +2,7 @@
 
 class Chrome_Controller_Header_HTML_Head extends Chrome_Controller_Header_Abstract
 {
-    public function __construct()
+    public function __construct(Chrome_Request_Handler_Interface $reqHandler)
     {
         Chrome_Design_Composite_Head::getInstance()->getComposite()->addView(new Chrome_View_Header_HTML_Head($this));
     }
@@ -10,7 +10,7 @@ class Chrome_Controller_Header_HTML_Head extends Chrome_Controller_Header_Abstra
 
 class Chrome_View_Header_HTML_Head extends Chrome_View_Abstract
 {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
        return '<title>'.$this->getTitle().'</title>
 <meta http-equiv="Content-Type" content="text/html; charset=uft-8" />
 <meta name="description" content="{DESCRIPTION}" />
@@ -23,5 +23,3 @@ class Chrome_View_Header_HTML_Head extends Chrome_View_Abstract
 
     }
 }
-
-$controller = new Chrome_Controller_Header_HTML_Head();

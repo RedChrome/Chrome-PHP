@@ -63,25 +63,25 @@ class Chrome_View_User_Login_Ajax extends Chrome_View_Abstract
 }
 
 class Chrome_View_User_Ajax_AlreadyLoggedIn extends Chrome_View_Abstract {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         return array('success' => false, 'message' => 'Login failed:<br>Cannot re-login! You\'re already logged in!', 'reloadDelay' => Chrome_View_User_Login_Ajax::CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY);
     }
 }
 
 class Chrome_View_User_Ajax_successfullyLoggedIn extends Chrome_View_Abstract {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         return array('success' => true, 'message' => 'Login successfull:<br>Logged In!', 'reloadDelay' => Chrome_View_User_Login_Ajax::CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY);
     }
 }
 
 class Chrome_View_User_Ajax_FormNotValid extends Chrome_View_Abstract {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         return array('success' => false, 'token' => $this->_controller->getForm()->getElement('login')->getOptions(Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_TOKEN), 'message' => 'Login failed:<br>Form was malformed', 'reloadDelay' => Chrome_View_User_Login_Ajax::CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY);
     }
 }
 
 class Chrome_View_User_Ajax_ShowForm extends Chrome_View_Abstract {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
 
         return array('success' => false, 'message' => 'Login failed:<br>Form is invalid, reload!', 'reloadDelay' => Chrome_View_User_Login_Ajax::CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY);
     }
@@ -89,7 +89,7 @@ class Chrome_View_User_Ajax_ShowForm extends Chrome_View_Abstract {
 
 class Chrome_View_User_Ajax_WrongPassword extends Chrome_View_Abstract{
 
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         return array('success' => false, 'message' => 'Login failed:<br>Wrong password and/or username!', 'reloadDelay' => Chrome_View_User_Login_Ajax::CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY);
     }
 }

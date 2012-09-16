@@ -18,7 +18,7 @@
  * @subpackage Chrome.Request
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 17:18:47] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 10:38:40] --> $
  * @author     Alexander Book
  */
 
@@ -92,6 +92,16 @@ interface Chrome_Request_Data_Interface
 	public function getREQUEST( $key = null );
 
 	public function getENV( $key = null );
+
+	public function setGET( array $array );
+
+	public function setPOST( array $array );
+
+	public function setFILES( array $array );
+
+	public function setENV( array $array );
+
+	public function setSERVER( array $array );
 }
 
 abstract class Chrome_Request_Data_Abstract implements Chrome_Request_Data_Interface
@@ -207,8 +217,32 @@ abstract class Chrome_Request_Data_Abstract implements Chrome_Request_Data_Inter
 	{
 		return $this->_vars;
 	}
-}
 
+	public function setGET( array $array )
+	{
+		$this->_vars['GET'] = array_merge($this->_vars['GET'], $array);
+	}
+
+	public function setPOST(  array $array )
+	{
+		$this->_vars['POST'] = array_merge($this->_vars['POST'], $array);
+	}
+
+	public function setFILES(  array $array )
+	{
+		$this->_vars['FILES'] = array_merge($this->_vars['FILES'], $array);
+	}
+
+	public function setENV(  array $array )
+	{
+		$this->_vars['ENV'] = array_merge($this->_vars['ENV'], $array);
+	}
+
+	public function setSERVER(  array $array )
+	{
+		$this->_vars['SERVER'] = array_merge($this->_vars['SERVER'], $array);
+	}
+}
 
 class Chrome_Request implements Chrome_Request_Interface
 {
@@ -285,7 +319,7 @@ class Chrome_Request implements Chrome_Request_Interface
 
 		// unset all global data, but DO NOT UNSET SESSION!!! http://php.net/manual/de/function.unset.php#77926
 		unset( $_SERVER, $_GET, $_POST, $_FILES, $_COOKIE, $_REQUEST, $_ENV, $GLOBALS );
-        $_SESSION = array();
+		$_SESSION = array();
 
 		// now we dont need them any more
 		unset( $this->_requests );

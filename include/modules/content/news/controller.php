@@ -10,23 +10,20 @@ class Chrome_Controller_News extends Chrome_Controller_Content_Abstract
     }
 
     protected function _execute()
-    {        
-        
-        
-        switch($this->_GET['action']) {
-            
+    {
+        switch(Chrome_Request::getInstance()->getRequestDataObject()->getGET('action')) {
+
             case 'show': {
                 echo 'show';
                 break;
             }
-            
+
             default: {
                 echo 'default';
             }
+
         }
-        
-        
-      
-        $this->view->render();
+
+        $this->view->render($this);
     }
 }

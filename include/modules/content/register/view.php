@@ -25,7 +25,7 @@ class Chrome_View_Register extends Chrome_View_Abstract
 
 class Chrome_View_Register_StepOne extends Chrome_View_Abstract
 {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
 
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/stepOne');
@@ -38,7 +38,7 @@ class Chrome_View_Register_StepOne extends Chrome_View_Abstract
 
 class Chrome_View_Register_StepTwo extends Chrome_View_Abstract
 {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/stepTwo');
         $template->assign('FORM', $this->_controller->getForm());
@@ -49,7 +49,7 @@ class Chrome_View_Register_StepTwo extends Chrome_View_Abstract
 
 class Chrome_View_Register_StepThree extends Chrome_View_Abstract
 {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/stepThree');
         return $template->render();
@@ -58,7 +58,7 @@ class Chrome_View_Register_StepThree extends Chrome_View_Abstract
 
 class Chrome_View_Register_AlreadyRegistered extends Chrome_View_Abstract
 {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/alreadyRegistered');
         return $template->render();

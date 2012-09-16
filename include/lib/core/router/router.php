@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 13:06:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 13:42:25] --> $
  * @author     Alexander Book
  */
 if( CHROME_PHP !== true ) die();
@@ -73,11 +73,7 @@ interface Chrome_Router_Resource_Interface
 
 	public function getClass();
 
-	public function setGET( array $array );
-
-	public function getGET();
-
-	public function initClass();
+	public function initClass(Chrome_Request_Handler_Interface $requestHandler);
 }
 
 /**
@@ -89,8 +85,6 @@ class Chrome_Router_Resource implements Chrome_Router_Resource_Interface
 	protected $_file = null;
 
 	protected $_class = null;
-
-	protected $_get = array();
 
 	public function __construct()
 	{
@@ -116,25 +110,11 @@ class Chrome_Router_Resource implements Chrome_Router_Resource_Interface
 		return $this->_class;
 	}
 
-	public function setGET( array $array )
-	{
-		$this->_get = array_merge( $this->_get, $array );
-	}
-
-	public function getGET()
-	{
-		return $this->_get;
-	}
-
-	public function initClass()
+	public function initClass(Chrome_Request_Handler_Interface $requestHandler)
 	{
 
 		if( $this->_class == '' or empty( $this->_class ) ) {
 			throw new Chrome_Exception( 'No Class set in Chrome_Router_Resource!', 2002 );
-		}
-
-		foreach( $this->_get as $key => $value ) {
-			$_GET[$key] = $value;
 		}
 
 		if( !class_exists( $this->_class, false ) ) {
@@ -149,14 +129,14 @@ class Chrome_Router_Resource implements Chrome_Router_Resource_Interface
 					import( $this->_class );
 				}
 				catch ( Chrome_Exceptopm $e ) {
-					throw new Chrome_Exception( 'No file found AND could no find the corresponding file!', 2003 );
+					throw new Chrome_Exception( 'No file found and could no find the corresponding file!', 2003 );
 				}
 				Chrome_Log::log( 'class "' . $this->_class .
 					'" were found by autoloader! But it should inserted into db to speed up website!', E_NOTICE );
 			}
 		}
 
-		return new $this->_class();
+		return new $this->_class($requestHandler);
 	}
 }
 

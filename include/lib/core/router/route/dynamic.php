@@ -17,110 +17,129 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 13:05:30] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 12:44:43] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
-//TODO: use Chrome_Request_Data_Interface $data
+if( CHROME_PHP !== true ) die();
+//TODO: Add a db scheme for Chrome_Model_Route_Dynamic_DB::getResourcesAsArray
+//TODO: Add regex support for single path, e.g. news/show/id/regex:|(\d)*?|/action/remove or something like that, but in fact, thats some kind of input validation... dont know if needed
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
 class Chrome_Route_Dynamic implements Chrome_Router_Route_Interface
 {
-    /**
-     * How much slashes "/" are allowed in a url?
-     *
-     * @var int
-     */
-    const CHROME_ROUTE_REGEX_MAX_LEVEL = 30;
+	/**
+	 * How much slashes "/" are allowed in a url?
+	 *
+	 * @var int
+	 */
+	const CHROME_ROUTE_REGEX_MAX_LEVEL = 30;
 
-    private $_resources = array();
+	private $_resources = array();
 
-    protected $_GET = array();
+	protected $_GET = array();
 
-    private $_previousKey = null;
+	private $_previousKey = null;
 
-    private $_resourceID = null;
+	private $_resourceID = null;
 
-    protected $_model = null;
+	protected $_model = null;
 
-    protected $_resource = null;
+	protected $_resource = null;
 
-    public function __construct(Chrome_Model_Abstract $model)
-    {
-        $this->_model = $model;
-        Chrome_Router::getInstance()->addRouterClass($this);
-        Chrome_Registry::getInstance()->set(Chrome_Router_Interface::CHROME_ROUTER_REGISTRY_NAMESPACE, 'Chrome_Route_Dynamic', $this, false);
-    }
+	public function __construct( Chrome_Model_Abstract $model )
+	{
+		$this->_model = $model;
+		Chrome_Router::getInstance()->addRouterClass( $this );
 
-    public function match(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data)
-    {
-        $this->_resources = $this->_model->getResourcesAsArray();
+		try {
+			Chrome_Registry::getInstance()->set( Chrome_Router_Interface::CHROME_ROUTER_REGISTRY_NAMESPACE,
+				'Chrome_Route_Dynamic', $this, false );
+		}
+		catch ( Chrome_Exception $e ) {
+			unset( $e );
+			// do nothing
+		}
 
-        $array = explode('/', $url->getPath(), self::CHROME_ROUTE_REGEX_MAX_LEVEL);
+	}
 
-        if(sizeof($array) <= 1) {
-            return false;
-        }
+	public function match( Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data )
+	{
+		$array = explode( '/', $url->getPath(), self::CHROME_ROUTE_REGEX_MAX_LEVEL );
 
-        if($this->_exist($array, $this->_resources) !== false) {
+		if( sizeof( $array ) <= 1 ) {
+			return false;
+		}
 
-            $resource = $this->_model->getResourceByID($this->_resourceID);
+		$this->_resources = $this->_model->getResourcesAsArray();
 
-            if($resource === null OR $resource == false) {
-                throw new Chrome_Exception('Patch matched, but resource wasn\'t found!', 2004);
-            }
+		if( $this->_exist( $array, $this->_resources ) !== false ) {
 
-            $this->_resource = new Chrome_Router_Resource();
-            $this->_resource->setClass($resource['class']);
-            $this->_resource->setFile($resource['file']);
+			$resource = $this->_model->getResourceByID( $this->_resourceID );
 
-            $this->_resource->setGET(array_merge($this->_GET, $resource['GET']));
+			if( $resource === null or $resource == false ) {
+				throw new Chrome_Exception( 'Path matched, but resource wasn\'t found!', 2004 );
+			}
 
-            return true;
+			$this->_resource = new Chrome_Router_Resource();
+			$this->_resource->setClass( $resource['class'] );
+			$this->_resource->setFile( $resource['file'] );
 
-        } else {
-            return false;
-        }
-    }
+		  if( sizeof( $resource['GET'] ) > 0 ) {
+				$data->setGET( $resource['GET'] );
+			}
+			if( sizeof( $resource['POST'] ) > 0 ) {
+				$data->setPOST( $resource['POST'] );
+			}
 
-    private function _exist($array, array $resource) {
+			return true;
 
-        foreach($resource AS $key => $value) {
+		} else {
+			return false;
+		}
+	}
 
-            if(isset($array[0]) AND $key === $array[0] OR ($key === '*' AND $array[0] != '')) {
+	private function _exist( $array, array $resource )
+	{
 
-                if($key === '*') {
-                    $this->_GET[$this->_previousKey] = $array[0];
-                }
+		foreach( $resource as $key => $value ) {
 
-                if(is_array($value)) {
-                    $this->_previousKey = array_shift($array);
+            // found if:
+            // 1. the keys are matching
+            // 2. the key(from resource) is * (so every input is allowed, but there must be an input)
+            // 3. the input array is empty, but the resource isnt and there is a key ""
+			if( isset( $array[0] ) and $key === $array[0] or ( $key === '*' and $array[0] != '' ) OR (sizeof($array) === 0 AND array_key_exists('', $resource) ) ) {
 
-                    return $this->_exist($array, $resource[$key]);
-                } else {
-                    $this->_resourceID = $value;
-                    return true;
-                }
-            } else {
-                continue;
-            }
-        }
-        return false;
-    }
+				if( $key === '*' ) {
+					$this->_GET[$this->_previousKey] = $array[0];
+				}
 
-    public function getResource()
-    {
-        return $this->_resource;
-    }
+				if( is_array( $value ) ) {
+					$this->_previousKey = array_shift( $array );
 
-    public function url($name, array $options)
-    {
-        die('Not implemented yet');
-    }
+					return $this->_exist( $array, $resource[$key] );
+				} else {
+					$this->_resourceID = $value;
+					return true;
+				}
+			} else {
+				continue;
+			}
+		}
+		return false;
+	}
+
+	public function getResource()
+	{
+		return $this->_resource;
+	}
+
+	public function url( $name, array $options )
+	{
+		die( 'Not implemented yet' );
+	}
 }
 
 /**
@@ -129,21 +148,21 @@ class Chrome_Route_Dynamic implements Chrome_Router_Route_Interface
  */
 class Chrome_Model_Route_Dynamic extends Chrome_Model_Abstract
 {
-    private static $_instance = null;
+	private static $_instance = null;
 
-    protected function __construct()
-    {
-        $this->_decorator = new Chrome_Model_Route_Dynamic_Cache(new Chrome_Model_Route_Dynamic_DB());
-    }
+	protected function __construct()
+	{
+		$this->_decorator = new Chrome_Model_Route_Dynamic_Cache( new Chrome_Model_Route_Dynamic_DB() );
+	}
 
-    public static function getInstance()
-    {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
+	public static function getInstance()
+	{
+		if( self::$_instance === null ) {
+			self::$_instance = new self();
+		}
 
-        return self::$_instance;
-    }
+		return self::$_instance;
+	}
 }
 
 /**
@@ -152,26 +171,27 @@ class Chrome_Model_Route_Dynamic extends Chrome_Model_Abstract
  */
 class Chrome_Model_Route_Dynamic_Cache extends Chrome_Model_Cache_Abstract
 {
-    const CHROME_MODEL_ROUTER_DYNAMIC_CACHE_CACHE_FILE = 'tmp/cache/router/_dynamic.cache';
+	const CHROME_MODEL_ROUTER_DYNAMIC_CACHE_CACHE_FILE = 'tmp/cache/router/_dynamic.cache';
 
-    protected function _cache()
-    {
-        $this->_cache = parent::$_cacheFactory->factory('serialization', self::CHROME_MODEL_ROUTER_DYNAMIC_CACHE_CACHE_FILE);
-    }
+	protected function _cache()
+	{
+		$this->_cache = parent::$_cacheFactory->factory( 'serialization', self::CHROME_MODEL_ROUTER_DYNAMIC_CACHE_CACHE_FILE );
+	}
 
-    public function getResourceByID($id) {
+	public function getResourceByID( $id )
+	{
 
-        if(($return = $this->_cache->load('getResource_'.$id)) === null) {
+		if( ( $return = $this->_cache->load( 'getResource_' . $id ) ) === null ) {
 
-            $return = $this->_decorator->getResourceByID($id);
+			$return = $this->_decorator->getResourceByID( $id );
 
-            if($return !== false) {
-                $this->_cache->save('getResource_'.$id, $return);
-            }
-        }
+			if( $return !== false ) {
+				$this->_cache->save( 'getResource_' . $id, $return );
+			}
+		}
 
-        return $return;
-    }
+		return $return;
+	}
 }
 
 /**
@@ -180,37 +200,60 @@ class Chrome_Model_Route_Dynamic_Cache extends Chrome_Model_Cache_Abstract
  */
 class Chrome_Model_Route_Dynamic_DB extends Chrome_Model_DB_Abstract
 {
-    protected $_dbInterface = 'interface';
+	protected $_dbInterface = 'interface';
 
-    public function __construct() {
-        parent::__construct();
-    }
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
-    public function getResourcesAsArray() {
-        return array('site' => array('news' => array('id' => array('*' => array('' => 1, 'show' => 1, 'update' => 2)))));
-    }
+	public function getResourcesAsArray()
+	{
+	    // just an example
+		return array( 'site' => array( 'news' => array( 'id' => array( '*' => array(
+							'' => 1, // '' is an alias for 'show'
+							'show' => 1,
+							'update' => 2 ) ) ) ) );
+	}
 
-    public function getResourceByID($id) {
-        $id = (int) $id;
+	public function getResourceByID( $id )
+	{
+		$id = ( int )$id;
 
-        $this->_dbInterfaceInstance
-                ->select('*')
-                ->from('route_dynamic')
-                ->where('id = "'.$id.'"')
-                ->limit(0, 1)
-                ->execute();
+		$this->_dbInterfaceInstance->select( '*' )->from( 'route_dynamic' )->where( 'id = "' . $id . '"' )->limit( 0,
+			1 )->execute();
 
-        $row = $this->_dbInterfaceInstance->next();
-        $this->_dbInterfaceInstance->clear();
+		$row = $this->_dbInterfaceInstance->next();
+		$this->_dbInterfaceInstance->clear();
 
-        $array = array();
-        if($row['GET_key'] !== '' AND $row['GET_value'] !== '') {
-                $array = array_combine(explode(',', $row['GET_key']), explode(',', $row['GET_value']));
-        }
-        $row['GET'] = $array;
+        // translate key=value,key2=value2 into an array {key => value, key2=>value2}
+		$GET = array();
+		if( !empty( $row['GET'] ) ) {
 
-        unset($row['GET_key'], $row['GET_value']);
+			// input is like key=value,key2=value2,..
+			$keyValuePairs = explode( ',', $row['GET'] );
+			foreach( $keyValuePairs as $keyValuePair ) {
 
-        return $row;
-    }
+				$keyValue = explode( '=', $keyValuePair );
+				$GET[$keyValue[0]] = $keyValue[1];
+			}
+		}
+		$row['GET'] = $GET;
+
+		$POST = array();
+		if( !empty( $row['POST'] ) ) {
+
+			// input is like key=value,key2=value2,..
+			$keyValuePairs = explode( ',', $row['POST'] );
+			foreach( $keyValuePairs as $keyValuePair ) {
+
+				$keyValue = explode( '=', $keyValuePair );
+				$POST[$keyValue[0]] = $keyValue[1];
+			}
+		}
+		$row['POST'] = $POST;
+
+
+		return $row;
+	}
 }

@@ -2,7 +2,7 @@
 
 class Chrome_Controller_Header_HTML_JS extends Chrome_Controller_Header_Abstract
 {
-    public function __construct()
+    public function __construct(Chrome_Request_Handler_Interface $reqHandler)
     {
         Chrome_Design_Composite_Body::getInstance()->getPostComposite()->addView(new Chrome_View_Header_HTML_JS($this));
     }
@@ -10,7 +10,7 @@ class Chrome_Controller_Header_HTML_JS extends Chrome_Controller_Header_Abstract
 
 class Chrome_View_Header_HTML_JS extends Chrome_View_Abstract
 {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
        return '
 <!-- JS -->
 <!--<script type="text/javascript" src="'._PUBLIC.'javascript/Framework/dojo.js" djConfig="parseOnLoad:true, isDebug: true"></script>-->
@@ -22,4 +22,3 @@ class Chrome_View_Header_HTML_JS extends Chrome_View_Abstract
     }
 }
 
-$controller = new Chrome_Controller_Header_HTML_JS();

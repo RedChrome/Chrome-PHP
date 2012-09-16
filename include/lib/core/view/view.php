@@ -17,7 +17,7 @@
  * @subpackage Chrome.View
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.02.2012 00:11:29] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 13:53:34] --> $
  * @author     Alexander Book
  */
 
@@ -70,8 +70,8 @@ abstract class Chrome_View_Abstract implements Chrome_View_Interface
 
     }
 
-    public function render() {
-        Chrome_Design::getInstance()->render();
+    public function render(Chrome_Controller_Interface $controller) {
+        Chrome_Design::getInstance()->render($this->_controller);
     }
 
     public function __call($func, $args)

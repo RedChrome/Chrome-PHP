@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2012 16:41:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:11:51] --> $
  * @author     Alexander Book
  */
 
@@ -47,14 +47,14 @@ class Chrome_Design_Composite_Laconic extends Chrome_Design_Composite_Abstract
         return self::$_instance;
     }
 
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
 
         $views = $this->_composite->getViews();
 
         $array = array();
 
         foreach($views as $view) {
-            $array = array_merge($array, $view->render());
+            $array = array_merge($array, $view->render($controller));
         }
 
         return $array;

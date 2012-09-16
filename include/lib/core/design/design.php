@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.02.2012 01:20:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:02:42] --> $
  * @author     Alexander Book
  */
 
@@ -33,7 +33,7 @@ require_once 'style.php';
  */
 interface Chrome_Design_Renderable
 {
-    public function render();
+    public function render(Chrome_Controller_Interface $controller);
 }
 
 require_once 'composite.php';
@@ -117,14 +117,15 @@ class Chrome_Design implements Chrome_Design_Interface
         $this->_design = Chrome_Design_Factory::getInstance()->getDesign();
     }
 
-    public function render()
+    public function render(Chrome_Controller_Interface $controller)
     {
         if(self::$_style !== null) {
-            self::$_style->apply();
+            self::$_style->apply($controller);
         }
 
+        $controller->getResponse()->write($this->_composite->render($controller));
         // render design AND send data to browser
-        Chrome_Response::getInstance()->write($this->_composite->render());
+        // Chrome_Response::getInstance()->write($this->_composite->render());
     }
 
     public function get($string, Chrome_Design_Renderable $obj = null) {

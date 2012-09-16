@@ -17,17 +17,18 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.10.2011 12:32:08] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 11:58:00] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true)
     die();
 
+//TODO: needed? all files that should get viewed, have to be in /public/**
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Router
- */ 
+ */
 class Chrome_Route_File extends Chrome_Route
 {
 	private static $_instance;

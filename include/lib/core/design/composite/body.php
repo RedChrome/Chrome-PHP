@@ -49,7 +49,7 @@ class Chrome_Design_Composite_Body extends Chrome_Design_Composite_Abstract
         return self::$_instance;
     }
 
-    public function render() {
-        return Chrome_Design::getInstance()->get('body_start').parent::render().Chrome_Design::getInstance()->get('body_end');
+    public function render(Chrome_Controller_Interface $controller) {
+        return Chrome_Design::getInstance()->get('body_start').parent::render($controller).Chrome_Design::getInstance()->get('body_end');
     }
 }

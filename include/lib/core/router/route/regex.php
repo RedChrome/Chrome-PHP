@@ -17,13 +17,13 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 13:05:13] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 11:57:08] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true)
     die();
-//TODO: use Chrome_Request_Data_Interface $data
+//TODO: is this class needed? if its needed, then update this class to current interface, and add try catch in constr.
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Router

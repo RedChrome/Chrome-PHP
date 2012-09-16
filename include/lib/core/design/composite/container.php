@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.08.2011 14:03:01] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:11:17] --> $
  * @author     Alexander Book
  */
 
@@ -52,12 +52,12 @@ class Chrome_Design_Composite_Container extends Chrome_Design_Composite_Abstract
         return $this->_views;
     }
 
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
 
         $return = '';
 
         foreach($this->_views AS $view) {
-            $return .= "\n".$view->render()."\n";
+            $return .= "\n".$view->render($controller)."\n";
         }
 
         return $return;

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2012 00:03:36] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:09:10] --> $
  * @author     Alexander Book
  */
 
@@ -47,7 +47,7 @@ class Chrome_Design_Composite_HTML extends Chrome_Design_Composite_Abstract
         return self::$_instance;
     }
 
-    public function render() {
-        return Chrome_Design::getInstance()->get('html_start').parent::render().Chrome_Design::getInstance()->get('html_end');
+    public function render(Chrome_Controller_Interface $controller) {
+        return Chrome_Design::getInstance()->get('html_start').parent::render($controller).Chrome_Design::getInstance()->get('html_end');
     }
 }

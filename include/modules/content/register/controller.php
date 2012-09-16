@@ -18,7 +18,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
         if(Chrome_Authorisation::getInstance()->isAllowed(new Chrome_Authorisation_Resource('register', 'register')) === false) {
             $this->view->alreadyRegistered();
             //$this->view->setError(403);
-            $this->view->render();
+            $this->view->render($this);
             return;
         }
 
@@ -92,7 +92,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
             }
         }
 
-        $this->view->render();
+        $this->view->render($this);
     }
 
     private function _stepOne() {

@@ -12,7 +12,7 @@ class Chrome_View_Content_SiteNotFound extends Chrome_View_Abstract
 
 class Chrome_View_SiteNotFound extends Chrome_View_Abstract
 {
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         $tpl = new Chrome_Template();
 
         $tpl->assignTemplate('modules/content/SiteNotFound/SiteNotFound.tpl');

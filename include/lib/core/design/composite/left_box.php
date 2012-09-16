@@ -47,7 +47,7 @@ class Chrome_Design_Composite_Left_Box extends Chrome_Design_Composite_Abstract
         return self::$_instance;
     }
 
-    public function render() {
-        return Chrome_Design::getInstance()->get('left_box_start').parent::render().Chrome_Design::getInstance()->get('left_box_end');
+    public function render(Chrome_Controller_Interface $controller) {
+        return Chrome_Design::getInstance()->get('left_box_start').parent::render($controller).Chrome_Design::getInstance()->get('left_box_end');
     }
 }

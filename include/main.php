@@ -18,7 +18,7 @@
  * @subpackage Chrome.FrontController
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 14:46:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 13:43:08] --> $
  * @author     Alexander Book
  */
 
@@ -256,10 +256,8 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
 				// the more stricter handlers are the first, which get added, the less stricter are the last
 				// the last one should _always_ return true in canHandleRequest
 				//$request->addRequestObject();
-				require_once LIB . 'core/request/ajax.php';
 				$request->addRequestObject( new Chrome_Request_Handler_AJAX() );
 				// this handler is always capable of handling a request, so it always returns true in canHandleRequest
-				require_once LIB . 'core/request/http.php';
 				$request->addRequestObject( new Chrome_Request_Handler_HTTP() );
 			}
 
@@ -283,7 +281,7 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
 				Chrome_Exception_Handler_Router() )->route( new Chrome_URI(), $this->_request );
 
 			// create controller class and set exception handler
-			$this->_controller = $resource->initClass();
+			$this->_controller = $resource->initClass($requestHandler);
 			$this->_controller->setExceptionHandler( new Chrome_Exception_Handler_Default() );
 
 			$this->handleRequest();

@@ -23,7 +23,7 @@ if(CHROME_PHP !== true)
 
 class Chrome_Design_Decorator_Chrome_Composite_Content extends Chrome_Design_Decorator_Abstract
 {            
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         
         if($this->_decorate === null) {
             throw new Chrome_Exception('No decorateable object set in Chrome_Design_Decorator_Content::render()!');
@@ -40,7 +40,7 @@ class Chrome_Design_Decorator_Chrome_Composite_Content extends Chrome_Design_Dec
 
 class Chrome_Design_Decorator_Chrome_Composite_Footer extends Chrome_Design_Decorator_Abstract
 {            
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         
         if($this->_decorate === null) {
             throw new Chrome_Exception('No decorateable object set in Chrome_Design_Decorator_Content::render()!');
@@ -57,7 +57,7 @@ class Chrome_Design_Decorator_Chrome_Composite_Footer extends Chrome_Design_Deco
 
 class Chrome_Design_Decorator_Chrome_Composite_HTML extends Chrome_Design_Decorator_Abstract
 {            
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         
         if($this->_decorate === null) {
             throw new Chrome_Exception('No decorateable object set in Chrome_Design_Decorator_Content::render()!');
@@ -73,7 +73,7 @@ class Chrome_Design_Decorator_Chrome_Composite_HTML extends Chrome_Design_Decora
 
 class Chrome_Design_Decorator_Chrome_Composite_Right_Box extends Chrome_Design_Decorator_Abstract
 {            
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         
         if($this->_decorate === null) {
             throw new Chrome_Exception('No decorateable object set in Chrome_Design_Decorator_Content::render()!');
@@ -90,7 +90,7 @@ class Chrome_Design_Decorator_Chrome_Composite_Right_Box extends Chrome_Design_D
 
 class Chrome_Design_Decorator_Chrome_Composite_Header extends Chrome_Design_Decorator_Abstract
 {            
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         
         if($this->_decorate === null) {
             throw new Chrome_Exception('No decorateable object set in Chrome_Design_Decorator_Content::render()!');
@@ -108,7 +108,7 @@ class Chrome_Design_Decorator_Chrome_Composite_Header extends Chrome_Design_Deco
 
 class Chrome_Design_Decorator_Chrome_Composite_Body extends Chrome_Design_Decorator_Abstract
 {            
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         
         if($this->_decorate === null) {
             throw new Chrome_Exception('No decorateable object set in Chrome_Design_Decorator_Content::render()!');
@@ -124,7 +124,7 @@ class Chrome_Design_Decorator_Chrome_Composite_Body extends Chrome_Design_Decora
 
 class Chrome_Design_Decorator_Chrome_Composite_Left_Box extends Chrome_Design_Decorator_Abstract
 {            
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         
         if($this->_decorate === null) {
             throw new Chrome_Exception('No decorateable object set in Chrome_Design_Decorator_Content::render()!');

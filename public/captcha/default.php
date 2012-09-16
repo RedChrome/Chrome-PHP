@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.09.2011 13:24:32] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 01:31:51] --> $
  */
 
 if(!isset($_GET['name'])) {
@@ -25,13 +25,13 @@ if(!isset($_GET['name'])) {
 
 // renew the key
 if(isset($_GET['renew'])) {
-    
+
 }
 
 define('CHROME_PHP', true);
 
 /**
- *  require all that to use session... 
+ *  require all that to use session...
  */
 require_once '../../include/config.php';
 
@@ -78,8 +78,8 @@ $white = imagecolorexact($img, 255, 255, 255);
 
 imagefill($img, 0, 0, $white);
 
-
-for($i=0;$i<6;++$i) {
+$length = strlen($key['key']);
+for($i=0;$i<$length;++$i) {
     $color = imagecolorexact($img, mt_rand(0, 200), mt_rand(0, 200), mt_rand(0, 200));
     imagefttext($img, 30, mt_rand(-25, 25), 22*$i+10, 45, $color, './font.ttf', $key['key']{$i});
 }

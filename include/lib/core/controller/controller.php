@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 02:18:34] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 13:55:33] --> $
  * @author     Alexander Book
  */
 
@@ -33,11 +33,11 @@ if(CHROME_PHP !== true)
 interface Chrome_Controller_Interface
 {
     /**
-     * getRequest()
+     * getRequestHandler()
      *
-     * @return Chrome_Request_Interface
+     * @return Chrome_Request_Handler_Interface
      */
-    //public function getRequest();
+    public function getRequestHandler();
 
     /**
      * getResponse()
@@ -52,6 +52,18 @@ interface Chrome_Controller_Interface
      * @return void
      */
     public function execute();
+
+    /**
+     * @param Chrome_Request_Handler_Interface $obj
+     *
+     */
+    public function setRequestHandler(Chrome_Request_Handler_Interface $obj);
+
+    /**
+     * @param Chrome_Request_Handler_Interface $reqHandler
+     * @return Chrome_Controller_Interface
+     */
+    public function __construct(Chrome_Request_Handler_Interface $reqHandler);
 }
 
 /**
@@ -165,6 +177,17 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
     protected $design = null;
 
     /**
+     * @var Chrome_Request_Handler_Interface
+     */
+    protected $requestHandler = null;
+
+    /**
+     *
+     * @var Chrome_Request_Data_Interface
+     */
+    protected $requestData = null;
+
+    /**
      * _initialize()
      *
      * @return void
@@ -185,13 +208,9 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      */
     abstract protected function _shutdown();
 
-    /**
-     * __construct()
-     *
-     * @return Chrome_Controller_Abstract
-     */
-    abstract public function __construct();
-
+    public function __construct(Chrome_Request_Handler_Interface $reqHandler) {
+        $this->setRequestHandler($reqHandler);
+    }
     /**
      * singletone pattern
      */
@@ -302,14 +321,10 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         return $this->ACE;
     }
 
-    /*public function getRequest()
+    public function getRequestHandler()
     {
-        if($this->request === null) {
-            $this->request = Chrome_Request::getInstance();
-        }
-
-        return $this->request;
-    }*/
+        return $this->requestHandler;
+    }
 
     public function getResponse()
     {
@@ -328,6 +343,11 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
     public function getDesign()
     {
         return $this->design;
+    }
+
+    public function setRequestHandler(Chrome_Request_Handler_Interface $obj) {
+        $this->requestHandler = $obj;
+        $this->requestData = $obj->getRequestData();
     }
 
     public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)

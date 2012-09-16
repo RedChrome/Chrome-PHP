@@ -17,7 +17,7 @@
  * @subpackage Chrome.File_System
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2012 18:31:16] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:39:10] --> $
  * @author     Alexander Book
  */
 
@@ -549,7 +549,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	 */
 	private function _updateCache($path, $type)
 	{
-	    // there is no nedd to clear the cache evere time, this function gets accessed
+	    // there is no need to clear the cache evere time, this function gets accessed
         // one time at the beginning should be enough...
 		//clearstatcache();
 

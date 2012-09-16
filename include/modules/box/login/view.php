@@ -44,7 +44,7 @@ class Chrome_View_Box_Login extends Chrome_View_Abstract
     /**
      * @return void
      */
-    public function render()
+    public function render(Chrome_Controller_Interface $controller)
     {
         // override parent, do nothing
     }
@@ -84,7 +84,7 @@ class Chrome_View_Box_LoggedIn extends Chrome_View_Abstract
         $this->setViewTitle('User Menu');
     }
 
-    public function render()
+    public function render(Chrome_Controller_Interface $controller)
     {
         return 'Eingeloggt...<br>Hier kommt dann das User Menu hin ;)';
     }
@@ -102,7 +102,7 @@ class Chrome_View_Box_Form_Login extends Chrome_View_Abstract
         $this->setViewTitle('Login');
     }
 
-    public function render()
+    public function render(Chrome_Controller_Interface $controller)
     {
         // create template with the form
         $template = new Chrome_Template();

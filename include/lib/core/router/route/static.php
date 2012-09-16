@@ -17,14 +17,11 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 13:05:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 11:33:02] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
-
-//TODO: use Chrome_Request_Data_Interface $data
+if( CHROME_PHP !== true ) die();
 
 /**
  * @package CHROME-PHP
@@ -32,57 +29,62 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Route_Static implements Chrome_Router_Route_Interface
 {
-    protected $_resource = null;
-    protected $_model = null;
+	protected $_resource = null;
+	protected $_model = null;
 
-    public function __construct(Chrome_Model_Abstract $model)
-    {
-        $this->_model = $model;
-        Chrome_Router::getInstance()->addRouterClass($this);
-        try {
-            Chrome_Registry::getInstance()->set(Chrome_Router_Interface::CHROME_ROUTER_REGISTRY_NAMESPACE, 'Chrome_Route_Static', $this, false);
-        } catch(Chrome_Exception $e) {
-            unset($e);
-            // do nothing
-        }
-    }
+	public function __construct( Chrome_Model_Abstract $model )
+	{
+		$this->_model = $model;
+		Chrome_Router::getInstance()->addRouterClass( $this );
+		try {
+			Chrome_Registry::getInstance()->set( Chrome_Router_Interface::CHROME_ROUTER_REGISTRY_NAMESPACE,
+				'Chrome_Route_Static', $this, false );
+		}
+		catch ( Chrome_Exception $e ) {
+			unset( $e );
+			// do nothing
+		}
+	}
 
-    public function match(Chrome_URI_Interface $url,Chrome_Request_Data_Interface $data) {
+	public function match( Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data )
+	{
 
-        $row = $this->_model->getRoute($url->getPath());
+		$row = $this->_model->getRoute( $url->getPath() );
 
-        if($row == false) {
-            return false;
-        } else {
+		if( $row == false ) {
+			return false;
+		} else {
 
-            $this->_resource = new Chrome_Router_Resource();
+			$this->_resource = new Chrome_Router_Resource();
 
-            $this->_resource->setFile($row['file']);
-            $this->_resource->setClass($row['class']);
+			$this->_resource->setFile( $row['file'] );
+			$this->_resource->setClass( $row['class'] );
 
-            if($row['GET_key'] !== '' AND $row['GET_value'] !== '') {
-                $this->_resource->setGET(array_combine(explode(',', $row['GET_key']), explode(',', $row['GET_value'])));
-            }
+			if( sizeof( $row['GET'] ) > 0 ) {
+				$data->setGET( $row['GET'] );
+			}
+			if( sizeof( $row['POST'] ) > 0 ) {
+				$data->setPOST( $row['POST'] );
+			}
+			return true;
+		}
+	}
 
-            return true;
-        }
-    }
+	public function getResource()
+	{
+		return $this->_resource;
+	}
 
-    public function getResource()
-    {
-        return $this->_resource;
-    }
+	public function url( $name, array $options )
+	{
+		$row = $this->_model->findRoute( $name );
 
-    public function url($name, array $options)
-    {
-        $row = $this->_model->findRoute($name);
-
-        if($row == false) {
-            return $row;
-        } else {
-            return $row['search'];
-        }
-    }
+		if( $row == false ) {
+			return $row;
+		} else {
+			return $row['search'];
+		}
+	}
 }
 
 /**
@@ -91,21 +93,21 @@ class Chrome_Route_Static implements Chrome_Router_Route_Interface
  */
 class Chrome_Model_Route_Static extends Chrome_Model_Abstract
 {
-    private static $_instance = null;
+	private static $_instance = null;
 
-    protected function __construct()
-    {
-        $this->_decorator = new Chrome_Model_Route_Static_Cache(new Chrome_Model_Route_Static_DB());
-    }
+	protected function __construct()
+	{
+		$this->_decorator = new Chrome_Model_Route_Static_Cache( new Chrome_Model_Route_Static_DB() );
+	}
 
-    public static function getInstance()
-    {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
+	public static function getInstance()
+	{
+		if( self::$_instance === null ) {
+			self::$_instance = new self();
+		}
 
-        return self::$_instance;
-    }
+		return self::$_instance;
+	}
 }
 
 /**
@@ -114,40 +116,42 @@ class Chrome_Model_Route_Static extends Chrome_Model_Abstract
  */
 class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
 {
-    const CHROME_MODEL_ROUTE_STATIC_CACHE_CACHE_FILE = 'tmp/cache/router/_static.cache';
+	const CHROME_MODEL_ROUTE_STATIC_CACHE_CACHE_FILE = 'tmp/cache/router/_static.cache';
 
-    protected function _cache()
-    {
-        $this->_cache = parent::$_cacheFactory->factory('serialization', self::CHROME_MODEL_ROUTE_STATIC_CACHE_CACHE_FILE);
-    }
+	protected function _cache()
+	{
+		$this->_cache = parent::$_cacheFactory->factory( 'serialization', self::CHROME_MODEL_ROUTE_STATIC_CACHE_CACHE_FILE );
+	}
 
-    public function getRoute($search) {
+	public function getRoute( $search )
+	{
 
-        if(($return = $this->_cache->load('getRoute_'.$search)) === null) {
+		if( ( $return = $this->_cache->load( 'getRoute_' . $search ) ) === null ) {
 
-            $return = $this->_decorator->getRoute($search);
+			$return = $this->_decorator->getRoute( $search );
 
-            if($return !== false) {
-                $this->_cache->save('getRoute_'.$search, $return);
-            }
-        }
+			if( $return !== false ) {
+				$this->_cache->save( 'getRoute_' . $search, $return );
+			}
+		}
 
-        return $return;
-    }
+		return $return;
+	}
 
-    public function findRoute($search) {
+	public function findRoute( $search )
+	{
 
-        if(($return = $this->_cache->load('findRoute_'.$search)) === null) {
+		if( ( $return = $this->_cache->load( 'findRoute_' . $search ) ) === null ) {
 
-            $return = $this->_decorator->findRoute($search);
+			$return = $this->_decorator->findRoute( $search );
 
-            if($return !== false) {
-                $this->_cache->save('findRoute_'.$search, $return);
-            }
-        }
+			if( $return !== false ) {
+				$this->_cache->save( 'findRoute_' . $search, $return );
+			}
+		}
 
-        return $return;
-    }
+		return $return;
+	}
 }
 
 /**
@@ -156,39 +160,68 @@ class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
  */
 class Chrome_Model_Route_Static_DB extends Chrome_Model_DB_Abstract
 {
-    protected $_dbInterface = 'interface';
+	protected $_dbInterface = 'interface';
 
-    public function __construct() {
-        parent::__construct();
-    }
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
-    public function getRoute($search) {
+	public function getRoute( $search )
+	{
 
-        $this->_dbInterfaceInstance
-                ->select('*')
-                ->from('route_static')
-                ->where('search = "'.$this->_escape($search).'"')
-                ->limit(0, 1)
-                ->execute();
+		$this->_dbInterfaceInstance->select( '*' )->from( 'route_static' )->where( 'search = "' . $this->_escape
+			( $search ) . '"' )->limit( 0, 1 )->execute();
 
-        $row = $this->_dbInterfaceInstance->next();
-        $this->_dbInterfaceInstance->clear();
+		$row = $this->_dbInterfaceInstance->next();
 
-        return $row;
-    }
+		$this->_dbInterfaceInstance->clear();
 
-    public function findRoute($name) {
+        if($row === false) {
+            return false;
+        }
 
-        $this->_dbInterfaceInstance
-                ->select('search')
-                ->from('route_static')
-                ->where('name = "'.$this->_escape($name).'"')
-                ->limit(0, 1)
-                ->execute();
 
-        $row = $this->_dbInterfaceInstance->next();
-        $this->_dbInterfaceInstance->clear();
+		// translate key=value,key2=value2 into an array {key => value, key2=>value2}
+		$GET = array();
+		if( !empty( $row['GET'] ) ) {
 
-        return $row;
-    }
+			// input is like key=value,key2=value2,..
+			$keyValuePairs = explode( ',', $row['GET'] );
+			foreach( $keyValuePairs as $keyValuePair ) {
+
+				$keyValue = explode( '=', $keyValuePair );
+				$GET[$keyValue[0]] = $keyValue[1];
+			}
+		}
+		$row['GET'] = $GET;
+
+
+		$POST = array();
+		if( !empty( $row['POST'] ) ) {
+
+			// input is like key=value,key2=value2,..
+			$keyValuePairs = explode( ',', $row['POST'] );
+			foreach( $keyValuePairs as $keyValuePair ) {
+
+				$keyValue = explode( '=', $keyValuePair );
+				$POST[$keyValue[0]] = $keyValue[1];
+			}
+		}
+		$row['POST'] = $POST;
+
+		return $row;
+	}
+
+	public function findRoute( $name )
+	{
+
+		$this->_dbInterfaceInstance->select( 'search' )->from( 'route_static' )->where( 'name = "' . $this->_escape
+			( $name ) . '"' )->limit( 0, 1 )->execute();
+
+		$row = $this->_dbInterfaceInstance->next();
+		$this->_dbInterfaceInstance->clear();
+
+		return $row;
+	}
 }

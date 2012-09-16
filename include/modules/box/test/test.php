@@ -5,7 +5,7 @@ if(CHROME_PHP !== true)
 
 class Chrome_Controller_Box_Test extends Chrome_Controller_Box_Abstract
 {
-    public function __construct() {
+    public function __construct(Chrome_Request_Handler_Interface $reqHandler) {
         Chrome_Design_Composite_Right_Box::getInstance()->getComposite()->addView(new Chrome_View_Box_Test($this));
     }
 
@@ -20,10 +20,7 @@ class Chrome_View_Box_Test extends Chrome_View_Abstract
         $this->setViewTitle('Right Box');
     }
 
-    public function render() {
+    public function render(Chrome_Controller_Interface $controller) {
         return 'box....';
     }
 }
-
-new Chrome_Controller_Box_Test();
-new Chrome_Controller_Box_Test();

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 21:57:54] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:20:47] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -67,7 +67,7 @@ class Chrome_Form_Element_Select extends Chrome_Form_Element_Abstract
             $data = array($data);
         }
 
-        $_isValid;
+        $_isValid = true;
 
         foreach($data AS $key => $value) {
 
