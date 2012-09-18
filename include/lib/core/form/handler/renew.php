@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2012 16:36:40] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 23:19:42] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -25,7 +25,7 @@ if(CHROME_PHP !== true)
 
 /**
  * This should be set as ReceivingHandler. It renews the form, if isSent() returns false.
- * This should be used to renew the form token. In order to be konsistent with the form, it should only
+ * This should be used to renew the form token. In order to be consistent with the form, it should only
  * renew the form, if the user has sent nothing to the server. This is important, because if we'd renew the form
  * and the user would have sent sth., then the form is invalid, because we replaced the token by a new one.
  * => the tokens wouldn't match => form invalid.

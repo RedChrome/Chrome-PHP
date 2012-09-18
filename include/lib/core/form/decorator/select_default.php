@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 15:13:27] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 18:22:43] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -91,7 +91,7 @@ class Chrome_Form_Decorator_Select_Default extends Chrome_Form_Decorator_Abstrac
             }
 
             if(array_key_exists($option, $readOnly)) {
-                #$disabled = ' disabled="disabled"';
+                $disabled = ' disabled="disabled"';
             } else {
                 $disabled = '';
             }

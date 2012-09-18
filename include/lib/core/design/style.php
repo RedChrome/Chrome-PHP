@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:08:30] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 20:01:34] --> $
  * @author     Alexander Book
  */
 
@@ -90,6 +90,10 @@ class Chrome_Design_Style implements Chrome_Design_Style_Interface
 
             new Chrome_Controller_Box_Test($controller->getRequestHandler());
             new Chrome_Controller_Box_Test($controller->getRequestHandler());
+            new Chrome_Controller_Box_Test($controller->getRequestHandler());
+
+            require_once BASEDIR.'modules/footer/var_dump/var_dump.php';
+            new Chrome_Controller_Footer_VarDump($controller->getRequestHandler());
 
         }
 

@@ -6,138 +6,161 @@ require_once 'include.php';
 
 class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 {
-    const CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE = 'REGISTER';
+	const CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE = 'REGISTER';
 
-    protected function _initialize()
-    {
-        $this->view = new Chrome_View_Register($this);
-    }
+	protected function _initialize()
+	{
+		$this->view = new Chrome_View_Register( $this );
+	}
 
-    protected function _execute()
-    {
-        if(Chrome_Authorisation::getInstance()->isAllowed(new Chrome_Authorisation_Resource('register', 'register')) === false) {
-            $this->view->alreadyRegistered();
-            //$this->view->setError(403);
-            $this->view->render($this);
-            return;
-        }
+	protected function _execute()
+	{
+		if( Chrome_Authorisation::getInstance()->isAllowed( new Chrome_Authorisation_Resource( 'register',
+			'register' ) ) === false ) {
+			$this->view->alreadyRegistered();
+			//$this->view->setError(403);
+			$this->view->render( $this );
+			return;
+		}
 
-        $session = Chrome_Session::getInstance();
+		$session = Chrome_Session::getInstance();
 
-        if(!isset($session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE]) ) {
+		if( $this->requestData->getGET( 'action' ) === 'register' ) {
 
-            $this->_stepOne();
+			if( !isset( $session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] ) ) {
 
-        } else {
+				$this->_stepOne();
 
-            switch($session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE]['step']) {
+			} else {
 
-                case 2: {
-                    $this->form = new Chrome_Form_Register_StepOne();
+				switch( $session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE]['step'] ) {
 
-                    if(!$this->form->isCreated() OR !$this->form->isSent() OR !$this->form->isValid()) {
+					case 2:
+						{
+							$this->form = new Chrome_Form_Register_StepOne();
 
-                        if(!$this->form->isValid()) {
-                            $this->form->create();
-                        }
+							if( !$this->form->isCreated() or !$this->form->isSent() or !$this->form->isValid() ) {
 
-                        $this->_stepOne();
-                        break;
-                    }
+								if( !$this->form->isValid() ) {
+									$this->form->create();
+								}
 
-                    $this->_stepTwo();
-                    break;
-                }
+								$this->_stepOne();
+								break;
+							}
 
-                case 3: {
+							$this->_stepTwo();
+							break;
+						}
 
-                    $this->form = new Chrome_Form_Register_StepTwo();
+					case 3:
+						{
 
-                    if(!$this->form->isCreated() OR !$this->form->isSent() OR !$this->form->isValid()) {
+							$this->form = new Chrome_Form_Register_StepTwo();
 
-                        $data = $this->form->getData();
+							if( !$this->form->isCreated() or !$this->form->isSent() or !$this->form->isValid() ) {
 
-                        // go one step back
-                        if($this->form->isSent('backward')) {
-                            $this->form = new Chrome_Form_Register_StepOne();
-                            $this->form->create();
-                            $this->_stepOne();
-                        } else {
-                            // process the errors
-                            $this->_stepTwo();
-                        }
+								$data = $this->form->getData();
 
-                        break;
-                    }
+								// go one step back
+								if( $this->form->isSent( 'backward' ) ) {
+									$this->form = new Chrome_Form_Register_StepOne();
+									$this->form->create();
+									$this->_stepOne();
+								} else {
+									// process the errors
+									$this->_stepTwo();
+								}
 
-                    $this->model = Chrome_Model_Register::getInstance();
-                    $this->model->sendRegisterEmail($this->form->getSentData('email'));
+								break;
+							}
 
-                    $this->_stepThree();
+							$this->model = Chrome_Model_Register::getInstance();
+							$this->model->sendRegisterEmail( $this->form->getSentData( 'email' ) );
 
-                    break;
-                }
+							$this->_stepThree();
 
-                case 4: {
+							break;
+						}
 
-                    $this->_stepThree();
-                    break;
-                }
+					case 4:
+						{
 
-                default: {
-                    // should never happen
-                    $session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = array('step' => 2);
-                    throw new Chrome_Exception('Undefined step in registration!');
-                }
-            }
-        }
+							$this->_stepThree();
+							break;
+						}
 
-        $this->view->render($this);
-    }
+					default:
+						{
+							// should never happen
+							$session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = array( 'step' => 2 );
+							throw new Chrome_Exception( 'Undefined step in registration!' );
+						}
+				}
+			}
+		} else if($this->requestData->getGET('action') === 'confirm_registration') {
 
-    private function _stepOne() {
-
-        if($this->form == null) {
-            $this->form = new Chrome_Form_Register_StepOne();
-        }
-
-        if(!$this->form->isCreated()) {
-            $this->form->create();
-        }
-
-        $this->view->setStepOne();
-
-        $session = Chrome_Session::getInstance();
-
-        $session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = array('step' => 2);
-    }
-
-    private function _stepTwo() {
-
-        if(!($this->form instanceof Chrome_Form_Register_StepTwo)) {
-            $this->form = new Chrome_Form_Register_StepTwo();
-        }
-
-        $this->form->create();
+            //if($this->requestData->getGET('activationKey'))
+            // validate activation key
 
 
-        $this->view->setStepTwo();
 
-        $session = Chrome_Session::getInstance();
 
-        $array = $session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE];
-        $array['step'] = 3;
-        $session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = $array;
-    }
 
-    private function _stepThree() {
 
-        $this->view->setStepThree();
 
-        $session = Chrome_Session::getInstance();
 
-        $array = $session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE];
-        $array['step'] = 4;
-        $session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = $array;
-    }
+		}
+
+		$this->view->render( $this );
+	}
+
+	private function _stepOne()
+	{
+
+		if( $this->form == null ) {
+			$this->form = new Chrome_Form_Register_StepOne();
+		}
+
+		if( !$this->form->isCreated() ) {
+			$this->form->create();
+		}
+
+		$this->view->setStepOne();
+
+		$session = Chrome_Session::getInstance();
+
+		$session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = array( 'step' => 2 );
+	}
+
+	private function _stepTwo()
+	{
+
+		if( !( $this->form instanceof Chrome_Form_Register_StepTwo ) ) {
+			$this->form = new Chrome_Form_Register_StepTwo();
+		}
+
+		$this->form->create();
+
+
+		$this->view->setStepTwo();
+
+		$session = Chrome_Session::getInstance();
+
+		$array = $session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE];
+		$array['step'] = 3;
+		$session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = $array;
+	}
+
+	private function _stepThree()
+	{
+
+		$this->view->setStepThree();
+
+		$session = Chrome_Session::getInstance();
+
+		$array = $session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE];
+		$array['step'] = 4;
+		$session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = $array;
+	}
 }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Session
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 17:20:02] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 18:10:57] --> $
  * @author     Alexander Book
  */
 
@@ -348,11 +348,15 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
      *
      * Get the data from session
      *
-     * @param string $key
+     * @param string $key key of a session-value or null to get all data
      * @return mixed
      */
     public function _get($key)
     {
+        if($key === null) {
+            return $this->_SESSION;
+        }
+
         return (isset($this->_SESSION[$key])) ? $this->_SESSION[$key] : null;
     }
 

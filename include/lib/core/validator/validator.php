@@ -17,7 +17,7 @@
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.08.2011 21:46:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.09.2012 22:53:42] --> $
  * @author     Alexander Book
  */
 
@@ -26,27 +26,27 @@ if(CHROME_PHP !== true)
 
 /**
  * defines the path to all validator classes (plugins)
- * 
+ *
  * @var string
- */ 
+ */
 define('VALIDATOR', LIB.'plugins/Validate/');
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Validator
- */ 
+ */
 interface Chrome_Validator_Interface
 {
     public function setData($data);
-    
+
     public function setOptions(array $options);
-    
+
     public function validate();
-    
+
     public function isValid();
-    
+
     public function getError();
-    
+
     public function getAllErrors();
 }
 
@@ -93,40 +93,33 @@ interface Chrome_Validator_Interface
 abstract class Chrome_Validator implements Chrome_Validator_Interface
 {
     /**
-     * Contains the data, which gets validated
-     * 
-     * @var mixed
-     */ 
-    protected $_data = null;
-    
-    /**
      * Stores options
-     * 
+     *
      * @var array
-     */ 
+     */
     protected $_options = array();
-    
+
 	/**
 	 * stores all error messages
 	 *
 	 * @var array
 	 */
 	protected $_errorMsg = array();
-    
+
     /**
      * Contains an Chrome_Language_Interface object to translate error messages
-     * 
+     *
      * @var Chrome_Language_Interface
-     */ 
+     */
     protected $_language = null;
-    
+
     /**
      * Checks whether it was already validated
-     * 
+     *
      * @var bool
-     */ 
+     */
     protected $_isValidated = false;
-    
+
 	/**
 	 * __constructor
 	 *
@@ -134,19 +127,15 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
 	public function __construct() {
 		$this->_validate();
 	}
-    
-    public function setData($data) {
-        $this->_data = $data;
-    }
-    
+
     public function setOptions(array $options) {
         $this->_options = $options;
     }
-    
+
     public function validate() {
         if($this->_isValidated === false) {
             $this->_validate();
-        }    
+        }
     }
 
 	/**
@@ -156,7 +145,7 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
 	protected function _validate() {
 		// superclass method does nothing
 	}
-    
+
 	/**
 	 * Adds a error message
 	 *
@@ -197,27 +186,27 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
 	    $this->_errorMsg = array();
 		return $return;
 	}
-    
+
     /**
      * Translates all error messages with the Language object
-     * 
+     *
      * @var Chrome_Language_Interface $obj language object
      * @return void
-     */ 
+     */
     public function setLanguage(Chrome_Language_Interface $obj)
     {
         $newMessage = array();
         foreach($this->_errorMsg AS $message) {
-            
+
             $translated = $obj->get($message);
             if($translated === null) {
                 $translated = $message;
             }
-            
 
-            $newMessage[] = $translated;            
+
+            $newMessage[] = $translated;
         }
-        
+
         $this->_errorMsg = $newMessage;
     }
 }

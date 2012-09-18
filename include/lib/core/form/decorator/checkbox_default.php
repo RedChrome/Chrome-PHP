@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2012 23:32:25] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 23:33:08] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -48,21 +48,6 @@ class Chrome_Form_Decorator_Checkbox_Default extends Chrome_Form_Decorator_Abstr
             throw new Chrome_Exception('Tried to render checkbox "'.$name.'", but all elements of this checkbox are already rendered in Form "'.$this->_formElement->getForm()->getID().'"!');
         }
 
-        $checked = '';
-        $readonly = '';
-
-        if($this->_formElement->getOptions(Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_READONLY) === true) {
-            $readonly = 'disabled="disabled" ';
-        }
-
-        /*
-        $isRequired = $this->_formElement->getOptions(Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_IS_REQUIRED);
-        if($isRequired === false AND in_array($value, (array) $this->getOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT)) === true) {
-            $checked = 'checked="checked" ';
-        } else {
-            $checked = '';
-        }*/
-
         $savedValues = (array)$this->_formElement->getSavedData();
         $sentValues  = (array)$this->_formElement->getData();
         $defaultSelection = (array)$this->getOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT);
@@ -86,9 +71,10 @@ class Chrome_Form_Decorator_Checkbox_Default extends Chrome_Form_Decorator_Abstr
         }
 
         $readOnly = $this->_formElement->getOptions(Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_READONLY);
+
         // all entries are readOnly
         if($readOnly === true) {
-            $readOnly = $array;
+            $readOnly = $values;
         } else if(!is_array($readOnly)) {
             // everything is enabled
             $readOnly = array();
@@ -97,13 +83,13 @@ class Chrome_Form_Decorator_Checkbox_Default extends Chrome_Form_Decorator_Abstr
         $readOnly = @array_flip($readOnly);
 
         if(isset($readOnly[$value])) {
-            $readOnly = 'disabled="disabled"';
+            $readOnly = ' disabled="disabled"';
         } else {
             $readOnly = '';
         }
         // important ;)
         $this->_int++;
 
-        return '<input type="checkbox" name="'.$name.'" value="'.$value.'" '.$this->_getPreparedAttrs().''.$checked.''.$readonly.'/>';
+        return '<input type="checkbox" name="'.$name.'" value="'.$value.'" '.$this->_getPreparedAttrs().''.$checked.''.$readOnly.'/>';
     }
 }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.08.2011 19:57:58] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.09.2012 00:20:59] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -25,14 +25,23 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
- */ 
+ */
 class Chrome_Form_Decorator_Backward_Default extends Chrome_Form_Decorator_Abstract
 {
-   private $_int = 0; 
-   
+    const CHROME_FORM_DECORATOR_BACKWARD_DELETE_PASSWORDS = 'DELETEPASSWORDS';
+
+    protected $_defaultOptions = array(self::CHROME_FORM_DECORATOR_BACKWARD_DELETE_PASSWORDS => true);
+
     public function render() {
-        
+
+        if($this->_options[self::CHROME_FORM_DECORATOR_BACKWARD_DELETE_PASSWORDS] === true) {
+            $addOnclick = 'onclick="javascript:truncate_password_input(\''.$this->_formElement->getForm()->getID().'\');return true"';
+        } else {
+            $addOnclick = '';
+        }
+
+
         $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_DEFAULT_LANGUAGE);
-        return '<input type="submit" name="'.$this->_formElement->getID().'" value="'.$lang->get('backward').'" '.$this->_getPreparedAttrs().'/>';
-    }   
+        return '<input type="submit" '.$addOnclick.' name="'.$this->_formElement->getID().'" value="'.$lang->get('backward').'" '.$this->_getPreparedAttrs().'/>';
+    }
 }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 13:46:54] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.09.2012 00:06:51] --> $
  * @author     Alexander Book
  */
 
@@ -40,8 +40,6 @@ abstract class Chrome_Controller_AJAX_Abstract extends Chrome_Controller_Abstrac
 		$this->_setFilter();
 
 		$this->_require();
-
-		$this->_validate();
 	}
 
 	final public function execute()
@@ -64,16 +62,6 @@ abstract class Chrome_Controller_AJAX_Abstract extends Chrome_Controller_Abstrac
 	protected function _shutdown()
 	{
 
-	}
-
-	protected function _validate()
-	{
-
-		parent::_validate();
-
-		$this->_POST = &$this->data['POST'];
-		$this->_HEADER = &$this->data['HEADER'];
-		$this->_COOKIE = &$this->data['COOKIE'];
 	}
 
 	public function getRequest()

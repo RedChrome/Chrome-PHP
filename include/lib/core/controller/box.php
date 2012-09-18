@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:07:10] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.09.2012 00:06:27] --> $
  * @author     Alexander Book
  */
 
@@ -37,8 +37,6 @@ class Chrome_Controller_Box_Abstract extends Chrome_Controller_Abstract
         $this->_initialize();
 
 		$this->_require();
-
-		$this->_validate();
 
 		$this->execute();
 	}

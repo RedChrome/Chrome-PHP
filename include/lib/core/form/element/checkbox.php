@@ -17,13 +17,17 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 22:02:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 23:12:26] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
 
 /**
+ *
+ * Info: If you set checked and disabled for the same checkbox, then the browser wont send this checkbox, because its disabled
+ * You should not use this to "tell the user that he has to check this and send it". If you want this feature, then use CHROME_FORM_ELEMENT_SELECTION_OPTIONS
+
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */

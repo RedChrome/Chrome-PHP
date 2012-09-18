@@ -18,6 +18,7 @@ class Chrome_View_Header_HTML_JS extends Chrome_View_Abstract
 <script type="text/javascript" src="'._PUBLIC.'javascript/dojo.js"></script>
 <script type="text/javascript" src="'._PUBLIC.'javascript/ganalytics.js"></script>
 <script type="text/javascript" src="'._PUBLIC.'javascript/chrome.js"></script>
+<script type="text/javascript" src="'._PUBLIC.'javascript/form_utility.js"></script>
 '.$this->getJS().'<!-- JS -->';
     }
 }

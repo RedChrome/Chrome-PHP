@@ -17,7 +17,7 @@
  * @subpackage Chrome.Request
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 02:08:25] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.09.2012 22:42:15] --> $
  * @author     Alexander Book
  */
 
@@ -47,7 +47,7 @@ class Chrome_Request_Handler_HTTP implements Chrome_Request_Handler_Interface
 class Chrome_Request_Data_HTTP extends Chrome_Request_Data_Abstract
 {
 	private static $_instance;
-
+    //todo: handle special chars such as ä
 	protected function __construct()
 	{
         parent::__construct();

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 13:55:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.09.2012 00:04:32] --> $
  * @author     Alexander Book
  */
 
@@ -110,16 +110,6 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      * @var array
      */
     protected $require = array();
-
-    /**
-     * this var contains all unescaped parameter($_GET, $_POST, etc..)
-     *
-     * structure:
-     * array('GET' => $_GET, 'POST' => $_POST, etc...)
-     *
-     * @var array
-     */
-    protected $data = array();
 
     /**
      * @deprecated
@@ -254,16 +244,6 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
                 classLoad($class);
             }
         }
-    }
-
-    /**
-     * _validate()
-     *
-     * @return void
-     */
-    protected function _validate()
-    {
-        //$this->data = &$this->getRequest()->getParameters();
     }
 
     /**
