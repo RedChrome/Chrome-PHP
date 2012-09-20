@@ -10,7 +10,9 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 
 	protected function _initialize()
 	{
+        //TODO: move those out of class
 		$this->view = new Chrome_View_Register( $this );
+        $this->model = Chrome_Model_Register::getInstance();
 	}
 
 	protected function _execute()
@@ -75,7 +77,8 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 								break;
 							}
 
-							$this->model = Chrome_Model_Register::getInstance();
+                            $this->model->addRegistrationRequest();
+
 							$this->model->sendRegisterEmail( $this->form->getSentData( 'email' ) );
 
 							$this->_stepThree();
@@ -85,7 +88,6 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 
 					case 4:
 						{
-
 							$this->_stepThree();
 							break;
 						}
@@ -103,13 +105,19 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
             //if($this->requestData->getGET('activationKey'))
             // validate activation key
 
+            $success = $this->model->checkRegistration($this->requestData->getGET('activationKey'));
 
+            // user successfully registered
+            if($success === true) {
 
+                $this->view->registrationFinished();
 
+            // activationKey is invalid
+            } else {
 
+                $this->view->registrationFailed();
 
-
-
+            }
 		}
 
 		$this->view->render( $this );

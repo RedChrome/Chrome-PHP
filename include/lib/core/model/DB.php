@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [12.08.2011 15:23:53] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.09.2012 14:45:34] --> $
  * @author     Alexander Book
  */
 
@@ -166,4 +166,47 @@ abstract class Chrome_Model_DB_Abstract extends Chrome_Model_Abstract
 
         return $this->_dbInterfaceInstance->escape($data);
     }
+
+    /**
+     * Chrome_Model_DB_Abstract::setDBInterface()
+     *
+     * Sets the dbInterfaceInstnace object with the given one
+     *
+     * @param Chrome_Form_Interface_Abstract
+     * @return void
+     */
+    public function setDBInterface(Chrome_Form_Interface_Abstract $dbInterface) {
+        $this->_dbInterfaceInstance = $dbInterface;
+    }
+
+    /**
+     * Chrome_Form_Interface_Abstract::getDBInterface()
+     *
+     * You should not use this internal! Only for access from outside of this class
+     * Getter for $_dbInterfaceInstance
+     *
+     * @return Chrome_Form_Interface_Abstract|null
+     */
+    public function getDBInterface() {
+        return $this->_dbInterfaceInstance;
+    }
+
+    /**
+     * Chrome_Form_Interface_Abstract::_getDBInterface()
+     *
+     * This is the corresponding method for getDBInterface, but for internal usage!
+     * It creates a new dbInterfaceInstance if the current one is null. This will never
+     * return null, getDBInterface might return null...
+     *
+     * @return Chrome_Form_Interface_Abstract
+     */
+    protected function _getDBInterface() {
+        if($this->_dbInterfaceInstance === null) {
+            $this->_connect();
+        }
+
+        return $this->_dbInterfaceInstance;
+    }
+
+
 }

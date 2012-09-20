@@ -17,12 +17,11 @@
  * @subpackage Chrome.DB.Adapter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 00:06:37] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.09.2012 16:15:28] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+if( CHROME_PHP !== true ) die();
 
 /**
  * @package CHROME-PHP
@@ -74,35 +73,36 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 
 	public static function getInstance()
 	{
-		if(self::$_instance === null) {
+		if( self::$_instance === null ) {
 			self::$_instance = new self();
 		}
 
 		return self::$_instance;
 	}
 
-	public function _select(Chrome_DB_Interface_Abstract &$obj = null, $select, $distinct = null, $highPriority = false, $sqlCache = 'SQL_CACHE')
+	public function _select( Chrome_DB_Interface_Abstract & $obj = null, $select, $distinct = null, $highPriority = false,
+		$sqlCache = 'SQL_CACHE' )
 	{
 		$interfaceID = $obj->getID();
-		$this->_setSQLType($obj, 'select');
+		$this->_setSQLType( $obj, 'select' );
 
-		if(!is_array($select)) {
-			$select = array($select);
+		if( !is_array( $select ) ) {
+			$select = array( $select );
 		}
 
 		// escape fields, but * AND COUNT() MAX() etc...
-		foreach($select AS $key => $value) {
-			$select[$key] = $this->_escapeField($value);
+		foreach( $select as $key => $value ) {
+			$select[$key] = $this->_escapeField( $value );
 		}
 
-		$select = implode(', ', $select);
+		$select = implode( ', ', $select );
 
 		// validate $distinct
-		if($distinct !== null) {
+		if( $distinct !== null ) {
 
-			$distinct = strtoupper($distinct);
+			$distinct = strtoupper( $distinct );
 
-			switch($distinct) {
+			switch( $distinct ) {
 				default:
 				case false:
 				case 'ALL':
@@ -126,17 +126,17 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 		}
 
 		// validate hightPriority
-		if($highPriority === true) {
+		if( $highPriority === true ) {
 			$highPriority = 'HIGH_PRIORITY';
 		} else {
 			$highPriority = null;
 		}
 
 		// validate $sqlCache
-		if($sqlCache !== null) {
-			$sqlCache = strtoupper($sqlCache);
+		if( $sqlCache !== null ) {
+			$sqlCache = strtoupper( $sqlCache );
 
-			switch($sqlCache) {
+			switch( $sqlCache ) {
 				case true:
 				case 'SQL_CACHE':
 					{
@@ -159,270 +159,332 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 			}
 		}
 
-		$this->_statementOption[$interfaceID]['select'] = array('select' => $select, 'distinct' => $distinct, 'highPriority' => $highPriority, 'sqlCache' =>
-			$sqlCache);
+		$this->_statementOption[$interfaceID]['select'] = array(
+			'select' => $select,
+			'distinct' => $distinct,
+			'highPriority' => $highPriority,
+			'sqlCache' => $sqlCache );
 	}
 
-	public function _from(Chrome_DB_Interface_Abstract &$obj, $from, $addPrefix = true)
+	public function _from( Chrome_DB_Interface_Abstract & $obj, $from, $addPrefix = true )
 	{
-		if(!is_array($from)) {
-			$from = array($from);
+		if( !is_array( $from ) ) {
+			$from = array( $from );
 		}
 
-		foreach($from AS $key => $value) {
+		foreach( $from as $key => $value ) {
 
-			$value = $this->_escapeTable($value, $addPrefix);
+			$value = $this->_escapeTable( $value, $addPrefix );
 
-			if(is_int($key)) {
-				$from[$key] = self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR.$value.self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR;
+			if( is_int( $key ) ) {
+				$from[$key] = self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR . $value . self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR;
 
 			} else {
-				$from[$key] = self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR.$value.self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR.' AS '.self::
-					CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR.$key.self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR;
+				$from[$key] = self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR . $value . self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR .
+					' AS ' . self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR . $key . self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR;
 			}
 		}
 
-		$this->_statementOption[$obj->getID()]['from'] = array('from' => implode(', ', $from));
+		$this->_statementOption[$obj->getID()]['from'] = array( 'from' => implode( ', ', $from ) );
 	}
 
-	public function createConnection($server, $database, $user, $pass)
+	public function createConnection( $server, $database, $user, $pass )
 	{
-		$connection = @mysql_pconnect($server, $user, $pass);
+		$connection = @mysql_pconnect( $server, $user, $pass );
 
-		if($connection === false) {
-            switch(mysql_errno()) {
+		if( $connection === false ) {
+			switch( mysql_errno() ) {
 
-                case 2002:
-                case 2003:
-                case 2005: {
-                    throw new Chrome_Exception('Could not establish connection to server  on "'.$server.'"! Server is not responding!', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER);
-                }
+				case 2002:
+				case 2003:
+				case 2005:
+					{
+						throw new Chrome_Exception( 'Could not establish connection to server  on "' . $server .
+							'"! Server is not responding!', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER );
+					}
 
-                case 1045: {
-                    throw new Chrome_Exception('Could not establish connection to server  on "'.$server.'"! Username and/or password is wrong', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD);
-                }
+				case 1045:
+					{
+						throw new Chrome_Exception( 'Could not establish connection to server  on "' . $server .
+							'"! Username and/or password is wrong', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD );
+					}
 
-                default: {
-                    throw new Chrome_Exception('('.mysql_errno().') '.mysql_error(), Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_UNKNOWN);
-                }
-            }
+				default:
+					{
+						throw new Chrome_Exception( '(' . mysql_errno() . ') ' . mysql_error(),
+							Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_UNKNOWN );
+					}
+			}
 		}
 
-		if(@mysql_select_db($database, $connection) === false) {
-            switch(mysql_errno()) {
-                case 1049: {
-                    throw new Chrome_Exception('Could not select database '.$database.'!', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE);
-                }
+		if( @mysql_select_db( $database, $connection ) === false ) {
+			switch( mysql_errno() ) {
+				case 1049:
+					{
+						throw new Chrome_Exception( 'Could not select database ' . $database . '!',
+							Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE );
+					}
 
-                default: {
-                    throw new Chrome_Exception('('.mysql_errno().') '.mysql_error(), Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_UNKNOWN);
-                }
-            }
+				default:
+					{
+						throw new Chrome_Exception( '(' . mysql_errno() . ') ' . mysql_error(),
+							Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_UNKNOWN );
+					}
+			}
 		}
 		return $connection;
 	}
 
-	public function _getStatement(Chrome_DB_Interface_Abstract &$obj = null)
+	public function _getStatement( Chrome_DB_Interface_Abstract & $obj = null )
 	{
 		return $this->_statement[$obj->getID()];
 	}
 
-	public function _execute(Chrome_DB_Interface_Abstract &$obj = null)
+	public function _execute( Chrome_DB_Interface_Abstract & $obj = null )
 	{
 		// interface ID
 		$IID = $obj->getID();
 
-		if(empty($this->_statement[$IID])) {
-			$this->_prepare($obj);
+		if( empty( $this->_statement[$IID] ) ) {
+			$this->_prepare( $obj );
 		}
 
-		$this->_query($obj, $this->_statement[$IID]);
+		$this->_query( $obj, $this->_statement[$IID] );
 	}
 
-	public function fetchResult(Chrome_DB_Interface_Abstract &$obj = null)
+	//TODO: return a class, not an array. e.g. Chrome_DB_Result!
+	public function fetchResult( Chrome_DB_Interface_Abstract & $obj = null )
 	{
-		return mysql_fetch_assoc($this->_queries[$obj->getID()]);
+		return mysql_fetch_assoc( $this->_queries[$obj->getID()] );
 	}
 
-	public function _prepare(Chrome_DB_Interface_Abstract &$obj = null)
+	public function _prepare( Chrome_DB_Interface_Abstract & $obj = null )
 	{
 		// Interface ID
 		$IID = $obj->getID();
 		$this->_statement[$IID] = '';
 
-		switch($this->_SQLType[$IID]) {
+		switch( $this->_SQLType[$IID] ) {
 
-			case 'select': {
+			case 'select':
+				{
 
-                if(isset($this->_statementOption[$IID]['hasRight']['column'])) {
-                    $this->_statementOption[$IID] = self::$_rightHandler->_addHasRight($this->_statementOption[$IID], $this->_statementOption[$IID]['hasRight']['resource']);
-                }
+					if( isset( $this->_statementOption[$IID]['hasRight']['column'] ) ) {
+						$this->_statementOption[$IID] = self::$_rightHandler->_addHasRight( $this->_statementOption[$IID],
+							$this->_statementOption[$IID]['hasRight']['resource'] );
+					}
 
-				$this->_statement[$IID] .= 'SELECT ';
+					$this->_statement[$IID] .= 'SELECT ';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['select']['distinct']) ? $this->_statementOption[$IID]['select']['distinct'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['select']['distinct'] ) ? $this->_statementOption[$IID]['select']['distinct'] .
+						' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['select']['priority']) ? $this->_statementOption[$IID]['select']['priority'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['select']['priority'] ) ? $this->_statementOption[$IID]['select']['priority'] .
+						' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['select']['sqlCache']) ? $this->_statementOption[$IID]['select']['sqlCache'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['select']['sqlCache'] ) ? $this->_statementOption[$IID]['select']['sqlCache'] .
+						' ' : '';
 
-				$this->_statement[$IID] .= $this->_statementOption[$IID]['select']['select'].' ';
+					$this->_statement[$IID] .= $this->_statementOption[$IID]['select']['select'] . ' ';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['from']['from']) ? 'FROM '.$this->_statementOption[$IID]['from']['from'].' ' : $this->_throwException('Cannot prepare SQL Query without a "from" statement in Chrome_DB_Adapter_MySQL::_prepare()!');
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['from']['from'] ) ? 'FROM ' . $this->_statementOption[$IID]['from']['from'] .
+						' ' : $this->_throwException( 'Cannot prepare SQL Query without a "from" statement in Chrome_DB_Adapter_MySQL::_prepare()!' );
 
-                $this->_statement[$IID] .= isset($this->_statement[$IID]['hashRight']['colomnName']) ? ' ,'.DB_PREFIX.'_ace AS ace' : '';
+					$this->_statement[$IID] .= isset( $this->_statement[$IID]['hashRight']['colomnName'] ) ? ' ,' .
+						DB_PREFIX . '_ace AS ace' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['where']['condition']) ? 'WHERE '.$this->_statementOption[$IID]['where']['condition'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['where']['condition'] ) ?
+						'WHERE ' . $this->_statementOption[$IID]['where']['condition'] . ' ' : '';
 
-                /*if(isset($this->_statementOption[$IID]['hashRight']['colomnName'])) {
-                    $this->_statement[$IID] .= isset($this->_statementOption[$IID]['where']['condition']) ? 'AND ' : ' ';
-                    $groupID = isset($this->_statementOption[$IID]['hasRight']['groupID']) ? $this->_statementOption[$IID]['hasRight']['groupID'] : $_SESSION['group'];
-                    $this->_statement[$IID] .= $this->_statementOption[$IID]['hasRight']['colomName'].' = ace.id
-				AND ace.allow NOT LIKE "'.CHROME_ACE::ACE_ALLOW_NONE.'|%"
-				AND ( (ace.deny LIKE "'.CHROME_ACE::ACE_DENY_ALL.'|%" AND ace.allow LIKE "%|'.$groupID.'|%" )
+					/*if(isset($this->_statementOption[$IID]['hashRight']['colomnName'])) {
+					$this->_statement[$IID] .= isset($this->_statementOption[$IID]['where']['condition']) ? 'AND ' : ' ';
+					$groupID = isset($this->_statementOption[$IID]['hasRight']['groupID']) ? $this->_statementOption[$IID]['hasRight']['groupID'] : $_SESSION['group'];
+					$this->_statement[$IID] .= $this->_statementOption[$IID]['hasRight']['colomName'].' = ace.id
+					AND ace.allow NOT LIKE "'.CHROME_ACE::ACE_ALLOW_NONE.'|%"
+					AND ( (ace.deny LIKE "'.CHROME_ACE::ACE_DENY_ALL.'|%" AND ace.allow LIKE "%|'.$groupID.'|%" )
 					OR (ace.allow LIKE "%|'.$groupID.'|%" AND ace.deny NOT LIKE "%|'.$groupID.'|%")
 					OR (ace.allow LIKE "'.CHROME_ACE::ACE_ALLOW_ALL.'|%" AND ace.deny NOT LIKE "%|'.$groupID.'|%" )
 					OR ace.deny LIKE "'.CHROME_ACE::ACE_DENY_NONE.'|%"
- 					) ';
-                }*/
+					) ';
+					}*/
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['groupBy']['group']) ? 'GROUP BY '.$this->_statementOption[$IID]['groupBy']['group'].' '.$this->_statementOption[$IID]['groupBy']['groupType'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['groupBy']['group'] ) ?
+						'GROUP BY ' . $this->_statementOption[$IID]['groupBy']['group'] . ' ' . $this->_statementOption[$IID]['groupBy']['groupType'] .
+						' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['having']['condition']) ? 'HAVING '.$this->_statementOption[$IID]['having']['condition'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['having']['condition'] ) ?
+						'HAVING ' . $this->_statementOption[$IID]['having']['condition'] . ' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['orderBy']['field']) ? 'ORDER BY '.$this->_statementOption[$IID]['orderBy']['field'].' '.$this->_statementOption[$IID]['orderBy']['orderType'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['orderBy']['field'] ) ?
+						'ORDER BY ' . $this->_statementOption[$IID]['orderBy']['field'] . ' ' . $this->_statementOption[$IID]['orderBy']['orderType'] .
+						' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['limit']['offset']) ? 'LIMIT '.$this->_statementOption[$IID]['limit']['offset'].', '.$this->_statementOption[$IID]['limit']['rowCount'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['limit']['offset'] ) ? 'LIMIT ' .
+						$this->_statementOption[$IID]['limit']['offset'] . ', ' . $this->_statementOption[$IID]['limit']['rowCount'] .
+						' ' : '';
 
-                if(isset($this->_statementOption[$IID]['hasRight']['column'])) {
-                    $this->_statement[$IID] = self::$_rightHandler->addHasRight($this->_statement[$IID], $this->_statementOption[$IID]['hasRight']['resource'], $this->_statementOption[$IID]['hasRight']['column']);
-                }
+					if( isset( $this->_statementOption[$IID]['hasRight']['column'] ) ) {
+						$this->_statement[$IID] = self::$_rightHandler->addHasRight( $this->_statement[$IID], $this->_statementOption[$IID]['hasRight']['resource'],
+							$this->_statementOption[$IID]['hasRight']['column'] );
+					}
 
-				break;
-			}
-
-			case 'insert': {
-
-				$this->_statement[$IID] .= 'INSERT ';
-
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['insert']['priority']) ? $this->_statementOption[$IID]['insert']['priority'].' ' : '';
-
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['insert']['ignore']) ? $this->_statementOption[$IID]['insert']['ignore'].' ' : '';
-
-				if(isset($this->_statementOption[$IID]['into'])) {
-					$this->_statement[$IID] .= 'INTO '.$this->_statementOption[$IID]['into']['into'].' ';
-					$this->_statement[$IID] .= isset($this->_statementOption[$IID]['into']['structure']) ? $this->_statementOption[$IID]['into']['structure'].' ' : '';
-				} else {
-					throw new Chrome_Exception('Cannot prepare SQL Query without a "into" statement in Chrome_DB_Adapter_MySQL::_prepare()!');
+					break;
 				}
 
-				if(isset($this->_statementOption[$IID]['values'])) {
-					$this->_statement[$IID] .= 'VALUES '.$this->_statementOption[$IID]['values']['values'];
-				} else if(isset($this->_statementOption[$IID]['set'])) {
-					$this->_statement[$IID] .= 'SET '.$this->_statementOption[$IID]['set']['set'];
-				} else {
-					throw new Chrome_Exception('Cannot insert nothing into database! Need to call "values" OR "set"!');
+			case 'insert':
+				{
+
+					$this->_statement[$IID] .= 'INSERT ';
+
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['insert']['priority'] ) ? $this->_statementOption[$IID]['insert']['priority'] .
+						' ' : '';
+
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['insert']['ignore'] ) ? $this->_statementOption[$IID]['insert']['ignore'] .
+						' ' : '';
+
+					if( isset( $this->_statementOption[$IID]['into'] ) ) {
+						$this->_statement[$IID] .= 'INTO ' . $this->_statementOption[$IID]['into']['into'] . ' ';
+						$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['into']['structure'] ) ? $this->_statementOption[$IID]['into']['structure'] .
+							' ' : '';
+					} else {
+						throw new Chrome_Exception( 'Cannot prepare SQL Query without a "into" statement in Chrome_DB_Adapter_MySQL::_prepare()!' );
+					}
+
+					if( isset( $this->_statementOption[$IID]['values'] ) ) {
+						$this->_statement[$IID] .= 'VALUES ' . $this->_statementOption[$IID]['values']['values'];
+					} else
+						if( isset( $this->_statementOption[$IID]['set'] ) ) {
+							$this->_statement[$IID] .= 'SET ' . $this->_statementOption[$IID]['set']['set'];
+						} else {
+							throw new Chrome_Exception( 'Cannot insert nothing into database! Need to call "values" OR "set"!' );
+						}
+
+						break;
 				}
 
-				break;
-			}
+			case 'update':
+				{
 
-			case 'update': {
+					$this->_statement[$IID] .= 'UPDATE ';
 
-				$this->_statement[$IID] .= 'UPDATE ';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['update']['lowPriority'] ) ? $this->_statementOption[$IID]['update']['lowPriority'] .
+						' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['update']['lowPriority']) ? $this->_statementOption[$IID]['update']['lowPriority'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['update']['ignore'] ) ? $this->_statementOption[$IID]['update']['ignore'] .
+						' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['update']['ignore']) ? $this->_statementOption[$IID]['update']['ignore'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['update']['table'] ) ? $this->_statementOption[$IID]['update']['table'] .
+						' ' : $this->_throwException( 'Cannot create an "update" query without a tablereference in Chrome_DB_Adapter_MySQL::_prepare()!' );
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['update']['table']) ? $this->_statementOption[$IID]['update']['table'].' ' : $this->_throwException('Cannot create an "update" query without a tablereference in Chrome_DB_Adapter_MySQL::_prepare()!');
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['set']['set'] ) ? 'SET ' . $this->_statementOption[$IID]['set']['set'] .
+						' ' : $this->_throwException( 'Cannot create an "update query" without having called "set" in Chrome_DB_Adapter_MySQL::_prepare()!' );
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['set']['set']) ? 'SET '.$this->_statementOption[$IID]['set']['set'].' ' : $this->_throwException('Cannot create an "update query" without having called "set" in Chrome_DB_Adapter_MySQL::_prepare()!');
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['where']['condition'] ) ?
+						'WHERE ' . $this->_statementOption[$IID]['where']['condition'] . ' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['where']['condition']) ? 'WHERE '.$this->_statementOption[$IID]['where']['condition'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['orderBy']['field'] ) ?
+						'ORDER BY ' . $this->_statementOption[$IID]['orderBy']['field'] . ' ' . $this->_statementOption[$IID]['orderBy']['orderType'] .
+						' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['orderBy']['field']) ? 'ORDER BY '.$this->_statementOption[$IID]['orderBy']['field'].' '.$this->_statementOption[$IID]['orderBy']['orderType'].' ' : '';
+					// in an update statement, limit only accepts rowCount
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['limit']['offset'] ) ? 'LIMIT ' .
+						$this->_statementOption[$IID]['limit']['rowCount'] . ' ' : '';
 
-                // in an update statement, limit only accepts rowCount
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['limit']['offset']) ? 'LIMIT '.$this->_statementOption[$IID]['limit']['rowCount'].' ' : '';
+					break;
 
-				break;
-
-			}
-
-			case 'replace': {
-
-				$this->_statement[$IID] .= 'REPLACE ';
-
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['replace']['lowPriority']) ? $this->_statementOption[$IID]['replace']['lowPriority'].' ' : '';
-
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['replace']['ignore']) ? $this->_statementOption[$IID]['replace']['ignore'].' ' : '';
-
-				if(isset($this->_statementOption[$IID]['into'])) {
-					$this->_statement[$IID] .= 'INTO '.$this->_statementOption[$IID]['into']['into'].' ';
-					$this->_statement[$IID] .= isset($this->_statementOption[$IID]['into']['structure']) ? $this->_statementOption[$IID]['into']['structure'].' ' : '';
-				} else {
-					throw new Chrome_Exception('Cannot prepare SQL Query without a "into" statement in Chrome_DB_Adapter_MySQL::_prepare()!');
 				}
 
-				if(isset($this->_statementOption[$IID]['values'])) {
-					$this->_statement[$IID] .= 'VALUES '.$this->_statementOption[$IID]['values']['values'];
-				} else if(isset($this->_statementOption[$IID]['set'])) {
-					$this->_statement[$IID] .= 'SET '.$this->_statementOption[$IID]['set']['set'];
-				} else {
-					throw new Chrome_Exception('Cannot replace nothing into database! Need to call "values" OR "set"!');
+			case 'replace':
+				{
+
+					$this->_statement[$IID] .= 'REPLACE ';
+
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['replace']['lowPriority'] ) ? $this->_statementOption[$IID]['replace']['lowPriority'] .
+						' ' : '';
+
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['replace']['ignore'] ) ? $this->_statementOption[$IID]['replace']['ignore'] .
+						' ' : '';
+
+					if( isset( $this->_statementOption[$IID]['into'] ) ) {
+						$this->_statement[$IID] .= 'INTO ' . $this->_statementOption[$IID]['into']['into'] . ' ';
+						$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['into']['structure'] ) ? $this->_statementOption[$IID]['into']['structure'] .
+							' ' : '';
+					} else {
+						throw new Chrome_Exception( 'Cannot prepare SQL Query without a "into" statement in Chrome_DB_Adapter_MySQL::_prepare()!' );
+					}
+
+					if( isset( $this->_statementOption[$IID]['values'] ) ) {
+						$this->_statement[$IID] .= 'VALUES ' . $this->_statementOption[$IID]['values']['values'];
+					} else
+						if( isset( $this->_statementOption[$IID]['set'] ) ) {
+							$this->_statement[$IID] .= 'SET ' . $this->_statementOption[$IID]['set']['set'];
+						} else {
+							throw new Chrome_Exception( 'Cannot replace nothing into database! Need to call "values" OR "set"!' );
+						}
+
+						break;
+
 				}
 
-				break;
+			case 'delete':
+				{
 
-			}
+					$this->_statement[$IID] .= 'DELETE ';
 
-			case 'delete': {
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['delete']['lowPriority'] ) ? $this->_statementOption[$IID]['delete']['lowPriority'] .
+						' ' : '';
 
-				$this->_statement[$IID] .= 'DELETE ';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['delete']['quick'] ) ? $this->_statementOption[$IID]['delete']['quick'] .
+						' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['delete']['lowPriority']) ? $this->_statementOption[$IID]['delete']['lowPriority'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['delete']['ignore'] ) ? $this->_statementOption[$IID]['delete']['ignore'] .
+						' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['delete']['quick']) ? $this->_statementOption[$IID]['delete']['quick'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['from']['from'] ) ? 'FROM ' . $this->_statementOption[$IID]['from']['from'] .
+						' ' : $this->_throwException( 'Cannot prepare SQL Query without a "from" statement in Chrome_DB_Adapter_MySQL::_prepare()!' );
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['delete']['ignore']) ? $this->_statementOption[$IID]['delete']['ignore'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['where']['condition'] ) ?
+						'WHERE ' . $this->_statementOption[$IID]['where']['condition'] . ' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['from']['from']) ? 'FROM '.$this->_statementOption[$IID]['from']['from'].' ' : $this->_throwException('Cannot prepare SQL Query without a "from" statement in Chrome_DB_Adapter_MySQL::_prepare()!');
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['orderBy']['field'] ) ?
+						'ORDER BY ' . $this->_statementOption[$IID]['orderBy']['field'] . ' ' . $this->_statementOption[$IID]['orderBy']['orderType'] .
+						' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['where']['condition']) ? 'WHERE '.$this->_statementOption[$IID]['where']['condition'].' ' : '';
+					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['limit']['offset'] ) ? 'LIMIT ' .
+						$this->_statementOption[$IID]['limit']['offset'] . ', ' . $this->_statementOption[$IID]['limit']['rowCount'] .
+						' ' : '';
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['orderBy']['field']) ? 'ORDER BY '.$this->_statementOption[$IID]['orderBy']['field'].' '.$this->_statementOption[$IID]['orderBy']['orderType'].' ' : '';
+					break;
+				}
 
-				$this->_statement[$IID] .= isset($this->_statementOption[$IID]['limit']['offset']) ? 'LIMIT '.$this->_statementOption[$IID]['limit']['offset'].', '.$this->_statementOption[$IID]['limit']['rowCount'].' ' : '';
+			case 'truncate':
+				{
 
-				break;
-			}
+					$this->_statement[$IID] .= 'TRUNCATE ';
 
-			case 'truncate': {
+					$this->_statement[$IID] .= isset( $this->_statement[$IID]['truncate']['table'] ) ? 'TABLE ' . $this->_statement[$IID]['truncate']['table'] .
+						' ' : $this->_throwException( 'Cannot truncate an undefined table! No table given in Chrome_DB_Adapter_MySQL::_prepare()!' );
 
-				$this->_statement[$IID] .= 'TRUNCATE ';
+					break;
+				}
 
-				$this->_statement[$IID] .= isset($this->_statement[$IID]['truncate']['table']) ? 'TABLE '.$this->_statement[$IID]['truncate']['table'].' ' : $this->_throwException('Cannot truncate an undefined table! No table given in Chrome_DB_Adapter_MySQL::_prepare()!');
-
-				break;
-			}
-
-			default: {
-				throw new Chrome_Exception('No OR wrong data manipulation statement selected! To prepare a statement you need to call "select, insert, update, replace, delete OR truncate" in Chrome_DB_Adapter_MySQL::_prepare()!');
-			}
+			default:
+				{
+					throw new Chrome_Exception( 'No OR wrong data manipulation statement selected! To prepare a statement you need to call "select, insert, update, replace, delete OR truncate" in Chrome_DB_Adapter_MySQL::_prepare()!' );
+				}
 		}
 	}
 
-	public function _insert(Chrome_DB_Interface_Abstract &$obj = null, $priority = null, $ignore = false)
+	public function _insert( Chrome_DB_Interface_Abstract & $obj = null, $priority = null, $ignore = false )
 	{
-		$this->_setSQLType($obj, 'insert');
+		$this->_setSQLType( $obj, 'insert' );
 
 		$interfaceID = $obj->getID();
 
-		if($priority !== null) {
-			$priority = strtoupper($priority);
+		if( $priority !== null ) {
+			$priority = strtoupper( $priority );
 
-			switch($priority) {
+			switch( $priority ) {
 
 				case 'LOW_PRIORITY':
 					{
@@ -452,107 +514,131 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 			}
 		}
 
-		if($ignore === true) {
+		if( $ignore === true ) {
 			$ignore = 'IGNORE';
 		} else {
 			$ignore = null;
 		}
 
-		$this->_statementOption[$interfaceID]['into'] = array('priority' => $priority, 'ignore' => $ignore);
+		$this->_statementOption[$interfaceID]['into'] = array( 'priority' => $priority, 'ignore' => $ignore );
 	}
 
-	public function _into(Chrome_DB_Interface_Abstract &$obj, $table, array $structure = null, $addPrefix = true)
+	public function _into( Chrome_DB_Interface_Abstract & $obj, $table, array $structure = null, $addPrefix = true )
 	{
-		$table = self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR.$this->_escapeTable($table, $addPrefix).self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR;
+		$table = self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR . $this->_escapeTable( $table, $addPrefix ) .
+			self::CHROME_DB_ADAPTER_MYSQL_TABLE_ESCAPE_CHAR;
 
-		if($structure !== null) {
-			foreach($structure AS $key => $value) {
+		if( $structure !== null ) {
+			foreach( $structure as $key => $value ) {
 
-				if(strpos($value, self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR) === false) {
-					$structure[$key] = self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR.$value.self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR;
+				if( strpos( $value, self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR ) === false ) {
+					$structure[$key] = self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR . $value . self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR;
 				}
 			}
 
-			$structure = '( '.implode(', ', $structure).' )';
+			$structure = '( ' . implode( ', ', $structure ) . ' )';
 		}
-		$this->_statementOption[$obj->getID()]['into'] = array('into' => $table, 'structure' => $structure);
+		$this->_statementOption[$obj->getID()]['into'] = array( 'into' => $table, 'structure' => $structure );
 	}
 
-	public function _set(Chrome_DB_Interface_Abstract &$obj, array $set)
+	public function _set( Chrome_DB_Interface_Abstract & $obj, array $set )
 	{
-		foreach($set AS $key => $value) {
+		foreach( $set as $key => $value ) {
 
-			if(is_int($key)) {
-				throw new Chrome_Exception('Cannot set a fieldname to an integer in Chrome_DB_Adapter_MySQL::_set()!');
+			if( is_int( $key ) ) {
+				throw new Chrome_Exception( 'Cannot set a fieldname to an integer in Chrome_DB_Adapter_MySQL::_set()!' );
 			}
 
-			$set[$key] = $this->_escapeField($key).' = "'.$value.'"';
+			$set[$key] = $this->_escapeField( $key ) . ' = "' . $value . '"';
 		}
 
-		$set = implode(', ', $set);
-		$this->_statementOption[$obj->getID()]['set'] = array('set' => $set);
+		$set = implode( ', ', $set );
+		$this->_statementOption[$obj->getID()]['set'] = array( 'set' => $set );
 	}
 
-	public function _values(Chrome_DB_Interface_Abstract &$obj, array $values)
+	public function _values( Chrome_DB_Interface_Abstract & $obj, array $values )
 	{
-		$values = '( "'.implode('", "', $values).'" )';
+		if( !is_string( $this->_statementOption[$obj->getID()]['into']['structure'] ) ) {
 
-		$this->_statementOption[$obj->getID()]['values'] = array('values' => $values);
+			if( is_string( key( $values ) ) ) {
+
+				foreach( $values as $key => $value ) {
+
+					if( strpos( $value, self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR ) === false ) {
+						$key = self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR . $key . self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR;
+					}
+
+					$structure[] = $key;
+				}
+
+				$structure = '( ' . implode( ', ', $structure ) . ' )';
+				$this->_statementOption[$obj->getID()]['into']['structure'] = $structure;
+			}
+		}
+
+		$values = '( "' . implode( '", "', $values ) . '" )';
+
+		$this->_statementOption[$obj->getID()]['values'] = array( 'values' => $values );
 	}
 
-	public function _limit(Chrome_DB_Interface_Abstract &$obj = null, $offset = null, $rowCount = null)
+	public function _limit( Chrome_DB_Interface_Abstract & $obj = null, $offset = null, $rowCount = null )
 	{
-		$offset = floor($offset);
+		$offset = floor( $offset );
 
 		// if not rowCount given, then we select all rows up to the end
-		if($rowCount === null) {
-			$rowCount = sprintf('%\'9'.self::CHROME_DB_ADAPTER_MYSQL_LIMIT_ROW_COUNT_ALL.'u', '9');
+		if( $rowCount === null ) {
+			$rowCount = sprintf( '%\'9' . self::CHROME_DB_ADAPTER_MYSQL_LIMIT_ROW_COUNT_ALL . 'u', '9' );
 		} else {
-			$rowCount = floor($rowCount);
+			$rowCount = floor( $rowCount );
 		}
 
-		if($offset < 0 OR $rowCount < 0) {
-			throw new Chrome_Exeception('Cannot set offset OR rowCount to a negative integer! Offset AND rowCount must be nonnegative!');
+		if( $offset < 0 or $rowCount < 0 ) {
+			throw new Chrome_Exeception( 'Cannot set offset OR rowCount to a negative integer! Offset AND rowCount must be nonnegative!' );
 		}
 
-		$this->_statementOption[$obj->getID()]['limit'] = array('limit' => true, 'offset' => $offset, 'rowCount' => $rowCount);
+		$this->_statementOption[$obj->getID()]['limit'] = array(
+			'limit' => true,
+			'offset' => $offset,
+			'rowCount' => $rowCount );
 	}
 
-	public function _groupBy(Chrome_DB_Interface_Abstract &$obj = null, $group, $groupType = 'ASC')
+	public function _groupBy( Chrome_DB_Interface_Abstract & $obj = null, $group, $groupType = 'ASC' )
 	{
-		$group = $this->_escapeField($group);
+		$group = $this->_escapeField( $group );
 
-		if($groupType !== null) {
+		if( $groupType !== null ) {
 
-			$groupType = strtoupper($groupType);
-			switch($groupType) {
+			$groupType = strtoupper( $groupType );
+			switch( $groupType ) {
 
 				default:
-				case 'ASC': {
-					$groupType = 'ASC';
-					break;
-				}
+				case 'ASC':
+					{
+						$groupType = 'ASC';
+						break;
+					}
 
-				case 'DESC': {
-					$groupType = 'DESC';
-					break;
-				}
+				case 'DESC':
+					{
+						$groupType = 'DESC';
+						break;
+					}
 			}
 		}
 
-		$this->_statementOption[$obj->getID()]['groupBy'] = array('group' => $group, 'groupType' => $groupType);
+		$this->_statementOption[$obj->getID()]['groupBy'] = array( 'group' => $group, 'groupType' => $groupType );
 	}
 
-	public function _orderBy(Chrome_DB_Interface_Abstract &$obj = null, $field, $orderType = 'ASC')
+	public function _orderBy( Chrome_DB_Interface_Abstract & $obj = null, $field, $orderType = 'ASC' )
 	{
- 	    if(is_string($field)) {
-            $field = $this->_escapeField($field);
-        } elseif(is_array($field)) {
-            $field = $this->_escapeField(implode(', ', $field));
-        }
+		if( is_string( $field ) ) {
+			$field = $this->_escapeField( $field );
+		} elseif( is_array( $field ) ) {
+			$field = $this->_escapeField( implode( ', ', $field ) );
+		}
 
-		$orderType = strtoupper($orderType);
-		switch(strtoupper($orderType)) {
+		$orderType = strtoupper( $orderType );
+		switch( strtoupper( $orderType ) ) {
 			default:
 			case 'ASC':
 				{
@@ -567,39 +653,43 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 				}
 		}
 
-		$this->_statementOption[$obj->getID()]['orderBy'] = array('field' => $field, 'orderType' => $orderType);
+		$this->_statementOption[$obj->getID()]['orderBy'] = array( 'field' => $field, 'orderType' => $orderType );
 	}
 
-	public function _update(Chrome_DB_Interface_Abstract &$obj, $table, $lowPriority = null, $ignore = null, $addPrefix = true)
+	public function _update( Chrome_DB_Interface_Abstract & $obj, $table, $lowPriority = null, $ignore = null,
+		$addPrefix = true )
 	{
-		$this->_setSQLType($obj, 'update');
+		$this->_setSQLType( $obj, 'update' );
 
-		$table = $this->_escapeTable($table, $addPrefix);
+		$table = $this->_escapeTable( $table, $addPrefix );
 
-		if($lowPriority === true) {
+		if( $lowPriority === true ) {
 			$lowPriority = 'LOW_PRIORITY';
 		} else {
 			$lowPriority = null;
 		}
 
-		if($ignore === true) {
+		if( $ignore === true ) {
 			$ignore = 'IGNORE';
 		} else {
 			$ignore = null;
 		}
 
-		$this->_statementOption[$obj->getID()]['update'] = array('table' => $table, 'lowPriority' => $lowPriority, 'ignore' => $ignore);
+		$this->_statementOption[$obj->getID()]['update'] = array(
+			'table' => $table,
+			'lowPriority' => $lowPriority,
+			'ignore' => $ignore );
 	}
 
-	public function _replace(Chrome_DB_Interface_Abstract &$obj = null, $priority = null, $addPrefix = true)
+	public function _replace( Chrome_DB_Interface_Abstract & $obj = null, $priority = null, $addPrefix = true )
 	{
-		$this->_setSQLType($obj, 'replace');
+		$this->_setSQLType( $obj, 'replace' );
 
-		if($priority !== null) {
+		if( $priority !== null ) {
 
-			$priority = strtoupper($priority);
+			$priority = strtoupper( $priority );
 
-			switch($priority) {
+			switch( $priority ) {
 
 				case 'LOW_PRIORITY':
 					{
@@ -620,124 +710,131 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 			}
 		}
 
-		$this->_statementOption[$obj->getID()]['replace'] = array('priority' => $priority);
+		$this->_statementOption[$obj->getID()]['replace'] = array( 'priority' => $priority );
 	}
 
-	public function _delete(Chrome_DB_Interface_Abstract &$obj = null, $lowPriority = false, $quick = false, $ignore = false)
+	public function _delete( Chrome_DB_Interface_Abstract & $obj = null, $lowPriority = false, $quick = false,
+		$ignore = false )
 	{
-		$this->_setSQLType($obj, 'delete');
+		$this->_setSQLType( $obj, 'delete' );
 
-		if($lowPriority === true) {
+		if( $lowPriority === true ) {
 			$lowPriority = 'LOW_PRIORITY';
 		} else {
 			$lowPriority = null;
 		}
 
-		if($quick === true) {
+		if( $quick === true ) {
 			$quick = 'QUICK';
 		} else {
 			$quick = null;
 		}
 
-		if($ignore === true) {
+		if( $ignore === true ) {
 			$ignore = 'IGNORE';
 		} else {
 			$ignore = null;
 		}
 
-		$this->_statementOption[$obj->getID()]['delete'] = array('lowPriority' => $lowPriority, 'quick' => $quick, 'ignore' => $ignore);
+		$this->_statementOption[$obj->getID()]['delete'] = array(
+			'lowPriority' => $lowPriority,
+			'quick' => $quick,
+			'ignore' => $ignore );
 	}
 
-	public function _truncate(Chrome_DB_Interface_Abstract &$obj = null, $table, $addPrefix = true)
+	public function _truncate( Chrome_DB_Interface_Abstract & $obj = null, $table, $addPrefix = true )
 	{
-		$this->_setSQLType($obj, 'truncate');
+		$this->_setSQLType( $obj, 'truncate' );
 
-		$table = $this->_escapeTable($table, $addPrefix);
+		$table = $this->_escapeTable( $table, $addPrefix );
 
-		$this->_statementOption[$obj->getID()]['truncate'] = array('table' => $table);
+		$this->_statementOption[$obj->getID()]['truncate'] = array( 'table' => $table );
 	}
 
-	public function _escape(Chrome_DB_Interface_Abstract &$obj = null, $string)
+	public function _escape( Chrome_DB_Interface_Abstract & $obj = null, $string )
 	{
-	    if($this->_connection === null) {
-	       	return mysql_real_escape_string($string);
-	    }
+		if( $this->_connection === null ) {
+			return mysql_real_escape_string( $string );
+		}
 
-		return mysql_real_escape_string($string, $this->_connection);
+		return mysql_real_escape_string( $string, $this->_connection );
 	}
 
-	private function _escapeTable($table, $addPrefix = true)
+	private function _escapeTable( $table, $addPrefix = true )
 	{
 		// replace 'prefix' with DB_PREFIX
-		if(strstr($table, 'prefix') !== false) {
+		if( strstr( $table, 'prefix' ) !== false ) {
 
-			$table = str_replace('prefix', DB_PREFIX, $table);
+			$table = str_replace( 'prefix', DB_PREFIX, $table );
 
 			// if string does not contain a prefix, then add it
 		} else
-			if($addPrefix === true AND strstr($table, DB_PREFIX) === false) {
-				$table = DB_PREFIX.'_'.$table;
+			if( $addPrefix === true and strstr( $table, DB_PREFIX ) === false ) {
+				$table = DB_PREFIX . '_' . $table;
 			}
 
 		return $table;
 	}
 
-	private function _escapeField($field)
+	private function _escapeField( $field )
 	{
-		if($field === '*') {
+		if( $field === '*' ) {
 			return $field;
 		}
 
-		$field = trim($field);
+		$field = trim( $field );
 
-		if(strpos($field, ',') !== false) {
+		if( strpos( $field, ',' ) !== false ) {
 
-			$fields = explode(',' ,$field);
+			$fields = explode( ',', $field );
 
-			foreach($fields AS $key => $value) {
-				$fields[$key] = $this->_escapeField($value);
+			foreach( $fields as $key => $value ) {
+				$fields[$key] = $this->_escapeField( $value );
 			}
-			$field = implode(', ', $fields);
+			$field = implode( ', ', $fields );
 			return $field;
 		}
 
 		// escape e.g. user.id to user.`id`
-		if(($pos = strpos($field, '.')) !== false) {
-			return substr($field, 0, $pos).'.'.self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR.substr($field, $pos + 1).self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR;
+		if( ( $pos = strpos( $field, '.' ) ) !== false ) {
+			return substr( $field, 0, $pos ) . '.' . self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR . substr( $field,
+				$pos + 1 ) . self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR;
 		}
-		if(strpos($field, '(') !== false) {
+		if( strpos( $field, '(' ) !== false ) {
 			return $field;
 		}
 		// continue if ` is in string
-		if(strpos($field, self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR) !== false) {
+		if( strpos( $field, self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR ) !== false ) {
 			return $field;
 		}
 
-		return self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR.$field.self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR;
+		return self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR . $field . self::CHROME_DB_ADAPTER_MYSQL_FIELD_ESCAPE_CHAR;
 	}
 
-	private function _throwException($string)
+	private function _throwException( $string )
 	{
-		throw new Chrome_Exception($string);
+		throw new Chrome_Exception( $string );
 	}
 
-	public function _query(Chrome_DB_Interface_Abstract &$obj = null, $query)
+	public function _query( Chrome_DB_Interface_Abstract & $obj = null, $query )
 	{
-	    if(!is_resource($this->_connection)) {
-	       // try to set connection again
-           if($this->_connectionID === null) {
-                throw new Chrome_Exception('Cannot execute query if no connection is set!', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_NO_CONNECTION_SET);
-           } else {
-                $this->_connection = self::$_registryInstance->getConnection($this->_connectionID);
-           }
-	    }
+		if( !is_resource( $this->_connection ) ) {
+			// try to set connection again
+			if( $this->_connectionID === null ) {
+				throw new Chrome_Exception( 'Cannot execute query if no connection is set!',
+					Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_NO_CONNECTION_SET );
+			} else {
+				$this->_connection = self::$_registryInstance->getConnection( $this->_connectionID );
+			}
+		}
 
-		$query = mysql_query($query, $this->_connection);
-		if($query === false) {
-            throw new Chrome_Exception('Error while sending a query to database!', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_ERROR_IN_QUERY);
+		$query = mysql_query( $query, $this->_connection );
+		if( $query === false ) {
+			throw new Chrome_Exception( 'Error while sending a query to database!',
+				Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_ERROR_IN_QUERY );
 		} else {
-            $this->_queries[$obj->getID()] = $query;
-        }
+			$this->_queries[$obj->getID()] = $query;
+		}
 	}
 
 	public function _clean()
@@ -747,7 +844,8 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 		$this->_statementOption = array();
 	}
 
-	public function _clear() {
+	public function _clear()
+	{
 		$this->_clean();
 	}
 }

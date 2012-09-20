@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB.Interface
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [12.08.2011 13:31:32] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.09.2012 15:41:42] --> $
  * @author     Alexander Book
  */
 
@@ -56,12 +56,12 @@ abstract class Chrome_DB_Interface_Abstract implements Chrome_Exception_Processa
 	 * @var string
 	 */
 	protected $_adapter = null;
-    
+
     /**
-     * 
-     */ 
+     *
+     */
     protected $_exceptionHandler = null;
-    
+
 	/**
 	 * Constructor,<br>
 	 * sets interface ID, registers Interface AND selects adapter
@@ -85,6 +85,9 @@ abstract class Chrome_DB_Interface_Abstract implements Chrome_Exception_Processa
 		// register interface
 		Chrome_DB_Adapter_Abstract::registerInterface($this);
 	}
+
+    // this should every dbInterface inherit
+    //abstract public function next();
 
 	/**
 	 * Clears all internal vars up
@@ -138,7 +141,7 @@ abstract class Chrome_DB_Interface_Abstract implements Chrome_Exception_Processa
             if($this->_exceptionHandler === null) {
                 $this->_exceptionHandler = new Chrome_Exception_Database_Handler();
             }
-            
+
             $this->_exceptionHandler->exception($e);
         }
 		if($return !== null)
@@ -197,11 +200,11 @@ abstract class Chrome_DB_Interface_Abstract implements Chrome_Exception_Processa
 		// this method should get overloaded
 		throw new Chrome_Exception('Chrome_DB_Interface_Abstract::getInstance() is not overloaded!');
 	}
-    
+
     public function setExceptionHandler(Chrome_Exception_Handler_Interface $handler) {
         $this->_exceptionHandler = $handler;
     }
-    
+
     public function getExceptionHandler() {
         return $this->_exceptionHandler;
     }

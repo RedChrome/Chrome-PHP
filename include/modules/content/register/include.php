@@ -37,8 +37,13 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 
 		$lang = new Chrome_Language( 'modules/content/user/registration' );
 
-		$emailValidator = new Chrome_Validator_Form_Email();
+		$emailValidator = new Chrome_Validator_Email_Default();
+        $emailExistsValidator = new Chrome_Validator_Email_Exists();
+        $emailBlacklistValidator = new Chrome_Validator_Email_Blacklist();
+        $emailExistsValidator->setOptions(array(Chrome_Validator_Email_Exists::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS => false));
+
 		$passwordValidator = new Chrome_Validator_Form_Password();
+
 		$nicknameValidator = new Chrome_Validator_Form_NicknameRegister();
 
 		$stringConverter = new Chrome_Converter_Value();
@@ -67,9 +72,9 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 
 		$this->_elements['email'] = new Chrome_Form_Element_Text( $this, 'email', array(
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array( $emailValidator ),
+			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array( $emailValidator, $emailExistsValidator, $emailBlacklistValidator ),
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ),
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array( $stringConverter ) ) );
+			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array( $stringConverter  ) ) );
 
 		$this->_elements['password'] = new Chrome_Form_Element_Password( $this, 'password', array(
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,

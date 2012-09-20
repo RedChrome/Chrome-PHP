@@ -17,7 +17,7 @@
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.09.2012 22:53:42] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.09.2012 12:20:10] --> $
  * @author     Alexander Book
  */
 
@@ -113,6 +113,8 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      */
     protected $_language = null;
 
+    protected $_data = null;
+
     /**
      * Checks whether it was already validated
      *
@@ -136,6 +138,14 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
         if($this->_isValidated === false) {
             $this->_validate();
         }
+    }
+
+    /**
+     * Sets the data to validate
+     * @param mixed $data
+     */
+    public function setData($data) {
+        $this->_data = $data;
     }
 
 	/**

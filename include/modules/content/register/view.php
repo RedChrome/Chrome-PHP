@@ -21,6 +21,16 @@ class Chrome_View_Register extends Chrome_View_Abstract
     public function alreadyRegistered() {
         Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Register_AlreadyRegistered($this->_controller));
     }
+
+    public function registrationFinished() {
+        $this->addTitle('Fertig');
+        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Register_Registration_Finished($this->_controller));
+    }
+
+    public function registrationFailed() {
+        $this->addTitle('Fehlgeschlagen');
+        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Register_Registration_Failed($this->_controller));
+    }
 }
 
 class Chrome_View_Register_StepOne extends Chrome_View_Abstract
@@ -61,6 +71,22 @@ class Chrome_View_Register_AlreadyRegistered extends Chrome_View_Abstract
     public function render(Chrome_Controller_Interface $controller) {
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/alreadyRegistered');
+        return $template->render();
+    }
+}
+
+class Chrome_View_Register_Registration_Finished extends Chrome_View_Abstract {
+    public function render(Chrome_Controller_Interface $controller) {
+        $template = new Chrome_Template();
+        $template->assignTemplate('modules/content/register/registrationFinished');
+        return $template->render();
+    }
+}
+
+class Chrome_View_Register_Registration_Failed extends Chrome_View_Abstract {
+    public function render(Chrome_Controller_Interface $controller) {
+        $template = new Chrome_Template();
+        $template->assignTemplate('modules/content/register/registrationFailed');
         return $template->render();
     }
 }

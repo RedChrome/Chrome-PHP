@@ -1,5 +1,6 @@
 <fieldset>
     <legend>Registrieren:</legend>
+    <?php echo $FORM->render('error'); ?>
     <?php echo $FORM->render('Register_StepTwo'); ?>
         <table border="0" cellpadding="0" cellspacing="10">
             <tr>

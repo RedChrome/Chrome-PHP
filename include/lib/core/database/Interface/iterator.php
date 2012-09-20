@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB.Interface
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2012 14:16:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.09.2012 16:01:15] --> $
  * @author     Alexander Book
  */
 
@@ -59,6 +59,8 @@ class Chrome_DB_Interface_Iterator extends Chrome_DB_Interface_Abstract implemen
 			// fetch next result from adapter
 			//$this->_iteratorArray[$this->_iteratorPointer] = call_user_func_array(array('Chrome_DB_Adapter_Abstract', '__callStatic'), array('fetchResult', array(&$this)));
 		}
+
+        return $this->current();
 	}
 
 	public function rewind() {
