@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB.Adapter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2012 00:33:44] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.09.2012 23:35:29] --> $
  * @author     Alexander Book
  */
 
@@ -148,7 +148,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	{
 		// 1. argument must be an instance of Chrome_DB_Interface_Abstract
 		if(!($arguments[0] instanceof Chrome_DB_Interface_Abstract)) {
-			throw new Chrome_Exception('Cannot call method ' . $method . ' without an instance of Chrome_DB_Interface_Abstract! First argument must be an instance of Chrome_DB_Interface_Abstract OR a child class!', 1);
+			throw new Chrome_Exception_Database('Cannot call method ' . $method . ' without an instance of Chrome_DB_Interface_Abstract! First argument must be an instance of Chrome_DB_Interface_Abstract OR a child class!', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_METHOD_INPUT);
 		}
 
 		// get ID of Interface
@@ -207,7 +207,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	{
 		// check for valid methods...
 		if(isset(self::$__forbiddenMethods['_' . $method])) {
-			throw new Chrome_Exception('You cannot call this method "_' . $method . '"! This method is private OR protected!', 1);
+			throw new Chrome_Exception_Database('You cannot call this method "_' . $method . '"! This method is private OR protected!', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_METHOD_INPUT);
 		}
 
 		$_method = $method;
@@ -223,7 +223,7 @@ abstract class Chrome_DB_Adapter_Abstract
 				// call this method
 				return call_user_func_array(array(self::$_adapters[self::$_interfaces[$interfaceID]['adapter']]['instance'], $_method), $arguments);
 			} else {
-				throw new Chrome_Exception('Method "_' . $method . '" does not exist in class Chrome_DB_Adapter_Abstract!', 2);
+				throw new Chrome_Exception_Database('Method "_' . $method . '" does not exist in class Chrome_DB_Adapter_Abstract!', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_METHOD_INPUT);
 			}
 		} else {
 			// calls this method
@@ -425,7 +425,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	{
 		// valid connection ID
 		if($connectionID < 0 OR !is_int($connectionID)) {
-			throw new Chrome_Exception('No valid connection ID given in Chrome_DB_Adapter_Abstract::setConnectionID()!', 6, null, false);
+			throw new Chrome_Exception_Database('No valid connection ID given in Chrome_DB_Adapter_Abstract::setConnectionID()!', Chrome_Exception_Database::DATABASE_EXCEPTION_INVALID_CONNECTION_GIVEN, null, false);
 		}
 		// set connection id
 		$this->_connectionID = $connectionID;
@@ -442,7 +442,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	{
 		// valid connection ID?
 		if($connectionID < 0 OR !is_int($connectionID)) {
-			throw new Chrome_Exception('No valid connection ID given in Chrome_DB_Adapter_Abstract::setDefaultConnectionID()!', 7);
+			throw new Chrome_Exception_Database('No valid connection ID given in Chrome_DB_Adapter_Abstract::setDefaultConnectionID()!', Chrome_Exception_Database::DATABASE_EXCEPTION_INVALID_CONNECTION_GIVEN);
 		}
 
 		self::$_defaultConnectionID = $connectionID;
@@ -504,7 +504,7 @@ abstract class Chrome_DB_Adapter_Abstract
 		}
 
 		try {
-            // create connection AND get connection ID
+            // create connection and get connection ID
 			$connectionID = self::$_registryInstance->createConnection($adapterInstance, $server, $database, $user, $pass);
 		} catch(Chrome_Exception_Database $e) {
             throw new Chrome_Exception_Database($e->getMessage(), $e->getCode(), $e);
@@ -527,7 +527,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	 * @param string                       $distinct [optional] available types: ALL, DISTINCT, DISTINCTROW
 	 * @param bool                         $highPriority [optional] if true the query will be high priority
 	 * @param string                       $sqlCache [optional] available types: SQL_CACHE, SQL_NO_CACHE
-	 * @throws Chrome_Exception
+	 * @throws Chrome_Exception_Database
 	 * @return void
 	 */
 	protected function _select(Chrome_DB_Interface_Abstract & $obj = null, $select, $distinct = null, $highPriority = false, $sqlCache = 'SQL_CACHE')
@@ -544,7 +544,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	 * @param Chrome_DB_Interface_Abstract $obj [optional]
 	 * @param string                       $priority [optional] available types: LOW_PRIORITY, DELAYED, HIGH_PRIORITY
 	 * @param bool                         $ignore [optional] ignore warnings on error?
-	 * @throws Chrome_Exception
+	 * @throws Chrome_Exception_Database
 	 * @return void
 	 */
 	protected function _insert(Chrome_DB_Interface_Abstract & $obj = null, $priority = null, $ignore = false)
@@ -563,7 +563,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	 * @param bool                         $lowPriority [optional] if true: query has low priority
 	 * @param bool                         $ignore [optional] if true: ignores errors in query
 	 * @param bool                         $addPrefix [optional] if true: adds a table prefix to $table
-	 * @throws Chrome_Exception
+	 * @throws Chrome_Exception_Database
 	 * @return void
 	 */
 	protected function _update(Chrome_DB_Interface_Abstract & $obj = null, $table, $lowPriority = false, $ignore = false, $addPrefix = true)
@@ -581,7 +581,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	 * @param bool                         $lowPriority [optional] if true: query has low priority
 	 * @param bool                         $quick [optional] if true: may speed up some queries on MyISAM
 	 * @param bool                         $ignore [optional] if true: ignores errors
-	 * @throws Chrome_Exception
+	 * @throws Chrome_Exception_Database
 	 * @return void
 	 */
 	protected function _delete(Chrome_DB_Interface_Abstract & $obj = null, $lowPriority = false, $quick = false, $ignore = false)
@@ -597,7 +597,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	 *
 	 * @param Chrome_DB_Interface_Abstract $obj [optional]
 	 * @param bool                         $priority [optional] available types: LOW_PRIORITY, DELAYED
-	 * @throws Chrome_Exception
+	 * @throws Chrome_Exception_Database
 	 * @return void
 	 */
 	protected function _replace(Chrome_DB_Interface_Abstract & $obj = null, $priority = null)
@@ -614,7 +614,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	 * @param Chrome_DB_Interface_Abstract $obj [optional]
 	 * @param string                       $table table
 	 * @param bool                         $addPrefix [optional] adds a table prefix to $table
-	 * @throws Chrome_Exception
+	 * @throws Chrome_Exception_Database
 	 * @return void
 	 */
 	protected function _truncate(Chrome_DB_Interface_Abstract & $obj = null, $table, $addPrefix = true)
@@ -675,7 +675,7 @@ abstract class Chrome_DB_Adapter_Abstract
 
             // should not happen!
             if(self::$_rightHandler == null) {
-                throw new Chrome_Exception('Cannot get an Chrome_Database_Right_Handler instance from Registry!');
+                throw new Chrome_Exception_Database('Cannot get an Chrome_Database_Right_Handler instance from Registry!', Chrome_Exception_Database::DATABASE_EXCEPTION_NO_VALID_RIGHT_HANDLER);
             }
         }
 
@@ -740,7 +740,7 @@ abstract class Chrome_DB_Adapter_Abstract
 
 		$interfaceID = $obj->getID();
 		if(isset($this->_SQLType[$interfaceID])) {
-			throw new Chrome_Exception('SQL Type already set!');
+			throw new Chrome_Exception_Database('SQL Type already set!', Chrome_Exception_Database::DATABASE_EXCEPTION_INVALID_STATE);
 		}
 
 		$this->_SQLType[$interfaceID] = $type;

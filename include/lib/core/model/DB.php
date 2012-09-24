@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.09.2012 14:45:34] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.09.2012 23:51:38] --> $
  * @author     Alexander Book
  */
 
@@ -197,12 +197,18 @@ abstract class Chrome_Model_DB_Abstract extends Chrome_Model_Abstract
      * This is the corresponding method for getDBInterface, but for internal usage!
      * It creates a new dbInterfaceInstance if the current one is null. This will never
      * return null, getDBInterface might return null...
+     * Another important information: If you call this method, then clean() is also called,
+     * so any not saved data is getting lost! (if $clean = true)
      *
+     * @param $clean boolean true, then clean() is getting called
      * @return Chrome_Form_Interface_Abstract
      */
-    protected function _getDBInterface() {
+    protected function _getDBInterface($clean = true) {
         if($this->_dbInterfaceInstance === null) {
             $this->_connect();
+        }
+        if($clean === true) {
+            $this->_dbInterfaceInstance->clean();
         }
 
         return $this->_dbInterfaceInstance;

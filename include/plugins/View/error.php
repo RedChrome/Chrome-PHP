@@ -15,16 +15,17 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.08.2011 17:43:52] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.09.2012 19:18:32] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
 
+//TODO: finish error codes
 class Chrome_View_Helper_Error extends Chrome_View_Helper_Abstract
 {
     private static $_instance = null;
-    
+
     public static function getInstance()
     {
         if(self::$_instance === null) {
@@ -33,7 +34,7 @@ class Chrome_View_Helper_Error extends Chrome_View_Helper_Abstract
 
         return self::$_instance;
     }
-    
+
     public function setError(Chrome_View_Abstract $obj, $errorCode) {
         switch($errorCode) {
             default: {
@@ -41,7 +42,7 @@ class Chrome_View_Helper_Error extends Chrome_View_Helper_Abstract
             }
         }
     }
-    
+
     public function getMethods()
     {
         return array('setError');

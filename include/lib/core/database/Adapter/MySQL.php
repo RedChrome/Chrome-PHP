@@ -17,21 +17,13 @@
  * @subpackage Chrome.DB.Adapter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.09.2012 16:15:28] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.09.2012 23:39:04] --> $
  * @author     Alexander Book
  */
 
 if( CHROME_PHP !== true ) die();
 
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.DB.Adapter
- * @todo move this class to core/error/exception/
- */
-class Chrome_Exeception_DB_MySQL extends Chrome_Exception
-{
-
-}
+// TODO: DO NOT THROW A CHROME_EXCEPTION, instead throw Chrome_Exception_Database or Chrome_Exception_DB
 
 /**
  * @package CHROME-PHP
@@ -199,20 +191,20 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 				case 2003:
 				case 2005:
 					{
-						throw new Chrome_Exception( 'Could not establish connection to server  on "' . $server .
-							'"! Server is not responding!', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER );
+						throw new Chrome_Exception_Database( 'Could not establish connection to server  on "' . $server .
+							'"! Server is not responding!', Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER );
 					}
 
 				case 1045:
 					{
-						throw new Chrome_Exception( 'Could not establish connection to server  on "' . $server .
-							'"! Username and/or password is wrong', Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD );
+						throw new Chrome_Exception_Database( 'Could not establish connection to server  on "' . $server .
+							'"! Username and/or password is wrong', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD );
 					}
 
 				default:
 					{
-						throw new Chrome_Exception( '(' . mysql_errno() . ') ' . mysql_error(),
-							Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_UNKNOWN );
+						throw new Chrome_Exception_Database( '(' . mysql_errno() . ') ' . mysql_error(),
+							Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN );
 					}
 			}
 		}
@@ -221,14 +213,14 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 			switch( mysql_errno() ) {
 				case 1049:
 					{
-						throw new Chrome_Exception( 'Could not select database ' . $database . '!',
-							Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE );
+						throw new Chrome_Exception_Database( 'Could not select database ' . $database . '!',
+							Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE );
 					}
 
 				default:
 					{
-						throw new Chrome_Exception( '(' . mysql_errno() . ') ' . mysql_error(),
-							Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_UNKNOWN );
+						throw new Chrome_Exception_Database( '(' . mysql_errno() . ') ' . mysql_error(),
+							Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN );
 					}
 			}
 		}
@@ -347,7 +339,7 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 						$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['into']['structure'] ) ? $this->_statementOption[$IID]['into']['structure'] .
 							' ' : '';
 					} else {
-						throw new Chrome_Exception( 'Cannot prepare SQL Query without a "into" statement in Chrome_DB_Adapter_MySQL::_prepare()!' );
+						throw new Chrome_Exception_Database( 'Cannot prepare SQL Query without a "into" statement in Chrome_DB_Adapter_MySQL::_prepare()!', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_METHOD_INPUT );
 					}
 
 					if( isset( $this->_statementOption[$IID]['values'] ) ) {
@@ -356,7 +348,7 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 						if( isset( $this->_statementOption[$IID]['set'] ) ) {
 							$this->_statement[$IID] .= 'SET ' . $this->_statementOption[$IID]['set']['set'];
 						} else {
-							throw new Chrome_Exception( 'Cannot insert nothing into database! Need to call "values" OR "set"!' );
+							throw new Chrome_Exception_Database( 'Cannot insert nothing into database! Need to call "values" OR "set"!', Chrome_Database_Exception::DATABASE_EXCEPTION_WRONG_METHOD_INPUT);
 						}
 
 						break;
@@ -410,7 +402,7 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 						$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['into']['structure'] ) ? $this->_statementOption[$IID]['into']['structure'] .
 							' ' : '';
 					} else {
-						throw new Chrome_Exception( 'Cannot prepare SQL Query without a "into" statement in Chrome_DB_Adapter_MySQL::_prepare()!' );
+						throw new Chrome_Exception_Database( 'Cannot prepare SQL Query without a "into" statement in Chrome_DB_Adapter_MySQL::_prepare()!', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_METHOD_INPUT );
 					}
 
 					if( isset( $this->_statementOption[$IID]['values'] ) ) {
@@ -419,7 +411,7 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 						if( isset( $this->_statementOption[$IID]['set'] ) ) {
 							$this->_statement[$IID] .= 'SET ' . $this->_statementOption[$IID]['set']['set'];
 						} else {
-							throw new Chrome_Exception( 'Cannot replace nothing into database! Need to call "values" OR "set"!' );
+							throw new Chrome_Exception_Database( 'Cannot replace nothing into database! Need to call "values" OR "set"!', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_METHOD_INPUT );
 						}
 
 						break;
@@ -470,7 +462,7 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 
 			default:
 				{
-					throw new Chrome_Exception( 'No OR wrong data manipulation statement selected! To prepare a statement you need to call "select, insert, update, replace, delete OR truncate" in Chrome_DB_Adapter_MySQL::_prepare()!' );
+					throw new Chrome_Exception_Database( 'No or wrong data manipulation statement selected! To prepare a statement you need to call "select, insert, update, replace, delete OR truncate" in Chrome_DB_Adapter_MySQL::_prepare()!', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_METHOD_INPUT );
 				}
 		}
 	}
@@ -546,7 +538,7 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 		foreach( $set as $key => $value ) {
 
 			if( is_int( $key ) ) {
-				throw new Chrome_Exception( 'Cannot set a fieldname to an integer in Chrome_DB_Adapter_MySQL::_set()!' );
+				throw new Chrome_Exception_Database( 'Cannot set a fieldname to an integer in Chrome_DB_Adapter_MySQL::_set()!', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_METHOD_INPUT );
 			}
 
 			$set[$key] = $this->_escapeField( $key ) . ' = "' . $value . '"';
@@ -593,7 +585,7 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 		}
 
 		if( $offset < 0 or $rowCount < 0 ) {
-			throw new Chrome_Exeception( 'Cannot set offset OR rowCount to a negative integer! Offset AND rowCount must be nonnegative!' );
+			throw new Chrome_Exception_Database( 'Cannot set offset or rowCount to a negative integer! Offset and rowCount must be nonnegative!', Chrome_Exeception_DB_MySQL::DATABASE_EXCEPTION_WRONG_METHOD_INPUT );
 		}
 
 		$this->_statementOption[$obj->getID()]['limit'] = array(
@@ -821,8 +813,8 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 		if( !is_resource( $this->_connection ) ) {
 			// try to set connection again
 			if( $this->_connectionID === null ) {
-				throw new Chrome_Exception( 'Cannot execute query if no connection is set!',
-					Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_NO_CONNECTION_SET );
+				throw new Chrome_Exception_Database( 'Cannot execute query if no connection is set!',
+					Chrome_Exception_Database::DATABASE_EXCEPTION_NO_CONNECTION_SET );
 			} else {
 				$this->_connection = self::$_registryInstance->getConnection( $this->_connectionID );
 			}
@@ -830,8 +822,8 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 
 		$query = mysql_query( $query, $this->_connection );
 		if( $query === false ) {
-			throw new Chrome_Exception( 'Error while sending a query to database!',
-				Chrome_Exception_Database_Interface::DATABASE_EXCEPTION_ERROR_IN_QUERY );
+			throw new Chrome_Exception_Database( 'Error while sending a query to database!',
+				Chrome_Exception_Database::DATABASE_EXCEPTION_ERROR_IN_QUERY );
 		} else {
 			$this->_queries[$obj->getID()] = $query;
 		}

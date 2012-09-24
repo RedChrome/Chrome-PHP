@@ -17,7 +17,7 @@
  * @subpackage Chrome.Exception
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.09.2011 12:48:32] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.09.2012 23:20:11] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -25,13 +25,13 @@ if(CHROME_PHP !== true)
 /**
  * @pacakge CHROME-PHP
  * @subpackage Chrome.Exception
- */ 
+ */
 interface Chrome_Exception_Handler_Interface
 {
 
     /**
      * exception()
-     * 
+     *
      * @param Exception $e
      * @return void
      */
@@ -41,13 +41,13 @@ interface Chrome_Exception_Handler_Interface
 /**
  * @pacakge CHROME-PHP
  * @subpackage Chrome.Exception
- */ 
+ */
 interface Chrome_Exception_Processable_Interface
 {
 
     /**
      * setExceptionHandler()
-     * 
+     *
      * @param mixed $obj
      * @return void
      */
@@ -55,7 +55,7 @@ interface Chrome_Exception_Processable_Interface
 
     /**
      * getExceptionHandler()
-     * 
+     *
      * @return Chrome_Exception_Handler_Interface
      */
     public function getExceptionHandler();
@@ -63,7 +63,7 @@ interface Chrome_Exception_Processable_Interface
 
 /**
  * load default exception class
- */ 
+ */
 require_once LIB.'exception/default.php';
 
 /**
@@ -99,7 +99,7 @@ class Chrome_Exception extends Exception
 
     /**
      * Chrome_Exception::__construct()
-     * 
+     *
      * @param string $msg
      * @param double $code
      * @param mixed $prevException
@@ -126,7 +126,7 @@ class Chrome_Exception extends Exception
 
     /**
      * Chrome_Exception::show()
-     * 
+     *
      * @param mixed $e
      * @return void
      */
@@ -142,23 +142,22 @@ class Chrome_Exception extends Exception
 
     /**
      * Chrome_Exception::_getPrevious()
-     * 
+     *
      * @return Chrome_Exception
      */
     public function _getPrevious()
     {
         return $this->_prevException;
     }
-    
+
     /**
      * Chrome_Exception::_getTraceAsString()
-     * 
+     *
      * Returns the trace AS a string, but replaces the DB password
-     * 
+     *
      * @return string
-     */ 
+     */
     public function _getTraceAsString() {
         return str_replace(DB_PASS, 'DB_PASS', $this->getTraceAsString());
     }
-
 }

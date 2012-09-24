@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB.Interface
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.09.2012 15:41:42] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.09.2012 23:47:29] --> $
  * @author     Alexander Book
  */
 
@@ -137,9 +137,11 @@ abstract class Chrome_DB_Interface_Abstract implements Chrome_Exception_Processa
 		// call the method of Chrome_DB_Adapter_Abstract
 		$return = call_user_func_array(array('Chrome_DB_Adapter_Abstract', '__callStatic'), array($method, array_merge(array(&$this), $arguments)));
 		// return $this, for method chaining
-        } catch(Chrome_Exception $e) {
+        } catch(Chrome_Exception_Database $e) {
+            // if no explicit exception handler is set, then pass it through so that it can be treated there correctly
             if($this->_exceptionHandler === null) {
-                $this->_exceptionHandler = new Chrome_Exception_Database_Handler();
+                throw $e;
+                //$this->_exceptionHandler = new Chrome_Exception_Database_Handler();
             }
 
             $this->_exceptionHandler->exception($e);

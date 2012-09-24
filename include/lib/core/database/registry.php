@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2012 14:55:30] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.09.2012 23:43:28] --> $
  * @author     Alexander Book
  */
 
@@ -98,7 +98,7 @@ class Chrome_DB_Registry
 	{
 		// check wheter connection exists
 		if(!isset($this->_connections[$connectionID])) {
-			throw new Chrome_Exception_DB('Cannot get connection by ID ' . $connectionID . '! Connection does not exist!', 1);
+			throw new Chrome_Exception_Database('Cannot get connection by ID ' . $connectionID . '! Connection does not exist!', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_METHOD_INPUT);
 		}
 
 		return $this->_connections[$connectionID];
