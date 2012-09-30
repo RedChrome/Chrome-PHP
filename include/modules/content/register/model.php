@@ -28,12 +28,17 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 
 	}
 
-	public function addRegistrationRequest()
+	public function addRegistrationRequest($name, $password, $email)
 	{
+        $db = $this->_getDBInterface();
 
+
+
+
+        $db->insert()->into('user_regist')->values()->execute();
 	}
 
-	public function checkRegistration( $acitvationKey )
+	public function checkRegistration( $activationKey )
 	{
 
 		$dbInterfaceInstance = $this->_getDBInterface();
@@ -42,45 +47,53 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 			'name',
 			'pass',
 			'pw_salt',
-			'email' ) )->from( 'user_regist' )->where( '`key` = "' . $this->_escape( $acitvationKey ) . '"' )->limit( 0,
+			'email' ) )->from( 'user_regist' )->where( '`key` = "' . $this->_escape( $activationKey ) . '"' )->limit( 0,
 			1 )->execute();
 
 		$result = $dbInterfaceInstance->next();
 
 		// activationKey is invalid
-        // todo: use class...
-		if( $result === false or $result === null ) {
+		// todo: use class...
+		//if( $result === false or $result === null ) {
+		//	return false;
+		//}
+
+		if( !$this->_isValidActivationKey( $result, $activationKey ) ) {
 			return false;
 		}
 
-        try {
 
-            $this->addUser($result['email'], $result['name'], $result['pass'], $result['pw_salt']);
+		try {
 
-        } catch(Chrome_Exception_Database $exception) {
+			$this->addUser( $result['email'], $result['name'], $result['pass'], $result['pw_salt'] );
 
-            return false;
-        }
+		}
+		catch ( Chrome_Exception_Database $exception ) {
 
-        try {
+			return false;
+		}
 
-            $this->deleteActivationKey($acitvationKey);
+		try {
 
-        } catch(Chrome_Exception_Database $exception) {
+			$this->deleteActivationKey( $activationKey );
 
-            // add a "job"?
+		}
+		catch ( Chrome_Exception_Database $exception ) {
 
-        }
+			//todo: logging
+			return false;
 
-        // everythings fine, correctly inserted
-        return true;
+		}
+
+		// everythings fine, correctly inserted
+		return true;
 	}
 
 	/**
 	 * If no $passwordSalt is given, then we assume $password is given in plaintext (not hashed)
 	 *
-     * @throw Chrome_Exception_Database
-     * @return boolean true if user was added without any error
+	 * @throw Chrome_Exception_Database
+	 * @return boolean true if user was added without any error
 	 */
 	protected function addUser( $email, $username, $password, $passwordSalt = null )
 	{
@@ -92,6 +105,7 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 			'email' => $db->escape( $email ),
 			'time' => CHROME_TIME );
 
+        // todo: move! this uses logic from authenitcation
 		if( $passwordSalt === null ) {
 
 			$passwordSalt = Chrome_Hash::randomChars( self::CHROME_MODEL_REGISTER_PW_SALT_LENGTH );
@@ -103,11 +117,27 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 
 		$db->insert()->into( 'user' )->values( $values )->execute();
 
-        return true;
+		return true;
 	}
 
-    protected function deleteActivationKey($activationKey) {
-        //todo: implement deletion
-    }
+	protected function deleteActivationKey( $activationKey )
+	{
+		$db = $this->_getDBInterface();
+
+		$db->delete()->from( 'user_regist' )->where( '`key` = "' . $db->escape( $activationKey ) . '" ' )->execute();
+	}
+
+	protected function _isValidActivationKey( $result, $activationKey )
+	{
+
+		if( $result === null or $result === false ) {
+			return false;
+		}
+
+		if( CHROME_TIME - $result['time'] > Chrome_Config::get( 'Registration', 'expiration' ) ) {
+			$this->deleteActivationKey( $activationKey );
+			return false;
+		}
+	}
 
 }

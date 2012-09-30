@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authentication
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2011 14:02:52] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.10.2012 00:53:42] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -26,6 +26,7 @@ if(CHROME_PHP !== true)
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
+ * @todo move some code to separate model and refactor methods (split some up)
  */
 class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abstract
 {
@@ -78,18 +79,17 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
             return $this->_chain->authenticate($resource);
         }
 
-        // data is base64 encoded
-        $data = base64_decode($data);
-        // data structure: ID.TOKEN
-        $array = explode('.', $data, 2);
-        $id = (int)$array[0];
-        $token = $array[1];
+        $array = $this->_decodeCookieString($data);
+
+        $id = $array['id'];
+        $token = $array['token'];
 
         // cookie is invalid
         if(empty($id) or empty($token) or $id == false or $token == false) {
             return $this->_clearCookie();
         }
 
+        // todo: move to model and refactor
         if($this->_options['dbInterface'] !== null) {
             $dbInterface = $this->_options['dbInterface'];
         } else {
@@ -142,6 +142,8 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
         return new Chrome_Authentication_Data_Container();
     }
 
+
+    // todo: to model
     private function _renewCookie($id)
     {
         $id = (int)$id;
@@ -162,13 +164,28 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
         $token = $hash->hash($hash->randomChars(12));
 
         // set cookie with data: ID.TOKEN
-        Chrome_Cookie::getInstance()->setCookie($this->_options['cookie_namespace'], base64_encode('1.'.$token));
+        //Chrome_Cookie::getInstance()->setCookie($this->_options['cookie_namespace'], base64_encode('1.'.$token));
+        Chrome_Cookie::getInstance()->setCookie($this->_options['cookie_namespace'], $this->_encodeCookieString($id, $token));
 
         // update db with this token
         $dbInterface->update($this->_options['dbTable'])
                     ->set(array('cookie_token' => $token))
-                    ->where('id = "'.$id.'"')
+                    ->where('id = "'.$id.'"') // no need to escape, $id is an int
                     ->limit(0, 1)
                     ->execute();
+    }
+
+    private function _encodeCookieString($id, $token) {
+        $id = (int) $id;
+
+        return base64_encode($id.'.'.$token);
+    }
+
+    private function _decodeCookieString($string) {
+        // data is base64 encoded
+        $data = base64_decode($string);
+        // data structure: ID.TOKEN
+        $array = explode('.', $data, 2);
+        return array('id' => (int)$array[0], 'token' => $array[1]);
     }
 }
