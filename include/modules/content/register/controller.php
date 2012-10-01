@@ -10,9 +10,9 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 
 	protected function _initialize()
 	{
-        //TODO: move those out of class
+		//TODO: move those out of class
 		$this->view = new Chrome_View_Register( $this );
-        $this->model = Chrome_Model_Register::getInstance();
+		$this->model = Chrome_Model_Register::getInstance();
 	}
 
 	protected function _execute()
@@ -76,8 +76,10 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 
 								break;
 							}
+							$activationKey = $this->model->generateActivationKey();
 
-                            $this->model->addRegistrationRequest();
+							$this->model->addRegistrationRequest( $this->form->getData( 'name' ), $this->form->getData( 'password' ),
+								$this->form->getData( 'email' ), $activationKey );
 
 							$this->model->sendRegisterEmail( $this->form->getSentData( 'email' ) );
 
@@ -100,25 +102,26 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 						}
 				}
 			}
-		} else if($this->requestData->getGET('action') === 'confirm_registration') {
+		} else
+			if( $this->requestData->getGET( 'action' ) === 'confirm_registration' ) {
 
-            //if($this->requestData->getGET('activationKey'))
-            // validate activation key
+				//if($this->requestData->getGET('activationKey'))
+				// validate activation key
 
-            $success = $this->model->checkRegistration($this->requestData->getGET('activationKey'));
+				$success = $this->model->checkRegistration( $this->requestData->getGET( 'activationKey' ) );
 
-            // user successfully registered
-            if($success === true) {
+				// user successfully registered
+				if( $success === true ) {
 
-                $this->view->registrationFinished();
+					$this->view->registrationFinished();
 
-            // activationKey is invalid
-            } else {
+					// activationKey is invalid
+				} else {
 
-                $this->view->registrationFailed();
+					$this->view->registrationFailed();
 
-            }
-		}
+				}
+			}
 
 		$this->view->render( $this );
 	}

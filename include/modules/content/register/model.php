@@ -28,21 +28,49 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 
 	}
 
-	public function addRegistrationRequest($name, $password, $email)
-	{
+    public function generateActivationKey() {
+
+        $key = Chrome_Hash::hash(Chrome_Hash::randomChars(10));
+
+        // check whether the same key already exists...
         $db = $this->_getDBInterface();
 
+        $db->select('key')->from('user_regist')->where('`key` = "'.$key.'"')->limit(0,1)->execute();
+
+        $result = $db->next();
+
+        // key is unique
+        if($result === null OR $result === false) {
+            return $key;
+        }
+        // another try
+        return $this->generateActivationKey();
+
+    }
 
 
+	public function addRegistrationRequest( $name, $password, $email, $activationKey )
+	{
+		$db = $this->_getDBInterface();
 
-        $db->insert()->into('user_regist')->values()->execute();
+		$passwordSalt = Chrome_Hash::randomChars( self::CHROME_MODEL_REGISTER_PW_SALT_LENGTH );
+		$password = Chrome_Hash::hash_algo( $password, CHROME_USER_HASH_ALGORITHM, $passwordSalt );
+
+		$values = array(
+			'name' => $name,
+			'pass' => $password,
+			'pw_salt' => $this->_escape( $passwordSalt ),
+			'email' => $this->_escape( $email ),
+			'time' => CHROME_TIME,
+			'key' => $this->_escape( $activationKey ) );
+
+		$db->insert()->into( 'user_regist' )->values( $values )->execute();
 	}
 
 	public function checkRegistration( $activationKey )
 	{
 
 		$dbInterfaceInstance = $this->_getDBInterface();
-
 		$dbInterfaceInstance->select( array(
 			'name',
 			'pass',
@@ -52,12 +80,6 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 
 		$result = $dbInterfaceInstance->next();
 
-		// activationKey is invalid
-		// todo: use class...
-		//if( $result === false or $result === null ) {
-		//	return false;
-		//}
-
 		if( !$this->_isValidActivationKey( $result, $activationKey ) ) {
 			return false;
 		}
@@ -65,8 +87,15 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 
 		try {
 
-			$this->addUser( $result['email'], $result['name'], $result['pass'], $result['pw_salt'] );
+			$resource = new Chrome_Authentication_Create_Resource_Database( $result['name'], $result['pass'],
+				$result['pw_salt'] );
+			Chrome_Authentication::getInstance()->createAuthentication( $resource );
+			$id = $resource->getID();
+			if( !is_numeric( $id ) or $id <= 0 ) {
+				throw new Chrome_Exception( 'Chrome_Authentication_Create_Resource_Interface should got set a proper id!' );
+			}
 
+			$this->addUser( $id, $result['email'], $result['name'] );
 		}
 		catch ( Chrome_Exception_Database $exception ) {
 
@@ -76,13 +105,11 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 		try {
 
 			$this->deleteActivationKey( $activationKey );
-
 		}
 		catch ( Chrome_Exception_Database $exception ) {
 
 			//todo: logging
 			return false;
-
 		}
 
 		// everythings fine, correctly inserted
@@ -95,35 +122,22 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 	 * @throw Chrome_Exception_Database
 	 * @return boolean true if user was added without any error
 	 */
-	protected function addUser( $email, $username, $password, $passwordSalt = null )
+	protected function addUser( $id, $email, $username )
 	{
 
 		$db = $this->_getDBInterface();
-
 		$values = array(
-			'reg_name' => $db->escape( $username ),
+			'id' => $id,
+			'name' => $db->escape( $username ),
 			'email' => $db->escape( $email ),
 			'time' => CHROME_TIME );
-
-        // todo: move! this uses logic from authenitcation
-		if( $passwordSalt === null ) {
-
-			$passwordSalt = Chrome_Hash::randomChars( self::CHROME_MODEL_REGISTER_PW_SALT_LENGTH );
-			$password = Chrome_Hash::hash( $password, $passwordSalt );
-		}
-
-		$values['pw_salt'] = $db->escape( $passwordSalt );
-		$values['password'] = $db->escape( $password );
-
 		$db->insert()->into( 'user' )->values( $values )->execute();
-
 		return true;
 	}
 
 	protected function deleteActivationKey( $activationKey )
 	{
 		$db = $this->_getDBInterface();
-
 		$db->delete()->from( 'user_regist' )->where( '`key` = "' . $db->escape( $activationKey ) . '" ' )->execute();
 	}
 

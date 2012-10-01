@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authentication
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.10.2012 00:53:42] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.10.2012 19:29:22] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -187,5 +187,9 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
         // data structure: ID.TOKEN
         $array = explode('.', $data, 2);
         return array('id' => (int)$array[0], 'token' => $array[1]);
+    }
+
+    protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource) {
+        // do nothing
     }
 }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authentication
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.10.2012 00:40:03] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.10.2012 00:55:34] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -80,7 +80,7 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
             return $this->_chain->authenticate($resource);
         }
 
-        $userPw = Chrome_Hash::getInstance()->hash($userPw, $array['password_salt']);
+        $userPw = Chrome_Hash::getInstance()->hash_algo($userPw, CHROME_USER_HASH_ALGORITHM,$array['password_salt']);
 
         // pw was wrong
         if($userPw != $array['password']) {
@@ -102,6 +102,15 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
     protected function _deAuthenticate() {
         // nothing to do, because no data is persistently saved
     }
+
+    protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource) {
+        if($resource instanceof Chrome_Authentication_Create_Resource_Database_Interface) {
+
+            $this->_model->createAuthentication($resource->getIdentity(), $resource->getCredential(), $resource->getCredentialSalt());
+
+            $resource->setID($this->_model->getIDByName($resource->getIdentity()));
+        }
+    }
 }
 
 /**
@@ -115,6 +124,28 @@ interface Chrome_Authentication_Resource_Database_Interface extends Chrome_Authe
     public function getCredential();
 
     public function getAutoLogin();
+}
+
+/**
+ * @package    CHROME-PHP
+ * @subpackage Chrome.Authentication
+ */
+interface Chrome_Authentication_Create_Resource_Database_Interface extends Chrome_Authentication_Create_Resource_Interface
+{
+    /**
+     * @return string name/identity
+     */
+    public function getIdentity();
+
+    /**
+     * @return string the password hashed
+     */
+    public function getCredential();
+
+    /**
+     * @return string salt for the hashed credential
+     */
+    public function getCredentialSalt();
 }
 
 /**
@@ -146,6 +177,44 @@ class Chrome_Authentication_Resource_Database implements Chrome_Authentication_R
     }
 }
 
+class Chrome_Authentication_Create_Resource_Database implements Chrome_Authentication_Create_Resource_Database_Interface
+{
+    protected $_identity = '';
+    protected $_credential = '';
+    protected $_credentialSalt = '';
+
+
+    public function __construct($identity, $credential, $salt) {
+        $this->_identity = $identity;
+        $this->_credential = $credential;
+        $this->_credentialSalt = $salt;
+    }
+
+    public function getIdentity() {
+        return $this->_identity;
+    }
+
+    public function getCredential() {
+        return $this->_credential;
+    }
+
+    public function getCredentialSalt() {
+        return $this->_credentialSalt;
+    }
+
+    public function getID() {
+        return $this->_id;
+    }
+
+    public function setID($id) {
+        $this->_id = $id;
+    }
+}
+
+/**
+ * @package    CHROME-PHP
+ * @subpackage Chrome.Authentication
+ */
 class Chrome_Model_Authentication_Database extends Chrome_Model_DB_Abstract
 {
     protected $_dbInterface = 'interface';
@@ -175,7 +244,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_DB_Abstract
             $result = false;
         }
 
-        $this->_dbInterfaceInstance->clear();
+        $this->_dbInterfaceInstance->clean();
         return $result;
     }
 
@@ -188,23 +257,43 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_DB_Abstract
                         ->limit(0, 1)
                         ->execute();
 
-        $this->_dbInterfaceInstance->clear();
+        $this->_dbInterfaceInstance->clean();
     }
 
-    public function createAuthentication($identity, $credential) {
+    public function createAuthentication($identity, $credential, $salt = null) {
 
         // user already exists
         if($this->getPasswordAndSaltByIdentity($identity) !== false) {
             throw new Chrome_Exception('User already exists in table "'.$this->_options['dbTable'].'"! Cannot override user!');
         }
 
-        $salt = Chrome_Hash::getInstance()->randomChars(12);
+        if($salt === null) {
+            $salt = Chrome_Hash::getInstance()->randomChars(12);
 
-        $hash = Chrome_Hash::getInstance()->hash($credential, $salt);
+            $hash = Chrome_Hash::getInstance()->hash($credential, $salt);
+        } else {
+            $hash = $credential;
+        }
 
         $this->_dbInterfaceInstance->insert()
                            ->into($this->_options['dbTable'], array($this->_options['dbIdentity'], $this->_options['dbCredential'], $this->_options['dbCredentialSalt']) )
-                           ->values(array($this->_escape($identity), $hash, $this->_escape($salt)))
+                           ->values(array($this->_escape($identity), $this->_escape($hash), $this->_escape($salt)))
                            ->execute();
+
+        $this->_dbInterfaceInstance->clean();
+    }
+
+    public function getIDByName($name) {
+
+        $this->_dbInterfaceInstance->select('id')
+                            ->from($this->_options['dbTable'])
+                            ->where('name = "'.$this->_escape($name).'" ')
+                            ->limit(0, 1)
+                            ->execute();
+
+        $result = $this->_dbInterfaceInstance->next();
+
+        return (int) $result['id'];
+
     }
 }

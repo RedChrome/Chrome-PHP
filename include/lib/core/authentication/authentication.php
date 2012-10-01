@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authentication
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.09.2012 18:56:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.10.2012 00:15:01] --> $
  */
 
 if( CHROME_PHP !== true ) die();
@@ -33,6 +33,14 @@ require_once 'container.php';
 interface Chrome_Authentication_Resource_Interface
 {
 
+}
+
+interface Chrome_Authentication_Create_Resource_Interface
+{
+    /**
+     * @return int the id of the currently added authentication user
+     */
+    public function getID();
 }
 
 /**
@@ -54,6 +62,8 @@ interface Chrome_Authentication_Interface
 	public function getAuthenticationID();
 
 	public function isUser();
+
+	public function createAuthentication( Chrome_Authentication_Create_Resource_Interface $resource );
 }
 
 /**
@@ -113,6 +123,14 @@ abstract class Chrome_Authentication_Chain_Abstract implements Chrome_Authentica
 		$this->_deAuthenticate();
 		$this->_chain->deAuthenticate();
 	}
+
+	public function createAuthentication( Chrome_Authentication_Create_Resource_Interface $resource )
+	{
+		$this->_createAuthentication( $resource );
+		$this->_chain->createAuthentication( $resource );
+	}
+
+    abstract protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource);
 }
 
 /**
@@ -235,4 +253,8 @@ class Chrome_Authentication implements Chrome_Authentication_Interface,
 	{
 		return $this->_authenticationID;
 	}
+
+    public function createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource) {
+        $this->_chain->createAuthentication($resource);
+    }
 }

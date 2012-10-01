@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 23:19:27] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.10.2012 01:15:12] --> $
  * @author     Alexander Book
  */
 
@@ -175,13 +175,16 @@ interface Chrome_Form_Interface
 	/**
 	 * getData()
 	 *
-	 * Returns the valid and convertered data from the elements
+     * Use this method to get data from form, not getSentData!!
+     *
+     *
+	 * Returns the valid and convertered data from the elements, if $key == null
 	 * Data structure:
 	 * array($elementID => $data, ...)
 	 *
 	 * @return array
 	 */
-	public function getData();
+	public function getData($key = null);
 
 	/**
 	 * getOptions()
@@ -770,13 +773,18 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 	 * Chrome_Form_Abstract::getData()
 	 *
 	 * Returns the validated and convertered data of all elements
-	 *
+	 * @param string $key a key to get only specific data, the key is an id of a form elements
 	 * @return array
 	 */
-	public function getData()
+	public function getData($key = null)
 	{
 		// cache
 		if( sizeof( $this->_data ) !== 0 ) {
+		      if($key != null) {
+		              return (isset($this->_data[$ley])) ? $this->_data[$key] : null;
+
+		      }
+
 			return $this->_data;
 		}
 
@@ -786,6 +794,10 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 				$this->_data[$formElement->getID()] = $_data;
 			}
 		}
+
+        if($key !== null) {
+            return $this->_data[$key];
+        }
 
 		return $this->_data;
 	}

@@ -17,11 +17,10 @@
  * @subpackage Chrome.Authentication
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2011 13:39:27] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.10.2012 22:56:30] --> $
  */
- 
-if(CHROME_PHP !== true)
-    die();
+
+if( CHROME_PHP !== true ) die();
 
 /**
  * @package    CHROME-PHP
@@ -29,32 +28,46 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Authentication_Chain_Null extends Chrome_Authentication_Chain_Abstract
 {
-    public function addChain(Chrome_Authentication_Chain_Interface $chain) {
-        
-        $chain->setChain($this);
-        
-        return $chain;
-    }
-    
-    protected function _update(Chrome_Authentication_Data_Container_Interface $return) {
-        // do nothing
-    }
-    
-    public function authenticate(Chrome_Authentication_Resource_Interface $resource = null) {
-        // no chain matched before.. this is the last chain, so the user is a guest
-        $container = new Chrome_Authentication_Data_Container();
-        
-        // guest status
-        $container->setID(0);
-        
-        return $container;
-    }
-    
-    protected function _deAuthenticate() {
-        // do nothing
-    }
-    
-    public function deAuthenticate() {
-        // do nothing
-    }
+	public function addChain( Chrome_Authentication_Chain_Interface $chain )
+	{
+		$chain->setChain( $this );
+
+		return $chain;
+	}
+
+	protected function _update( Chrome_Authentication_Data_Container_Interface $return )
+	{
+		// do nothing
+	}
+
+	public function authenticate( Chrome_Authentication_Resource_Interface $resource = null )
+	{
+		// no chain matched before.. this is the last chain, so the user is a guest
+		$container = new Chrome_Authentication_Data_Container();
+
+		// guest status
+		$container->setID( 0 );
+
+		return $container;
+	}
+
+	protected function _deAuthenticate()
+	{
+		// do nothing
+	}
+
+	public function deAuthenticate()
+	{
+		// do nothing
+	}
+
+	protected function _createAuthentication( Chrome_Authentication_Create_Resource_Interface $resource )
+	{
+		// do nothing
+	}
+
+	public function createAuthentication( Chrome_Authentication_Create_Resource_Interface $resource )
+	{
+		// do nothing
+	}
 }

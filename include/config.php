@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 13:14:29] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.10.2012 00:53:19] --> $
  * @author     Alexander Book
  */
 
@@ -71,6 +71,7 @@ define('CHROME_SESSION_RENEWTIME', 30);    # Time for a session to renew its id
 # algorithm which hashes the cookie
 define('CHROME_HASH_ALGORITHM', 'tiger192,3'); # default hash algorithm, available types: md5, sha1, tiger, ghost, whirlpool etc...
 define('CHROME_CRYPT_ALGORITHM', 'BLOWFISH'); # default crypt algorithm, if mcrypt extension isn't loaded, available: XTEA & BLOWFISH
+define('CHROME_USER_HASH_ALGORITHM', 'tiger192,3'); #algorithm to hash user pws
 
 ########### AUTHORISATION ########
 define('CHROME_AUTHORISATION_DEFAULT_ADAPTER', 'Chrome_Authorisation_Adapter_Default');
