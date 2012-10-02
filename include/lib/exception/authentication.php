@@ -17,7 +17,7 @@
  * @subpackage Chrome.FrontController
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.10.2011 12:44:57] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.10.2012 14:25:20] --> $
  * @author     Alexander Book
  */
 
@@ -32,9 +32,10 @@ class Chrome_Exception_Handler_Authentication implements Chrome_Exception_Handle
 {
     public function exception(Exception $e)
     {
-        
+
         Chrome_Log::log('Exception in Chrome_Authentication! Error code: '.$e->getCode(), E_ERROR);
-        
-        die('Error in authentication! See log files for more information');  
+        Chrome_Log::log($e->getTraceAsString(), E_ERROR);
+
+        die('Error in authentication! See log files for more information');
     }
 }

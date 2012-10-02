@@ -78,7 +78,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 							}
 							$activationKey = $this->model->generateActivationKey();
 
-							$this->model->addRegistrationRequest( $this->form->getData( 'name' ), $this->form->getData( 'password' ),
+							$this->model->addRegistrationRequest( $this->form->getData( 'nickname' ), $this->form->getData( 'password' ),
 								$this->form->getData( 'email' ), $activationKey );
 
 							$this->model->sendRegisterEmail( $this->form->getSentData( 'email' ) );

@@ -46,10 +46,18 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 
 		$nicknameValidator = new Chrome_Validator_Form_NicknameRegister();
 
-		$stringConverter = new Chrome_Converter_Value();
-		$stringConverter->addFilter( 'escape' );
-		$stringConverter->addFilter( 'convert_char_to_html' );
-		$stringConverter->addFilter( 'stripHTML' );
+		$emailConverter = new Chrome_Converter_Value();
+		$emailConverter->addFilter( 'escape' );
+		$emailConverter->addFilter( 'convert_char_to_html' );
+		$emailConverter->addFilter( 'stripHTML' );
+        $emailConverter->addFilter( 'strToLower');
+
+        $nameConverter = new Chrome_Converter_Value();
+		$nameConverter->addFilter( 'escape' );
+		$nameConverter->addFilter( 'convert_char_to_html' );
+		$nameConverter->addFilter( 'stripHTML' );
+
+
 
 		$this->_elements[$this->_id] = new Chrome_Form_Element_Form( $this, $this->_id, array( Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME =>
 				300, Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_MIN_ALLOWED_TIME => 1 ) );
@@ -74,7 +82,7 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array( $emailValidator, $emailExistsValidator, $emailBlacklistValidator ),
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ),
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array( $stringConverter  ) ) );
+			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array( $emailConverter  ) ) );
 
 		$this->_elements['password'] = new Chrome_Form_Element_Password( $this, 'password', array(
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
@@ -94,6 +102,6 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array( $nicknameValidator ),
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ),
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array( $stringConverter ) ) );
+			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array( $nameConverter ) ) );
 	}
 }

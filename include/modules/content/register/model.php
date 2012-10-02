@@ -28,25 +28,26 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 
 	}
 
-    public function generateActivationKey() {
+	public function generateActivationKey()
+	{
 
-        $key = Chrome_Hash::hash(Chrome_Hash::randomChars(10));
+		$key = Chrome_Hash::getInstance()->hash( Chrome_Hash::randomChars( 10 ) );
 
-        // check whether the same key already exists...
-        $db = $this->_getDBInterface();
+		// check whether the same key already exists...
+		$db = $this->_getDBInterface();
 
-        $db->select('key')->from('user_regist')->where('`key` = "'.$key.'"')->limit(0,1)->execute();
+		$db->select( 'key' )->from( 'user_regist' )->where( '`key` = "' . $key . '"' )->limit( 0, 1 )->execute();
 
-        $result = $db->next();
+		$result = $db->next();
 
-        // key is unique
-        if($result === null OR $result === false) {
-            return $key;
-        }
-        // another try
-        return $this->generateActivationKey();
+		// key is unique
+		if( $result === null or $result === false ) {
+			return $key;
+		}
+		// another try
+		return $this->generateActivationKey();
 
-    }
+	}
 
 
 	public function addRegistrationRequest( $name, $password, $email, $activationKey )
@@ -54,7 +55,7 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 		$db = $this->_getDBInterface();
 
 		$passwordSalt = Chrome_Hash::randomChars( self::CHROME_MODEL_REGISTER_PW_SALT_LENGTH );
-		$password = Chrome_Hash::hash_algo( $password, CHROME_USER_HASH_ALGORITHM, $passwordSalt );
+		$password = Chrome_Hash::getInstance()->hash_algo( $password, CHROME_USER_HASH_ALGORITHM, $passwordSalt );
 
 		$values = array(
 			'name' => $name,
@@ -75,13 +76,14 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 			'name',
 			'pass',
 			'pw_salt',
-			'email' ) )->from( 'user_regist' )->where( '`key` = "' . $this->_escape( $activationKey ) . '"' )->limit( 0,
+			'email',
+			'time' ) )->from( 'user_regist' )->where( '`key` = "' . $this->_escape( $activationKey ) . '"' )->limit( 0,
 			1 )->execute();
 
 		$result = $dbInterfaceInstance->next();
 
 		if( !$this->_isValidActivationKey( $result, $activationKey ) ) {
-			return false;
+		  return false;
 		}
 
 
@@ -148,10 +150,13 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 			return false;
 		}
 
-		if( CHROME_TIME - $result['time'] > Chrome_Config::get( 'Registration', 'expiration' ) ) {
+		if( CHROME_TIME - $result['time'] > Chrome_Config::getConfig( 'Registration', 'expiration' ) ) {
+
 			$this->deleteActivationKey( $activationKey );
 			return false;
 		}
+
+        return true;
 	}
 
 }
