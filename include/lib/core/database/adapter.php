@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB.Adapter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.09.2012 23:35:29] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.10.2012 14:22:22] --> $
  * @author     Alexander Book
  */
 
@@ -313,14 +313,14 @@ abstract class Chrome_DB_Adapter_Abstract
      *
      * @return void
      */
-    public static function initDefaultConnection() {
+    public static function initDefaultConnection(Chrome_DB_Interface_Abstract & $obj) {
 
         // default connection already established
         if(self::$_defaultConnectionID !== null) {
             // get adapter instance
             $adapterInstance = self::$_adapters[CHROME_DATABASE]['instance'];
             // set connection
-            $adapterInstance->setConnectionID(self::$_defaultConnectionID);
+            $adapterInstance->setConnectionID(null, self::$_defaultConnectionID);
             self::$_registryInstance->setConnectionForAdapter($adapterInstance);
             return;
 
@@ -329,7 +329,7 @@ abstract class Chrome_DB_Adapter_Abstract
         // initialize adapter
         self::_initAdapter(CHROME_DATABASE);
         // set default connection id
-        self::setDefaultConnectionID(self::$_adapters[CHROME_DATABASE]['instance']->getConnectionID());
+        self::setDefaultConnectionID($obj, self::$_adapters[CHROME_DATABASE]['instance']->getConnectionID());
     }
 
 	/**
@@ -350,7 +350,7 @@ abstract class Chrome_DB_Adapter_Abstract
             $connectionID = self::$_registryInstance->createConnection($adapterInstance, DB_HOST, DB_NAME, DB_USER, DB_PASS);
 
 			// set connection ID
-			$adapterInstance->setConnectionID($connectionID);
+			$adapterInstance->setConnectionID(null, $connectionID);
 		}
 	}
 
@@ -396,7 +396,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	 * @param resource $connection connection to db
 	 * @return void
 	 */
-	public function setConnection($connection)
+	public function setConnection(Chrome_DB_Interface_Abstract & $obj, $connection)
 	{
 		// valid connection?
 		if(!is_resource($connection)) {
@@ -421,7 +421,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	 * @param int $connectionID id of the connection, from Chrome_DB_Registry
 	 * @return void
 	 */
-	public function setConnectionID($connectionID)
+	public function setConnectionID(Chrome_DB_Interface_Abstract $obj = null, $connectionID)
 	{
 		// valid connection ID
 		if($connectionID < 0 OR !is_int($connectionID)) {
@@ -438,10 +438,10 @@ abstract class Chrome_DB_Adapter_Abstract
 	 * @param int $connectionID id of the connection, from Chrome_DB_Registry
 	 * @return void
 	 */
-	public static function setDefaultConnectionID($connectionID)
+	public static function setDefaultConnectionID(Chrome_DB_Interface_Abstract & $obj, $connectionID)
 	{
 		// valid connection ID?
-		if($connectionID < 0 OR !is_int($connectionID)) {
+		if(!is_int($connectionID) OR $connectionID < 0) {
 			throw new Chrome_Exception_Database('No valid connection ID given in Chrome_DB_Adapter_Abstract::setDefaultConnectionID()!', Chrome_Exception_Database::DATABASE_EXCEPTION_INVALID_CONNECTION_GIVEN);
 		}
 
@@ -510,10 +510,10 @@ abstract class Chrome_DB_Adapter_Abstract
             throw new Chrome_Exception_Database($e->getMessage(), $e->getCode(), $e);
         }
 		// set connection ID
-		$adapterInstance->setConnectionID($connectionID);
+		$adapterInstance->setConnectionID($obj, $connectionID);
 		// if default connection ID already set, do not renew default connection ID
 		if($adapterInstance->getDefaultConnectionID() === null)
-			$adapterInstance->setDefaultConnectionID($connectionID);
+			$adapterInstance->setDefaultConnectionID($obj, $connectionID);
 
 		return true;
 	}
@@ -723,7 +723,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	 * @param Chrome_DB_Interface_Abstract $obj [optional]
 	 * @return query statement
 	 */
-	protected function _getStatement(Chrome_DB_Interface_Abstract & $obj = null)
+	protected function _getStatement(Chrome_DB_Interface_Abstract & $obj)
 	{
 
 	}
@@ -752,7 +752,7 @@ abstract class Chrome_DB_Adapter_Abstract
      *
      * @return void
      */
-    public static function setRightHandler(Chrome_Database_Right_Hander_Interface $obj) {
+    public static function setRightHandler(Chrome_DB_Interface_Abstract & $obj = null, Chrome_Database_Right_Hander_Interface $obj) {
         self::$_rightHandler = $obj;
     }
 

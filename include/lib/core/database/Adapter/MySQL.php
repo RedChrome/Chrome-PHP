@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB.Adapter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.09.2012 23:39:04] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.10.2012 14:26:33] --> $
  * @author     Alexander Book
  */
 
@@ -819,9 +819,10 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 				$this->_connection = self::$_registryInstance->getConnection( $this->_connectionID );
 			}
 		}
-
+        $queryString = $query;
 		$query = mysql_query( $query, $this->_connection );
 		if( $query === false ) {
+		    Chrome_Log::log('Query: '.$queryString, E_ERROR);
 			throw new Chrome_Exception_Database( 'Error while sending a query to database!',
 				Chrome_Exception_Database::DATABASE_EXCEPTION_ERROR_IN_QUERY );
 		} else {

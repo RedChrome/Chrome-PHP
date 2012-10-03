@@ -4,6 +4,8 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 {
 	const CHROME_MODEL_REGISTER_PW_SALT_LENGTH = 20;
 
+    const CHROME_MODEL_REGISTER_TABLE = 'user_regist';
+
 	private static $_instance = null;
 
 	protected function __construct()
@@ -36,7 +38,7 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 		// check whether the same key already exists...
 		$db = $this->_getDBInterface();
 
-		$db->select( 'key' )->from( 'user_regist' )->where( '`key` = "' . $key . '"' )->limit( 0, 1 )->execute();
+		$db->select( 'key' )->from( self::CHROME_MODEL_REGISTER_TABLE )->where( '`key` = "' . $key . '"' )->limit( 0, 1 )->execute();
 
 		$result = $db->next();
 
@@ -65,7 +67,7 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 			'time' => CHROME_TIME,
 			'key' => $this->_escape( $activationKey ) );
 
-		$db->insert()->into( 'user_regist' )->values( $values )->execute();
+		$db->insert()->into( self::CHROME_MODEL_REGISTER_TABLE )->values( $values )->execute();
 	}
 
 	public function checkRegistration( $activationKey )
@@ -77,7 +79,7 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 			'pass',
 			'pw_salt',
 			'email',
-			'time' ) )->from( 'user_regist' )->where( '`key` = "' . $this->_escape( $activationKey ) . '"' )->limit( 0,
+			'time' ) )->from( self::CHROME_MODEL_REGISTER_TABLE )->where( '`key` = "' . $this->_escape( $activationKey ) . '"' )->limit( 0,
 			1 )->execute();
 
 		$result = $dbInterfaceInstance->next();
@@ -121,6 +123,7 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 	/**
 	 * If no $passwordSalt is given, then we assume $password is given in plaintext (not hashed)
 	 *
+     * @todo move this to content/user/
 	 * @throw Chrome_Exception_Database
 	 * @return boolean true if user was added without any error
 	 */
@@ -140,7 +143,7 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 	protected function deleteActivationKey( $activationKey )
 	{
 		$db = $this->_getDBInterface();
-		$db->delete()->from( 'user_regist' )->where( '`key` = "' . $db->escape( $activationKey ) . '" ' )->execute();
+		$db->delete()->from( self::CHROME_MODEL_REGISTER_TABLE )->where( '`key` = "' . $db->escape( $activationKey ) . '" ' )->execute();
 	}
 
 	protected function _isValidActivationKey( $result, $activationKey )
@@ -158,5 +161,4 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 
         return true;
 	}
-
 }
