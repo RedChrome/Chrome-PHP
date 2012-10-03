@@ -78,8 +78,8 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 							}
 							$activationKey = $this->model->generateActivationKey();
 
-							$this->model->addRegistrationRequest( $this->form->getData( 'nickname' ), $this->form->getData( 'password' ),
-								$this->form->getData( 'email' ), $activationKey );
+							$this->model->addRegistrationRequest( $this->form->getData( 'nickname' ), $this->form->getData
+								( 'password' ), $this->form->getData( 'email' ), $activationKey );
 
 							$this->model->sendRegisterEmail( $this->form->getSentData( 'email' ) );
 
@@ -108,18 +108,27 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 				//if($this->requestData->getGET('activationKey'))
 				// validate activation key
 
-				$success = $this->model->checkRegistration( $this->requestData->getGET( 'activationKey' ) );
+				$result = $this->model->checkRegistration( $this->requestData->getGET( 'activationKey' ) );
 
-				// user successfully registered
-				if( $success === true ) {
-
-					$this->view->registrationFinished();
-
-					// activationKey is invalid
-				} else {
-
+				if( $result === false ) {
 					$this->view->registrationFailed();
 
+				} else {
+
+                    $success = $this->model->finishRegistration($result['name'], $result['pass'], $result['pw_salt'], $result['email']);
+
+
+					// user successfully registered
+					if( $success === true ) {
+
+						$this->view->registrationFinished();
+
+						// activationKey is invalid
+					} else {
+
+						$this->view->registrationFailed();
+
+					}
 				}
 			}
 

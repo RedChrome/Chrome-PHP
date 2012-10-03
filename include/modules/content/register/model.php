@@ -32,7 +32,6 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 
 	public function generateActivationKey()
 	{
-
 		$key = Chrome_Hash::getInstance()->hash( Chrome_Hash::randomChars( 10 ) );
 
 		// check whether the same key already exists...
@@ -72,6 +71,10 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 
 	public function checkRegistration( $activationKey )
 	{
+        if(empty($activationKey)) {
+            return false;
+        }
+
 
 		$dbInterfaceInstance = $this->_getDBInterface();
 		$dbInterfaceInstance->select( array(
@@ -79,7 +82,7 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 			'pass',
 			'pw_salt',
 			'email',
-			'time' ) )->from( self::CHROME_MODEL_REGISTER_TABLE )->where( '`key` = "' . $this->_escape( $activationKey ) . '"' )->limit( 0,
+            'time' ) )->from( self::CHROME_MODEL_REGISTER_TABLE )->where( '`key` = "' . $this->_escape( $activationKey ) . '"' )->limit( 0,
 			1 )->execute();
 
 		$result = $dbInterfaceInstance->next();
@@ -88,18 +91,21 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 		  return false;
 		}
 
+        return $result;
+	}
 
-		try {
+    public function finishRegistration($name, $pass, $pw_salt, $email) {
+        try {
 
-			$resource = new Chrome_Authentication_Create_Resource_Database( $result['name'], $result['pass'],
-				$result['pw_salt'] );
+			$resource = new Chrome_Authentication_Create_Resource_Database( $name, $pass,
+				$pw_salt );
 			Chrome_Authentication::getInstance()->createAuthentication( $resource );
 			$id = $resource->getID();
 			if( !is_numeric( $id ) or $id <= 0 ) {
 				throw new Chrome_Exception( 'Chrome_Authentication_Create_Resource_Interface should got set a proper id!' );
 			}
 
-			$this->addUser( $id, $result['email'], $result['name'] );
+			$this->addUser( $id, $email, $name );
 		}
 		catch ( Chrome_Exception_Database $exception ) {
 
@@ -118,7 +124,7 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 
 		// everythings fine, correctly inserted
 		return true;
-	}
+    }
 
 	/**
 	 * If no $passwordSalt is given, then we assume $password is given in plaintext (not hashed)
