@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 16:05:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.10.2012 20:08:57] --> $
  * @author     Alexander Book
  */
 
@@ -119,6 +119,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
 
             return true;
         } else {
+            $this->_renewTimer();
             $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
             return false;
         }
@@ -159,7 +160,8 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
 
         if($this->_decorator === null) {
 
-            $this->_decorator = new Chrome_Form_Decorator_Form_Default($this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS], $this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES]);
+            $this->_decorator = new Chrome_Form_Decorator_Form_Default($this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS],
+                                                                        $this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES]);
             $this->_decorator->setFormElement($this);
         }
 
@@ -192,5 +194,15 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
 
     protected function _createToken() {
         return md5(uniqid(mt_rand(), true));
+    }
+
+    protected function _renewTimer() {
+        $session = Chrome_Session::getInstance();
+
+        $formData = $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+
+        $formData[$this->_form->getID()][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE][self::CHROME_FORM_ELEMENT_FORM_TIME] = CHROME_TIME;
+
+        $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE] = $formData;
     }
 }

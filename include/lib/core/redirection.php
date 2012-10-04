@@ -17,7 +17,7 @@
  * @subpackage Chrome.Session
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 16:57:11] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.10.2012 00:42:53] --> $
  * @author     Alexander Book
  */
 
@@ -32,8 +32,6 @@ if(CHROME_PHP !== true)
 interface Chrome_Redirection_Interface
 {
     public static function redirectToPreviousPage();
-
-
 }
 
 
@@ -45,12 +43,14 @@ class Chrome_Redirection implements Chrome_Redirection_Interface
 
     public static function getPreviousPage() {
 
-        if(isset($_SERVER['HTTP_REFERER'])) {
-            return $_SERVER['HTTP_REFERER'];
+        $requestDataObject = Chrome_Request::getInstance()->getRequestDataObject();
+
+        if(($return = $requestDataObject->getSERVER('HTTP_REFERER')) != null) {
+            return $return;
         } else {
 
             // we dont know where the user came, so get to the index.php
-            return ROOT_URL;
+            return 'http://'.$requestDataObject->getSERVER('HTTP_HOST').ROOT_URL;
         }
     }
 

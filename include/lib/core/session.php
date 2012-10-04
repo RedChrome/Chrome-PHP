@@ -17,7 +17,7 @@
  * @subpackage Chrome.Session
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 18:10:57] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.10.2012 23:41:11] --> $
  * @author     Alexander Book
  */
 
@@ -147,7 +147,7 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
          *
          * @var int
          */
-    const CHROME_SESSION_GARBAGE_COLLECTOR_PROBABILITY  = 20;
+    const CHROME_SESSION_GARBAGE_COLLECTOR_PROBABILITY  = 100;
 
         /**
          * Lifetime for a session

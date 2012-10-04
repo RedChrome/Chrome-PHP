@@ -17,7 +17,7 @@
  * @subpackage Chrome.Response
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 02:14:51] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.10.2012 00:21:26] --> $
  * @author     Alexander Book
  */
 
@@ -121,4 +121,33 @@ final class Chrome_Response
  * @package CHROME-PHP
  * @subpackage Chrome.Response
  */
-abstract class Chrome_Response_Abstract implements Chrome_Response_Interface {}
+abstract class Chrome_Response_Abstract implements Chrome_Response_Interface {
+
+    protected $_status = '200 OK';
+    protected $_headers = array();
+
+    protected function _printHeaders() {
+        if(!headers_sent()) {
+    		header('HTTP/1.0 '.$this->_status);
+
+            if(empty($this->_headers)) {
+                return;
+            }
+
+        	foreach($this->_headers AS $key => $value) {
+        	   header($key.': '.$value);
+            }
+        }
+    }
+
+    public function addHeader($name, $value)
+	{
+		$this->_headers[$name] = $value;
+	}
+
+    public function setStatus($status)
+	{
+		$this->_status = $status;
+ 	}
+
+}
