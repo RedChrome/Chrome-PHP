@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2012 17:50:22] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 00:27:46] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -42,7 +42,7 @@ class Chrome_Form_Element_Submit extends Chrome_Form_Element_Abstract #extends C
         return true;
     }
 
-    public function isValid() {
+    protected function _isValid() {
 
         $data = $this->_form->getSentData($this->_id);
 
@@ -53,18 +53,9 @@ class Chrome_Form_Element_Submit extends Chrome_Form_Element_Abstract #extends C
             $isValid = false;
         }
 
-        foreach($this->_validators AS $validator) {
+        $_isValid = $this->_validate($data);
 
-            $validator->setData($data);
-            $validator->validate();
-
-            if(!$validator->isValid()) {
-                $this->_errors += $validator->getAllErrors();
-                $isValid = false;
-            }
-        }
-
-        return $isValid;
+        return $isValid && $_isValid;
     }
 
     public function isSent() {
@@ -90,13 +81,9 @@ class Chrome_Form_Element_Submit extends Chrome_Form_Element_Abstract #extends C
 
         $data = $this->_form->getSentData($this->_id);
 
-        foreach($this->_converters AS $converter) {
-            $data = Chrome_Converter::getInstance()->convert($converter, $data);
-        }
+        $this->_data = $this->_convert($data);
 
-        $this->_data = $data;
-
-        return $data;
+        return $this->_data;
     }
 
     public function getDecorator() {

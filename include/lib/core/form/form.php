@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.10.2012 13:41:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 11:21:03] --> $
  * @author     Alexander Book
  */
 
@@ -958,6 +958,18 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 					{
 					}
 			}
+		} else if($key == 'action') {
+		  if(strpos($value, ROOT_URL) === false) {
+
+		      if($value{0} == '/') {
+		          $value = ROOT_URL.$value;
+		      } else {
+                $value = ROOT_URL.'/'.$value;
+		      }
+
+
+              $this->_attribts[$key] = $value;
+		  }
 		}
 	}
 

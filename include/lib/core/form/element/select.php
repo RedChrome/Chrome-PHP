@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:20:47] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 01:25:37] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -37,8 +37,6 @@ class Chrome_Form_Element_Select extends Chrome_Form_Element_Abstract
     protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
                                        self::CHROME_FORM_ELEMENT_SELECT_MULTIPLE => false);
 
-    protected $_isValid = null;
-
     protected $_data = null;
 
 
@@ -46,28 +44,20 @@ class Chrome_Form_Element_Select extends Chrome_Form_Element_Abstract
         return true;
     }
 
-    public function isValid()
+    protected function _isValid()
     {
-        // cache
-        if($this->_isValid !== null) {
-            return $this->_isValid;
-        }
-
-        $isValid = true;
+        $_isValid = true;
 
         $data = $this->_form->getSentData($this->_id);
 
         if($this->_options[self::CHROME_FORM_ELEMENT_SELECT_MULTIPLE] === false AND is_array($data)) {
             $this->_errors[] = self::CHROME_FORM_ELEMENT_SELECT_ERROR_MULTIPLE;
-            $this->_isValid = false;
             return false;
         }
 
         if(!is_array($data)) {
             $data = array($data);
         }
-
-        $_isValid = true;
 
         foreach($data AS $key => $value) {
 
@@ -79,35 +69,23 @@ class Chrome_Form_Element_Select extends Chrome_Form_Element_Abstract
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_READONLY;
             }
 
-            // if it's not defined as input, then its invalid
+            // if it's not defined as valid input, then its invalid
             if(!in_array($value, $this->_options[self::CHROME_FORM_ELEMENT_SELECTION_OPTIONS])) {
                 $isValid = false;
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_WRONG_SELECTION;
             }
 
-            foreach($this->_validators AS $validator) {
-
-                $validator->setData($value);
-                $validator->validate();
-
-                if(!$validator->isValid()) {
-                    $this->_errors += $validator->getAllErrors();
-                    $isValid = false;
-                }
+            if(!$this->_validate($value)) {
+                $isValid = false;
             }
 
             if($isValid === false) {
-                $_isValid = false;
                 $this->_unSave($key);
+                $_isValid = false;
             }
         }
 
-        $isValid = $_isValid;
-
-        $this->_isValid = $isValid;
-
-
-        return $this->_isValid;
+        return $_isValid;
     }
 
     public function isSent()
@@ -145,9 +123,7 @@ class Chrome_Form_Element_Select extends Chrome_Form_Element_Abstract
         }
 
         foreach($data AS $key => $value) {
-            foreach($this->_converters AS $converter) {
-                $data[$key] = Chrome_Converter::getInstance()->convert($converter, $data[$key]);
-            }
+            $data[$key] = $this->_convert($data[$key]);
         }
 
         $this->_data = $data;

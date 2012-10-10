@@ -17,7 +17,7 @@
  * @subpackage Chrome.Log
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2011 12:22:02] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 14:14:46] --> $
  * @author     Alexander Book
  */
 
@@ -32,7 +32,9 @@ interface Chrome_Log_Interface
 {
     public static function getInstance();
 
-    public static function log($string, $mode = E_WARNING);
+    public static function log($string, $mode = E_WARNING, Chrome_Logger_Interface $logger = null);
+
+    public static function logException(Exception $exception, $mode = E_WARNING, Chrome_Logger_Interface $logger = null);
 
     public static function setLogger(Chrome_Logger_Interface $logger);
 }
@@ -68,7 +70,14 @@ class Chrome_Log implements Chrome_Log_Interface
         return self::$_instance;
     }
 
-    public static function log($string, $mode = E_WARNING,Chrome_Logger_Interface $logger = null)
+    public static function logException(Exception $exception, $mode = E_WARNING, Chrome_Logger_Interface $logger = null) {
+
+        self::log('An Exception with message "'.$exception->getMessage().'" occured. Printing stack trace:', $mode, $logger);
+        self::log($exception->getTraceAsString(), $mode, $logger);
+
+    }
+
+    public static function log($string, $mode = E_WARNING, Chrome_Logger_Interface $logger = null)
     {
         if($logger !== null) {
             $logger->log($string, $mode);

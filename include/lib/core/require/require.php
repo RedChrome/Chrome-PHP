@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2012 19:20:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 20:33:20] --> $
  * @author     Alexander Book
  */
 
@@ -342,16 +342,6 @@ class Chrome_Require implements Chrome_Require_Interface
 	}
 }
 
-function __autoload($name)
-{
-    static $_instance;
-    if($_instance === null) {
-        $_instance = Chrome_Require::getInstance();
-    }
-
-    $_instance->classLoad($name);
-}
-
 function classLoad($name)
 {
     static $_instance;
@@ -360,7 +350,7 @@ function classLoad($name)
         $_instance = Chrome_Require::getInstance();
     }
 
-	return Chrome_Require::getInstance()->classLoad($name);
+	return $_instance->classLoad($name);
 }
 
 function import($array)
@@ -378,3 +368,5 @@ function import($array)
 	   $_instance->classLoadWithoutDieing($class);
     }
 }
+
+spl_autoload_register('classLoad');

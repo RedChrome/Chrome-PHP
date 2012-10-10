@@ -17,7 +17,7 @@
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.09.2012 12:20:10] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 12:58:39] --> $
  * @author     Alexander Book
  */
 
@@ -61,7 +61,7 @@ interface Chrome_Validator_Interface
  *
  * 	public function __construct($email) {
  * 		$this->_email = $email;
- * 		Chrome_Validator::__construct();
+ * 		parent::__construct();
  * 	}
  *
  * 	private function _validate() {
@@ -127,7 +127,7 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
 	 *
 	 */
 	public function __construct() {
-		$this->_validate();
+		$this->validate();
 	}
 
     public function setOptions(array $options) {
@@ -137,6 +137,7 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
     public function validate() {
         if($this->_isValidated === false) {
             $this->_validate();
+            $this->_isValidated = true;
         }
     }
 
@@ -146,15 +147,14 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      */
     public function setData($data) {
         $this->_data = $data;
+        $this->_isValidated = false;
     }
 
 	/**
 	 * superclass method
 	 *
 	 */
-	protected function _validate() {
-		// superclass method does nothing
-	}
+	abstract protected function _validate();
 
 	/**
 	 * Adds a error message

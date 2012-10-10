@@ -17,13 +17,13 @@
  * @subpackage Chrome.DB.Adapter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.10.2012 14:26:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 11:01:14] --> $
  * @author     Alexander Book
  */
 
 if( CHROME_PHP !== true ) die();
 
-// TODO: DO NOT THROW A CHROME_EXCEPTION, instead throw Chrome_Exception_Database or Chrome_Exception_DB
+// TODO: DO NOT THROW A CHROME_EXCEPTION, instead throw Chrome_Exception_Database or Chrome_Exception_Database
 
 /**
  * @package CHROME-PHP
@@ -282,8 +282,8 @@ class Chrome_DB_Adapter_MySQL extends Chrome_DB_Adapter_Abstract
 					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['from']['from'] ) ? 'FROM ' . $this->_statementOption[$IID]['from']['from'] .
 						' ' : $this->_throwException( 'Cannot prepare SQL Query without a "from" statement in Chrome_DB_Adapter_MySQL::_prepare()!' );
 
-					$this->_statement[$IID] .= isset( $this->_statement[$IID]['hashRight']['colomnName'] ) ? ' ,' .
-						DB_PREFIX . '_ace AS ace' : '';
+				    /*	$this->_statement[$IID] .= isset( $this->_statement[$IID]['hashRight']['colomnName'] ) ? ' ,' .
+						DB_PREFIX . '_ace AS ace' : '';*/
 
 					$this->_statement[$IID] .= isset( $this->_statementOption[$IID]['where']['condition'] ) ?
 						'WHERE ' . $this->_statementOption[$IID]['where']['condition'] . ' ' : '';

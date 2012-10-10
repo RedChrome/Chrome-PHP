@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 15:01:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 00:20:32] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -29,6 +29,9 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Form_Element_Hidden extends Chrome_Form_Element_Abstract
 {
+    /**
+     * @deprecated
+     */
     const CHROME_FORM_ELEMENT_HAS_DEFAULT = 'HASDEFAULT';
 
     const CHROME_FORM_ELEMENT_DEFAULT = 'DEFAULT';
@@ -36,45 +39,27 @@ class Chrome_Form_Element_Hidden extends Chrome_Form_Element_Abstract
 
     protected $_data = null;
 
-    protected $_isValid = null;
+    protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_DEFAULT => false);
 
     public function isCreated() {
         return true;
     }
 
-    public function isValid() {
-
-        // cache;
-        if($this->_isValid !== null) {
-            return $this->_isValid;
-        }
+    protected function _isValid() {
 
         $data = $this->_form->getSentData($this->_id);
 
         $isValid = true;
 
         // if we've set a default input, then it must be the same!
-        if($this->_options[self::CHROME_FORM_ELEMENT_HAS_DEFAULT] === true) {
+        if($this->_options[self::CHROME_FORM_ELEMENT_DEFAULT] !== null) {
             if($data !== $this->_options[self::CHROME_FORM_ELEMENT_DEFAULT]) {
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_DEFAULT;
                 $isValid = false;
             }
         }
 
-        foreach($this->_validators AS $validator) {
-
-            $validator->setData($data);
-            $validator->validate();
-
-            if(!$validator->isValid()) {
-                $this->_errors += $validator->getAllErrors();
-                $isValid = false;
-            }
-        }
-
-        $this->_isValid = $isValid;
-
-        return $isValid;
+        return $this->_validate($data) && $isValid;
     }
 
     public function isSent() {
@@ -100,13 +85,9 @@ class Chrome_Form_Element_Hidden extends Chrome_Form_Element_Abstract
 
         $data = $this->_form->getSentData($this->_id);
 
-        foreach($this->_converters AS $converter) {
-            $data = Chrome_Converter::getInstance()->convert($converter, $data);
-        }
+        $this->_data = $this->_convert($data);
 
-        $this->_data = $data;
-
-        return $data;
+        return $this->_data;
     }
 
     public function getDecorator() {

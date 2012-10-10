@@ -17,7 +17,7 @@
  * @subpackage Chrome.Session
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.10.2012 00:42:53] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 13:01:37] --> $
  * @author     Alexander Book
  */
 
@@ -32,13 +32,23 @@ if(CHROME_PHP !== true)
 interface Chrome_Redirection_Interface
 {
     public static function redirectToPreviousPage();
+
+    public static function redirectToWebsite($website);
+
+    public static function redirectToResource(Chrome_Router_Resource_Interface $resource);
 }
 
 
 class Chrome_Redirection implements Chrome_Redirection_Interface
 {
+    protected function _redirect($site) {
+        $resp = Chrome_Response::getInstance();
+        $resp->setStatus('302 Redirect');
+        $resp->addHeader('Location', $site);
+    }
+
     public static function redirectToPreviousPage() {
-        Chrome_Response::getInstance()->addHeader('Location', self::getPreviousPage());
+        self::_redirect(self::getPreviousPage());
     }
 
     public static function getPreviousPage() {
@@ -52,6 +62,17 @@ class Chrome_Redirection implements Chrome_Redirection_Interface
             // we dont know where the user came, so get to the index.php
             return 'http://'.$requestDataObject->getSERVER('HTTP_HOST').ROOT_URL;
         }
+    }
+
+    public static function redirectToWebsite($website) {
+        self::_redirect($website);
+    }
+
+    public static function redirectToResource(Chrome_Router_Resource_Interface $resource) {
+        $resource->setReturnAsAbsolutPath(true);
+        $url = Chrome_Router::getInstance()->url($resource);
+
+        self::_redirect($url);
     }
 
 }

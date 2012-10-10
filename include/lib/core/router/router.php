@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 13:42:25] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 13:01:31] --> $
  * @author     Alexander Book
  */
 if( CHROME_PHP !== true ) die();
@@ -31,17 +31,17 @@ require_once LIB . 'exception/router.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-interface Chrome_Router_Interface
+interface Chrome_Router_Interface extends Chrome_Router_Route_Interface
 {
 	const CHROME_ROUTER_REGISTRY_NAMESPACE = 'Chrome_Router';
 
 	public function route( Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data );
 
-	public function match( Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data );
+	//public function match( Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data );
 
-	public function getResource();
+	//public function getResource();
 
-	public function url( $name, array $options );
+	//public function url( $name, array $options );
 
 	public function addRouterClass( Chrome_Router_Route_Interface $obj );
 }
@@ -56,14 +56,14 @@ interface Chrome_Router_Route_Interface
 
 	public function getResource();
 
-	public function url( $name, array $options );
+	public function url( Chrome_Router_Resource_Interface $resource );
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-interface Chrome_Router_Resource_Interface
+interface Chrome_Router_Result_Interface
 {
 	public function setFile( $file );
 
@@ -73,18 +73,33 @@ interface Chrome_Router_Resource_Interface
 
 	public function getClass();
 
-	public function initClass(Chrome_Request_Handler_Interface $requestHandler);
+	public function initClass( Chrome_Request_Handler_Interface $requestHandler );
+
+	public function setName( $name );
+
+	public function getName();
+}
+
+interface Chrome_Router_Resource_Interface
+{
+    public function getName();
+    //TODO: finish interface with better names
+    //public function getRequestOptions();
+
+    public function setReturnAsAbsolutPath($boolean);
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Router_Resource implements Chrome_Router_Resource_Interface
+class Chrome_Router_Resource implements Chrome_Router_Result_Interface
 {
 	protected $_file = null;
 
 	protected $_class = null;
+
+	protected $_name = null;
 
 	public function __construct()
 	{
@@ -110,10 +125,21 @@ class Chrome_Router_Resource implements Chrome_Router_Resource_Interface
 		return $this->_class;
 	}
 
-	public function initClass(Chrome_Request_Handler_Interface $requestHandler)
+	public function getName()
+	{
+		return $this->_name;
+	}
+
+	public function setName( $name )
+	{
+		$this->_name = $name;
+	}
+
+
+	public function initClass( Chrome_Request_Handler_Interface $requestHandler )
 	{
 
-		if( $this->_class == '' or empty( $this->_class ) ) {
+		if( empty( $this->_class ) ) {
 			throw new Chrome_Exception( 'No Class set in Chrome_Router_Resource!', 2002 );
 		}
 
@@ -136,7 +162,7 @@ class Chrome_Router_Resource implements Chrome_Router_Resource_Interface
 			}
 		}
 
-		return new $this->_class($requestHandler);
+		return new $this->_class( $requestHandler );
 	}
 }
 
@@ -180,7 +206,7 @@ class Chrome_Router implements Chrome_Router_Interface, Chrome_Exception_Process
 				}
 			}
 
-			if( $this->_resource == null or !( $this->_resource instanceof Chrome_Router_Resource_Interface ) ) {
+			if( $this->_resource == null or !( $this->_resource instanceof Chrome_Router_Result_Interface ) ) {
 				throw new Chrome_Exception( 'Could not found adequate controller class!', 2001 );
 			}
 
@@ -230,7 +256,7 @@ class Chrome_Router implements Chrome_Router_Interface, Chrome_Exception_Process
 		return $this->_exceptionHandler;
 	}
 
-	public function url( $name, array $options )
+	public function url( Chrome_Router_Resource_Interface $resource )
 	{
 		foreach( $this->_routerClasses as $router ) {
 			if( ( $return = $router->url( $name, $options ) ) !== false ) {

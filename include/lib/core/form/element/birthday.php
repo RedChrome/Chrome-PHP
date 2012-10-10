@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 22:09:56] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 00:25:12] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -45,27 +45,20 @@ class Chrome_Form_Element_Birthday extends Chrome_Form_Element_Abstract
 
     protected $_data = null;
 
-    protected $_isValid = null;
-
     public function isCreated() {
         return true;
     }
 
-    public function isValid()
+    protected function _isValid()
     {
-        if($this->_isValid !== null) {
-            return $this->_isValid;
-        }
-
         $isValid = true;
 
         $data = $this->getData();
 
         if($this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === true) {
-
             if($data[self::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_MONTH] == null OR $data[self::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_YEAR] == null OR $data[self::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_DAY] == null) {
-               $isValid = false;
-            $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
+                $isValid = false;
+                $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
             }
         }
 
@@ -98,8 +91,6 @@ class Chrome_Form_Element_Birthday extends Chrome_Form_Element_Abstract
             $this->_errors[] = self::CHROME_FORM_ELEMENT_BIRTHDAY_ERROR_DATE;
             $isValid = false;
         }
-
-        $this->_isValid = $isValid;
 
         return $isValid;
     }

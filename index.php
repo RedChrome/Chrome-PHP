@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 13:38:40] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 20:02:42] --> $
  * @author     Alexander Book
  */
 // debugin...
@@ -32,3 +32,5 @@ if(!isset($_SERVER['REMOTE_ADDR'])) {
  * load front controller
  */
 require_once 'include/main.php';
+
+Chrome_Front_Controller::getInstance()->execute();

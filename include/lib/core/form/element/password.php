@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 14:51:42] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 00:18:17] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -37,28 +37,18 @@ class Chrome_Form_Element_Password extends Chrome_Form_Element_Abstract
         return true;
     }
 
-    public function isValid()
+    protected function _isValid()
     {
         if($this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true) {
+            $this->_isValid = true;
             return true;
         }
 
         $data = $this->_form->getSentData($this->_id);
 
-        $isValid = true;
+        $this->_isValid = $this->_validate($data);
 
-        foreach($this->_validators AS $validator) {
-
-            $validator->setData($data);
-            $validator->validate();
-
-            if(!$validator->isValid()) {
-                $this->_errors += $validator->getAllErrors();
-                $isValid = false;
-            }
-        }
-
-        return $isValid;
+        return $this->_isValid;
     }
 
     public function isSent() {
@@ -93,13 +83,9 @@ class Chrome_Form_Element_Password extends Chrome_Form_Element_Abstract
 
         $data = $this->_form->getSentData($this->_id);
 
-        foreach($this->_converters AS $converter) {
-            $data = Chrome_Converter::getInstance()->convert($converter, $data);
-        }
+        $this->_data = $this->_convert($data);
 
-        $this->_data = $data;
-
-        return $data;
+        return $this->_data;
     }
 
     public function getDecorator() {

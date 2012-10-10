@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authorisation
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2012 18:12:29] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 10:43:27] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -288,4 +288,15 @@ class Chrome_Authorisation implements Chrome_Authorisation_Interface
     public static function getAuthorisationAdapter() {
         return self::$_adapter;
     }
+}
+
+function _isAllowed(Chrome_Authorisation_Resource_Interface $resource) {
+    static $_adapter;
+
+    if($_adapter === null) {
+        $_adapter = Chrome_Authorisation::getAuthorisationAdapter();
+    }
+
+    return $_adapter->isAllowed($resource);
+
 }

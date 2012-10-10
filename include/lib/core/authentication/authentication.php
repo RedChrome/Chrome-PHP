@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authentication
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.10.2012 02:02:59] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 17:01:01] --> $
  */
 
 if( CHROME_PHP !== true ) die();
@@ -32,7 +32,12 @@ require_once 'container.php';
  */
 interface Chrome_Authentication_Resource_Interface
 {
-
+    /**
+     * Returns the id you want to authenticate against
+     *
+     * @return int
+     */
+    public function getID();
 }
 
 /**

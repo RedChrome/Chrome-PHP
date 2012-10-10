@@ -1,174 +1,195 @@
 <?php
 
+/**
+ * CHROME-PHP CMS
+ *
+ * LICENSE
+ *
+ * This source file is subject to the Creative Commons license that is bundled
+ * with this package in the file LICENSE.
+ * It is also available through the world-wide-web at this URL:
+ * http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * If you did not receive a copy of the license AND are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@chrome-php.de so we can send you a copy immediately.
+ *
+ * @package    CHROME-PHP
+ * @subpackage Chrome.Model
+ * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 17:28:32] --> $
+ * @author     Alexander Book
+ */
+
+if( CHROME_PHP !== true ) die();
+
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.User
+ */
 class Chrome_Model_User_DB extends Chrome_Model_DB_Abstract
 {
-    private static $_instance = null;
+	private static $_instance = null;
 
-    protected $_token;
+	protected function __construct()
+	{
+		if( $this->_escaper === null ) $this->_escaper = Chrome_DB_Interface_Factory::factory( 'interface' )->initDefaultConnection();
+	}
 
-    protected function __construct() {
-        if($this->_escaper === null)
-            $this->_escaper = Chrome_DB_Interface_Factory::factory('interface')->initDefaultConnection();
-    }
+	public static function getInstance()
+	{
+		if( self::$_instance === null ) {
+			self::$_instance = new self();
+		}
 
-    public static function getInstance()
-    {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
+		return self::$_instance;
+	}
 
-        return self::$_instance;
-    }
+	public function addUser( $id, $email, $username, $group = null )
+	{
+	    if($group === null) {
+	       $group = Chrome_Config::getConfig('Registration', 'default_user_group');
+	    }
 
-    public function getUserIDByToken($token) {
+		try {
+			$exists = $this->userExists( $id, $username, $email );
+		}
+		catch ( Chrome_Exception $e ) {
+			return false;
+		}
 
-        $dbObj = Chrome_DB_Interface_Factory::factory('interface')
-					->select(array('id'))
-					->from('user')
-					->where('token = "'.$this->_escape(base64_decode($token)).'"')
-					->limit(0, 1)
-					->execute();
+		if( $exists === true ) {
+			throw new Chrome_Exception( 'Cannot add user if he already exists!' );
+			return false;
+		}
 
-        $data = $dbObj->next();
+		$group = ( int )$group;
 
-        return $data['id'];
-    }
+		try {
+			$db = $this->_getDBInterface();
 
-    public function logUserIn($email, $password) {
+			$values = array(
+				'id' => $id,
+				'name' => $db->escape( $username ),
+				'email' => $db->escape( $email ),
+				'time' => CHROME_TIME,
+				'group' => $group );
+			$db->insert()->into( 'user' )->values( $values )->execute();
+			return true;
+		}
+		catch ( Chrome_Exception $e ) {
+			Chrome_Log::logException( $e );
+			return false;
+		}
+	}
 
-        $dbObj = Chrome_DB_Interface_Factory::factory('interface')
-                    ->select(array('password', 'pw_salt'))
-                    ->from('user')
-                    ->where('email = "'.$this->_escape($email).'"')
-                    ->limit(0, 1)
-                    ->execute();
+	public function userExists( $id, $name, $email )
+	{
+		try {
+			$db = $this->_getDBInterface();
 
-        $data = $dbObj->next();
+			$id = ( int )$id;
+			$name = $db->escape( $name );
+			$email = $db->escape( $email );
 
-        // wrong email address
-        if(!isset($data['password'])) {
-            return false;
-        }
+			$db->select( array( 'id' ) )->from( 'user' )->where( 'id = ' . $id . ' OR name = "' . $name .
+				'" OR email = "' . $email . '"' )->limit( 0, 1 )->execute();
+			$result = $db->next();
 
-        $hash = Chrome_Hash::getInstance();
+			if( $result !== false ) {
+				return true;
+			}
 
-        $hashedPassword = $hash->hash($password, $data['pw_salt']);
+			return false;
+		}
+		catch ( Chrome_Exception_Database $e ) {
+			Chrome_Log::logException( $e, E_ERROR );
+			throw new Chrome_Exception( 'Error while checking whether user exists with name or email', 0, $e );
+		}
+	}
 
-        // wrong password
-        if($hashedPassword != $data['password']) {
-            return false;
-        }
+	public function getUserNameByID( $id )
+	{
 
-        $token = $hash->randomChars(32);
+		$id = ( int )$id;
 
-        $this->_token = base64_encode($token);
+		$dbObj = Chrome_DB_Interface_Factory::factory( 'interface' )->select( 'name' )->from( 'user' )->where( 'id = "' .
+			$id . '"' )->limit( 0, 1 )->execute();
 
-        $dbObj->clear()
-                ->update('user')
-                ->set(array('token' => $this->_escape($token), 'llogin' => CHROME_TIME, 'ip' => $_SERVER['REMOTE_ADDR']))
-                ->where('email = "'.$this->_escape($email).'"')
-                ->limit(0, 1)
-                ->execute();
+		$data = $dbObj->next();
 
-        return true;
-    }
+		return $data['name'];
+	}
 
-    public function getUserToken() {
-        return $this->_token;
-    }
+	public function getUserNameByEmail( $email )
+	{
 
+		$dbObj = Chrome_DB_Interface_Factory::factory( 'interface' )->select( 'name' )->from( 'user' )->where( 'email = "' .
+			$this->_escape( $email ) . '"' )->limit( 0, 1 )->execute();
 
-    public function renewUserToken($id) {
+		$data = $dbObj->next();
 
-        $id = (int) $id;
-
-        $token = Chrome_Hash::getInstance()->randomChars(32);
-
-        $this->_token = base64_encode($token);
-
-        $dbObj = Chrome_DB_Interface_Factory::factory('interface')
-                ->update('user')
-                ->set(array('token' => $this->_escape($token), 'llogin' => CHROME_TIME, 'ip' => $_SERVER['REMOTE_ADDR']))
-                ->where('id = "'.$id.'"')
-                ->limit(0, 1)
-                ->execute();
-
-        $cookie = Chrome_Cookie::getInstance();
-    }
-
-    public function getUserNameByID($id) {
-
-        $id = (int) $id;
-
-        $dbObj = Chrome_DB_Interface_Factory::factory('interface')
-            ->select('name')
-            ->from('user')
-            ->where('id = "'.$id.'"')
-            ->limit(0, 1)
-            ->execute();
-
-        $data = $dbObj->next();
-
-        return $data['name'];
-    }
-
-    public function getUserNameByEmail($email) {
-
-        $dbObj = Chrome_DB_Interface_Factory::factory('interface')
-            ->select('name')
-            ->from('user')
-            ->where('email = "'.$this->_escape($email).'"')
-            ->limit(0, 1)
-            ->execute();
-
-        $data = $dbObj->next();
-
-        return $data['name'];
-    }
+		return $data['name'];
+	}
 }
 
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.User
+ */
 class Chrome_Model_User extends Chrome_Model_Decorator_Abstract
 {
-    private static $_instance = null;
+	private static $_instance = null;
 
-    private $_getUserNameByIDCache = array();
+	private $_getUserNameByIDCache = array();
 
-    private $_getUserNameByEmailCache = array();
+	private $_getUserNameByEmailCache = array();
 
-    private $_languageObj = null;
+	private $_languageObj = null;
 
-    public static function getInstance() {
-        if(self::$_instance == null) {
-            self::$_instance = new self(Chrome_Model_User_DB::getInstance());
-        }
+	public static function getInstance()
+	{
+		if( self::$_instance == null ) {
+			self::$_instance = new self( Chrome_Model_User_DB::getInstance() );
+		}
 
-        return self::$_instance;
-    }
+		return self::$_instance;
+	}
 
-    public function getUserNameByID($id) {
+	public function getUserNameByID( $id )
+	{
 
-        if(!isset($this->_getUserNameByIDCache[$id])) {
-            $this->_getUserNameByIDCache[$id] = $this->_decorator->getUserNameByID($id);
-        }
+		if( !isset( $this->_getUserNameByIDCache[$id] ) ) {
+			$this->_getUserNameByIDCache[$id] = $this->_decorator->getUserNameByID( $id );
+		}
 
-        return $this->_getUserNameByIDCache[$id];
-    }
+		return $this->_getUserNameByIDCache[$id];
+	}
 
-    public function getUserNameByEmail($email) {
-        if(!isset($this->_getUserNameByEmailCache[$email])) {
-            $this->_getUserNameByEmailCache[$email] = $this->_decorator->_getUserNameByEmailCache($id);
-        }
+	public function getUserNameByEmail( $email )
+	{
+		if( !isset( $this->_getUserNameByEmailCache[$email] ) ) {
+			$this->_getUserNameByEmailCache[$email] = $this->_decorator->_getUserNameByEmailCache( $id );
+		}
 
-        return $this->_getUserNameByEmailCache[$email];
-    }
+		return $this->_getUserNameByEmailCache[$email];
+	}
 
 
-    public function getLanguageObject() {
+	public function getLanguageObject()
+	{
 
-        if($this->_languageObj === null) {
-            $this->_languageObj = new Chrome_Language('classes/user/user');
-        }
+		if( $this->_languageObj === null ) {
+			$this->_languageObj = new Chrome_Language( 'classes/user/user' );
+		}
 
-        return $this->_languageObj;
-    }
+		return $this->_languageObj;
+	}
+
+	public function addUser( $id, $email, $name )
+	{
+		return $this->_decorator->addUser( $id, $email, $name );
+	}
 }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.03.2012 16:24:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 11:20:49] --> $
  * @author     Alexander Book
  */
 

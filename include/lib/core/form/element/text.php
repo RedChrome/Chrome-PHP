@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 21:51:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 00:10:41] --> $
  * @author     Alexander Book
  */
 
@@ -37,22 +37,13 @@ class Chrome_Form_Element_Text extends Chrome_Form_Element_Abstract
 
 	protected $_data = null;
 
-    protected $_isValid = null;
-
 	public function isCreated()
 	{
 		return true;
 	}
 
-	public function isValid()
+	protected function _isValid()
 	{
-        // cache
-        if($this->_isValid !== null) {
-            return $this->_isValid;
-        }
-
-		$isValid = true;
-
 		$data = $this->_form->getSentData( $this->_id );
 
 		// if readonly is true, then data is null and the element is valid ;)
@@ -60,22 +51,11 @@ class Chrome_Form_Element_Text extends Chrome_Form_Element_Abstract
 			return true;
 		}
 
-		foreach( $this->_validators as $validator ) {
-
-			$validator->setData( $data );
-			$validator->validate();
-
-			if( !$validator->isValid() ) {
-				$this->_errors += $validator->getAllErrors();
-				$isValid = false;
-			}
-		}
+        $isValid = $this->_validate($data);
 
         if($isValid === false) {
             $this->_unSave();
         }
-
-        $this->_isValid = $isValid;
 
 		return $isValid;
 	}
@@ -115,9 +95,7 @@ class Chrome_Form_Element_Text extends Chrome_Form_Element_Abstract
 
 		$data = $this->_form->getSentData( $this->_id );
 
-		foreach( $this->_converters as $converter ) {
-			$data = Chrome_Converter::getInstance()->convert( $converter, $data );
-		}
+		$data = $this->_convert($data);
 
 		$this->_data = $data;
 

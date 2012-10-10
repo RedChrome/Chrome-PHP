@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 12:44:43] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.10.2012 19:33:12] --> $
  * @author     Alexander Book
  */
 
@@ -136,7 +136,7 @@ class Chrome_Route_Dynamic implements Chrome_Router_Route_Interface
 		return $this->_resource;
 	}
 
-	public function url( $name, array $options )
+	public function url( Chrome_Router_Resource_Interface $resource )
 	{
 		die( 'Not implemented yet' );
 	}

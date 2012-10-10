@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 21:59:11] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 00:17:47] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -33,8 +33,6 @@ class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract
 
     protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
                                        self::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array());
-
-    protected $_isValid = null;
 
     protected $_data = null;
 
@@ -55,16 +53,10 @@ class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract
         return true;
     }
 
-    public function isValid()
+    protected function _isValid()
     {
-        // cache
-        if($this->_isValid !== null) {
-            return $this->_isValid;
-        }
-
         // every input is readonly, so its valid because we expect and accept no data
         if($this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true) {
-            $this->_isValid = true;
             return true;
         }
 
@@ -73,38 +65,28 @@ class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract
 
         // if user sent an readonly marked input, then its invalid
         if(is_array($this->_options[self::CHROME_FORM_ELEMENT_READONLY]) AND in_array($data, $this->_options[self::CHROME_FORM_ELEMENT_READONLY])) {
-            $this->_isValid = false;
             $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_READONLY;
             return false;
         }
 
+        // if user sent nothing and it is not required, then its valid
         if($data === null AND $this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === false) {
             return true;
         }
 
         if(!in_array($data, $this->_options[self::CHROME_FORM_ELEMENT_SELECTION_OPTIONS])) {
-            $isValid = false;
             $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_WRONG_SELECTION;
+            $isValid = false;
         }
 
-        foreach($this->_validators AS $validator) {
+        $_isValid = $this->_validate($data);
 
-            $validator->setData($data);
-            $validator->validate();
-
-            if(!$validator->isValid()) {
-                $this->_errors += $validator->getAllErrors();
-                $isValid = false;
-            }
-        }
-
-        if($isValid === false) {
+        if($_isValid === false OR $isValid === false) {
             $this->_unSave();
+            return false;
         }
 
-        $this->_isValid = $isValid;
-
-        return $isValid;
+        return true;
     }
 
     public function create()
@@ -129,13 +111,9 @@ class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract
             return $this->_options[self::CHROME_FORM_ELEMENT_DEFAULT];
         }*/
 
-        foreach($this->_converters AS $converter) {
-            $data = Chrome_Converter::getInstance()->convert($converter, $data);
-        }
+        $this->_data = $this->_convert($data);
 
-        $this->_data = $data;
-
-        return $data;
+        return $this->_data;
     }
 
     public function getDecorator() {

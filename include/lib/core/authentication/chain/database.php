@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authentication
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.10.2012 14:26:37] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 20:55:54] --> $
  */
 
 if( CHROME_PHP !== true ) die();
@@ -60,7 +60,6 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
 
 	public function authenticate( Chrome_Authentication_Resource_Interface $resource = null )
 	{
-
 		// if no data is given, then it cannot authenticate
 		if( $resource === null ) {
 			return $this->_chain->authenticate( $resource );
@@ -71,7 +70,7 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
 			return $this->_chain->authenticate( $resource );
 		}
 
-		$id = $resource->getIdentity();
+		$id = $resource->getID();
 		$userPw = $resource->getCredential();
 
 		// returns an array with password, password_salt, and id if user was found, false else
@@ -90,10 +89,10 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
 		}
 
 		$container = new Chrome_Authentication_Data_Container();
-		$container->setID( ( int )$array['id'] )->setAutoLogin( ( bool )$resource->getAutoLogin() );
+		$container->setID( $id )->setAutoLogin( ( bool )$resource->getAutoLogin() );
 
 		if( $this->_setTime === true ) {
-			$this->_model->updateTimeById( $array['id'] );
+			$this->_model->updateTimeById( $id );
 		}
 
 		return $container;
@@ -109,10 +108,9 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
 	{
 		if( $resource instanceof Chrome_Authentication_Create_Resource_Database_Interface ) {
 
-			$this->_model->createAuthentication( $resource->getIdentity(), $resource->getCredential(), $resource->getCredentialSalt
-				() );
+			$this->_model->createAuthentication( $resource->getCredential(), $resource->getCredentialSalt() );
 
-			$resource->setID( $this->_model->getIDByName( $resource->getIdentity() ) );
+			$resource->setID( $this->_model->getIDByPassword( $resource->getCredential(), $resource->getCredentialSalt() ) );
 		}
 	}
 }
@@ -124,8 +122,6 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
 interface Chrome_Authentication_Resource_Database_Interface extends
 	Chrome_Authentication_Resource_Interface
 {
-	public function getIdentity();
-
 	public function getCredential();
 
 	public function getAutoLogin();
@@ -138,11 +134,6 @@ interface Chrome_Authentication_Resource_Database_Interface extends
 interface Chrome_Authentication_Create_Resource_Database_Interface extends
 	Chrome_Authentication_Create_Resource_Interface
 {
-	/**
-	 * @return string name/identity
-	 */
-	public function getIdentity();
-
 	/**
 	 * @return string the password hashed
 	 */
@@ -161,20 +152,20 @@ interface Chrome_Authentication_Create_Resource_Database_Interface extends
 class Chrome_Authentication_Resource_Database implements
 	Chrome_Authentication_Resource_Database_Interface
 {
-	protected $_identity = '';
+	protected $_id = '';
 	protected $_credential = '';
 	protected $_autoLogin = false;
 
-	public function __construct( $identity, $credential, $autoLogin )
+	public function __construct( $id, $credential, $autoLogin )
 	{
-		$this->_identity = $identity;
+		$this->_id = $id;
 		$this->_credential = $credential;
 		$this->_autoLogin = $autoLogin;
 	}
 
-	public function getIdentity()
+	public function getID()
 	{
-		return $this->_identity;
+		return (int) $this->_id;
 	}
 
 	public function getCredential()
@@ -198,6 +189,7 @@ class Chrome_Authentication_Create_Resource_Database implements
 	protected $_identity = '';
 	protected $_credential = '';
 	protected $_credentialSalt = '';
+    protected $_id = null;
 
 
 	public function __construct( $identity, $credential, $salt )
@@ -243,7 +235,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_DB_Abstract
 
 	protected $_options = array(
 		'dbTable' => 'authenticate',
-		'dbIdentity' => 'name',
+		'dbIdentity' => 'id',
 		'dbCredential' => 'password',
 		'dbCredentialSalt' => 'password_salt',
 		'dbTime' => 'time' );
@@ -254,33 +246,25 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_DB_Abstract
 		$this->_connect();
 	}
 
+    /**
+     * @param int $identity
+     */
 	public function getPasswordAndSaltByIdentity( $identity )
 	{
-
-
 		$identity = $this->_escape( $identity );
 
-		/*$this->_dbInterfaceInstance->select(array($this->_options['dbCredential'], $this->_options['dbCredentialSalt'], 'id'))
+		$this->_dbInterfaceInstance->select(array($this->_options['dbCredential'], $this->_options['dbCredentialSalt']))
 		->from($this->_options['dbTable'])
 		->where($this->_options['dbIdentity'].' = "'.$identity.'"')
 		->limit(0, 1)
 		->execute();
-		*/
-
-        /**
-         * @todo use interface
-         */
-		$this->_dbInterfaceInstance->query( 'SELECT ' . $this->_options['dbCredential'] . ', ' . $this->_options['dbCredentialSalt'] .
-			', `a`.id  FROM `cp1_authenticate` AS `a` LEFT JOIN `cp1_user` AS `u` ON `u`.id = `a`.id WHERE `u`.email = "' .
-			$identity . '"' );
 
 		$result = $this->_dbInterfaceInstance->next();
 
 		if( $result != false ) {
 			$result = array(
 				'password' => $result[$this->_options['dbCredential']],
-				'password_salt' => $result[$this->_options['dbCredentialSalt']],
-				'id' => $result['id'] );
+				'password_salt' => $result[$this->_options['dbCredentialSalt']] );
 		} else {
 			$result = false;
 		}
@@ -299,15 +283,8 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_DB_Abstract
 		$this->_dbInterfaceInstance->clean();
 	}
 
-	public function createAuthentication( $identity, $credential, $salt = null )
+	public function createAuthentication( $credential, $salt = null )
 	{
-
-		// user already exists
-		if( $this->getPasswordAndSaltByIdentity( $identity ) !== false ) {
-			throw new Chrome_Exception( 'User already exists in table "' . $this->_options['dbTable'] .
-				'"! Cannot override user!' );
-		}
-
 		if( $salt === null ) {
 			$salt = Chrome_Hash::getInstance()->randomChars( 12 );
 
@@ -317,21 +294,19 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_DB_Abstract
 		}
 
 		$this->_dbInterfaceInstance->insert()->into( $this->_options['dbTable'], array(
-			$this->_options['dbIdentity'],
 			$this->_options['dbCredential'],
 			$this->_options['dbCredentialSalt'] ) )->values( array(
-			$this->_escape( $identity ),
 			$this->_escape( $hash ),
 			$this->_escape( $salt ) ) )->execute();
 
 		$this->_dbInterfaceInstance->clean();
 	}
 
-	public function getIDByName( $name )
+	public function getIDByPassword( $pw, $pwSalt )
 	{
 
-		$this->_dbInterfaceInstance->select( 'id' )->from( $this->_options['dbTable'] )->where( 'name = "' .
-			$this->_escape( $name ) . '" ' )->limit( 0, 1 )->execute();
+		$this->_dbInterfaceInstance->select( 'id' )->from( $this->_options['dbTable'] )->where( $this->_options['dbCredential'].' = "' .
+			$this->_escape( $pw ) . '" AND '.$this->_options['dbCredentialSalt'].' = "'.$this->_escape($pwSalt).'"' )->orderBy('id', 'DESC')->limit( 0, 1 )->execute();
 
 		$result = $this->_dbInterfaceInstance->next();
 

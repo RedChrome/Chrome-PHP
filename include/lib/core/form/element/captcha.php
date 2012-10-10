@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 16:52:24] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 00:24:28] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -37,17 +37,11 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
 
     protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => true);
 
-    protected $_isValid = null;
-
     public function isCreated() {
         return true;
     }
 
-    public function isValid() {
-        // cache
-        if($this->_isValid !== null) {
-            return $this->_isValid;
-        }
+    protected function _isValid() {
 
         $data = $this->_form->getSentData($this->_id);
 
@@ -58,8 +52,6 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
         if($valid == false) {
             $this->_errors[] = self::CHROME_FORM_ELEMENT_CAPTCHA_ERROR_NOT_VALID;
         }
-
-        $this->_isValid = $valid;
 
         return $valid;
     }

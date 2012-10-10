@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 23:12:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 00:22:53] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -39,18 +39,12 @@ class Chrome_Form_Element_Checkbox extends Chrome_Form_Element_Abstract
 
     protected $_data = null;
 
-    protected $_isValid = null;
-
     public function isCreated() {
         return true;
     }
 
-    public function isValid()
+    protected function _isValid()
     {
-        if($this->_isValid !== null) {
-            return $this->_isValid;
-        }
-
         $isValid = true;
 
         $data = $this->_form->getSentData($this->_id);
@@ -72,19 +66,8 @@ class Chrome_Form_Element_Checkbox extends Chrome_Form_Element_Abstract
                 $this->_unSave($key);
             }
 
-            foreach($this->_validators AS $validator) {
-
-                $validator->setData($value);
-                $validator->validate();
-
-                if(!$validator->isValid()) {
-                    $this->_errors += $validator->getAllErrors();
-                    $isValid = false;
-                }
-            }
+            $isValid = $this->_validate($value) && $isValid;
         }
-
-        $this->_isValid = $isValid;
 
         return $isValid;
     }
@@ -129,9 +112,8 @@ class Chrome_Form_Element_Checkbox extends Chrome_Form_Element_Abstract
         }
 
         foreach($data AS $key => $value) {
-            foreach($this->_converters AS $converter) {
-                $data[$key] = Chrome_Converter::getInstance()->convert($converter, $data[$key]);
-            }
+
+            $data[$key] = $this->_convert($data[$key]);
         }
 
         $this->_data = $data;

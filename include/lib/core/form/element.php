@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 17:58:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 02:22:58] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -186,38 +186,138 @@ interface Chrome_Form_Element_Interface
  */
 abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Interface
 {
-    /**#@!
+    /**
+     * Session namespace for form, validator and converter
      *
      * @var string
      */
-    const CHROME_FORM_ELEMENT_SESSION_NAMESPACE = 'FORMS';
-    const CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE = 'VALIDATOR';
-    const CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE = 'CONVERTER';
+    const CHROME_FORM_ELEMENT_SESSION_NAMESPACE = 'FORMS',
+        CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE = 'VALIDATOR',
+        CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE = 'CONVERTER';
 
-    const CHROME_FORM_ELEMENT_IS_REQUIRED = 'ISREQUIRED';
-    const CHROME_FORM_ELEMENT_ERROR_NOT_SENT = 'ERRORNOTSENT';
+    /**
+     * Option to determine whether the form element is required or not.
+     * If the element is not sent and isrequired set to true then the
+     * element will raise ERROR_NOT_SENT.
+     *
+     * Structure: boolean
+     *
+     * @var string
+     */
+    const CHROME_FORM_ELEMENT_IS_REQUIRED = 'ISREQUIRED',
 
-    const CHROME_FORM_ELEMENT_SELECTION_OPTIONS = 'SELECTIONOPTIONS';
-    const CHROME_FORM_ELEMENT_ERROR_WRONG_SELECTION = 'ERRORWRONGSELECTION';
+    /**
+     * This error will be raised if the element is marked as required and the user
+     * did not sent data.
+     *
+     * @var string
+     */
+    CHROME_FORM_ELEMENT_ERROR_NOT_SENT = 'ERRORNOTSENT';
 
-    const CHROME_FORM_ELEMENT_SUBMIT_VALUES = 'SUBMITVALUES';
-    const CHROME_FORM_ELEMENT_ERROR_WRONG_SUBMIT = 'ERRORWRONGSUBMIT';
+    /**
+     * This is an option for multiple user input, e.g. radio, checkbox, selection
+     * This option says which selection can be sent by user
+     *
+     * Structure: array('option1', 'option2', ...)
+     *
+     * @var string
+     */
+    const CHROME_FORM_ELEMENT_SELECTION_OPTIONS = 'SELECTIONOPTIONS',
 
-    const CHROME_FORM_ELEMENT_READONLY = 'READONLY';
-    const CHROME_FORM_ELEMENT_ERROR_READONLY = 'ERRORREADONLY';
+    /**
+     * This error will occure if the user sent data which didnt matched the
+     * SELECTION_OPTIONS
+     *
+     * @var string
+     */
+    CHROME_FORM_ELEMENT_ERROR_WRONG_SELECTION = 'ERRORWRONGSELECTION';
 
+    /**
+     * If the user clicks on the submit button, then e.g. the user sends 'login'
+     * This option says which submit values are accepted
+     *
+     * Structure: array('submit1', 'login', 'logout')
+     *
+     * @var string
+     */
+    const CHROME_FORM_ELEMENT_SUBMIT_VALUES = 'SUBMITVALUES',
+
+    /**
+     * If the user has sent a wrong submit type e.g. he has sent 'register', but only
+     * 'login', 'logout' are allowed, then this error is raised
+     *
+     * @var string
+     */
+    CHROME_FORM_ELEMENT_ERROR_WRONG_SUBMIT = 'ERRORWRONGSUBMIT';
+
+    /**
+     * This determines whether the user cannot change the form element
+     * Note: If this is set to true, than the return value of this element is null, not
+     *       the default value set in decorator!!
+     *
+     * Structure: Use boolean if the user can only send one input (e.g. textarea)
+     *            Use array('selectionOption1', ...) if the user can send more inputs (e.g. selection),
+     *              then the values inside the array tells the element which selectionOptions are readonly
+     *
+     * @var string
+     */
+    const CHROME_FORM_ELEMENT_READONLY = 'READONLY',
+
+    /**
+     * Will be raised if user tried to sent a readonly input. Normally the browser will not
+     * send the data if it's marked as readonly
+     *
+     * @var string
+     */
+    CHROME_FORM_ELEMENT_ERROR_READONLY = 'ERRORREADONLY';
+
+    /**
+     * Options for the decorator. They can influence the behavior of the decorator
+     *
+     * Structure: array('DECORATOR_OPT_1' => 'anyValueYouWant', ...)
+     *
+     * @var string
+     */
     const CHROME_FORM_ELEMENT_DECORATOR_OPTIONS = 'DECORATOROPTIONS';
+
+    /**
+     * Attributes for the decorator. These attributes cannot influence the behavior.
+     * All attributes are parsed in html. E.g. if your submit button shall has an onclick
+     * event then use this.
+     *
+     * Structure: array('onclick' => 'javascript:alert()', ...)
+     *
+     * @var string
+     */
     const CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES = 'DECORATORATTRIBUTES';
 
-    // saves the input into session
+    /**
+     * If set to true, then every user input (which is converter using the given converters) is
+     * saved into session. So on the next page reload every input is displayed.
+     *
+     * Structure: boolean
+     *
+     * @var string
+     */
     const CHROME_FORM_ELEMENT_SAVE_DATA = 'SAVEDATA';
-    // doesn't saves null data. => on reload, the saved input is still visible
+
+    /**
+     * If this is set to true, then if the user has not sent no input, then it is not
+     * saved into session. This is usefull to display the default values.
+     * It is recommended to set this always to true (this is default in every element)
+     *
+     * Structure: boolean
+     *
+     * @var string
+     */
     const CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA = 'NOTSAVENULLDATA';
 
-    const CHROME_FORM_ELEMENT_ERROR_WRONG_INPUT = 'ERRORWRONGINPUT';
-
+    /**
+     * This is raised if a form element was not created, but the user sent the form
+     *
+     * @var string
+     */
     const CHROME_FORM_ELEMENT_ERROR_NOT_CREATED = 'ERRORNOTCREATED';
-    /**#@!*/
 
     /**
      *
@@ -299,6 +399,19 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     protected $_decorator = null;
 
     /**
+     * Cache for isValid method
+     *
+     * @var boolean
+     */
+    protected $_isValid = null;
+
+
+    /**
+     * @var Chrome_Converter
+     */
+    private static $_converterInstance = null;
+
+    /**
      * Chrome_Form_Element_Abstract::__construct()
      *
      * @param mixed $form
@@ -324,6 +437,26 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
         }
 
         $this->_options[self::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE] = null;
+    }
+
+    /**
+     * Chrome_Form_Element_Abstract::isValid()
+     *
+     * Determines whether this element is valid. This method is a default implementation
+     * of a cache using _isValid() for validation
+     *
+     * @return boolean
+     */
+    public function isValid() {
+
+        // cache
+        if($this->_isValid !== null) {
+            return $this->_isValid;
+        }
+
+        // either _isValid() exists or this method is overwritten..
+        $this->_isValid = $this->_isValid();
+        return $this->_isValid;
     }
 
     /**
@@ -491,6 +624,52 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      */
     public function getSavedData() {
         return null;
+    }
+
+    /**
+     * Chrome_Form_Element_Abstract::_validate()
+     *
+     * validates the data, given as parameter, and returns the result of the validators
+     * Returns false if any validator got an error, true else
+     *
+     * @return boolean
+     */
+    protected function _validate($data) {
+
+        $isValid = true;
+
+        foreach($this->_validators AS $validator) {
+
+            $validator->setData($data);
+            $validator->validate();
+
+            if(!$validator->isValid()) {
+                $this->_errors += $validator->getAllErrors();
+                $isValid = false;
+            }
+        }
+
+        return $isValid;
+    }
+
+    /**
+     * Chrome_Form_Element_Abstract::_convert()
+     *
+     * Converts the data using the converters, set in options
+     *
+     * @return boolean
+     */
+    protected function _convert($data) {
+
+        if(self::$_converterInstance === null) {
+            self::$_converterInstance = Chrome_Converter::getInstance();
+        }
+
+        foreach( $this->_converters as $converter ) {
+			$data = self::$_converterInstance->convert( $converter, $data );
+		}
+
+        return $data;
     }
 }
 

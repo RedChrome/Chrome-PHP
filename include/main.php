@@ -18,15 +18,16 @@
  * @subpackage Chrome.FrontController
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 13:43:08] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 20:28:02] --> $
  * @author     Alexander Book
  */
 
-/**
- * @var boolean
- */
-define( 'CHROME_PHP', true );
-
+if( !defined( 'CHROME_PHP' ) ) {
+	/**
+	 * @var boolean
+	 */
+	define( 'CHROME_PHP', true );
+}
 /**
  * load config
  */
@@ -87,6 +88,20 @@ interface Chrome_Front_Controller_Interface
 	 * @return
 	 */
 	public function handleRequest();
+
+	/**
+	 * init()
+	 *
+	 * @return void
+	 */
+	public function init();
+
+	/**
+	 * execute()
+	 *
+	 * @return void
+	 */
+	public function execute();
 }
 
 /**
@@ -191,101 +206,124 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
 	private function __construct()
 	{
 		try {
-			// init require-class, can be skipped if every class is defined
-			// but if not, then we get nasty error, that cannot get handled easily
-			$require = Chrome_Require::getInstance();
-			// startup registry, can be skipped
-			$registry = Chrome_Registry::getInstance();
+			$this->init();
+		}
+		catch ( Chrome_Exception $e ) {
 
-			// init logging
-			$log = Chrome_Log::getInstance();
+			$handler = new Chrome_Exception_Handler_FrontController();
+			$handler->exception( $e );
+		}
+	}
 
-			// only log sth. if we're in developer mode
-			if( CHROME_DEVELOPER_STATUS === true ) {
-				$log->setLogger( new Chrome_Logger_File( TMP . CHROME_LOG_DIR . CHROME_LOG_FILE ) );
-			} else {
-				$log->setLogger( new Chrome_Logger_Null() );
-			}
+	/**
+	 * Set up all needed classes and dependencies
+	 *
+	 * @return void
+	 */
+	public function init()
+	{
+		// init require-class, can be skipped if every class is defined
+		// but if not, then we get nasty error, that cannot get handled easily
+		$require = Chrome_Require::getInstance();
+		// startup registry, can be skipped
+		$registry = Chrome_Registry::getInstance();
 
-			// startup filters
+		// init logging
+		$log = Chrome_Log::getInstance();
 
-			$this->_preprocessor = new Chrome_Filter_Chain_Preprocessor();
-			$this->_postprocessor = new Chrome_Filter_Chain_Postprocessor();
+		// only log sth. if we're in developer mode
+		if( CHROME_DEVELOPER_STATUS === true ) {
+			$log->setLogger( new Chrome_Logger_File( TMP . CHROME_LOG_DIR . CHROME_LOG_FILE ) );
+		} else {
+			$log->setLogger( new Chrome_Logger_Null() );
+		}
 
-			// setting up authentication, authorisation service
-			{
-				$handler = new Chrome_Exception_Handler_Authentication();
+		// startup filters
 
-				$authentication = Chrome_Authentication::getInstance();
-				$authentication->setExceptionHandler( $handler );
+		$this->_preprocessor = new Chrome_Filter_Chain_Preprocessor();
+		$this->_postprocessor = new Chrome_Filter_Chain_Postprocessor();
 
-				$db = new Chrome_Authentication_Chain_Database( new Chrome_Model_Authentication_Database() );
-				$cookie = new Chrome_Authentication_Chain_Cookie();
-				$session = new Chrome_Authentication_Chain_Session();
+		// setting up authentication, authorisation service
+		{
+			$handler = new Chrome_Exception_Handler_Authentication();
 
-				// set authentication chains in the right order
-				// the first chain should be session, because its the fastest one
-				// the last should be the slowest, thats the db
-				$authentication->addChain( $session )->addChain( $cookie )->addChain( $db );
+			$authentication = Chrome_Authentication::getInstance();
+			$authentication->setExceptionHandler( $handler );
 
-				// set authorisation service
-				//Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB())); // better one, but not finished ;)
-				$adapter = Chrome_Authorisation_Adapter_Default::getInstance();
-				$adapter->setModel( new Chrome_Model_Authorisation_Default_DB() );
+			$db = new Chrome_Authentication_Chain_Database( new Chrome_Model_Authentication_Database() );
+			$cookie = new Chrome_Authentication_Chain_Cookie();
+			$session = new Chrome_Authentication_Chain_Session();
 
-				Chrome_Authorisation::setAuthorisationAdapter( $adapter );
+			// set authentication chains in the right order
+			// the first chain should be session, because its the fastest one
+			// the last should be the slowest, thats the db
+			$authentication->addChain( $session )->addChain( $cookie )->addChain( $db );
 
-				// needed for the database, because it fetches there the rightHandler instance
-				$registry->set( 'database', 'right_handler', new Chrome_Database_Right_Handler_Default(), true );
+			// set authorisation service
+			//Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB())); // better one, but not finished ;)
+			$adapter = Chrome_Authorisation_Adapter_Default::getInstance();
+			$adapter->setModel( new Chrome_Model_Authorisation_Default_DB() );
 
-				// first authentication
-				// user gets authenticated if session or cookie is set
-				// for db authentication use:
-				//
-				//$authentication->authenticate(new Chrome_Authentication_Resource_Database($userName, $password, $autoLogin));
-				//
-				//$authentication->authenticate(new Chrome_Authentication_Resource_Database('RedChrome', 'tiger', true));
-				$authentication->authenticate();
-			}
+			Chrome_Authorisation::setAuthorisationAdapter( $adapter );
 
-			// distinct which request is sent
-			$request = Chrome_Request::getInstance();
-			// set up the available request handler
-			{
-				// watch out for the right order you add those handlers,
-				// the more stricter handlers are the first, which get added, the less stricter are the last
-				// the last one should _always_ return true in canHandleRequest
-				//$request->addRequestObject();
-				$request->addRequestObject( new Chrome_Request_Handler_AJAX() );
-				// this handler is always capable of handling a request, so it always returns true in canHandleRequest
-				$request->addRequestObject( new Chrome_Request_Handler_HTTP() );
-			}
+			// needed for the database, because it fetches there the rightHandler instance
+			$registry->set( 'database', 'right_handler', new Chrome_Database_Right_Handler_Default(), true );
 
-			$requestHandler = $request->getRequest();
-			$this->_request = $request->getRequestDataObject();
+			// first authentication
+			// user gets authenticated if session or cookie is set
+			// for db authentication use:
+			//
+			//$authentication->authenticate(new Chrome_Authentication_Resource_Database($userName, $password, $autoLogin));
+			//
+			//$authentication->authenticate(new Chrome_Authentication_Resource_Database('RedChrome', 'tiger', true));
+			$authentication->authenticate();
+		}
 
-			// enable route matching
-			{
-				//import(array('Chrome_Route_Static', 'Chrome_Route_Dynamic') );
-				// matches static routes
-				new Chrome_Route_Static( Chrome_Model_Route_Static::getInstance() );
-				// matches dynamic created routes
-				new Chrome_Route_Dynamic( Chrome_Model_Route_Dynamic::getInstance() );
-				// matches routes to administration site
-				new Chrome_Route_Administration( Chrome_Model_Route_Administration::getInstance() );
+		// distinct which request is sent
+		$request = Chrome_Request::getInstance();
+		// set up the available request handler
+		{
+			// watch out for the right order you add those handlers,
+			// the more stricter handlers are the first, which get added, the less stricter are the last
+			// the last one should _always_ return true in canHandleRequest
+			//$request->addRequestObject();
+			$request->addRequestObject( new Chrome_Request_Handler_AJAX() );
+			// this handler is always capable of handling a request, so it always returns true in canHandleRequest
+			$request->addRequestObject( new Chrome_Request_Handler_HTTP() );
+		}
 
-			}
+		$requestHandler = $request->getRequest();
+		$this->_request = $request->getRequestDataObject();
 
+		// enable route matching
+		{
+			//import(array('Chrome_Route_Static', 'Chrome_Route_Dynamic') );
+			// matches static routes
+			new Chrome_Route_Static( Chrome_Model_Route_Static::getInstance() );
+			// matches dynamic created routes
+			new Chrome_Route_Dynamic( Chrome_Model_Route_Dynamic::getInstance() );
+			// matches routes to administration site
+			new Chrome_Route_Administration( Chrome_Model_Route_Administration::getInstance() );
+		}
+	}
+
+	/**
+	 * Executes the controller
+	 *
+	 * @return void
+	 */
+	public function execute()
+	{
+		try {
 			// get the accessed resource by Router
 			$resource = Chrome_Router::getInstance()->setExceptionHandler( new
 				Chrome_Exception_Handler_Router() )->route( new Chrome_URI(), $this->_request );
 
 			// create controller class and set exception handler
-			$this->_controller = $resource->initClass($requestHandler);
+			$this->_controller = $resource->initClass( Chrome_Request::getInstance()->getRequest() );
 			$this->_controller->setExceptionHandler( new Chrome_Exception_Handler_Default() );
 
 			$this->handleRequest();
-
 		}
 		catch ( Chrome_Exception $e ) {
 
@@ -313,5 +351,3 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
 		$this->_response->flush();
 	}
 }
-
-Chrome_Front_Controller::getInstance();

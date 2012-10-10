@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2012 16:17:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 13:07:30] --> $
  * @author     Alexander Book
  */
 
@@ -67,7 +67,10 @@ class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract {
 
 class Chrome_View_User_Default_successfullyLoggedIn extends Chrome_View_Abstract {
     public function render(Chrome_Controller_Interface $controller) {
-        return 'successfully logged in!';
+        $template = new Chrome_Template();
+        $template->assignTemplate('modules/content/user/login/already_logged_in');
+        return $template->render();
+
     }
 }
 
@@ -91,6 +94,12 @@ class Chrome_View_User_Default_ShowForm extends Chrome_View_Abstract {
 
 class Chrome_View_User_Default_WrongPassword extends Chrome_View_Abstract{
     public function render(Chrome_Controller_Interface $controller) {
-        return 'wrong password or username!';
+        $lang = new Chrome_Language('modules/content/user/login');
+
+        $template = new Chrome_Template();
+        $template->assignTemplate('modules/content/user/login/form_log_in');
+        $template->assign('LANG', $lang);
+        $template->assign('FORM', $this->_controller->getForm());
+        return $template->render();
     }
 }
