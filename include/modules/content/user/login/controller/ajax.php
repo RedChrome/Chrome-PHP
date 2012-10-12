@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 16:16:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:58:46] --> $
  * @author     Alexander Book
  */
 
@@ -75,8 +75,7 @@ class Chrome_Controller_Content_Login_AJAX extends Chrome_Controller_Content_Abs
                     $this->view->showForm();
                 }
             } catch(Chrome_Exception $e) {
-                // todo: set proper exception handler, so that it is dispalyed as json
-                $e->show($e);
+                $this->exceptionHandler->exception($e);
             }
         }
         $this->view->render($this);

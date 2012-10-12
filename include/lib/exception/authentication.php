@@ -14,10 +14,10 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.FrontController
+ * @subpackage Chrome.Authentication
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.10.2012 14:25:20] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:40:51] --> $
  * @author     Alexander Book
  */
 
@@ -26,7 +26,7 @@ if(CHROME_PHP !== true)
 
 /**
  * @package CHROME-PHP
- * @subpackage Chrome.FrontController
+ * @subpackage Chrome.Authentication
  */
 class Chrome_Exception_Handler_Authentication implements Chrome_Exception_Handler_Interface
 {

@@ -22,12 +22,28 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 		return self::$_instance;
 	}
 
-	/**
-	 * @todo send email
-	 */
-	public function sendRegisterEmail( $email )
+	public function sendRegisterEmail( $email, $name, $activationKey )
 	{
+        require_once LIB.'Zend/Mail.php';
+        try {
 
+            $template = new Chrome_Template();
+            $template->assignTemplate('modules/content/register/email');
+            $template->assign('activationKey', $activationKey);
+            $template->assign('email', $email);
+            $template->assign('name', $name);
+
+            $mail = new Zend_Mail();
+            $mail->setBodyHtml($template->render())
+                    ->setFrom(Chrome_Config::getConfig('Registration', 'email_sender'), Chrome_Config::getConfig('Registration', 'email_sender_name'))
+                    ->addTo($email)
+                    ->setSubject(Chrome_Config::getConfig('Registration', 'email_subject'))
+                    ->send();
+        } catch(Exception $e) {
+            return false;
+        }
+
+        return true;
 	}
 
 	public function generateActivationKey()

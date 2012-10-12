@@ -17,7 +17,7 @@
  * @subpackage Chrome.Config
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 15:55:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:20:14] --> $
  * @author     Alexander Book
  */
 
@@ -33,9 +33,40 @@ require_once 'model.php';
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Config
- * @todo add interface to Chrome_Config
  */
-class Chrome_Config
+interface Chrome_Config_Interface
+{
+    /**
+     * Returns the configuration for the subclass $subclass
+     *
+     * @param string $subclass similar to a namespace
+     * @param string $name [optional] if not set, then the whole subclass will be returned (as array)
+     * @return mixed
+     */
+    public static function getConfig($subclass, $name = '');
+
+    /**
+     * See getConfig(), this is just a non static implementation
+     *
+     * @return mixed
+     */
+    public function _getConfig($subclass, $name = '');
+
+    /**
+     * Sets the configuration for $name in subclass $subclass with value $value
+     * and type $type.
+     *
+     * @return void
+     */
+    public function setConfig($name, $subclass, $value, $type, $modul = '');
+}
+
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Config
+ */
+class Chrome_Config implements Chrome_Config_Interface
 {
     /**
      * contains Chrome_Config instance for singleton pattern

@@ -16,22 +16,21 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [12.10.2012 01:06:40] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:58:12] --> $
  * @author     Alexander Book
  */
-// debugin...
-if(!isset($_SERVER['REMOTE_ADDR'])) {
-    $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-    $_SERVER['HTTP_USER_AGENT'] = 'Mozilla Firefox 5.0';
-    $_SERVER['REQUEST_URI'] = '';
-    $_SERVER['SCRIPT_NAME'] = 'index.php';
-    $_SERVER['SERVER_NAME'] = "localhost";
-}
+
+if(CHROME_PHP !== true)
+    die();
 
 /**
- * load front controller
+ * @package CHROME-PHP
  */
-require_once 'include/main.php';
-
-Chrome_Front_Controller::getInstance()->execute();
-//TODO: set up Zend_Mail properly
+class Chrome_Exception_Handler_JSON implements Chrome_Exception_Handler_Interface
+{
+    public function exception(Exception $e)
+    {
+        echo json_encode(array('error' => $e->getMessage()));
+        die();
+    }
+}

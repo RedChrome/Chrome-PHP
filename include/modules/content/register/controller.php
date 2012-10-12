@@ -81,7 +81,12 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 							$this->model->addRegistrationRequest( $this->form->getData( 'nickname' ), $this->form->getData
 								( 'password' ), $this->form->getData( 'email' ), $activationKey );
 
-							$this->model->sendRegisterEmail( $this->form->getSentData( 'email' ) );
+							$result = $this->model->sendRegisterEmail( $this->form->getSentData( 'email' ) );
+
+                            // todo: handle error if email was not send
+                            if($result === false) {
+
+                            }
 
 							$this->_stepThree();
 

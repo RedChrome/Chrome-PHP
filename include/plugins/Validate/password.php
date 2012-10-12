@@ -19,7 +19,7 @@ die('Not uppdated Chrome_Validator_Password');
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.05.2010 22:25:02] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:33:01] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -34,7 +34,6 @@ if(CHROME_PHP !== true)
  * @copyright   Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license     http://chrome-php.de/license/new-bsd		New BSD License
  * @version		2009/04/08/15/25
- * @todo 		Check if nickname is forbidden?
  */
 class Chrome_Validator_Password extends Chrome_Validator
 {
@@ -49,7 +48,7 @@ class Chrome_Validator_Password extends Chrome_Validator
 	{
 		$this->_password 	= $password;
 		$this->_password_2  = ($password_2 === null) ? $password : $password_2;
-		
+
 	}
 
 	protected function _validate()

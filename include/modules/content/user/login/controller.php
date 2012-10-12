@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:26:20] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:59:52] --> $
  * @author     Alexander Book
  */
 
@@ -39,35 +39,11 @@ class Chrome_Controller_Content_Login extends Chrome_Controller_Content_Abstract
 		if( $this->requestHandler instanceof Chrome_Request_Handler_AJAX ) {
 			require_once 'controller/ajax.php';
 			$controller = new Chrome_Controller_Content_Login_AJAX($this->requestHandler);
+            $controller->setExceptionHandler(new Chrome_Exception_Handler_JSON());
 		} else {
 			require_once 'controller/default.php';
 			$controller = new Chrome_Controller_Content_Login_Default($this->requestHandler);
 		}
-
-
-		/*
-		if(isset($this->_GET['request'])) {
-		$request = $this->_GET['request'];
-		} else if(isset($this->_POST['request'])) {
-		$request  =$this->_POST['request'];
-		} else {
-		$request = '';
-		}
-
-		switch($request) {
-
-		case 'ajax': {
-		require_once 'controller/ajax.php';
-		$controller = new Chrome_Controller_Content_Login_AJAX();
-		break;
-		}
-
-		default: {
-		require_once 'controller/default.php';
-		$controller = new Chrome_Controller_Content_Login_Default();
-		}
-
-		}*/
 
 		$controller->execute();
 	}
@@ -82,36 +58,5 @@ class Chrome_Controller_Content_Login extends Chrome_Controller_Content_Abstract
         }
 
         return parent::getResponse();
-        /*
-
-		/**
-		 * not good, but it works ;)
-		 *
-		if( isset( $_GET['request'] ) ) {
-			$request = $_GET['request'];
-		} else
-			if( isset( $_POST['request'] ) ) {
-				$request = $_POST['request'];
-			} else {
-				$request = '';
-			}
-
-			switch( $request ) {
-
-				case 'ajax':
-					{
-						Chrome_Response::setResponseClass( 'ajax' );
-						break;
-					}
-
-				default:
-					{
-						// do nothing special
-					}
-
-			}
-
-		return parent::getResponse();
-        */
 	}
 }

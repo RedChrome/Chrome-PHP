@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.09.2012 00:04:32] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:38:18] --> $
  * @author     Alexander Book
  */
 
@@ -30,15 +30,8 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
-interface Chrome_Controller_Interface
+interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Interface
 {
-    /**
-     * getRequestHandler()
-     *
-     * @return Chrome_Request_Handler_Interface
-     */
-    public function getRequestHandler();
-
     /**
      * getResponse()
      *
@@ -54,12 +47,6 @@ interface Chrome_Controller_Interface
     public function execute();
 
     /**
-     * @param Chrome_Request_Handler_Interface $obj
-     *
-     */
-    public function setRequestHandler(Chrome_Request_Handler_Interface $obj);
-
-    /**
      * @param Chrome_Request_Handler_Interface $reqHandler
      * @return Chrome_Controller_Interface
      */
@@ -70,17 +57,8 @@ interface Chrome_Controller_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
-abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface, Chrome_Exception_Processable_Interface
+abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
 {
-
-    /**
-     * specific ACE for this controller
-     *
-     *
-     * @deprecated
-     * @var Chrome_Authorisation_Resource_Interface
-     */
-    protected $ACE = null;
 
     /**
      * @deprecated
@@ -210,11 +188,13 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
 
     /**
      * _authorize()
-     *
+     * @deprecated
      * @return void
      */
     protected function _authorize()
     {
+
+        throw new Chrome_Exception('Do not use this..');
         if($this->ACE === null OR $this->ACE === false) {
             return true;
         }

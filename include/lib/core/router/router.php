@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 13:01:31] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:14:36] --> $
  * @author     Alexander Book
  */
 if( CHROME_PHP !== true ) die();
@@ -36,12 +36,6 @@ interface Chrome_Router_Interface extends Chrome_Router_Route_Interface
 	const CHROME_ROUTER_REGISTRY_NAMESPACE = 'Chrome_Router';
 
 	public function route( Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data );
-
-	//public function match( Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data );
-
-	//public function getResource();
-
-	//public function url( $name, array $options );
 
 	public function addRouterClass( Chrome_Router_Route_Interface $obj );
 }

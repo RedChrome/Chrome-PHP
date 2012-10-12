@@ -18,46 +18,63 @@
  * @subpackage Chrome.Request
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 10:38:40] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:32:11] --> $
  * @author     Alexander Book
  */
 
-//TODO: Add documentation
-
-
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Request
+ */
 interface Chrome_Request_Interface
 {
 	/**
+     * Singleton pattern
+     *
 	 * @return Chrome_Request_Interface
 	 */
 	public static function getInstance();
 
 
 	/**
+     * Returns the request handler
+     *
 	 * @return Chrome_Request_Handler_Interface
 	 */
 	public function getRequest();
 
 	/**
+     * Adds a request handler. They determine which request is sent
+     *
 	 * @param Chrome_Request_Handler_Interface $obj
 	 * @return void
 	 */
 	public function addRequestObject( Chrome_Request_Handler_Interface $obj );
 
 	/**
+     * Returns the request data object
+     *
 	 * @retur Chrome_Request_Data_Interface
 	 */
 	public function getRequestDataObject();
 }
 
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Request
+ */
 interface Chrome_Request_Handler_Interface
 {
 	/**
+     * Determines whether this class can handle the sent request
+     *
 	 * @return boolean
 	 */
 	public function canHandleRequest();
 
 	/**
+     * Returns the request data object
+     *
 	 * @return Chrome_Request_Data_Interface
 	 */
 	public function getRequestData();
@@ -67,14 +84,23 @@ interface Chrome_Request_Handler_Interface
  * This class saves the required global data $_SERVER, $_GET, etc.. which is for
  * the specific request needed. E.g. Ajax request cant send a file
  *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Request
  */
 interface Chrome_Request_Data_Interface
 {
 	/**
+     * Singleton pattern
+     *
 	 * @return Chrome_Request_Data_Interface
 	 */
 	public static function getInstance();
 
+    /**
+     * Returns all data. GET,POST,SERVER,FILES, etc..
+     *
+     * @return array
+     */
 	public function getData();
 
 	public function getGET( $key = null );
@@ -104,11 +130,21 @@ interface Chrome_Request_Data_Interface
 	public function setSERVER( array $array );
 }
 
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Request
+ */
 abstract class Chrome_Request_Data_Abstract implements Chrome_Request_Data_Interface
 {
 
+    /**
+     * @var array
+     */
 	protected $_vars = array();
 
+    /**
+     * @return Chrome_Request_Data_Interface
+     */
 	protected function __construct()
 	{
 		$this->_vars = array(
@@ -244,6 +280,15 @@ abstract class Chrome_Request_Data_Abstract implements Chrome_Request_Data_Inter
 	}
 }
 
+/**
+ * Facade for Request_Data obj, and Request_Handler obj
+ *
+ * This class checks every request handler, whether he can handle the current request and
+ * returns the request data obj corresponding to the handler, which can handle the request.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Request
+ */
 class Chrome_Request implements Chrome_Request_Interface
 {
 	/**
@@ -276,12 +321,18 @@ class Chrome_Request implements Chrome_Request_Interface
 
 	}
 
+    /**
+     * @return Chrome_Request_Data_Interface
+     */
 	public function getRequestDataObject()
 	{
 		// the if is always true, well it should be...
 		return ( $this->_requestData === null or $this->getRequest() != null ) ? $this->_requestData : $this->_requestData;
 	}
 
+    /**
+     * @return Chrome_Request_Interface
+     */
 	public static function getInstance()
 	{
 		if( self::$_instance === null ) {
@@ -291,8 +342,14 @@ class Chrome_Request implements Chrome_Request_Interface
 		return self::$_instance;
 	}
 
+    /**
+     * Checks which handler is able to handle the request and returns this object
+     *
+     * @return Chrome_Request_Handler_Interface
+     */
 	public function getRequest()
 	{
+	    // cache
 		if( $this->_request !== null ) {
 			return $this->_request;
 		}
@@ -311,7 +368,7 @@ class Chrome_Request implements Chrome_Request_Interface
 
 		// well that should never happen. every Chrome_Request_Handler_Interface has to return an object of Chrome_Request_Data_Interface
 		// null is also not allowed!
-		if( !( $this->_requestData instanceof Chrome_Request_Data_Interface ) or $this->_requestData === null ) {
+		if( !( $this->_requestData instanceof Chrome_Request_Data_Interface ) OR $this->_requestData === null ) {
 			throw new Chrome_Exception( 'Unexpected return value of "' . get_class( $this->_request ) .
 				'" in method getRequestData()! Expected an object of interface Chrome_Request_Data_Interface, actual="' .
 				get_class( $this->_requestData ) . '"! Violation of interface declaration!' );
@@ -327,6 +384,10 @@ class Chrome_Request implements Chrome_Request_Interface
 		return $this->_request;
 	}
 
+    /**
+     * @param Chrome_Request_Handler_Interface $obj the handle you want to add to queue
+     * @return void
+     */
 	public function addRequestObject( Chrome_Request_Handler_Interface $obj )
 	{
 		// only add a request, if we havent decided which request is sent...

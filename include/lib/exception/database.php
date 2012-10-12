@@ -17,7 +17,7 @@
  * @subpackage Chrome.Database
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.09.2012 23:35:17] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:40:54] --> $
  * @author     Alexander Book
  */
 
@@ -26,7 +26,7 @@ if(CHROME_PHP !== true)
 
 /**
  * @package CHROME-PHP
- * @subpackage Chrome.Databas
+ * @subpackage Chrome.Database
  */
 class Chrome_Exception_Database extends Chrome_Exception
 {
