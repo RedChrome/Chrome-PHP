@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 02:22:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.10.2012 10:44:15] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -142,6 +142,24 @@ interface Chrome_Form_Element_Interface
      * @return Chrome_Form_Decorator_Interface
      */
     public function getDecorator();
+
+    /**
+     * setDefaultDecorator
+     *
+     * @param string $formElementClass
+     * @param string $decoratorClass
+     * @return void
+     */
+    public static function setDefaultDecorator($formElementClass, $decoratorClass);
+
+    /**
+     * resetDecorator
+     *
+     * Sets the current decorator to null
+     *
+     * @return void
+     */
+    public function resetDecorator();
 
     /**
      * getForm()
@@ -339,6 +357,14 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      * @var array
      */
     protected $_defaultOptions = array();
+
+    /**
+     * Contains the definition for default decorators
+     * Structure:
+     *  array($formElementClassName => $defaultFormDecoratorClassName, ...)
+     *
+     */
+    protected static $_defaultDecorator = array();
 
     /**
      * current options
@@ -602,6 +628,10 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
         return $this->_form;
     }
 
+    public function resetDecorator() {
+        $this->_decorator = null;
+    }
+
     /**
      * Chrome_Form_Element_Abstract::setDecorator()
      *
@@ -670,6 +700,35 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 		}
 
         return $data;
+    }
+
+    public static function setDefaultDecorator($formElementClass, $decoratorClass) {
+        self::$_defaultDecorator[$formElementClass] = $decoratorClass;
+    }
+
+    public function getDecorator() {
+
+        if($this->_decorator !== null) {
+            return $this->_decorator;
+        }
+
+        if(isset(self::$_defaultDecorator[get_class($this)])) {
+            $class = self::$_defaultDecorator[get_class($this)];
+
+        } else {
+
+            $class = str_replace('Element', 'Decorator',get_class($this)).'_'.$this->_form->getAttribute('decorator');
+
+            if(!class_exists($class)) {
+                throw new Chrome_Exception('Could not load form decorator '.get_class($this).'!');
+            }
+        }
+
+        $this->_decorator = new $class($this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS], $this->_options[self::
+                CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES]);
+        $this->_decorator->setFormElement($this);
+
+        return $this->_decorator;
     }
 }
 

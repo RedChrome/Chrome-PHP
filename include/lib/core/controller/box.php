@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.09.2012 00:06:27] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.10.2012 23:38:07] --> $
  * @author     Alexander Book
  */
 
@@ -31,7 +31,6 @@ class Chrome_Controller_Box_Abstract extends Chrome_Controller_Abstract
 {
 	public function __construct( Chrome_Request_Handler_Interface $reqHandler )
 	{
-
 		parent::__construct( $reqHandler );
 
         $this->_initialize();
@@ -61,15 +60,5 @@ class Chrome_Controller_Box_Abstract extends Chrome_Controller_Abstract
 		$this->_execute();
 
 		$this->_shutdown();
-	}
-
-	public function getResponse()
-	{
-		return Chrome_Response::getInstance();
-	}
-
-	public function getRequest()
-	{
-		return Chrome_Request::getInstance();
 	}
 }

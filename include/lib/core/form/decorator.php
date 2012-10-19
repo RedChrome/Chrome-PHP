@@ -17,10 +17,12 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2012 23:30:30] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.10.2012 12:01:23] --> $
  */
 if(CHROME_PHP !== true)
     die();
+
+//TODO: add documentation
 
 /**
  * Chrome_Form_Decorator_Interface
@@ -38,9 +40,11 @@ interface Chrome_Form_Decorator_Interface
 
     public function getOptions();
 
-    public function setAttribute($key, $value);
+    public function setAttribute($key, $value, $overwrite = false);
 
     public function setAttributes(array $attr);
+
+    public function getAttributes();
 
     public function setFormElement(Chrome_Form_Element_Interface $obj);
 
@@ -51,10 +55,11 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
 {
     const CHROME_FORM_DECORATOR_SELECTION_DISPLAY = 'SELECTIONDISPLAY';
     const CHROME_FORM_DECORATOR_DEFAULT_INPUT = 'DEFAULTINPUT';
+    const CHROME_FORM_DECORATOR_LABEL = 'LABEL';
 
     protected $_options = array();
 
-    protected $_defaultOptions = array(self::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array());
+    protected $_defaultOptions = array(self::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array(), self::CHROME_FORM_DECORATOR_LABEL => null);
 
     protected $_formElement = null;
 
@@ -88,11 +93,21 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
         return $this;
     }
 
-    public function setAttribute($key, $value) {
+    public function getAttributes() {
+        return $this->_attribute;
+    }
+
+    public function setAttribute($key, $value, $overwrite = false) {
+
+        if($overwrite === false AND isset($this->_attribute[$key])) {
+            return $this;
+        }
+
         if($value === null) {
             unset($this->_attribute[$key]);
             return $this;
         }
+
         $this->_attribute[$key] = $value;
         return $this;
     }
@@ -108,6 +123,6 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
         foreach($this->_attribute AS $key => $value) {
             $return .= ' '.$key.'="'.$value.'"';
         }
-        return $return;
+        return $return.' ';
     }
 }

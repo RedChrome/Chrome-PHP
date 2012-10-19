@@ -19,6 +19,7 @@ class Chrome_View_Header_HTML_Head extends Chrome_View_Abstract
 <meta name="language" content="de" />
 
 <!-- CSS -->
+<link href="'._PUBLIC.'css/yaml/flexible-grids.css" rel="stylesheet" type="text/css"/>
 '.$this->getCSS().'<!-- CSS -->';
 
     }

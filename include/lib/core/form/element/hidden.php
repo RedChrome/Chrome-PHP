@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 00:20:32] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.10.2012 16:29:03] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -88,15 +88,6 @@ class Chrome_Form_Element_Hidden extends Chrome_Form_Element_Abstract
         $this->_data = $this->_convert($data);
 
         return $this->_data;
-    }
-
-    public function getDecorator() {
-        if($this->_decorator === null) {
-            $this->_decorator = new Chrome_Form_Decorator_Hidden_Default($this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS], $this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES]);
-            $this->_decorator->setFormElement($this);
-        }
-
-        return $this->_decorator;
     }
 
     public function save() {

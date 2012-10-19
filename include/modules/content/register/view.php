@@ -18,6 +18,10 @@ class Chrome_View_Register extends Chrome_View_Abstract
         Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Register_StepThree($this->_controller));
     }
 
+    public function setStepNoEmailSent() {
+        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Register_StepEmailNotSent($this->_controller));
+    }
+
     public function alreadyRegistered() {
         Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Register_AlreadyRegistered($this->_controller));
     }
@@ -88,5 +92,16 @@ class Chrome_View_Register_Registration_Failed extends Chrome_View_Abstract {
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/registrationFailed');
         return $template->render();
+    }
+}
+
+class Chrome_View_Register_StepEmailNotSent extends Chrome_View_Abstract {
+    public function render(Chrome_Controller_Interface $controller) {
+
+        $template = new Chrome_Template();
+        $template->assignTemplate('modules/content/register/emailNotSent');
+        $template->assign('activationKey', $this->_controller->getActivationKey());
+        return $template->render();
+
     }
 }

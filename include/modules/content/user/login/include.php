@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 11:20:49] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.10.2012 01:37:19] --> $
  * @author     Alexander Book
  */
 
@@ -59,10 +59,11 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $LANG = new Chrome_Language('modules/content/user/login');
 
         $this->_id = 'login';
-        $this->setAttribute('name', $this->_id);
-        $this->setAttribute('method', self::CHROME_FORM_METHOD_POST);
-        $this->setAttribute('id', $this->_id);
-        $this->setAttribute('action', 'login.html');
+        $this->setAttribute(self::ATTRIBUTE_NAME, $this->_id);
+        $this->setAttribute(self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST);
+        $this->setAttribute(self::ATTRIBUTE_ID, $this->_id);
+        $this->setAttribute(self::ATTRIBUTE_ACTION, 'login.html');
+        $this->setAttribute(self::ATTRIBUTE_DECORATOR, 'Yaml');
 
         // this element has to be set in every form!
         // max time, this form is valid is 300 sec
@@ -78,8 +79,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
             ),
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array(
                 'onblur' => 'if(this.value==\'\')this.value=\''.$LANG->get('email').'\'',
-                'onfocus' => 'if(this.value==\''.$LANG->get('email').'\')this.value=\'\'',
-                'size' => 15)));
+                'onfocus' => 'if(this.value==\''.$LANG->get('email').'\')this.value=\'\'')));
 
 
         // this is the password input
@@ -90,8 +90,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array(
                 'onblur' => 'if(this.value==\'\')this.value=\''.$LANG->get('password').'\'',
                 'onfocus' => 'if(this.value==\''.$LANG->get('password').'\')this.value=\'\'',
-                'value' => $LANG->get('password'),
-                'size' => 15)));
+                'value' => $LANG->get('password'))));
 
         // create an boolean converter, cause 'stay_loggedin' only accepts true or false
         $boolConverter = new Chrome_Converter_Value();
@@ -103,7 +102,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $this->_elements['stay_loggedin'] = new Chrome_Form_Element_Checkbox($this, 'stay_loggedin', array(
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => false,
             Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array(false),
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array(true, false),
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array(true),
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array($boolConverter)));
 
         // submit button, nothing special

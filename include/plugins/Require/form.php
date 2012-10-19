@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.02.2012 17:17:41] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.10.2012 15:48:52] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -89,8 +89,9 @@ class Chrome_Require_Form implements Chrome_Require_Interface
         }
 
         if(preg_match('#Chrome_Form_Decorator_(.{1,})#i', $class, $matches)) {
-            if(_isFile(LIB.'core/form/decorator/'.strtolower($matches[1].'.php'))) {
-                return LIB.'core/form/decorator/'.strtolower($matches[1]).'.php';
+            $file = strtolower(str_replace('_', '/', $matches[1]));
+            if(_isFile(LIB.'core/form/decorator/'.$file.'.php')) {
+                return LIB.'core/form/decorator/'.$file.'.php';
             } else {
                 throw new Chrome_Exception('Cannot load class '.$class.'! There is no file matching the requirements in Chrome_Require_Form::classLoad()!');
             }

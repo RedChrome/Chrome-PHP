@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 18:31:53] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.10.2012 01:42:22] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -26,28 +26,17 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Text_Default extends Chrome_Form_Decorator_Abstract
+class Chrome_Form_Decorator_Text_Yaml extends Chrome_Form_Decorator_Text_Default
 {
     public function render() {
 
-        $value = $this->getOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT);
+        $return = '<div class="ym-fbox-text">';
 
-        $data = $this->_formElement->getSavedData();
-
-        if($value === array()) {
-            $value = '';
+        if($this->_formElement->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED) === true AND ($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null) {
+            $this->setOption(self::CHROME_FORM_DECORATOR_LABEL, $label.'<sup class="ym-required" title="This field is mandatory">*</sup>');
         }
 
-        if($data !== null) {
-            $value = $data;
-        }
-
-        $class = '';
-
-        if($this->_formElement->getForm()->hasValidationErrors($this->_formElement->getID())) {
-            $class = ' class="wrongInput"';
-        }
-
-        return '<input type="text" name="'.$this->_formElement->getID().'" value="'.$value.'"'.$class.''.$this->_getPreparedAttrs().'/>';
+        $return .= parent::render().'</div>';
+        return $return;
     }
 }

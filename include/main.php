@@ -18,7 +18,7 @@
  * @subpackage Chrome.FrontController
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 20:28:02] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.10.2012 10:13:43] --> $
  * @author     Alexander Book
  */
 
@@ -326,7 +326,7 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
 			$this->handleRequest();
 		}
 		catch ( Chrome_Exception $e ) {
-
+		  die($e->getMessage());
 			$handler = new Chrome_Exception_Handler_FrontController();
 			$handler->exception( $e );
 		}

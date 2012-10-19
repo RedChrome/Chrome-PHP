@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 00:24:28] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.10.2012 16:27:39] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -78,15 +78,6 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
 
     public function getData() {
         return $this->_form->getSentData($this->_id);
-    }
-
-    public function getDecorator() {
-        if($this->_decorator === null) {
-            $this->_decorator = new Chrome_Form_Decorator_Captcha_Default($this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS], $this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES]);
-            $this->_decorator->setFormElement($this);
-        }
-
-        return $this->_decorator;
     }
 
     public function save() {

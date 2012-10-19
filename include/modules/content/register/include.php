@@ -5,9 +5,9 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
 	public function __construct()
 	{
 		$this->_id = 'Register_StepOne';
-		$this->setAttribute( 'name', $this->_id );
-		$this->setAttribute( 'method', self::CHROME_FORM_METHOD_POST );
-		$this->setAttribute( 'id', 'Register_StepOne' );
+		$this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
+		$this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST );
+		$this->setAttribute( self::ATTRIBUTE_ID, $this->_id );
 
 		$lang = new Chrome_Language( 'modules/content/user/registration' );
 
@@ -31,9 +31,9 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 	public function __construct()
 	{
 		$this->_id = 'Register_StepTwo';
-		$this->setAttribute( 'name', $this->_id );
-		$this->setAttribute( 'method', self::CHROME_FORM_METHOD_POST );
-		$this->setAttribute( 'id', $this->_id );
+		$this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
+		$this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST );
+		$this->setAttribute( self::ATTRIBUTE_ID, $this->_id );
 
 		$lang = new Chrome_Language( 'modules/content/user/registration' );
 

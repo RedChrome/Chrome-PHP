@@ -17,14 +17,12 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:38:18] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.10.2012 23:38:43] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true)
     die();
-
-//TODO: Clean up all this stuff
 
 /**
  * @package CHROME-PHP
@@ -59,13 +57,6 @@ interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Inter
  */
 abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
 {
-
-    /**
-     * @deprecated
-     * @var array
-     */
-    protected $errorHandler = array();
-
     /**
      * exceptionHandler class which takes care of thrown exceptions
      * <code>
@@ -88,19 +79,6 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      * @var array
      */
     protected $require = array();
-
-    /**
-     * @deprecated
-     * @var Chrome_Router_Interface
-     */
-    protected $router = false;
-
-    /**
-     * contains a Chrome_Request_Interface object
-     *
-     * @var Chrome_Request_Interface
-     */
-    protected $request = null;
 
     /**
      * contains an instance of Chrome_Responde_Interface
@@ -187,22 +165,6 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
     }
 
     /**
-     * _authorize()
-     * @deprecated
-     * @return void
-     */
-    protected function _authorize()
-    {
-
-        throw new Chrome_Exception('Do not use this..');
-        if($this->ACE === null OR $this->ACE === false) {
-            return true;
-        }
-
-        return Chrome_Authorisation::getInstance()->isAllowed($this->ACE);
-    }
-
-    /**
      * _require()
      *
      * @return void
@@ -274,11 +236,6 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
     public function getForm()
     {
         return $this->form;
-    }
-
-    public function getACE()
-    {
-        return $this->ACE;
     }
 
     public function getRequestHandler()

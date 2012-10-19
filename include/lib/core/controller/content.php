@@ -17,13 +17,12 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.09.2012 00:05:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.10.2012 23:39:32] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true)
     die();
-//TODO: cleanup, remove attributes $_GET, etc..
 
 /**
  * @package CHROME-PHP
@@ -31,16 +30,6 @@ if(CHROME_PHP !== true)
  */
 abstract class Chrome_Controller_Content_Abstract extends Chrome_Controller_Abstract
 {
-    protected $_GET  = array();
-
-    protected $_POST = array();
-
-    protected $_FILES = array();
-
-    protected $_HEADER = array();
-
-    protected $_COOKIE = array();
-
 	public function __construct(Chrome_Request_Handler_Interface $reqHandler)
 	{
 	    parent::__construct($reqHandler);

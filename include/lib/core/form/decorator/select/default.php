@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 18:22:43] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.10.2012 11:32:03] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -29,6 +29,7 @@ class Chrome_Form_Decorator_Select_Default extends Chrome_Form_Decorator_Abstrac
 {
 	public function render()
 	{
+        $return = '';
 
 		$multiple = '';
 		if( $this->_formElement->getOptions( Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_SELECT_MULTIPLE )
@@ -36,8 +37,11 @@ class Chrome_Form_Decorator_Select_Default extends Chrome_Form_Decorator_Abstrac
 			$multiple = 'multiple="multiple"';
 		}
 
-		$return = '<select name="' . $this->_formElement->getID() . '[]" ' . $multiple . ' ' . $this->_getPreparedAttrs() .
-			'>' . "\n";
+        if( ($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null) {
+            $return = '<label for="'.$this->_formElement->getID().'[]">'.$label.'</label>';
+        }
+
+		$return .= '<select name="' . $this->_formElement->getID() . '[]" ' . $multiple . ' ' . $this->_getPreparedAttrs() .'>' . "\n";
 
 		$array = $this->_formElement->getOptions( Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_SELECTION_OPTIONS );
 		$savedValues = ( array )$this->_formElement->getSavedData();

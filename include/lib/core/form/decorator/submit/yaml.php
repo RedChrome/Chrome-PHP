@@ -17,27 +17,20 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2012 08:36:08] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.10.2012 01:27:12] --> $
  */
-if(CHROME_PHP !== true)
-    die();
+if( CHROME_PHP !== true ) die();
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Submit_Default extends Chrome_Form_Decorator_Abstract
+class Chrome_Form_Decorator_Submit_Yaml extends Chrome_Form_Decorator_Submit_Default
 {
-   private $_int = 0;
+	public function render()
+	{
+		$this->setAttribute( 'class', 'ym-button' );
 
-    public function render() {
-
-        $array = $this->_formElement->getOptions(Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_SUBMIT_VALUES);
-
-        $value = $array[$this->_int];
-
-        $this->_int = (++$this->_int) % ($array);
-
-        return '<input type="submit" name="'.$this->_formElement->getID().'" value="'.$value.'" '.$this->_getPreparedAttrs().'/>';
-    }
+		return '<div class="ym-fbox-button">' . parent::render() . '</div>';
+	}
 }

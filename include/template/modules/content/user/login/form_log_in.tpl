@@ -1,30 +1,21 @@
 <?php
-$FORM->getElement('identity')->getDecorator()
-        ->setAttribute('size', 25);
+$FORM->getDecorator('identity')->setOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL, $LANG->get('email_address'));
 
-$FORM->getElement('password')->getDecorator()
-        ->setAttribute('size', 25);
+$FORM->getDecorator('password')->setOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL, $LANG->get('password'));
+$FORM->getDecorator('stay_loggedin')->setOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL, array($LANG->get('stay_loggedin')));
 ?>
 
-<fieldset><legend><?php echo $LANG->get('login'); ?></legend>
-<?php echo $FORM->render('login'); ?>
-
-<table align="center">
-    <tr>
-        <td align="left"><?php echo $LANG->get('email_address'); ?>:</td>
-        <td><?php echo $FORM->render('identity'); ?></td>
-    </tr>
-    <tr>
-        <td align="left"><?php echo $LANG->get('password'); ?>:</td>
-        <td><?php echo $FORM->render('password');?></td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <?php echo $FORM->render('stay_loggedin'); ?><?php echo $LANG->get('stay_loggedin'); ?>
-            <?php echo $FORM->render('submit'); ?>
-        </td>
-    </tr>
-</table>
 
 <?php echo $FORM->render('login'); ?>
-</fieldset>
+<h6><?php echo $LANG->get('login'); ?></h6>
+
+        <?php echo $FORM->render('identity'); ?>
+
+        <?php echo $FORM->render('password');?>
+
+            <?php echo $FORM->render('stay_loggedin'); ?>
+
+<?php echo $FORM->render('submit'); ?>
+
+
+<?php echo $FORM->render('login'); ?>

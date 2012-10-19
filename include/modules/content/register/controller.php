@@ -8,6 +8,8 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 {
 	const CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE = 'REGISTER';
 
+    protected $_activationKey;
+
 	protected function _initialize()
 	{
 		//TODO: move those out of class
@@ -76,16 +78,16 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 
 								break;
 							}
-							$activationKey = $this->model->generateActivationKey();
+							$this->_activationKey = $this->model->generateActivationKey();
 
 							$this->model->addRegistrationRequest( $this->form->getData( 'nickname' ), $this->form->getData
-								( 'password' ), $this->form->getData( 'email' ), $activationKey );
+								( 'password' ), $this->form->getData( 'email' ), $this->_activationKey );
 
-							$result = $this->model->sendRegisterEmail( $this->form->getSentData( 'email' ) );
+							$result = $this->model->sendRegisterEmail( $this->form->getSentData( 'email' ),$this->form->getSentData('nickname'), $this->_activationKey );
 
-                            // todo: handle error if email was not send
                             if($result === false) {
-
+                                $this->_stepNoEmailSent();
+                                break;
                             }
 
 							$this->_stepThree();
@@ -187,4 +189,20 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 		$array['step'] = 4;
 		$session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = $array;
 	}
+
+    private function _stepNoEmailSent() {
+
+        $this->view->setStepNoEmailSent();
+
+        $session = Chrome_Session::getInstance();
+
+		$array = $session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE];
+		$array['step'] = 4;
+		$session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = $array;
+
+    }
+
+    public function getActivationKey() {
+        return $this->_activationKey;
+    }
 }

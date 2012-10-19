@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 11:21:03] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.10.2012 01:55:35] --> $
  * @author     Alexander Book
  */
 
@@ -372,6 +372,22 @@ interface Chrome_Form_Interface
  */
 abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 {
+    /**
+     * ATTRIBUTE_METHOD: tells where the data comes from, post or get?
+     * ATTRIBUTE_DECORATOR: sets the extension for decorators, default is Default, so
+     *                      all decorators come from Chrome_Form_Decorator_XXX_Default
+     * ATTRIBUTE_ACTION: sets the form action
+     * ATTRIBUTE_NAME: sets the form name
+     * ATTRIBUTE_ID: sets the form id
+     * @var string
+     */
+    const ATTRIBUTE_METHOD = 'method',
+          ATTRIBUTE_DECORATOR = 'decorator',
+          ATTRIBUTE_ACTION = 'action',
+          ATTRIBUTE_NAME = 'name',
+          ATTRIBUTE_ID = 'id';
+
+
 	/**
 	 * @var string
 	 */
@@ -447,7 +463,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 	 *
 	 * @var array
 	 */
-	protected $_attribts = array();
+	protected $_attribts = array('decorator' => 'Default');
 
 	/**
 	 * Receiving Handler, gets called after isSent()
@@ -795,7 +811,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 			}
 		}
 
-		if( $key !== null) {
+		if( $key !== null ) {
 			return ( isset( $this->_data[$key] ) ) ? $this->_data[$key] : null;
 		}
 
@@ -931,7 +947,11 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 	 * Chrome_Form_Abstract::setAttribute()
 	 *
 	 * Sets an form attribute
-	 *
+     * Special attributes: 'method', 'action', 'decorator'
+     * 'method': Sets the input data: available are CHROME_FORM_METHOD_POST, CHROME_FORM_METHOD_GET for input data from $_POST or $_GET
+	 * 'action': Sets the form action in <form action="">
+     * 'decorator': Sets the default extension for all decorators, default: Default
+     *
 	 * @param string $key
 	 * @param mixed $value
 	 * @return void
@@ -940,36 +960,54 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 	{
 		$this->_attribts[$key] = $value;
 
-		if( $key == 'method' ) {
-			switch( strtoupper( $value ) ) {
-				case self::CHROME_FORM_METHOD_POST:
-					{
-						$this->setSentData( Chrome_Request::getInstance()->getRequestDataObject()->getPOST() );
-						break;
+		switch( $key ) {
+			case self::ATTRIBUTE_METHOD:
+				{
+					switch( strtoupper( $value ) ) {
+						case self::CHROME_FORM_METHOD_POST:
+							{
+								$this->setSentData( Chrome_Request::getInstance()->getRequestDataObject()->getPOST() );
+								break;
+							}
+
+						case self::CHROME_FORM_METHOD_GET:
+							{
+								$this->setSentData( Chrome_Request::getInstance()->getRequestDataObject()->getGET() );
+								break;
+							}
+
+						default:
+							{
+							}
 					}
+					break;
+				}
+			case self::ATTRIBUTE_ACTION:
+				{
+					if( strpos( $value, ROOT_URL ) === false ) {
 
-				case self::CHROME_FORM_METHOD_GET:
-					{
-						$this->setSentData( Chrome_Request::getInstance()->getRequestDataObject()->getGET() );
-						break;
+						if( $value{0} == '/' ) {
+							$value = ROOT_URL . $value;
+						} else {
+							$value = ROOT_URL . '/' . $value;
+						}
+
+
+						$this->_attribts[$key] = $value;
 					}
+					break;
+				}
+			case self::ATTRIBUTE_DECORATOR:
+				{
+                    foreach($this->_elements as $element) {
+                        $element->resetDecorator();
+                    }
+                    break;
+				}
+            case self::ATTRIBUTE_ID: {
+                $this->_id = $value;
+            }
 
-				default:
-					{
-					}
-			}
-		} else if($key == 'action') {
-		  if(strpos($value, ROOT_URL) === false) {
-
-		      if($value{0} == '/') {
-		          $value = ROOT_URL.$value;
-		      } else {
-                $value = ROOT_URL.'/'.$value;
-		      }
-
-
-              $this->_attribts[$key] = $value;
-		  }
 		}
 	}
 

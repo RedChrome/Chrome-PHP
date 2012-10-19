@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 00:25:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.10.2012 16:27:12] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -127,15 +127,6 @@ class Chrome_Form_Element_Birthday extends Chrome_Form_Element_Abstract
         $this->_data[self::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_YEAR] = $year;
 
         return $this->_data;
-    }
-
-    public function getDecorator() {
-        if($this->_decorator === null) {
-            $this->_decorator = new Chrome_Form_Decorator_Birthday_Default($this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS], $this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES]);
-            $this->_decorator->setFormElement($this);
-        }
-
-        return $this->_decorator;
     }
 
     public function save() {

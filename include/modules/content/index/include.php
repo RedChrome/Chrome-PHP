@@ -8,9 +8,9 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 	{
 
 		$this->_id = 'Index';
-		$this->setAttribute( 'name', $this->_id );
-		$this->setAttribute( 'method', self::CHROME_FORM_METHOD_POST );
-		$this->setAttribute( 'id', 'Index' );
+		$this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
+		$this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST );
+		$this->setAttribute( self::ATTRIBUTE_ID, 'Index' );
 
 		$lengthValidator = new Chrome_Validator_Form_Length();
 		$lengthValidator->setOptions( array( Chrome_Validator_Form_Length::CHROME_VALIDATOR_FORM_LENGTH_MAX =>
@@ -30,7 +30,8 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 			Chrome_Form_Element_Radio::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
             Chrome_Form_Element_Radio::CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA => true,
 			Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => 'test',
-			Chrome_Form_Element_Radio::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array( 'test', 'test2' ) ) );
+			Chrome_Form_Element_Radio::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array( 'test', 'test2' ),
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_READONLY => array('test') ) );
 
 		$this->_elements['text'] = new Chrome_Form_Element_Text( $this, 'text', array( Chrome_Form_Element_Text::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
 				Chrome_Form_Element_Text::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => $textValidators ) );
@@ -44,6 +45,7 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 				'Value1',
 				'Value2',
 				'Value3' ),
+                Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => array('Value1', 'Value2'),
                 Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
                     Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array('Value1', 'Value2')
                 ) ) );

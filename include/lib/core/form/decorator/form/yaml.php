@@ -17,19 +17,20 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.08.2011 15:34:56] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.10.2012 01:42:10] --> $
  */
-if(CHROME_PHP !== true)
-    die();
+if( CHROME_PHP !== true ) die();
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
- */ 
-class Chrome_Form_Decorator_Password_Default extends Chrome_Form_Decorator_Abstract
+ */
+class Chrome_Form_Decorator_Form_Yaml extends Chrome_Form_Decorator_Form_Default
 {
-    public function render() {
-           
-        return '<input type="password" name="'.$this->_formElement->getID().'" '.$this->_getPreparedAttrs().'/>';
-    }   
+	public function render()
+	{
+		$this->setAttribute( 'class', 'ym-form' );
+
+		return parent::render(  );
+	}
 }

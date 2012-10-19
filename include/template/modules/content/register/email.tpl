@@ -11,3 +11,6 @@ Falls sie nicht weitergeleitet werden, besuchen Sie die Seite manuell und geben 
 
 Viele Gr&uuml;ße,<br />
 Ihr <?php echo Chrome_Config::getConfig('Site', 'name'); ?> Team
+
+Falls Sie sich nicht registriert haben, ignorieren Sie bitte diese E-Mail!
+If you have not registered yourself to this site then please ignore this e-mail!
