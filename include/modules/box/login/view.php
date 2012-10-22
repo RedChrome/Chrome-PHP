@@ -17,12 +17,11 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.02.2012 00:38:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.10.2012 23:44:07] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+if( CHROME_PHP !== true ) die();
 
 
 /**
@@ -31,43 +30,41 @@ if(CHROME_PHP !== true)
  */
 class Chrome_View_Box_Login extends Chrome_View_Abstract
 {
-    /**
-     * preConstructor
-     * @return void
-     */
-    protected function _preConstruct()
-    {
-        // add the .js file for ajax support
-        $this->addJS('javascript/modules/box/login.js');
-    }
 
-    /**
-     * @return void
-     */
-    public function render(Chrome_Controller_Interface $controller)
-    {
-        // override parent, do nothing
-    }
+	public function __construct( Chrome_Controller_Abstract $controller )
+	{
+		parent::__construct( $controller );
+		// add the .js file for ajax support
+		$this->addJS( 'javascript/modules/box/login.js' );
+	}
 
-    /**
-     * sets the actual rendered view
-     *
-     * @return void
-     */
-    public function showUserMenu()
-    {
-        // add view
-        $this->_controller->getDesign()->addView(new Chrome_View_Box_LoggedIn($this->_controller));
-    }
+	/**
+	 * @return void
+	 */
+	public function render( Chrome_Controller_Interface $controller )
+	{
+		// override parent, do nothing
+	}
 
-    /**
-     * @return void
-     */
-    public function showLoginForm()
-    {
-        // add view
-        $this->_controller->getDesign()->addView(new Chrome_View_Box_Form_Login($this->_controller));
-    }
+	/**
+	 * sets the actual rendered view
+	 *
+	 * @return void
+	 */
+	public function showUserMenu()
+	{
+		// add view
+		$this->_controller->getDesign()->addView( new Chrome_View_Box_LoggedIn( $this->_controller ) );
+	}
+
+	/**
+	 * @return void
+	 */
+	public function showLoginForm()
+	{
+		// add view
+		$this->_controller->getDesign()->addView( new Chrome_View_Box_Form_Login( $this->_controller ) );
+	}
 }
 
 /**
@@ -79,15 +76,17 @@ class Chrome_View_Box_Login extends Chrome_View_Abstract
  */
 class Chrome_View_Box_LoggedIn extends Chrome_View_Abstract
 {
-    public function _postConstruct()
-    {
-        $this->setViewTitle('User Menu');
-    }
+	public function __construct( Chrome_Controller_Abstract $controller )
+	{
+		parent::__construct( $controller );
+		$this->setViewTitle( 'User Menu' );
+	}
 
-    public function render(Chrome_Controller_Interface $controller)
-    {
-        return 'Eingeloggt...<br>Hier kommt dann das User Menu hin ;)';
-    }
+
+	public function render( Chrome_Controller_Interface $controller )
+	{
+		return 'Eingeloggt...<br>Hier kommt dann das User Menu hin ;)';
+	}
 }
 
 /**
@@ -96,21 +95,22 @@ class Chrome_View_Box_LoggedIn extends Chrome_View_Abstract
  */
 class Chrome_View_Box_Form_Login extends Chrome_View_Abstract
 {
-    public function _postConstruct()
-    {
-        // set the title of the login box
-        $this->setViewTitle('Login');
-    }
+    public function __construct( Chrome_Controller_Abstract $controller )
+	{
+		parent::__construct( $controller );
+		// set the title of the login box
+		$this->setViewTitle( 'Login' );
+	}
 
-    public function render(Chrome_Controller_Interface $controller)
-    {
-        // create template with the form
-        $template = new Chrome_Template();
-        $template->assignTemplate('modules/box/login/form_log_in');
-        // assigning form and language
-        $template->assign('FORM', $this->_controller->getForm());
-        $template->assign('LANG', new Chrome_Language('modules/content/user/login'));
-        // return the rendered template
-        return $template->render();
-    }
+	public function render( Chrome_Controller_Interface $controller )
+	{
+		// create template with the form
+		$template = new Chrome_Template();
+		$template->assignTemplate( 'modules/box/login/form_log_in' );
+		// assigning form and language
+		$template->assign( 'FORM', $this->_controller->getForm() );
+		$template->assign( 'LANG', new Chrome_Language( 'modules/content/user/login' ) );
+		// return the rendered template
+		return $template->render();
+	}
 }

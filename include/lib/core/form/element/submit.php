@@ -17,21 +17,17 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.10.2012 16:30:52] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.10.2012 00:11:10] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
 
 /**
- * @todo create Chrome_Form_Element_Button_Abstract class
- */
-
-/**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Submit extends Chrome_Form_Element_Abstract #extends Chrome_Form_Element_Button_Abstract
+class Chrome_Form_Element_Submit extends Chrome_Form_Element_Abstract
 {
     protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
                                        self::CHROME_FORM_ELEMENT_SUBMIT_VALUES => array());

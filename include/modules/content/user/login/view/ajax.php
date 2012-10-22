@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 17:20:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.10.2012 23:42:23] --> $
  * @author     Alexander Book
  */
 
@@ -37,10 +37,12 @@ class Chrome_View_User_Login_Ajax extends Chrome_View_Abstract
      */
     const CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY = 5000;
 
-    protected function _preConstruct() {
+    public function __construct(Chrome_Controller_Abstract $controller) {
+        parent::__construct($controller);
         // the script has to know that this view handles ajax request. This sets an special style and enables json encoding of objects
         $this->setAjaxEnvironment();
     }
+
     public function alreadyLoggedIn() {
         Chrome_Design_Composite_Laconic::getInstance()->getComposite()->addView(new Chrome_View_User_Ajax_AlreadyLoggedIn($this->_controller));
     }

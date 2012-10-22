@@ -65,13 +65,17 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 
 		$this->_elements['error'] = new Chrome_Form_Element_Error( $this, 'error', array() );
 
-        // with the comment you can enable/disable the auto deletion of password content, if the user clicks on backward
-		$this->_elements['backward'] = new Chrome_Form_Element_Backward( $this, 'backward', //array( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS =>
+
+
+         // with the comment you can enable/disable the auto deletion of password content, if the user clicks on backward
+        $backwardButton = new Chrome_Form_Element_Backward( $this, 'backward', //array( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS =>
 				//array( Chrome_Form_Decorator_Backward_Default::CHROME_FORM_DECORATOR_BACKWARD_DELETE_PASSWORDS => true ) )
                 array() );
 
-		$this->_elements['submit'] = new Chrome_Form_Element_Submit( $this, 'submit', array( Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
+		$submitButton = new Chrome_Form_Element_Submit( $this, 'submit', array( Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
 				Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_SUBMIT_VALUES => array( $lang->get( 'register' ) ) ) );
+
+        $this->_elements['buttons'] = new Chrome_Form_Element_Buttons($this, 'buttons', array(Chrome_Form_Element_Buttons::CHROME_FORM_ELEMENT_BUTTONS => array($submitButton, $backwardButton)));
 
 		$this->_elements['captcha'] = new Chrome_Form_Element_Captcha( $this, 'captcha', array( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES =>
 				array( 'size' => 30 ) ) );

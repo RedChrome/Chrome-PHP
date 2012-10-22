@@ -17,12 +17,13 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.10.2012 12:01:23] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 19:49:51] --> $
  */
 if(CHROME_PHP !== true)
     die();
 
 //TODO: add documentation
+//TODO: if field is mandatory, then use a language obj. to get the right phrase
 
 /**
  * Chrome_Form_Decorator_Interface

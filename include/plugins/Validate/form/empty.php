@@ -17,7 +17,7 @@
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.08.2011 20:40:35] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 19:45:34] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -25,7 +25,7 @@ if(CHROME_PHP !== true)
 
 /**
  * Chrome_Validator_Form_Empty
- * 
+ *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */

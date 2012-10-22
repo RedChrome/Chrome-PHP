@@ -36,10 +36,9 @@
                 }  ?></td>
             </tr>
             <tr>
-                <td><?php echo $FORM->render('backward'); ?></td>
-                <td colspan="2"><?php echo $FORM->render('submit'); ?></td>
+                <td><?php echo $FORM->render('buttons')->element('backward'); ?></td>
+                <td colspan="2"><?php echo $FORM->render('buttons')->element('submit'); ?></td>
             </tr>
         </table>
-
     <?php echo $FORM->render('Register_StepTwo'); ?>
 </fieldset>

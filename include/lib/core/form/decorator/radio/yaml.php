@@ -17,29 +17,21 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.10.2012 01:27:33] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 19:49:07] --> $
  */
 if( CHROME_PHP !== true ) die();
 
 /**
- * TODO: finish label
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Radio_Yaml extends Chrome_Form_Decorator_Text_Default
+class Chrome_Form_Decorator_Radio_Yaml extends Chrome_Form_Decorator_Radio_Default
 {
-	public function render( array $options = array() )
+	public function render()
 	{
-		$return = '<div class="ym-fbox-check">';
+		$return = '<div class="ym-fbox-check">' . parent::render().'</div>' . "\n";
 
-		if( $this->_formElement->getOptions( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED )
-			=== true and ( $label = $this->getOption( self::CHROME_FORM_DECORATOR_LABEL ) ) !== null ) {
-			$this->setOption( self::CHROME_FORM_DECORATOR_LABEL, $label .
-				'<sup class="ym-required" title="This field is mandatory">*</sup>' );
-		}
-
-		$return .= parent::render( $options ) . '</div>';
 		return $return;
 	}
 }

@@ -2,8 +2,6 @@
 
 class Chrome_View_Content_User_Login extends Chrome_View_Abstract
 {
-    protected function _preConstruct() {
-    }
 
     public function successfullyLogedIn() {
 

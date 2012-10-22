@@ -17,17 +17,11 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.10.2012 16:26:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.10.2012 00:12:08] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
-
-
-/**
- * @todo create Chrome_Form_Element_Button superclass and then this shall be a child of that...
- * then we can remove this unelegant solution!! (IMPORTANT!)
- */
 
 /**
  * @package CHROME-PHP
@@ -35,10 +29,6 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Form_Element_Backward extends Chrome_Form_Element_Abstract
 {
-    protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => false);
-
-    protected $_int = 0;
-
     public function isCreated()
     {
         return true;
@@ -51,24 +41,7 @@ class Chrome_Form_Element_Backward extends Chrome_Form_Element_Abstract
 
     public function isSent()
     {
-        // the first check
-        // just return true, so that the whole form is sent
-        // but at the second check we want to know whether
-        // the user has pusehd the "backward" button or not!
-        // not really elegant, but it works :|
-        //
-        // it works because the form caches the isSent call, but only if you check all
-        // it does not cache if you want to check a specific element!
-        if($this->_int == 0) {
-            ++$this->_int;
-            return true;
-        } else {
-            if(($data = $this->getData()) == null) {
-                return false;
-            } else {
-                return true;
-            }
-        }
+         return ($this->getData()) !== null;
     }
 
     public function create()

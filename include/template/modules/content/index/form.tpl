@@ -1,18 +1,23 @@
+<?php
+$FORM->getDecorator('password')->setOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL, $LANG->get('password'));
+$FORM->getDecorator('radio')->setOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL, array('Test', 'Test2'));
+$FORM->getDecorator('checkbox')->setOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL, array('value1', 'VAlue2', 'Value3'));
 
+?>
 <br />
 <?php echo $FORM->render('Index'); ?>
 
     <input type="text" name="text" value="<?php echo $TOKEN;?>" size="35"/>
-    <br />Password <?php echo $FORM->render('password'); ?>
+    <?php echo $FORM->render('password'); ?>
     <br /><br />
-    <?php echo $FORM->render('radio'); ?>Test<br />
-    <?php echo $FORM->render('radio'); ?>Test2<br />
+    <?php echo $FORM->render('radio'); ?>
+    <?php echo $FORM->render('radio'); ?>
 
 
     <br />
-    <?php echo $FORM->render('checkbox'); ?> Value 1<br />
-    <?php echo $FORM->render('checkbox'); ?> Value 2<br />
-    <?php echo $FORM->render('checkbox'); ?> Value 3<br />
+    <?php echo $FORM->render('checkbox'); ?><br />
+    <?php echo $FORM->render('checkbox'); ?><br />
+    <?php echo $FORM->render('checkbox'); ?>
 
 
     <?php echo $FORM->render('select'); ?>

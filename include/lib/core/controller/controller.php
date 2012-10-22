@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.10.2012 23:38:43] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.10.2012 23:53:28] --> $
  * @author     Alexander Book
  */
 
@@ -30,6 +30,13 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Interface
 {
+    /**
+     * getRequestHandler()
+     *
+     * @return Chrome_Request_Handler_Interface
+     */
+    public function getRequestHandler();
+
     /**
      * getResponse()
      *

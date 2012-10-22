@@ -17,12 +17,11 @@
  * @subpackage Chrome.View
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 13:53:34] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.10.2012 23:51:51] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+if( CHROME_PHP !== true ) die();
 
 /**
  * @package CHROME-PHP
@@ -30,9 +29,22 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_View_Interface extends Chrome_Design_Renderable
 {
-    public function renderInit();
+	/**
+	 * @deprecated
+	 */
+	public function renderInit();
 
-    public function renderShutdown();
+	/**
+	 * @deprecated
+	 */
+	public function renderShutdown();
+
+    /**
+     * Returns the class name
+     *
+     * @return string
+     */
+    public function getClassName();
 }
 
 /**
@@ -41,64 +53,121 @@ interface Chrome_View_Interface extends Chrome_Design_Renderable
  */
 abstract class Chrome_View_Abstract implements Chrome_View_Interface
 {
-    protected $_controller = null;
+    /**
+     * Contains the controller
+     *
+     * @var Chrome_Controller_Abstract
+     */
+	protected $_controller = null;
 
-    protected $_className = null;
+    /**
+     * Cache for getClassName()
+     *
+     * @var string
+     */
+	protected $_className = null;
 
-    final public function __construct(Chrome_Controller_Abstract $controller = null) {
+    /**
+     * Constructor
+     *
+     * @return Chrome_View_Abstract
+     */
+	public function __construct( Chrome_Controller_Abstract $controller )
+	{
+		$this->_controller = $controller;
+	}
 
-        $args = func_get_args();
+	/**
+	 *@deprecated
+	 */
+	final protected function _preConstruct()
+	{
+		throw new Chrome_Exception( 'deprecated' );
+	}
 
-        call_user_func_array(array($this, '_preConstruct'), $args);
-        $this->_controller = $controller;
-        call_user_func_array(array($this, '_postConstruct'), $args);
-    }
+	/**
+	 *@deprecated
+	 */
+	final protected function _postConstruct()
+	{
+		throw new Chrome_Exception( 'deprecated' );
+	}
 
-    protected function _preConstruct() {
+    /**
+     *@deprecated
+     */
+	final public function renderInit()
+	{
 
-    }
+	}
 
-    protected function _postConstruct() {
+    /**
+     *@deprecated
+     */
+	final public function renderShutdown()
+	{
 
-    }
+	}
 
-    public function renderInit() {
+    /**
+     * Renders the view
+     *
+     * @return mixed
+     */
+	public function render( Chrome_Controller_Interface $controller )
+	{
+		Chrome_Design::getInstance()->render( $this->_controller );
+	}
 
-    }
+    /**
+     * magic method
+     *
+     * Calls a method from view helper if it exists
+     *
+     * @return mixed
+     */
+	public function __call( $func, $args )
+	{
+		if( $this->_isPluginMethod( $func ) ) {
+			return $this->_callPluginMethod( $func, $args );
+		} else {
+			throw new Chrome_Exception( 'Cannot call method ' . $func . ' with args (' . var_export( $args, true ) .
+				') in Chrome_View_Abstract::__call()!' );
+		}
+	}
 
-    public function renderShutdown() {
+    /**
+     * Checks whether the method __call tries to run, exists in view helper
+     *
+     * @return boolean
+     */
+	protected function _isPluginMethod( $func )
+	{
+		return Chrome_View_Handler::getInstance()->isCallable( $func );
+	}
 
-    }
+    /**
+     * Calls the method $func with arguments $args
+     *
+     * @return mixed
+     */
+	protected function _callPluginMethod( $func, $args )
+	{
+		return Chrome_View_Handler::getInstance()->call( $func, array_merge( array( $this ), $args ) );
+	}
 
-    public function render(Chrome_Controller_Interface $controller) {
-        Chrome_Design::getInstance()->render($this->_controller);
-    }
+    /**
+     * returns the class name of this class
+     *
+     * @return mixed
+     */
+	public function getClassName()
+	{
 
-    public function __call($func, $args)
-    {
-        if($this->_isPluginMethod($func)) {
-            return $this->_callPluginMethod($func, $args);
-        } else {
-            throw new Chrome_Exception('Cannot call method '.$func.' with args ('.var_export($args, true).') in Chrome_View_Abstract::__call()!');
-        }
-    }
+		if( $this->_className === null ) {
+			$this->_className = get_class( $this );
+		}
 
-    protected function _isPluginMethod($func)
-    {
-        return Chrome_View_Handler::getInstance()->isCallable($func);
-    }
-
-    protected function _callPluginMethod($func, $args)
-    {
-        return Chrome_View_Handler::getInstance()->call($func, array_merge(array($this), $args));
-    }
-
-    public function getClassName() {
-
-        if($this->_className === null) {
-            $this->_className = get_class($this);
-        }
-
-        return $this->_className;
-    }
+		return $this->_className;
+	}
 }

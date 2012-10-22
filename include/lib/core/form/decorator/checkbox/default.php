@@ -17,10 +17,9 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.10.2012 11:36:26] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 19:36:45] --> $
  */
-if(CHROME_PHP !== true)
-    die();
+if( CHROME_PHP !== true ) die();
 
 /**
  * TODO: change attribute class if errors exists
@@ -30,89 +29,93 @@ if(CHROME_PHP !== true)
 class Chrome_Form_Decorator_Checkbox_Default extends Chrome_Form_Decorator_Abstract
 {
 
-    private $_int = 0;
+	private $_int = 0;
 
-    public function render() {
+	public function render()
+	{
 
-        $name = $this->_formElement->getID();
+		$name = $this->_formElement->getID();
 
-        // get all selection options
-        $values = $this->_formElement->getOptions(Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_SELECTION_OPTIONS);
+		// get all selection options
+		$values = $this->_formElement->getOptions( Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_SELECTION_OPTIONS );
 
-        // then we have more than one checkbox and we can access them as an array
-        if(sizeof($values) > 1) {
-            $name = $name.'[]';
-        }
+		// then we have more than one checkbox and we can access them as an array
+		if( sizeof( $values ) > 1 ) {
+			$name = $name . '[]';
+		}
 
-        // check whether the current index exists, if not, then we have to often called render()
-        if(!isset($values[$this->_int]) ) {
-            $this->_int = 0;
-            //throw new Chrome_Exception('Tried to render checkbox "'.$name.'", but all elements of this checkbox are already rendered in Form "'.$this->_formElement->getForm()->getID().'"!');
-        }
+		// check whether the current index exists, if not, then we have to often called render()
+		if( !isset( $values[$this->_int] ) ) {
+			$this->_int = 0;
+			//throw new Chrome_Exception('Tried to render checkbox "'.$name.'", but all elements of this checkbox are already rendered in Form "'.$this->_formElement->getForm()->getID().'"!');
+		}
 
 
-        $value = $values[$this->_int];
+		$value = $values[$this->_int];
 
-        if( $this->_formElement->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED) === true ) {
+		if( $this->_formElement->getOptions( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED )
+			=== true ) {
 
 			$this->setAttribute( 'required', 'required' );
 		}
-        $required = '';
-        if(in_array($value, (array) ($this->_formElement->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED))) ) {
-            $required = ' required="required"';
-        }
-
-        $savedValues = (array)$this->_formElement->getSavedData();
-        $sentValues  = (array)$this->_formElement->getData();
-        $defaultSelection = (array)$this->getOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT);
-
-        $arrayMerged = array();
-
-        if($savedValues !== array(null)) {
-            $arrayMerged = @array_merge(array_flip($savedValues), $arrayMerged);
-        }
-        if($sentValues !== array(null)) {
-            $arrayMerged = @array_merge(array_flip($sentValues), $arrayMerged);
-        }
-        if($arrayMerged === array() AND $defaultSelection !== array(null)) {
-            $arrayMerged = @array_merge(array_flip($defaultSelection), $arrayMerged);
-        }
-
-        if(isset($arrayMerged[$value])) {
-            $checked = 'checked="checked"';
-        } else {
-            $checked = '';
-        }
-
-        $readOnly = $this->_formElement->getOptions(Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_READONLY);
-
-        // all entries are readOnly
-        if($readOnly === true) {
-            $readOnly = $values;
-        } else if(!is_array($readOnly)) {
-            // everything is enabled
-            $readOnly = array();
-        }
-
-        $readOnly = @array_flip($readOnly);
-
-        if(isset($readOnly[$value])) {
-            $readOnly = ' disabled="disabled"';
-        } else {
-            $readOnly = '';
-        }
-        // important ;)
-
-
-        $return = '<input type="checkbox" name="'.$name.'" value="'.$value.'"'.$this->_getPreparedAttrs().''.$checked.''.$readOnly.$required.'/>';
-
-        if( ( $label = $this->getOption( self::CHROME_FORM_DECORATOR_LABEL ) ) !== null AND isset($label[$this->_int])) {
-			$return .= '
-            <label for="' . $name . '">' . $label[$this->_int] . '</label>';
+		$required = '';
+		if( in_array( $value, ( array )( $this->_formElement->getOptions( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED ) ) ) ) {
+			$required = ' required="required"';
 		}
 
-        $this->_int++;
+		$savedValues = ( array )$this->_formElement->getSavedData();
+		$sentValues = ( array )$this->_formElement->getData();
+		$defaultSelection = ( array )$this->getOption( Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT );
 
-        return $return;
-    }
+		$arrayMerged = array();
+
+		if( $savedValues !== array( null ) ) {
+			$arrayMerged = @array_merge( array_flip( $savedValues ), $arrayMerged );
+		}
+		if( $sentValues !== array( null ) ) {
+			$arrayMerged = @array_merge( array_flip( $sentValues ), $arrayMerged );
+		}
+		if( $arrayMerged === array() and $defaultSelection !== array( null ) ) {
+			$arrayMerged = @array_merge( array_flip( $defaultSelection ), $arrayMerged );
+		}
+
+		if( isset( $arrayMerged[$value] ) ) {
+			$checked = 'checked="checked"';
+		} else {
+			$checked = '';
+		}
+
+		$readOnly = $this->_formElement->getOptions( Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_READONLY );
+
+		// all entries are readOnly
+		if( $readOnly === true ) {
+			$readOnly = $values;
+		} else
+			if( !is_array( $readOnly ) ) {
+				// everything is enabled
+				$readOnly = array();
+			}
+
+		$readOnly = @array_flip( $readOnly );
+
+		if( isset( $readOnly[$value] ) ) {
+			$readOnly = ' disabled="disabled"';
+		} else {
+			$readOnly = '';
+		}
+
+		$return = '<input type="checkbox" name="' . $name . '" value="' . $value . '"' . $this->_getPreparedAttrs() .
+			'' . $checked . '' . $readOnly . $required . '/>';
+
+
+		if( ( $label = $this->getOption( self::CHROME_FORM_DECORATOR_LABEL ) ) !== null and isset( $label[$this->_int] ) ) {
+			$return = '
+            <label>' . $return . ' '.$label[$this->_int] . '</label>';
+		}
+
+		// important ;)
+		$this->_int++;
+
+		return $return;
+	}
 }

@@ -2,8 +2,9 @@
 
 class Chrome_View_Register extends Chrome_View_Abstract
 {
-    public function _preConstruct() {
+    public function __construct(Chrome_Controller_Abstract $controller) {
         $this->addTitle('Registrieren');
+        parent::__construct($controller);
     }
 
     public function setStepOne() {

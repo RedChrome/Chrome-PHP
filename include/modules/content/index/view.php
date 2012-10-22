@@ -5,8 +5,9 @@ if(CHROME_PHP !== true)
 
 class Chrome_View_Index extends Chrome_View_Abstract
 {
-    protected function _preConstruct() {
 
+    public function __construct(Chrome_Controller_Abstract $controller) {
+        parent::__construct($controller);
         $this->addTitle('Form');
     }
 
@@ -85,6 +86,7 @@ class Chrome_View_Index_STHOTHER extends Chrome_View_Abstract
             $template->assignTemplate('modules/content/index/form');
             $template->assign('FORM', $this->_controller->getForm());
             $template->assign('TOKEN', $options[Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_TOKEN]);
+            $template->assign('LANG', new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL));
             return $template->render();
         } else {
             return '<form action="" name="redirect" method="post"><input type="submit" name="submit" value="Weiter"/></form>';

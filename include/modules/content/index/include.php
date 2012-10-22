@@ -11,6 +11,7 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 		$this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
 		$this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST );
 		$this->setAttribute( self::ATTRIBUTE_ID, 'Index' );
+        $this->setAttribute( self::ATTRIBUTE_DECORATOR, 'Yaml');
 
 		$lengthValidator = new Chrome_Validator_Form_Length();
 		$lengthValidator->setOptions( array( Chrome_Validator_Form_Length::CHROME_VALIDATOR_FORM_LENGTH_MAX =>

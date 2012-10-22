@@ -17,7 +17,7 @@
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 12:58:39] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 19:45:19] --> $
  * @author     Alexander Book
  */
 
@@ -120,7 +120,7 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      *
      * @var bool
      */
-    protected $_isValidated = false;
+    //protected $_isValidated = false;
 
 	/**
 	 * __constructor
@@ -135,10 +135,10 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
     }
 
     public function validate() {
-        if($this->_isValidated === false) {
+        //if($this->_isValidated === false) {
             $this->_validate();
             $this->_isValidated = true;
-        }
+        //}
     }
 
     /**

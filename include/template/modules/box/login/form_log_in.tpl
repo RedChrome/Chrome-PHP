@@ -1,10 +1,14 @@
+<?php
+$FORM->getDecorator('stay_loggedin')->setOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL, array($LANG->get('stay_loggedin')));
+?>
+
 <?php echo $FORM->render('login'); ?>
 <?php echo $FORM->render('identity'); ?>
 
 <?php echo $FORM->render('password'); ?>
 
 <br /><br />
-<?php echo $LANG->get('stay_loggedin');?> <?php echo $FORM->render('stay_loggedin'); ?>
+<?php echo $FORM->render('stay_loggedin'); ?>
 
 <?php
 $FORM->getElement('submit')->getDecorator()->setAttribute('onclick', 'javascript:AJAX_send_login();return false');

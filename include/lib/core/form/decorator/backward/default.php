@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.10.2012 19:51:49] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.10.2012 00:16:05] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -35,7 +35,7 @@ class Chrome_Form_Decorator_Backward_Default extends Chrome_Form_Decorator_Abstr
     public function render() {
 
         if($this->_options[self::CHROME_FORM_DECORATOR_BACKWARD_DELETE_PASSWORDS] === true) {
-            $addOnclick = 'onclick="javascript:truncate_password_input(\''.$this->_formElement->getForm()->getID().'\');return true"';
+            $addOnclick = 'onclick="javascript:truncate_form_input(\''.$this->_formElement->getForm()->getID().'\');return true"';
         } else {
             $addOnclick = '';
         }

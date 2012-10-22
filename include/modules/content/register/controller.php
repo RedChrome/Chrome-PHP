@@ -67,7 +67,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 								$data = $this->form->getData();
 
 								// go one step back
-								if( $this->form->isSent( 'backward' ) ) {
+								if( $this->form->isSent( 'buttons' ) AND isset($data['buttons']['backward'])) {
 									$this->form = new Chrome_Form_Register_StepOne();
 									$this->form->create();
 									$this->_stepOne();

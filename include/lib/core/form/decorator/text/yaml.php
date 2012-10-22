@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.10.2012 01:42:22] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 19:00:27] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -30,13 +30,10 @@ class Chrome_Form_Decorator_Text_Yaml extends Chrome_Form_Decorator_Text_Default
 {
     public function render() {
 
-        $return = '<div class="ym-fbox-text">';
-
         if($this->_formElement->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED) === true AND ($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null) {
             $this->setOption(self::CHROME_FORM_DECORATOR_LABEL, $label.'<sup class="ym-required" title="This field is mandatory">*</sup>');
         }
 
-        $return .= parent::render().'</div>';
-        return $return;
+        return '<div class="ym-fbox-text">'.parent::render().'</div>';
     }
 }

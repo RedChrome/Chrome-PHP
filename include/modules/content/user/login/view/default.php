@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 13:07:30] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.10.2012 23:41:06] --> $
  * @author     Alexander Book
  */
 
@@ -30,8 +30,7 @@ if(CHROME_PHP !== true)
  */
 class Chrome_View_User_Login_Default extends Chrome_View_Abstract
 {
-    protected function _preConstruct() {
-    }
+
     public function alreadyLoggedIn() {
         Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_User_Default_AlreadyLoggedIn($this->_controller));
     }

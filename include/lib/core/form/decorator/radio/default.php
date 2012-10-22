@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.10.2012 11:37:42] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 19:34:32] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -35,7 +35,6 @@ class Chrome_Form_Decorator_Radio_Default extends Chrome_Form_Decorator_Abstract
 	{
 
 		$array = $this->_formElement->getOptions( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_SELECTION_OPTIONS );
-
 		$value = $array[$this->_int];
 
 		$this->_int = ++$this->_int % sizeof( $array );
@@ -70,8 +69,7 @@ class Chrome_Form_Decorator_Radio_Default extends Chrome_Form_Decorator_Abstract
 			$this->_getPreparedAttrs() . $checked . $disabled . '/>';
 
 		if( ( $label = $this->getOption( self::CHROME_FORM_DECORATOR_LABEL ) ) !== null and isset( $label[$this->_int] ) ) {
-			$return .= '<label for="' . $this->_formElement->getID() . '">' . $label[$this->_int] .
-				'</label>';
+			$return = '<label> ' . $return . ' '.$label[$this->_int] . '</label>';
 		}
 
 		return $return;

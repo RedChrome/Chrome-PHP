@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.10.2012 11:38:20] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 19:48:39] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -31,7 +31,8 @@ class Chrome_Form_Decorator_Password_Default extends Chrome_Form_Decorator_Abstr
 	{
 		$return = '';
 
-		if( $this->getOptions( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED ) === true ) {
+		if( $this->_formElement->getOptions( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED )
+			=== true ) {
 			$this->setAttribute( 'required', 'required' );
 		}
 

@@ -26,6 +26,7 @@ class Chrome_Controller_Index extends Chrome_Controller_Content_Abstract
 				if( $this->form->isValid() ) {
 					$this->view->formIsValid();
 				} else {
+				    $this->form->create();
 					$this->view->formIsInvalid();
 				}
 			} else {
