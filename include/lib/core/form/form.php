@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.10.2012 01:55:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:36:23] --> $
  * @author     Alexander Book
  */
 
@@ -40,7 +40,6 @@ require_once 'decorator.php';
  */
 interface Chrome_Form_Handler_Interface
 {
-
 	/**
 	 * is()
 	 *
@@ -952,6 +951,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 	 * 'action': Sets the form action in <form action="">
      * 'decorator': Sets the default extension for all decorators, default: Default
      *
+     * TODO: dependecy injection with Chrome_Request::getInstance()->getRequestDataObject();
+     *
 	 * @param string $key
 	 * @param mixed $value
 	 * @return void
@@ -963,7 +964,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 		switch( $key ) {
 			case self::ATTRIBUTE_METHOD:
 				{
-					switch( strtoupper( $value ) ) {
+					switch( $value ) {
 						case self::CHROME_FORM_METHOD_POST:
 							{
 								$this->setSentData( Chrome_Request::getInstance()->getRequestDataObject()->getPOST() );
@@ -978,6 +979,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 
 						default:
 							{
+							     $this->setSentData(Chrome_Request::getInstance()->getRequestDataObject()->getData());
 							}
 					}
 					break;

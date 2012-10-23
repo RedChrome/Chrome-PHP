@@ -17,9 +17,11 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 17:43:42] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:47:40] --> $
  */
 if( CHROME_PHP !== true ) die();
+
+require_once 'default.php';
 
 /**
  * @package CHROME-PHP
@@ -27,17 +29,6 @@ if( CHROME_PHP !== true ) die();
  */
 class Chrome_Form_Decorator_Buttons_Yaml extends Chrome_Form_Decorator_Buttons_Default
 {
-	public function render()
-	{
-		return $this;
-	}
-
-	// here we want to render all elements
-	public function __toString()
-	{
-		return $this->renderAll();
-	}
-
 	// here we want to render a specific element
 	public function element( $name )
 	{

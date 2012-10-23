@@ -17,19 +17,24 @@
  * @subpackage Chrome.Date
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.08.2011 20:40:51] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:09:06] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
 
+interface Chrome_Date_Interface
+{
+
+}
+
 /**
  * Chrome_Date
- * 
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Date
  */
-class Chrome_Date
+class Chrome_Date implements Chrome_Date_Interface
 {
     private function _addPlural($nb, $str)
     {
@@ -111,10 +116,8 @@ class Chrome_Date
         if($lang == null) {
             $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_DEFAULT_LANGUAGE);
         }
-        
-        
 
-       return array($lang->get('january'), $lang->get('february'), $lang->get('march'), $lang->get('april'), $lang->get('may'), $lang->get('june'), $lang->get('july'), $lang->get('august'), $lang->get('september'), $lang->get('oktober'), $lang->get('november'), $lang->get('december'));
+        return array($lang->get('january'), $lang->get('february'), $lang->get('march'), $lang->get('april'), $lang->get('may'), $lang->get('june'), $lang->get('july'), $lang->get('august'), $lang->get('september'), $lang->get('oktober'), $lang->get('november'), $lang->get('december'));
     }
 
     public function getDays()

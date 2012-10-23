@@ -22,6 +22,8 @@ $FORM->getDecorator('checkbox')->setOption(Chrome_Form_Decorator_Abstract::CHROM
 
     <?php echo $FORM->render('select'); ?>
 
+    <?php echo $FORM->render('birthday'); ?>
+
     <br />
     <br />
     <?php echo $FORM->render('submit'); ?>

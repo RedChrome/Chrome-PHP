@@ -17,89 +17,20 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.10.2012 01:31:45] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:46:41] --> $
  */
 if( CHROME_PHP !== true ) die();
+
+require_once 'default.php';
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Birthday_Yaml extends Chrome_Form_Decorator_Abstract
+class Chrome_Form_Decorator_Birthday_Yaml extends Chrome_Form_Decorator_Birthday_Default
 {
-	public function render()
+	public function renderAll()
 	{
-		$lang = new Chrome_Language( Chrome_Language::CHROME_LANGUAGE_DEFAULT_LANGUAGE );
-
-		$date = new Chrome_Date();
-
-		$data = $this->_formElement->getSavedData();
-
-		// MONTH
-		$months = array( $lang->get( 'month' ) );
-
-		$months = array_merge( $months, $date->getMonths() );
-
-		$selected = '';
-
-		if( !isset( $data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_MONTH] ) ) {
-			$selected = 'selected="selected"';
-		}
-
-		$class = '';
-
-		$return = '<select name="' . $this->_formElement->getID() . '_m"' . $class . '>' . "\n";
-		foreach( $months as $key => $month ) {
-			if( $data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_MONTH] == $key ) {
-				$selected = 'selected="selected"';
-			}
-			$return .= '<option value="' . $key . '" ' . $selected . '>' . $month . '</option>' . "\n";
-			$selected = '';
-		}
-		$return .= '</select>';
-
-		// DAY
-		$days = array( $lang->get( 'day' ) );
-
-		$days = array_merge( $days, $date->getDays() );
-
-		$selected = '';
-
-		if( !isset( $data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_DAY] ) ) {
-			$selected = 'selected="selected"';
-		}
-
-		$return .= "\n" . '<select name="' . $this->_formElement->getID() . '_d">' . "\n";
-		foreach( $days as $key => $day ) {
-			if( $data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_DAY] == $key ) {
-				$selected = 'selected="selected"';
-			}
-			$return .= '<option value="' . $key . '" ' . $selected . '>' . $day . '</option>';
-			$selected = '';
-		}
-		$return .= "\n" . '</select>';
-
-		// YEAR
-		$years = array( $lang->get( 'year' ) );
-
-		$years = array_merge( $years, $date->getYears() );
-
-		$selected = '';
-
-		if( !isset( $data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_YEAR] ) ) {
-			$selected = 'selected="selected"';
-		}
-
-		$return .= "\n" . '<select name="' . $this->_formElement->getID() . '_y">' . "\n";
-		foreach( $years as $key => $year ) {
-			if( $data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_YEAR] == $year ) {
-				$selected = 'selected="selected"';
-			}
-			$return .= '<option value="' . $year . '" ' . $selected . '>' . $year . '</option>';
-			$selected = '';
-		}
-		$return .= "\n" . '</select>';
-
-		return $return;
+        return '<div class="ym-fbox-select">'. parent::renderAll().'</div>';
 	}
 }

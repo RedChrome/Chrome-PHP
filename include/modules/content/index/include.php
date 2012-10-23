@@ -67,6 +67,8 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
             Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_SUBMIT_VALUES => array('Absenden')
         ));
 
+        $this->_elements['birthday'] = new Chrome_Form_Element_Birthday($this, 'birthday', array());
+
         //$this->addReceivingHandler(new Chrome_Form_Handler_Delete());
 	}
 }

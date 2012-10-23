@@ -17,10 +17,9 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 19:49:51] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:07:22] --> $
  */
-if(CHROME_PHP !== true)
-    die();
+if( CHROME_PHP !== true ) die();
 
 //TODO: add documentation
 //TODO: if field is mandatory, then use a language obj. to get the right phrase
@@ -33,97 +32,144 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Form_Decorator_Interface
 {
-    public function setOption($key, $value);
+	public function setOption( $key, $value );
 
-    public function setOptions(array $array);
+	public function setOptions( array $array );
 
-    public function getOption($key);
+	public function getOption( $key );
 
-    public function getOptions();
+	public function getOptions();
 
-    public function setAttribute($key, $value, $overwrite = false);
+	public function setAttribute( $key, $value, $overwrite = false );
 
-    public function setAttributes(array $attr);
+	public function setAttributes( array $attr );
 
-    public function getAttributes();
+	public function getAttributes();
 
-    public function setFormElement(Chrome_Form_Element_Interface $obj);
+	public function setFormElement( Chrome_Form_Element_Interface $obj );
 
-    public function render();
+	public function render();
 }
 
-abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_Interface
+interface Chrome_Form_Decorator_Individual_Interface
 {
-    const CHROME_FORM_DECORATOR_SELECTION_DISPLAY = 'SELECTIONDISPLAY';
-    const CHROME_FORM_DECORATOR_DEFAULT_INPUT = 'DEFAULTINPUT';
-    const CHROME_FORM_DECORATOR_LABEL = 'LABEL';
+	const OPTION_LANGUAGE = 'LANGUAGE', OPTION_ATTRIBUTE = 'ATTRIBUTE';
 
-    protected $_options = array();
+	public function element( $name, array $options = array() );
 
-    protected $_defaultOptions = array(self::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array(), self::CHROME_FORM_DECORATOR_LABEL => null);
+	public function renderAll();
 
-    protected $_formElement = null;
+	public function __toString();
+}
 
-    protected $_attribute = array();
+abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_Interface, Chrome_Language_L12y
+{
+	const CHROME_FORM_DECORATOR_SELECTION_DISPLAY = 'SELECTIONDISPLAY';
+	const CHROME_FORM_DECORATOR_DEFAULT_INPUT = 'DEFAULTINPUT';
+	const CHROME_FORM_DECORATOR_LABEL = 'LABEL';
 
-    public function __construct(array $options, array $attributes) {
-        $this->_options = array_merge($this->_defaultOptions, $options);
-        $this->_attribute = $attributes;
+	protected $_options = array();
+
+	protected $_defaultOptions = array( self::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array(), self::CHROME_FORM_DECORATOR_LABEL => null );
+
+	protected $_formElement = null;
+
+	protected $_attribute = array();
+
+    protected $_lang = null;
+
+    protected $_langDefaultNamespace = Chrome_Language_Interface::CHROME_LANGUAGE_GENERAL;
+
+	public function __construct( array $options, array $attributes )
+	{
+		$this->_options = array_merge( $this->_defaultOptions, $options );
+		$this->_attribute = $attributes;
+	}
+
+	public function setOption( $key, $value )
+	{
+		$this->_options[$key] = $value;
+		return $this;
+	}
+
+	public function setOptions( array $array )
+	{
+		$this->_options = array_merge( $this->_options, $array );
+		return $this;
+	}
+
+	public function getOption( $key )
+	{
+		return ( isset( $this->_options[$key] ) ) ? $this->_options[$key] : null;
+	}
+
+	public function getOptions()
+	{
+		return $this->_options;
+	}
+
+	public function setFormElement( Chrome_Form_Element_Interface $obj )
+	{
+		$this->_formElement = $obj;
+		return $this;
+	}
+
+	public function getAttributes()
+	{
+		return $this->_attribute;
+	}
+
+	public function setAttribute( $key, $value, $overwrite = false )
+	{
+		if( $overwrite === false and isset( $this->_attribute[$key] ) ) {
+			return $this;
+		}
+
+		if( $value === null ) {
+			unset( $this->_attribute[$key] );
+			return $this;
+		}
+
+		$this->_attribute[$key] = $value;
+		return $this;
+	}
+
+	public function setAttributes( array $attr )
+	{
+		$this->_attribute = array_merge( $this->_attribute, $attr );
+		return $this;
+	}
+
+    public function setLanguage(Chrome_Language_Interface $lang) {
+        $this->_lang = $lang;
     }
 
-    public function setOption($key, $value) {
-        $this->_options[$key] = $value;
-        return $this;
+    public function getLanguage() {
+        ($this->_lang !== null) ? $this->_lang : ($this->_lang = new Chrome_Language($this->_langDefaultNamespace));
+        return $this->_lang;
     }
 
-    public function setOptions(array $array) {
-        $this->_options = array_merge($this->_options, $array);
-        return $this;
-    }
+	protected function _getPreparedAttrs()
+	{
+		$return = '';
 
-    public function getOption($key) {
-        return (isset($this->_options[$key])) ? $this->_options[$key] : null;
-    }
+		foreach( $this->_attribute as $key => $value ) {
+			$return .= ' ' . $key . '="' . $value . '"';
+		}
+		return $return . ' ';
+	}
+}
 
-    public function getOptions() {
-        return $this->_options;
-    }
+abstract class Chrome_Form_Decorator_Individual_Abstract extends Chrome_Form_Decorator_Abstract implements
+	Chrome_Form_Decorator_Individual_Interface
+{
+	final public function render()
+	{
+		return $this;
+	}
 
-    public function setFormElement(Chrome_Form_Element_Interface $obj) {
-        $this->_formElement = $obj;
-        return $this;
-    }
-
-    public function getAttributes() {
-        return $this->_attribute;
-    }
-
-    public function setAttribute($key, $value, $overwrite = false) {
-
-        if($overwrite === false AND isset($this->_attribute[$key])) {
-            return $this;
-        }
-
-        if($value === null) {
-            unset($this->_attribute[$key]);
-            return $this;
-        }
-
-        $this->_attribute[$key] = $value;
-        return $this;
-    }
-
-    public function setAttributes(array $attr) {
-        $this->_attribute = array_merge($this->_attribute, $attr);
-        return $this;
-    }
-
-    protected function _getPreparedAttrs() {
-        $return = '';
-
-        foreach($this->_attribute AS $key => $value) {
-            $return .= ' '.$key.'="'.$value.'"';
-        }
-        return $return.' ';
-    }
+	public function __toString()
+	{
+		return $this->renderAll();
+	}
 }

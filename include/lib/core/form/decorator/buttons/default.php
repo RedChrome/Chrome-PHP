@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 13:48:50] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:19:58] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -25,21 +25,9 @@ if( CHROME_PHP !== true ) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Buttons_Default extends Chrome_Form_Decorator_Abstract
+class Chrome_Form_Decorator_Buttons_Default extends Chrome_Form_Decorator_Individual_Abstract
 {
-	public function render()
-	{
-		return $this;
-	}
-
-	// here we want to render all elements
-	public function __toString()
-	{
-		return $this->renderAll();
-	}
-
-	// here we want to render a specific element
-	public function element( $name )
+	public function element( $name, array $options = array())
 	{
 		$buttons = $this->_formElement->getOptions( Chrome_Form_Element_Buttons::CHROME_FORM_ELEMENT_BUTTONS );
 

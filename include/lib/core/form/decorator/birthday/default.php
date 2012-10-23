@@ -17,91 +17,160 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.10.2012 00:48:48] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:28:20] --> $
  */
-if(CHROME_PHP !== true)
-    die();
+if( CHROME_PHP !== true ) die();
 
 /**
  * TODO: change attribute class if errors exists
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Birthday_Default extends Chrome_Form_Decorator_Abstract
+class Chrome_Form_Decorator_Birthday_Default extends Chrome_Form_Decorator_Individual_Abstract
 {
-    public function render() {
+	const ELEMENT_MONTH = 'month', ELEMENT_DAY = 'day', ELEMENT_YEAR = 'year';
 
-        $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_DEFAULT_LANGUAGE);
+	public function renderAll()
+	{
+		$lang = $this->getLanguage();
 
-        $date = new Chrome_Date();
+		$date = new Chrome_Date();
 
-        $data = $this->_formElement->getSavedData();
+		$data = $this->_formElement->getSavedData();
 
-        // MONTH
-        $months = array($lang->get('month'));
+		$return = $this->_renderMonths( $lang, $date, $data );
 
-        $months = array_merge($months, $date->getMonths());
+		$return .= $this->_renderDays( $lang, $date, $data );
 
-        $selected = '';
+		$return .= $this->_renderYears( $lang, $date, $data );
 
-        if(!isset($data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_MONTH])) {
-            $selected = 'selected="selected"';
-        }
+		return $return;
+	}
 
-        $class = '';
+	public function element( $name, array $options = array() )
+	{
+	    if(isset($options[self::OPTION_LANGUAGE])) {
+	       $lang = $options[self::OPTION_LANGUAGE];
+	    } else {
+	       $lang = $this->getLanguage();
+	    }
 
-        $return = '<select name="'.$this->_formElement->getID().'_m"'.$class.'>'."\n";
-        foreach($months AS $key => $month) {
-            if($data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_MONTH] == $key) {
-                $selected = 'selected="selected"';
+		$date = new Chrome_Date();
+
+		$data = $this->_formElement->getSavedData();
+
+		switch( $name ) {
+			case self::ELEMENT_DAY:
+				{
+					return $this->_renderDays( $lang, $date, $data );
+				}
+
+			case self::ELEMENT_MONTH:
+				{
+					return $this->_renderMonths( $lang, $date, $data );
+				}
+			case self::ELEMENT_YEAR:
+				{
+					return $this->_renderYears( $lang, $date, $data );
+				}
+
+			default:
+				{
+
+				}
+		}
+	}
+
+	protected function _renderDays( Chrome_Language_Interface $lang, Chrome_Date_Interface $date, $data )
+	{
+		$days = array( $lang->get( 'day' ) );
+
+		$days = array_merge( $days, $date->getDays() );
+
+		$selected = '';
+
+		if( !isset( $data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_DAY] ) ) {
+			$selected = 'selected="selected"';
+		}
+
+		$return = "\n" . '<select name="' . $this->_formElement->getID() . '_d"'.$this->_getPreparedAttrs().'>' . "\n";
+		foreach( $days as $key => $day ) {
+			if( $data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_DAY] == $key ) {
+				$selected = 'selected="selected"';
+			}
+            if($key === 0) {
+                $selected .= ' disabled="disabled"';
             }
-            $return .= '<option value="'.$key.'" '.$selected.'>'.$month.'</option>'."\n";
-            $selected = '';
-        }
-        $return .= '</select>';
+			$return .= '<option value="' . $key . '" ' . $selected.'>' . $day . '</option>';
+			$selected = '';
+		}
+		$return .= "\n" . '</select>';
 
-        // DAY
-        $days = array($lang->get('day'));
+		return $return;
+	}
 
-        $days = array_merge($days, $date->getDays());
+	protected function _renderMonths( Chrome_Language_Interface $lang, Chrome_Date_Interface $date, $data )
+	{
+		$months = array( $lang->get( 'month' ) );
 
-        $selected = '';
+		$months = array_merge( $months, $date->getMonths($lang) );
 
-        if(!isset($data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_DAY])) {
-            $selected = 'selected="selected"';
-        }
+		$selected = '';
 
-        $return .= "\n".'<select name="'.$this->_formElement->getID().'_d">'."\n";
-        foreach($days AS $key => $day) {
-            if($data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_DAY] == $key) {
-                $selected = 'selected="selected"';
+		if( !isset( $data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_MONTH] ) ) {
+			$selected = 'selected="selected"';
+		}
+
+
+		$return = '<select name="' . $this->_formElement->getID() . '_m"' .$this->_getPreparedAttrs().'>' . "\n";
+		foreach( $months as $key => $month ) {
+			if( $data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_MONTH] == $key ) {
+				$selected = 'selected="selected"';
+			}
+            if($key === 0) {
+                $selected .= ' disabled="disabled"';
             }
-            $return .= '<option value="'.$key.'" '.$selected.'>'.$day.'</option>';
-            $selected = '';
-        }
-        $return .= "\n".'</select>';
+			$return .= '<option value="' . $key . '" ' . $selected . '>' . $month . '</option>';
+			$selected = '';
+		}
+		$return .= "\n" . '</select>';
 
-        // YEAR
-        $years = array($lang->get('year'));
+		return $return;
+	}
 
-        $years = array_merge($years, $date->getYears());
+	protected function _renderYears( Chrome_Language_Interface $lang, Chrome_Date_Interface $date, $data )
+	{
+		$years = array( $lang->get( 'year' ) );
 
-        $selected = '';
+		$years = array_merge( $years, $date->getYears() );
 
-        if(!isset($data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_YEAR])) {
-            $selected = 'selected="selected"';
-        }
+		$selected = '';
 
-        $return .= "\n".'<select name="'.$this->_formElement->getID().'_y">'."\n";
-        foreach($years AS $key => $year) {
-            if($data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_YEAR] == $year) {
-                $selected = 'selected="selected"';
+		if( !isset( $data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_YEAR] ) ) {
+			$selected = 'selected="selected"';
+		}
+
+		$return = "\n" . '<select name="' . $this->_formElement->getID() . '_y"'.$this->_getPreparedAttrs().'>' . "\n";
+		foreach( $years as $key => $year ) {
+			if( $data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_YEAR] == $year ) {
+				$selected = 'selected="selected"';
+			}
+            if($key === 0) {
+                $selected .= ' disabled="disabled"';
             }
-            $return .= '<option value="'.$year.'" '.$selected.'>'.$year.'</option>';
-            $selected = '';
-        }
-        $return .= "\n".'</select>';
+			$return .= '<option value="' . $year . '" ' . $selected . '>' . $year . '</option>';
+			$selected = '';
+		}
+		$return .= "\n" . '</select>';
 
-        return $return;
+		return $return;
+	}
+
+    public function setFormElement(Chrome_Form_Element_Interface $obj) {
+        parent::setFormElement($obj);
+
+        if($obj->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED) === true) {
+            $this->_attribute['required'] = 'required';
+        }
     }
 }
