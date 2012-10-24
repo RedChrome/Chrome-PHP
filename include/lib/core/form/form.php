@@ -17,11 +17,12 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:36:23] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.10.2012 16:19:59] --> $
  * @author     Alexander Book
  */
 
 if( CHROME_PHP !== true ) die();
+
 /**
  * load Chrome_Form_Element_Abstract
  */
@@ -361,6 +362,20 @@ interface Chrome_Form_Interface
 	 * @return void
 	 */
 	public function addCreationHandler( Chrome_Form_Handler_Interface $handler );
+
+    /**
+     * Sets a request data object, to get sent data from it
+     *
+     * @param Chrome_Request_Data_Interface $obj
+     * @return void
+     */
+    public function setRequestData(Chrome_Request_Data_Interface $obj);
+
+    /**
+     * Returns the request data
+     * @return Chrome_Request_Data_Interface
+     */
+    public function getRequestData();
 }
 
 /**
@@ -371,20 +386,17 @@ interface Chrome_Form_Interface
  */
 abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 {
-    /**
-     * ATTRIBUTE_METHOD: tells where the data comes from, post or get?
-     * ATTRIBUTE_DECORATOR: sets the extension for decorators, default is Default, so
-     *                      all decorators come from Chrome_Form_Decorator_XXX_Default
-     * ATTRIBUTE_ACTION: sets the form action
-     * ATTRIBUTE_NAME: sets the form name
-     * ATTRIBUTE_ID: sets the form id
-     * @var string
-     */
-    const ATTRIBUTE_METHOD = 'method',
-          ATTRIBUTE_DECORATOR = 'decorator',
-          ATTRIBUTE_ACTION = 'action',
-          ATTRIBUTE_NAME = 'name',
-          ATTRIBUTE_ID = 'id';
+	/**
+	 * ATTRIBUTE_METHOD: tells where the data comes from, post or get?
+	 * ATTRIBUTE_DECORATOR: sets the extension for decorators, default is Default, so
+	 *                      all decorators come from Chrome_Form_Decorator_XXX_Default
+	 * ATTRIBUTE_ACTION: sets the form action
+	 * ATTRIBUTE_NAME: sets the form name
+	 * ATTRIBUTE_ID: sets the form id
+	 * @var string
+	 */
+	const ATTRIBUTE_METHOD = 'method', ATTRIBUTE_DECORATOR = 'decorator', ATTRIBUTE_ACTION = 'action',
+		ATTRIBUTE_NAME = 'name', ATTRIBUTE_ID = 'id';
 
 
 	/**
@@ -462,7 +474,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 	 *
 	 * @var array
 	 */
-	protected $_attribts = array('decorator' => 'Default');
+	protected $_attribts = array( 'decorator' => 'Default' );
 
 	/**
 	 * Receiving Handler, gets called after isSent()
@@ -484,6 +496,13 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 	 * @var Chrome_Form_Handler_Interface
 	 */
 	protected $_validationHandler = array();
+
+    /**
+     * Request data object, contains the sent data from user
+     *
+     * @var Chrome_Request_Data_Interface
+     */
+    protected $_requestDataObject = null;
 
 	/**
 	 * Chrome_Form_Abstract::__construct()
@@ -788,6 +807,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 	 * Chrome_Form_Abstract::getData()
 	 *
 	 * Returns the validated and convertered data of all elements
+     *
 	 * @param string $key a key to get only specific data, the key is an id of a form elements
 	 * @return array
 	 */
@@ -946,13 +966,11 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 	 * Chrome_Form_Abstract::setAttribute()
 	 *
 	 * Sets an form attribute
-     * Special attributes: 'method', 'action', 'decorator'
-     * 'method': Sets the input data: available are CHROME_FORM_METHOD_POST, CHROME_FORM_METHOD_GET for input data from $_POST or $_GET
+	 * Special attributes: 'method', 'action', 'decorator'
+	 * 'method': Sets the input data: available are CHROME_FORM_METHOD_POST, CHROME_FORM_METHOD_GET for input data from $_POST or $_GET
 	 * 'action': Sets the form action in <form action="">
-     * 'decorator': Sets the default extension for all decorators, default: Default
-     *
-     * TODO: dependecy injection with Chrome_Request::getInstance()->getRequestDataObject();
-     *
+	 * 'decorator': Sets the default extension for all decorators, default: Default
+	 *
 	 * @param string $key
 	 * @param mixed $value
 	 * @return void
@@ -967,19 +985,19 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 					switch( $value ) {
 						case self::CHROME_FORM_METHOD_POST:
 							{
-								$this->setSentData( Chrome_Request::getInstance()->getRequestDataObject()->getPOST() );
+								$this->setSentData( $this->getRequestData()->getPOST() );
 								break;
 							}
 
 						case self::CHROME_FORM_METHOD_GET:
 							{
-								$this->setSentData( Chrome_Request::getInstance()->getRequestDataObject()->getGET() );
+								$this->setSentData( $this->getRequestData()->getGET() );
 								break;
 							}
 
 						default:
 							{
-							     $this->setSentData(Chrome_Request::getInstance()->getRequestDataObject()->getData());
+								$this->setSentData( $this->getRequestData()->getData() );
 							}
 					}
 					break;
@@ -1001,14 +1019,15 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 				}
 			case self::ATTRIBUTE_DECORATOR:
 				{
-                    foreach($this->_elements as $element) {
-                        $element->resetDecorator();
-                    }
-                    break;
+					foreach( $this->_elements as $element ) {
+						$element->resetDecorator();
+					}
+					break;
 				}
-            case self::ATTRIBUTE_ID: {
-                $this->_id = $value;
-            }
+			case self::ATTRIBUTE_ID:
+				{
+					$this->_id = $value;
+				}
 
 		}
 	}
@@ -1173,4 +1192,26 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 	{
 		$this->_validationHandler[] = $handler;
 	}
+
+    /**
+     * Chrome_Form_Abstract::setRequestData
+     *
+     * @param Chrome_Request_Data_Interface
+     */
+    public function setRequestData(Chrome_Request_Data_Interface $obj) {
+        $this->_requestDataObject = $obj;
+    }
+
+    /**
+     * Chrome_Form_Abstract::getRequestData
+     *
+     * @return Chrome_Request_Data_Interface
+     */
+    public function getRequestData() {
+        if($this->_requestDataObject === null) {
+            $this->_requestDataObject = Chrome_Request::getInstance()->getRequestDataObject();
+        }
+
+        return $this->_requestDataObject;
+    }
 }
