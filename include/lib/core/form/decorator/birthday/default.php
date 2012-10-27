@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:28:20] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.10.2012 17:12:31] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -121,7 +121,6 @@ class Chrome_Form_Decorator_Birthday_Default extends Chrome_Form_Decorator_Indiv
 			$selected = 'selected="selected"';
 		}
 
-
 		$return = '<select name="' . $this->_formElement->getID() . '_m"' .$this->_getPreparedAttrs().'>' . "\n";
 		foreach( $months as $key => $month ) {
 			if( $data[Chrome_Form_Element_Birthday::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_MONTH] == $key ) {
@@ -171,6 +170,7 @@ class Chrome_Form_Decorator_Birthday_Default extends Chrome_Form_Decorator_Indiv
 
         if($obj->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED) === true) {
             $this->_attribute['required'] = 'required';
+
         }
     }
 }

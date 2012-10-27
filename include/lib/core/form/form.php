@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.10.2012 16:19:59] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.10.2012 23:11:26] --> $
  * @author     Alexander Book
  */
 
@@ -373,6 +373,7 @@ interface Chrome_Form_Interface
 
     /**
      * Returns the request data
+     *
      * @return Chrome_Request_Data_Interface
      */
     public function getRequestData();
