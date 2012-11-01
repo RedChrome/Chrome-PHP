@@ -414,7 +414,7 @@ class Chrome_File
 		$file = file($srcFile);
 
 		if($mode === 'end')
-			$line = sizeof($file) - $line;
+			$line = count($file) - $line;
 
 		$file[$line] = $file[$line]."\n".$text;
 
@@ -462,7 +462,7 @@ class Chrome_File
 		if(!is_array($texts))
 			$texts[] = $texts;
 
-		if(sizeof($texts) != sizeof($lines))
+		if(count($texts) != count($lines))
 			return false;
 
 		$file = file($srcFile);

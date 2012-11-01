@@ -19,7 +19,8 @@ class Chrome_User_Login implements Chrome_User_Login_Interface
 {
     private static $_instance = null;
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if(self::$_instance === null) {
             self::$_instance = new self();
         }
@@ -30,18 +31,21 @@ class Chrome_User_Login implements Chrome_User_Login_Interface
     /**
      * @return bool
      */
-    public function login($id, $credential, $autoLogin = false) {
+    public function login($id, $credential, $autoLogin = false)
+    {
 
         $authenticate = Chrome_Authentication::getInstance();
 
         try {
             $authenticate->authenticate(new Chrome_Authentication_Resource_Database($id, $credential, $autoLogin));
-        } catch(Chrome_Exception $e) {
+        }
+        catch (Chrome_Exception $e) {
 
         }
     }
 
-    public function isLoggedIn() {
+    public function isLoggedIn()
+    {
 
         $authenticate = Chrome_Authentication::getInstance();
 
@@ -59,18 +63,21 @@ class Chrome_User_Login implements Chrome_User_Login_Interface
         return false;
     }
 
-    public function checkIsLoggedIn() {
+    public function checkIsLoggedIn()
+    {
         throw new Chrome_Exception('Not impelmented yet');
     }
 
-    public function logout() {
+    public function logout()
+    {
         throw new Chrome_Exception('Not impelmented yet');
     }
 
     /**
      * @deprecated
      */
-    public function getID() {
+    public function getID()
+    {
         throw new Chrome_Exception('Not impelmented yet');
     }
 }

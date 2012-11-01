@@ -3,6 +3,8 @@
 /**
  * CHROME-PHP CMS
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * This source file is subject to the Creative Commons license that is bundled
@@ -13,15 +15,17 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
+ * @category   CHROME-PHP
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.10.2012 19:29:22] --> $
+ * @author     Alexander Book <alexander.book@gmx.de>
+ * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
+ * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 22:53:17] --> $
+ * @link       http://chrome-php.de
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
  * @package    CHROME-PHP
@@ -30,7 +34,12 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abstract
 {
-    protected $_options = array('cookie_namespace' => '_AUTH', 'dbInterface' => null, 'dbTable' => 'authenticate', 'cookie_renew_probability' => 10);
+    protected $_options = array(
+                           'cookie_namespace'         => '_AUTH',
+                           'dbInterface'              => null,
+                           'dbTable'                  => 'authenticate',
+                           'cookie_renew_probability' => 10,
+                          );
 
     /**
      *
@@ -107,12 +116,12 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
         }
 
         // search in the db for token and id
-        $dbInterface->select(array('id', 'cookie_token'), null, false, 'SQL_NO_CACHE')
-                    ->from($this->_options['dbTable'])
-                    ->where('id = "'.$id.'" AND cookie_token = "'.$tokenEscaped.'"')
-                    ->limit(0, 1)
-                    ->execute();
-
+        $dbInterface
+            ->select(array('id', 'cookie_token'), null, false, 'SQL_NO_CACHE')
+            ->from($this->_options['dbTable'])
+            ->where('id = "' . $id . '" AND cookie_token = "' . $tokenEscaped . '"')
+            ->limit(0, 1)
+            ->execute();
 
         $result = $dbInterface->next();
 
@@ -146,7 +155,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
     // todo: to model
     private function _renewCookie($id)
     {
-        $id = (int)$id;
+        $id = (int) $id;
 
         if($this->_options['dbInterface'] !== null) {
             $dbInterface = $this->_options['dbInterface'];
@@ -160,7 +169,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
         }
 
         // create token
-        $hash = Chrome_Hash::getInstance();
+        $hash  = Chrome_Hash::getInstance();
         $token = $hash->hash($hash->randomChars(12));
 
         // set cookie with data: ID.TOKEN
@@ -168,28 +177,35 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
         Chrome_Cookie::getInstance()->setCookie($this->_options['cookie_namespace'], $this->_encodeCookieString($id, $token));
 
         // update db with this token
-        $dbInterface->update($this->_options['dbTable'])
-                    ->set(array('cookie_token' => $token))
-                    ->where('id = "'.$id.'"') // no need to escape, $id is an int
-                    ->limit(0, 1)
-                    ->execute();
+        $dbInterface
+            ->update($this->_options['dbTable'])
+            ->set(array('cookie_token' => $token))
+            ->where('id = "' . $id . '"')
+            ->limit(0, 1)
+            ->execute();
     }
 
-    private function _encodeCookieString($id, $token) {
+    private function _encodeCookieString($id, $token)
+    {
         $id = (int) $id;
 
-        return base64_encode($id.'.'.$token);
+        return base64_encode($id . '.' . $token);
     }
 
-    private function _decodeCookieString($string) {
+    private function _decodeCookieString($string)
+    {
         // data is base64 encoded
         $data = base64_decode($string);
         // data structure: ID.TOKEN
         $array = explode('.', $data, 2);
-        return array('id' => (int)$array[0], 'token' => $array[1]);
+        return array(
+                'id'    => (int) $array[0],
+                'token' => $array[1],
+               );
     }
 
-    protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource) {
+    protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)
+    {
         // do nothing
     }
 }

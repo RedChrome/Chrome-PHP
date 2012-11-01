@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.10.2012 17:12:31] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.10.2012 22:36:02] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -29,6 +29,8 @@ if( CHROME_PHP !== true ) die();
 class Chrome_Form_Decorator_Birthday_Default extends Chrome_Form_Decorator_Individual_Abstract
 {
 	const ELEMENT_MONTH = 'month', ELEMENT_DAY = 'day', ELEMENT_YEAR = 'year';
+
+    const OPTION_LANGUAGE = 'LANG';
 
 	public function renderAll()
 	{

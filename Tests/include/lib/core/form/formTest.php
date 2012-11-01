@@ -107,6 +107,6 @@ class FormTest extends PHPUnit_Framework_TestCase
         $form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, Chrome_Form_Abstract::CHROME_FORM_METHOD_POST);
         $this->assertTrue($form->issetSentData('POST'));
         $this->setExpectedException('Chrome_Exception', '', 1);
-        $form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, 'Chrome_Form_Abstract::CHROME_FORM_METHOD_POST');
+        $form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, 'anyMethod...');
     }
 }

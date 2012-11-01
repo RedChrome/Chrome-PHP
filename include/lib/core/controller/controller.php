@@ -17,12 +17,11 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.10.2012 23:53:28] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 23:16:35] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
  * @package CHROME-PHP
@@ -161,7 +160,8 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      */
     abstract protected function _shutdown();
 
-    public function __construct(Chrome_Request_Handler_Interface $reqHandler) {
+    public function __construct(Chrome_Request_Handler_Interface $reqHandler)
+    {
         $this->setRequestHandler($reqHandler);
     }
     /**
@@ -179,17 +179,17 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
     protected function _require()
     {
         if(isset($this->require['file'])) {
-            foreach($this->require['file'] AS $file) {
+            foreach($this->require['file'] as $file) {
                 if(_isFile($file)) {
                     require_once $file;
                 } else {
-                    throw new Chrome_Exception('Could not require file '.$file.'! The file does not exist in Chrome_Controller_Abstract::_require()!');
+                    throw new Chrome_Exception('Could not require file ' . $file . '! The file does not exist in Chrome_Controller_Abstract::_require()!');
                 }
             }
         }
 
         if(isset($this->require['class'])) {
-            foreach($this->require['class'] AS $class) {
+            foreach($this->require['class'] as $class) {
                 classLoad($class);
             }
         }
@@ -208,9 +208,9 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
 
         $registry = Chrome_Registry::getInstance();
 
-        foreach($this->filter AS $filterChain => $filters) {
+        foreach($this->filter as $filterChain => $filters) {
             if(is_string($filterChain)) {
-                $_filterChain = $registry->get('Chrome_Filter_Chain', 'Chrome_Filter_Chain_'.ucfirst($filterChain));
+                $_filterChain = $registry->get('Chrome_Filter_Chain', 'Chrome_Filter_Chain_' . ucfirst($filterChain));
             } elseif($filterChain instanceof Chrome_Filter_Chain_Abstract) {
                 $_filterChain = $filterChain;
             }
@@ -219,7 +219,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
                 throw new Chrome_Exception('Cannot add a filter to a non-existing filter chain in Chrome_Controller_Abstract::_filter()!');
             }
 
-            foreach($filters AS $filter) {
+            foreach($filters as $filter) {
                 $_filterChain->addFilter($filter);
             }
         }
@@ -269,9 +269,10 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         return $this->design;
     }
 
-    public function setRequestHandler(Chrome_Request_Handler_Interface $obj) {
+    public function setRequestHandler(Chrome_Request_Handler_Interface $obj)
+    {
         $this->requestHandler = $obj;
-        $this->requestData = $obj->getRequestData();
+        $this->requestData    = $obj->getRequestData();
     }
 
     public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)

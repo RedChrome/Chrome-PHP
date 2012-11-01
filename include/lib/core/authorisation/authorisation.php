@@ -17,11 +17,10 @@
  * @subpackage Chrome.Authorisation
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 10:43:27] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 23:05:00] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
  *
@@ -90,38 +89,45 @@ interface Chrome_Authorisation_Resource_Interface
 
 class Chrome_Authorisation_Resource implements Chrome_Authorisation_Resource_Interface
 {
-    protected $_id = null;
-    protected $_assert = null;
+    protected $_id             = null;
+    protected $_assert         = null;
     protected $_transformation = null;
 
-    public function __construct($id, $transformation, $assert = null) {
+    public function __construct($id, $transformation, $assert = null)
+    {
 
-        $this->_id = $id;
+        $this->_id             = $id;
         $this->_transformation = $transformation;
-        $this->_assert = $assert;
+        $this->_assert         = $assert;
     }
 
-    public function getID() {
+    public function getID()
+    {
         return $this->_id;
     }
 
-    public function setID($id) {
+    public function setID($id)
+    {
         $this->_id = $id;
     }
 
-    public function getAssert() {
+    public function getAssert()
+    {
         return $this->_assert;
     }
 
-    public function setAssert(Chrome_Authorisation_Assert_Interface $assert) {
+    public function setAssert(Chrome_Authorisation_Assert_Interface $assert)
+    {
         $this->_assert = $assert;
     }
 
-    public function setTransformation($transformation) {
+    public function setTransformation($transformation)
+    {
         $this->_transformation = $transformation;
     }
 
-    public function getTransformation() {
+    public function getTransformation()
+    {
         return $this->_transformation;
     }
 }
@@ -160,14 +166,16 @@ abstract class Chrome_Authorisation_Assert_Abstract implements Chrome_Authorisat
      * @param mixed $value
      * @return void
      */
-    public function setOption($key, $value) {
+    public function setOption($key, $value)
+    {
         $this->_option[$key] = $value;
     }
 
     /**
      * @return mixed
      */
-    public function getOption($key) {
+    public function getOption($key)
+    {
         return isset($this->_option[$key]) ? $this->_option[$key] : null;
     }
 }
@@ -222,7 +230,7 @@ interface Chrome_Authorisation_Interface
      */
     public static function setAuthorisationAdapter(Chrome_Authorisation_Adapter_Interface $adapter);
 
-     /**
+    /**
      * getAuthorisationAdapter()
      *
      * Returns the authorisation adapter e.g. RBAC
@@ -285,18 +293,19 @@ class Chrome_Authorisation implements Chrome_Authorisation_Interface
      *
      * @return Chrome_Authorisation_Adapter_Interface
      */
-    public static function getAuthorisationAdapter() {
+    public static function getAuthorisationAdapter()
+    {
         return self::$_adapter;
     }
 }
 
-function _isAllowed(Chrome_Authorisation_Resource_Interface $resource) {
-    static $_adapter;
+function _isAllowed(Chrome_Authorisation_Resource_Interface $resource)
+{
+    static $adapter;
 
-    if($_adapter === null) {
-        $_adapter = Chrome_Authorisation::getAuthorisationAdapter();
+    if($adapter === null) {
+        $adapter = Chrome_Authorisation::getAuthorisationAdapter();
     }
 
-    return $_adapter->isAllowed($resource);
-
+    return $adapter->isAllowed($resource);
 }

@@ -44,7 +44,7 @@ class Chrome_Form_Decorator_Checkbox_Yaml extends Chrome_Form_Decorator_Checkbox
 
 		++$this->_index;
 
-		if( $this->_index === sizeof( $values ) ) {
+		if( $this->_index === count( $values ) ) {
 
 			$return .= '</div>';
 			$this->_index = 0;

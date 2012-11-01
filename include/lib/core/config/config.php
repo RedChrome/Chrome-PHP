@@ -17,13 +17,11 @@
  * @subpackage Chrome.Config
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:20:14] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 23:05:19] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
-
+if(CHROME_PHP !== true) die();
 
 /**
  * load model class for Chrome_Config
@@ -117,7 +115,8 @@ class Chrome_Config implements Chrome_Config_Interface
      *
      * @returns Chrome_Model_Abstract
      */
-    public function getModel() {
+    public function getModel()
+    {
         return $this->_model;
     }
 
@@ -127,7 +126,9 @@ class Chrome_Config implements Chrome_Config_Interface
      * singleton pattern
      *
      */
-    private function __clone() {}
+    private function __clone()
+    {
+    }
 
     /**
      * Chrome_Config::getInstance()
@@ -136,7 +137,7 @@ class Chrome_Config implements Chrome_Config_Interface
      */
     public static function getInstance()
     {
-        if (self::$_instance === null) {
+        if(self::$_instance === null) {
             self::$_instance = new self();
         }
         return self::$_instance;
@@ -167,14 +168,10 @@ class Chrome_Config implements Chrome_Config_Interface
      */
     public function _getConfig($subclass, $name = '')
     {
-        if (!isset($this->_config[$subclass]) OR ($name != '' AND !isset($this->_config[$subclass][$name])))
-            throw new Chrome_Exception('Wrong input given in Chrome_Config::getConfig("' . $subclass . '", "' . $name .
-                '")! Config-Data doesn\'t exist!');
+        if(!isset($this->_config[$subclass]) or ($name != '' and !isset($this->_config[$subclass][$name]))) throw new Chrome_Exception('Wrong input given in Chrome_Config::getConfig("' . $subclass . '", "' . $name . '")! Config-Data doesn\'t exist!');
 
-        if ($name != '')
-            return $this->_config[$subclass][$name];
-        else
-            return $this->_config[$subclass];
+        if($name != '') return $this->_config[$subclass][$name];
+        else  return $this->_config[$subclass];
     }
 
     /**

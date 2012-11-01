@@ -3,6 +3,8 @@
 /**
  * CHROME-PHP CMS
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * This source file is subject to the Creative Commons license that is bundled
@@ -13,14 +15,17 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
+ * @category   CHROME-PHP
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.10.2012 19:29:01] --> $
+ * @author     Alexander Book <alexander.book@gmx.de>
+ * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
+ * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 22:46:23] --> $
+ * @link       http://chrome-php.de
  */
 
-if( CHROME_PHP !== true ) die();
+if(CHROME_PHP !== true) die();
 
 /**
  * @package    CHROME-PHP
@@ -28,53 +33,53 @@ if( CHROME_PHP !== true ) die();
  */
 class Chrome_Authentication_Chain_Session extends Chrome_Authentication_Chain_Abstract
 {
-	protected $_options = array( 'session_namespace' => '_AUTH_SESSION' );
+    protected $_options = array('session_namespace' => '_AUTH_SESSION');
 
-	public function __construct( array $options = array() )
-	{
-		$this->_options = array_merge( $this->_options, $options );
-	}
+    public function __construct(array $options = array())
+    {
+        $this->_options = array_merge($this->_options, $options);
+    }
 
-	protected function _update( Chrome_Authentication_Data_Container_Interface $return )
-	{
-		$session = Chrome_Session::getInstance();
+    protected function _update(Chrome_Authentication_Data_Container_Interface $return)
+    {
+        $session = Chrome_Session::getInstance();
 
-		$array = array( 'id' => $return->getID() );
+        $array = array('id' => $return->getID());
 
-		$session->set( $this->_options['session_namespace'], $array );
+        $session->set($this->_options['session_namespace'], $array);
 
-	}
+    }
 
-	public function authenticate( Chrome_Authentication_Resource_Interface $resource = null )
-	{
-		if( $resource !== null ) {
-			return $this->_chain->authenticate( $resource );
-		}
+    public function authenticate(Chrome_Authentication_Resource_Interface $resource = null)
+    {
+        if($resource !== null) {
+            return $this->_chain->authenticate($resource);
+        }
 
-		$session = Chrome_Session::getInstance();
+        $session = Chrome_Session::getInstance();
 
-		$data = $session->get( $this->_options['session_namespace'] );
+        $data = $session->get($this->_options['session_namespace']);
 
-		if( $data === null or empty( $data ) === true or !isset( $data['id'] ) ) {
-			return $this->_chain->authenticate( $resource );
-		}
+        if($data === null or empty($data) === true or !isset($data['id'])) {
+            return $this->_chain->authenticate($resource);
+        }
 
-		$container = new Chrome_Authentication_Data_Container();
+        $container = new Chrome_Authentication_Data_Container();
 
-		$container->setID( $data['id'] );
+        $container->setID($data['id']);
 
-		return $container;
-	}
+        return $container;
+    }
 
-	protected function _deAuthenticate()
-	{
-		$session = Chrome_Session::getInstance();
+    protected function _deAuthenticate()
+    {
+        $session = Chrome_Session::getInstance();
 
-		$session->set( $this->_options['session_namespace'], null );
-	}
+        $session->set($this->_options['session_namespace'], null);
+    }
 
-	protected function _createAuthentication( Chrome_Authentication_Create_Resource_Interface $resource )
-	{
-		// do nothing
-	}
+    protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)
+    {
+        // do nothing
+    }
 }

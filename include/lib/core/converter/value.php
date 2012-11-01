@@ -82,7 +82,7 @@ class Chrome_Converter_Value implements Chrome_Converter_Value_Interface
     
     public function addFilter($filter, array $params = null) {
         
-        $id = sizeof($this->_array);
+        $id = count($this->_array);
         $this->_array[] = $filter;
         $this->_params[$id] = $params;
         

@@ -60,10 +60,10 @@ class Chrome_Route_Static implements Chrome_Router_Route_Interface
 			$this->_resource->setFile( $row['file'] );
 			$this->_resource->setClass( $row['class'] );
 
-			if( sizeof( $row['GET'] ) > 0 ) {
+			if( count( $row['GET'] ) > 0 ) {
 				$data->setGET( $row['GET'] );
 			}
-			if( sizeof( $row['POST'] ) > 0 ) {
+			if( count( $row['POST'] ) > 0 ) {
 				$data->setPOST( $row['POST'] );
 			}
 			return true;

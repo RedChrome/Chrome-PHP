@@ -1,4 +1,5 @@
 <?php
+
 $FORM->getDecorator('password')->setOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL, $LANG->get('password'));
 $FORM->getDecorator('radio')->setOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL, array('Test', 'Test2'));
 $FORM->getDecorator('checkbox')->setOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL, array('value1', 'VAlue2', 'Value3'));

@@ -17,11 +17,10 @@
  * @subpackage Chrome.Authorisation
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 11:09:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 22:57:21] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
  * Chrome_Authorisation_Adapter_Default
@@ -103,7 +102,8 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
      *
      * @return Chrome_Authorisation_Adapter_Default
      */
-    private function __construct() {
+    private function __construct()
+    {
 
     }
 
@@ -114,7 +114,8 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
      *
      * @return Chrome_Authorisation_Adapter_Default
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if(self::$_instance === null) {
             self::$_instance = new self();
         }
@@ -130,7 +131,8 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
      * @param Chrome_Model_Abstract $model
      * @return void
      */
-    public function setModel(Chrome_Model_Abstract $model) {
+    public function setModel(Chrome_Model_Abstract $model)
+    {
         $this->_model = $model;
     }
 
@@ -140,9 +142,10 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
      * @param Chrome_Authentication_Data_Container $container
      * @return void
      */
-    public function setDataContainer(Chrome_Authentication_Data_Container $container) {
+    public function setDataContainer(Chrome_Authentication_Data_Container $container)
+    {
 
-        $this->_userID = (int) $container->getID();
+        $this->_userID  = (int) $container->getID();
 
         $this->_groupID = $this->_model->getUserGroupById($this->_userID);
 
@@ -155,7 +158,8 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
      * @param Chrome_Authorisation_Resource_Interface $resource
      * @return boolean true if allowed to access resource, false else
      */
-    public function isAllowed(Chrome_Authorisation_Resource_Interface $resource) {
+    public function isAllowed(Chrome_Authorisation_Resource_Interface $resource)
+    {
 
         $assert = $resource->getAssert();
 
@@ -167,7 +171,7 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
             }
         }
 
-        $id     = $resource->getID();
+        $id             = $resource->getID();
         $transformation = $resource->getTransformation();
 
         if(isset($this->_cache[$id][$transformation])) {
@@ -175,9 +179,8 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
         }
 
         // int has to be between 0 and 2^(self::CHROME_AUTHORISATION_DEFAULT_MAX_GROUPS+1) - 1
-        $int = $this->_model->getAccessById($id, $transformation);
-
-        $access = $int & $this->_int;
+        $int    = $this->_model->getAccessById($id, $transformation);
+        $access = ($int & $this->_int);
 
         if($access == 0) {
             $access = false;
@@ -197,7 +200,8 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
      *
      * @return void
      */
-    protected function _createIntegerRepresentation() {
+    protected function _createIntegerRepresentation()
+    {
         if($this->_groupID === null) {
             throw new Chrome_Exception('No Group-ID set!');
         }
@@ -212,7 +216,8 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
      *
      * @return int
      */
-    public function getGroupId() {
+    public function getGroupId()
+    {
         return $this->_groupID;
     }
 }
@@ -228,35 +233,33 @@ class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_DB_Abstract
 {
     protected $_dbInterface = 'Interface';
 
-    public function __construct() {
-        parent::__construct();
-    }
-
-    public function getAccessById($id, $transformation) {
-
-        $id = $this->_escape($id);
+    public function getAccessById($id, $transformation)
+    {
+        $id             = $this->_escape($id);
         $transformation = $this->_escape($transformation);
 
-        $this->_dbInterfaceInstance->select('_access')
-                                    ->from('authorisation_resource_default')
-                                    ->where('_resource_id = "'.$id.'" AND _transformation = "'.$transformation.'"')
-                                    ->execute()
-                                    ->clear();
+        $this->_dbInterfaceInstance
+            ->select('_access')
+            ->from('authorisation_resource_default')
+            ->where('_resource_id = "' . $id . '" AND _transformation = "' . $transformation . '"')
+            ->execute()
+            ->clear();
 
-         $return = $this->_dbInterfaceInstance->next();
-         return (int) $return['_access'];
+        $return = $this->_dbInterfaceInstance->next();
+        return (int) $return['_access'];
 
     }
 
-    public function getUserGroupById($id) {
-
+    public function getUserGroupById($id)
+    {
         $id = (int) $id;
 
-        $this->_dbInterfaceInstance->select('group_id')
-                                    ->from('authorisation_user_default')
-                                    ->where('user_id = "'.$id.'"')
-                                    ->execute()
-                                    ->clear();
+        $this->_dbInterfaceInstance
+            ->select('group_id')
+            ->from('authorisation_user_default')
+            ->where('user_id = "' . $id . '"')
+            ->execute()
+            ->clear();
 
         $return = $this->_dbInterfaceInstance->next();
         return (int) $return['group_id'];
@@ -270,22 +273,23 @@ class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_DB_Abstract
  */
 class Chrome_Database_Right_Handler_Default implements Chrome_Database_Right_Handler_Interface
 {
-    public function addHasRight($sqlStatement, Chrome_Authorisation_Resource_Interface $resource, $dbColumn) {
-
+    public function addHasRight($sqlStatement, Chrome_Authorisation_Resource_Interface $resource, $dbColumn)
+    {
         // do nothing, everything is done in _addHasRight
         return $sqlStatement;
     }
 
-    public function _addHasRight($sqlStatementOptions, Chrome_Authorisation_Resource_Interface $resource) {
+    public function _addHasRight($sqlStatementOptions, Chrome_Authorisation_Resource_Interface $resource)
+    {
 
         $transformation = $resource->getTransformation();
         $groupID = Chrome_Authorisation_Adapter_Default::getInstance()->getGroupId();
 
         if(isset($sqlStatementOptions['from']['from'])) {
-            $sqlStatementOptions['from']['from'] .= ' INNER JOIN '.DB_PREFIX.'_authorisation_resource_default AS _authResource ON _authResource._resource_id = '.$sqlStatementOptions['hasRight']['column'];
+            $sqlStatementOptions['from']['from'] .= ' INNER JOIN ' . DB_PREFIX . '_authorisation_resource_default AS _authResource ON _authResource._resource_id = ' . $sqlStatementOptions['hasRight']['column'];
         }
 
-        @$sqlStatementOptions['where']['condition'] .= ' _authResource._transformation = "'.$resource->getTransformation().'" AND _authResource._access & '.$groupID.' != 0 ';
+        @$sqlStatementOptions['where']['condition'] .= ' _authResource._transformation = "' . $resource->getTransformation() . '" AND _authResource._access & ' . $groupID . ' != 0 ';
 
         return $sqlStatementOptions;
     }

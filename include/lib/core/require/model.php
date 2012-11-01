@@ -297,7 +297,7 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      */
     public function getClasses()
     {
-        if(($return = $this->_cache->load('getClasses')) === null OR sizeof($return) == 0) {
+        if(($return = $this->_cache->load('getClasses')) === null OR count($return) == 0) {
 
             $return = $this->_decorator->getClasses();
 

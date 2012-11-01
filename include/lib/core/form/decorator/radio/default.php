@@ -37,7 +37,7 @@ class Chrome_Form_Decorator_Radio_Default extends Chrome_Form_Decorator_Abstract
 		$array = $this->_formElement->getOptions( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_SELECTION_OPTIONS );
 		$value = $array[$this->_int];
 
-		$this->_int = ++$this->_int % sizeof( $array );
+		$this->_int = ++$this->_int % count( $array );
 
 		$checked = '';
 		$disabled = '';

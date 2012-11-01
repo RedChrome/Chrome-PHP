@@ -64,7 +64,7 @@ class Chrome_Route_Regex implements Chrome_Router_Route_Interface
 
         $array = explode('/', $url->getPath(), self::CHROME_ROUTE_REGEX_MAX_LEVEL);
 
-        if(sizeof($array) <= 1) {
+        if(count($array) <= 1) {
             return false;
         }
 

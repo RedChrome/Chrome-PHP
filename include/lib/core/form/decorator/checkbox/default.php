@@ -40,7 +40,7 @@ class Chrome_Form_Decorator_Checkbox_Default extends Chrome_Form_Decorator_Abstr
 		$values = $this->_formElement->getOptions( Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_SELECTION_OPTIONS );
 
 		// then we have more than one checkbox and we can access them as an array
-		if( sizeof( $values ) > 1 ) {
+		if( count( $values ) > 1 ) {
 			$name = $name . '[]';
 		}
 

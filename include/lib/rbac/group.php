@@ -65,7 +65,7 @@ class Chrome_RBAC_Group implements Chrome_RBAC_Group_Interface
         
         $roles = array();
         
-        if(sizeof($this->_groups) > 0) {
+        if(count($this->_groups) > 0) {
             foreach($this->_groups as $group) {
                 $roles += $group->getRoles($roleID);
             }
@@ -73,7 +73,7 @@ class Chrome_RBAC_Group implements Chrome_RBAC_Group_Interface
         
         $_roles = array();
                 
-        if(sizeof($this->_roles) > 0) {
+        if(count($this->_roles) > 0) {
             foreach($this->_roles as $role) {
                 if($role->isRole($roleID) == true) {
                     $_roles += array($role);

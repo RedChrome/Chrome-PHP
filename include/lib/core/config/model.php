@@ -17,7 +17,7 @@
  * @subpackage Chrome.Config
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 15:55:49] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 23:11:23] --> $
  * @author     Alexander Book
  */
 
@@ -60,11 +60,20 @@ class Chrome_Model_Config_DB extends Chrome_Model_DB_Abstract
 
     public function loadConfig()
     {
-        $this->_dbInterfaceInstance->select(array('name', 'subclass', 'value'))->from('config')->execute();
+        $this->_dbInterfaceInstance
+            ->select(
+                array(
+                 'name',
+                 'subclass',
+                 'value',
+                )
+            )
+            ->from('config')
+            ->execute();
 
         $config = array();
 
-        foreach($this->_dbInterfaceInstance AS $result) {
+        foreach($this->_dbInterfaceInstance as $result) {
             // sets $config[subclass][name] = value
             $config[$result['subclass']][$result['name']] = $result['value'];
         }
@@ -76,7 +85,19 @@ class Chrome_Model_Config_DB extends Chrome_Model_DB_Abstract
 
     public function setConfig($name, $subclass, $value, $type, $modul = '')
     {
-        $this->_dbInterfaceInstance->insert()->into('config')->values(array($name, $subclass, $value, $type, $modul))->execute();
+        $this->_dbInterfaceInstance
+            ->insert()
+            ->into('config')
+            ->values(
+                array(
+                 $name,
+                 $subclass,
+                 $value,
+                 $type,
+                 $modul,
+                )
+            )
+            ->execute();
 
         $this->_dbInterfaceInstance->clear();
     }

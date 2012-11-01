@@ -60,7 +60,7 @@ class Chrome_Route_File extends Chrome_Route
 					require_once $value.$matches[2];
 
 					$data = self::_searchForRoute($url);
-					if(sizeof($data) > 1 AND $data != false)
+					if(count($data) > 1 AND $data != false)
 						return $data;
 
 

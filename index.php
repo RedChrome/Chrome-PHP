@@ -3,6 +3,8 @@
 /**
  * CHROME-PHP CMS
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * This source file is subject to the Creative Commons license that is bundled
@@ -13,24 +15,26 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [12.10.2012 01:06:40] --> $
- * @author     Alexander Book
+ * @category  CHROME-PHP
+ * @package   CHROME-PHP
+ * @author    Alexander Book <alexander.book@gmx.de>
+ * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
+ * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 14:37:59] --> $
+ * @link      http://chrome-php.de
  */
 // debugin...
-if(!isset($_SERVER['REMOTE_ADDR'])) {
-    $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-    $_SERVER['HTTP_USER_AGENT'] = 'Mozilla Firefox 5.0';
-    $_SERVER['REQUEST_URI'] = '';
-    $_SERVER['SCRIPT_NAME'] = 'index.php';
-    $_SERVER['SERVER_NAME'] = "localhost";
+if( !isset( $_SERVER['REMOTE_ADDR'] ) ) {
+	$_SERVER['REMOTE_ADDR']     = '127.0.0.1';
+	$_SERVER['HTTP_USER_AGENT'] = 'Mozilla Firefox 5.0';
+	$_SERVER['REQUEST_URI']     = '';
+	$_SERVER['SCRIPT_NAME']     = 'index.php';
+	$_SERVER['SERVER_NAME']     = 'localhost';
 }
-
 /**
- * load front controller
+ *load front controller
  */
+
 require_once 'include/main.php';
 
 Chrome_Front_Controller::getInstance()->execute();

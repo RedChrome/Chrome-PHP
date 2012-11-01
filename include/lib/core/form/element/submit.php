@@ -44,7 +44,7 @@ class Chrome_Form_Element_Submit extends Chrome_Form_Element_Abstract
 
         $isValid = true;
 
-        if(sizeof($this->_options[self::CHROME_FORM_ELEMENT_SUBMIT_VALUES]) > 0 AND !in_array($data, (array) $this->_options[self::CHROME_FORM_ELEMENT_SUBMIT_VALUES])) {
+        if(count($this->_options[self::CHROME_FORM_ELEMENT_SUBMIT_VALUES]) > 0 AND !in_array($data, (array) $this->_options[self::CHROME_FORM_ELEMENT_SUBMIT_VALUES])) {
             $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_WRONG_SUBMIT;
             $isValid = false;
         }

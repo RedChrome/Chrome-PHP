@@ -1,4 +1,5 @@
-<?php
+<?
+$FORM->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_DECORATOR, 'Yaml');
 $FORM->getDecorator('identity')->setOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL, $LANG->get('email_address'));
 
 $FORM->getDecorator('password')->setOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL, $LANG->get('password'));

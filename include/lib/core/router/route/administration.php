@@ -58,7 +58,7 @@ class Chrome_Route_Administration implements Chrome_Router_Route_Interface
 		}
 
 		// go to admin overview
-		if( sizeof( $dirs ) == 1 or ( $dirs[1] ) == '' and sizeof( $dirs ) == 2 ) {
+		if( count( $dirs ) == 1 or ( $dirs[1] ) == '' and count( $dirs ) == 2 ) {
 
             if(!_isAllowed(new Chrome_Authorisation_Resource($this->_model->getDefaultResourceID(), ''))) {
                 return false;

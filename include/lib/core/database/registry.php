@@ -122,7 +122,7 @@ class Chrome_DB_Registry
         return $this->_connectionID++;
 
 		// returns the connection ID
-		//return sizeof($this->_connections) - 1;
+		//return count($this->_connections) - 1;
 	}
 
 	/**

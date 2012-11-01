@@ -92,7 +92,7 @@ class Chrome_Converter
         $filters = $converter->getFilters();
 
         $this->_converters[] = $converter;
-        $id = sizeof($this->_converters)-1;
+        $id = count($this->_converters)-1;
 
         foreach($filters AS $filter) {
             $this->_filters[$filter] = $id;

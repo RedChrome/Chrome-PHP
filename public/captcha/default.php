@@ -16,16 +16,11 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 01:31:51] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [31.10.2012 13:35:22] --> $
  */
 
 if(!isset($_GET['name'])) {
     die();
-}
-
-// renew the key
-if(isset($_GET['renew'])) {
-
 }
 
 define('CHROME_PHP', true);

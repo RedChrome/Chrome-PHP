@@ -171,7 +171,7 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      * @return boolean
      */
 	public function isValid() {
-		if(sizeof($this->_errorMsg) > 0)
+		if(count($this->_errorMsg) > 0)
 			return false;
 
 		return true;

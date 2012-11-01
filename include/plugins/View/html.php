@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CHROME-PHP CMS
  *
@@ -15,11 +16,10 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.07.2011 14:21:44] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 19:04:34] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
 {
@@ -41,20 +41,20 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
     }
 
     public function getTitle()
-    {        
-        return $this->_title.$this->_getDefaultTitleEnding();
+    {
+        return $this->_title . $this->_getDefaultTitleEnding();
     }
 
     public function addTitle(Chrome_View_Abstract $obj, $title)
-    {        
+    {
         if($this->_title === '') {
             $this->_title = $this->_getDefaultTitleBeginning();
         }
-        
+
         if(is_array($title)) {
-            $this->_title .= $this->_getDefaultTitleSeparator().implode($this->_getDefaultTitleSeparator(), $title);
+            $this->_title .= $this->_getDefaultTitleSeparator() . implode($this->_getDefaultTitleSeparator(), $title);
         } else {
-            $this->_title .= $this->_getDefaultTitleSeparator().$title;
+            $this->_title .= $this->_getDefaultTitleSeparator() . $title;
         }
     }
 
@@ -65,8 +65,8 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
 
     public function addJS(Chrome_View_Abstract $obj, $filename = null, $directory = null)
     {
-        if($filename === null AND $directory === null) {
-            if(isset($obj->JS) AND is_array($obj->JS)) {
+        if($filename === null and $directory === null) {
+            if(isset($obj->JS) and is_array($obj->JS)) {
                 $this->_JS = array_merge($obj->JS, $this->_JS);
                 return;
             } else {
@@ -77,7 +77,7 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
                 throw new Chrome_Exception('Either filename AND directory is not set, OR filename must be set!');
             }
 
-            $this->_JS[] = _PUBLIC.$directory.$filename;
+            $this->_JS[] = _PUBLIC . $directory . $filename;
         }
     }
 
@@ -85,7 +85,7 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
     {
         if($js === null) {
 
-            if(isset($obj->JS) AND is_array($obj->JS)) {
+            if(isset($obj->JS) and is_array($obj->JS)) {
                 $this->_JS = $obj->JS;
             } else {
                 throw new Chrome_Exception('Cannot add multiple .js files if property "JS" of the view class is not an array!');
@@ -102,8 +102,8 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
 
             $return = '';
 
-            foreach($this->_JS AS $file) {
-                $return .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
+            foreach($this->_JS as $file) {
+                $return .= '<script type="text/javascript" src="' . $file . '"></script>' . "\n";
             }
 
             return $return;
@@ -114,8 +114,8 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
 
     public function addCSS(Chrome_View_Abstract $obj, $filename = null, $directory = null)
     {
-        if($filename === null AND $directory === null) {
-            if(isset($obj->CSS) AND is_array($obj->CSS)) {
+        if($filename === null and $directory === null) {
+            if(isset($obj->CSS) and is_array($obj->CSS)) {
                 $this->_CSS = array_merge($obj->CSS, $this->_CSS);
             } else {
                 throw new Chrome_Exception('Cannot add an .css file if property "CSS" does not exist OR it is not an array in a view class!');
@@ -127,13 +127,13 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
             throw new Chrome_Exception('No filename for a .css file given!');
         }
 
-        $this->_CSS[] = _PUBLIC.$directory.$filename;
+        $this->_CSS[] = _PUBLIC . $directory . $filename;
     }
 
     public function setCSS(Chrome_View_Abstract $obj, array $css = null)
     {
         if($css === null) {
-            if(isset($obj->CSS) AND is_array($obj->CSS)) {
+            if(isset($obj->CSS) and is_array($obj->CSS)) {
                 $this->_CSS = $obj->CSS;
                 return;
             }
@@ -151,8 +151,8 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
         }
 
         $return = '';
-        foreach($this->_CSS AS $css) {
-            $return .= '<link rel="stylesheet" href="'.$css.'" type="text/css" />'."\n";
+        foreach($this->_CSS as $css) {
+            $return .= '<link rel="stylesheet" href="' . $css . '" type="text/css" />' . "\n";
         }
         return $return;
     }
@@ -174,7 +174,16 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
 
     public function getMethods()
     {
-        return array('getTitle', 'addTitle', 'setTitle', 'addJS', 'addCSS', 'setJS', 'setCSS', 'getJS', 'getCSS');
+        return array(
+            'getTitle',
+            'addTitle',
+            'setTitle',
+            'addJS',
+            'addCSS',
+            'setJS',
+            'setCSS',
+            'getJS',
+            'getCSS');
     }
 
     public function getClassName()
