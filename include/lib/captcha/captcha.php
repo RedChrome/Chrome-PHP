@@ -20,7 +20,7 @@
  * @author    Alexander Book <alexander.book@gmx.de>
  * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
  * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 04:15:57] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.11.2012 21:45:26] --> $
  * @link      http://chrome-php.de
  */
 
@@ -172,7 +172,7 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
                 if(!class_exists('Chrome_Captcha_Engine_' . $_engine, false)) {
                     throw new Chrome_Exception('Loaded captcha engine file does not contain proper class Chrome_Captcha_Engine_' .
                         $_engine
-                            );
+                    );
                 }
             }
         }

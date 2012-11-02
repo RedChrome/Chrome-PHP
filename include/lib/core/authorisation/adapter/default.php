@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authorisation
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 22:57:21] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.11.2012 21:04:54] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -232,6 +232,10 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
 class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_DB_Abstract
 {
     protected $_dbInterface = 'Interface';
+
+    public function __construct() {
+        parent::__construct();
+    }
 
     public function getAccessById($id, $transformation)
     {

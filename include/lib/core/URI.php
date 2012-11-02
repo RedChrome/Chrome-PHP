@@ -17,7 +17,7 @@
  * @subpackage Chrome.URI
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 23:15:04] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 00:50:25] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -28,9 +28,9 @@ if(CHROME_PHP !== true) die();
  */
 interface Chrome_URI_Interface
 {
-    const CHROME_URI_AUTHORITY_HOST     = 'HOST',
-          CHROME_URI_AUTHORITY_PORT     = 'PORT',
-          CHROME_URI_AUTHORITY_USER     = 'USER',
+    const CHROME_URI_AUTHORITY_HOST = 'HOST',
+          CHROME_URI_AUTHORITY_PORT = 'PORT',
+          CHROME_URI_AUTHORITY_USER = 'USER',
           CHROME_URI_AUTHORITY_PASSWORD = 'PASSWORD';
 
     public function setProtocol($protocol);
@@ -73,9 +73,9 @@ class Chrome_URI implements Chrome_URI_Interface
     protected $_protocol  = 'http';
 
     protected $_authority = array(
-                             self::CHROME_URI_AUTHORITY_HOST     => null,
-                             self::CHROME_URI_AUTHORITY_PORT     => null,
-                             self::CHROME_URI_AUTHORITY_USER     => null,
+                             self::CHROME_URI_AUTHORITY_HOST => null,
+                             self::CHROME_URI_AUTHORITY_PORT => null,
+                             self::CHROME_URI_AUTHORITY_USER => null,
                              self::CHROME_URI_AUTHORITY_PASSWORD => null,
                             );
 
@@ -163,7 +163,7 @@ class Chrome_URI implements Chrome_URI_Interface
             throw new Chrome_Exception('Invalid URL "' . $url . '" given in Chrome_URI::setURL()!');
         } else {
 
-            $this->_protocol = $data['scheme'];
+            $this->_protocol                                       = $data['scheme'];
             $this->_authority[self::CHROME_URI_AUTHORITY_HOST]     = $data['host'];
             $this->_authority[self::CHROME_URI_AUTHORITY_USER]     = (isset($data['user'])) ? $data['user'] : null;
             $this->_authority[self::CHROME_URI_AUTHORITY_PORT]     = (isset($data['port'])) ? $data['port'] : null;
