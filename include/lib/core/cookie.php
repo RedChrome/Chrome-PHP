@@ -16,11 +16,10 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 16:49:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.11.2012 22:26:00] --> $
  * @author     Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
  * @package CHROME-PHP
@@ -60,33 +59,33 @@ class Chrome_Cookie implements ArrayAccess
     /**
      * Contains instance of this class
      *
-     * @var Chrome_Cookie
+     * @var Chrome_cookie
      */
     private static $_instance = null;
 
-    private $_COOKIE = null;
+    private $_cookie = null;
 
     /**
-     * Chrome_Cookie::__construct()
+     * Chrome_cookie::__construct()
      *
-     * @return Chrome_Cookie
+     * @return Chrome_cookie
      */
     private function __construct()
     {
-        $this->_COOKIE = $_COOKIE;
+        $this->_cookie = $_COOKIE;
 
         $this->_validateCookie();
     }
 
     public function get($name)
     {
-        return (isset($this->_COOKIE[$name]) AND !empty($this->_COOKIE[$name])) ? $this->_COOKIE[$name] : null;
+        return (isset($this->_cookie[$name]) and !empty($this->_cookie[$name])) ? $this->_cookie[$name] : null;
     }
 
     /**
-     * Chrome_Cookie::getInstance()
+     * Chrome_cookie::getInstance()
      *
-     * @return Chrome_Cookie
+     * @return Chrome_cookie
      */
     public static function getInstance()
     {
@@ -98,7 +97,7 @@ class Chrome_Cookie implements ArrayAccess
     }
 
     /**
-     * Chrome_Cookie::setCookie()
+     * Chrome_cookie::setCookie()
      *
      * Sets a cookie on the clients browser
      *
@@ -113,7 +112,7 @@ class Chrome_Cookie implements ArrayAccess
      */
     public function setCookie($name, $value = 0, $expire = 0, $path = self::CHROME_COOKIE_DEFAULT_PATH, $domain = '', $secure = false, $httponly = false)
     {
-        if($path === null OR $path === false) {
+        if($path === null or $path === false) {
             $path = self::CHROME_COOKIE_DEFAULT_PATH;
         }
 
@@ -130,7 +129,7 @@ class Chrome_Cookie implements ArrayAccess
     }
 
     /**
-     * Chrome_Cookie::getCookie()
+     * Chrome_cookie::getCookie()
      *
      * Returns the value of a cookie
      *
@@ -139,11 +138,11 @@ class Chrome_Cookie implements ArrayAccess
      */
     public function getCookie($name)
     {
-        return (isset($this->_COOKIE[$name])) ? $this->_COOKIE[$name] : null;
+        return (isset($this->_cookie[$name])) ? $this->_cookie[$name] : null;
     }
 
     /**
-     * Chrome_Cookie::unsetCookie()
+     * Chrome_cookie::unsetCookie()
      *
      * Unsets a cookie
      * If you changed default settings, then you have to add these here too, otherwise client will create a new cookie
@@ -158,19 +157,18 @@ class Chrome_Cookie implements ArrayAccess
      */
     public function unsetCookie($name, $path = self::CHROME_COOKIE_DEFAULT_PATH, $domain = '', $secure = false, $httponly = false)
     {
-        if($path === null OR $path === false) {
+        if($path === null or $path === false) {
             $path = self::CHROME_COOKIE_DEFAULT_PATH;
         }
 
-
         if(!headers_sent()) {
-            setCookie($name, "", CHROME_TIME - self::CHROME_COOKIE_COOKIE_NO_EXPIRE, $path, $domain, $secure, $httponly);
+            setcookie($name, '', (CHROME_TIME - self::CHROME_COOKIE_COOKIE_NO_EXPIRE), $path, $domain, $secure, $httponly);
         }
-        unset($this->_COOKIE[$name]);
+        unset($this->_cookie[$name]);
     }
 
     /**
-     * Chrome_Cookie::_validateCookie()
+     * Chrome_cookie::_validateCookie()
      *
      * Checks wheter the cookies are valide
      *
@@ -178,11 +176,11 @@ class Chrome_Cookie implements ArrayAccess
      */
     private function _validateCookie()
     {
-        if(!isset($this->_COOKIE[self::CHROME_COOKIE_COOKIE_VALIDATION_KEY])) {
+        if(!isset($this->_cookie[self::CHROME_COOKIE_COOKIE_VALIDATION_KEY])) {
             $this->unsetAllCookies();
             $this->setCookie(self::CHROME_COOKIE_COOKIE_VALIDATION_KEY, $this->_getValidationCode(), -1);
         } else {
-            if($this->_COOKIE[self::CHROME_COOKIE_COOKIE_VALIDATION_KEY] != $this->_getValidationCode()) {
+            if($this->_cookie[self::CHROME_COOKIE_COOKIE_VALIDATION_KEY] != $this->_getValidationCode()) {
                 $this->unsetAllCookies();
                 $this->setCookie(self::CHROME_COOKIE_COOKIE_VALIDATION_KEY, $this->_getValidationCode(), -1);
             }
@@ -190,7 +188,7 @@ class Chrome_Cookie implements ArrayAccess
     }
 
     /**
-     * Chrome_Cookie::_getValidationCode()
+     * Chrome_cookie::_getValidationCode()
      *
      * Creates a validation code AND returns this
      * The code should always be the same for the same user, ()so no timestamp OR anything like that!)
@@ -204,17 +202,16 @@ class Chrome_Cookie implements ArrayAccess
         }
 
         // you can modifie this, so you get a better protection against session hijacking
-        $string = 'random_string.'.$_SERVER["HTTP_USER_AGENT"].$_SERVER['HTTP_USER_AGENT']{2}.$_SERVER["HTTP_USER_AGENT"]{0};
+        $string = 'random_string.' . $_SERVER['HTTP_USER_AGENT'] . $_SERVER['HTTP_USER_AGENT'] {2} . $_SERVER['HTTP_USER_AGENT'] {0};
 
-        $this->_validationCode = Chrome_Hash::getInstance()->hash($string);
-
+        $this->_validationCode  = Chrome_Hash::getInstance()->hash($string);
         $_SESSION['CHROME_PHP'] = $this->_validationCode;
 
         return $this->_validationCode;
     }
 
     /**
-     * Chrome_Cookie::unsetAllCookies()
+     * Chrome_cookie::unsetAllCookies()
      *
      * Unsets all cookies
      *
@@ -222,35 +219,39 @@ class Chrome_Cookie implements ArrayAccess
      */
     public function unsetAllCookies()
     {
-        if(!isset($this->_COOKIE)) {
+        if(!isset($this->_cookie)) {
             return;
         }
 
-        foreach($this->_COOKIE AS $key => $name) {
+        foreach($this->_cookie as $key => $name) {
             if($key === self::CHROME_COOKIE_COOKIE_VALIDATION_KEY) {
                 continue;
             }
 
             $this->unsetCookie($key);
         }
-        unset($this->_COOKIE);
+        unset($this->_cookie);
     }
 
     /**
      * Methods of ArrayAccess interface
      */
-    public function offsetExists($offset) {
-        return isset($this->_COOKIE[$offset]);
+    public function offsetExists($offset)
+    {
+        return isset($this->_cookie[$offset]);
     }
-    public function offsetGet($offset) {
+    public function offsetGet($offset)
+    {
         return $this->get($offset);
     }
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value)
+    {
         $this->setCookie($offset, $value);
     }
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset)
+    {
         $this->unsetCookie($offset);
     }
 }
 
-Chrome_Cookie::getInstance();
+Chrome_cookie::getInstance();

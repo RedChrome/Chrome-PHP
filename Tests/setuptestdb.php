@@ -17,7 +17,7 @@ if($query == false) {
 }
 
 $interface = Chrome_DB_Interface_Factory::factory();
-$registry = Chrome_DB_Registry::getInstance();
+$registry = Chrome_Database_Registry::getInstance();
 $con = $registry->getConnection($interface->getConnectionID());
 
 $result = mysql_query($query, $con);

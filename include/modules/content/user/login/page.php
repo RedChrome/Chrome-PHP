@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2012 23:23:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:12:42] --> $
  * @author     Alexander Book
  */
 
@@ -31,19 +31,19 @@ if(CHROME_PHP !== true)
 class Chrome_Controller_User_Login_Page extends Chrome_Controller_Content_Abstract
 {
     protected function _initialize() {
-        $this->require = array('file' => array(CONTENT.'user/login/include.php', CONTENT.'user/login/view/default.php'));
+        $this->_require = array('file' => array(CONTENT.'user/login/include.php', CONTENT.'user/login/view/default.php'));
 	}
 
     protected function _execute() {
 
-        $this->form = Chrome_Form_Login::getInstance();
+        $this->_form = Chrome_Form_Login::getInstance();
 
         // the login form, will be the first one in Content
-        $this->view = new Chrome_View_User_Default_ShowForm($this);
+        $this->_view = new Chrome_View_User_Default_ShowForm($this);
 
         $views = Chrome_Design_Composite_Content::getInstance()->getComposite()->getViews();
 
-        array_unshift($views, $this->view);
+        array_unshift($views, $this->_view);
 
         Chrome_Design_Composite_Content::getInstance()->getComposite()->setView($views);
     }

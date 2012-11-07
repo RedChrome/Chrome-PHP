@@ -17,11 +17,11 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 13:47:01] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:58:27] --> $
  * @author     Alexander Book
  */
 
-if( CHROME_PHP !== true ) die();
+if(CHROME_PHP !== true) die();
 
 /**
  * @package CHROME-PHP
@@ -29,27 +29,27 @@ if( CHROME_PHP !== true ) die();
  */
 abstract class Chrome_Controller_Header_Abstract extends Chrome_Controller_Abstract
 {
-	public function __construct( Chrome_Request_Handler_Interface $reqHandler )
-	{
-		parent::__construct( $reqHandler );
-	}
+    public function __construct(Chrome_Request_Handler_Interface $reqHandler)
+    {
+        parent::__construct($reqHandler);
+    }
 
-	final public function execute()
-	{
-	}
+    final public function execute()
+    {
+    }
 
-	protected function _initialize()
-	{
+    protected function _initialize()
+    {
 
-	}
+    }
 
-	protected function _execute()
-	{
+    protected function _execute()
+    {
 
-	}
+    }
 
-	protected function _shutdown()
-	{
+    protected function _shutdown()
+    {
 
-	}
+    }
 }

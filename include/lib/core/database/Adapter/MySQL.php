@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB.Adapter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 11:01:14] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.11.2012 00:24:49] --> $
  * @author     Alexander Book
  */
 

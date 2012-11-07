@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 20:33:20] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.11.2012 22:11:09] --> $
  * @author     Alexander Book
  */
 
@@ -270,8 +270,9 @@ class Chrome_Require implements Chrome_Require_Interface
             }
 		}
 
-        // cannot throw an exception, because this function gets called mostly via __autoload
-		die('Could not load class "'.$name.'"! No extension is matching and class is not defined in table '.DB_PREFIX.'_class!');
+        Chrome_Log::logException(new Chrome_Exception_Require('Could not load class "'.$name.'"'), E_ERROR);
+        // cannot throw an exception, because this function gets called mostly via __autoload => php crashes, fixed in newer php distributions...
+		//die('Could not load class "'.$name.'"! No extension is matching and class is not defined in table '.DB_PREFIX.'_class!');
 	}
 
     /**
@@ -369,4 +370,4 @@ function import($array)
     }
 }
 
-spl_autoload_register('classLoad');
+spl_autoload_register('classLoad', true);

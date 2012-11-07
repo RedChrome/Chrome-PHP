@@ -6,7 +6,7 @@ class Chrome_Controller_News extends Chrome_Controller_Content_Abstract
 {
     protected function _initialize()
     {
-        $this->view = new Chrome_View_Content_News($this);
+        $this->_view = new Chrome_View_Content_News($this);
     }
 
     protected function _execute()
@@ -24,6 +24,6 @@ class Chrome_Controller_News extends Chrome_Controller_Content_Abstract
 
         }
 
-        $this->view->render($this);
+        $this->_view->render($this);
     }
 }

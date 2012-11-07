@@ -29,12 +29,12 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.DB
  */
-class Chrome_DB_Registry
+class Chrome_Database_Registry
 {
 	/**
 	 * Instance of this class, used for singleton pattern
 	 *
-	 * @var Chrome_DB_Registry
+	 * @var Chrome_Database_Registry
 	 */
 	private static $_instance;
 
@@ -65,7 +65,7 @@ class Chrome_DB_Registry
 	/**
 	 * Gets the instance of this class
 	 *
-	 * @return Chrome_DB_Registry instance
+	 * @return Chrome_Database_Registry instance
 	 */
 	public static function getInstance()
 	{

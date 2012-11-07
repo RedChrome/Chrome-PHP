@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:59:52] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.11.2012 13:04:11] --> $
  * @author     Alexander Book
  */
 
@@ -36,13 +36,13 @@ class Chrome_Controller_Content_Login extends Chrome_Controller_Content_Abstract
 
 	protected function _execute()
 	{
-		if( $this->requestHandler instanceof Chrome_Request_Handler_AJAX ) {
+		if( $this->_requestHandler instanceof Chrome_Request_Handler_AJAX ) {
 			require_once 'controller/ajax.php';
-			$controller = new Chrome_Controller_Content_Login_AJAX($this->requestHandler);
+			$controller = new Chrome_Controller_Content_Login_AJAX($this->_requestHandler);
             $controller->setExceptionHandler(new Chrome_Exception_Handler_JSON());
 		} else {
 			require_once 'controller/default.php';
-			$controller = new Chrome_Controller_Content_Login_Default($this->requestHandler);
+			$controller = new Chrome_Controller_Content_Login_Default($this->_requestHandler);
 		}
 
 		$controller->execute();
@@ -53,7 +53,7 @@ class Chrome_Controller_Content_Login extends Chrome_Controller_Content_Abstract
         /*if(Chrome_Request::getInstance()->getRequest() instanceof Chrome_Request_Handler_AJAX) {
             Chrome_Response::setResponseClass( 'ajax' );
         }*/
-        if($this->requestHandler instanceof Chrome_Request_Handler_AJAX) {
+        if($this->_requestHandler instanceof Chrome_Request_Handler_AJAX) {
             Chrome_Response::setResponseClass( 'ajax' );
         }
 

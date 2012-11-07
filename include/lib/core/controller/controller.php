@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 23:16:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:05:57] --> $
  * @author     Alexander Book
  */
 
@@ -74,7 +74,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      *
      * @var Chrome_Exception_Handler_Interface
      */
-    protected $exceptionHandler = null;
+    protected $_exceptionHandler = null;
 
     /**
      * Requires all classes/files
@@ -84,27 +84,27 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      *
      * @var array
      */
-    protected $require = array();
+    protected $_require = array();
 
     /**
      * contains an instance of Chrome_Responde_Interface
      *
      * @var Chrome_Response_Interface
      */
-    protected $response = null;
+    protected $_response = null;
 
     /**
      * contains an instance of Chrome_Model_Abstract
      *
      * @var Chrome_Model_Abstract
      */
-    protected $model = array();
+    protected $_model = array();
 
     /**
      *
      * @var Chrome_View_Interface
      */
-    protected $view = null;
+    protected $_view = null;
 
     /**
      * array of filters
@@ -114,30 +114,30 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      *
      * @var array
      */
-    protected $filter = null;
+    protected $_filter = null;
 
     /**
      *
      * @var Chrome_Form_Interface
      */
-    protected $form = null;
+    protected $_form = null;
 
     /**
      *
      * @var Chrome_Design_Composite_Interface
      */
-    protected $design = null;
+    protected $_design = null;
 
     /**
      * @var Chrome_Request_Handler_Interface
      */
-    protected $requestHandler = null;
+    protected $_requestHandler = null;
 
     /**
      *
      * @var Chrome_Request_Data_Interface
      */
-    protected $requestData = null;
+    protected $_requestData = null;
 
     /**
      * _initialize()
@@ -178,8 +178,8 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      */
     protected function _require()
     {
-        if(isset($this->require['file'])) {
-            foreach($this->require['file'] as $file) {
+        if(isset($this->_require['file'])) {
+            foreach($this->_require['file'] as $file) {
                 if(_isFile($file)) {
                     require_once $file;
                 } else {
@@ -188,8 +188,8 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
             }
         }
 
-        if(isset($this->require['class'])) {
-            foreach($this->require['class'] as $class) {
+        if(isset($this->_require['class'])) {
+            foreach($this->_require['class'] as $class) {
                 classLoad($class);
             }
         }
@@ -202,13 +202,13 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      */
     protected function _setFilter()
     {
-        if(!is_array($this->filter)) {
+        if(!is_array($this->_filter)) {
             return;
         }
 
         $registry = Chrome_Registry::getInstance();
 
-        foreach($this->filter as $filterChain => $filters) {
+        foreach($this->_filter as $filterChain => $filters) {
             if(is_string($filterChain)) {
                 $_filterChain = $registry->get('Chrome_Filter_Chain', 'Chrome_Filter_Chain_' . ucfirst($filterChain));
             } elseif($filterChain instanceof Chrome_Filter_Chain_Abstract) {
@@ -227,61 +227,61 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
 
     protected function write($string)
     {
-        $this->response->write($string);
+        $this->_response->write($string);
     }
 
     public function getModel()
     {
-        return $this->model;
+        return $this->_model;
     }
 
     public function getView()
     {
-        return $this->view;
+        return $this->_view;
     }
 
     public function getForm()
     {
-        return $this->form;
+        return $this->_form;
     }
 
     public function getRequestHandler()
     {
-        return $this->requestHandler;
+        return $this->_requestHandler;
     }
 
     public function getResponse()
     {
-        if($this->response === null) {
-            $this->response = Chrome_Response::getInstance();
+        if($this->_response === null) {
+            $this->_response = Chrome_Response::getInstance();
         }
 
-        return $this->response;
+        return $this->_response;
     }
 
     public function setDesign(Chrome_Design_Composite_Interface $obj)
     {
-        $this->design = $obj;
+        $this->_design = $obj;
     }
 
     public function getDesign()
     {
-        return $this->design;
+        return $this->_design;
     }
 
     public function setRequestHandler(Chrome_Request_Handler_Interface $obj)
     {
-        $this->requestHandler = $obj;
-        $this->requestData    = $obj->getRequestData();
+        $this->_requestHandler = $obj;
+        $this->_requestData    = $obj->getRequestData();
     }
 
     public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)
     {
-        $this->exceptionHandler = $obj;
+        $this->_exceptionHandler = $obj;
     }
 
     public function getExceptionHandler()
     {
-        return $this->exceptionHandler;
+        return $this->_exceptionHandler;
     }
 }

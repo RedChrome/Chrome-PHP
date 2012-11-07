@@ -16,11 +16,18 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 20:26:44] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.11.2012 22:06:49] --> $
  * @author     Alexander Book
  */
+
+// unfortunately PHPUnit now needs $GLOBALS to be set, but we dont allow this, so use this hack
+$_tempServer = $_SERVER;
+$_tempGlobals = $GLOBALS;
 
 require_once 'include/main.php';
 Chrome_Front_Controller::getInstance();
 require_once 'testsetup.php';
 require_once 'testsetupdb.php';
+
+$_SERVER = $_tempServer;
+$GLOBALS = $_tempGlobals;

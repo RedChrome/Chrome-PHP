@@ -67,9 +67,9 @@ abstract class Chrome_DB_Adapter_Abstract
     protected static $_rightHandler = null;
 
 	/**
-	 * Instance of Chrome_DB_Registry
+	 * Instance of Chrome_Database_Registry
 	 *
-	 * @var Chrome_DB_Registry instance
+	 * @var Chrome_Database_Registry instance
 	 */
 	protected static $_registryInstance;
 
@@ -81,7 +81,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	protected $_connection = null;
 
 	/**
-	 * Current connection ID, needed for getting connection from Chrome_DB_Registry
+	 * Current connection ID, needed for getting connection from Chrome_Database_Registry
 	 *
 	 * @var int
 	 */
@@ -103,14 +103,14 @@ abstract class Chrome_DB_Adapter_Abstract
 
 	/**
 	 * Constructor, <br>
-	 * sets @see self::$_registryInstance to an instance of Chrome_DB_Registry
+	 * sets @see self::$_registryInstance to an instance of Chrome_Database_Registry
 	 *
 	 * @return void
 	 */
 	protected function __construct()
 	{
 		if(self::$_registryInstance === null) {
-			self::$_registryInstance = Chrome_DB_Registry::getInstance();
+			self::$_registryInstance = Chrome_Database_Registry::getInstance();
 		}
 	}
 
@@ -381,11 +381,11 @@ abstract class Chrome_DB_Adapter_Abstract
 	 * Use instead {@see Chrome_DB_Adapter_Abstract::setConnection()}
 	 *
 	 * @deprecated
-	 * @param Chrome_DB_Registry $obj instance of Chrome_DB_Registry
+	 * @param Chrome_Database_Registry $obj instance of Chrome_Database_Registry
 	 * @param resource           $connection connection to db
 	 * @return void
 	 */
-	public function setConnectionByRegistry(Chrome_DB_Registry &$obj, $connection)
+	public function setConnectionByRegistry(Chrome_Database_Registry &$obj, $connection)
 	{
 		$this->_connection = $connection;
 	}
@@ -418,7 +418,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	/**
 	 * Sets a connection ID
 	 *
-	 * @param int $connectionID id of the connection, from Chrome_DB_Registry
+	 * @param int $connectionID id of the connection, from Chrome_Database_Registry
 	 * @return void
 	 */
 	public function setConnectionID(Chrome_DB_Interface_Abstract $obj = null, $connectionID)
@@ -435,7 +435,7 @@ abstract class Chrome_DB_Adapter_Abstract
 	/**
 	 * Sets default connection ID
 	 *
-	 * @param int $connectionID id of the connection, from Chrome_DB_Registry
+	 * @param int $connectionID id of the connection, from Chrome_Database_Registry
 	 * @return void
 	 */
 	public static function setDefaultConnectionID(Chrome_DB_Interface_Abstract & $obj, $connectionID)

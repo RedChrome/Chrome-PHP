@@ -18,7 +18,7 @@
  * @subpackage Chrome.Request
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:32:11] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.11.2012 21:57:55] --> $
  * @author     Alexander Book
  */
 
@@ -375,7 +375,7 @@ class Chrome_Request implements Chrome_Request_Interface
 		}
 
 		// unset all global data, but DO NOT UNSET SESSION!!! http://php.net/manual/de/function.unset.php#77926
-		unset( $_SERVER, $_GET, $_POST, $_FILES, $_COOKIE, $_REQUEST, $_ENV, $GLOBALS );
+		unset( $_GET, $_POST, $_FILES, $_COOKIE, $_REQUEST, $_ENV, $_SERVER, $GLOBALS );
 		$_SESSION = array();
 
 		// now we dont need them any more

@@ -17,12 +17,11 @@
  * @subpackage Chrome.Converter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.10.2012 13:59:50] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:59:32] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 /**
  *
  */
@@ -42,11 +41,13 @@ class Chrome_Converter
 
     protected $_converters = array();
 
-    private function __construct() {
+    private function __construct()
+    {
 
     }
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
 
         if(self::$_instance === null) {
             self::$_instance = new self();
@@ -58,43 +59,48 @@ class Chrome_Converter
     public function convert(Chrome_Converter_Value_Interface $filterList, $var)
     {
         $this->_tmpVar = $var;
-        foreach($filterList AS $key => $filter) {
+        foreach($filterList as $key => $filter) {
             $this->_convert($this->_getConverterID($filter), $filter, $filterList->getParam($key));
         }
 
         return $this->_tmpVar;
     }
 
-    protected function _convert($converterID, $filterName, $params) {
+    protected function _convert($converterID, $filterName, $params)
+    {
 
         $this->_converters[$converterID]->convert($this->_tmpVar, $filterName, $params);
     }
 
-    protected function _getConverterID($filter) {
+    protected function _getConverterID($filter)
+    {
 
         if(!$this->_hasFilter($filter)) {
-            throw new Chrome_Exception('Cannot apply filter "'.$filter.'"! Filter does not exist OR is not added to Chrome_Converter!');
+            throw new Chrome_Exception('Cannot apply filter "' . $filter . '"! Filter does not exist OR is not added to Chrome_Converter!');
         }
 
         return $this->_filters[$filter];
     }
 
-    protected function _hasConverter($converter) {
+    protected function _hasConverter($converter)
+    {
         return (isset($this->_converters[$converter]));
     }
 
-    protected function _hasFilter($filter) {
+    protected function _hasFilter($filter)
+    {
         return (isset($this->_filters[$filter]));
     }
 
-    public function addConverter(Chrome_Converter_Interface $converter) {
+    public function addConverter(Chrome_Converter_Interface $converter)
+    {
 
         $filters = $converter->getFilters();
 
         $this->_converters[] = $converter;
-        $id = count($this->_converters)-1;
+        $id = (count($this->_converters) - 1);
 
-        foreach($filters AS $filter) {
+        foreach($filters as $filter) {
             $this->_filters[$filter] = $id;
         }
     }
@@ -125,17 +131,20 @@ abstract class Chrome_Converter_Abstract implements Chrome_Converter_Interface
 
     protected $_methods = array();
 
-    public function __construct() {
+    public function __construct()
+    {
         Chrome_Converter::getInstance()->addConverter($this);
     }
 
-    public function getFilters() {
+    public function getFilters()
+    {
         return $this->_filters;
     }
 
-    public function convert(&$var, $filterName, $params = array()) {
-        if(!isset($this->_methods[$filterName]) ) {
-            throw new Chrome_Exception('Cannot apply filter "'.$filterName.'"! There is no association to the filter($this->_methods) in Chrome_Converter_Abstract::convert()!');
+    public function convert(&$var, $filterName, $params = array())
+    {
+        if(!isset($this->_methods[$filterName])) {
+            throw new Chrome_Exception('Cannot apply filter "' . $filterName . '"! There is no association to the filter($this->_methods) in Chrome_Converter_Abstract::convert()!');
         }
 
         $this->{$this->_methods[$filterName]}($var, $params);
@@ -145,5 +154,5 @@ abstract class Chrome_Converter_Abstract implements Chrome_Converter_Interface
 /**
  * @todo add BASEDIR.'plugins/Converter/default.php' to db OR anywhere else, autoloading?
  */
-require_once BASEDIR.'plugins/Converter/default.php';
-require_once BASEDIR.'plugins/Converter/string.php';
+require_once BASEDIR . 'plugins/Converter/default.php';
+require_once BASEDIR . 'plugins/Converter/string.php';

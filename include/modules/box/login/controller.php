@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:07:36] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:09:22] --> $
  * @author     Alexander Book
  */
 
@@ -40,7 +40,7 @@ class Chrome_Controller_Box_Login extends Chrome_Controller_Box_Abstract
     protected function _initialize()
     {
         // just load some files... model, view and form(include.php)
-        $this->require = array('file' => array(CONTENT.'user/login/model.php', VIEW.'box/login/view.php', CONTENT.'user/login/include.php'));
+        $this->_require = array('file' => array(CONTENT.'user/login/model.php', VIEW.'box/login/view.php', CONTENT.'user/login/include.php'));
     }
 
     /**
@@ -52,28 +52,28 @@ class Chrome_Controller_Box_Login extends Chrome_Controller_Box_Abstract
     {
         // setting up
 
-        $this->model = new Chrome_Model_Login(null);
-        $this->view = new Chrome_View_Box_Login($this);
-        $this->design = Chrome_Design_Composite_Left_Box::getInstance()->getComposite();
+        $this->_model = new Chrome_Model_Login(null);
+        $this->_view = new Chrome_View_Box_Login($this);
+        $this->_design = Chrome_Design_Composite_Left_Box::getInstance()->getComposite();
 
         // if the user is logged in, then show the user menu
-        if($this->model->isLoggedIn() === true) {
+        if($this->_model->isLoggedIn() === true) {
 
-            $this->view->showUserMenu();
+            $this->_view->showUserMenu();
 
         // else create the form and display it
         } else {
-            $this->form = Chrome_Form_Login::getInstance();
+            $this->_form = Chrome_Form_Login::getInstance();
 
             // form was sent
-            if($this->form->isSent()) {
+            if($this->_form->isSent()) {
                 // here we can do what we want
             }
 
-            $this->view->showLoginForm();
+            $this->_view->showLoginForm();
         }
 
         // create the output
-        $this->view->render($this);
+        $this->_view->render($this);
     }
 }

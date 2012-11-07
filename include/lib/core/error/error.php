@@ -16,22 +16,21 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.11.2009 21:15:08] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:46:08] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
-if(CHROME_DEVELOPER_STATUS === true OR CHROME_DISPLAY_ERRORS !== '') {
-            @ini_set('display_errors', 'On');
-        }
+if(CHROME_DEVELOPER_STATUS === true or CHROME_DISPLAY_ERRORS !== '') {
+    @ini_set('display_errors', 'On');
+}
 
-        if(CHROME_DISPLAY_ERRORS !== '') {
-            error_reporting(CHROME_DISPLAY_ERRORS);
-        } elseif (CHROME_DEVELOPER_STATUS === true) {
-            error_reporting(E_ALL);
-        } else {
-            error_reporting(0);
-        }
+if(CHROME_DISPLAY_ERRORS !== '') {
+    error_reporting(CHROME_DISPLAY_ERRORS);
+} elseif(CHROME_DEVELOPER_STATUS === true) {
+    error_reporting(E_ALL);
+} else {
+    error_reporting(0);
+}
 
 require_once 'exception.php';

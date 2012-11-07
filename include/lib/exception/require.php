@@ -14,21 +14,20 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
+ * @subpackage Chrome.Converter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.11.2012 22:06:01] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:50:18] --> $
  * @author     Alexander Book
  */
 
-if( !defined( 'CHROME_PHP' ) ) {
-	define( 'CHROME_PHP', true );
+if(CHROME_PHP !== true)
+    die();
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Converter
+ */
+class Chrome_Exception_Require extends Chrome_Exception
+{
 }
-
-$_SERVER['REQUEST_URI'] = '/root/CHROME_2/';
-$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-$_SERVER['HTTP_USER_AGENT'] = 'Mozilla Firefox 5.0';
-$_SERVER['SCRIPT_NAME'] = 'index.php';
-$_SERVER['SERVER_NAME'] = "localhost";
-
-require_once 'include/config.php';
-require_once LIB . 'core/error/exception.php';
