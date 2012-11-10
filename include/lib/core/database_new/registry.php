@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.11.2012 21:30:50] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.11.2012 16:30:08] --> $
  * @link       http://chrome-php.de
  */
 
@@ -61,7 +61,7 @@ class Chrome_Database_Registry_Connection implements Chrome_Database_Registry_Co
     public function addConnection($name, Chrome_Database_Connection_Interface $connection)
     {
         if(isset($this->_connections[$name])) {
-            throw new Chrome_Exception_Database('Cannot re-set an existing database connection with name "' . $name . '"!');
+            throw new Chrome_Exception_Database('Cannot re-set an existing database connection with name "'.$name.'"!');
         }
 
         $this->_connections[$name] = $connection;
@@ -70,7 +70,7 @@ class Chrome_Database_Registry_Connection implements Chrome_Database_Registry_Co
     public function getConnection($name)
     {
         if(!isset($this->_connections[$name])) {
-            throw new Chrome_Exception_Database('Could not find connection with name "' . $name . '"!');
+            throw new Chrome_Exception_Database('Could not find connection with name "'.$name.'"!');
         }
 
         return $this->_connections[$name]->getConnection();
@@ -79,13 +79,14 @@ class Chrome_Database_Registry_Connection implements Chrome_Database_Registry_Co
     public function getConnectionObject($name)
     {
         if(!isset($this->_connections[$name])) {
-            throw new Chrome_Exception_Database('Could not find connection object with name "' . $name . '"!');
+            throw new Chrome_Exception_Database('Could not find connection object with name "'.$name.'"!');
         }
 
         return $this->_connections[$name];
     }
 
-    public function isConnected($name) {
+    public function isConnected($name)
+    {
         return isset($this->_connections[$name]);
     }
 }

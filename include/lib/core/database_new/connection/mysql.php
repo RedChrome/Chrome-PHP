@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.11.2012 00:05:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.11.2012 20:36:13] --> $
  * @link       http://chrome-php.de
  */
 
@@ -36,16 +36,18 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
     protected $_password;
     protected $_clientFlags;
     protected $_database;
+    protected $_port;
 
     protected $_connection = null;
 
-    public function setConnectionOptions($host, $username, $password, $database, $clientFlags = 0)
+    public function setConnectionOptions($host, $username, $password, $database, $port = 3306, $clientFlags = 0)
     {
         $this->_host = $host;
         $this->_username = $username;
         $this->_password = $password;
         $this->_clientFlags = $clientFlags;
         $this->_database = $database;
+        $this->_port = $port;
 
         $this->_isSetConnectionOptions = true;
     }
@@ -56,7 +58,7 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
             throw new Chrome_Exception('Cannot connect with no information! Call setConnectionOptions() before!');
         }
 
-        $this->_connection = mysql_pconnect($this->_host, $this->_username, $this->_password, $this->_clientFlags);
+        $this->_connection = @mysql_connect($this->_host.':'.$this->_port, $this->_username, $this->_password);
 
         if($this->_connection === false) {
             switch(mysql_errno()) {
@@ -65,31 +67,33 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
                 case 2003:
                 case 2005:
                     {
-                        throw new Chrome_Exception_Database('Could not establish connection to server  on "' . $this->_host . '"! Server is not responding!', Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER);
+                        throw new Chrome_Exception_Database('Could not establish connection to server  on "'.$this->_host.'"! Server is not responding!', Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER);
                     }
 
                 case 1045:
                     {
-                        throw new Chrome_Exception_Database('Could not establish connection to server  on "' . $this->_host . '"! Username and/or password is wrong', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD);
+                        throw new Chrome_Exception_Database('Could not establish connection to server  on "'.$this->_host.'"! Username and/or password is wrong', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD);
                     }
 
                 default:
                     {
-                        throw new Chrome_Exception_Database('(' . mysql_errno() . ') ' . mysql_error(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
+
+                        throw new Chrome_Exception_Database('('.mysql_errno().') '.mysql_error(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
                     }
             }
         }
+
 
         if(@mysql_select_db($this->_database, $this->_connection) === false) {
             switch(mysql_errno()) {
                 case 1049:
                     {
-                        throw new Chrome_Exception_Database('Could not select database ' . $this->_database . '!', Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE);
+                        throw new Chrome_Exception_Database('Could not select database '.$this->_database.'!', Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE);
                     }
 
                 default:
                     {
-                        throw new Chrome_Exception_Database('(' . mysql_errno() . ') ' . mysql_error(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
+                        throw new Chrome_Exception_Database('('.mysql_errno().') '.mysql_error(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
                     }
             }
         }

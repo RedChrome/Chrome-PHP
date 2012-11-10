@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.11.2012 22:06:01] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.11.2012 20:17:09] --> $
  * @author     Alexander Book
  */
 
@@ -32,3 +32,10 @@ $_SERVER['SERVER_NAME'] = "localhost";
 
 require_once 'include/config.php';
 require_once LIB . 'core/error/exception.php';
+
+// Put here your vars for testing database connections
+define('MYSQL_HOST', 'localhost');
+define('MYSQL_USER', 'chrome-php');
+define('MYSQL_PASS', 'chrome-php-password');
+define('MYSQL_DB', 'chrome_2');
+define('MYSQL_PORT', 3306);

@@ -21,32 +21,36 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.11.2012 23:49:22] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.11.2012 12:04:49] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true) die();
 
-interface Chrome_Database_Result_Interface
+interface Chrome_Database_Result_Interface extends Chrome_Database_Adapter_Result_Interface
 {
-    public function setAdapter(Chrome_Database_Adapter_Interface $adapter);
+    public function setAdapter(Chrome_Database_Adapter_Result_Interface $adapter);
 
-    public function isEmpty();
+    public function getAdapter();
+
+    //public function isEmpty();
 
     public function hasNext();
 
-    public function getNext();
+    //public function getNext();
 
-    public function getAll();
-
-    public function affectedRows();
+    //public function affectedRows();
 }
 
 abstract class Chrome_Database_Result_Abstract implements Chrome_Database_Result_Interface
 {
     protected $_adapter = null;
 
-    public function setAdapter(Chrome_Database_Adapter_Interface $adapter) {
+    public function setAdapter(Chrome_Database_Adapter_Result_Interface $adapter) {
         $this->_adapter = $adapter;
+    }
+
+    public function getAdapter() {
+        return $this->_adapter;
     }
 }

@@ -21,27 +21,39 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.11.2012 00:13:11] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.11.2012 11:57:18] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true) die();
 
-interface Chrome_Database_Adapter_Interface
+interface Chrome_Database_Adapter_Result_Interface
 {
-    const DATABASE_RESULT_RETURN_TYPE_NUMERIC = 'numeric',
-          DATABASE_RESULT_RETURN_TYPE_ASSOCIATIVE = 'associative',
-          DATABASE_RESULT_RETURN_TYPE_ALL = 'all';
+    public function getNext();
 
+    /**
+     * Gets the number of affeced rows. You can use this for SELECT, SHOW, INSERT,
+     * UPDATE or DELETE. (This method combines *_affeced_rows and *_num_rows)
+     */
+    public function getAffectedRows();
+
+    public function isEmpty();
+}
+
+interface Chrome_Database_Adapter_Interface_Interface
+{
+    public function query($query);
+
+    public function escape($data);
+}
+
+interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Interface_Interface, Chrome_Database_Adapter_Result_Interface
+{
     public function __construct(Chrome_Database_Connection_Interface $connection);
 
     public function setConnection(Chrome_Database_Connection_Interface $connection);
 
-    public function query($query);
-
-    public function fetchResult($returnValues);
-
-    public function escape($data);
+    public function getConnection();
 }
 
 abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapter_Interface
@@ -61,9 +73,14 @@ abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapt
     {
         $this->_connectionObject = $connection;
 
-        if( ($resource = $connection->getConnection() ) === null) {
+        if(($resource = $connection->getConnection()) === null) {
             throw new Chrome_Exception_Database('Given database connection is null');
         }
-        $this->_connection = $connection->getConnection();
+        $this->_connection = $resource;
+    }
+
+    public function getConnection()
+    {
+        return $this->_connectionObject;
     }
 }
