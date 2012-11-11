@@ -21,30 +21,13 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.11.2012 18:57:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.11.2012 19:00:39] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true) die();
 
-interface Chrome_Database_Result_Interface extends Chrome_Database_Adapter_Result_Interface
+class Chrome_Database_Interface_Fluent extends Chrome_Database_Interface_Abstract
 {
-    public function setAdapter(Chrome_Database_Adapter_Result_Interface $adapter);
 
-    public function getAdapter();
-
-    public function hasNext();
-}
-
-abstract class Chrome_Database_Result_Abstract implements Chrome_Database_Result_Interface
-{
-    protected $_adapter = null;
-
-    public function setAdapter(Chrome_Database_Adapter_Result_Interface $adapter) {
-        $this->_adapter = $adapter;
-    }
-
-    public function getAdapter() {
-        return $this->_adapter;
-    }
 }

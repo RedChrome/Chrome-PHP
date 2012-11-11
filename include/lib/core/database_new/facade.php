@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.11.2012 15:09:13] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.11.2012 18:28:29] --> $
  * @link       http://chrome-php.de
  */
 
@@ -39,24 +39,7 @@ class Chrome_Database_Facade
 
     public static function getInterface($interfaceName, $resultName, $connectionName = self::DEFAULT_CONNECTION, $adapterName = '')
     {
-
-        if($connectionName instanceof Chrome_Database_Connection_Interface) {
-            $connection = $connectionName;
-        } else {
-
-            $registry = Chrome_Database_Registry_Connection::getInstance();
-
-            // if its default connection, and not yet connected
-            if($connectionName === self::DEFAULT_CONNECTION && $registry->isConnected($connectionName) === false) {
-                $connection = self::_createDefaultConnection();
-                $registry->addConnection($connectionName, $connection);
-            }
-
-            // get connection
-            if(!isset($connection)) {
-                $connection = $registry->getConnectionObject($connectionName);
-            }
-        }
+        $connection = self::_getConnection($connectionName);
 
         // create adapter, set connection
         $adapter = self::_createAdapter($adapterName, $connection);
@@ -126,6 +109,25 @@ class Chrome_Database_Facade
         $connection->connect();
 
         return $connection;
+    }
+
+    protected static function _getConnection($connectionName)
+    {
+        if($connectionName instanceof Chrome_Database_Connection_Interface) {
+            return $connectionName;
+        } else {
+
+            $registry = Chrome_Database_Registry_Connection::getInstance();
+
+            // if its default connection, and not yet connected
+            if($connectionName === self::DEFAULT_CONNECTION && $registry->isConnected($connectionName) === false) {
+                $connection = self::_createDefaultConnection();
+                $registry->addConnection($connectionName, $connection);
+                return $connection;
+            }
+        }
+
+        return $registry->getConnectionObject($connectionName);
     }
 
     protected static function _requireClass($type, $classSuffix)

@@ -21,26 +21,44 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.11.2012 21:13:02] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.11.2012 18:24:47] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true) die();
 
 /**
- *
+ * load registry, saves all database connections
  */
 require_once 'registry.php';
 
-require_once 'connection.php';
-
-require_once 'adapter.php';
-
-require_once 'result.php';
-
-require_once 'interface.php';
-
+/**
+ * load class, which saves all sent queries
+ */
 require_once 'statement.php';
 
-require_once 'facade.php';
+/**
+ * interface for all connections
+ */
+require_once 'connection.php';
 
+/**
+ * interface for all adapters
+ */
+require_once 'adapter.php';
+
+/**
+ * interface for all results
+ */
+require_once 'result.php';
+
+/**
+ * load interface for accessing database
+ */
+require_once 'interface.php';
+
+/**
+ * load class to easily configure a database access object
+ * this will include adapters, connection, result and interface
+ */
+require_once 'facade.php';
