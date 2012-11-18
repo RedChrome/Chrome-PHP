@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.03.2012 13:43:41] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:25:05] --> $
  * @author     Alexander Book
  */
 
@@ -28,7 +28,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Require
  */
-class Chrome_Model_Require extends Chrome_Model_Abstract
+class Chrome_Model_Require extends Chrome_Model_Decorator_Abstract
 {
 	/**
 	 * Contains instance of this class
@@ -89,7 +89,7 @@ class Chrome_Model_Require extends Chrome_Model_Abstract
  * @package    CHROME-PHP
  * @subpackage Chrome.Require
  */
-class Chrome_Model_Require_DB extends Chrome_Model_DB_Abstract
+class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
 {
     /**
      * Chrome_Model_Require_DB::__construct()

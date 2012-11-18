@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.11.2012 18:57:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.11.2012 11:02:05] --> $
  * @link       http://chrome-php.de
  */
 
@@ -34,6 +34,8 @@ interface Chrome_Database_Result_Interface extends Chrome_Database_Adapter_Resul
     public function getAdapter();
 
     public function hasNext();
+
+    public function clear();
 }
 
 abstract class Chrome_Database_Result_Abstract implements Chrome_Database_Result_Interface
@@ -46,5 +48,12 @@ abstract class Chrome_Database_Result_Abstract implements Chrome_Database_Result
 
     public function getAdapter() {
         return $this->_adapter;
+    }
+
+    public function clear() {
+        $class = get_class($this);
+        $return = new $class();
+        $return->setAdapter($this->_adapter);
+        return $return;
     }
 }

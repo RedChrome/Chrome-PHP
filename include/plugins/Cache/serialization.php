@@ -9,23 +9,32 @@
  * with this package in the file LICENSE.
  * It is also available through the world-wide-web at this URL:
  * http://creativecommons.org/licenses/by-nc-sa/3.0/
- * If you did not receive a copy of the license AND are unable to
+ * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
+ * @category   CHROME-PHP
  * @package    CHROME-PHP
  * @subpackage Chrome.Cache
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.08.2012 17:54:03] --> $
+ * @author     Alexander Book <alexander.book@gmx.de>
+ * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
+ * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:32:43] --> $
+ * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true)
     die();
 
 /**
- * @package CHROME-PHP
+ * @category   CHROME-PHP
+ * @package    CHROME-PHP
  * @subpackage Chrome.Cache
+ * @author     Alexander Book <alexander.book@gmx.de>
+ * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
+ * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:32:43] --> $
+ * @link       http://chrome-php.de
  */
 interface Chrome_Cache_Serialization_Interface extends Chrome_Cache_Interface
 {
@@ -65,11 +74,14 @@ interface Chrome_Cache_Serialization_Interface extends Chrome_Cache_Interface
 /**
  * Chrome_Cache_Serialization
  *
- * @package
- * @author CHROME-PHP
- * @copyright Alexander
- * @version 2009
- * @access public
+ * @category   CHROME-PHP
+ * @package    CHROME-PHP
+ * @subpackage Chrome.Cache
+ * @author     Alexander Book <alexander.book@gmx.de>
+ * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
+ * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:32:43] --> $
+ * @link       http://chrome-php.de
  */
 class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome_Cache_Serialization_Interface
 {
@@ -138,15 +150,15 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
      */
     public function __construct($file, $lifetime = 0)
     {
-        $file = BASEDIR.$file;
-
         if(!is_string($file)) {
             throw new Chrome_Exception('Not supported variable type $file! $file must be a string in Chrome_Cache_Serialization::__construct()!');
         }
 
+        $file = BASEDIR.$file;
+
         // does the cache file already exist?
         if(!_isFile($file)) {
-            // load Chrome_File class AND create the file
+            // load Chrome_File class and create the file
             require_once LIB.'core/file/file.php';
             Chrome_File::mkFile($file);
         }
@@ -279,7 +291,7 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
 
         $this->_data[self::CHROME_CACHE_SERIALIZATION_TIMESTAMP_KEY] = CHROME_TIME;
 
-        // truncate file AND seek to position 0
+        // truncate file and seek to position 0
         //ftruncate($this->_filePointer, 0);
         //fseek($this->_filePointer, 0);
         // write the serialized data
@@ -289,7 +301,7 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
     /**
      * Chrome_Cache_Serialization::_loadData()
      *
-     * Loads the cache file AND save it into var
+     * Loads the cache file and save it into var
      *
      * @return void
      */
@@ -328,7 +340,7 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
     /**
      * Chrome_Cache_Serialization::_isValid()
      *
-     * Check wheter cache data is valid AND if not unset data
+     * Check wheter cache data is valid and if not unset data
      *
      * @return void
      */

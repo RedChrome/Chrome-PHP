@@ -177,7 +177,7 @@ class Chrome_Design_Model_Default_Cache extends Chrome_Model_Cache_Abstract
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
-class Chrome_Design_Model_Default_DB extends Chrome_Model_DB_Abstract
+class Chrome_Design_Model_Default_DB extends Chrome_Model_Database_Abstract
 {
     /**
      * Chrome_Design_Model_Default_DB::__construct()

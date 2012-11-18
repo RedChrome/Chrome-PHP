@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.11.2012 20:17:09] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.11.2012 23:13:46] --> $
  * @author     Alexander Book
  */
 
@@ -39,3 +39,5 @@ define('MYSQL_USER', 'chrome-php');
 define('MYSQL_PASS', 'chrome-php-password');
 define('MYSQL_DB', 'chrome_2');
 define('MYSQL_PORT', 3306);
+
+define('TEST_DATABASE_CONNECTIONS', false);

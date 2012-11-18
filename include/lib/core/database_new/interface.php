@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.11.2012 23:59:39] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.11.2012 18:30:03] --> $
  * @link       http://chrome-php.de
  */
 
@@ -35,15 +35,19 @@ interface Chrome_Database_Interface_Interface
 
     public function getAdapter();
 
-    public function execute();
+    public function execute(array $parameters = array());
 
     public function query($query);
 
-    public function setParameters(array $array);
+    public function setParameters(array $array, $escape = true);
+
+    public function setParameter($key, $value, $escape = true);
 
     public function escape($data);
 
     public function getStatement();
+
+    public function clear();
 }
 
 abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Interface_Interface
@@ -56,29 +60,59 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
     protected $_params = array();
 
+    protected $_sentQuery = null;
+
     public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result)
     {
         $this->_adapter = $adapter;
         $this->_result = $result;
     }
 
-    public function execute()
+    public function execute(array $parameters = array())
     {
-        return $this->query($this->_query);
+        if(count($parameters) >= 1) {
+            $this->setParameters($parameters, true);
+        }
+
+        if($this->_query !== null) {
+            return $this->query($this->_query);
+        } else {
+            throw new Chrome_Exception('Cannot execute an sql statement if no statement was set!');
+        }
     }
 
     public function query($query)
     {
-        Chrome_Database_Registry_Statement::addStatement($this->_query);
+        if($this->_sentQuery !== null) {
+            $this->clear();
+        }
+
+        $query = $this->_prepareStatement($query);
+
+        Chrome_Database_Registry_Statement::addStatement($query);
 
         $this->_adapter->query($query);
+
+        $this->_sentQuery = $query;
 
         return $this->_result;
     }
 
-    public function setParameters(array $array)
+    public function setParameters(array $array, $escape = true)
     {
-        $this->_params = array_merge($this->_params, $array);
+        if($escape === true) {
+            foreach($array as $key => $value) {
+                $this->_params[$key] = $this->escape($value);
+            }
+
+        } else {
+            $this->_params = array_merge($this->_params, $array);
+        }
+    }
+
+    public function setParameter($key, $value, $escape = true)
+    {
+        $this->_params[$key] = ($escape === true) ? $this->escape($value) : $value;
     }
 
     public function getResult()
@@ -91,11 +125,29 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
         return $this->_adapter;
     }
 
-    public function escape($data) {
+    public function escape($data)
+    {
         return $this->_adapter->escape($data);
     }
 
-    public function getStatement() {
-        return $this->_query;
+    public function getStatement()
+    {
+        return $this->_sentQuery;
+    }
+
+    public function clear()
+    {
+        $this->_query = null;
+        $this->_params = null;
+        $this->_result = $this->_result->clear();
+    }
+
+    protected function _prepareStatement($statement)
+    {
+        // replace table prefix
+        $statement = str_replace('cpp_', DB_PREFIX.'_' , $statement);
+
+        $statement = str_replace('?', '%s', $statement);
+        return vsprintf($statement, $this->_params);
     }
 }

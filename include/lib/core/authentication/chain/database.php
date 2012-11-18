@@ -231,7 +231,7 @@ class Chrome_Authentication_Create_Resource_Database implements Chrome_Authentic
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Chrome_Model_Authentication_Database extends Chrome_Model_DB_Abstract
+class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstract
 {
     protected $_dbInterface = 'interface';
 

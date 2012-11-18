@@ -2,13 +2,13 @@
 
 require_once 'Tests/testsetup.php';
 
-require_once LIB.'core/database_new/database.php';
-require_once LIB.'core/database_new/connection/mysql.php';
+require_once LIB . 'core/database_new/database.php';
+require_once LIB . 'core/database_new/connection/mysql.php';
 
 class DatabaseConnectionMysqlTest extends PHPUnit_Framework_TestCase
 {
-    public function testThrowExceptionWhenCreatingConnectionWithoutAnyData() {
-
+    public function testThrowExceptionWhenCreatingConnectionWithoutAnyData()
+    {
         $this->setExpectedException('Chrome_Exception');
 
         $connection = new Chrome_Database_Connection_Mysql();
@@ -16,8 +16,16 @@ class DatabaseConnectionMysqlTest extends PHPUnit_Framework_TestCase
         $connection->connect();
     }
 
+    public function doSkipTestsIfNeeded()
+    {
+        if(TEST_DATABASE_CONNECTIONS === false)
+            $this->markTestSkipped();
+    }
+
     public function testCannotConnectToNotExistingServer()
     {
+        $this->doSkipTestsIfNeeded();
+
         $connection = new Chrome_Database_Connection_Mysql();
         $connection->setConnectionOptions('notExistingHost', 'guest', '', 'chrome_2');
 
@@ -25,7 +33,9 @@ class DatabaseConnectionMysqlTest extends PHPUnit_Framework_TestCase
         $connection->connect();
     }
 
-    public function testCannotConnectWithInvalidUserNameOrPassword() {
+    public function testCannotConnectWithInvalidUserNameOrPassword()
+    {
+        $this->doSkipTestsIfNeeded();
 
         $connection = new Chrome_Database_Connection_Mysql();
         $connection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, '', MYSQL_DB);
@@ -34,7 +44,9 @@ class DatabaseConnectionMysqlTest extends PHPUnit_Framework_TestCase
         $connection->connect();
     }
 
-    public function testConnect() {
+    public function testConnect()
+    {
+        $this->doSkipTestsIfNeeded();
 
         $connection = new Chrome_Database_Connection_Mysql();
         $connection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
@@ -42,6 +54,4 @@ class DatabaseConnectionMysqlTest extends PHPUnit_Framework_TestCase
 
         $connection->connect();
     }
-
-
 }

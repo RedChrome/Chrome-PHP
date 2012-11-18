@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.09.2012 23:51:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:15:55] --> $
  * @author     Alexander Book
  */
 
@@ -25,10 +25,19 @@ if(CHROME_PHP !== true)
     die();
 
 /**
- * @package CHROME-PHP
+ * @packagte   CHROME-PHP
  * @subpackage Chrome.Model
  */
-abstract class Chrome_Model_DB_Abstract extends Chrome_Model_Abstract
+interface Chrome_Model_Database_Statement_Interface
+{
+    public function getStatement($key);
+}
+
+/**
+ * @package    CHROME-PHP
+ * @subpackage Chrome.Model
+ */
+abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
 {
     /**
      * Adapter name e.g. MySQL
@@ -100,16 +109,16 @@ abstract class Chrome_Model_DB_Abstract extends Chrome_Model_Abstract
 	protected $_dbInterfaceInstance 	= null;
 
 	/**
-	 * Chrome_Model_DB_Abstract::__construct()
+	 * Chrome_Model_Database_Abstract::__construct()
 	 *
-	 * @return Chrome_Model_DB_Abstract
+	 * @return Chrome_Model_Database_Abstract
 	 */
 	protected function __construct() {
         $this->_connect();
 	}
 
 	/**
-	 * Chrome_Model_DB_Abstract::_connect()
+	 * Chrome_Model_Database_Abstract::_connect()
 	 *
      * Connects to a database, using $_dbAdapter, $_dbInterface, $_dbServer, $_dbDatabase, $_dbUser AND $_dbPassword
      * if any value is changed, this creates a interface with these values.
@@ -132,7 +141,7 @@ abstract class Chrome_Model_DB_Abstract extends Chrome_Model_Abstract
 	}
 
 	/**
-	 * Chrome_Model_DB_Abstract::_getNewDBInterface()
+	 * Chrome_Model_Database_Abstract::_getNewDBInterface()
 	 *
      * Creates a new Interface for database access,
      * the new interface instance is saved in $_dbInterfaceInstance
@@ -153,7 +162,7 @@ abstract class Chrome_Model_DB_Abstract extends Chrome_Model_Abstract
 	}
 
     /**
-     * Chrome_Model_DB_Abstract::_escape()
+     * Chrome_Model_Database_Abstract::_escape()
      *
      *
      * @param mixed $data data that gets escaped
@@ -168,7 +177,7 @@ abstract class Chrome_Model_DB_Abstract extends Chrome_Model_Abstract
     }
 
     /**
-     * Chrome_Model_DB_Abstract::setDBInterface()
+     * Chrome_Model_Database_Abstract::setDBInterface()
      *
      * Sets the dbInterfaceInstnace object with the given one
      *
@@ -213,6 +222,4 @@ abstract class Chrome_Model_DB_Abstract extends Chrome_Model_Abstract
 
         return $this->_dbInterfaceInstance;
     }
-
-
 }

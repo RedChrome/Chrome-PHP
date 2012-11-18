@@ -155,7 +155,7 @@ class Chrome_Model_Route_Administration extends Chrome_Model_Abstract
 
 }
 
-class Chrome_Model_Route_Administration_DB extends Chrome_Model_DB_Abstract
+class Chrome_Model_Route_Administration_DB extends Chrome_Model_Database_Abstract
 {
 	public function getClassAndFile( $name )
 	{

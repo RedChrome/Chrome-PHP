@@ -5,6 +5,9 @@ function truncate_form_input( formID ) {
     elements =  form.getElementsByTagName("input");
 
     for(var i=0;i<elements.length;++i) {
+
+        elements[i].required = false;
+
         if(elements[i].type == "submit") {
             continue;
         }
@@ -16,6 +19,12 @@ function truncate_form_input( formID ) {
 
     // this will remove all select inputs
     for(var i=0;i<elements.length;++i) {
+
+        if(elements[i].required == true) {
+            elements[i].required = false;
+            continue;
+        }
+
 	    selectParentNode = elements[i].parentNode;
     	newSelectObj = elements[i].cloneNode(false); // Make a shallow copy
 	    selectParentNode.replaceChild(newSelectObj, elements[i]);

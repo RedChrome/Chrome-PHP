@@ -18,7 +18,7 @@ class Chrome_Database_Adapter_Dummy extends Chrome_Database_Adapter_Abstract
 
     public function escape($data)
     {
-        return $data;
+        return addcslashes($data, '\'');
     }
 
     public function isEmpty() {

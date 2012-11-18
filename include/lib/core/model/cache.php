@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2011 23:39:21] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 16:30:22] --> $
  * @author     Alexander Book
  */
 
@@ -32,24 +32,24 @@ abstract class Chrome_Model_Cache_Abstract extends Chrome_Model_Decorator_Abstra
 {
     /**
      * Namespace for registry
-     * 
+     *
      * @var string
-     */ 
+     */
     const CHROME_MODEL_CACHE_REGISTRY_NAMESPACE = 'Chrome_Model_Cache';
-    
+
     /**
      * Instance of the Chrome_Cache_Factory class
      *
      * @var Chrome_Cache_Factory
      */
 	protected static $_cacheFactory = null;
-    
-    
+
+
     /**
      * contains an instance of a cache class
-     * 
+     *
      * @var Chrome_Cache_Abstract
-     */ 
+     */
     protected $_cache = null;
 
 	/**
@@ -67,10 +67,8 @@ abstract class Chrome_Model_Cache_Abstract extends Chrome_Model_Decorator_Abstra
 			self::$_cacheFactory = Chrome_Cache_Factory::getInstance();
 		}
 		parent::__construct($instance);
-        
+
 		$this->_cache();
-        
-        $this->_checkCacheForActivationByRegistry();
 	}
 
 	/**
@@ -94,24 +92,4 @@ abstract class Chrome_Model_Cache_Abstract extends Chrome_Model_Decorator_Abstra
             $this->_cache->clear();
         }
 	}
-    
-    /**
-     * Chrome_Model_Cache_Abstract::_checkCacheForActivationByRegistry()
-     * 
-     * Checks whether the cache is disabled or not by the registry
-     * 
-     * @return void
-     */ 
-    protected function _checkCacheForActivationByRegistry()
-    {
-        $activated = Chrome_Registry::getInstance()->get(self::CHROME_MODEL_CACHE_REGISTRY_NAMESPACE, __CLASS__.'.isActivated');
-        
-        // the cache is disabled
-        if($activated === false) {
-            // set the cache to Chrome_Cache_Null
-            // this class does NOT cache anything
-            // it's just a null object
-            $this->_cache = self::$_cacheFactory->factory('null');
-        }
-    }
 }

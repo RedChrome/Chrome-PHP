@@ -1,6 +1,6 @@
 <?php
 
-class Chrome_Model_Register extends Chrome_Model_DB_Abstract
+class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 {
 	const CHROME_MODEL_REGISTER_PW_SALT_LENGTH = 20;
 
@@ -188,7 +188,7 @@ class Chrome_Model_Register extends Chrome_Model_DB_Abstract
 
 		if( CHROME_TIME - $result['time'] > Chrome_Config::getConfig( 'Registration', 'expiration' ) ) {
 
-			$this->deleteActivationKey( $activationKey );
+			$this->_deleteActivationKey( $activationKey );
 			return false;
 		}
 

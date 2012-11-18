@@ -274,7 +274,7 @@ class Chrome_Model_RBAC_Cache extends Chrome_Model_Cache_Abstract
     }
 }
 
-class Chrome_Model_RBAC_DB extends Chrome_Model_DB_Abstract
+class Chrome_Model_RBAC_DB extends Chrome_Model_Database_Abstract
 {
     protected $_dbInterface = 'Iterator';
 

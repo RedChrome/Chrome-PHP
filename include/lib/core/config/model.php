@@ -17,7 +17,7 @@
  * @subpackage Chrome.Config
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 23:11:23] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:24:38] --> $
  * @author     Alexander Book
  */
 
@@ -28,7 +28,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Config
  */
-class Chrome_Model_Config extends Chrome_Model_Abstract
+class Chrome_Model_Config extends Chrome_Model_Decorator_Abstract
 {
     private static $_instance = null;
 
@@ -51,7 +51,7 @@ class Chrome_Model_Config extends Chrome_Model_Abstract
  * @package CHROME-PHP
  * @subpackage Chrome.Config
  */
-class Chrome_Model_Config_DB extends Chrome_Model_DB_Abstract
+class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
 {
     public function __construct()
     {

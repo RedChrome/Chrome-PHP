@@ -28,7 +28,7 @@ if(CHROME_PHP !== true) die();
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Chrome_Model_User_DB extends Chrome_Model_DB_Abstract
+class Chrome_Model_User_DB extends Chrome_Model_Database_Abstract
 {
     private static $_instance = null;
 

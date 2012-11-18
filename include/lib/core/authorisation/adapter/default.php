@@ -229,7 +229,7 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
  * @package CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
-class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_DB_Abstract
+class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_Database_Abstract
 {
     protected $_dbInterface = 'Interface';
 

@@ -17,12 +17,11 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.02.2012 23:50:11] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:28:44] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**#@!
  * load some specific model classes
@@ -40,17 +39,7 @@ require_once 'form.php';
  */
 abstract class Chrome_Model_Abstract
 {
-	protected $_decorator = null;
-
-	protected function __construct() {
-
-	}
-
-	public function __call($func, $args) {
-		if($this->_decorator === null) {
-			return;
-		}
-
-		return call_user_func_array(array($this->_decorator, $func), $args);
-	}
+    protected function __construct()
+    {
+    }
 }

@@ -200,7 +200,7 @@ class Chrome_Model_Route_Dynamic_Cache extends Chrome_Model_Cache_Abstract
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Model_Route_Dynamic_DB extends Chrome_Model_DB_Abstract
+class Chrome_Model_Route_Dynamic_DB extends Chrome_Model_Database_Abstract
 {
     protected $_dbInterface = 'interface';
 
