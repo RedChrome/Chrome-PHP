@@ -17,7 +17,7 @@
  * @subpackage Chrome.Core
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.11.2012 13:05:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 21:00:33] --> $
  * @author     Alexander Book
  */
 
@@ -67,6 +67,8 @@ require_once 'hash/hash.php';
  * load database
  */
 require_once 'database/database.php';
+//TODO: in datbase: change path to mysql, postgresql to right one
+require_once 'database_new/database.php';
 
 /**
  * load cache classes

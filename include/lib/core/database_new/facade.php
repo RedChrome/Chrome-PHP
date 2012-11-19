@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.11.2012 18:28:29] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:09:54] --> $
  * @link       http://chrome-php.de
  */
 
@@ -47,10 +47,8 @@ class Chrome_Database_Facade
         // create result using adapter
         $result = self::_createResult($resultName, $adapter);
 
-
         // create interface with adapter and result
         $interface = self::_createInterface($interfaceName, $result, $adapter);
-
 
         return $interface;
     }
@@ -98,19 +96,6 @@ class Chrome_Database_Facade
         return new $interfaceClass($adapter, $result);
     }
 
-    protected static function _createDefaultConnection()
-    {
-        $connectionName = ucfirst(strtolower(CHROME_DATABASE));
-        self::_requireClass('connection', $connectionName);
-
-        //TODO: in development, this should not get used in production!
-        $connection = new Chrome_Database_Connection_Mysql();
-        $connection->setConnectionOptions(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-        $connection->connect();
-
-        return $connection;
-    }
-
     protected static function _getConnection($connectionName)
     {
         if($connectionName instanceof Chrome_Database_Connection_Interface) {
@@ -119,11 +104,24 @@ class Chrome_Database_Facade
 
             $registry = Chrome_Database_Registry_Connection::getInstance();
 
-            // if its default connection, and not yet connected
-            if($connectionName === self::DEFAULT_CONNECTION && $registry->isConnected($connectionName) === false) {
-                $connection = self::_createDefaultConnection();
-                $registry->addConnection($connectionName, $connection);
-                return $connection;
+            if($connectionName === self::DEFAULT_CONNECTION) {
+
+                if($registry->isConnected($connectionName) === false) {
+                    try {
+                        $connectionObject = $registry->getConnectionObject($connectionName);
+                        $connectionObject->connect();
+                    }
+                    catch (Chrome_Exception_Database $e) {
+                        // error while connecting to database
+                        throw $e;
+                    }
+                    catch (Chrome_Exception $e) {
+                        // error with previous setup of connection object...
+                        throw new Chrome_Exception('Could not connect to database, due to a wrong configuration in default connection object', 0, $e);
+                    }
+
+                    return $connectionObject;
+                }
             }
         }
 
@@ -137,8 +135,8 @@ class Chrome_Database_Facade
         switch($type) {
             case 'adapter':
                 {
-                    $class = 'Chrome_Database_Adapter_'.$classSuffix;
-                    $file = LIB.self::DATABASE_CLASS_DIR.'adapter/'.$_classSuffixLower.'.php';
+                    $class = 'Chrome_Database_Adapter_' . $classSuffix;
+                    $file  = LIB . self::DATABASE_CLASS_DIR . 'adapter/' . $_classSuffixLower . '.php';
                     break;
                 }
 
@@ -149,8 +147,8 @@ class Chrome_Database_Facade
                         $_classSuffixLower = self::$_defaultInterface;
                     }
 
-                    $class = 'Chrome_Database_Interface_'.$classSuffix;
-                    $file = LIB.self::DATABASE_CLASS_DIR.'interface/'.$_classSuffixLower.'.php';
+                    $class = 'Chrome_Database_Interface_' . $classSuffix;
+                    $file  = LIB . self::DATABASE_CLASS_DIR . 'interface/' . $_classSuffixLower . '.php';
                     break;
                 }
 
@@ -161,24 +159,23 @@ class Chrome_Database_Facade
                         $_classSuffixLower = self::$_defaultResult;
                     }
 
-                    $class = 'Chrome_Database_Result_'.$classSuffix;
-                    $file = LIB.self::DATABASE_CLASS_DIR.'result/'.$_classSuffixLower.'.php';
+                    $class = 'Chrome_Database_Result_' . $classSuffix;
+                    $file  = LIB . self::DATABASE_CLASS_DIR . 'result/' . $_classSuffixLower . '.php';
                     break;
                 }
 
             case 'connection':
                 {
-                    $class = 'Chrome_Database_Connection_'.$classSuffix;
-                    $file = LIB.self::DATABASE_CLASS_DIR.'connection/'.$_classSuffixLower.'.php';
+                    $class = 'Chrome_Database_Connection_' . $classSuffix;
+                    $file  = LIB . self::DATABASE_CLASS_DIR . 'connection/' . $_classSuffixLower . '.php';
                     break;
                 }
 
             default:
                 {
-                    throw new Chrome_Exception('Unknown type "'.$type.'"!');
+                    throw new Chrome_Exception('Unknown type "' . $type . '"!');
                 }
         }
-
 
         if(class_exists($class, false)) {
             return $class;
@@ -190,7 +187,7 @@ class Chrome_Database_Facade
         }
 
         if(!class_exists($class, false)) {
-            throw new Chrome_Exception('Could not load required class "'.$class.'"');
+            throw new Chrome_Exception('Could not load required class "' . $class . '"');
         }
 
         return $class;

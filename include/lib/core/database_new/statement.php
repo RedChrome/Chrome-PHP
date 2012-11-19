@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.11.2012 17:28:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:11:09] --> $
  * @link       http://chrome-php.de
  */
 
@@ -44,23 +44,28 @@ class Chrome_Database_Registry_Statement implements Chrome_Database_Registry_Sta
 {
     protected static $_statements = array();
 
-    public static function addStatement($statement) {
+    public static function addStatement($statement)
+    {
         self::$_statements[] = $statement;
     }
 
-    public static function getStatements() {
+    public static function getStatements()
+    {
         return self::$_statements;
     }
 
-    public static function getLastStatement() {
-        return self::$_statements[self::count()-1];
+    public static function getLastStatement()
+    {
+        return self::$_statements[self::count() - 1];
     }
 
-    public static function count() {
+    public static function count()
+    {
         return count(self::$_statements);
     }
 
-    public static function getStatement($number) {
-        return !isset(self::$_statements[$number-1]) ? null : self::$_statements[$number-1];
+    public static function getStatement($number)
+    {
+        return !isset(self::$_statements[$number - 1]) ? null : self::$_statements[$number - 1];
     }
 }

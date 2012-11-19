@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.11.2012 23:39:48] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 19:45:17] --> $
  * @link       http://chrome-php.de
  */
 
@@ -35,15 +35,24 @@ interface Chrome_Database_Connection_Interface
 
     public function connect();
 
+    public function isConnected();
+
     public function getDefaultAdapter();
 }
 
 abstract class Chrome_Database_Connection_Abstract implements Chrome_Database_Connection_Interface
 {
-    protected $_connection = null;
+    protected $_connection  = null;
+
+    protected $_isConnected = false;
 
     public function getConnection()
     {
         return $this->_connection;
+    }
+
+    public function isConnected()
+    {
+        return $this->_isConnected;
     }
 }

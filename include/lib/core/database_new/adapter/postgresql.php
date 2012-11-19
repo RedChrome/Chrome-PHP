@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.11.2012 17:37:39] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:07:28] --> $
  * @link       http://chrome-php.de
  */
 
@@ -31,7 +31,8 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
 {
     protected $_isEmpty = true;
 
-    public function isEmpty() {
+    public function isEmpty()
+    {
         return $this->_isEmpty;
     }
 
@@ -62,7 +63,8 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
         return pg_escape_string($this->_connection, $data);
     }
 
-    public function getAffectedRows() {
+    public function getAffectedRows()
+    {
 
     }
 }

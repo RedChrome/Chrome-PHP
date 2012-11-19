@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.11.2012 17:33:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:08:49] --> $
  * @link       http://chrome-php.de
  */
 
@@ -38,34 +38,35 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
     protected $_database;
     protected $_port;
 
-    protected $_connection = null;
-
-    public function setConnectionOptions($host, $username, $password, $database, $port = 3306,  $clientFlags = 0)
+    public function setConnectionOptions($host, $username, $password, $database, $port = 3306, $clientFlags = 0)
     {
-        $this->_host = $host;
-        $this->_username = $username;
-        $this->_password = $password;
+        $this->_host        = $host;
+        $this->_username    = $username;
+        $this->_password    = $password;
         $this->_clientFlags = $clientFlags;
-        $this->_database = $database;
-        $this->_port = $port;
+        $this->_database    = $database;
+        $this->_port        = $port;
 
         $this->_isSetConnectionOptions = true;
     }
 
     public function connect()
     {
+        if($this->_isConnected === true) {
+            return;
+        }
+
         if($this->_isSetConnectionOptions === false) {
             throw new Chrome_Exception('Cannot connect with no information! Call setConnectionOptions() before!');
         }
 
-        $this->_connection = pg_connect('host='.$this->_host.' port="'.$this->_port.' user='.$this->_username.' password='.$this->_password.' dbname='.$this->_database);
+        $this->_connection = pg_connect('host=' . $this->_host . ' port="' . $this->_port . ' user=' . $this->_username . ' password=' . $this->_password . ' dbname=' . $this->_database);
 
         if($this->_connection === false) {
             throw new Chrome_Exception_Database('Could not connect to PostgreSQL server!');
         }
 
-        //$this->_connection = mysql_pconnect($this->_host.':'.$this->_port, $this->_username, $this->_password, $this->_clientFlags);
-
+        $this->_isConnected = true;
 
         return $this->_connection;
     }

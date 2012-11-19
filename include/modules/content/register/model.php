@@ -24,6 +24,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 
 	public function sendRegisterEmail( $email, $name, $activationKey )
 	{
+	    // TODO: move this
         require_once LIB.'Zend/Mail.php';
         try {
 

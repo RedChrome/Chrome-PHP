@@ -30,4 +30,8 @@ class Chrome_Database_Connection_Dummy implements Chrome_Database_Connection_Int
     {
         return 'Dummy';
     }
+
+    public function isConnected() {
+        return true;
+    }
 }

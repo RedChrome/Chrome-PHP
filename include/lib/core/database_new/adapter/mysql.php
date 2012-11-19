@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.11.2012 13:33:47] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:07:18] --> $
  * @link       http://chrome-php.de
  */
 
@@ -31,7 +31,8 @@ class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
 {
     protected $_isEmpty = true;
 
-    public function isEmpty() {
+    public function isEmpty()
+    {
         return $this->_isEmpty;
     }
 
@@ -63,7 +64,8 @@ class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
         return mysql_real_escape_string($data, $this->_connection);
     }
 
-    public function getAffectedRows() {
+    public function getAffectedRows()
+    {
 
     }
 }

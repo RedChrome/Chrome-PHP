@@ -13,7 +13,9 @@ class DatabaseResultInterfaceTest extends PHPUnit_Framework_TestCase
     public $_connection = null;
 
     public function testInitResultIterator() {
-        $db = Chrome_Database_Facade::getInterface('Simple', 'Iterator');
+
+        $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
+        $db = Chrome_Database_Facade::getInterface('Simple', 'Iterator', $connection);
         $this->assertTrue(is_subclass_of($db->getResult(), 'Iterator'));
     }
 

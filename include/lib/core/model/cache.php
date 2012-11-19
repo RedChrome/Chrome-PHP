@@ -17,15 +17,14 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 16:30:22] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 18:54:50] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
- * @package CHROME-PHP
+ * @package    CHROME-PHP
  * @subpackage Chrome.Model
  */
 abstract class Chrome_Model_Cache_Abstract extends Chrome_Model_Decorator_Abstract
@@ -42,7 +41,7 @@ abstract class Chrome_Model_Cache_Abstract extends Chrome_Model_Decorator_Abstra
      *
      * @var Chrome_Cache_Factory
      */
-	protected static $_cacheFactory = null;
+    protected static $_cacheFactory = null;
 
 
     /**
@@ -52,44 +51,46 @@ abstract class Chrome_Model_Cache_Abstract extends Chrome_Model_Decorator_Abstra
      */
     protected $_cache = null;
 
-	/**
-	 * Chrome_Model_Cache_Abstract::__construct()
-	 *
+    /**
+     * Chrome_Model_Cache_Abstract::__construct()
+     *
      * Creates a new cache model
      *
      * This is a decorator pattern. To cache a model you can use this class.
      *
-	 * @param Chrome_Model_Abstract $instance instance of another model object
-	 * @return Chrome_Model_Cache_Abstract
-	 */
-	public function __construct(Chrome_Model_Abstract $instance) {
-		if(self::$_cacheFactory === null) {
-			self::$_cacheFactory = Chrome_Cache_Factory::getInstance();
-		}
-		parent::__construct($instance);
+     * @param Chrome_Model_Abstract $instance instance of another model object
+     * @return Chrome_Model_Cache_Abstract
+     */
+    public function __construct(Chrome_Model_Abstract $instance)
+    {
+        if(self::$_cacheFactory === null) {
+            self::$_cacheFactory = Chrome_Cache_Factory::getInstance();
+        }
 
-		$this->_cache();
-	}
+        parent::__construct($instance);
+        $this->_cache();
+    }
 
-	/**
-	 * Chrome_Model_Cache_Abstract::_cache()
-	 *
+    /**
+     * Chrome_Model_Cache_Abstract::_cache()
+     *
      * This method is used to e.g create a new cache object
      *
-	 * @return void
-	 */
-	abstract protected function _cache();
+     * @return void
+     */
+    abstract protected function _cache();
 
-	/**
-	 * Chrome_Model_Cache_Abstract::clearCache()
-	 *
+    /**
+     * Chrome_Model_Cache_Abstract::clearCache()
+     *
      * This methods clears the entire cache
      *
-	 * @return bool
-	 */
-	public function clearCache() {
+     * @return bool
+     */
+    public function clearCache()
+    {
         if($this->_cache !== null) {
             $this->_cache->clear();
         }
-	}
+    }
 }

@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [31.10.2012 20:49:27] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:12:24] --> $
  * @link       http://chrome-php.de
  */
 
@@ -248,6 +248,14 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
         $this->_preprocessor = new Chrome_Filter_Chain_Preprocessor();
         $this->_postprocessor = new Chrome_Filter_Chain_Postprocessor();
 
+        // confugre database default connection
+        {
+            $defaultConnection = new Chrome_Database_Connection_Mysql();
+            $defaultConnection->setConnectionOptions(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+            $dbRegistry = Chrome_Database_Registry_Connection::getInstance();
+            $dbRegistry->addConnection(Chrome_Database_Facade::DEFAULT_CONNECTION, $defaultConnection);
+        }
+
         // setting up authentication, authorisation service
         {
             $handler = new Chrome_Exception_Handler_Authentication();
@@ -331,7 +339,6 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             $this->handleRequest();
         }
         catch (Chrome_Exception $e) {
-            die($e->getMessage());
             $handler = new Chrome_Exception_Handler_FrontController();
             $handler->exception($e);
         }
@@ -344,7 +351,6 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
      */
     public function handleRequest()
     {
-        //$this->_request = $this->_controller->getRequest();
         $this->_response = $this->_controller->getResponse();
 
         $this->_preprocessor->processFilters($this->_request, $this->_response);

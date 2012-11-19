@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.11.2012 13:36:25] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:10:45] --> $
  * @link       http://chrome-php.de
  */
 
@@ -33,16 +33,19 @@ class Chrome_Database_Result_Assoc extends Chrome_Database_Result_Abstract
 
     protected $_nextResult = null;
 
-    public function isEmpty() {
+    public function isEmpty()
+    {
         return $this->_adapter->isEmpty();
     }
 
-    public function hasNext() {
+    public function hasNext()
+    {
         $this->_nextResult = $this->getNext();
         return ($this->_nextResult !== false);
     }
 
-    public function getNext() {
+    public function getNext()
+    {
         if($this->_nextResult !== null) {
             $result = $this->_nextResult;
             $this->_nextResult = null;
@@ -51,11 +54,13 @@ class Chrome_Database_Result_Assoc extends Chrome_Database_Result_Abstract
         return $this->_adapter->getNext();
     }
 
-    public function setAdapter(Chrome_Database_Adapter_Result_Interface $adapter) {
+    public function setAdapter(Chrome_Database_Adapter_Result_Interface $adapter)
+    {
         $this->_adapter = $adapter;
     }
 
-    public function getAffectedRows() {
+    public function getAffectedRows()
+    {
         return $this->_adapter->getAffectedRows();
     }
 

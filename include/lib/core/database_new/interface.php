@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.11.2012 18:30:03] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:10:09] --> $
  * @link       http://chrome-php.de
  */
 
@@ -137,7 +137,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
     public function clear()
     {
-        $this->_query = null;
+        $this->_query  = null;
         $this->_params = null;
         $this->_result = $this->_result->clear();
     }
@@ -145,7 +145,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
     protected function _prepareStatement($statement)
     {
         // replace table prefix
-        $statement = str_replace('cpp_', DB_PREFIX.'_' , $statement);
+        $statement = str_replace('cpp_', DB_PREFIX . '_', $statement);
 
         $statement = str_replace('?', '%s', $statement);
         return vsprintf($statement, $this->_params);
