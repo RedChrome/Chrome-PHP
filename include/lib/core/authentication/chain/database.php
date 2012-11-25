@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 22:43:51] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 20:25:07] --> $
  * @link       http://chrome-php.de
  */
 
@@ -233,7 +233,8 @@ class Chrome_Authentication_Create_Resource_Database implements Chrome_Authentic
  */
 class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstract
 {
-    protected $_dbInterface = 'interface';
+    //protected $_dbInterface = 'interface';
+    protected $_dbInterface = 'model';
 
     protected $_options = array(
                            'dbTable'          => 'authenticate',
@@ -256,16 +257,10 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
     {
         $identity = $this->_escape($identity);
 
-        $this->_dbInterfaceInstance
-            ->select(array($this->_options['dbCredential'], $this->_options['dbCredentialSalt']))
-            ->from($this->_options['dbTable'])
-            ->where($this->_options['dbIdentity'] . ' = "' . $identity . '"')
-            ->limit(0, 1)
-            ->execute();
+        $result = $this->_dbInterfaceInstance->prepare('authenticationGetPasswordAndSaltByIdentity')
+                        ->execute(array($identity));
 
-        $result = $this->_dbInterfaceInstance->next();
-
-        if($result != false) {
+        if($result->isEmpty() === false) {
             $result = array(
                        'password'      => $result[$this->_options['dbCredential']],
                        'password_salt' => $result[$this->_options['dbCredentialSalt']],
@@ -274,7 +269,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
             $result = false;
         }
 
-        $this->_dbInterfaceInstance->clean();
+        $this->_dbInterfaceInstance->clear();
         return $result;
     }
 
@@ -282,14 +277,10 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
     {
         $id = (int) $id;
 
-        $this->_dbInterfaceInstance
-                ->update($this->_options['dbTable'])
-                ->set(array($this->_options['dbTime'] => CHROME_TIME))
-                ->where('id = "' . $id . '"')
-                ->limit(0, 1)
-                ->execute();
+        $this->_dbInterfaceInstance->prepare('authenticationUpdateTimeById')
+            ->execute(array(CHROME_TIME, $id));
 
-        $this->_dbInterfaceInstance->clean();
+        $this->_dbInterfaceInstance->clear();
     }
 
     public function createAuthentication($credential, $salt = null)
@@ -317,20 +308,10 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
 
     public function getIDByPassword($pw, $pwSalt)
     {
+        $result = $this->_dbInterfaceInstance->prepare('authenticationGetOdByPassword')
+            ->execute(array($pw, $pwSalt));
 
-        $this->_dbInterfaceInstance
-                ->select('id')
-                ->from($this->_options['dbTable'])
-                ->where(
-                    $this->_options['dbCredential'] . ' = "' . $this->_escape($pw) . '" AND ' .
-                    $this->_options['dbCredentialSalt'] . ' = "' . $this->_escape($pwSalt) . '"'
-                )
-                ->orderBy('id', 'DESC')
-                ->limit(0, 1)
-                ->execute();
-
-        $result = $this->_dbInterfaceInstance->next();
-
-        return (int) $result['id'];
+        $return = $result->getNext();
+        return (int) $return['id'];
     }
 }

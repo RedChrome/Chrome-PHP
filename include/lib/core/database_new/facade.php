@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:09:54] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 18:24:53] --> $
  * @link       http://chrome-php.de
  */
 
@@ -192,4 +192,18 @@ class Chrome_Database_Facade
 
         return $class;
     }
+
+    public static function initComposition(Chrome_Database_Composition_Interface $requiredcomp, Chrome_Database_Composition_Interface $comp = null)
+    {
+        if($comp === null) {
+            $composition = $requiredcomp;
+        } else {
+            $composition = $requiredcomp->merge($requiredcomp, $comp);
+        }
+
+        $connection = ($composition->getConnection() === null) ? self::DEFAULT_CONNECTION : $composition->getConnection();
+
+        return self::getInterface($composition->getInterface(), $composition->getResult(), $connection, $composition->getAdapter());
+    }
+
 }

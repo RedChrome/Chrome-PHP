@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:12:24] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.11.2012 01:08:13] --> $
  * @link       http://chrome-php.de
  */
 
@@ -248,14 +248,6 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
         $this->_preprocessor = new Chrome_Filter_Chain_Preprocessor();
         $this->_postprocessor = new Chrome_Filter_Chain_Postprocessor();
 
-        // confugre database default connection
-        {
-            $defaultConnection = new Chrome_Database_Connection_Mysql();
-            $defaultConnection->setConnectionOptions(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-            $dbRegistry = Chrome_Database_Registry_Connection::getInstance();
-            $dbRegistry->addConnection(Chrome_Database_Facade::DEFAULT_CONNECTION, $defaultConnection);
-        }
-
         // setting up authentication, authorisation service
         {
             $handler = new Chrome_Exception_Handler_Authentication();
@@ -270,7 +262,7 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             // set authentication chains in the right order
             // the first chain should be session, because its the fastest one
             // the last should be the slowest, thats the db
-            $authentication->addChain($session)->addChain($cookie)->addChain($db);
+            $authentication->addChain($cookie)->addChain($session)->addChain($db);
 
             // set authorisation service
             //Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB())); // better one, but not finished ;)

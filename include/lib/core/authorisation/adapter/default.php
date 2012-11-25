@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authorisation
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:57:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 20:25:29] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -231,8 +231,7 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
  */
 class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_Database_Abstract
 {
-    protected $_dbInterface = 'Interface';
-
+    protected $_dbInterface = 'model';
     public function __construct()
     {
         parent::__construct();
@@ -240,33 +239,21 @@ class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_Database_Abstra
 
     public function getAccessById($id, $transformation)
     {
-        $id             = $this->_escape($id);
-        $transformation = $this->_escape($transformation);
+        $result = $this->_dbInterfaceInstance->prepare('authorisationGetAccessById')
+            ->execute(array($id, $transformation));
 
-        $this->_dbInterfaceInstance
-            ->select('_access')
-            ->from('authorisation_resource_default')
-            ->where('_resource_id = "' . $id . '" AND _transformation = "' . $transformation . '"')
-            ->execute()
-            ->clear();
-
-        $return = $this->_dbInterfaceInstance->next();
+        $result->getNext();
         return (int) $return['_access'];
-
     }
 
     public function getUserGroupById($id)
     {
         $id = (int) $id;
 
-        $this->_dbInterfaceInstance
-            ->select('group_id')
-            ->from('authorisation_user_default')
-            ->where('user_id = "' . $id . '"')
-            ->execute()
-            ->clear();
+        $result = $this->_dbInterfaceInstance->prepare('authorisationGetUserGroupById')
+            ->execute(array($id));
 
-        $return = $this->_dbInterfaceInstance->next();
+        $return = $result->getNext();
         return (int) $return['group_id'];
     }
 }

@@ -17,21 +17,12 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:15:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 20:07:22] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true)
     die();
-
-/**
- * @packagte   CHROME-PHP
- * @subpackage Chrome.Model
- */
-interface Chrome_Model_Database_Statement_Interface
-{
-    public function getStatement($key);
-}
 
 /**
  * @package    CHROME-PHP
@@ -54,6 +45,12 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
      * @var string
      */
 	protected $_dbInterface				= null;
+
+    protected $_dbResult                = null;
+
+    protected $_dbConnection            = null;
+
+    protected $_dbComposition           = null;
 
     /**
      * Server address
@@ -128,7 +125,7 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
 	 */
 	protected function _connect() {
 
-		if( $this->_dbServer	!== null OR
+		/*if( $this->_dbServer	!== null OR
 		 	$this->_dbDatabase	!== null OR
 			$this->_dbUser 		!== null OR
 			$this->_dbPassword	!== null ) {
@@ -138,6 +135,13 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
 		} else {
 			$this->_dbInterfaceInstance = Chrome_DB_Interface_Factory::factory($this->_dbInterface);
 		}
+        */
+        if($this->_dbComposition !== null) {
+            $this->_dbInterfaceInstance = Chrome_Database_Facade::initComposition($this->_dbComposition);
+        } else {
+            $this->_dbInterfaceInstance = Chrome_Database_Facade::getInterface($this->_dbInterface, $this->_dbResult, $this->_dbConnection, $this->_dbAdapter);
+        }
+
 	}
 
 	/**

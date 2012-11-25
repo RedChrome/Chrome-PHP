@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.11.2012 18:24:47] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 18:14:20] --> $
  * @link       http://chrome-php.de
  */
 
@@ -58,7 +58,17 @@ require_once 'result.php';
 require_once 'interface.php';
 
 /**
+ * load interface for compositioning different database access objects
+ */
+require_once 'composition.php';
+
+/**
  * load class to easily configure a database access object
  * this will include adapters, connection, result and interface
  */
 require_once 'facade.php';
+
+/**
+ * this will set the default connection
+ */
+require_once BASEDIR.'database.php';

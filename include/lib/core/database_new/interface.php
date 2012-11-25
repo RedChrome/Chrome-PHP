@@ -21,9 +21,11 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:10:09] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 19:45:31] --> $
  * @link       http://chrome-php.de
  */
+
+//TODO: enable right_handler support
 
 if(CHROME_PHP !== true) die();
 
@@ -46,6 +48,8 @@ interface Chrome_Database_Interface_Interface
     public function escape($data);
 
     public function getStatement();
+
+    public function getQuery();
 
     public function clear();
 }
@@ -108,11 +112,14 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
         } else {
             $this->_params = array_merge($this->_params, $array);
         }
+
+        return $this;
     }
 
     public function setParameter($key, $value, $escape = true)
     {
         $this->_params[$key] = ($escape === true) ? $this->escape($value) : $value;
+        return $this;
     }
 
     public function getResult()
@@ -132,6 +139,11 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
     public function getStatement()
     {
+        return $this->_query;
+    }
+
+    public function getQuery()
+    {
         return $this->_sentQuery;
     }
 
@@ -140,6 +152,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
         $this->_query  = null;
         $this->_params = null;
         $this->_result = $this->_result->clear();
+        return $this;
     }
 
     protected function _prepareStatement($statement)

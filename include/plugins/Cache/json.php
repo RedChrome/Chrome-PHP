@@ -17,7 +17,7 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 15:45:50] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 20:17:42] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -30,10 +30,10 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Cache_Json extends Chrome_Cache_Abstract
 {
-    protected $_fileName    = null;
+    protected $_fileName = null;
     protected $_filePointer = null;
-    protected $_values      = array();
-    protected $_changed     = false;
+    protected $_values = array();
+    protected $_changed = false;
 
     public function __construct($file)
     {
@@ -43,25 +43,27 @@ class Chrome_Cache_Json extends Chrome_Cache_Abstract
             throw new Chrome_Exception('File does not exist!');
         }
 
-        $this->_values = json_decode(file_get_contents($this->_fileName, false));
+        $this->_values = (array) json_decode(file_get_contents($this->_fileName, false));
 
-        if($this->_values === false) {
+        if($this->_values === array()) {
             throw new Chrome_Exception('Error while decoding .json file!');
         }
     }
 
     public function __destruct()
     {
-        if($this->_filePointer !== null AND $this->_changed === true) {
+        if($this->_filePointer !== null and $this->_changed === true) {
             fwrite($this->_filePointer, json_encode($this->_values));
         }
 
-        fclose($this->_filePointer);
+        if($this->_filePointer !== null) {
+            fclose($this->_filePointer);
+        }
     }
 
-    public function factory($file)
+    public static function factory($file)
     {
-        self::__construct($file);
+        return new self($file);
     }
 
     public function save($key, $value)

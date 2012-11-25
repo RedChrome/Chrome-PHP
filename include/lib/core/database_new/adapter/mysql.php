@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:07:18] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.11.2012 01:32:36] --> $
  * @link       http://chrome-php.de
  */
 
@@ -40,6 +40,7 @@ class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
     {
         $this->_result = mysql_query($query, $this->_connection);
 
+        //TODO: print more info about the exception and or query...
         if($this->_result === false) {
 
             throw new Chrome_Exception_Database('Error while sending a query to database!');

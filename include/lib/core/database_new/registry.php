@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 20:31:13] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.11.2012 00:16:59] --> $
  * @link       http://chrome-php.de
  */
 

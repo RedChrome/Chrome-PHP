@@ -17,7 +17,7 @@
  * @subpackage Chrome.Config
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:24:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 20:36:07] --> $
  * @author     Alexander Book
  */
 
@@ -53,6 +53,10 @@ class Chrome_Model_Config extends Chrome_Model_Decorator_Abstract
  */
 class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
 {
+    protected $_dbInterface = 'model';
+
+    protected $_dbResult    = 'iterator';
+
     public function __construct()
     {
         $this->_connect();
@@ -60,22 +64,12 @@ class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
 
     public function loadConfig()
     {
-        $this->_dbInterfaceInstance
-            ->select(
-                array(
-                 'name',
-                 'subclass',
-                 'value',
-                )
-            )
-            ->from('config')
-            ->execute();
-
+        $result = $this->_dbInterfaceInstance->prepare('configLoadConfiguration')->execute();
         $config = array();
+        foreach($result as $item) {
 
-        foreach($this->_dbInterfaceInstance as $result) {
             // sets $config[subclass][name] = value
-            $config[$result['subclass']][$result['name']] = $result['value'];
+            $config[$item['subclass']][$item['name']] = $item['value'];
         }
 
         $this->_dbInterfaceInstance->clear();
@@ -85,19 +79,14 @@ class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
 
     public function setConfig($name, $subclass, $value, $type, $modul = '')
     {
-        $this->_dbInterfaceInstance
-            ->insert()
-            ->into('config')
-            ->values(
-                array(
+        $this->_dbInterfaceInstance->prepare('configSetConfiguration')
+            ->execute(array(
                  $name,
                  $subclass,
                  $value,
                  $type,
                  $modul,
-                )
-            )
-            ->execute();
+                ));
 
         $this->_dbInterfaceInstance->clear();
     }

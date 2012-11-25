@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 22:53:17] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 20:26:13] --> $
  * @link       http://chrome-php.de
  */
 
@@ -36,16 +36,18 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
 {
     protected $_options = array(
                            'cookie_namespace'         => '_AUTH',
-                           'dbInterface'              => null,
+                           'dbComposition'            => null,
                            'dbTable'                  => 'authenticate',
                            'cookie_renew_probability' => 10,
                           );
+
+    protected $_dbComposition = null;
 
     /**
      *
      * @var array $options:
      *                  - cookie_namespace: (string) Namespace of the cookie, default: _AUTH
-     *                  - dbInterface: (Chrome_DB_Interface_Abstract) Instance of an db connection, default: null (creates a default connection)
+     *                  - dbComposition: (Chrome_DB_Interface_Abstract) Instance of an db connection, default: null (creates a default connection)
      *                  - dbTable: (string) Name of the db-table, containing the cookie-token and id, default: authenticate
      *                  - cookie_renew_probability: (int) probability (1:x) when the cookie gets renewed, e.g.
      *                                              probability is set to 20, then the probability is 5% = 1/20, default: 10
@@ -54,6 +56,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
      */
     public function __construct(array $options = array())
     {
+        $this->_dbComposition = new Chrome_Database_Composition('model');
         $this->_options = array_merge($this->_options, $options);
     }
 
@@ -99,34 +102,26 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
         }
 
         // todo: move to model and refactor
-        if($this->_options['dbInterface'] !== null) {
-            $dbInterface = $this->_options['dbInterface'];
-        } else {
-            $dbInterface = Chrome_DB_Interface_Factory::factory('interface');
-        }
-
-        // could not connect to db, try another chain, maybe it can authenticate
-        if($dbInterface === null or $dbInterface == false) {
-            return $this->_chain->authenticate($resource);
-        }
+        $dbInterface = Chrome_Database_Facade::initInterface($this->_dbComposition, $this->_options['dbComposition']);
 
         // user has sent an invalid token
         if($token !== ($tokenEscaped = $dbInterface->escape($token))) {
             return $this->_clearCookie();
         }
 
-        // search in the db for token and id
-        $dbInterface
-            ->select(array('id', 'cookie_token'), null, false, 'SQL_NO_CACHE')
-            ->from($this->_options['dbTable'])
-            ->where('id = "' . $id . '" AND cookie_token = "' . $tokenEscaped . '"')
-            ->limit(0, 1)
-            ->execute();
+        try {
+            $dbInterface = Chrome_Database_Facade::initComposition('model', 'assoc');
+            $dbInterface->prepare('authenticationDoesIdAndTokenExist')
+                ->execute(array($this->_options['dbTable'], $id, $tokenEscaped));
 
-        $result = $dbInterface->next();
+            $result = $dbInterface->getResult();
+
+        } catch(Chrome_Exception $e) {
+            echo $e;
+        }
 
         // no entry found
-        if($result == false or empty($result)) {
+        if($result->isEmpty() === true) {
             return $this->_chain->authenticate($resource);
         } else {
 
@@ -157,16 +152,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
     {
         $id = (int) $id;
 
-        if($this->_options['dbInterface'] !== null) {
-            $dbInterface = $this->_options['dbInterface'];
-        } else {
-            $dbInterface = Chrome_DB_Interface_Factory::factory('interface');
-        }
-
-        // could not connect to db, try another chain, maybe it can authenticate
-        if($dbInterface === null or $dbInterface == false) {
-            return $this->_chain->authenticate($resource);
-        }
+        $dbInterface = Chrome_Database_Facade::initComposition($this->_dbComposition, $this->_options['dbComposition']);
 
         // create token
         $hash  = Chrome_Hash::getInstance();
@@ -176,13 +162,9 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
         //Chrome_Cookie::getInstance()->setCookie($this->_options['cookie_namespace'], base64_encode('1.'.$token));
         Chrome_Cookie::getInstance()->setCookie($this->_options['cookie_namespace'], $this->_encodeCookieString($id, $token));
 
-        // update db with this token
-        $dbInterface
-            ->update($this->_options['dbTable'])
-            ->set(array('cookie_token' => $token))
-            ->where('id = "' . $id . '"')
-            ->limit(0, 1)
-            ->execute();
+        // update database
+        $dbInterface->prepare('authenticationUpdateTokenById')
+            ->execute(array($this->_options['dbTable'], $token, $id));
     }
 
     private function _encodeCookieString($id, $token)

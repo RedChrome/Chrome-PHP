@@ -21,17 +21,19 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:10:45] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 19:59:28] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true) die();
 
-class Chrome_Database_Result_Assoc extends Chrome_Database_Result_Abstract
+class Chrome_Database_Result_Assoc extends Chrome_Database_Result_Abstract implements ArrayAccess
 {
     protected $_adapter = null;
 
     protected $_nextResult = null;
+
+    protected $_currentResult = array();
 
     public function isEmpty()
     {
@@ -49,9 +51,13 @@ class Chrome_Database_Result_Assoc extends Chrome_Database_Result_Abstract
         if($this->_nextResult !== null) {
             $result = $this->_nextResult;
             $this->_nextResult = null;
+            $this->_currentResult = $result;
             return $result;
         }
-        return $this->_adapter->getNext();
+
+        $this->_currentResult = $this->_adapter->getNext();
+
+        return $this->_currentResult;
     }
 
     public function setAdapter(Chrome_Database_Adapter_Result_Interface $adapter)
@@ -64,4 +70,23 @@ class Chrome_Database_Result_Assoc extends Chrome_Database_Result_Abstract
         return $this->_adapter->getAffectedRows();
     }
 
+
+    /*
+        ArrayAccess methods
+    */
+    public function offsetExists($offset) {
+        return isset($this->_currentResult[$offset]);
+    }
+
+    public function offsetGet($offset) {
+        return $this->_currentResult[$offset];
+    }
+
+    public function offsetSet($offset, $value) {
+        $this->_currentResult[$offset] = $value;
+    }
+
+    public function offsetUnset($offset) {
+        $this->_currentResult[$offset] = null;
+    }
 }
