@@ -1,0 +1,8 @@
+{
+    "info": "File for MySQL, saves all queries sent by module register",
+
+    "registerCheckKeyExists": "SELECT `key` FROM cpp_user_regist WHERE `key` = \"?\" LIMIT 0,1", 
+    "registerAddRegistrationRequest": "INSERT INTO cpp_user_regist VALUES(?,?,?,?,?,?)",
+    "registerGetRegistrationRequest": "SELECT `name`, `pass`, `pw_salt`, `email`, `time` FROM cpp_user_regist WHERE `key` = \"?\" LIMIT 0,1",
+    "registerDeleteActivationKey": "DELETE FROM cpp_user_regist WHERE `key`  = \"?\""
+}

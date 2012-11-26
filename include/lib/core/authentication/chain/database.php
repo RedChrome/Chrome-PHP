@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 20:25:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 11:23:35] --> $
  * @link       http://chrome-php.de
  */
 
@@ -292,16 +292,8 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
             $hash = $credential;
         }
 
-        $this->_dbInterfaceInstance
-                ->insert()
-                ->into(
-                    $this->_options['dbTable'], array(
-                                                 $this->_options['dbCredential'],
-                                                 $this->_options['dbCredentialSalt'],
-                                                )
-                )
-                ->values(array($this->_escape($hash), $this->_escape($salt)))
-                ->execute();
+        $this->_dbInterfaceInstance->prepare('authenticationCreateAuthentication')
+            ->execute(array($hash, $salt));
 
         $this->_dbInterfaceInstance->clean();
     }

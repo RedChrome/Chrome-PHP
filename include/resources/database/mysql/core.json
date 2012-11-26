@@ -1,5 +1,5 @@
 {
-    "info": "File for MySQL, saves alle queries sent by core",
+    "info": "File for MySQL, saves all queries sent by core",
 
     "authenticationDoesIdAndTokenExist": "SELECT `id` FROM cpp_? WHERE `id` = ? AND `cookie_token` = \"?\" LIMIT 0,1",
     "authenticationUpdateTokenById": "UPDATE ? SET `cookie_token` = ? WHERE `id` = ? LIMIT 0,1",
@@ -11,6 +11,16 @@
     "authorisationGetUserGroupById": "SELECT `group_id` FROM cpp_authorisation_user_default WHERE `user_id`= \"?\" ",
 
     "configLoadConfiguration": "SELECT `name`,`subclass`, `value` FROM cpp_config",
-    "configSetConfiguration": "INSERT INTO cpp_config VALUES(?, ?, ?, ?, ?)"
+    "configSetConfiguration": "INSERT INTO cpp_config VALUES(?, ?, ?, ?, ?)",
+
+    "requireGetRequirements": "SELECT `name`, `path`, `require_class` FROM cpp_require AS `r` WHERE `activated` = 1 ORDER BY r.order ASC",
+    "requireGetClasses": "SELECT `name`, `file` FROM cpp_class",
+    "requireDeleteEntryByName": "DELETE FROM cpp_class WHERE `name` = \"?\" LIMIT 0,1",
+    "requireDoesNameExist": "SELECT `id` FROM cpp_class WHERE `name` = \"?\" LIMIT 0,1",
+    "requireSetClass": "INSERT INTO cpp_class(`id`, `name`, `file`) VALUES ('', ?, ?)", 
+
+    "routeDynamicGetResourceById": "SELECT * FROM cpp_route_dynamic WHERE `id` = ? LIMIT 0,1",
+    "routeStaticGetRoute": "SELECT * FROM cpp_route_static WHERE `search` = \"?\" LIMIT 0,1",
+    "routeStaticFindRoute": "SELECT `search` FROM cpp_route_static WHERE `name`= \"?\" LIMIT 0,1"
 
 }

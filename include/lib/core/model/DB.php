@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 20:07:22] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 11:32:06] --> $
  * @author     Alexander Book
  */
 
@@ -221,7 +221,7 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
             $this->_connect();
         }
         if($clean === true) {
-            $this->_dbInterfaceInstance->clean();
+            $this->_dbInterfaceInstance = $this->_dbInterfaceInstance->clear();
         }
 
         return $this->_dbInterfaceInstance;

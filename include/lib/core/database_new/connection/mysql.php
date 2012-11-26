@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:08:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 10:05:12] --> $
  * @link       http://chrome-php.de
  */
 
@@ -100,6 +100,8 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
         }
 
         $this->_isConnected = true;
+
+        unset($this->_password, $this->_username, $this->_database, $this->_host, $this->_clientFlags, $this->_port);
 
         return $this->_connection;
     }

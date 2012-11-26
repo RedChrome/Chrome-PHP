@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:25:21] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 10:12:05] --> $
  * @author     Alexander Book
  */
 
@@ -154,7 +154,7 @@ class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
  */
 class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Abstract
 {
-	protected $_dbInterface = 'interface';
+	protected $_dbInterface = 'model';
 
 	public function __construct()
 	{
@@ -164,10 +164,11 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Abstract
 	public function getRoute( $search )
 	{
 
-		$this->_dbInterfaceInstance->select( '*' )->from( 'route_static' )->where( 'search = "' . $this->_escape
-			( $search ) . '"' )->limit( 0, 1 )->execute();
+        $result = $this->_dbInterfaceInstance->prepare('routeStaticGetRoute')
+            ->execute(array($search));
 
-		$row = $this->_dbInterfaceInstance->next();
+
+		$row = $result->getNext();
 
 		$this->_dbInterfaceInstance->clear();
 
@@ -210,10 +211,11 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Abstract
 	public function findRoute( $name )
 	{
 
-		$this->_dbInterfaceInstance->select( 'search' )->from( 'route_static' )->where( 'name = "' . $this->_escape
-			( $name ) . '"' )->limit( 0, 1 )->execute();
+        $result = $this->_dbInterfaceInstance->prepare('routeStaticFindRoute')
+            ->execute(array($name));
 
-		$row = $this->_dbInterfaceInstance->next();
+        $row = $result->getNext();
+
 		$this->_dbInterfaceInstance->clear();
 
 		return $row;

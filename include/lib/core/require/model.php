@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 20:36:54] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 10:02:04] --> $
  * @author     Alexander Book
  */
 
@@ -100,6 +100,7 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
      */
     public function __construct()
     {
+        $this->_dbComposition = new Chrome_Database_Composition('model', 'iterator');
         $this->_connect();
     }
 
@@ -114,17 +115,11 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
     {
         $require = array();
 
-        // create sql query
-        $this->_dbInterfaceInstance
-                ->initDefaultConnection()
-                ->select(array('name', 'path', 'require_class'))
-                ->from(array('r' => 'require'))
-                ->where('activated = "1"')
-                ->orderBy('r.order', 'ASC')
-                ->execute();
+        $result = $this->_dbInterfaceInstance->prepare('requireGetRequirements')
+            ->execute();
 
         // loop through every result
-        foreach($this->_dbInterfaceInstance AS $value) {
+        foreach($result AS $value) {
             $require[] = $value;
         }
 
@@ -143,16 +138,11 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
     {
         $_class = array();
 
-
-        // create sql query
-        $this->_dbInterfaceInstance
-                ->initDefaultConnection()
-                ->select(array('name', 'file'))
-                ->from('class')
-                ->execute();
+        $result = $this->_dbInterfaceInstance->prepare('requireGetClasses')
+            ->execute();
 
         // loop through
-        foreach($this->_dbInterfaceInstance AS $value) {
+        foreach($result AS $value) {
             $_class[$value['name']] = $value['file'];
         }
 
@@ -172,42 +162,29 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
      */
     public function addClass($name, $file, $override = false)
     {
-        $db = Chrome_DB_Interface_Factory::factory();
-
         // delete old entry
         if($override === true) {
             // make sql query AND clean up DB interface
-            $db->delete()
-                ->from('class')
-                ->where('name = "' . $db->escape($name) . '" ')
-                ->limit(0, 1)
-                ->execute()
-                ->clear();
+
+            $this->_dbInterfaceInstance->prepare('requireDeleteEntryByName')
+                ->execute(array($name));
 
         } else {
 
             // check whether there is already the same class defined
-            $result = $db
-                        ->select(array('id'))
-                        ->from('class')
-                        ->where('name = "' . $db->escape($name) . '" ')
-                        ->execute()
-                        ->next()
-                        ->current();
+            $resultObj = $this->_dbInterfaceInstance->prepare('requireDoesNameExist')
+                ->execute(array($name));
 
-            if(!empty($result['id'])) {
+            if(!$resultObj->isEmpty()) {
                 throw new Chrome_Exception('There is already a class ' . $name . ' defined in database! Override set to false in Chrome_Require::addClass()!');
             }
-            // clear it
-            $db->clear();
-        }
 
-        // insert the class to db
-        $db
-            ->insert()
-            ->into('class', array('id', 'name', 'file'))
-            ->values(array('', $db->escape($name), $db->escape($file)))
-            ->execute();
+        }
+        $this->_dbInterfaceInstance->clear();
+
+         // insert the class to db
+        $this->_dbInterfaceInstance->prepare('requireSetClass')
+            ->execute(array($name, $file));
     }
 
     /**
