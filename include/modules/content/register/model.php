@@ -12,6 +12,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 	{
 	    $this->_dbInterfaceInstance = Chrome_Database_Facade::getInterface('model', 'assoc');
         $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::getInstance('register'));
+        $this->_dbInterfaceInstance->clear();
 		// do nothing
 	}
 
@@ -55,6 +56,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 
 		// check whether the same key already exists...
 		$db = $this->_getDBInterface();
+        $db->clear();
 
 		$result = $db->prepare('registerCheckKeyExists')->execute(array($key));
 
@@ -62,6 +64,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 		if( $result->isEmpty() ) {
 			return $key;
 		}
+        die();
 		// another try
 		return $this->generateActivationKey();
 	}
@@ -79,7 +82,10 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 		}
 		catch ( Chrome_Exception_Database $e ) {
 			Chrome_Log::logException( $e );
+            return false;
 		}
+
+        return true;
 	}
 
 	public function checkRegistration( $activationKey )
@@ -90,12 +96,13 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 
 		try {
 			$db = $this->_getDBInterface();
-
+            $db->clear();
             $resultObj = $db->prepare('registerGetRegistrationRequest')
                 ->execute(array($activationKey));
 
 
-			$result = $resultObj->getNext();
+            $result = $resultObj->getNext();
+
 		} catch ( Chrome_Exception_DB $e ) {
 			Chrome_Log::logException( $e );
 		}
@@ -171,7 +178,6 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 
 	protected function _isValidActivationKey( $result, $activationKey )
 	{
-
 		if( $result === null or $result === false ) {
 			return false;
 		}

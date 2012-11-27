@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 20:15:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 19:43:06] --> $
  * @link       http://chrome-php.de
  */
 
@@ -54,6 +54,8 @@ interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Inte
     public function setConnection(Chrome_Database_Connection_Interface $connection);
 
     public function getConnection();
+
+    public function clear();
 }
 
 abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapter_Interface
@@ -63,6 +65,10 @@ abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapt
     protected $_connection = null;
 
     protected $_result = null;
+
+    protected $_isEmpty = true;
+
+    protected $_cache   = null;
 
     public function __construct(Chrome_Database_Connection_Interface $connection)
     {
@@ -86,5 +92,14 @@ abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapt
     public function getConnection()
     {
         return $this->_connectionObject;
+    }
+
+    public function clear()
+    {
+        $adapter = clone $this;
+        $adapter->_result = null;
+        $adapter->_isEmpty = true;
+        $adapter->_cache = null;
+        return $adapter;
     }
 }

@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 11:23:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 23:38:46] --> $
  * @link       http://chrome-php.de
  */
 
@@ -295,7 +295,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
         $this->_dbInterfaceInstance->prepare('authenticationCreateAuthentication')
             ->execute(array($hash, $salt));
 
-        $this->_dbInterfaceInstance->clean();
+        $this->_dbInterfaceInstance->clear();
     }
 
     public function getIDByPassword($pw, $pwSalt)

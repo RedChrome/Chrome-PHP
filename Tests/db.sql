@@ -399,18 +399,20 @@ INSERT INTO `cp1_class` (`id`, `name`, `file`) VALUES
 
 
 INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`) VALUES
+('blacklist_host', 'Registration', 'localhost,', 'string', '', 0),
+('comment_block_sec', 'News', '30', 'int', '', 0),
 ('Default_Design', 'Design', 'chrome', 'string', '', 0),
+('default_user_group', 'Registration', '1', 'int', '', 0),
+('email_sender', 'Registration', 'registration@localhost.de', 'string', '', 0),
+('email_sender_name', 'Registration', 'Registrierung', 'string', '', 0),
+('email_subject', 'Registration', 'Registrierung auf Localhost!', 'string', '', 0),
+('expiration', 'Registration', '604800', 'int', '', 0),
+('Gallery_Page_Limit', 'Gallery', '9', 'int', '', 0),
 ('Meta_Desc', 'Site', '', 'string', '', 0),
 ('Meta_Keywords', 'Site', '', 'string', '', 0),
-('Title_Beginning', 'Site', 'Chrome-PHP', 'string', '', 0),
-('Title_Separator', 'Site', ' :: ', 'string', '', 0),
-('Email_Subject', 'Registration', 'Registrierung auf Localhost!', 'string', '', 0),
-('pmsPerPage', 'Pm', '10', 'int', '', 0),
-('maxTitleLength', 'Pm', '150', 'int', '', 0),
 ('News_Comment_Limit', 'News', '15', 'int', '', 0),
 ('News_Page_Limit', 'News', '6', 'int', '', 0),
-('comment_block_sec', 'News', '30', 'int', '', 0),
-('Gallery_Page_Limit', 'Gallery', '9', 'int', '', 0),
+('Title_Beginning', 'Site', 'Chrome-PHP', 'string', '', 0),
 ('Title_Ending', 'Site', '', 'string', '', 0),
-('blacklist_host', 'Registration', 'localhost,', 'string', '', 0),
-('expiration', 'Registration', '604800', 'int', '', 0);
+('Title_Separator', 'Site', ' :: ', 'string', '', 0),
+('name', 'Site', 'CHROME-PHP', 'string', '', 0);

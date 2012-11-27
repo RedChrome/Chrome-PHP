@@ -36,7 +36,8 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
     {
         $this->_interface->clear();
 
-        $this->assertSame($this->_adapter, $this->_interface->getAdapter());
+        $this->assertSame($this->_adapter->getConnection(), $this->_interface->getAdapter()->getConnection());
+        $this->assertNotSame($this->_adapter, $this->_interface->getAdapter());
         $this->assertNotSame($this->_result, $this->_interface->getResult());
     }
 
@@ -46,7 +47,7 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
 
         $this->_interface->query($query);
 
-        $this->assertEquals($query, $this->_interface->getStatement());
+        $this->assertEquals($query, $this->_interface->getQuery());
     }
 
     public function testReplaceTablePrefix()
@@ -55,7 +56,7 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         $statement2 = 'SELECT * from ' . DB_PREFIX . '_require LIMIT 0,1';
         $this->_interface->query($statement);
 
-        $this->assertEquals($statement2, $this->_interface->getStatement());
+        $this->assertEquals($statement2, $this->_interface->getQuery());
     }
 
     public function testReplaceParametersWithEscaping()
@@ -69,7 +70,7 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         $this->_interface->setParameters(array($table, $limitEnde));
         $this->_interface->query($statement);
 
-        $this->assertEquals($statement2, $this->_interface->getStatement());
+        $this->assertEquals($statement2, $this->_interface->getQuery());
     }
 
     public function testReplaceParametersWithoutEscaping()
@@ -83,6 +84,6 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         $this->_interface->setParameters(array($table, $limitEnde), false);
         $this->_interface->query($statement);
 
-        $this->assertEquals($statement2, $this->_interface->getStatement());
+        $this->assertEquals($statement2, $this->_interface->getQuery());
     }
 }

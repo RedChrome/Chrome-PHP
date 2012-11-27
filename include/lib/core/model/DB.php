@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 11:32:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 22:58:11] --> $
  * @author     Alexander Book
  */
 
@@ -155,14 +155,16 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
 	 */
 	protected function _getNewDBInterface(Chrome_DB_Interface_Abstract $interface = null) {
 
-		$interface = ($interface === null) ? $this->_dbInterface : $interface;
+        throw new Chrome_Exception('Not implemented yet');
+
+		/*$interface = ($interface === null) ? $this->_dbInterface : $interface;
 
 		$conID = $this->_dbInterfaceInstance->getConnectionID();
 
 		$instance = Chrome_DB_Interface_Factory::factory($interface);
 		$instance->setConnectionID($conID);
 
-		$this->_dbInterfaceInstance = $instance;
+		$this->_dbInterfaceInstance = $instance;<br />*/
 	}
 
     /**
@@ -189,6 +191,7 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
      * @return void
      */
     public function setDBInterface(Chrome_Form_Interface_Abstract $dbInterface) {
+        // TODO: wtf? wrong interface? form??
         $this->_dbInterfaceInstance = $dbInterface;
     }
 
@@ -221,7 +224,7 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
             $this->_connect();
         }
         if($clean === true) {
-            $this->_dbInterfaceInstance = $this->_dbInterfaceInstance->clear();
+            $this->_dbInterfaceInstance->clear();
         }
 
         return $this->_dbInterfaceInstance;

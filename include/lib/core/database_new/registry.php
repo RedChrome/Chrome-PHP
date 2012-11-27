@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.11.2012 00:16:59] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 00:06:46] --> $
  * @link       http://chrome-php.de
  */
 
@@ -31,7 +31,7 @@ interface Chrome_Database_Registry_Connection_Interface
 {
     public static function getInstance();
 
-    public function addConnection($name, Chrome_Database_Connection_Interface $connection);
+    public function addConnection($name, Chrome_Database_Connection_Interface $connection, $overwrite = false);
 
     public function getConnection($name);
 
@@ -60,9 +60,9 @@ class Chrome_Database_Registry_Connection implements Chrome_Database_Registry_Co
 
         return self::$_instance;
     }
-    public function addConnection($name, Chrome_Database_Connection_Interface $connection)
+    public function addConnection($name, Chrome_Database_Connection_Interface $connection, $overwrite = false)
     {
-        if(isset($this->_connections[$name])) {
+        if(isset($this->_connections[$name]) AND $overwrite !== true) {
             throw new Chrome_Exception_Database('Cannot re-set an existing database connection with name "' . $name . '"!');
         }
 

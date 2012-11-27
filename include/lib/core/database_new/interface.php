@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 19:45:31] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 19:40:15] --> $
  * @link       http://chrome-php.de
  */
 
@@ -85,11 +85,16 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
         }
     }
 
-    public function query($query)
+    public function query($query, array $params = array())
     {
         if($this->_sentQuery !== null) {
-            $this->clear();
+            throw new Chrome_Exception('Did not called clear() before executing another query!');
         }
+
+        if(count($params) > 0) {
+            $this->setParameters($params, true);
+        }
+
 
         $query = $this->_prepareStatement($query);
 
@@ -151,7 +156,10 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
     {
         $this->_query  = null;
         $this->_params = null;
-        $this->_result = $this->_result->clear();
+        $this->_sentQuery = null;
+        $this->_adapter = $this->_adapter->clear();
+        $this->_result  = $this->_result->clear();
+        $this->_result->setAdapter($this->_adapter);
         return $this;
     }
 
@@ -161,6 +169,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
         $statement = str_replace('cpp_', DB_PREFIX . '_', $statement);
 
         $statement = str_replace('?', '%s', $statement);
+
         return vsprintf($statement, $this->_params);
     }
 }

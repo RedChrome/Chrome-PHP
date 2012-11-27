@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:07:28] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 19:42:20] --> $
  * @link       http://chrome-php.de
  */
 
@@ -29,8 +29,6 @@ if(CHROME_PHP !== true) die();
 
 class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstract
 {
-    protected $_isEmpty = true;
-
     public function isEmpty()
     {
         return $this->_isEmpty;
@@ -45,12 +43,24 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
         }
 
         if(is_resource($this->_result) === true) {
-            $this->_isEmpty = false;
+
+            $this->_cache = $this->getNext();
+            if($this->_cache === false) {
+                $this->_isEmpty = true;
+            } else {
+                $this->_isEmpty = false;
+            }
         }
     }
 
     public function getNext()
     {
+        if($this->_cache !== null) {
+            $cache = $this->_cache;
+            $this->_cache = null;
+            return $cache;
+        }
+
         if($this->_result !== false) {
             return pg_fetch_array($this->_result, null, PGSQL_ASSOC);
         } else {

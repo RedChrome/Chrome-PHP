@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 23:11:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 23:52:55] --> $
  * @author     Alexander Book
  */
 
@@ -69,13 +69,17 @@ class Chrome_Model_User_DB extends Chrome_Model_Database_Abstract
         try {
             $db = $this->_getDBInterface();
 
+
+
             $values = array(
                 'id' => $id,
                 'name' => $db->escape($username),
                 'email' => $db->escape($email),
                 'time' => CHROME_TIME,
                 'group' => $group);
-            $db->insert()->into('user')->values($values)->execute();
+
+            $db->query('INSERT INTO cpp_user(id, name, email, time, `group`) VALUES ("?", "?", "?", "?", "?")', $values);
+            //$db->insert()->into('user')->values($values)->execute();
             return true;
         }
         catch (Chrome_Exception $e) {
@@ -90,17 +94,14 @@ class Chrome_Model_User_DB extends Chrome_Model_Database_Abstract
             $db = $this->_getDBInterface();
 
             $id = (int)$id;
-            $name = $db->escape($name);
-            $email = $db->escape($email);
 
-            $db->select(array('id'))->from('user')->where('id = ' . $id . ' OR name = "' . $name . '" OR email = "' . $email . '"')->limit(0, 1)->execute();
-            $result = $db->next();
+            $db->query('SELECT id FROM cpp_user WHERE id = "?" OR name = "?" OR email = "?" LIMIT 0,1', array($id, $name, $email));
 
-            if($result !== false) {
-                return true;
+            //$db->select(array('id'))->from('user')->where('id = ' . $id . ' OR name = "' . $name . '" OR email = "' . $email . '"')->limit(0, 1)->execute();
+
+            if($db->getResult()->isEmpty()) {
+                return false;
             }
-
-            return false;
         }
         catch (Chrome_Exception_Database $e) {
             Chrome_Log::logException($e, E_ERROR);

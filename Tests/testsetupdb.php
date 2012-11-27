@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 20:19:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 00:28:33] --> $
  * @author     Alexander Book
  */
 
@@ -24,8 +24,13 @@ require_once 'testsetup.php';
 
 require_once LIB.'core/file_system/file_system.php';
 
-require_once LIB.'core/database/database.php';
-$interface = Chrome_DB_Interface_Factory::factory('interface');
-$interface->connect('localhost', 'chrome_2_test', 'test', '');
-$id = $interface->getConnectionID();
-$interface->setDefaultConnectionID($id);
+require_once LIB.'core/database_new/database.php';
+require_once LIB.'core/database_new/connection/mysql.php';
+
+// configure default database connection
+$defaultConnection = new Chrome_Database_Connection_Mysql();
+$defaultConnection->setConnectionOptions('localhost', 'test', '', 'chrome_2_test');
+$defaultConnection->connect();
+
+$dbRegistry = Chrome_Database_Registry_Connection::getInstance();
+$dbRegistry->addConnection(Chrome_Database_Facade::DEFAULT_CONNECTION, $defaultConnection, true);
