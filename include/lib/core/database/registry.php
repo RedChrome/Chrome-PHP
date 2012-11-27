@@ -3,6 +3,8 @@
 /**
  * CHROME-PHP CMS
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * This source file is subject to the Creative Commons license that is bundled
@@ -13,129 +15,96 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
+ * @category   CHROME-PHP
  * @package    CHROME-PHP
- * @subpackage Chrome.DB
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.09.2012 23:43:28] --> $
- * @author     Alexander Book
+ * @subpackage Chrome.Database
+ * @author     Alexander Book <alexander.book@gmx.de>
+ * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
+ * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 00:06:46] --> $
+ * @link       http://chrome-php.de
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
-/**
- * @todo implement Chrome_Registry_Interface,  OR check whether it is compatible with it
- * @package CHROME-PHP
- * @subpackage Chrome.DB
- */
-class Chrome_Database_Registry
+interface Chrome_Database_Registry_Connection_Interface
 {
-	/**
-	 * Instance of this class, used for singleton pattern
-	 *
-	 * @var Chrome_Database_Registry
-	 */
-	private static $_instance;
+    public static function getInstance();
 
-	/**
-	 * Contains all database connections
-	 *
-	 * @var array
-	 */
-	private $_connections;
+    public function addConnection($name, Chrome_Database_Connection_Interface $connection, $overwrite = false);
+
+    public function getConnection($name);
+
+    public function getConnectionObject($name);
+
+    public function isConnected($name);
+
+    public function isExisting($name);
+}
+
+class Chrome_Database_Registry_Connection implements Chrome_Database_Registry_Connection_Interface
+{
+    protected $_connections = array();
+
+    private static $_instance = null;
+
+    protected function __construct()
+    {
+    }
+
+    public static function getInstance()
+    {
+        if(self::$_instance === null) {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
+    }
+    public function addConnection($name, Chrome_Database_Connection_Interface $connection, $overwrite = false)
+    {
+        if(isset($this->_connections[$name]) AND $overwrite !== true) {
+            throw new Chrome_Exception_Database('Cannot re-set an existing database connection with name "' . $name . '"!');
+        }
+
+        $this->_connections[$name] = $connection;
+    }
+
+    public function getConnection($name)
+    {
+        if(!isset($this->_connections[$name])) {
+            throw new Chrome_Exception_Database('Could not find connection with name "' . $name . '"!');
+        }
+
+        if($this->_connections[$name]->isConnected() === false) {
+            throw new Chrome_Exception_Database('Cannot get connection, if connection is not established!');
+        }
+
+        return $this->_connections[$name]->getConnection();
+    }
+
+    public function getConnectionObject($name)
+    {
+        if(!isset($this->_connections[$name])) {
+            throw new Chrome_Exception_Database('Could not find connection object with name "' . $name . '"!');
+        }
+
+        return $this->_connections[$name];
+    }
 
     /**
-     * Contains the id of the last created connection
+     * Returns true if connection exists and connection is established
+     * false else
      *
-     * @var int
+     * @param string $name name of the connection
+     * @return bool
      */
-    private $_connectionID = 0;
+    public function isConnected($name)
+    {
+        return $this->isExisting($name) ? $this->_connections[$name]->isConnected() : false;
+    }
 
-	/**
-	 * Constructor, used for singleton pattern
-	 *
-	 * @return void
-	 */
-	private function __construct()
-	{
-		$this->_connections = array();
-	}
-
-	/**
-	 * Gets the instance of this class
-	 *
-	 * @return Chrome_Database_Registry instance
-	 */
-	public static function getInstance()
-	{
-		if(self::$_instance === null) {
-			self::$_instance = new self();
-		}
-
-		return self::$_instance;
-	}
-
-	/**
-	 * Sets a connection for an adapter
-	 *
-	 * @param Chrome_DB_Adapter_Abstract $obj instance of an adapter
-	 * @return void
-	 */
-	public function setConnectionForAdapter(Chrome_DB_Adapter_Abstract &$obj)
-	{
-		// sets the connection
-		$obj->setConnectionByRegistry($this, $this->_getConnection($obj->getConnectionID()));
-	}
-
-	/**
-	 * Fetches the conneciton from $this->_connections
-	 *
-	 * @param int $connectionID connection ID
-	 * @return resource connection to database
-	 */
-	private function _getConnection($connectionID)
-	{
-		// check wheter connection exists
-		if(!isset($this->_connections[$connectionID])) {
-			throw new Chrome_Exception_Database('Cannot get connection by ID ' . $connectionID . '! Connection does not exist!', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_METHOD_INPUT);
-		}
-
-		return $this->_connections[$connectionID];
-	}
-
-	/**
-	 * Creates a new connection
-	 *
-	 * @param Chrome_DB_Adapter_Abstract $obj instance of an adapter
-	 * @param string                     $server name of the server, e.g. localhost
-	 * @param string                     $database name of the database, e.g. chrome
-	 * @param string                     $user username
-	 * @param string                     $pass password
-	 * @return int 						 Connection ID
-	 */
-	public function createConnection(Chrome_DB_Adapter_Abstract &$obj, $server, $database, $user, $pass)
-	{
-		// try to connect to database, using the adapter
-        $this->_connections[$this->_connectionID] = $obj->createConnection($server, $database, $user, $pass);
-
-        return $this->_connectionID++;
-
-		// returns the connection ID
-		//return count($this->_connections) - 1;
-	}
-
-	/**
-	 * Get a connection by ID
-	 *
-	 * @param int $connectionID [optional] connection ID, if not set, then the last created connection is used
-	 * @return resource, connection to database
-	 */
-	public function getConnection($connectionID = null)
-	{
-	    if($connectionID === null) {
-	       $connectionID = $this->_connectionID;
-	    }
-		return $this->_getConnection($connectionID);
-	}
+    public function isExisting($name)
+    {
+        return isset($this->_connections[$name]);
+    }
 }

@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 18:24:53] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 20:01:08] --> $
  * @link       http://chrome-php.de
  */
 
@@ -31,7 +31,7 @@ class Chrome_Database_Facade
 {
     const DEFAULT_CONNECTION = '';
 
-    const DATABASE_CLASS_DIR = 'core/database_new/';
+    const DATABASE_CLASS_DIR = 'core/database/';
 
     protected static $_defaultInterface = 'Simple';
 
@@ -59,7 +59,7 @@ class Chrome_Database_Facade
             $adapterName = $connection->getDefaultAdapter();
         }
 
-        $adapterClass = self::_requireClass('adapter', $adapterName);
+        $adapterClass = self::requireClass('adapter', $adapterName);
 
         return new $adapterClass($connection);
     }
@@ -71,7 +71,7 @@ class Chrome_Database_Facade
             $result = $adapter;
 
             foreach(array_reverse($resultName) as $value) {
-                $resultClass = self::_requireClass('result', $value);
+                $resultClass = self::requireClass('result', $value);
 
                 $newResult = new $resultClass();
                 $newResult->setAdapter($result);
@@ -82,7 +82,7 @@ class Chrome_Database_Facade
         }
 
 
-        $resultClass = self::_requireClass('result', $resultName);
+        $resultClass = self::requireClass('result', $resultName);
 
         $result = new $resultClass();
         $result->setAdapter($adapter);
@@ -91,7 +91,7 @@ class Chrome_Database_Facade
 
     protected static function _createInterface($interfaceName, Chrome_Database_Result_Interface $result, Chrome_Database_Adapter_Interface $adapter)
     {
-        $interfaceClass = self::_requireClass('interface', $interfaceName);
+        $interfaceClass = self::requireClass('interface', $interfaceName);
 
         return new $interfaceClass($adapter, $result);
     }
@@ -128,7 +128,7 @@ class Chrome_Database_Facade
         return $registry->getConnectionObject($connectionName);
     }
 
-    protected static function _requireClass($type, $classSuffix)
+    public static function requireClass($type, $classSuffix)
     {
         $_classSuffixLower = strtolower($classSuffix);
 

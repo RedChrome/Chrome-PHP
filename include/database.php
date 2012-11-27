@@ -21,13 +21,15 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.11.2012 01:11:08] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 19:58:45] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true) die();
 
-require_once LIB.'core/database_new/connection/mysql.php';
+Chrome_Database_Facade::requireClass('connection', 'Mysql');
+
+//require_once LIB.'core/database/connection/mysql.php';
 
 // configure default database connection
 $defaultConnection = new Chrome_Database_Connection_Mysql();

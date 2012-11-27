@@ -3,6 +3,8 @@
 /**
  * CHROME-PHP CMS
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * This source file is subject to the Creative Commons license that is bundled
@@ -13,201 +15,161 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
+ * @category   CHROME-PHP
  * @package    CHROME-PHP
- * @subpackage Chrome.DB.Interface
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.09.2012 23:47:29] --> $
- * @author     Alexander Book
+ * @subpackage Chrome.Database
+ * @author     Alexander Book <alexander.book@gmx.de>
+ * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
+ * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 19:40:15] --> $
+ * @link       http://chrome-php.de
  */
 
-if(CHROME_PHP !== true)
-    die();
+//TODO: enable right_handler support
 
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.DB.Interface
- */
-abstract class Chrome_DB_Interface_Abstract implements Chrome_Exception_Processable_Interface
+if(CHROME_PHP !== true) die();
+
+interface Chrome_Database_Interface_Interface
 {
+    public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result);
 
-	/**
-	 * Default adapter
-	 */
-	const CHROME_DB_INTERFACE_ABSTRACT_DEFAULT_ADAPTER = CHROME_DATABASE;
+    public function getResult();
 
-	/**
-	 * Contains ID of this interface
-	 *
-	 * @var string
-	 */
-	private $_toString;
+    public function getAdapter();
 
-	/**
-	 * Number of all initialized interfaces
-	 *
-	 * @var int
-	 */
-	private static $_instances = 0;
+    public function execute(array $parameters = array());
 
-	/**
-	 * Name of the adapter, e.g. MySQL
-	 *
-	 * @var string
-	 */
-	protected $_adapter = null;
+    public function query($query);
 
-    /**
-     *
-     */
-    protected $_exceptionHandler = null;
+    public function setParameters(array $array, $escape = true);
 
-	/**
-	 * Constructor,<br>
-	 * sets interface ID, registers Interface AND selects adapter
-	 *
-	 * @param string $adapter [optional]
-	 * @return void
-	 */
-	protected function __construct($adapter = null)
-	{
-		// set interface id
-		++self::$_instances;
-		$this->_toString = self::$_instances;
+    public function setParameter($key, $value, $escape = true);
 
-		// set Adapter
-		if($adapter === null) {
-			$this->_adapter = self::CHROME_DB_INTERFACE_ABSTRACT_DEFAULT_ADAPTER;
-		} else {
-			$this->_adapter = $adapter;
-		}
+    public function escape($data);
 
-		// register interface
-		Chrome_DB_Adapter_Abstract::registerInterface($this);
-	}
+    public function getStatement();
 
-    // this should every dbInterface inherit
-    //abstract public function next();
+    public function getQuery();
 
-	/**
-	 * Clears all internal vars up
-	 */
-	protected function clear() {
-		$this->__call('clear', array());
-	}
+    public function clear();
+}
 
-	/**
-	 * Wrapper for clear()
-	 */
-	protected function clean() {
-		$this->clear();
-	}
+abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Interface_Interface
+{
+    protected $_query = null;
 
-	/**
-	 * Magic method of PHP
-	 *
-	 * @return int ID of this interface
-	 */
-	final public function __toString()
-	{
-		return (string) $this->_toString;
-	}
+    protected $_adapter = null;
 
-	/**
-	 * Gets the interface ID
-	 *
-	 * @return int interface ID
-	 */
-	final public function getID()
-	{
-		return (int) $this->_toString;
-	}
+    protected $_result = null;
 
-	/**
-	 * Magic method of PHP
-	 *
-	 *
-	 * @param string $method method name
-	 * @param array  $arguments arguments of the called method
-	 * @return Chrome_DB_Interface_Abstract, instance of this
-	 */
-	final public function __call($method, $arguments)
-	{
-	    try {
-		// call the method of Chrome_DB_Adapter_Abstract
-		$return = call_user_func_array(array('Chrome_DB_Adapter_Abstract', '__callStatic'), array($method, array_merge(array(&$this), $arguments)));
-		// return $this, for method chaining
-        } catch(Chrome_Exception_Database $e) {
-            // if no explicit exception handler is set, then pass it through so that it can be treated there correctly
-            if($this->_exceptionHandler === null) {
-                throw $e;
-                //$this->_exceptionHandler = new Chrome_Exception_Database_Handler();
-            }
+    protected $_params = array();
 
-            $this->_exceptionHandler->exception($e);
-        }
-		if($return !== null)
-			return $return;
+    protected $_sentQuery = null;
 
-		return $this;
-	}
-
-	/**
-	 * Gets the adapter for an interface
-	 *
-	 * @return string adapter
-	 */
-	final public function getAdapter()
-	{
-		return $this->_adapter;
-	}
-
-	/**
-	 * Sets an adapter
-	 *
-	 * @param string $adapter name of the adapter, e.g. MySQL
-	 * @return Chrome_DB_Interface_Abstract, instance of this
-	 */
-	final public function setAdapter($adapter)
-	{
-		// set internal adapter
-		$this->_adapter = $adapter;
-
-		// register interface
-		Chrome_DB_Adapter_Abstract::registerInterface($this);
-
-		// return $this, needed for method chaining
-		return $this;
-	}
-
-	/**
-	 * Gets the default adapter for every interface
-	 *
-	 * @return string default adapter
-	 */
-	final public static function getDefaultAdapter()
-	{
-		return self::CHROME_DB_INTERFACE_ABSTRACT_DEFAULT_ADAPTER;
-	}
-
-	/**
-	 * Gets a new instance of an interface
-	 *
-	 * @return object Chrome_DB_Interface_Abstract
-	 */
-	public static function getInstance() {
-		// only php >= 5.3
-		//return new static();
-
-		// this method should get overloaded
-		throw new Chrome_Exception('Chrome_DB_Interface_Abstract::getInstance() is not overloaded!');
-	}
-
-    public function setExceptionHandler(Chrome_Exception_Handler_Interface $handler) {
-        $this->_exceptionHandler = $handler;
+    public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result)
+    {
+        $this->_adapter = $adapter;
+        $this->_result = $result;
     }
 
-    public function getExceptionHandler() {
-        return $this->_exceptionHandler;
+    public function execute(array $parameters = array())
+    {
+        if(count($parameters) >= 1) {
+            $this->setParameters($parameters, true);
+        }
+
+        if($this->_query !== null) {
+            return $this->query($this->_query);
+        } else {
+            throw new Chrome_Exception('Cannot execute an sql statement if no statement was set!');
+        }
+    }
+
+    public function query($query, array $params = array())
+    {
+        if($this->_sentQuery !== null) {
+            throw new Chrome_Exception('Did not called clear() before executing another query!');
+        }
+
+        if(count($params) > 0) {
+            $this->setParameters($params, true);
+        }
+
+
+        $query = $this->_prepareStatement($query);
+
+        Chrome_Database_Registry_Statement::addStatement($query);
+
+        $this->_adapter->query($query);
+
+        $this->_sentQuery = $query;
+
+        return $this->_result;
+    }
+
+    public function setParameters(array $array, $escape = true)
+    {
+        if($escape === true) {
+            foreach($array as $key => $value) {
+                $this->_params[$key] = $this->escape($value);
+            }
+
+        } else {
+            $this->_params = array_merge($this->_params, $array);
+        }
+
+        return $this;
+    }
+
+    public function setParameter($key, $value, $escape = true)
+    {
+        $this->_params[$key] = ($escape === true) ? $this->escape($value) : $value;
+        return $this;
+    }
+
+    public function getResult()
+    {
+        return $this->_result;
+    }
+
+    public function getAdapter()
+    {
+        return $this->_adapter;
+    }
+
+    public function escape($data)
+    {
+        return $this->_adapter->escape($data);
+    }
+
+    public function getStatement()
+    {
+        return $this->_query;
+    }
+
+    public function getQuery()
+    {
+        return $this->_sentQuery;
+    }
+
+    public function clear()
+    {
+        $this->_query  = null;
+        $this->_params = null;
+        $this->_sentQuery = null;
+        $this->_adapter = $this->_adapter->clear();
+        $this->_result  = $this->_result->clear();
+        $this->_result->setAdapter($this->_adapter);
+        return $this;
+    }
+
+    protected function _prepareStatement($statement)
+    {
+        // replace table prefix
+        $statement = str_replace('cpp_', DB_PREFIX . '_', $statement);
+
+        $statement = str_replace('?', '%s', $statement);
+
+        return vsprintf($statement, $this->_params);
     }
 }

@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.11.2012 23:13:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 20:00:42] --> $
  * @author     Alexander Book
  */
 
@@ -32,6 +32,7 @@ $_SERVER['SERVER_NAME'] = "localhost";
 
 require_once 'include/config.php';
 require_once LIB . 'core/error/exception.php';
+require_once LIB.'core/file_system/file_system.php';
 
 // Put here your vars for testing database connections
 define('MYSQL_HOST', 'localhost');

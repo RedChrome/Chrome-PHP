@@ -3,6 +3,8 @@
 /**
  * CHROME-PHP CMS
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * This source file is subject to the Creative Commons license that is bundled
@@ -13,18 +15,44 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
+ * @category   CHROME-PHP
  * @package    CHROME-PHP
- * @subpackage Chrome.DB.Adapter
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 13:18:25] --> $
- * @author     Alexander Book
+ * @subpackage Chrome.Database
+ * @author     Alexander Book <alexander.book@gmx.de>
+ * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
+ * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 19:45:17] --> $
+ * @link       http://chrome-php.de
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
-// get an interface
-$interface = Chrome_DB_Interface_Factory::factory('interface');
-// initialize connection
-$interface->initDefaultConnection();
+interface Chrome_Database_Connection_Interface
+{
+    public function getConnection();
+
+    public function disconnect();
+
+    public function connect();
+
+    public function isConnected();
+
+    public function getDefaultAdapter();
+}
+
+abstract class Chrome_Database_Connection_Abstract implements Chrome_Database_Connection_Interface
+{
+    protected $_connection  = null;
+
+    protected $_isConnected = false;
+
+    public function getConnection()
+    {
+        return $this->_connection;
+    }
+
+    public function isConnected()
+    {
+        return $this->_isConnected;
+    }
+}

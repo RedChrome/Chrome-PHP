@@ -2,7 +2,7 @@
 
 require_once 'Tests/testsetup.php';
 
-require_once LIB.'core/database_new/database.php';
+require_once LIB.'core/database/database.php';
 
 class DatabaseStatementTest extends PHPUnit_Framework_TestCase
 {

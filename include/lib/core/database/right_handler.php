@@ -17,7 +17,7 @@
  * @subpackage Chrome.DB
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2012 15:13:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 19:54:34] --> $
  * @author     Alexander Book
  */
 
@@ -26,6 +26,9 @@ if(CHROME_PHP !== true)
 
 /**
  * Chrome_Database_Right_Handler_Interface
+ *
+ * TODO: modify this interface. deprecated
+ *
  *
  * Interface of all Right_Handlers
  * The differenece between addHasRight and _addHasRight is, that _addHasRight gets called before the db adapter generates

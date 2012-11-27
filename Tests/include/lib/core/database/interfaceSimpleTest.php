@@ -2,7 +2,7 @@
 
 require_once 'Tests/testsetup.php';
 
-require_once LIB . 'core/database_new/database.php';
+require_once LIB . 'core/database/database.php';
 require_once 'Tests/dummies/database/connection/dummy.php';
 require_once 'Tests/dummies/database/adapter.php';
 require_once 'Tests/dummies/database/result.php';

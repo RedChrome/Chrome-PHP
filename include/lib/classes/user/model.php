@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 23:52:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 19:52:47] --> $
  * @author     Alexander Book
  */
 
@@ -34,7 +34,7 @@ class Chrome_Model_User_DB extends Chrome_Model_Database_Abstract
 
     protected function __construct()
     {
-        if($this->_escaper === null) $this->_escaper = Chrome_DB_Interface_Factory::factory('interface')->initDefaultConnection();
+        //if($this->_escaper === null) $this->_escaper = Chrome_DB_Interface_Factory::factory('interface')->initDefaultConnection();
     }
 
     public static function getInstance()
