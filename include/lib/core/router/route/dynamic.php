@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:48:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 22:26:01] --> $
  * @author     Alexander Book
  */
 
@@ -222,12 +222,13 @@ class Chrome_Model_Route_Dynamic_DB extends Chrome_Model_Database_Abstract
     {
         $id = (int)$id;
 
-        $result = $this->_dbInterfaceInstance->prepare('routeDynamicGetResourceById')
+        $db = $this->_getDBInterface();
+
+        $result = $db->prepare('routeDynamicGetResourceById')
             ->execute(array($id));
 
         $row = $result->getNext();
 
-        $this->_dbInterfaceInstance->clear();
 
         // translate key=value,key2=value2 into an array {key => value, key2=>value2}
         $GET = array();

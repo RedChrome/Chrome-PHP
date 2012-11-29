@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 22:28:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 22:28:40] --> $
  * @link       http://chrome-php.de
  */
 
@@ -31,7 +31,7 @@ Chrome_Database_Facade::requireClass('connection', 'Mysql');
 
 // configure default database connection
 $defaultConnection = new Chrome_Database_Connection_Mysql();
-$defaultConnection->setConnectionOptions(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$defaultConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
 
 $dbRegistry = Chrome_Database_Registry_Connection::getInstance();
 $dbRegistry->addConnection(Chrome_Database_Facade::DEFAULT_CONNECTION, $defaultConnection);

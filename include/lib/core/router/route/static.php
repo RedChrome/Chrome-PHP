@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:47:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 22:25:38] --> $
  * @author     Alexander Book
  */
 
@@ -164,13 +164,13 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Abstract
 	public function getRoute( $search )
 	{
 
-        $result = $this->_dbInterfaceInstance->prepare('routeStaticGetRoute')
+        $db = $this->_getDBInterface();
+
+        $result = $db->prepare('routeStaticGetRoute')
             ->execute(array($search));
 
 
 		$row = $result->getNext();
-
-		$this->_dbInterfaceInstance->clear();
 
         if($row === false) {
             return false;
@@ -210,13 +210,12 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Abstract
 
 	public function findRoute( $name )
 	{
+        $db = $this->_getDBInterface();
 
-        $result = $this->_dbInterfaceInstance->prepare('routeStaticFindRoute')
+        $result = $db->prepare('routeStaticFindRoute')
             ->execute(array($name));
 
         $row = $result->getNext();
-
-		$this->_dbInterfaceInstance->clear();
 
 		return $row;
 	}

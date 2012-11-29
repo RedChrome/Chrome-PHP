@@ -17,7 +17,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 12:12:59] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 22:45:55] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -95,8 +95,7 @@ class Chrome_Dir
 	 */
 	public static function createDir($dest, $chmod = 0777)
 	{
-		if(strrpos($dest, '/') === strlen($dest));
-			$dest{strlen($dest)} = '';
+	    $dest = trim($dest);
 
 		$array = explode('/', $dest);
 		$i = 0;
@@ -106,7 +105,8 @@ class Chrome_Dir
 		if(self::hasExt(end($array)))
 			array_pop($array);
 
-		while(isset($array[$i])) {
+		while(isset($array[$i]) AND !empty($array[$i])) {
+
 			$dir .= $array[$i].'/';
 			if(!is_dir($dir))
 				mkdir($dir, $chmod);
