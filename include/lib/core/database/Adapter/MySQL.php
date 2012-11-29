@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 19:42:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 23:15:59] --> $
  * @link       http://chrome-php.de
  */
 
@@ -38,9 +38,8 @@ class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
     {
         $this->_result = mysql_query($query, $this->_connection);
 
-        //TODO: print more info about the exception and or query...
         if($this->_result === false) {
-            throw new Chrome_Exception_Database('Error while sending "'.$query.'" to database!');
+            throw new Chrome_Exception_Database('Error while sending "'.$query.'" to database! MySQL Error:'.mysql_error($this->_connection));
         }
 
         if(is_resource($this->_result) === true) {
@@ -78,6 +77,28 @@ class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
 
     public function getAffectedRows()
     {
+        $rows = mysql_affected_rows($this->_connection);
+        if($rows <= 0) {
 
+            $rows = mysql_num_rows($this->_connection);
+
+            if($rows <= 0) {
+                return 0;
+            }
+
+            return $rows;
+        }
+
+        return $rows;
+    }
+
+    public function getErrorCode()
+    {
+        return mysql_errno($this->_connection);
+    }
+
+    public function getErrorMessage()
+    {
+        return mysql_error($this->_connection);
     }
 }

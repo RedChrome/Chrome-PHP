@@ -28,4 +28,12 @@ class Chrome_Database_Adapter_Dummy extends Chrome_Database_Adapter_Abstract
     public function getAffectedRows() {
         return 0;
     }
+
+    public function getErrorCode() {
+        return 0;
+    }
+
+    public function getErrorMessage() {
+        return '';
+    }
 }

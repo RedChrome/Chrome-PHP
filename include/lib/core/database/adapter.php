@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 19:43:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 23:03:30] --> $
  * @link       http://chrome-php.de
  */
 
@@ -56,6 +56,10 @@ interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Inte
     public function getConnection();
 
     public function clear();
+
+    public function getErrorMessage();
+
+    public function getErrorCode();
 }
 
 abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapter_Interface
