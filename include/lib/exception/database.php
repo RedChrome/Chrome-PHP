@@ -17,7 +17,7 @@
  * @subpackage Chrome.Database
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:40:54] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:24:56] --> $
  * @author     Alexander Book
  */
 
@@ -56,7 +56,7 @@ class Chrome_Exception_Database extends Chrome_Exception
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Exception_Database_Handler
+class Chrome_Exception_Database_Handler implements Chrome_Exception_Handler_Interface
 {
     public function exception(Exception $e) {
 
@@ -105,4 +105,6 @@ class Chrome_Exception_Database_Handler
             }
         }
     }
+
+
 }

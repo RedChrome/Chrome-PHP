@@ -86,4 +86,49 @@ class DatabaseFacadeTest extends PHPUnit_Framework_TestCase
             $this->assertTrue(false, 'There was no default configuration for a connection found. Please configure that in Front_Controller!');
         }
     }
+
+    public function testFacadeInitCompositionWithConnectionWithoutDefaultComposition() {
+
+        $registry = Chrome_Database_Registry_Connection::getInstance();
+        $connection = new Chrome_Database_Connection_Dummy('example');
+        $registry->addConnection('testFacadeInitCompositionWithConnection', $connection);
+
+        $comp = new Chrome_Database_Composition('Simple', null, null, 'testFacadeInitCompositionWithConnection');
+
+        $db = Chrome_Database_Facade::initComposition($comp);
+
+        $this->assertNotNull($db);
+        $this->assertTrue($db instanceof Chrome_Database_Interface_Simple);
+        $this->assertSame($db->getAdapter()->getConnection(), $connection);
+    }
+
+    public function testFacadeInitCompositionWithEmptyComposition() {
+
+        $comp = new Chrome_Database_Composition();
+
+        $db = Chrome_Database_Facade::initComposition($comp);
+
+        $this->assertNotNull($db);
+        $this->assertTrue($db instanceof Chrome_Database_Interface_Interface);
+    }
+
+    public function testFacadeInitCompositionWithDefaultComposition() {
+
+        $registry = Chrome_Database_Registry_Connection::getInstance();
+        $connection = new Chrome_Database_Connection_Dummy('example');
+        $registry->addConnection('testFacadeInitCompositionWithDefaultComposition', $connection);
+
+
+        $comp = new Chrome_Database_Composition(null, 'dummy'); //this is empty, so we should only use $defComp
+
+        $defComp = new Chrome_Database_Composition('model', 'assoc', 'dummy', 'testFacadeInitCompositionWithDefaultComposition');
+
+        $db = Chrome_Database_Facade::initComposition($comp, $defComp);
+
+        $this->assertNotNull($db);
+        $this->assertTrue($db instanceof Chrome_Database_Interface_Model);
+        $this->assertTrue($db->getResult() instanceof Chrome_Database_Result_Dummy);
+        $this->assertTrue($db->getAdapter() instanceof Chrome_Database_Adapter_Dummy);
+        $this->assertTrue($db->getAdapter()->getConnection() instanceof Chrome_Database_Connection_Dummy);
+    }
 }

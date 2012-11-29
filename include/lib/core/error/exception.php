@@ -17,7 +17,7 @@
  * @subpackage Chrome.Exception
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.11.2012 13:02:54] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:38:54] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -130,14 +130,70 @@ class Chrome_Exception extends Exception
      * @param mixed $e
      * @return void
      */
-    public function show($e)
-    {
-        if($e->handleException() === true) {
-            echo '<pre>';
-            var_dump($e);
-            echo '</pre>';
+    public function show($e) {
+
+        if($this->handleException() === false OR !($e instanceof Exception)) {
+            die();
         }
+
+        $trace = $e->getTrace();
+
+        echo '<h1>Uncaught Exception</h1>';
+        echo '<h3>'.$e->getMessage().'</h3>';
+        echo $e->getFile().'('.$e->getLine().')<br><br>Call Stack:<br>';
+
+        foreach($trace as $key => $value) {
+
+            echo @$value['file'].'('.@$value['line'].'): ';
+
+            if(!isset($value['class'])) {
+                echo $value['function'].$this->_getArgs($value['args']);
+
+            } else {
+                echo $value['class'].$value['type'].$value['function'];
+
+                echo $this->_getArgs($value['args']);
+            }
+            echo '<br>'."\n";
+        }
+
         die();
+
+    }
+
+    protected function _getArgs($args) {
+
+        if($args === null OR $args === array()) {
+            return '(<i>void</i>)';
+        }
+
+        $return = '(';
+
+        foreach($args as $key => $value) {
+            if(is_int($key)) {
+                if($key == 0) {
+                    $return .= ''.$this->_getValue($value);
+                    continue;
+                }
+                $return .= ', '.$this->_getValue($value);;
+            } else {
+                $return .= ' '.$key.' => '.$this->_getValue($value);;
+            }
+        }
+        $return .= ')';
+        return $return;
+    }
+
+    protected function _getValue($value) {
+        if(is_string($value)) {
+            return '"'.substr($value,0, 120).'"';
+        } else if(is_object($value)) {
+            return 'Object(<i>'.get_class($value).'</i>)';
+        } else if($value !== null) {
+            return gettype($value).'('.$value.')';
+        }
+
+        return '<i>null</i>';
     }
 
     /**

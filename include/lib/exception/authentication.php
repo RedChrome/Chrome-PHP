@@ -17,12 +17,17 @@
  * @subpackage Chrome.Authentication
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:40:51] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:51:21] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true)
     die();
+
+class Chrome_Exception_Authentication extends Chrome_Exception
+{
+
+}
 
 /**
  * @package CHROME-PHP
@@ -32,6 +37,9 @@ class Chrome_Exception_Handler_Authentication implements Chrome_Exception_Handle
 {
     public function exception(Exception $e)
     {
+        if(!($e instanceof Chrome_Exception_Authentication)) {
+            $e->show($e);
+        }
 
         Chrome_Log::log('Exception in Chrome_Authentication! Error code: '.$e->getCode(), E_ERROR);
         Chrome_Log::log($e->getTraceAsString(), E_ERROR);

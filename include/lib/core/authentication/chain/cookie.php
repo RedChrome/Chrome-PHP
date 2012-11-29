@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 20:26:13] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:53:33] --> $
  * @link       http://chrome-php.de
  */
 
@@ -109,16 +109,14 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
             return $this->_clearCookie();
         }
 
-        try {
-            $dbInterface = Chrome_Database_Facade::initComposition('model', 'assoc');
-            $dbInterface->prepare('authenticationDoesIdAndTokenExist')
-                ->execute(array($this->_options['dbTable'], $id, $tokenEscaped));
 
-            $result = $dbInterface->getResult();
+        $dbInterface = Chrome_Database_Facade::initComposition('model', 'assoc');
+        $dbInterface->prepare('authenticationDoesIdAndTokenExist')
+            ->execute(array($this->_options['dbTable'], $id, $tokenEscaped));
 
-        } catch(Chrome_Exception $e) {
-            echo $e;
-        }
+        $result = $dbInterface->getResult();
+
+
 
         // no entry found
         if($result->isEmpty() === true) {

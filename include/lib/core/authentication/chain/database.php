@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 23:38:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:59:18] --> $
  * @link       http://chrome-php.de
  */
 
@@ -46,7 +46,6 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
 
     public function __construct(Chrome_Model_Abstract $model, $updateTime = false, $setTime = true)
     {
-
         $this->_model      = $model;
         $this->_updateTime = (boolean) $updateTime;
         $this->_setTime    = (boolean) $setTime;
@@ -247,7 +246,6 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
     public function __construct(array $options = array())
     {
         $this->_options = array_merge($this->_options, $options);
-        $this->_connect();
     }
 
     /**
@@ -257,7 +255,9 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
     {
         $identity = $this->_escape($identity);
 
-        $result = $this->_dbInterfaceInstance->prepare('authenticationGetPasswordAndSaltByIdentity')
+        $db = $this->_getDBInterface();
+
+        $result = $db->prepare('authenticationGetPasswordAndSaltByIdentity')
                         ->execute(array($identity));
 
         if($result->isEmpty() === false) {
@@ -269,7 +269,6 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
             $result = false;
         }
 
-        $this->_dbInterfaceInstance->clear();
         return $result;
     }
 
@@ -277,10 +276,10 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
     {
         $id = (int) $id;
 
-        $this->_dbInterfaceInstance->prepare('authenticationUpdateTimeById')
-            ->execute(array(CHROME_TIME, $id));
+        $db = $this->_getDBInterface();
 
-        $this->_dbInterfaceInstance->clear();
+        $db->prepare('authenticationUpdateTimeById')
+            ->execute(array(CHROME_TIME, $id));
     }
 
     public function createAuthentication($credential, $salt = null)
@@ -292,15 +291,17 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
             $hash = $credential;
         }
 
-        $this->_dbInterfaceInstance->prepare('authenticationCreateAuthentication')
-            ->execute(array($hash, $salt));
+        $db = $this->_getDBInterface();
 
-        $this->_dbInterfaceInstance->clear();
+        $db->prepare('authenticationCreateAuthentication')
+            ->execute(array($hash, $salt));
     }
 
     public function getIDByPassword($pw, $pwSalt)
     {
-        $result = $this->_dbInterfaceInstance->prepare('authenticationGetOdByPassword')
+        $db = $this->_getDBInterface();
+
+        $result = $db->prepare('authenticationGetOdByPassword')
             ->execute(array($pw, $pwSalt));
 
         $return = $result->getNext();

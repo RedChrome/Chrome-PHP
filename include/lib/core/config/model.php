@@ -17,7 +17,7 @@
  * @subpackage Chrome.Config
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 20:36:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 21:00:07] --> $
  * @author     Alexander Book
  */
 
@@ -59,12 +59,13 @@ class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
 
     public function __construct()
     {
-        $this->_connect();
     }
 
     public function loadConfig()
     {
-        $result = $this->_dbInterfaceInstance->prepare('configLoadConfiguration')->execute();
+        $db = $this->_getDBInterface();
+
+        $result = $db->prepare('configLoadConfiguration')->execute();
         $config = array();
         foreach($result as $item) {
 
@@ -72,14 +73,14 @@ class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
             $config[$item['subclass']][$item['name']] = $item['value'];
         }
 
-        $this->_dbInterfaceInstance->clear();
-
         return $config;
     }
 
     public function setConfig($name, $subclass, $value, $type, $modul = '')
     {
-        $this->_dbInterfaceInstance->prepare('configSetConfiguration')
+        $db = $this->_getDBInterface();
+
+        $db->prepare('configSetConfiguration')
             ->execute(array(
                  $name,
                  $subclass,
@@ -87,8 +88,6 @@ class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
                  $type,
                  $modul,
                 ));
-
-        $this->_dbInterfaceInstance->clear();
     }
 }
 

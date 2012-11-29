@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 10:07:45] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:48:12] --> $
  * @author     Alexander Book
  */
 
@@ -206,7 +206,7 @@ class Chrome_Model_Route_Dynamic_DB extends Chrome_Model_Database_Abstract
 
     public function __construct()
     {
-        parent::__construct();
+
     }
 
     public function getResourcesAsArray()

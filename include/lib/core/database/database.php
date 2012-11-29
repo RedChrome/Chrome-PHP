@@ -21,11 +21,16 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 18:14:20] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 00:02:04] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true) die();
+
+/**
+ * load exception class
+ */
+require_once LIB.'exception/database.php';
 
 /**
  * load registry, saves all database connections

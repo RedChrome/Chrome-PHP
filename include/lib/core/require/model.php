@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 10:02:04] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:59:44] --> $
  * @author     Alexander Book
  */
 
@@ -101,7 +101,6 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
     public function __construct()
     {
         $this->_dbComposition = new Chrome_Database_Composition('model', 'iterator');
-        $this->_connect();
     }
 
     /**
@@ -115,16 +114,15 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
     {
         $require = array();
 
-        $result = $this->_dbInterfaceInstance->prepare('requireGetRequirements')
+        $db = $this->_getDBInterface();
+
+        $result = $db->prepare('requireGetRequirements')
             ->execute();
 
         // loop through every result
         foreach($result AS $value) {
             $require[] = $value;
         }
-
-        // clear DB interface, to re-use it
-        $this->_dbInterfaceInstance->clear();
 
         return $require;
     }
@@ -138,16 +136,15 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
     {
         $_class = array();
 
-        $result = $this->_dbInterfaceInstance->prepare('requireGetClasses')
+        $db = $this->_getDBInterface();
+
+        $result = $db->prepare('requireGetClasses')
             ->execute();
 
         // loop through
         foreach($result AS $value) {
             $_class[$value['name']] = $value['file'];
         }
-
-        // clear DB Interface, to re-use it
-        $this->_dbInterfaceInstance->clear();
 
         return $_class;
     }
@@ -162,17 +159,19 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
      */
     public function addClass($name, $file, $override = false)
     {
+        $db = $this->_getDBInterface();
+
         // delete old entry
         if($override === true) {
             // make sql query AND clean up DB interface
 
-            $this->_dbInterfaceInstance->prepare('requireDeleteEntryByName')
+            $db->prepare('requireDeleteEntryByName')
                 ->execute(array($name));
 
         } else {
 
             // check whether there is already the same class defined
-            $resultObj = $this->_dbInterfaceInstance->prepare('requireDoesNameExist')
+            $resultObj = $db->prepare('requireDoesNameExist')
                 ->execute(array($name));
 
             if(!$resultObj->isEmpty()) {
@@ -180,10 +179,11 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
             }
 
         }
-        $this->_dbInterfaceInstance->clear();
+
+        $db = $this->_getDBInterface();
 
          // insert the class to db
-        $this->_dbInterfaceInstance->prepare('requireSetClass')
+        $db->prepare('requireSetClass')
             ->execute(array($name, $file));
     }
 

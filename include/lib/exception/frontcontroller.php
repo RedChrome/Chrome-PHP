@@ -17,7 +17,7 @@
  * @subpackage Chrome.FrontController
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.08.2011 15:32:40] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:40:23] --> $
  * @author     Alexander Book
  */
 
@@ -32,6 +32,6 @@ class Chrome_Exception_Handler_FrontController implements Chrome_Exception_Handl
 {
     public function exception(Exception $e)
     {
-        die('There was an error in processing the request! Please try it again later!<br>'.var_export($e, true));
+        die('There was an error in processing the request! Please try it again later!<br>'.$e->show($e));
     }
 }

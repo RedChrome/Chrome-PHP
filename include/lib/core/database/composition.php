@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.11.2012 19:04:48] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 21:14:00] --> $
  * @link       http://chrome-php.de
  */
 
@@ -58,28 +58,31 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
 
     protected $_connection = null;
 
-    public function __construct($interface = null, $result = null, $adapter = null, $connection = null) {
+    public function __construct($interface = null, $result = null, $adapter = null, $connection = null)
+    {
         $this->setInterface($interface);
         $this->setResult($result);
         $this->setAdapter($adapter);
         $this->setConnection($connection);
     }
 
-    public function merge(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null) {
+    public function merge(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null)
+    {
 
         if($comp === null) {
             return $requiredComp;
         }
 
-        $interface    = $this->_getMergedInterface($requiredComp, $comp);
-        $adapter      = $this->_getMergedAdapter($requiredComp, $comp);
-        $connection   = $this->_getMergedConnection($requiredComp, $comp);
-        $result       = $this->_getMergedResult($requiredComp, $comp);
+        $interface  = $this->_getMergedInterface($requiredComp, $comp);
+        $adapter    = $this->_getMergedAdapter($requiredComp, $comp);
+        $connection = $this->_getMergedConnection($requiredComp, $comp);
+        $result     = $this->_getMergedResult($requiredComp, $comp);
 
         return new self($interface, $result, $adapter, $connection);
     }
 
-    protected function _empty($string) {
+    protected function _empty($string)
+    {
 
         if(empty($string)) {
             return null;
@@ -88,23 +91,28 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
         return $string;
     }
 
-    public function setAdapter($adapter) {
+    public function setAdapter($adapter)
+    {
         $this->_adapter = $this->_empty($adapter);
     }
 
-    public function setInterface($interface) {
+    public function setInterface($interface)
+    {
         $this->_interface = $this->_empty($interface);
     }
 
-    public function setConnection($connection) {
+    public function setConnection($connection)
+    {
         $this->_connection = $this->_empty($connection);
     }
 
-    public function setResult($result) {
+    public function setResult($result)
+    {
         $this->_result = $this->_empty($result);
     }
 
-    protected function _getMergedInterface(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null) {
+    protected function _getMergedInterface(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null)
+    {
         // check interface
         $interface = '';
         if($requiredComp->getInterface() === null) {
@@ -121,11 +129,11 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
                 }
             }
         }
-
         return $interface;
     }
 
-    protected function _getMergedAdapter(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null) {
+    protected function _getMergedAdapter(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null)
+    {
         // check adapter
         $adapter = '';
         if($requiredComp->getAdapter() === null) {
@@ -142,11 +150,11 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
                 }
             }
         }
-
         return $adapter;
     }
 
-     protected function _getMergedResult(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null) {
+    protected function _getMergedResult(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null)
+    {
         // check result
         $result = '';
         if($requiredComp->getResult() === null) {
@@ -167,7 +175,8 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
         return $result;
     }
 
-    protected function _getMergedConnection(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null) {
+    protected function _getMergedConnection(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null)
+    {
 
         if($requiredComp->getConnection() !== null) {
             return $requiredComp->getConnection();
@@ -177,25 +186,25 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
             }
             return null;
         }
-
     }
 
-    public function getInterface() {
+    public function getInterface()
+    {
         return $this->_interface;
     }
 
-    public function getConnection() {
+    public function getConnection()
+    {
         return $this->_connection;
     }
 
-    public function getAdapter() {
+    public function getAdapter()
+    {
         return $this->_adapter;
     }
 
-    public function getResult() {
+    public function getResult()
+    {
         return $this->_result;
     }
-
-
 }
-

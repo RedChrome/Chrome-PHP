@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 22:45:48] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:57:21] --> $
  * @link       http://chrome-php.de
  */
 
@@ -372,7 +372,7 @@ class Chrome_Authentication implements Chrome_Authentication_Interface, Chrome_E
 
             // user could not authenticate or he should not authenticate
             if(($id = $this->_container->getID()) === false) {
-                throw new Chrome_Exception('ID was not an integer, as expected!', 201);
+                throw new Chrome_Exception_Authentication('ID was not an integer, as expected!', 201);
             } else  $this->_isAuthenticated = true;
 
             // user should get authenticated as guest
@@ -398,15 +398,11 @@ class Chrome_Authentication implements Chrome_Authentication_Interface, Chrome_E
                     // id has to be positiv or 0!
                     // unknown error, should not happen
                 } else {
-                    throw new Chrome_Exception('ID was not in the range!', 202);
+                    throw new Chrome_Exception_Authentication('ID was not in the range!', 202);
                 }
         }
-        catch (Chrome_Exception $e) {
-            if($this->_exceptionHandler != null) {
-                $this->_exceptionHandler->exception($e);
-            } else {
-                throw $e;
-            }
+        catch (Chrome_Exception_Authentication $e) {
+            $this->_handleException($e);
         }
     }
 
@@ -465,6 +461,18 @@ class Chrome_Authentication implements Chrome_Authentication_Interface, Chrome_E
      */
     public function createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)
     {
-        $this->_chain->createAuthentication($resource);
+        try {
+            $this->_chain->createAuthentication($resource);
+        } catch(Chrome_Exception_Authentication $e) {
+            $this->_handleException($e);
+        }
+    }
+
+    protected function _handleException(Chrome_Exception_Authentication $e) {
+        if($this->_exceptionHandler != null) {
+            $this->_exceptionHandler->exception($e);
+        } else {
+            throw $e;
+        }
     }
 }
