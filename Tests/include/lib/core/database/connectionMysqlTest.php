@@ -54,4 +54,14 @@ class DatabaseConnectionMysqlTest extends PHPUnit_Framework_TestCase
 
         $connection->connect();
     }
+
+    public function testIsConnectedOnEmptyConnection() {
+        $connection = new Chrome_Database_Connection_Mysql();
+        $this->assertFalse($connection->isConnected());
+    }
+
+    public function testDisconnect() {
+        $connection = new Chrome_Database_Connection_Mysql();
+        $connection->disconnect();
+    }
 }

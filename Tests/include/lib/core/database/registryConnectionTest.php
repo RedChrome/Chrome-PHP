@@ -60,9 +60,21 @@ class DatabaseRegistryConnectionTest extends PHPUnit_Framework_TestCase
 
     public function testExceptionIfConnectionObjectNotExist()
     {
-
         $this->setExpectedException('Chrome_Exception');
 
         $this->_registry->getConnectionObject('DatabaseRegistryConnectionTest6');
+    }
+
+    public function testExceptionIfConnectionIsNotEstablished()
+    {
+        $connection = new Chrome_Database_Connection_Dummy();
+        $connection->setIsConnected(false);
+
+        $this->_registry->addConnection('DatabaseRegistryConnectionTest7', $connection);
+
+
+        $this->setExpectedException('Chrome_Exception_Database');
+
+        $this->_registry->getConnection('DatabaseRegistryConnectionTest7');
     }
 }

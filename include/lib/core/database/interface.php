@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 19:40:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.12.2012 22:44:51] --> $
  * @link       http://chrome-php.de
  */
 
@@ -78,23 +78,24 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
             $this->setParameters($parameters, true);
         }
 
-        if($this->_query !== null) {
-            return $this->query($this->_query);
-        } else {
-            throw new Chrome_Exception('Cannot execute an sql statement if no statement was set!');
-        }
+        return $this->query($this->_query);
     }
 
     public function query($query, array $params = array())
     {
         if($this->_sentQuery !== null) {
-            throw new Chrome_Exception('Did not called clear() before executing another query!');
+            throw new Chrome_Exception_Database('Did not called clear() before executing another query!');
         }
+
+        if($query === null OR empty($query)) {
+            throw new Chrome_Exception_Database('Cannot execute an sql statement if no statement was set!');
+        }
+
+        $this->_query = $query;
 
         if(count($params) > 0) {
             $this->setParameters($params, true);
         }
-
 
         $query = $this->_prepareStatement($query);
 

@@ -1,0 +1,1 @@
+phpunit --configuration Tests\codeCoverage.xml Tests/

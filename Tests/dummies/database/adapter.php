@@ -2,6 +2,8 @@
 
 class Chrome_Database_Adapter_Dummy extends Chrome_Database_Adapter_Abstract
 {
+    public $_affectedRows = 0;
+
     public function setDataResource($object) {
         $this->_object = $object;
     }
@@ -26,7 +28,7 @@ class Chrome_Database_Adapter_Dummy extends Chrome_Database_Adapter_Abstract
     }
 
     public function getAffectedRows() {
-        return 0;
+        return $this->_affectedRows;
     }
 
     public function getErrorCode() {

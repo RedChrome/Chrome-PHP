@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 23:01:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.12.2012 21:05:26] --> $
  * @link       http://chrome-php.de
  */
 
@@ -74,10 +74,10 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
             return $requiredComp;
         }
 
-        $interface  = $this->_getMergedInterface($requiredComp, $comp);
-        $adapter    = $this->_getMergedAdapter($requiredComp, $comp);
+        $interface = $this->_getMergedInterface($requiredComp, $comp);
+        $adapter = $this->_getMergedAdapter($requiredComp, $comp);
         $connection = $this->_getMergedConnection($requiredComp, $comp);
-        $result     = $this->_getMergedResult($requiredComp, $comp);
+        $result = $this->_getMergedResult($requiredComp, $comp);
 
         return new self($interface, $result, $adapter, $connection);
     }
@@ -122,7 +122,7 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
             if($comp->getInterface() === null) {
                 $interface = $requiredComp->getInterface();
             } else {
-                if(is_subclass_of('Chrome_Database_Interface_'.$comp->getInterface(), 'Chrome_Database_Interface_'.$requiredComp->getInterface())) {
+                if(is_subclass_of('Chrome_Database_Interface_' . $comp->getInterface(), 'Chrome_Database_Interface_' . $requiredComp->getInterface())) {
                     $interface = $comp->getInterface();
 
                 } else {
@@ -143,7 +143,7 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
             if($comp->getAdapter() === null) {
                 $adapter = $requiredComp->getAdapter();
             } else {
-                if(is_subclass_of('Chrome_Database_Adapter_'.$comp->getAdapter(), 'Chrome_Database_Adapter_'.$requiredComp->getAdapter())) {
+                if(is_subclass_of('Chrome_Database_Adapter_' . $comp->getAdapter(), 'Chrome_Database_Adapter_' . $requiredComp->getAdapter())) {
                     $adapter = $comp->getAdapter();
 
                 } else {
@@ -164,7 +164,7 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
             if($comp->getResult() === null) {
                 $result = $requiredComp->getResult();
             } else {
-                if(is_subclass_of('Chrome_Database_Result_'.$comp->getResult(), 'Chrome_Database_Result_'.$requiredComp->getResult())) {
+                if(is_subclass_of('Chrome_Database_Result_' . $comp->getResult(), 'Chrome_Database_Result_' . $requiredComp->getResult())) {
                     $result = $comp->getResult();
 
                 } else {

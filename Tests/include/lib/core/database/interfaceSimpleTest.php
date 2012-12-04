@@ -86,4 +86,67 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($statement2, $this->_interface->getQuery());
     }
+
+    public function testSetParameterWithEscaping() {
+
+        $table = 'requ\'ire';
+        $tableEsc = 'requ\\\'ire';
+        $limitEnde = 1;
+
+        $statement = 'SELECT * from cpp_? LIMIT 0,?';
+        $statement2 = 'SELECT * from ' . DB_PREFIX . '_'.$tableEsc.' LIMIT 0,'.$limitEnde;
+        $this->_interface->setParameter('table', $table, true);
+        $this->_interface->setParameter('limitEnde', $limitEnde, true);
+        $this->_interface->query($statement);
+
+        $this->assertEquals($statement2, $this->_interface->getQuery());
+        $this->assertEquals($statement, $this->_interface->getStatement());
+    }
+
+    public function testSetParameterWithoutEscaping() {
+
+        $table = 'requ\'ire';
+        $tableEsc = 'requ\'ire';
+        $limitEnde = 1;
+
+        $statement = 'SELECT * from cpp_? LIMIT 0,?';
+        $statement2 = 'SELECT * from ' . DB_PREFIX . '_'.$tableEsc.' LIMIT 0,'.$limitEnde;
+        $this->_interface->setParameter('table', $table, false);
+        $this->_interface->setParameter('limitEnde', $limitEnde, false);
+        $this->_interface->query($statement);
+
+        $this->assertEquals($statement2, $this->_interface->getQuery());
+        $this->assertEquals($statement, $this->_interface->getStatement());
+    }
+
+    public function testGetStatementWhenNothingIsDone()
+    {
+        $this->assertNull($this->_interface->getStatement());
+    }
+
+    public function testExceptionIsThrownIfClearWasntCalled()
+    {
+        $this->_interface->query('Any query');
+
+        $this->setExpectedException('Chrome_Exception_Database');
+
+        $this->_interface->query('this should throw an exception');
+    }
+
+    public function testExceptionIsThrownIfNoQueryWasGiven()
+    {
+        $this->setExpectedException('Chrome_Exception_Database');
+
+        $this->_interface->query(null);
+    }
+
+    public function testExceptionIsThrownIfEmptyQueryWasGiven()
+    {
+        $this->setExpectedException('Chrome_Exception_Database');
+
+        $this->_interface->query('');
+    }
+
+
+
 }

@@ -6,7 +6,7 @@ require_once LIB.'core/database/database.php';
 require_once 'Tests/dummies/database/connection/dummy.php';
 require_once 'Tests/dummies/database/adapter.php';
 
-class DatabaseResultInterfaceTest extends PHPUnit_Framework_TestCase
+class DatabaseResultInteratorTest extends PHPUnit_Framework_TestCase
 {
     public $_dataArray = array();
 
@@ -25,6 +25,7 @@ class DatabaseResultInterfaceTest extends PHPUnit_Framework_TestCase
 
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
+        // Dummy_Adapter gets used via connection_dummy as default adapter
         $db = Chrome_Database_Facade::getInterface('Simple', 'Iterator', $connection);
 
         // this will force the adapter to access this class using method getNext()
@@ -34,9 +35,10 @@ class DatabaseResultInterfaceTest extends PHPUnit_Framework_TestCase
         $i = 1;
         foreach($db->getResult() as $key => $value) {
             $this->assertEquals($i, $value);
+            $this->assertEquals($db->getResult()->valid(), $db->getResult()->hasNext());
             ++$i;
         }
-
+        $this->assertFalse($db->getResult()->isEmpty());
         $this->assertEquals(array(),$this->_dataArray);
     }
 
@@ -57,7 +59,16 @@ class DatabaseResultInterfaceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(null, $db->getResult()->getNext());
     }
 
+    public function testAffectedRows() {
+        $db = Chrome_Database_Facade::getInterface('Simple', 'Iterator', null, 'Dummy');
+        $db->getAdapter()->_affectedRows = 6;
+        $this->assertEquals(6, $db->getResult()->getAffectedRows());
+    }
+
     public function getNext() {
         return array_shift($this->_dataArray);
     }
+
+
+
 }

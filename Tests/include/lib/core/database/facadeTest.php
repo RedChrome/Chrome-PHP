@@ -70,13 +70,23 @@ class DatabaseFacadeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($connection, $db->getAdapter()->getConnection());
     }
 
+    public function testFacadeThrowsExceptionOnNoDatabaseConnection()
+    {
+        $connection = new Chrome_Database_Connection_Dummy(null);
+
+        $this->setExpectedException('Chrome_Exception_Database');
+
+        $db = Chrome_Database_Facade::getInterface('Simple', array('Iterator', 'Assoc'), $connection);
+
+    }
+
     public function testFacadeWithDefaultConnection() {
 
         $registry = Chrome_Database_Registry_Connection::getInstance();
         if($registry->isExisting(Chrome_Database_Facade::DEFAULT_CONNECTION)) {
 
             if(!$registry->isConnected(Chrome_Database_Facade::DEFAULT_CONNECTION)) {
-                // if an exception is thrown, then the configuration is no done correctly
+                // if an exception is thrown, then the configuration is not done correctly
                 $registry->getConnectionObject(Chrome_Database_Facade::DEFAULT_CONNECTION)->connect();
             }
 
@@ -95,7 +105,7 @@ class DatabaseFacadeTest extends PHPUnit_Framework_TestCase
 
         $comp = new Chrome_Database_Composition('Simple', null, null, 'testFacadeInitCompositionWithConnection');
 
-        $db = Chrome_Database_Facade::initComposition($comp);
+        $db = Chrome_Database_Facade::initComposition($comp, null);
 
         $this->assertNotNull($db);
         $this->assertTrue($db instanceof Chrome_Database_Interface_Simple);
@@ -130,5 +140,52 @@ class DatabaseFacadeTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($db->getResult() instanceof Chrome_Database_Result_Dummy);
         $this->assertTrue($db->getAdapter() instanceof Chrome_Database_Adapter_Dummy);
         $this->assertTrue($db->getAdapter()->getConnection() instanceof Chrome_Database_Connection_Dummy);
+    }
+
+    public function testFacadeTriesToConnectSuccessfully()
+    {
+        $registry = Chrome_Database_Registry_Connection::getInstance();
+        $connection = new Chrome_Database_Connection_Dummy('example');
+        $connection->setIsConnected(false);
+        $registry->addConnection('testFacadeTriesToConnectSuccessfully', $connection);
+
+        $interface = Chrome_Database_Facade::getInterface('model', 'assoc', 'testFacadeTriesToConnectSuccessfully');
+        $this->assertSame($connection, $interface->getAdapter()->getConnection());
+    }
+
+    public function testFacadeThrowsDatabaseExceptionOnConnect()
+    {
+        $registry = Chrome_Database_Registry_Connection::getInstance();
+        $connection = new Chrome_Database_Connection_Dummy('example');
+        $connection->setIsConnected(false);
+        $connection->throwExceptionOnConnect('Chrome_Exception_Database');
+        $registry->addConnection('testFacadeThrowsDatabaseExceptionOnConnect', $connection);
+
+        $this->setExpectedException('Chrome_Exception_Database');
+        $interface = Chrome_Database_Facade::getInterface('model', 'assoc', 'testFacadeThrowsDatabaseExceptionOnConnect');
+    }
+
+    public function testFacadeThrowsExceptionOnConnect()
+    {
+        $registry = Chrome_Database_Registry_Connection::getInstance();
+        $connection = new Chrome_Database_Connection_Dummy('example');
+        $connection->setIsConnected(false);
+        $connection->throwExceptionOnConnect('Chrome_Exception');
+        $registry->addConnection('testFacadeThrowsExceptionOnConnect', $connection);
+
+        $this->setExpectedException('Chrome_Exception');
+        $interface = Chrome_Database_Facade::getInterface('model', 'assoc', 'testFacadeThrowsExceptionOnConnect');
+    }
+
+    public function testFacadeThrowsChromeExceptionOnConnect()
+    {
+        $registry = Chrome_Database_Registry_Connection::getInstance();
+        $connection = new Chrome_Database_Connection_Dummy('example');
+        $connection->setIsConnected(false);
+        $connection->throwExceptionOnConnect('Chrome_Exception_Authentication');
+        $registry->addConnection('testFacadeThrowsChromeExceptionOnConnect', $connection);
+
+        $this->setExpectedException('Chrome_Exception'); // we expect only Chrome_Exceptions
+        $interface = Chrome_Database_Facade::getInterface('model', 'assoc', 'testFacadeThrowsChromeExceptionOnConnect');
     }
 }

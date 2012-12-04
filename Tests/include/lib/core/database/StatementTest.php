@@ -48,6 +48,17 @@ class DatabaseStatementTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($string, Chrome_Database_Registry_Statement::getStatement($count));
     }
 
+    public function testGetStatementsIsNotEmpty() {
+
+        $string = 'Test statement which should be in getStatements()';
+        Chrome_Database_Registry_Statement::addStatement($string);
+
+        $this->assertNotEmpty(Chrome_Database_Registry_Statement::getStatements());
+
+        $this->assertContains($string, Chrome_Database_Registry_Statement::getStatements());
+
+    }
+
 
 
 }

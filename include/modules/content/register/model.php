@@ -64,7 +64,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 		if( $result->isEmpty() ) {
 			return $key;
 		}
-        die();
+
 		// another try
 		return $this->generateActivationKey();
 	}
