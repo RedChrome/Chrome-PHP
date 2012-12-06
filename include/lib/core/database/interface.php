@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.12.2012 22:44:51] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.12.2012 00:51:47] --> $
  * @link       http://chrome-php.de
  */
 
@@ -155,11 +155,11 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
     public function clear()
     {
-        $this->_query  = null;
-        $this->_params = null;
+        $this->_query     = null;
+        $this->_params    = null;
         $this->_sentQuery = null;
-        $this->_adapter = $this->_adapter->clear();
-        $this->_result  = $this->_result->clear();
+        $this->_adapter   = $this->_adapter->clear();
+        $this->_result    = $this->_result->clear();
         $this->_result->setAdapter($this->_adapter);
         return $this;
     }

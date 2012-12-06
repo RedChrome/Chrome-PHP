@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 01:00:03] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.12.2012 00:20:18] --> $
  * @link       http://chrome-php.de
  */
 
@@ -43,7 +43,7 @@ class Chrome_Database_Result_Assoc extends Chrome_Database_Result_Abstract imple
     public function hasNext()
     {
         $this->_nextResult = $this->getNext();
-        return ($this->_nextResult !== false);
+        return ($this->_nextResult !== false AND $this->_nextResult !== null);
     }
 
     public function getNext()

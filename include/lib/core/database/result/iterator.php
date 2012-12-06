@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:10:59] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.12.2012 00:16:43] --> $
  * @link       http://chrome-php.de
  */
 
@@ -96,6 +96,6 @@ class Chrome_Database_Result_Iterator extends Chrome_Database_Result_Abstract im
 
     public function valid()
     {
-        return (isset($this->_iteratorArray[$this->_iteratorPointer]) and $this->_iteratorArray[$this->_iteratorPointer] !== false);
+        return (isset($this->_iteratorArray[$this->_iteratorPointer]) AND $this->_iteratorArray[$this->_iteratorPointer] !== false AND $this->_iteratorArray[$this->_iteratorPointer] !== null);
     }
 }

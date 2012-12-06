@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 19:45:41] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.12.2012 17:30:30] --> $
  * @link       http://chrome-php.de
  */
 
@@ -123,9 +123,9 @@ class Chrome_Database_Facade
                     return $connectionObject;
                 }
             }
-        }
 
-        return $registry->getConnectionObject($connectionName);
+            return $registry->getConnectionObject($connectionName);
+        }
     }
 
     public static function requireClass($type, $classSuffix)

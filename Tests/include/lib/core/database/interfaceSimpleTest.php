@@ -66,7 +66,7 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         $limitEnde = 1;
 
         $statement = 'SELECT * from cpp_? LIMIT 0,?';
-        $statement2 = 'SELECT * from ' . DB_PREFIX . '_'.$tableEsc.' LIMIT 0,'.$limitEnde;
+        $statement2 = 'SELECT * from ' . DB_PREFIX . '_' . $tableEsc . ' LIMIT 0,' . $limitEnde;
         $this->_interface->setParameters(array($table, $limitEnde));
         $this->_interface->query($statement);
 
@@ -80,21 +80,22 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         $limitEnde = 1;
 
         $statement = 'SELECT * from cpp_? LIMIT 0,?';
-        $statement2 = 'SELECT * from ' . DB_PREFIX . '_'.$tableEsc.' LIMIT 0,'.$limitEnde;
+        $statement2 = 'SELECT * from ' . DB_PREFIX . '_' . $tableEsc . ' LIMIT 0,' . $limitEnde;
         $this->_interface->setParameters(array($table, $limitEnde), false);
         $this->_interface->query($statement);
 
         $this->assertEquals($statement2, $this->_interface->getQuery());
     }
 
-    public function testSetParameterWithEscaping() {
+    public function testSetParameterWithEscaping()
+    {
 
         $table = 'requ\'ire';
         $tableEsc = 'requ\\\'ire';
         $limitEnde = 1;
 
         $statement = 'SELECT * from cpp_? LIMIT 0,?';
-        $statement2 = 'SELECT * from ' . DB_PREFIX . '_'.$tableEsc.' LIMIT 0,'.$limitEnde;
+        $statement2 = 'SELECT * from ' . DB_PREFIX . '_' . $tableEsc . ' LIMIT 0,' . $limitEnde;
         $this->_interface->setParameter('table', $table, true);
         $this->_interface->setParameter('limitEnde', $limitEnde, true);
         $this->_interface->query($statement);
@@ -103,14 +104,15 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($statement, $this->_interface->getStatement());
     }
 
-    public function testSetParameterWithoutEscaping() {
+    public function testSetParameterWithoutEscaping()
+    {
 
         $table = 'requ\'ire';
         $tableEsc = 'requ\'ire';
         $limitEnde = 1;
 
         $statement = 'SELECT * from cpp_? LIMIT 0,?';
-        $statement2 = 'SELECT * from ' . DB_PREFIX . '_'.$tableEsc.' LIMIT 0,'.$limitEnde;
+        $statement2 = 'SELECT * from ' . DB_PREFIX . '_' . $tableEsc . ' LIMIT 0,' . $limitEnde;
         $this->_interface->setParameter('table', $table, false);
         $this->_interface->setParameter('limitEnde', $limitEnde, false);
         $this->_interface->query($statement);
@@ -146,7 +148,6 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
 
         $this->_interface->query('');
     }
-
 
 
 }
