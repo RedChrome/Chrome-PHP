@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 20:00:50] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.12.2012 12:05:00] --> $
  * @author     Alexander Book
  */
 
@@ -32,3 +32,11 @@ $defaultConnection->connect();
 
 $dbRegistry = Chrome_Database_Registry_Connection::getInstance();
 $dbRegistry->addConnection(Chrome_Database_Facade::DEFAULT_CONNECTION, $defaultConnection, true);
+
+if(TEST_DATABASE_CONNECTIONS === true) {
+    $mysqlTestConnection = new Chrome_Database_Connection_Mysql();
+    $mysqlTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
+    $mysqlTestConnection->connect();
+
+    $dbRegistry->addConnection('mysql_test', $mysqlTestConnection, true);
+}

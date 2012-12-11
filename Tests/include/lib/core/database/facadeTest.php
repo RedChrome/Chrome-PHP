@@ -212,4 +212,24 @@ class DatabaseFacadeTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Chrome_Exception'); // we expect only Chrome_Exceptions
         $interface = Chrome_Database_Facade::getInterface('model', 'assoc', '');
     }
+
+    public function testFacadeRequireClassConnection() {
+
+
+        $this->setExpectedException('Chrome_Exception');
+
+        Chrome_Database_Facade::requireClass('connection', 'notExistingClassSuffix');
+
+
+    }
+
+    public function testFacadeRequireClassWrongType() {
+
+
+        $this->setExpectedException('Chrome_Exception');
+
+        Chrome_Database_Facade::requireClass('notExistingType', 'anything');
+
+
+    }
 }

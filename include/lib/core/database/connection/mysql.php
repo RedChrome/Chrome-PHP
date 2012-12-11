@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 00:38:41] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.12.2012 18:31:47] --> $
  * @link       http://chrome-php.de
  */
 
@@ -53,7 +53,7 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
     public function connect()
     {
         if($this->_isConnected === true) {
-            return;
+            return true;
         }
 
         if($this->_isSetConnectionOptions === false) {
@@ -86,7 +86,7 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
         }
 
         if(@mysql_select_db($this->_database, $this->_connection) === false) {
-            switch(mysql_errno()) {
+            switch(mysql_errno($this->_connection)) {
                 case 1049:
                     {
                         throw new Chrome_Exception_Database('Could not select database ' . $this->_database . '!', Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE);
@@ -108,16 +108,11 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
 
     public function disconnect()
     {
-        // do nothing, we used an presistent connection
+        // do nothing, we're using a persistent connection
     }
 
     public function getDefaultAdapter()
     {
         return 'Mysql';
-    }
-
-    public function isConnected()
-    {
-        return $this->_isConnected;
     }
 }

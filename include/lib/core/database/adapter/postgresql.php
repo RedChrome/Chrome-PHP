@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 23:08:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.12.2012 18:27:06] --> $
  * @link       http://chrome-php.de
  */
 
@@ -73,10 +73,30 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
         return pg_escape_string($this->_connection, $data);
     }
 
-    //TODO: finish
     public function getAffectedRows()
     {
+        if($this->_result === false) {
+            return 0;
+        }
 
+        $rows = pg_affected_rows($this->_connection);
+
+        if($rows <= 0) {
+
+            if(is_bool($this->_result)) {
+                return 0;
+            }
+
+            $rows = pg_num_rows($this->_result);
+
+            if($rows === false) {
+                return 0;
+            }
+
+            return $rows;
+        }
+
+        return $rows;
     }
 
     public function getErrorCode()

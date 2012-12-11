@@ -18,8 +18,9 @@ class DatabaseConnectionMysqlTest extends PHPUnit_Framework_TestCase
 
     public function doSkipTestsIfNeeded()
     {
-        if(TEST_DATABASE_CONNECTIONS === false)
+        if(TEST_DATABASE_CONNECTIONS === false) {
             $this->markTestSkipped();
+        }
     }
 
     public function testCannotConnectToNotExistingServer()
@@ -51,16 +52,22 @@ class DatabaseConnectionMysqlTest extends PHPUnit_Framework_TestCase
         $connection = new Chrome_Database_Connection_Mysql();
         $connection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
 
-
         $connection->connect();
+
+        $this->assertTrue($connection->isConnected());
+        $this->assertTrue($connection->connect());
+
+        Chrome_Database_Registry_Connection::getInstance()->addConnection('mysql_test', $connection, true);
     }
 
-    public function testIsConnectedOnEmptyConnection() {
+    public function testIsConnectedOnEmptyConnection()
+    {
         $connection = new Chrome_Database_Connection_Mysql();
         $this->assertFalse($connection->isConnected());
     }
 
-    public function testDisconnect() {
+    public function testDisconnect()
+    {
         $connection = new Chrome_Database_Connection_Mysql();
         $connection->disconnect();
     }

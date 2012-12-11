@@ -41,6 +41,18 @@ class DatabaseInterfaceModelTest extends PHPUnit_Framework_TestCase
         $db->prepare('anything else');
     }
 
+    public function testDefaultModelImplementation()
+    {
+
+        $con = new Chrome_Database_Connection_Dummy('not Null');
+
+        $db = Chrome_Database_Facade::getInterface('model', 'dummy', $con);
+
+        $this->setExpectedException('Chrome_Exception');
+
+        $db->prepare('notExisting');
+    }
+
     public function getStatement($key)
     {
         if($key === 'anyKey') {

@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 22:40:20] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.12.2012 18:23:31] --> $
  * @link       http://chrome-php.de
  */
 
@@ -100,12 +100,12 @@ class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implem
             $database = self::DEFAULT_DATABASE;
         }
 
-        if(!isset(self::$_instances[$namespace])) {
+        if(!isset(self::$_instances[$database][$namespace])) {
 
-            self::$_instances[$namespace] = new self($namespace, $database);
+            self::$_instances[$database][$namespace] = new self($namespace, $database);
         }
 
-        return self::$_instances[$namespace];
+        return self::$_instances[$database][$namespace];
     }
 
     protected function _cache()
