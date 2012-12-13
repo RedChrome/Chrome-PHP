@@ -30,8 +30,8 @@ if(CHROME_PHP !== true) die();
 Chrome_Database_Facade::requireClass('connection', 'Mysql');
 
 // configure default database connection
-$defaultConnection = new Chrome_Database_Connection_Mysql();
-$defaultConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
+//$defaultConnection = new Chrome_Database_Connection_Mysql();
+//$defaultConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
 
-$dbRegistry = Chrome_Database_Registry_Connection::getInstance();
-$dbRegistry->addConnection(Chrome_Database_Facade::DEFAULT_CONNECTION, $defaultConnection);
+//$dbRegistry = Chrome_Database_Registry_Connection::getInstance();
+//$dbRegistry->addConnection(Chrome_Database_Facade::getDefaultConnection(), $defaultConnection);

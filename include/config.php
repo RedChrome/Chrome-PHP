@@ -46,6 +46,8 @@ define('DB_NAME', 'chrome_2');
 define('DB_PREFIX', 'cp1');
 //every request to the website needs an established database connection, even if it's not needed
 define('DB_FORCE_CONNECTION', true);
+//name of the default connection
+if(!defined('DB_DEFAULT_CONNECTION')) define('DB_DEFAULT_CONNECTION', '');
 
 /**#@!*/
 //########## ERROR MANAGEMENT #########

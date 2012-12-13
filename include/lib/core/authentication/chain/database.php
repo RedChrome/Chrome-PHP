@@ -294,7 +294,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
         $db = $this->_getDBInterface();
 
         $db->prepare('authenticationCreateAuthentication')
-            ->execute(array($hash, $salt));
+            ->execute(array($hash, $salt, CHROME_TIME));
     }
 
     public function getIDByPassword($pw, $pwSalt)

@@ -19,11 +19,12 @@
  * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.12.2012 12:05:00] --> $
  * @author     Alexander Book
  */
-
 require_once 'testsetup.php';
 
 require_once LIB.'core/database/database.php';
 require_once LIB.'core/database/connection/mysql.php';
+
+Chrome_Database_Facade::setDefaultConnection('testingConnection');
 
 // configure default database connection
 $defaultConnection = new Chrome_Database_Connection_Mysql();
@@ -31,7 +32,7 @@ $defaultConnection->setConnectionOptions('localhost', 'test', '', 'chrome_2_test
 $defaultConnection->connect();
 
 $dbRegistry = Chrome_Database_Registry_Connection::getInstance();
-$dbRegistry->addConnection(Chrome_Database_Facade::DEFAULT_CONNECTION, $defaultConnection, true);
+$dbRegistry->addConnection(Chrome_Database_Facade::getDefaultConnection(), $defaultConnection, true);
 
 if(TEST_DATABASE_CONNECTIONS === true) {
     $mysqlTestConnection = new Chrome_Database_Connection_Mysql();

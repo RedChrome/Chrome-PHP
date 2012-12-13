@@ -29,13 +29,15 @@ if(CHROME_PHP !== true) die();
 
 class Chrome_Database_Facade
 {
-    const DEFAULT_CONNECTION = '';
+    const DEFAULT_CONNECTION = DB_DEFAULT_CONNECTION;
 
     const DATABASE_CLASS_DIR = 'core/database/';
 
     protected static $_defaultInterface = 'Simple';
 
     protected static $_defaultResult = 'Assoc';
+    
+    protected static $_defaultConnection = self::DEFAULT_CONNECTION;
 
     public static function getInterface($interfaceName, $resultName, $connectionName = self::DEFAULT_CONNECTION, $adapterName = '')
     {
@@ -104,11 +106,11 @@ class Chrome_Database_Facade
 
             $registry = Chrome_Database_Registry_Connection::getInstance();
 
-            if($connectionName === self::DEFAULT_CONNECTION) {
-
-                if($registry->isConnected($connectionName) === false) {
+            if($connectionName === self::DEFAULT_CONNECTION OR $connectionName === null) {
+																				
+                if($registry->isConnected(self::$_defaultConnection) === false) {
                     try {
-                        $connectionObject = $registry->getConnectionObject($connectionName);
+                        $connectionObject = $registry->getConnectionObject(self::$_defaultConnection);
                         $connectionObject->connect();
                     }
                     catch (Chrome_Exception_Database $e) {
@@ -121,6 +123,8 @@ class Chrome_Database_Facade
                     }
 
                     return $connectionObject;
+                } else {
+                	return $registry->getConnectionObject(self::$_defaultConnection);
                 }
             }
 
@@ -204,6 +208,14 @@ class Chrome_Database_Facade
         $connection = ($composition->getConnection() === null) ? self::DEFAULT_CONNECTION : $composition->getConnection();
 
         return self::getInterface($composition->getInterface(), $composition->getResult(), $connection, $composition->getAdapter());
+    }
+    
+    public static function setDefaultConnection($conn) {
+    	self::$_defaultConnection = $conn;
+    }
+    
+    public static function getDefaultConnection() {
+    	return self::$_defaultConnection;
     }
 
 }

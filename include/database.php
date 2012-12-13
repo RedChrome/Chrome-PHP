@@ -34,4 +34,4 @@ $defaultConnection = new Chrome_Database_Connection_Mysql();
 $defaultConnection->setConnectionOptions(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 $dbRegistry = Chrome_Database_Registry_Connection::getInstance();
-$dbRegistry->addConnection(Chrome_Database_Facade::DEFAULT_CONNECTION, $defaultConnection);
+$dbRegistry->addConnection(Chrome_Database_Facade::getDefaultConnection(), $defaultConnection);

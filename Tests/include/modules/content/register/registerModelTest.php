@@ -91,7 +91,7 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($check);
 
 
-        $this->_db->query('INSERT INTO cpp_user_regist(`key`, `name`, `time`) VALUES("testKey", "anyExampleName", 1300000000)');
+        $this->_db->query('INSERT INTO cpp_user_regist(`key`, `name`, `time`, `pass`, `pw_salt`, `email`) VALUES("testKey", "anyExampleName", 1300000000, "anything...", "anything..", "anything.")');
 
         // if this happes, maybe the expiration time is set very high in Chrome_Config?
         $this->assertFalse($this->_model->checkRegistration('testKey'), 'activationKey was not invalid, but it should be! (time expired)');

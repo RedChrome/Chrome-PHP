@@ -22,6 +22,7 @@
 
 if( !defined( 'CHROME_PHP' ) ) {
 	define( 'CHROME_PHP', true );
+	define('DB_DEFAULT_CONNECTION', 'testingConnection');
 }
 
 $_SERVER['REQUEST_URI'] = '/root/CHROME_2/';
@@ -37,9 +38,10 @@ require_once LIB.'core/file_system/file_system.php';
 
 // Put here your vars for testing database connections
 define('MYSQL_HOST', 'localhost');
-define('MYSQL_USER', 'chrome-php');
-define('MYSQL_PASS', 'chrome-php-password');
-define('MYSQL_DB', 'chrome_2');
+define('MYSQL_USER', 'test');
+define('MYSQL_PASS', '');
+define('MYSQL_DB', 'chrome_2_test');
 define('MYSQL_PORT', 3306);
 
 define('TEST_DATABASE_CONNECTIONS', true);
+

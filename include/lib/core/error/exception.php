@@ -189,6 +189,8 @@ class Chrome_Exception extends Exception
             return '"'.substr($value,0, 120).'"';
         } else if(is_object($value)) {
             return 'Object(<i>'.get_class($value).'</i>)';
+        } else if(is_array($value)) {
+        	return print_r($value, true);
         } else if($value !== null) {
             return gettype($value).'('.$value.')';
         }

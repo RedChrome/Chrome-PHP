@@ -6,7 +6,7 @@
     "authenticationGetPasswordAndSaltByIdentity": "SELECT `password`,`password_salt` FROM cpp_authenticate WHERE `id` = \"?\" LIMIT 0,1",
     "authenticationUpdateTimeById": "UPDATE cpp_authenticate SET `time` = ? WHERE `id` = ? LIMIT 0,1",
     "authenticationGetOdByPassword": "SELECT `id` FROM cpp_authenticate WHERE `password` = \"?\" AND `password_salt` = \"?\" ORDER BY `id` DESC LIMIT 0,1",
-    "authenticationCreateAuthentication": "INSERT INTO cpp_authenticate(`password`, `password_salt`) VALUES(\"?\", \"?\")",
+    "authenticationCreateAuthentication": "INSERT INTO cpp_authenticate(`password`, `password_salt`, `time`) VALUES(\"?\", \"?\", \"?\")",
 
     "authorisationGetAccessById": "SELECT `_access` FROM cpp_authorisation_resource_default WHERE `_resource_id` = \"?\" AND `_transformation` = \"?\"",
     "authorisationGetUserGroupById": "SELECT `group_id` FROM cpp_authorisation_user_default WHERE `user_id`= \"?\" ",

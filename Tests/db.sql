@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `cp1_authenticate` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `password` varchar(256) NOT NULL,
   `password_salt` varchar(256) NOT NULL,
-  `cookie_token` varchar(50) NOT NULL,
+  `cookie_token` varchar(50),
   `time` int(12) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
@@ -320,8 +320,8 @@ CREATE TABLE IF NOT EXISTS `cp1_user` (
   `email` varchar(200) NOT NULL,
   `group` int(2) NOT NULL DEFAULT '0',
   `time` int(15) NOT NULL,
-  `avatar` varchar(50) NOT NULL,
-  `address` varchar(300) NOT NULL,
+  `avatar` varchar(50),
+  `address` varchar(300),
   `design` varchar(20) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;

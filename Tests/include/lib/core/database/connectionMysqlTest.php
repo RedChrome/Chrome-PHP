@@ -39,7 +39,7 @@ class DatabaseConnectionMysqlTest extends PHPUnit_Framework_TestCase
         $this->doSkipTestsIfNeeded();
 
         $connection = new Chrome_Database_Connection_Mysql();
-        $connection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, '', MYSQL_DB);
+        $connection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, 'anythingWRONG', MYSQL_DB);
 
         $this->setExpectedException('Chrome_Exception_Database');
         $connection->connect();
