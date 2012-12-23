@@ -395,7 +395,9 @@ INSERT INTO `cp1_class` (`id`, `name`, `file`) VALUES
 (27, 'Chrome_Authorisation_Adapter_Default', 'lib/core/authorisation/adapter/default.php'),
 (28, 'Chrome_Authorisation_Adapter_Interface', 'lib/core/authorisation/authorisation.php'),
 (29, 'Chrome_Route_Administration', 'lib/core/router/route/administration.php'),
-(30, 'Chrome_Model_User', 'lib/classes/user/model.php');
+(30, 'Chrome_Model_User', 'lib/classes/user/model.php'),
+(31, 'Chrome_Model_Authentication_Cookie', 'lib/core/authentication/chain/cookie.php'),
+(32, 'Chrome_Authentication_Chain_Cookie', 'lib/core/authentication/chain/cookie.php');
 
 
 INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`) VALUES
@@ -416,3 +418,7 @@ INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 ('Title_Ending', 'Site', '', 'string', '', 0),
 ('Title_Separator', 'Site', ' :: ', 'string', '', 0),
 ('name', 'Site', 'CHROME-PHP', 'string', '', 0);
+
+INSERT INTO `cp1_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
+(1, 'testAuthenticate', 'testAuthenticateSalt', NULL, 12345678),
+(2, '4c85bf07d5d7c1ee8a6edba0f7646a58b6cb6ce9ea88b08d', 'ahFB319VKaD', NULL, 12345678); -- password is test

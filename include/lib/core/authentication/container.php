@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 22:53:51] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.12.2012 15:40:09] --> $
  * @link       http://chrome-php.de
  */
 
@@ -33,6 +33,10 @@ if(CHROME_PHP !== true) die();
  */
 interface Chrome_Authentication_Data_Container_Interface
 {
+    const STATUS_GUEST = 0;
+
+    const STATUS_USER = 1;
+
     /**
      * setID()
      *
@@ -70,6 +74,43 @@ interface Chrome_Authentication_Data_Container_Interface
      * @return boolean
      */
     public function getAutoLogin();
+
+    /**
+     * setStatus()
+     *
+     * sets the status of the authenticated person
+     *
+     * @param int $status
+     */
+    public function setStatus($status);
+
+    /**
+     * getStatus()
+     *
+     * Returns the status of the authenticated person
+     *
+     * @return int status
+     */
+    public function getStatus();
+
+    /**
+     * hasStatus()
+     *
+     * Returns true if the person has the status given as $status
+     *
+     * @param int $status
+     * @return boolean
+     */
+    public function hasStatus($status);
+
+    /**
+     * getAuthenticatedBy()
+     *
+     * Returns a class, which has authenticated the person as user/guest
+     *
+     * @return string
+     */
+    public function getAuthenticatedBy();
 }
 
 /**
@@ -91,6 +132,27 @@ class Chrome_Authentication_Data_Container implements Chrome_Authentication_Data
      * @var boolean
      */
     protected $_autoLogin = false;
+
+    /**
+     *
+     * @var int
+     */
+    protected $_status = Chrome_Authentication_Data_Container_Interface::STATUS_GUEST;
+
+    /**
+     * the class, which has authenticated the person
+     *
+     * @var string
+     */
+    protected $_authenticatedBy = '';
+
+    /**
+     * @param string class that authenticated the person
+     */
+    public function __construct($authenticationChain)
+    {
+        $this->_authenticatedBy = $authenticationChain;
+    }
 
     /**
      * Chrome_Authentication_Data_Container::setID()
@@ -144,5 +206,47 @@ class Chrome_Authentication_Data_Container implements Chrome_Authentication_Data
     public function getAutoLogin()
     {
         return $this->_autoLogin;
+    }
+
+    /**
+     * setStatus()
+     *
+     * sets the status of the authenticated person
+     *
+     * @param int $status
+     */
+    public function setStatus($status)
+    {
+        $this->_status = $status;
+    }
+
+    /**
+     * getStatus()
+     *
+     * Returns the status of the authenticated person
+     *
+     * @return int status
+     */
+    public function getStatus()
+    {
+        return $this->_status;
+    }
+
+    /**
+     * hasStatus()
+     *
+     * Returns true if the person has the status given as $status
+     *
+     * @param int $status
+     * @return boolean
+     */
+    public function hasStatus($status)
+    {
+        return ($this->_status === $status);
+    }
+
+    public function getAuthenticatedBy()
+    {
+        return $this->_authenticatedBy;
     }
 }

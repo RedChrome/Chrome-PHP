@@ -17,7 +17,7 @@
  * @subpackage Chrome.Exception
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:38:54] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.12.2012 13:37:45] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -190,7 +190,19 @@ class Chrome_Exception extends Exception
         } else if(is_object($value)) {
             return 'Object(<i>'.get_class($value).'</i>)';
         } else if(is_array($value)) {
-        	return print_r($value, true);
+
+            $return = '<i>Array</i>( ';
+
+            if(count($value) !== 0) {
+                foreach($value as $key => $value) {
+                    $return .= $key.' => ' .$this->_getValue($value).', ';
+                }
+            } else {
+                $return .= '<i>void</i>  ';
+            }
+
+            return substr($return, 0, strlen($return)-2).' )';
+
         } else if($value !== null) {
             return gettype($value).'('.$value.')';
         }

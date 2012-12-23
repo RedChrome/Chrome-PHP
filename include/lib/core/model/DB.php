@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.11.2012 22:58:11] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.12.2012 14:52:56] --> $
  * @author     Alexander Book
  */
 
@@ -175,6 +175,9 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
      * @return mixed escaped data
      */
     protected function _escape($data) {
+
+        throw new Chrome_Exception('Dont use _escape');
+
         if($this->_escaper !== null) {
             return $this->_escaper->escape($data);
         }

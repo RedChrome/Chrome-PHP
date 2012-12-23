@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:59:18] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.12.2012 15:05:25] --> $
  * @link       http://chrome-php.de
  */
 
@@ -33,14 +33,24 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_Abstract
 {
+    /**
+     * object for manipulating data
+     *
+     * @var Chrome_Model_Abstract
+     */
     protected $_model = null;
+
     /**
      * This updates the login time, every time a user access the site (if the user is already logged in)
+     *
+     * @var boolean
      */
     protected $_updateTime = false;
 
     /**
      * This updates the login time only on successfully log in
+     *
+     * @var boolean
      */
     protected $_setTime = true;
 
@@ -54,7 +64,6 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
 
     protected function _update(Chrome_Authentication_Data_Container_Interface $return)
     {
-
         // here we could update the login time if we want
         if($this->_updateTime === true) {
 
@@ -85,22 +94,24 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
             return $this->_chain->authenticate($resource);
         }
 
+        //TODO: move to model
         $userPw = Chrome_Hash::getInstance()->hash_algo($userPw, CHROME_USER_HASH_ALGORITHM, $array['password_salt']);
 
         // pw was wrong
         if($userPw != $array['password']) {
+
             return $this->_chain->authenticate($resource);
         }
 
-        $container = new Chrome_Authentication_Data_Container();
+        $container = new Chrome_Authentication_Data_Container(__CLASS__);
         $container->setID($id)->setAutoLogin((boolean) $resource->getAutoLogin());
+        $container->setStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER);
 
         if($this->_setTime === true) {
             $this->_model->updateTimeById($id);
         }
 
         return $container;
-
     }
 
     protected function _deAuthenticate()
@@ -192,7 +203,6 @@ class Chrome_Authentication_Create_Resource_Database implements Chrome_Authentic
     protected $_credentialSalt = '';
     protected $_id             = null;
 
-
     public function __construct($identity, $credential, $salt)
     {
         $this->_identity       = $identity;
@@ -253,17 +263,17 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
      */
     public function getPasswordAndSaltByIdentity($identity)
     {
-        $identity = $this->_escape($identity);
-
         $db = $this->_getDBInterface();
 
         $result = $db->prepare('authenticationGetPasswordAndSaltByIdentity')
                         ->execute(array($identity));
 
+        $data = $result->getNext();
+
         if($result->isEmpty() === false) {
             $result = array(
-                       'password'      => $result[$this->_options['dbCredential']],
-                       'password_salt' => $result[$this->_options['dbCredentialSalt']],
+                       'password'      => $data[$this->_options['dbCredential']],
+                       'password_salt' => $data[$this->_options['dbCredentialSalt']],
                       );
         } else {
             $result = false;

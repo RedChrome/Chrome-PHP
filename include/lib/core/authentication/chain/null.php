@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 22:46:20] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.12.2012 15:18:53] --> $
  * @link       http://chrome-php.de
  */
 
@@ -48,9 +48,10 @@ class Chrome_Authentication_Chain_Null extends Chrome_Authentication_Chain_Abstr
     public function authenticate(Chrome_Authentication_Resource_Interface $resource = null)
     {
         // no chain matched before.. this is the last chain, so the user is a guest
-        $container = new Chrome_Authentication_Data_Container();
+        $container = new Chrome_Authentication_Data_Container(__CLASS__);
 
         // guest status
+        $container->setStatus(Chrome_Authentication_Data_Container_Interface::STATUS_GUEST);
         $container->setID(0);
 
         return $container;

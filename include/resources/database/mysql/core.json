@@ -2,9 +2,9 @@
     "info": "File for MySQL, saves all queries sent by core",
 
     "authenticationDoesIdAndTokenExist": "SELECT `id` FROM cpp_? WHERE `id` = ? AND `cookie_token` = \"?\" LIMIT 0,1",
-    "authenticationUpdateTokenById": "UPDATE ? SET `cookie_token` = ? WHERE `id` = ? LIMIT 0,1",
+    "authenticationUpdateTokenById": "UPDATE cpp_? SET `cookie_token` = \"?\" WHERE `id` = \"?\" LIMIT 1",
     "authenticationGetPasswordAndSaltByIdentity": "SELECT `password`,`password_salt` FROM cpp_authenticate WHERE `id` = \"?\" LIMIT 0,1",
-    "authenticationUpdateTimeById": "UPDATE cpp_authenticate SET `time` = ? WHERE `id` = ? LIMIT 0,1",
+    "authenticationUpdateTimeById": "UPDATE cpp_authenticate SET `time` = \"?\" WHERE `id` = \"?\" LIMIT 1",
     "authenticationGetOdByPassword": "SELECT `id` FROM cpp_authenticate WHERE `password` = \"?\" AND `password_salt` = \"?\" ORDER BY `id` DESC LIMIT 0,1",
     "authenticationCreateAuthentication": "INSERT INTO cpp_authenticate(`password`, `password_salt`, `time`) VALUES(\"?\", \"?\", \"?\")",
 
@@ -18,7 +18,7 @@
     "requireGetClasses": "SELECT `name`, `file` FROM cpp_class",
     "requireDeleteEntryByName": "DELETE FROM cpp_class WHERE `name` = \"?\" LIMIT 0,1",
     "requireDoesNameExist": "SELECT `id` FROM cpp_class WHERE `name` = \"?\" LIMIT 0,1",
-    "requireSetClass": "INSERT INTO cpp_class(`id`, `name`, `file`) VALUES ('', ?, ?)", 
+    "requireSetClass": "INSERT INTO cpp_class(`id`, `name`, `file`) VALUES ('', ?, ?)",
 
     "routeDynamicGetResourceById": "SELECT * FROM cpp_route_dynamic WHERE `id` = ? LIMIT 0,1",
     "routeStaticGetRoute": "SELECT * FROM cpp_route_static WHERE `search` = \"?\" LIMIT 0,1",

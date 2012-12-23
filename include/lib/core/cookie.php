@@ -16,16 +16,21 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.11.2012 22:26:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.12.2012 14:38:16] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true) die();
+
+interface Chrome_Cookie_Interface
+{
+
+}
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Cookie
  */
-class Chrome_Cookie implements ArrayAccess
+class Chrome_Cookie implements ArrayAccess, Chrome_Cookie_Interface
 {
     /**
      * Maximum time accepted by a browser
@@ -63,7 +68,7 @@ class Chrome_Cookie implements ArrayAccess
      */
     private static $_instance = null;
 
-    private $_cookie = null;
+    protected $_cookie = null;
 
     /**
      * Chrome_cookie::__construct()
@@ -115,6 +120,8 @@ class Chrome_Cookie implements ArrayAccess
         if($path === null or $path === false) {
             $path = self::CHROME_COOKIE_DEFAULT_PATH;
         }
+
+        $this->_cookie[$name] = $value;
 
         if(!headers_sent()) {
 
@@ -253,5 +260,3 @@ class Chrome_Cookie implements ArrayAccess
         $this->unsetCookie($offset);
     }
 }
-
-Chrome_cookie::getInstance();

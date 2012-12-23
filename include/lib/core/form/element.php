@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.10.2012 10:44:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.12.2012 13:58:06] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -719,7 +719,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 
             $class = str_replace('Element', 'Decorator',get_class($this)).'_'.$this->_form->getAttribute('decorator');
 
-            if(!class_exists($class)) {
+            if(!class_exists($class, true)) {
                 throw new Chrome_Exception('Could not load form decorator '.get_class($this).'!');
             }
         }
