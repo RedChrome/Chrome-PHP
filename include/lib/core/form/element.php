@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.12.2012 13:58:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 17:04:36] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -431,6 +431,19 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      */
     protected $_isValid = null;
 
+    /**
+     * Cache of isCreated method
+     *
+     * @var boolean
+     */
+    protected $_isCreated = null;
+
+    /**
+     * Cache of isSent method
+     *
+     * @var boolean
+     */
+    protected $_isSent  = null;
 
     /**
      * @var Chrome_Converter
@@ -473,8 +486,8 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      *
      * @return boolean
      */
-    public function isValid() {
-
+    public function isValid()
+    {
         // cache
         if($this->_isValid !== null) {
             return $this->_isValid;
@@ -483,6 +496,46 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
         // either _isValid() exists or this method is overwritten..
         $this->_isValid = $this->_isValid();
         return $this->_isValid;
+    }
+
+    /**
+     * Chrome_Form_Element_Abstract::isCreated()
+     *
+     * Determines whether this element is created. This method is a default implementation
+     * of a cache using _isCreated() for validation
+     *
+     * @return boolean
+     */
+    public function isCreated()
+    {
+        // cache
+        if($this->_isCreated !== null) {
+            return $this->_isCreated;
+        }
+
+        // either _isCreated() exists or this method is overwritten..
+        $this->_isCreated = $this->_isCreated();
+        return $this->_isCreated;
+    }
+
+    /**
+     * Chrome_Form_Element_Abstract::isSent()
+     *
+     * Determines whether this element is sent. This method is a default implementation
+     * of a cache using _isSent() for validation
+     *
+     * @return boolean
+     */
+    public function isSent()
+    {
+        // cache
+        if($this->_isSent !== null) {
+            return $this->_isSent;
+        }
+
+        // either _isSent() exists or this method is overwritten..
+        $this->_isSent = $this->_isSent();
+        return $this->_isSent;
     }
 
     /**

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 13:14:31] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 16:27:41] --> $
  */
 
 if( CHROME_PHP !== true ) die();
@@ -37,7 +37,7 @@ class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract
 
 	protected $_data = null;
 
-	public function isCreated()
+	protected function _isCreated()
 	{
 		foreach( $this->_options[self::CHROME_FORM_ELEMENT_BUTTONS] as $button ) {
 			if( $button->isCreated() === false ) {
@@ -61,7 +61,7 @@ class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract
 		return true;
 	}
 
-	public function isSent()
+	protected function _isSent()
 	{
 		if( $this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === false ) {
 			foreach( $this->_options[self::CHROME_FORM_ELEMENT_BUTTONS] as $button ) {

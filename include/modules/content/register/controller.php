@@ -61,22 +61,22 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 
                             $this->_form = new Chrome_Form_Register_StepTwo();
 
-                            if(!$this->_form->isCreated() or !$this->_form->isSent() or !$this->_form->isValid()) {
+                            $data = $this->_form->getData();
 
-                                $data = $this->_form->getData();
-
-                                // go one step back
-                                if($this->_form->isSent('buttons') and isset($data['buttons']['backward'])) {
-                                    $this->_form = new Chrome_Form_Register_StepOne();
-                                    $this->_form->create();
-                                    $this->_stepOne();
-                                } else {
-                                    // process the errors
-                                    $this->_stepTwo();
-                                }
-
+                            // go one step back
+                            if($this->_form->isSent('buttons') and isset($data['buttons']['backward'])) {
+                                $this->_form = new Chrome_Form_Register_StepOne();
+                                $this->_form->create();
+                                $this->_stepOne();
                                 break;
                             }
+
+                            // process the errors
+                            if(!$this->_form->isCreated() or !$this->_form->isSent() or !$this->_form->isValid()) {
+                                $this->_stepTwo();
+                                break;
+                            }
+
                             $this->_activationKey = $this->_model->generateActivationKey();
 
                             $this->_model->addRegistrationRequest($this->_form->getData('nickname'), $this->_form->getData('password'), $this->_form->getData('email'), $this->_activationKey);
@@ -141,7 +141,6 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 
     private function _stepOne()
     {
-
         if($this->_form == null) {
             $this->_form = new Chrome_Form_Register_StepOne();
         }
@@ -159,7 +158,6 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 
     private function _stepTwo()
     {
-
         if(!($this->_form instanceof Chrome_Form_Register_StepTwo)) {
             $this->_form = new Chrome_Form_Register_StepTwo();
         }
@@ -178,7 +176,6 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 
     private function _stepThree()
     {
-
         $this->_view->setStepThree();
 
         $session = Chrome_Session::getInstance();
@@ -190,7 +187,6 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 
     private function _stepNoEmailSent()
     {
-
         $this->_view->setStepNoEmailSent();
 
         $session = Chrome_Session::getInstance();

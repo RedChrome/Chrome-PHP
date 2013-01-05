@@ -17,7 +17,7 @@
  * @subpackage Chrome.Converter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.10.2012 13:51:59] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 13:48:47] --> $
  * @author     Alexander Book
  */
 
@@ -191,13 +191,13 @@ class Chrome_Converter_Default extends Chrome_Converter_Abstract
 	protected function _escape( &$var, $option )
 	{
 		if( isset( $option['interface'] ) ) {
-			if( $option['interface'] instanceof Chrome_DB_Interface_Abstract ) {
+			if( $option['interface'] instanceof Chrome_Database_Interface_Interface ) {
 				$obj = $option['interface'];
 			} else {
 				throw new Chrome_Exception( 'Option "interface" must be an instance of Chrome_DB_Interface_Abstract! Cannot access an escape method without a valid DB_Interface in Chrome_Converter_Default::_escape()!' );
 			}
 		} else {
-			$obj = Chrome_DB_Interface_Factory::factory();
+			$obj = Chrome_Database_Facade::getInterface(null, null);
 		}
 		$var = $obj->escape( $var );
 	}

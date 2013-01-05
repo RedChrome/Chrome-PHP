@@ -58,13 +58,11 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 		$nameConverter->addFilter( 'stripHTML' );
 
 
-
 		$this->_elements[$this->_id] = new Chrome_Form_Element_Form( $this, $this->_id, array( Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME =>
 				300, Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_MIN_ALLOWED_TIME => 1 ) );
 
 
 		$this->_elements['error'] = new Chrome_Form_Element_Error( $this, 'error', array() );
-
 
 
          // with the comment you can enable/disable the auto deletion of password content, if the user clicks on backward

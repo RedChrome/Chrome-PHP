@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.10.2012 16:30:23] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 16:28:35] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -51,7 +51,7 @@ class Chrome_Form_Element_Password extends Chrome_Form_Element_Abstract
         return $this->_isValid;
     }
 
-    public function isSent() {
+    protected function _isSent() {
 
         if($this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true) {
             return true;

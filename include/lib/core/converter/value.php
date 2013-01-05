@@ -17,7 +17,7 @@
  * @subpackage Chrome.Converter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:59:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 13:50:27] --> $
  * @author     Alexander Book
  */
 
@@ -88,7 +88,6 @@ class Chrome_Converter_Value implements Chrome_Converter_Value_Interface
 
     public function addFilter($filter, array $params = null)
     {
-
         $id = count($this->_array);
         $this->_array[] = $filter;
         $this->_params[$id] = $params;

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.09.2012 14:17:04] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 17:18:52] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -58,7 +58,7 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
 
     protected function _getDBInterface() {
         if($this->_dbInterface === null) {
-            return Chrome_DB_Interface_Factory::factory('interface');
+            return Chrome_Database_Facade::getInterface(null, null);
         } else {
             return $this->_dbInterface;
         }
@@ -71,9 +71,11 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
         $dbInterface = $this->_getDBInterface();
 
         // checking users, trying to register
-        $dbInterface->select('email')->from('user_regist')->where('email = "'.$dbInterface->escape($email).'"')->execute();
+        //$dbInterface->select('email')->from('user_regist')->where('email = "'.$dbInterface->escape($email).'"')->execute();
 
-        $result = $dbInterface->next();
+        $resultSet = $dbInterface->query('SELECT email FROM cpp_user_regist WHERE email = "?"', array($email) );
+
+        $result = $resultSet->getNext();
 
         // the email does not exist
         if($result === false) {
@@ -90,9 +92,11 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
         $dbInterface->clear();
 
         // checking registered users
-        $dbInterface->select('email')->from('user')->where('email = "'.$dbInterface->escape($email).'"')->execute();
+        //$dbInterface->select('email')->from('user')->where('email = "'.$dbInterface->escape($email).'"')->execute();
 
-        $result = $dbInterface->next();
+        $resultSet = $dbInterface->query('SELECT email FROM cpp_user WHERE email = "?"', array($email));
+
+        $result = $resultSet->getNext();
 
         // the email does not exist
         if($result === false) {

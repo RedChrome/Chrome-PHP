@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.10.2012 12:17:10] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 16:28:15] --> $
  * @author     Alexander Book
  */
 
@@ -69,7 +69,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
         parent::__construct($form, $id, $options);
     }
 
-    public function isCreated()
+    protected function _isCreated()
     {
         $session = Chrome_Session::getInstance();
 
@@ -87,7 +87,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
         return true;
     }
 
-    public function isValid()
+    protected function _isValid()
     {
         $session = Chrome_Session::getInstance();
 
@@ -115,7 +115,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
         return true;
     }
 
-    public function isSent()
+    protected function _isSent()
     {
         if($this->getData() !== null) {
 

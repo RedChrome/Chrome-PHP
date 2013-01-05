@@ -20,7 +20,7 @@
  * @author    Alexander Book <alexander.book@gmx.de>
  * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
  * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.11.2012 23:41:01] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 15:01:43] --> $
  * @link      http://chrome-php.de
  */
 
@@ -44,8 +44,6 @@ define('DB_USER', 'chrome-php');
 define('DB_NAME', 'chrome_2');
 //SQL-Prefix
 define('DB_PREFIX', 'cp1');
-//every request to the website needs an established database connection, even if it's not needed
-define('DB_FORCE_CONNECTION', true);
 //name of the default connection
 if(!defined('DB_DEFAULT_CONNECTION')) define('DB_DEFAULT_CONNECTION', '');
 

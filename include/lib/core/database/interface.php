@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.12.2012 00:51:47] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 17:16:06] --> $
  * @link       http://chrome-php.de
  */
 
@@ -39,7 +39,7 @@ interface Chrome_Database_Interface_Interface
 
     public function execute(array $parameters = array());
 
-    public function query($query);
+    public function query($query, array $params = array());
 
     public function setParameters(array $array, $escape = true);
 

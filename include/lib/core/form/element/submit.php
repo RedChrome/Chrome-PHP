@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.10.2012 00:11:10] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 16:33:27] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -54,7 +54,7 @@ class Chrome_Form_Element_Submit extends Chrome_Form_Element_Abstract
         return $isValid && $_isValid;
     }
 
-    public function isSent() {
+    protected function _isSent() {
         if($this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === true) {
             if($this->_form->getSentData($this->_id) === null) {
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;

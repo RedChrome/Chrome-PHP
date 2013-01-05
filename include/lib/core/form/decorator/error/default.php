@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.10.2012 19:51:31] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 17:07:32] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -38,7 +38,9 @@ class Chrome_Form_Decorator_Error_Default extends Chrome_Form_Decorator_Abstract
     {
         $return = '<div class="wrongInput" align="left"><ul>';
 
-        $errors = $this->_formElement->getForm()->getErrors();
+        $errors = array_merge($this->_formElement->getForm()->getValidationErrors());
+
+        #$errors = $this->_formElement->getForm()->getErrors();
 
         $lang = $this->_options[self::CHROME_FORM_DECORATOR_ERROR_LANGUAGE_OBJ];
 

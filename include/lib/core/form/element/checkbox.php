@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.10.2012 01:05:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 17:09:20] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -49,7 +49,7 @@ class Chrome_Form_Element_Checkbox extends Chrome_Form_Element_Abstract
 
         $data = $this->_form->getSentData($this->_id);
 
-        if($this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === true AND ($data == null  OR empty($data) == true) ) {
+        if($this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === true AND empty($data) == true ) {
             $isValid = false;
             $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
         }
@@ -72,8 +72,8 @@ class Chrome_Form_Element_Checkbox extends Chrome_Form_Element_Abstract
         return $isValid;
     }
 
-    public function isSent() {
-
+    protected function _isSent()
+    {
         if($this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === true) {
             if($this->_form->getSentData($this->_id) === null) {
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;

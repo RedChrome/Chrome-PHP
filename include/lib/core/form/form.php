@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 14:41:08] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 17:03:20] --> $
  * @link       http://chrome-php.de
  */
 
@@ -400,14 +400,17 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      * ATTRIBUTE_ID: sets the form id
      * @var string
      */
-    const ATTRIBUTE_METHOD = 'method', ATTRIBUTE_DECORATOR = 'decorator', ATTRIBUTE_ACTION = 'action', ATTRIBUTE_NAME =
-        'name', ATTRIBUTE_ID = 'id';
-
+    const ATTRIBUTE_METHOD    = 'method',
+          ATTRIBUTE_DECORATOR = 'decorator',
+          ATTRIBUTE_ACTION    = 'action',
+          ATTRIBUTE_NAME      = 'name',
+          ATTRIBUTE_ID        = 'id';
 
     /**
      * @var string
      */
-    const CHROME_FORM_METHOD_POST = 'POST', CHROME_FORM_METHOD_GET = 'GET';
+    const CHROME_FORM_METHOD_POST = 'POST',
+          CHROME_FORM_METHOD_GET  = 'GET';
 
     /**
      * Name/Id of the form

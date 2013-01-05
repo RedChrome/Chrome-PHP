@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.12.2012 18:23:31] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 15:00:02] --> $
  * @link       http://chrome-php.de
  */
 
@@ -65,9 +65,6 @@ class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract
         if($this->_model === null) {
             $this->_model = Chrome_Model_Database_Statement::getInstance();
         }
-        /*if($this->_model === null) {
-            throw new Chrome_Exception('No Model set!');
-        }*/
     }
 }
 
