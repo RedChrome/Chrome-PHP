@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.12.2012 17:41:20] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 13:12:51] --> $
  * @link       http://chrome-php.de
  */
 
@@ -46,7 +46,7 @@ require_once 'lib/core/core.php';
  * @package CHROME-PHP
  * @subpackage Chrome.FrontController
  */
-interface Chrome_Front_Controller_Interface
+interface Chrome_Front_Controller_Interface extends Chrome_Exception_Processable_Static_Interface
 {
     /**
      * setController()
@@ -143,6 +143,11 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
     private $_controller = null;
 
     /**
+     * @var Chrome_Exception_Handler_Interface
+     */
+    private static $_exceptionHandler = null;
+
+    /**
      * Chrome_Front_Controller::setRequest()
      *
      * @param mixed $request
@@ -196,6 +201,10 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
      */
     public static function getInstance()
     {
+        if(self::$_exceptionHandler === null) {
+            self::$_exceptionHandler = new Chrome_Exception_Handler_FrontController();
+        }
+
         if(self::$_instance === null) {
             self::$_instance = new self();
         }
@@ -214,9 +223,7 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             $this->init();
         }
         catch (Chrome_Exception $e) {
-
-            $handler = new Chrome_Exception_Handler_FrontController();
-            $handler->exception($e);
+            self::$_exceptionHandler->exception($e);
         }
     }
 
@@ -331,8 +338,7 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             $this->handleRequest();
         }
         catch (Chrome_Exception $e) {
-            $handler = new Chrome_Exception_Handler_FrontController();
-            $handler->exception($e);
+            self::$_exceptionHandler->exception($e);
         }
     }
 
@@ -352,5 +358,24 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
         $this->_postprocessor->processFilters($this->_request, $this->_response);
 
         $this->_response->flush();
+    }
+
+    /**
+     * setExceptionHandler()
+     *
+     * @param mixed $obj
+     * @return void
+     */
+    public static function setExceptionHandler(Chrome_Exception_Handler_Interface $obj) {
+        self::$_exceptionHandler = $obj;
+    }
+
+    /**
+     * getExceptionHandler()
+     *
+     * @return Chrome_Exception_Handler_Interface
+     */
+    public static function getExceptionHandler() {
+        return self::$_exceptionHandler;
     }
 }

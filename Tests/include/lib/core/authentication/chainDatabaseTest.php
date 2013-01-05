@@ -23,6 +23,7 @@ class AuthenticationChainDatabaseTest extends PHPUnit_Framework_TestCase
         $this->_chain = new Chrome_Authentication_Chain_Database($this->_model, $this->_updateTime, $this->_setTime);
 
         $this->_chain->setChain(new Chrome_Authentication_Chain_Null());
+        $this->_chain->addChain(new Chrome_Authentication_Chain_Null());
     }
 
     /**
@@ -97,7 +98,19 @@ class AuthenticationChainDatabaseTest extends PHPUnit_Framework_TestCase
         $this->_chain->deAuthenticate();
     }
 
-    public function testCreateAuthentication() {
+    public function testCreateAuthenticationWithGivenSalt() {
+        $resource = new Chrome_Authentication_Create_Resource_Database('myName', 'anyPass', 'anySalt');
 
+        $this->_chain->createAuthentication($resource);
+
+        $this->assertNotNull($resource->getID());
+        $this->assertEquals('myName', $resource->getIdentity());
+    }
+
+    public function testCreateAuthenticationWithoutSalt() {
+        $resource = new Chrome_Authentication_Create_Resource_Database('myName' ,'myPassword WIthout a satl');
+        $this->_chain->createAuthentication($resource);
+
+        $this->assertNotNull($resource->getID());
     }
 }

@@ -114,4 +114,22 @@ class DatabaseAdapterMysqlTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    public function testGetNext() {
+
+        $this->_db->query('SELECT * FROM cpp_require');
+
+        $exists = false;
+
+        $resultSet = $this->_db->getResult();
+
+        while( ($result = $resultSet->getNext()) !== false) {
+            $exists = true;
+            if(!is_file(BASEDIR.'/'.$result['path'])) {
+                $this->assertFalse(true, 'path '.BASEDIR.'/'.$result['path'].' does not exist, or database has wrong elements in table cpp_require or getNext() does not work');
+            }
+        }
+
+        $this->assertTrue($exists, 'no element found in table cpp_require? cannot be?');
+
+    }
 }

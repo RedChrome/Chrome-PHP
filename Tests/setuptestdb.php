@@ -18,10 +18,8 @@ if($query == false) {
     die();
 }
 
-$dbRegistry = Chrome_Database_Registry_Connection::getInstance();
-$con = $dbRegistry->getConnection(Chrome_Database_Facade::getDefaultConnection());
-
 $queries = explode(';', $query);
+$db = Chrome_Database_Facade::getInterface('simple', 'assoc');
 
 foreach($queries as $_query) {
 
@@ -29,6 +27,6 @@ foreach($queries as $_query) {
         continue;
     }
 
-    mysql_query($_query, $con);
-
+    $db->query($_query);
+    $db->clear();
 }

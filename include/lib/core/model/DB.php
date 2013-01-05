@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.12.2012 14:52:56] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.12.2012 18:44:08] --> $
  * @author     Alexander Book
  */
 
@@ -195,6 +195,7 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
      */
     public function setDBInterface(Chrome_Form_Interface_Abstract $dbInterface) {
         // TODO: wtf? wrong interface? form??
+        throw new Chrome_Exception('Dont use setDBInterface');
         $this->_dbInterfaceInstance = $dbInterface;
     }
 

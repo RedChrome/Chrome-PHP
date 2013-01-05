@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.12.2012 15:05:25] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.12.2012 18:20:32] --> $
  * @link       http://chrome-php.de
  */
 
@@ -203,7 +203,7 @@ class Chrome_Authentication_Create_Resource_Database implements Chrome_Authentic
     protected $_credentialSalt = '';
     protected $_id             = null;
 
-    public function __construct($identity, $credential, $salt)
+    public function __construct($identity, $credential, $salt = null)
     {
         $this->_identity       = $identity;
         $this->_credential     = $credential;
@@ -268,9 +268,10 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
         $result = $db->prepare('authenticationGetPasswordAndSaltByIdentity')
                         ->execute(array($identity));
 
-        $data = $result->getNext();
-
         if($result->isEmpty() === false) {
+
+            $data = $result->getNext();
+
             $result = array(
                        'password'      => $data[$this->_options['dbCredential']],
                        'password_salt' => $data[$this->_options['dbCredentialSalt']],
@@ -311,7 +312,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
     {
         $db = $this->_getDBInterface();
 
-        $result = $db->prepare('authenticationGetOdByPassword')
+        $result = $db->prepare('authenticationGetIdByPassword')
             ->execute(array($pw, $pwSalt));
 
         $return = $result->getNext();

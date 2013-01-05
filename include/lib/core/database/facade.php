@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.12.2012 17:30:30] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.12.2012 13:14:41] --> $
  * @link       http://chrome-php.de
  */
 
@@ -36,7 +36,7 @@ class Chrome_Database_Facade
     protected static $_defaultInterface = 'Simple';
 
     protected static $_defaultResult = 'Assoc';
-    
+
     protected static $_defaultConnection = self::DEFAULT_CONNECTION;
 
     public static function getInterface($interfaceName, $resultName, $connectionName = self::DEFAULT_CONNECTION, $adapterName = '')
@@ -83,7 +83,6 @@ class Chrome_Database_Facade
             return $result;
         }
 
-
         $resultClass = self::requireClass('result', $resultName);
 
         $result = new $resultClass();
@@ -107,7 +106,7 @@ class Chrome_Database_Facade
             $registry = Chrome_Database_Registry_Connection::getInstance();
 
             if($connectionName === self::DEFAULT_CONNECTION OR $connectionName === null) {
-																				
+
                 if($registry->isConnected(self::$_defaultConnection) === false) {
                     try {
                         $connectionObject = $registry->getConnectionObject(self::$_defaultConnection);
@@ -209,11 +208,11 @@ class Chrome_Database_Facade
 
         return self::getInterface($composition->getInterface(), $composition->getResult(), $connection, $composition->getAdapter());
     }
-    
+
     public static function setDefaultConnection($conn) {
     	self::$_defaultConnection = $conn;
     }
-    
+
     public static function getDefaultConnection() {
     	return self::$_defaultConnection;
     }

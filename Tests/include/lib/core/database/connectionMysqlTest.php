@@ -7,13 +7,17 @@ require_once LIB . 'core/database/connection/mysql.php';
 
 class DatabaseConnectionMysqlTest extends PHPUnit_Framework_TestCase
 {
+    protected $_connection;
+
+    public function setUp() {
+        $this->_connection = new Chrome_Database_Connection_Mysql();
+    }
+
     public function testThrowExceptionWhenCreatingConnectionWithoutAnyData()
     {
         $this->setExpectedException('Chrome_Exception');
 
-        $connection = new Chrome_Database_Connection_Mysql();
-
-        $connection->connect();
+        $this->_connection->connect();
     }
 
     public function doSkipTestsIfNeeded()
@@ -27,48 +31,41 @@ class DatabaseConnectionMysqlTest extends PHPUnit_Framework_TestCase
     {
         $this->doSkipTestsIfNeeded();
 
-        $connection = new Chrome_Database_Connection_Mysql();
-        $connection->setConnectionOptions('notExistingHost', 'guest', '', 'chrome_2');
+        $this->_connection->setConnectionOptions('notExistingHost', 'guest', '', 'chrome_2');
 
         $this->setExpectedException('Chrome_Exception_Database');
-        $connection->connect();
+        $this->_connection->connect();
     }
 
     public function testCannotConnectWithInvalidUserNameOrPassword()
     {
         $this->doSkipTestsIfNeeded();
 
-        $connection = new Chrome_Database_Connection_Mysql();
-        $connection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, 'anythingWRONG', MYSQL_DB);
+        $this->_connection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, 'anythingWRONG', MYSQL_DB);
 
         $this->setExpectedException('Chrome_Exception_Database');
-        $connection->connect();
+        $this->_connection->connect();
     }
 
     public function testConnect()
     {
         $this->doSkipTestsIfNeeded();
 
-        $connection = new Chrome_Database_Connection_Mysql();
-        $connection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
+        $this->_connection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
 
-        $connection->connect();
+        $this->_connection->connect();
 
-        $this->assertTrue($connection->isConnected());
-        $this->assertTrue($connection->connect());
-
-        Chrome_Database_Registry_Connection::getInstance()->addConnection('mysql_test', $connection, true);
+        $this->assertTrue($this->_connection->isConnected());
+        $this->assertTrue($this->_connection->connect());
     }
 
     public function testIsConnectedOnEmptyConnection()
     {
-        $connection = new Chrome_Database_Connection_Mysql();
-        $this->assertFalse($connection->isConnected());
+        $this->assertFalse($this->_connection->isConnected());
     }
 
     public function testDisconnect()
     {
-        $connection = new Chrome_Database_Connection_Mysql();
-        $connection->disconnect();
+        $this->_connection->disconnect();
     }
 }

@@ -106,7 +106,7 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
         /**
          * setting up test place
          */
-        $this->_db->query('DELETE FROM cpp_user WHERE name = "testfinishRegistration"');
+        //$this->_db->query('DELETE FROM cpp_user WHERE name = "testfinishRegistration"');
 
         //$this->_db->delete()->from( 'user' )->where( 'name = "testfinishRegistration" ' )->execute();
         $this->_model->addRegistrationRequest('testfinishRegistration', $testFinishRegistrationPass, 'testfinishRegistrationEmail', 'testfinishRegistrationKey');
@@ -125,7 +125,7 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->_db->getResult()->getNext(), 'activationKey not deleted aferwards');
 
         $this->_db->clear();
-        $this->_db->query('SELECT * FROM cpp_user WHERE name = "testfinishRegistration"');
+        $this->_db->query('SELECT * FROM cpp_user WHERE name = "testfinishRegistration" ORDER BY id DESC');
         $result = $this->_db->getResult()->getNext();
 
         $this->assertTrue($result !== false, 'no user created');
@@ -136,8 +136,8 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($result2 !== false, 'no entry created in authenticate');
 
-        $this->assertTrue($result2['password'] == $testFinishRegistrationPass);
+        $this->assertTrue($result2['password'] == $testFinishRegistrationPass, 'password does not match');
 
-        $this->assertTrue($result2['password_salt'] == $testfinishRegistrationPassSalt);
+        $this->assertTrue($result2['password_salt'] == $testfinishRegistrationPassSalt, 'password salt does not match');
     }
 }

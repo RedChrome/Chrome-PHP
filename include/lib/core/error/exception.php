@@ -17,7 +17,7 @@
  * @subpackage Chrome.Exception
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.12.2012 13:37:45] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 13:18:22] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -28,7 +28,6 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Exception_Handler_Interface
 {
-
     /**
      * exception()
      *
@@ -59,6 +58,24 @@ interface Chrome_Exception_Processable_Interface
      * @return Chrome_Exception_Handler_Interface
      */
     public function getExceptionHandler();
+}
+
+interface Chrome_Exception_Processable_Static_Interface
+{
+    /**
+     * setExceptionHandler()
+     *
+     * @param mixed $obj
+     * @return void
+     */
+    public static function setExceptionHandler(Chrome_Exception_Handler_Interface $obj);
+
+    /**
+     * getExceptionHandler()
+     *
+     * @return Chrome_Exception_Handler_Interface
+     */
+    public static function getExceptionHandler();
 }
 
 /**
@@ -138,7 +155,7 @@ class Chrome_Exception extends Exception
 
         $trace = $e->getTrace();
 
-        echo '<h1>Uncaught Exception</h1>';
+        echo '<h1>Uncaught Exception of type '.get_class($e).' </h1>';
         echo '<h3>'.$e->getMessage().'</h3>';
         echo $e->getFile().'('.$e->getLine().')<br><br>Call Stack:<br>';
 
@@ -157,8 +174,7 @@ class Chrome_Exception extends Exception
             echo '<br>'."\n";
         }
 
-        die();
-
+        //die();
     }
 
     protected function _getArgs($args) {

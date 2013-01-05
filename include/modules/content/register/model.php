@@ -119,7 +119,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 		try {
 
             if($resource === null) {
-                $resource = new Chrome_Authentication_Create_Resource_Database( $name, $pass, $pw_salt );
+                $resource = new Chrome_Authentication_Create_Resource_Database( $pass, $pw_salt );
             }
 
 			Chrome_Authentication::getInstance()->createAuthentication( $resource );
@@ -134,7 +134,6 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 		catch ( Chrome_Exception_Database $exception ) {
 
 			Chrome_Log::logException( $exception );
-
 			return false;
 		}
 
