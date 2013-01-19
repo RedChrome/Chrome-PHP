@@ -17,7 +17,7 @@
  * @subpackage Chrome.File_System
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:39:10] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.01.2013 20:33:38] --> $
  * @author     Alexander Book
  */
 
@@ -266,7 +266,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	 */
 	public function read($path)
 	{
-		$path = trim($path, '/');
+		$path = self::_sanitizePath($path);
 
 		if(isset($this->_cache[$path])) {
 
@@ -329,7 +329,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	public function isFile($path)
 	{
 	    // is not everytime needed, but its better...
-		$path = ltrim(trim($path, '/'), './');
+		$path = self::_sanitizePath($path);
 
 		$this->_updateCache($path, self::FILE_SYSTEM_READ_TYPE_FILE);
 
@@ -378,8 +378,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	 */
 	public function isDir($path)
 	{
-		$path = ltrim(trim($path, '/'), './');
-
+		$path = self::_sanitizePath($path);
 		$this->_updateCache($path, self::FILE_SYSTEM_READ_TYPE_DIR);
 		// entry in cache AND file exists
 		if(isset($this->_cache[$path]) AND $this->_cache[$path][self::FILE_SYSTEM_KEY_TYPE] != self::FILE_SYSTEM_DOES_NOT_EXIST) {
@@ -426,7 +425,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	 */
 	public function exists($path)
 	{
-		$path = ltrim(trim($path, '/'), './');
+		$path = self::_sanitizePath($path);
 
 		if(isset($this->_cache[$path]) AND $this->_cache[$path][self::FILE_SYSTEM_KEY_TYPE] !== self::FILE_SYSTEM_DOES_NOT_EXIST)
 			return true;
@@ -470,11 +469,10 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	 */
 	private function _exists($path, $type = self::FILE_SYSTEM_READ_TYPE_FILE)
 	{
-
 		switch($type) {
 			case self::FILE_SYSTEM_READ_TYPE_FILE:
 				{
-					if(is_file($path) AND file_exists($path)) {
+					if(is_file($path) ) {//AND file_exists($path)) {
 						return true;
 					} else {
 						return false;
@@ -483,7 +481,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 
 			case self::FILE_SYSTEM_READ_TYPE_DIR:
 				{
-					if(is_dir($path) AND file_exists($path)) {
+					if(is_dir($path) ) {//AND file_exists($path)) {
 						return true;
 					} else {
 						return false;
@@ -516,7 +514,6 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	 */
 	private function _add($path, $type)
 	{
-
 		$this->_change = true;
 
 		switch($type) {
@@ -616,7 +613,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	 */
 	private function _getInfoDir($path, $update = false)
 	{
-		if($update === true AND isset($this->_cache[$path][self::FILE_SYSTEM_KEY_FILE]) AND $this->_cache[$path][self::FILE_SYSTEM_KEY_FILE] !== false) {
+		if($update === true AND isset($this->_cache[$path][self::FILE_SYSTEM_KEY_FILE]) AND $this->_cache[$path][self::FILE_SYSTEM_KEY_FILE] !== self::FILE_SYSTEM_DOES_NOT_EXIST) {
 			$files = scandir($path);
 			array_shift($files);
 			array_shift($files);
@@ -627,6 +624,19 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 		return array(self::FILE_SYSTEM_KEY_TIMESTAMP => CHROME_TIME, self::FILE_SYSTEM_KEY_TYPE => self::FILE_SYSTEM_READ_TYPE_DIR, self::FILE_SYSTEM_KEY_PERMISSION => substr(decoct(fileperms($path)), 1),
 			self::FILE_SYSTEM_KEY_IS_READABLE => is_readable($path), self::FILE_SYSTEM_KEY_IS_WRITEABLE => is_writeable($path), self::FILE_SYSTEM_KEY_FILE => $files);
 	}
+
+    /**
+     * Chrome_File_System_Read::__sanitizePath()
+     *
+     * removes unnecessary chars of the path
+     *
+     * @param string $path
+     * @return string
+     */
+    private function _sanitizePath($path)
+    {
+        return ltrim(trim($path, '/'), './');
+    }
 
 	/**
 	 * Chrome_File_System_Read::getDirInfo()
@@ -639,8 +649,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	 */
 	public function getDirInfo($path, $files = false)
 	{
-
-		$path = ltrim(trim($path, '/'), './');
+		$path = self::_sanitizePath($path);
 
         if(!$this->isDir($path)) {
             throw new Chrome_Exception('Cannot get information about a directory("'.$path.'") that does not exist in Chrome_File_System_Read::getDirInfo()!');
@@ -678,7 +687,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
     {
         require_once LIB.'core/file/file.php';
 
-        ltrim(trim($file, '/'), './');
+        $file = self::_sanitizePath($file);
 
         try {
             Chrome_File::delete($file);
@@ -704,7 +713,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
     {
         require_once LIB.'core/file/dir.php';
 
-        ltrim(trim($path, '/'), './');
+        $path = self::_sanitizePath($path);
 
         try {
             Chrome_Dir::delete($path);
@@ -727,7 +736,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	 */
 	public function getInfo($path)
 	{
-		$path = ltrim(trim($path, '/'), './');
+		$path = self::_sanitizePath($path);
 
 		if(isset($this->_cache[$path]))
 			return $this->_cache[$path];
@@ -842,4 +851,37 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
             return array();
         }
     }
+
+    /**
+     * Chrome_File_System_Read::forceCacheUpdate()
+     *
+     * Forces the cache to update it values
+     *
+     * @param string $path
+     * @param boolean $file true for file update, false for dir update
+     * @return void
+     */
+     public function forceCacheUpdate($path, $file = true)
+     {
+        $path = self::_sanitizePath($path);
+        // only do smt. if cache entry exists
+        if(isset($this->_cache[$path])) {
+            if($this->_cache[$path][self::FILE_SYSTEM_KEY_TYPE] === self::FILE_SYSTEM_READ_TYPE_DIR) {
+                $this->_cache[$path] = $this->_getInfoDir($path, true);
+            } else if($this->_cache[$path][self::FILE_SYSTEM_KEY_TYPE] === self::FILE_SYSTEM_READ_TYPE_FILE) {
+               $this->_cache[$path] = $this->_getInfoFile($path, true);
+            } else {
+                if($file === true && $this->_exists($path, self::FILE_SYSTEM_READ_TYPE_FILE)) {
+                    $this->_isFile($path);
+                } else if($file === false && $this->_exists($path, self::FILE_SYSTEM_READ_TYPE_DIR)) {
+                    $this->_isDir($path);
+                } else {
+                    return;
+                }
+            }
+        }
+
+        $this->_change = true;
+
+     }
 }

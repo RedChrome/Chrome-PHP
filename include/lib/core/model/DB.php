@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.12.2012 18:44:08] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.01.2013 17:34:38] --> $
  * @author     Alexander Book
  */
 
@@ -50,7 +50,11 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
 
     protected $_dbConnection            = null;
 
+    // this is a composition set INSIDE the child class
     protected $_dbComposition           = null;
+
+    // this is a composition injected from OUTSIDE the child class
+    protected $_dbDIComposition         = null;
 
     /**
      * Server address
@@ -232,5 +236,16 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
         }
 
         return $this->_dbInterfaceInstance;
+    }
+
+    protected function _getDBInterfaceByComposition()
+    {
+        if($this->_dbComposition === null) {
+            throw new Chrome_Exception('No default database composition set!');
+        } else {
+
+            $this->_dbInterfaceInstance = Chrome_Database_Facade::initComposition($this->_dbComposition, $this->_dbDIComposition);
+            return $this->_dbInterfaceInstance;
+        }
     }
 }

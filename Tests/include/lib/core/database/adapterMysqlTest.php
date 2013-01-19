@@ -47,14 +47,14 @@ class DatabaseAdapterMysqlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $this->_db->getAdapter()->getAffectedRows());
     }
 
-    public function testGetAffectedRows() {
-
+    public function testGetAffectedRows()
+    {
         $this->doSkipTestsIfNeeded();
 
         $this->_db->query('DELETE FROM cpp_user_regist LIMIT 1');
-        
+
         $this->assertTrue($this->_db->getAdapter()->isEmpty());
-        
+
         // this depends on your mysql server version...
         $this->assertGreaterThanOrEqual(0, $this->_db->getAdapter()->getAffectedRows());
     }
@@ -66,7 +66,6 @@ class DatabaseAdapterMysqlTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Chrome_Exception_Database');
 
         $this->_db->query('SELECT * FROM cpp_require LIgMIT 0,1');
-
     }
 
     public function testBehaviourOnWrongQuery() {

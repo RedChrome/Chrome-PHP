@@ -17,7 +17,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 12:13:05] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.01.2013 20:08:52] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -139,7 +139,7 @@ class Chrome_File
 	 */
 	public static function dirExists($dir)
 	{
-		return is_dir($dir);
+		return Chrome_Dir::exists($dir);
 	}
 
 	/**
@@ -267,8 +267,10 @@ class Chrome_File
 	 */
 	public static function mkFile($file, $chmod = 0777)
 	{
-		if(!self::dirExists($file))
+		if(!self::dirExists($file)) {
+		    //var_dump($file);
 			Chrome_Dir::createDir($file, $chmod);
+        }
 
 		if(!self::exists($file)) {
 			@$fp = fopen($file, 'xb');
@@ -276,6 +278,9 @@ class Chrome_File
 				return false;
 			fclose($fp);
 			self::chper($file, $chmod);
+
+            Chrome_File_System_Read::getInstance()->forceCacheUpdate($file, true);
+
 			return true;
 		} else return false;
 	}

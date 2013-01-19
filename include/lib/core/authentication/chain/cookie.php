@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.12.2012 14:17:53] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.01.2013 16:53:33] --> $
  * @link       http://chrome-php.de
  */
 
@@ -30,7 +30,6 @@ if(CHROME_PHP !== true) die();
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
- * @todo move some code to separate model and refactor methods (split some up)
  */
 class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abstract
 {

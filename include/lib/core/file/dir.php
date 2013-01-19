@@ -17,15 +17,14 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 22:45:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.01.2013 20:10:01] --> $
  */
 
-if(CHROME_PHP !== true)
-	die();
+if(CHROME_PHP !== true) die();
 /**
  * load file_system class
  */
-require_once LIB.'core/file_system/file_system.php';
+require_once LIB . 'core/file_system/file_system.php';
 
 /**
  * Chrome_Dir Klasse
@@ -58,235 +57,230 @@ require_once LIB.'core/file_system/file_system.php';
 
 class Chrome_Dir
 {
-	/**
-	 * Wrapper for the standard dir exists function
-	 *
-	 * @param string $dir dir path
-	 * @return boolean True if $dir is a dir
-	 * @since 1.0
-	 */
-	public static function exists($dir)
-	{
-		return is_dir($dir);
-	}
+    /**
+     * Wrapper for the standard dir exists function
+     *
+     * @param string $dir dir path
+     * @return boolean True if $dir is a dir
+     * @since 1.0
+     */
+    public static function exists($dir)
+    {
+        $array = explode('/', $dir);
 
-	/**
-	 * Checks wheter $file has an extension OR not
-	 *
-	 * @param string $file file
-	 * @return boolean true if file has an extension, else false
-	 */
-	public static function hasExt($file)
-	{
-		if(strpos($file, '.') === false)
-			return false;
-		else
-			return true;
-	}
+        // if an filename was given too, delete it from the array
+        if(self::hasExt(end($array)) or end($array) === '') {
+            array_pop($array);
+        }
 
-	/**
-	 * Creates a directory
-	 *
-	 * @param string $dest Path for new dir
-	 * @param string $chmod permisson for dir
-	 * @return boolean True on success
-	 * @since 1.0
-	 *
-	 */
-	public static function createDir($dest, $chmod = 0777)
-	{
-	    $dest = trim($dest);
+        return is_dir(implode('/', $array));
+    }
 
-		$array = explode('/', $dest);
-		$i = 0;
-		$dir = '';
+    /**
+     * Checks wheter $file has an extension OR not
+     *
+     * @param string $file file
+     * @return boolean true if file has an extension, else false
+     */
+    public static function hasExt($file)
+    {
+        if(strpos($file, '.') === false) return false;
+        else  return true;
+    }
 
-		// if an filename was given too, delete it from the array
-		if(self::hasExt(end($array)))
-			array_pop($array);
+    /**
+     * Creates a directory
+     *
+     * @param string $dest Path for new dir
+     * @param string $chmod permisson for dir
+     * @return boolean True on success
+     * @since 1.0
+     *
+     */
+    public static function createDir($dest, $chmod = 0777)
+    {
+        $dest = trim($dest);
 
-		while(isset($array[$i]) AND !empty($array[$i])) {
+        $array = explode('/', $dest);
+        $i = 0;
+        $dir = '';
 
-			$dir .= $array[$i].'/';
-			if(!is_dir($dir))
-				mkdir($dir, $chmod);
-			++$i;
-		}
+        // if an filename was given too, delete it from the array
+        if(self::hasExt(end($array)) or end($array) === '') {
+            array_pop($array);
+        }
 
-		return true;
-	}
+        while(isset($array[$i]) and !empty($array[$i])) {
 
-	/**
-	 * Deletes all files in a dir recursive
-	 *
-	 * @param string $dir Path
-	 * @return true on success
-	 *
-	 */
-	public static function truncateDir($dir)
-	{
-		$files = scandir($dir);
+            $dir .= $array[$i] . '/';
+            if(!is_dir($dir)) {
+                $success = mkdir($dir, $chmod);
+                if($success === false) {
+                    return false;
+                }
+            }
 
-		foreach($files AS $file)
-		{
-			if($file == '.' OR $file == '..')
-				continue;
+            ++$i;
+        }
 
-			if(is_dir($dir.'/'.$file))
-				self::truncateDir(($dir.'/'.$file));
-			if(is_file($dir.'/'.$file))
-				@unlink($dir.'/'.$file);
-		}
+        Chrome_File_System_Read::getInstance()->forceCacheUpdate($dest, false);
 
-	}
+        return true;
+    }
 
-	/**
-	 *	Delets a path AND all sub dirs AND files
-	 *
-	 * @param string $path path to dir
-	 * @return boolean true on success
-	 * @since 1.0
-	 *
-	 */
-	public static function deleteDir($path)
-	{
-		if(!is_dir($path))
-			return true;
+    /**
+     * Deletes all files in a dir recursive
+     *
+     * @param string $dir Path
+     * @return true on success
+     *
+     */
+    public static function truncateDir($dir)
+    {
+        $files = scandir($dir);
 
-		$dir = dir($path);
+        foreach($files as $file) {
+            if($file == '.' or $file == '..') continue;
 
-		while($file = $dir->read()) {
-			if(is_dir($path.'/'.$file) AND ($file != '.' AND $file != '..'))
-				self::deleteDir($path.'/'.$file);
-			else
-				@unlink($path.'/'.$file);
-		}
+            if(is_dir($dir . '/' . $file)) self::truncateDir(($dir . '/' . $file));
+            if(is_file($dir . '/' . $file)) @unlink($dir . '/' . $file);
+        }
 
-		if(!rmdir($path))
-			throw new Chrome_Exception('Unknown Error: Coudn\'t delete path: '.$path);
-		else
-			return true;
-	}
+    }
 
-	/**
-	 * Changes permission for a dir AND all subfiles AND subdirs
-	 *
-	 * @param string $path path to dir
-	 * @param string $chmod permission to set = '0777'
-	 * @return boolean true
-	 * @since 1.0
-	 */
-	public static function chper($path, $chmod = 0777)
-	{
-		if(!is_dir($path))
-			return false;
+    /**
+     *	Delets a path AND all sub dirs AND files
+     *
+     * @param string $path path to dir
+     * @return boolean true on success
+     * @since 1.0
+     *
+     */
+    public static function deleteDir($path)
+    {
+        if(!is_dir($path)) return true;
 
-		$dir = dir($path);
+        $dir = dir($path);
 
-		while($file = $dir->read()) {
-			if(is_dir($path.'/'.$file) AND ($file != '.' AND $file != '..'))
-				self::chper($path.'/'.$file);
-			else
-				@chmod($path.'/'.$file);
-		}
+        while($file = $dir->read()) {
+            if(is_dir($path . '/' . $file) and ($file != '.' and $file != '..')) self::deleteDir($path . '/' . $file);
+            else @unlink($path . '/' . $file);
+        }
 
-		return true;
-	}
-	/**
-	 * Copy a folder recursivly
-	 *
-	 * @param string $source source folder
-	 * @param string $dest destination
-	 * @return boolean true on success
-	 */
-	public static function copyShellFolder($source, $dest)
-	{
+        if(!rmdir($path)) throw new Chrome_Exception('Unknown Error: Coudn\'t delete path: ' . $path);
+        else  return true;
+    }
 
-		if(!is_dir($source))
-			return false;
+    /**
+     * Changes permission for a dir AND all subfiles AND subdirs
+     *
+     * @param string $path path to dir
+     * @param string $chmod permission to set = '0777'
+     * @return boolean true
+     * @since 1.0
+     */
+    public static function chper($path, $chmod = 0777)
+    {
+        if(!is_dir($path)) return false;
 
-		exec('cp -Rv '.$source.' '.$dest, $var); // copy a folder recursivly
-		return $var;
-	}
+        $dir = dir($path);
 
-	/**
-	 * Delete a folder recursivly
-	 *
-	 * @param string $sounrce folder to delete
-	 * @return boolean true on success
-	 */
-	public static function deleteShellFolder($source)
-	{
+        while($file = $dir->read()) {
+            if(is_dir($path . '/' . $file) and ($file != '.' and $file != '..')) self::chper($path . '/' . $file);
+            else @chmod($path . '/' . $file);
+        }
 
-		if(!is_dir($source))
-			return false;
+        return true;
+    }
+    /**
+     * Copy a folder recursivly
+     *
+     * @param string $source source folder
+     * @param string $dest destination
+     * @return boolean true on success
+     */
+    public static function copyShellFolder($source, $dest)
+    {
 
-		exec('rm -Rv '.$source, $var); // delete a folder recursivly
+        if(!is_dir($source)) return false;
 
-		return $var;
-	}
-	/**
-	 * Copy all files from one dir to another
-	 *
-	 * @param string $srcPath source dir
-	 * @param string $destPath destination, destination must be a dir!
-	 * @return true on success
-	 */
-	public static function copyFiles($srcPath, $destPath)
-	{
-		if(!is_dir($srcPath) OR !is_dir($destPath))
-			return false;
+        exec('cp -Rv ' . $source . ' ' . $dest, $var); // copy a folder recursivly
+        return $var;
+    }
 
-		$dir = dir($srcPath);
+    /**
+     * Delete a folder recursivly
+     *
+     * @param string $sounrce folder to delete
+     * @return boolean true on success
+     */
+    public static function deleteShellFolder($source)
+    {
 
-		while($file = $dir->read()) {
-			if(is_file($srcPath.'/'.$file))
-				@copy($srcPath.'/'.$file, $destPath.'/'.$file);
-			elseif(is_dir($srcPath.'/'.$file) AND ($file != '.' AND $file != '..'))
-				self::copyFiles($srcPath.'/'.$file, $destPath.'/'.$file);
-		}
+        if(!is_dir($source)) return false;
 
-		unset($dir);
-		return true;
-	}
+        exec('rm -Rv ' . $source, $var); // delete a folder recursivly
 
-	/**
-	 * Wrapper for copyFiles, but it creates the destination dir
-	 *
-	 * @param string $srcPath source Path
-	 * @param string $destPath destination, if doesn't exist, we create it
-	 * @return true on success
-	 */
-	public static function copy($srcPath, $destPath)
-	{
-		throw new Chrome_Exception('Function isn\'t finished!');
+        return $var;
+    }
+    /**
+     * Copy all files from one dir to another
+     *
+     * @param string $srcPath source dir
+     * @param string $destPath destination, destination must be a dir!
+     * @return true on success
+     */
+    public static function copyFiles($srcPath, $destPath)
+    {
+        if(!is_dir($srcPath) or !is_dir($destPath)) return false;
 
-		if(!is_dir($srcPath))
-			return false;
+        $dir = dir($srcPath);
 
-		//first we create the dir
-		if(!is_dir($destPath))
-			self::createDir($srcPath.$destPath);
+        while($file = $dir->read()) {
+            if(is_file($srcPath . '/' . $file)) @copy($srcPath . '/' . $file, $destPath . '/' . $file);
+            elseif(is_dir($srcPath . '/' . $file) and ($file != '.' and $file != '..')) self::copyFiles($srcPath . '/' . $file, $destPath . '/' . $file);
+        }
 
-		//now we copy all files
-		return self::copyFiles($srcPath, $destPath);
-	}
+        unset($dir);
+        return true;
+    }
 
-	/**
-	 * Moves a dir to another dir
-	 *
-	 * @param string $srcPath source Path
-	 * @param string $destPath destination
-	 * @return true on success
-	 */
-	public static function move($srcPath, $destPath)
-	{
-		// copy the dir AND files
-		$return = self::copy($srcPath, $destPath);
-		// delete old dir
-		if($return)
-			return self::deleteDir($srcPath);
-	}
+    /**
+     * Wrapper for copyFiles, but it creates the destination dir
+     *
+     * @param string $srcPath source Path
+     * @param string $destPath destination, if doesn't exist, we create it
+     * @return true on success
+     */
+    public static function copy($srcPath, $destPath)
+    {
+        throw new Chrome_Exception('Function isn\'t finished!');
+
+        if(!is_dir($srcPath)) return false;
+
+        //first we create the dir
+        if(!is_dir($destPath)) self::createDir($srcPath . $destPath);
+
+        //now we copy all files
+        return self::copyFiles($srcPath, $destPath);
+    }
+
+    /**
+     * Moves a dir to another dir
+     *
+     * @param string $srcPath source Path
+     * @param string $destPath destination
+     * @return true on success
+     */
+    public static function move($srcPath, $destPath)
+    {
+        // copy the dir AND files
+        $return = self::copy($srcPath, $destPath);
+        // delete old dir
+        if($return) return self::deleteDir($srcPath);
+    }
 
 
-} ?>
+}
+
+?>

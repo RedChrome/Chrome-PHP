@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.12.2012 18:20:32] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.01.2013 17:37:52] --> $
  * @link       http://chrome-php.de
  */
 
@@ -88,16 +88,15 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
 
         // returns an array with password, password_salt, and id if user was found, false else
         $array = $this->_model->getPasswordAndSaltByIdentity($id);
-        
-        
+
+
         // user doesn't exist
         if($array == false) {
             return $this->_chain->authenticate($resource);
         }
 
-        // TODO: move to model
-        $userPw = Chrome_Hash::getInstance()->hash_algo($userPw, CHROME_USER_HASH_ALGORITHM, $array['password_salt']);
-               
+        $userPw = $this->_model->hashUserPassword($userPw, $array['password_salt']); // Chrome_Hash::getInstance()->hash_algo($userPw, CHROME_USER_HASH_ALGORITHM, $array['password_salt']);
+
         // pw was wrong
         if($userPw != $array['password']) {
             return $this->_chain->authenticate($resource);
@@ -253,8 +252,10 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
                            'dbTime'           => 'time',
                           );
 
-    public function __construct(array $options = array())
+    public function __construct(array $options = array(), Chrome_Database_Composition_Interface $composition = null)
     {
+        $this->_dbDIComposition = $composition;
+        $this->_dbComposition = new Chrome_Database_Composition('model');
         $this->_options = array_merge($this->_options, $options);
     }
 
@@ -263,7 +264,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
      */
     public function getPasswordAndSaltByIdentity($identity)
     {
-        $db = $this->_getDBInterface();
+        $db = $this->_getDBInterfaceByComposition();
 
         $result = $db->prepare('authenticationGetPasswordAndSaltByIdentity')
                         ->execute(array($identity));
@@ -287,7 +288,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
     {
         $id = (int) $id;
 
-        $db = $this->_getDBInterface();
+        $db = $this->_getDBInterfaceByComposition();
 
         $db->prepare('authenticationUpdateTimeById')
             ->execute(array(CHROME_TIME, $id));
@@ -302,7 +303,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
             $hash = $credential;
         }
 
-        $db = $this->_getDBInterface();
+        $db = $this->_getDBInterfaceByComposition();
 
         $db->prepare('authenticationCreateAuthentication')
             ->execute(array($hash, $salt, CHROME_TIME));
@@ -310,12 +311,17 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
 
     public function getIDByPassword($pw, $pwSalt)
     {
-        $db = $this->_getDBInterface();
+        $db = $this->_getDBInterfaceByComposition();
 
         $result = $db->prepare('authenticationGetIdByPassword')
             ->execute(array($pw, $pwSalt));
 
         $return = $result->getNext();
         return (int) $return['id'];
+    }
+
+    public static function hashUserPassword($password, $salt)
+    {
+        return Chrome_Hash::getInstance()->hash_algo($password, CHROME_USER_HASH_ALGORITHM, $salt);
     }
 }

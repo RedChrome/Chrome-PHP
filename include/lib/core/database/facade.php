@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 13:40:39] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.01.2013 17:24:10] --> $
  * @link       http://chrome-php.de
  */
 
@@ -221,6 +221,10 @@ class Chrome_Database_Facade
 
     public static function getDefaultConnection() {
     	return self::$_defaultConnection;
+    }
+
+    public static function getDefaultConnectionObject() {
+        return Chrome_Database_Registry_Connection::getInstance()->getConnectionObject(self::$_defaultConnection);
     }
 
 }

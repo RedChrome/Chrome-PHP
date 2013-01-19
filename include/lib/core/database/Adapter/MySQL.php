@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.12.2012 18:25:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.01.2013 16:52:17] --> $
  * @link       http://chrome-php.de
  */
 
@@ -46,7 +46,7 @@ class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
 
             // TODO: what happens if affected_rows = false?
             $this->_isEmpty = !(mysql_affected_rows($this->_connection) > 0);
-            
+
             /*$this->_cache = $this->getNext();
 
             if($this->_cache === false) {
@@ -56,7 +56,7 @@ class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
                 $this->_isEmpty = false;
             }*/
         } else {
-            $this->_isEmpty = false;
+            $this->_isEmpty = true;
         }
     }
 
