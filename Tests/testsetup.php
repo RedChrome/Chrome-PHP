@@ -20,9 +20,9 @@
  * @author     Alexander Book
  */
 
-if( !defined( 'CHROME_PHP' ) ) {
-	define( 'CHROME_PHP', true );
-	define('DB_DEFAULT_CONNECTION', 'testingConnection');
+if(!defined('CHROME_PHP')) {
+    define('CHROME_PHP', true);
+    define('DB_DEFAULT_CONNECTION', 'testingConnection');
 }
 
 $_SERVER['REQUEST_URI'] = '/root/CHROME_2/';
@@ -32,7 +32,7 @@ $_SERVER['SCRIPT_NAME'] = 'index.php';
 $_SERVER['SERVER_NAME'] = "localhost";
 
 require_once 'include/config.php';
-require_once LIB . 'core/error/exception.php';
+require_once LIB.'core/error/exception.php';
 require_once LIB.'core/mime.php';
 require_once LIB.'core/file_system/file_system.php';
 
@@ -44,4 +44,3 @@ define('MYSQL_DB', 'chrome_2_test');
 define('MYSQL_PORT', 3306);
 
 define('TEST_DATABASE_CONNECTIONS', true);
-

@@ -25,7 +25,8 @@
  * @link       http://chrome-php.de
  */
 
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
 class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstract
 {
@@ -40,16 +41,20 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
 
     public function setConnectionOptions($host, $username, $password, $database, $port = 3306, $socket = null)
     {
+        if(!extension_loaded('mysqli')) {
+            throw new Chrome_Exception('Extension MySQLi not loaded! Cannot use this adapter');
+        }
+        
         $this->_host = $host;
         $this->_username = $username;
         $this->_password = $password;
         $this->_socket = $socket;
         $this->_database = $database;
-        $this->_port = (int)$port;
+        $this->_port = (int) $port;
 
         // persistent connection
         if(stripos($this->_host, 'p:') === false) {
-            $this->_host = 'p:' . $this->_host;
+            $this->_host = 'p:'.$this->_host;
         }
 
         $this->_isSetConnectionOptions = true;
@@ -64,12 +69,12 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
         if($this->_isSetConnectionOptions === false) {
             throw new Chrome_Exception('Cannot connect to MySQL Server without any information about the server! Call setConnectionOptions() before!');
         }
-
+        
         $this->_connection = @new mysqli($this->_host, $this->_username, $this->_password, $this->_database, $this->_port, $this->_socket);
 
         if(mysqli_connect_error() !== null or $this->_connection === null) {
             switch(mysqli_connect_errno()) {
-                    // TODO: add other exceptions
+                // TODO: add other exceptions
 
                 case 1040: // too much connections
                 case 1044: // cannot access database
@@ -77,16 +82,19 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
                 case 2003: // cannot connect to server
                 case 2005:
                     {
-                        throw new Chrome_Exception_Database('Could not establish connection to server on "' . $this->_host . '"!', Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER);
+                        throw new Chrome_Exception_Database('Could not establish connection to server on "'.$this->_host.'"!',
+                                Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER);
                     }
 
                 case 1045: // wrong password
                     {
-                        throw new Chrome_Exception_Database('Could not connect to MySQL Server. Wrong Username and/or password', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD);
+                        throw new Chrome_Exception_Database('Could not connect to MySQL Server. Wrong Username and/or password',
+                                Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD);
                     }
                 default:
                     {
-                        throw new Chrome_Exception_Database('(' . mysqli_connect_errno() . ') ' . mysqli_connect_error(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
+                        throw new Chrome_Exception_Database('('.mysqli_connect_errno().') '.mysqli_connect_error(),
+                                Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
                     }
             }
         }

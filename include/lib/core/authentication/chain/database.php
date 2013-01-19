@@ -88,18 +88,18 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
 
         // returns an array with password, password_salt, and id if user was found, false else
         $array = $this->_model->getPasswordAndSaltByIdentity($id);
-
+        
+        
         // user doesn't exist
         if($array == false) {
             return $this->_chain->authenticate($resource);
         }
 
-        //TODO: move to model
+        // TODO: move to model
         $userPw = Chrome_Hash::getInstance()->hash_algo($userPw, CHROME_USER_HASH_ALGORITHM, $array['password_salt']);
-
+               
         // pw was wrong
         if($userPw != $array['password']) {
-
             return $this->_chain->authenticate($resource);
         }
 

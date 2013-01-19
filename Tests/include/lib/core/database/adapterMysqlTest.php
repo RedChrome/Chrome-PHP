@@ -49,11 +49,12 @@ class DatabaseAdapterMysqlTest extends PHPUnit_Framework_TestCase
 
     public function testGetAffectedRows() {
 
-         $this->doSkipTestsIfNeeded();
+        $this->doSkipTestsIfNeeded();
 
         $this->_db->query('DELETE FROM cpp_user_regist LIMIT 1');
-
+        
         $this->assertTrue($this->_db->getAdapter()->isEmpty());
+        
         // this depends on your mysql server version...
         $this->assertGreaterThanOrEqual(0, $this->_db->getAdapter()->getAffectedRows());
     }

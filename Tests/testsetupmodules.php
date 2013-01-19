@@ -29,7 +29,5 @@ require_once 'testsetupdb.php';
 require_once 'include/main.php';
 Chrome_Front_Controller::getInstance();
 
-
-
 $_SERVER = $_tempServer;
 $GLOBALS = $_tempGlobals;

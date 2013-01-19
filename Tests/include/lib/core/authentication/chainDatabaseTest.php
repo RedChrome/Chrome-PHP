@@ -3,7 +3,6 @@
 require_once 'Tests/testsetup.php';
 require_once 'Tests/dummies/authentication/resource.php';
 
-
 class AuthenticationChainDatabaseTest extends PHPUnit_Framework_TestCase
 {
     protected $_chain = null;
@@ -29,6 +28,7 @@ class AuthenticationChainDatabaseTest extends PHPUnit_Framework_TestCase
     /**
      * Database cannot authenticate without resource...
      */
+
     public function testAuthenticateWithoutResource()
     {
         $authContainer = $this->_chain->authenticate();
@@ -89,7 +89,8 @@ class AuthenticationChainDatabaseTest extends PHPUnit_Framework_TestCase
         return $authContainer;
     }
 
-    public function testAuthenticateWithProperResourceAndRightDataAndSetTime() {
+    public function testAuthenticateWithProperResourceAndRightDataAndSetTime()
+    {
         $this->_setTime = true;
         $this->_updateTime = true;
         $this->setUp();
@@ -98,7 +99,8 @@ class AuthenticationChainDatabaseTest extends PHPUnit_Framework_TestCase
         $this->_chain->deAuthenticate();
     }
 
-    public function testCreateAuthenticationWithGivenSalt() {
+    public function testCreateAuthenticationWithGivenSalt()
+    {
         $resource = new Chrome_Authentication_Create_Resource_Database('myName', 'anyPass', 'anySalt');
 
         $this->_chain->createAuthentication($resource);
@@ -107,8 +109,9 @@ class AuthenticationChainDatabaseTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('myName', $resource->getIdentity());
     }
 
-    public function testCreateAuthenticationWithoutSalt() {
-        $resource = new Chrome_Authentication_Create_Resource_Database('myName' ,'myPassword WIthout a satl');
+    public function testCreateAuthenticationWithoutSalt()
+    {
+        $resource = new Chrome_Authentication_Create_Resource_Database('myName', 'myPassword WIthout a satl');
         $this->_chain->createAuthentication($resource);
 
         $this->assertNotNull($resource->getID());

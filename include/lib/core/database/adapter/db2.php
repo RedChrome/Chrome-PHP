@@ -27,7 +27,7 @@
 
 if(CHROME_PHP !== true) die();
 
-class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
+class Chrome_Database_Adapter_DB2 extends Chrome_Database_Adapter_Abstract
 {
     public function isEmpty()
     {
@@ -36,7 +36,8 @@ class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
 
     public function query($query)
     {
-        $this->_result = mysql_query($query, $this->_connection);
+        // TODO: add COUNT(*) to the query
+        $this->_result = db2_query($this->_connection, $query);
 
         if($this->_result === false) {
             throw new Chrome_Exception_Database('Error while sending "'.$query.'" to database! MySQL Error:'.mysql_error($this->_connection));
@@ -44,26 +45,17 @@ class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
 
         if(is_resource($this->_result) === true) {
 
-            // TODO: what happens if affected_rows = false?
-            $this->_isEmpty = !(mysql_affected_rows($this->_connection) > 0);
-            
-            /*$this->_cache = $this->getNext();
-
-            if($this->_cache === false) {
-                $this->_isEmpty = true;
-            } else {
-
-                $this->_isEmpty = false;
-            }*/
+           //TODO: is it empty?
+           $this->_isEmpty = false;
         } else {
-            $this->_isEmpty = false;
+            $this->_isEmpty = true;
         }
     }
 
     public function getNext()
     {
-        if($this->_result !== false) {
-            return mysql_fetch_array($this->_result, MYSQL_ASSOC);
+       if($this->_result !== false) {
+            return db2_fetch_assoc($this->_result);
         } else {
             return false;
         }
@@ -71,42 +63,33 @@ class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
 
     public function escape($data)
     {
-        return mysql_real_escape_string($data, $this->_connection);
+        return db2_escape_string($data);
     }
 
     public function getAffectedRows()
     {
-        if($this->_result === false ) {
-            return 0;
+        if($this->_result !== false) {
+            return db2_num_rows($this->_result);
         }
-
-        $rows = mysql_affected_rows($this->_connection);
-
-        if($rows <= 0 ) {
-
-            if(is_bool($this->_result)) {
-                return 0;
-            }
-
-            $rows = mysql_num_rows($this->_result);
-
-            if($rows === false) {
-                return 0;
-            }
-
-            return $rows;
-        }
-
-        return $rows;
+        
+        return false;        
     }
 
     public function getErrorCode()
     {
-        return mysql_errno($this->_connection);
+        if($this->_result === false) {
+            return db2_stm_errormsg();
+        }
+        
+        return db2_stmt_errormsg($this->_result);
     }
 
     public function getErrorMessage()
     {
-        return mysql_error($this->_connection);
+        if($this->_result === false) {
+            return db2_stm_error();
+        }
+        
+        return db2_stmt_error($this->_result);
     }
 }

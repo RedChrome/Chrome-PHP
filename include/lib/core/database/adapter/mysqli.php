@@ -25,7 +25,8 @@
  * @link       http://chrome-php.de
  */
 
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
 class Chrome_Database_Adapter_Mysqli extends Chrome_Database_Adapter_Abstract
 {
@@ -60,10 +61,10 @@ class Chrome_Database_Adapter_Mysqli extends Chrome_Database_Adapter_Abstract
 
         if($this->_result === false) {
             $this->_isEmpty = true;
-            throw new Chrome_Exception_Database('Error while sending "' . $query . '" to database! MySQL Error:' . $this->getErrorMessage());
+            throw new Chrome_Exception_Database('Error while sending "'.$query.'" to database! MySQL Error:'.$this->getErrorMessage());
         }
 
-        if(($this->_result instanceof mysqli_result) ) {
+        if(($this->_result instanceof mysqli_result)) {
             $this->_isEmpty = !($this->_result->num_rows > 0);
         } else {
             $this->_isEmpty = true;

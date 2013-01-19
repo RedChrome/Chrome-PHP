@@ -21,13 +21,13 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.12.2012 17:04:39] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.12.2012 18:31:47] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true) die();
 
-class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_Abstract
+class Chrome_Database_Connection_DB2 extends Chrome_Database_Connection_Abstract
 {
     protected $_isSetConnectionOptions = false;
 
@@ -37,11 +37,13 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
     protected $_clientFlags;
     protected $_database;
     protected $_port;
+    protected $_connectionString;
+    protected $_options;
 
-    public function setConnectionOptions($host, $username, $password, $database, $port = 3306, $clientFlags = 0)
+    public function setConnectionOptions($host, $username, $password, $database, $port = 50000, $connectionString = null, $options = array())
     {
-        if(!extension_loaded('postgresql')) {
-            throw new Chrome_Exception('Extension PostgreSQL not loaded! Cannot use this adapter');
+        if(!extension_loaded('db2')) {
+            throw new Chrome_Exception('Extension DB2 not loaded! Cannot use this adapter');
         }
         
         $this->_host        = $host;
@@ -50,6 +52,17 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
         $this->_clientFlags = $clientFlags;
         $this->_database    = $database;
         $this->_port        = $port;
+        $this->_options     = $options;
+        
+        if($connectionString !== null) {
+            $this->_connectionString = $connectionString;
+        } else {
+            // set connection string appropriate to the given authorisation data
+            
+            //TODO: set connection string for db2
+            $this->_connectionString = 'DATABASE='.$database.';HOSTNAME='.$hostname.';PORT='.$port.';';
+            
+        }
 
         $this->_isSetConnectionOptions = true;
     }
@@ -57,32 +70,38 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
     public function connect()
     {
         if($this->_isConnected === true) {
-            return;
+            return true;
         }
 
         if($this->_isSetConnectionOptions === false) {
             throw new Chrome_Exception('Cannot connect with no information! Call setConnectionOptions() before!');
         }
 
-        $this->_connection = pg_connect('host=' . $this->_host . ' port="' . $this->_port . ' user=' . $this->_username . ' password=' . $this->_password . ' dbname=' . $this->_database. ' connect_timeout=1');
+        $this->_connection = @db2_pconnect($this->_connectionString, $this->_username, $this->_password, $this->_options);
 
         if($this->_connection === false) {
-            throw new Chrome_Exception_Database('Could not connect to PostgreSQL server!');
+            // TODO: handle errors
+            
+            
+            
+            return false;
         }
-
+        
+        
         $this->_isConnected = true;
+
+        unset($this->_password, $this->_username, $this->_database, $this->_host, $this->_clientFlags, $this->_port, $this->_options, $this->_connectionString);
 
         return $this->_connection;
     }
 
     public function disconnect()
     {
-        pg_close($this->_connection);
+        // do nothing, we're using a persistent connection
     }
 
     public function getDefaultAdapter()
     {
-        return 'Postgresql';
+        return 'Db2';
     }
-
 }

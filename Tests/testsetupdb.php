@@ -23,13 +23,18 @@ require_once 'testsetup.php';
 
 require_once LIB.'core/database/database.php';
 require_once LIB.'core/database/connection/mysqli.php';
-
 Chrome_Database_Facade::setDefaultConnection('testingConnection');
 
 // configure default database connection
-$defaultConnection = new Chrome_Database_Connection_Mysqli();
-$defaultConnection->setConnectionOptions('localhost', 'test', '', 'chrome_2_test');
-$defaultConnection->connect();
+try {
+    $defaultConnection = new Chrome_Database_Connection_Mysqli();
+    $defaultConnection->setConnectionOptions('localhost', 'test', '', 'chrome_2_test');
+    $defaultConnection->connect();
+} catch(Chrome_Exception $e) {
+    die($e->show($e));
+} catch(Exception $e) {
+    die(var_dump($e));
+}
 
 $dbRegistry = Chrome_Database_Registry_Connection::getInstance();
 $dbRegistry->addConnection(Chrome_Database_Facade::getDefaultConnection(), $defaultConnection, true);

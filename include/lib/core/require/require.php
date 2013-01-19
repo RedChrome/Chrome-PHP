@@ -259,9 +259,8 @@ class Chrome_Require implements Chrome_Require_Interface
 		// $rClass -> $requireClass
 		foreach($this->_requireClass AS $rClass) {
 		    try {
-    			if( ($file = $rClass::getInstance()->classLoad($name)) !== false AND $file !== null) {
+    			if( ($file = call_user_func(array($rClass, 'getInstance'))->classLoad($name)) !== false AND $file !== null) {
     				$this->_model->setClass($name, $file);
-
                     require_once $file;
                     return true;
     			}

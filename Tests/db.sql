@@ -421,4 +421,4 @@ INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 
 INSERT INTO `cp1_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
 (1, 'testAuthenticate', 'testAuthenticateSalt', NULL, 12345678),
-(2, '4c85bf07d5d7c1ee8a6edba0f7646a58b6cb6ce9ea88b08d', 'ahFB319VKaD', NULL, 12345678); -- password is test
+(2, 'eec1d7d507bf854c586a64f7a0db6e8a8db088eae96ccbb6', 'ahFB319VKaD', NULL, 12345678); -- password is test
