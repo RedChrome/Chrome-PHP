@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.12.2012 18:25:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 12:58:27] --> $
  * @link       http://chrome-php.de
  */
 
@@ -71,8 +71,8 @@ class Chrome_Database_Adapter_DB2 extends Chrome_Database_Adapter_Abstract
         if($this->_result !== false) {
             return db2_num_rows($this->_result);
         }
-        
-        return false;        
+
+        return false;
     }
 
     public function getErrorCode()
@@ -80,7 +80,7 @@ class Chrome_Database_Adapter_DB2 extends Chrome_Database_Adapter_Abstract
         if($this->_result === false) {
             return db2_stm_errormsg();
         }
-        
+
         return db2_stmt_errormsg($this->_result);
     }
 
@@ -89,7 +89,12 @@ class Chrome_Database_Adapter_DB2 extends Chrome_Database_Adapter_Abstract
         if($this->_result === false) {
             return db2_stm_error();
         }
-        
+
         return db2_stmt_error($this->_result);
+    }
+
+    public function getLastInsertId() {
+        $id = db2_last_insert_id($this->_connection);
+        return ($id == 0) ? null : 0;
     }
 }

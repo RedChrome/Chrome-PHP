@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.12.2012 18:32:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 12:57:28] --> $
  * @link       http://chrome-php.de
  */
 
@@ -129,5 +129,10 @@ class Chrome_Database_Adapter_Mysqli extends Chrome_Database_Adapter_Abstract
     public function getErrorMessage()
     {
         return $this->_connection->error;
+    }
+
+    public function getLastInsertId()
+    {
+        return ($this->_connection->insert_id == 0) ? null : $this->_connection->insert_id;
     }
 }

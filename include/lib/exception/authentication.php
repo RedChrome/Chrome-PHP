@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authentication
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:51:21] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 14:07:15] --> $
  * @author     Alexander Book
  */
 
@@ -41,7 +41,7 @@ class Chrome_Exception_Handler_Authentication implements Chrome_Exception_Handle
             $e->show($e);
         }
 
-        Chrome_Log::log('Exception in Chrome_Authentication! Error code: '.$e->getCode(), E_ERROR);
+        Chrome_Log::log('Exception in Chrome_Authentication! Error code: '.$e->getCode() .'. Message: '.$e->getMessage(), E_ERROR);
         Chrome_Log::log($e->getTraceAsString(), E_ERROR);
 
         die('Error in authentication! See log files for more information');

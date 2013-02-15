@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authorisation
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 23:01:35] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 15:31:11] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -39,25 +39,4 @@ abstract class Chrome_Authorisation_Asserts_Abstract extends Chrome_Authorisatio
     {
         $this->_asserts[] = $assert;
     }
-
-    /*
-        abstract public function assert(Chrome_Authorisation_Resource_Interface $authResource)
-        {
-        // a  logical interconnection of AND
-        foreach($this->_asserts as $assert) {
-        if($assert->assert($authResource) === false) {
-        return false;
-        }
-        }
-
-        // a  logical interconnection of OR
-        foreach($this->_asserts as $assert) {
-        if($assert->assert($authResource) === true) {
-        return true;
-        }
-        }
-
-        // or any other you like...
-        }
-    */
 }

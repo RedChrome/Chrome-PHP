@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authorisation
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 23:05:00] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 15:28:22] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -93,9 +93,8 @@ class Chrome_Authorisation_Resource implements Chrome_Authorisation_Resource_Int
     protected $_assert         = null;
     protected $_transformation = null;
 
-    public function __construct($id, $transformation, $assert = null)
+    public function __construct($id, $transformation, Chrome_Authorisation_Assert_Interface $assert = null)
     {
-
         $this->_id             = $id;
         $this->_transformation = $transformation;
         $this->_assert         = $assert;
@@ -238,6 +237,14 @@ interface Chrome_Authorisation_Interface
      * @return Chrome_Authorisation_Adapter_Interface
      */
     public static function getAuthorisationAdapter();
+
+    /**
+     * isAllowed()
+     *
+     * @param Chrome_Authorisation_Resource_Interface $obj
+     * @return boolean true if allowed to access resource, false else
+     */
+    public static function isAllowed(Chrome_Authorisation_Resource_Interface $obj);
 }
 
 /**
@@ -267,7 +274,6 @@ class Chrome_Authorisation implements Chrome_Authorisation_Interface
     public static function getInstance()
     {
         // no adapter set, so use default adapter...
-        // default adapter is RBAC
         if(self::$_adapter === null) {
             self::$_adapter = CHROME_AUTHORISATION_DEFAULT_ADAPTER::getInstance();
         }
@@ -297,15 +303,14 @@ class Chrome_Authorisation implements Chrome_Authorisation_Interface
     {
         return self::$_adapter;
     }
-}
 
-function _isAllowed(Chrome_Authorisation_Resource_Interface $resource)
-{
-    static $adapter;
-
-    if($adapter === null) {
-        $adapter = Chrome_Authorisation::getAuthorisationAdapter();
+    /**
+     * Checks whether the user is allowed to access resource or not
+     *
+     * @param Chrome_Authorisation_Resource_Interface $obj
+     * @return boolean true if allowed to access resource, false else
+     */
+    public static function isAllowed(Chrome_Authorisation_Resource_Interface $resource) {
+        self::$_adapter->isAllowed($resource);
     }
-
-    return $adapter->isAllowed($resource);
 }

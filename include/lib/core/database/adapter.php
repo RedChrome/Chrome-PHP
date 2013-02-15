@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 23:03:30] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.01.2013 15:54:26] --> $
  * @link       http://chrome-php.de
  */
 
@@ -38,6 +38,8 @@ interface Chrome_Database_Adapter_Result_Interface
     public function getAffectedRows();
 
     public function isEmpty();
+
+    public function getLastInsertId();
 }
 
 interface Chrome_Database_Adapter_Interface_Interface

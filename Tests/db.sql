@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS `testing`;
+CREATE TABLE IF NOT EXISTS `testing` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `var1` varchar(50) NOT NULL,
+  `var2` varchar(50) NOT NULL,
+  `var3` varchar(100) NOT NULL,
+  `var4` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `cp1_ace`;
 CREATE TABLE IF NOT EXISTS `cp1_ace` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
@@ -22,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `cp1_acg` (
   `name` varchar(100) NOT NULL,
   `description` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `cp1_admin_navi`;
 CREATE TABLE IF NOT EXISTS `cp1_admin_navi` (
@@ -34,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `cp1_admin_navi` (
   `url` varchar(100) NOT NULL,
   `access` int(5) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `cp1_authenticate`;
 CREATE TABLE IF NOT EXISTS `cp1_authenticate` (
@@ -338,7 +348,9 @@ CREATE TABLE IF NOT EXISTS `cp1_user_regist` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-
+--
+-- NEEDED
+--
 INSERT INTO `cp1_require` (`id`, `name`, `path`, `activated`, `order`, `require_class`) VALUES
 (1, 'Chrome_Require_Filter', 'plugins/Require/filter.php', 1, 6, 1),
 (2, 'Chrome_Require_Exception', 'plugins/Require/exception.php', 1, 6, 1),
@@ -399,7 +411,6 @@ INSERT INTO `cp1_class` (`id`, `name`, `file`) VALUES
 (31, 'Chrome_Model_Authentication_Cookie', 'lib/core/authentication/chain/cookie.php'),
 (32, 'Chrome_Authentication_Chain_Cookie', 'lib/core/authentication/chain/cookie.php');
 
-
 INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`) VALUES
 ('blacklist_host', 'Registration', 'localhost,', 'string', '', 0),
 ('comment_block_sec', 'News', '30', 'int', '', 0),
@@ -419,6 +430,27 @@ INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 ('Title_Separator', 'Site', ' :: ', 'string', '', 0),
 ('name', 'Site', 'CHROME-PHP', 'string', '', 0);
 
+INSERT INTO `cp1_authorisation_user_default` (`user_id`, `group_id`) VALUES
+(0, 1); -- guest, this must be set
+
+--
+-- END NEEDED
+--
+
 INSERT INTO `cp1_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
 (1, 'testAuthenticate', 'testAuthenticateSalt', NULL, 12345678),
 (2, '4c85bf07d5d7c1ee8a6edba0f7646a58b6cb6ce9ea88b08d', 'ahFB319VKaD', NULL, 12345678); -- password is test
+
+INSERT INTO `cp1_authorisation_resource_default` (`_resource_id`, `_transformation`, `_access`) VALUES
+-- just for testing authorisation
+('test', 'read', 1234666),
+('test', 'write', 913785),
+('test2', 'anyTrafo', 18462),
+('testIsAllowed', 'guestAllowed', 1),
+('testIsAllowed', 'guestNotAllowed', 123456);
+
+INSERT INTO `cp1_authorisation_user_default` (`user_id`, `group_id`) VALUES
+(1, 123456),
+(2, 89123),
+(3, 8388607),
+(4, 168804);

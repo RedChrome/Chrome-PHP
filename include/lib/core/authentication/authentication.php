@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.12.2012 12:34:57] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 14:39:57] --> $
  * @link       http://chrome-php.de
  */
 
@@ -93,8 +93,24 @@ interface Chrome_Authentication_Interface
 	 *
 	 * @param Chrome_Authentication_Chain_Interface $chain new authentication method
 	 * @return Chrome_Authentication_Interface for fluent interface
-	*/
+    */
 	public function addChain(Chrome_Authentication_Chain_Interface $chain);
+
+    /**
+	 * Sets the first chain object, all other chains are getting lost.
+	 * Like a list in java
+	 *
+	 * @param Chrome_Authentication_Chain_Interface $chain
+	 * @return Chrome_Authentication_Interface
+	*/
+	public function setChain(Chrome_Authentication_Chain_Interface $chain);
+
+    /**
+     * Returns a chain
+     *
+     * @return Chrome_Authentication_Chain_Interface
+     */
+    public function getChain();
 
 	/**
 	 * Undos the authentication
@@ -111,7 +127,7 @@ interface Chrome_Authentication_Interface
 	 * Dont use this to determine whether the user is logged in or just a guest, use for this isUser()!
 	 *
 	 * @return boolean true if authenticated, false else
-		*/
+	*/
 	public function isAuthenticated();
 
 	/**
@@ -158,6 +174,13 @@ interface Chrome_Authentication_Chain_Interface
 	 * @return void
 	 */
 	public function addChain(Chrome_Authentication_Chain_Interface $chain);
+
+    /**
+     * Get a chain
+     *
+     * @return Chrome_Authentication_Chain_Interface
+     */
+    public function getChain();
 
 	/**
 	 * The logic to authenticate
@@ -238,9 +261,19 @@ abstract class Chrome_Authentication_Chain_Abstract implements Chrome_Authentica
 	*/
 	public function addChain(Chrome_Authentication_Chain_Interface $chain)
 	{
-		$this->_chain = $this->_chain->addChain($chain);
+        $this->_chain = $this->_chain->addChain($chain);
 		return $this;
 	}
+
+    /**
+     * Returns a chain
+     *
+     * @return Chrome_Authentication_Chain_Interface
+     */
+    public function getChain()
+    {
+        return $this->_chain;
+    }
 
 	/**
 	 * Sets the first chain object, all other are deleted
@@ -360,6 +393,28 @@ class Chrome_Authentication implements Chrome_Authentication_Interface, Chrome_E
 		return $this;
 	}
 
+    /**
+     * discards all other chains, and sets the given one as the first chain
+     *
+     * @param Chrome_Authentication_Chain_Interface $chain
+	 * @return Chrome_Authentication
+	 */
+    public function setChain(Chrome_Authentication_Chain_Interface $chain)
+    {
+        $this->_chain = $chain;
+        return $this;
+    }
+
+    /**
+     * Returns a chain
+     *
+     * @return Chrome_Authentication_Chain_Interface
+     */
+    public function getChain()
+    {
+        return $this->_chain;
+    }
+
 	/**
 	 * @param Chrome_Authentication_Resource_Interface $resource [optional]
 	 * @return void
@@ -419,6 +474,10 @@ class Chrome_Authentication implements Chrome_Authentication_Interface, Chrome_E
 	 */
 	public function deAuthenticate()
 	{
+	    $this->_isAuthenticated = false;
+        $this->_container = null;
+        $this->_authenticationID = null;
+
 		$this->_chain->deAuthenticate();
 	}
 
