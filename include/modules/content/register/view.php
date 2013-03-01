@@ -1,6 +1,6 @@
 <?php
 
-class Chrome_View_Register extends Chrome_View_Abstract
+class Chrome_View_Register extends Chrome_View_Strategy_Abstract
 {
     public function __construct(Chrome_Controller_Abstract $controller) {
         $this->addTitle('Registrieren');
@@ -8,33 +8,35 @@ class Chrome_View_Register extends Chrome_View_Abstract
     }
 
     public function setStepOne() {
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Register_StepOne($this->_controller));
+
+        $this->_views[] = new Chrome_View_Register_StepOne($this->_controller);
     }
 
     public function setStepTwo() {
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Register_StepTwo($this->_controller));
+
+        $this->_views[] = new Chrome_View_Register_StepTwo($this->_controller);
     }
 
     public function setStepThree() {
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Register_StepThree($this->_controller));
+        $this->_views[] = new Chrome_View_Register_StepThree($this->_controller);
     }
 
     public function setStepNoEmailSent() {
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Register_StepEmailNotSent($this->_controller));
+       $this->_views[] = new Chrome_View_Register_StepEmailNotSent($this->_controller);
     }
 
     public function alreadyRegistered() {
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Register_AlreadyRegistered($this->_controller));
+        $this->_views[] = new Chrome_View_Register_AlreadyRegistered($this->_controller);
     }
 
     public function registrationFinished() {
         $this->addTitle('Fertig');
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Register_Registration_Finished($this->_controller));
+        $this->_views[] = new Chrome_View_Register_Registration_Finished($this->_controller);
     }
 
     public function registrationFailed() {
         $this->addTitle('Fehlgeschlagen');
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Register_Registration_Failed($this->_controller));
+        $this->_views[] = new Chrome_View_Register_Registration_Failed($this->_controller);
     }
 }
 

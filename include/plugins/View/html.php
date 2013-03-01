@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 19:04:34] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 13:48:07] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -45,7 +45,7 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
         return $this->_title . $this->_getDefaultTitleEnding();
     }
 
-    public function addTitle(Chrome_View_Abstract $obj, $title)
+    public function addTitle(Chrome_View_Interface $obj, $title)
     {
         if($this->_title === '') {
             $this->_title = $this->_getDefaultTitleBeginning();
@@ -58,12 +58,12 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
         }
     }
 
-    public function setTitle(Chrome_View_Abstract $obj, $title)
+    public function setTitle(Chrome_View_Interface $obj, $title)
     {
         $this->_title = $title;
     }
 
-    public function addJS(Chrome_View_Abstract $obj, $filename = null, $directory = null)
+    public function addJS(Chrome_View_Interface $obj, $filename = null, $directory = null)
     {
         if($filename === null and $directory === null) {
             if(isset($obj->JS) and is_array($obj->JS)) {
@@ -81,7 +81,7 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
         }
     }
 
-    public function setJS(Chrome_View_Abstract $obj, array $js = null)
+    public function setJS(Chrome_View_Interface $obj, array $js = null)
     {
         if($js === null) {
 
@@ -96,7 +96,7 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
         $this->_JS = $js;
     }
 
-    public function getJS(Chrome_View_Abstract $obj = null, $getAsString = true)
+    public function getJS(Chrome_View_Interface $obj = null, $getAsString = true)
     {
         if($getAsString === true) {
 
@@ -112,7 +112,7 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
         return $this->_JS;
     }
 
-    public function addCSS(Chrome_View_Abstract $obj, $filename = null, $directory = null)
+    public function addCSS(Chrome_View_Interface $obj, $filename = null, $directory = null)
     {
         if($filename === null and $directory === null) {
             if(isset($obj->CSS) and is_array($obj->CSS)) {
@@ -130,7 +130,7 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
         $this->_CSS[] = _PUBLIC . $directory . $filename;
     }
 
-    public function setCSS(Chrome_View_Abstract $obj, array $css = null)
+    public function setCSS(Chrome_View_Interface $obj, array $css = null)
     {
         if($css === null) {
             if(isset($obj->CSS) and is_array($obj->CSS)) {
@@ -144,7 +144,7 @@ class Chrome_View_Helper_HTML extends Chrome_View_Helper_Abstract
         $this->_CSS = $css;
     }
 
-    public function getCSS(Chrome_View_Abstract $obj = null, $getAsString = true)
+    public function getCSS(Chrome_View_Interface $obj = null, $getAsString = true)
     {
         if($getAsString !== true) {
             return $this->_CSS;

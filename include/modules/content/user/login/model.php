@@ -43,16 +43,19 @@ class Chrome_Model_Login extends Chrome_Model_Form_Abstract
 
     public function getIDByIdentity($identity) {
 
-        $db = Chrome_DB_Interface_Factory::factory();
+        $db = Chrome_Database_Facade::getInterface('simple', 'assoc');
 
-        $db->select(array('id'))->from('user')->where('email = "'.$db->escape($identity).'"')->limit(0,1)->execute();
+        $db->query('SELECT `id` FROM cpp_user WHERE email = "?" LIMIT 0,1', array($identity));
 
-        $result = $db->next();
+        $result = $db->getResult();
 
-        if($result === false) {
+        $row = $result->getNext();
+
+        if($row === false) {
+
             throw new Chrome_Exception('Could not find user with identity "'.$identity.'"');
         }
 
-        return $result['id'];
+        return $row['id'];
     }
 }

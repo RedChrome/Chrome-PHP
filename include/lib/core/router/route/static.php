@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 22:25:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2013 14:15:00] --> $
  * @author     Alexander Book
  */
 
@@ -48,8 +48,15 @@ class Chrome_Route_Static implements Chrome_Router_Route_Interface
 
 	public function match( Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data )
 	{
+        $path = trim($url->getPath());
 
-		$row = $this->_model->getRoute( $url->getPath() );
+	    $pos = strripos($path, '.html');
+
+        if($pos !== false) {
+            $path = substr($path, 0, $pos);
+        }
+
+		$row = $this->_model->getRoute( $path );
 
 		if( $row == false ) {
 			return false;

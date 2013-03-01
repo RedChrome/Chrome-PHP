@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.10.2012 01:37:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2013 13:44:14] --> $
  * @author     Alexander Book
  */
 
@@ -102,7 +102,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $this->_elements['stay_loggedin'] = new Chrome_Form_Element_Checkbox($this, 'stay_loggedin', array(
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => false,
             Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array(false),
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array(true),
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array(1),
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array($boolConverter)));
 
         // submit button, nothing special

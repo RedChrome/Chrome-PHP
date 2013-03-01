@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:02:42] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 17:48:12] --> $
  * @author     Alexander Book
  */
 
@@ -26,13 +26,18 @@ if(CHROME_PHP !== true)
 
 require_once 'abstract.php';
 require_once 'style.php';
-
+require_once 'container.php';
+require_once 'mapper.php';
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
 interface Chrome_Design_Renderable
 {
+    /**
+     * @todo remove controller...
+     * @deprecated $controller
+     */
     public function render(Chrome_Controller_Interface $controller);
 }
 
@@ -43,19 +48,13 @@ require_once 'factory.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
-interface Chrome_Design_Interface extends Chrome_Design_Renderable, Chrome_Design_Abstract_Interface
+interface Chrome_Design_Interface extends Chrome_Design_Abstract_Interface
 {
-    public function setDesign(Chrome_Design_Abstract $design);
-
     public function getDesign();
 
     public function setComposite(Chrome_Design_Composite_Abstract $composite);
 
     public function getComposite();
-
-    public static function setStyle(Chrome_Design_Style_Interface $style);
-
-    public static function getStyle();
 }
 
 /**
@@ -70,7 +69,9 @@ class Chrome_Design implements Chrome_Design_Interface
 
     private $_composite = null;
 
-    private static $_style = null;
+    private $_style = null;
+
+    private $_mapper = null;
 
     private function __construct()
     {
@@ -86,15 +87,8 @@ class Chrome_Design implements Chrome_Design_Interface
         return self::$_instance;
     }
 
-    public function setDesign(Chrome_Design_Abstract $design)
-    {
-        $this->_design = $design;
-    }
-
     public function getDesign()
     {
-        $this->_createDesign();
-
         return $this->_design;
     }
 
@@ -115,30 +109,41 @@ class Chrome_Design implements Chrome_Design_Interface
         }
 
         $this->_design = Chrome_Design_Factory::getInstance()->getDesign();
+
+        $this->_style = $this->_design->getStyle();
+
+        $this->_mapper = $this->_design->getMapper();
     }
 
     public function render(Chrome_Controller_Interface $controller)
     {
-        if(self::$_style !== null) {
-            self::$_style->apply($controller);
-        }
+        $renderableList = new Chrome_Design_Renderable_Container_List();
+
+        // call loader
+
+
+        // call style
+        $this->_style->setRenderableList($renderableList);
+        $this->_style->apply($controller);
+
+        // this adds the content controller view
+        $controller->addViews($renderableList);
+
+        // call mapper
+        $this->_mapper->mapAll($renderableList);
 
         $controller->getResponse()->write($this->_composite->render($controller));
-        // render design AND send data to browser
-        // Chrome_Response::getInstance()->write($this->_composite->render());
     }
 
     public function get($string, Chrome_Design_Renderable $obj = null) {
         return $this->_design->get($string, $obj);
     }
 
-    public static function setStyle(Chrome_Design_Style_Interface $style) {
-        self::$_style = $style;
+    public function getStyle() {
+        return $this->_style;
     }
 
-    public static function getStyle() {
-        return self::$_style;
+    public function getMapper() {
+        return $this->_mapper;
     }
 }
-
-Chrome_Design::getInstance();

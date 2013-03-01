@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.12.2010 14:57:30] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 16:28:47] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -33,7 +33,7 @@ if(CHROME_PHP !== true)
  * @version 2009/11/16/15/45
  * @access public
  */
-class Chrome_Require_Design implements Chrome_Require_Interface
+class Chrome_Require_Design implements Chrome_Require_Loader_Interface
 {
     /**
      * Contains instance of this class

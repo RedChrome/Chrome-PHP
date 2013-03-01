@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.01.2013 18:28:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 17:32:27] --> $
  * @link       http://chrome-php.de
  */
 
@@ -85,13 +85,6 @@ interface Chrome_Front_Controller_Interface extends Chrome_Exception_Processable
      * @return
      */
     public function setResponse(Chrome_Response $response);
-
-    /**
-     * handleRequest()
-     *
-     * @return
-     */
-    public function handleRequest();
 
     /**
      * init()
@@ -202,6 +195,8 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
     public static function getInstance()
     {
         if(self::$_exceptionHandler === null) {
+
+            require_once LIB.'exception/frontcontroller.php';
             self::$_exceptionHandler = new Chrome_Exception_Handler_FrontController();
         }
 
@@ -221,8 +216,7 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
     {
         try {
             $this->init();
-        }
-        catch (Chrome_Exception $e) {
+        } catch (Chrome_Exception $e) {
             self::$_exceptionHandler->exception($e);
         }
     }
@@ -234,11 +228,17 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
      */
     public function init()
     {
+        require_once LIB.'core/require/model.php';
+        Chrome_Require::setModel(Chrome_Model_Require::getInstance());
+
         // init require-class, can be skipped if every class is defined
         // but if not, then we get nasty error, that cannot get handled easily
         $require = Chrome_Require::getInstance();
         // startup registry, can be skipped
         $registry = Chrome_Registry::getInstance();
+
+        Chrome_Cookie::getInstance();
+        Chrome_Session::getInstance();
 
         // init logging
         $log = Chrome_Log::getInstance();
@@ -317,6 +317,8 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             // matches routes to administration site
             new Chrome_Route_Administration(Chrome_Model_Route_Administration::getInstance());
         }
+
+        Chrome_View_Abstract::setPluginObject(Chrome_View_Handler::getInstance());
     }
 
     /**
@@ -335,29 +337,22 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             $this->_controller = $resource->initClass(Chrome_Request::getInstance()->getRequest());
             $this->_controller->setExceptionHandler(new Chrome_Exception_Handler_Default());
 
-            $this->handleRequest();
-        }
-        catch (Chrome_Exception $e) {
+
+            $this->_response = $this->_controller->getResponse();
+
+            $this->_preprocessor->processFilters($this->_request, $this->_response);
+
+            $this->_controller->execute();
+
+            Chrome_Design::getInstance()->render($this->_controller);
+
+            $this->_postprocessor->processFilters($this->_request, $this->_response);
+
+            $this->_response->flush();
+
+        } catch (Chrome_Exception $e) {
             self::$_exceptionHandler->exception($e);
         }
-    }
-
-    /**
-     * Chrome_Front_Controller::handleRequest()
-     *
-     * @return void
-     */
-    public function handleRequest()
-    {
-        $this->_response = $this->_controller->getResponse();
-
-        $this->_preprocessor->processFilters($this->_request, $this->_response);
-
-        $this->_controller->execute();
-
-        $this->_postprocessor->processFilters($this->_request, $this->_response);
-
-        $this->_response->flush();
     }
 
     /**

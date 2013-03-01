@@ -17,29 +17,33 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:28:44] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 13:23:22] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true) die();
 
-/**#@!
- * load some specific model classes
- */
-require_once 'decorator.php';
-require_once 'DB.php';
-require_once 'cache.php';
-require_once 'HTTP.php';
-require_once 'form.php';
-/**#@!*/
+interface Chrome_Model_Interface
+{
+}
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Model
  */
-abstract class Chrome_Model_Abstract
+abstract class Chrome_Model_Abstract implements Chrome_Model_Interface
 {
     protected function __construct()
     {
     }
 }
+
+/**#@!
+ * load some specific model classes
+ */
+require_once 'decorator.php';
+require_once 'database.php';
+require_once 'cache.php';
+require_once 'HTTP.php';
+require_once 'form.php';
+/**#@!*/

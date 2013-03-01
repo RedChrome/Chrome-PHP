@@ -11,12 +11,10 @@ class Chrome_Controller_Index extends Chrome_Controller_Content_Abstract
 		$this->_view = new Chrome_View_Index( $this );
 
 		$this->_model = new Chrome_Model_HTTP_Index();
-		#$this->filter['postprocessor'][] = new Chrome_Filter_JSON();
 	}
 
 	protected function _execute()
 	{
-
 		$this->_form = new Chrome_Form_Index();
 
 		if( $this->_form->isCreated() ) {
@@ -38,13 +36,16 @@ class Chrome_Controller_Index extends Chrome_Controller_Content_Abstract
 			$this->_form->create();
 		}
 
-		$this->_data = $this->_model->getAllData();
-
 		$this->_view->doSTH();
+	}
+
+    public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
 
         $obj = new Chrome_Controller_User_Login_Page($this->_requestHandler);
         $obj->execute();
+        $obj->addViews($list);
 
-		$this->_view->render($this);
-	}
+        parent::addViews($list);
+        #$list->addContainer(new Chrome_Design_Renderable_Container($this->_view, 'content'));
+    }
 }

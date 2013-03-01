@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:58:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 17:18:03] --> $
  * @author     Alexander Book
  */
 
@@ -33,51 +33,54 @@ class Chrome_Controller_Content_Login_AJAX extends Chrome_Controller_Content_Abs
 	protected function _initialize() {
 
         // this is important!! This encodes the rendered data from the views with json
-	    $this->filter['postprocessor'][] = new Chrome_Filter_JSON();
+	    $this->_filter['postprocessor'][] = new Chrome_Filter_JSON();
 
-        $this->require = array('file' => array(CONTENT.'user/login/include.php', CONTENT.'user/login/view/ajax.php', CONTENT.'user/login/model.php'));
+        $this->_require = array('file' => array(CONTENT.'user/login/include.php', CONTENT.'user/login/view/ajax.php', CONTENT.'user/login/model.php'));
 	}
 
     protected function _execute()
     {
-        $this->form = Chrome_Form_Login::getInstance();
+        $this->_form = Chrome_Form_Login::getInstance();
         // after the user has sent this form, it is not immediately deleted
         // so the user may send another login?
 
-        $this->view = new Chrome_View_User_Login_Ajax($this);
+        $this->_view = new Chrome_View_User_Login_Ajax($this);
 
-        $this->model = new Chrome_Model_Login($this->form);
+        $this->_model = new Chrome_Model_Login($this->_form);
 
-        if($this->model->isLoggedIn() == true) {
-            $this->view->alreadyLoggedIn();
+        if($this->_model->isLoggedIn() == true) {
+            $this->_view->alreadyLoggedIn();
         } else {
             try {
-                if($this->form->isSent()) {
+                if($this->_form->isSent()) {
 
-                    if($this->form->isValid()) {
+                    if($this->_form->isValid()) {
 
                         // try to log in
-                        $this->model->login();
+                        $this->_model->login();
 
-                        if($this->model->successfullyLoggedIn() === true) {
-                            $this->view->successfullyLoggedIn();
+                        if($this->_model->successfullyLoggedIn() === true) {
+                            $this->_view->successfullyLoggedIn();
                         } else {
-                            $this->view->errorWhileLoggingIn();
+                            $this->_view->errorWhileLoggingIn();
                         }
 
                     } else {
-                        $this->form->delete();
-                        $this->form->create();
-                        $this->view->formNotValid();
+                        $this->_form->delete();
+                        $this->_form->create();
+                        $this->_view->formNotValid();
                     }
 
                 } else {
-                    $this->view->showForm();
+                    $this->_view->showForm();
                 }
             } catch(Chrome_Exception $e) {
-                $this->exceptionHandler->exception($e);
+                $this->_exceptionHandler->exception($e);
             }
         }
-        $this->view->render($this);
+    }
+
+    public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
+        $list->addContainer(new Chrome_Design_Renderable_Container($this->_view, 'ajax'));
     }
 }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.12.2012 20:21:49] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2013 19:17:27] --> $
  * @author     Alexander Book
  */
 
@@ -62,7 +62,7 @@ class Chrome_Design_Factory implements Chrome_Design_Factory_Interface
 
     public function factory($design)
     {
-        $file = BASEDIR.self::CHROME_DESIGN_FACTORY_INCLUDE_PATH.$design.'.php';
+        $file = BASEDIR.self::CHROME_DESIGN_FACTORY_INCLUDE_PATH.$design.'/'.$design.'.php';
 
         if(!_isFile($file)) {
             throw new Chrome_Exception('Cannot load design '.$design.'! File '.$file.' does not exist in Chrome_Design_Factory::factory()!');

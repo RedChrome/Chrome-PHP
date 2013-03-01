@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.02.2012 15:09:37] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 16:28:54] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -33,7 +33,7 @@ if(CHROME_PHP !== true)
  * @license     http://chrome-php.de/license/new-bsd		New BSD License
  * @version		2009/04/08/15/25
  */
-class Chrome_Require_Filter implements Chrome_Require_Interface
+class Chrome_Require_Filter implements Chrome_Require_Loader_Interface
 {
     /**
      * Contains instance of this class

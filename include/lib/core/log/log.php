@@ -17,7 +17,7 @@
  * @subpackage Chrome.Log
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.10.2012 14:14:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 14:47:19] --> $
  * @author     Alexander Book
  */
 
@@ -105,7 +105,20 @@ class Chrome_Logger_File implements Chrome_Logger_Interface
 
     public function __construct($file)  {
 
-        $this->_filePointer = @fopen($file, 'a');
+        require_once LIB.'core/file/file.php';
+
+        if(!Chrome_File::exists($file)) {
+           $this->_filePointer =  Chrome_File::mkFileUsingFilePointer($file, 0777, 'a', false);
+        } else {
+           $this->_filePointer = @fopen($file, 'a');
+        }
+
+        if($this->_filePointer === false) {
+            throw new Chrome_Exception('Could not create file "'.$file.'" in Chrome_Logger_File!');
+        }
+
+
+        /*$this->_filePointer = @fopen($file, 'a');
         if($this->_filePointer === false) {
 
             require_once LIB.'core/file/file.php';
@@ -115,7 +128,7 @@ class Chrome_Logger_File implements Chrome_Logger_Interface
             if($this->_filePointer === false) {
                 throw new Chrome_Exception('Could not create file "'.$file.'" in Chrome_Logger_File!');
             }
-        }
+        }*/
 
 
     }

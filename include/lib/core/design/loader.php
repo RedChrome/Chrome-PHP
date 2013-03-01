@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 15:49:43] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 14:32:20] --> $
  * @author     Alexander Book
  */
 
@@ -31,5 +31,7 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Design_Loader
 {
+    public function setRenderableList(Chrome_Design_Renderable_Container_List_Interface $list);
 
+    public function loadRenderables(Chrome_Router_Result_Interface $route, Chrome_Request_Data_Interface $request, Chrome_Response_Interface $response);
 }

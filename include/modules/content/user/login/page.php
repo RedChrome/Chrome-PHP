@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:12:42] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 16:03:59] --> $
  * @author     Alexander Book
  */
 
@@ -28,7 +28,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Chrome_Controller_User_Login_Page extends Chrome_Controller_Content_Abstract
+class Chrome_Controller_User_Login_Page extends Chrome_Controller_Module_Abstract
 {
     protected function _initialize() {
         $this->_require = array('file' => array(CONTENT.'user/login/include.php', CONTENT.'user/login/view/default.php'));
@@ -41,10 +41,14 @@ class Chrome_Controller_User_Login_Page extends Chrome_Controller_Content_Abstra
         // the login form, will be the first one in Content
         $this->_view = new Chrome_View_User_Default_ShowForm($this);
 
-        $views = Chrome_Design_Composite_Content::getInstance()->getComposite()->getViews();
+        #$views = Chrome_Design_Composite_Content::getInstance()->getComposite()->getViews();
 
-        array_unshift($views, $this->_view);
+        #array_unshift($views, $this->_view);
 
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->setView($views);
+        #Chrome_Design_Composite_Content::getInstance()->getComposite()->setView($views);
+    }
+
+    public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
+        $list->addContainer(new Chrome_Design_Renderable_Container($this->_view, 'content'));
     }
 }

@@ -17,44 +17,11 @@
  * @subpackage Chrome.Modules
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 17:41:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 13:45:26] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
     die();
-
-/**
- * Chrome_Controller_Footer_Benchmark
- *
- * @package
- * @author CHROME-PHP
- * @copyright Alexander Book
- * @version 2010
- * @access public
- */
-class Chrome_Controller_Footer_Benchmark extends Chrome_Controller_Abstract
-{
-    public function __construct(Chrome_Request_Handler_Interface $reqHandler) {
-        parent::__construct($reqHandler);
-        Chrome_Design_Composite_Footer::getInstance()->getComposite()->addView(new Chrome_View_Footer_Benchmark($this));
-    }
-
-    protected function _execute() {
-
-    }
-
-    public function execute() {
-
-    }
-
-    protected function _initialize() {
-        #$this->view = new Chrome_View_Box_Test($this);
-    }
-
-    protected function _shutdown() {
-
-    }
-}
 
 /**
  * Chrome_View_Footer_Benchmark
@@ -65,12 +32,12 @@ class Chrome_Controller_Footer_Benchmark extends Chrome_Controller_Abstract
  * @version 2010
  * @access public
  */
-class Chrome_View_Footer_Benchmark extends Chrome_View_Abstract
+class Chrome_View_Footer_Benchmark extends Chrome_View
 {
     public function render(Chrome_Controller_Interface $controller) {
-        return '<div id="test">rendered in '.sprintf('%01.2f', (microtime(true)- CHROME_MTIME)* 1000).' msec<br>
+        return 'rendered in '.sprintf('%01.2f', (microtime(true)- CHROME_MTIME)* 1000).' msec<br>
 Consumed '.memory_get_usage(true) .' Byte so far<br>
 Peak usage was '.memory_get_peak_usage(true) .' Byte so far
-        </div>';
+';
     }
 }

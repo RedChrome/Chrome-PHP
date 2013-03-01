@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2009 17:09:12] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2013 13:10:09] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -25,7 +25,6 @@ if(CHROME_PHP !== true)
 /**
  * Chrome_Template_Extension_Core
  *
- * ___SHORT_DIRSCRIPTION___
  *
  * @author		Alexander Book
  * @package		CHROME-PHP
@@ -65,16 +64,6 @@ class Chrome_Template_Extension_Core extends Chrome_Template_Extension_Abstract
 		Chrome_View::addVar(Chrome_Template::_addLang(new Chrome_Lang($file, $lang), $prefix));
 
 		return '{EVAL}Chrome_Template::assignDynamic(Chrome_Template::_addLang(new Chrome_Lang(\''.$file.'\', \''.$lang.'\'), \''.$prefix.'\'));{ENDEVAL}';
-	}
-
-	public function includeForm($params) {
-
-
-
-		// TODO: finish method Chrome_Template_Extension_Core::includeForm()
-		throw new Chrome_Exception('TODO: finish method Chrome_Template_Extension_Core::includeForm()');
-
-
 	}
 
 	public function includeCSS($params) {

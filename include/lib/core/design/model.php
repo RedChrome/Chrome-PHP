@@ -17,14 +17,18 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 15:47:09] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 13:40:23] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true)
     die();
 
+//TODO: remove this file?
+
 /**
+ *
+ *
  * Chrome_Design_Model
  *
  * Model that handles the access point to the data resource for all designs

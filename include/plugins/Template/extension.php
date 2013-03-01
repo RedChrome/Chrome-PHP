@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2009 17:02:20] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2013 13:11:37] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -25,7 +25,6 @@ if(CHROME_PHP !== true)
 /**
  * Chrome_Template_Extension_Abstract
  *
- * ___SHORT_DIRSCRIPTION___
  *
  * @author		Alexander Book
  * @package		CHROME-PHP
@@ -43,7 +42,6 @@ abstract class Chrome_Template_Extension_Abstract
 /**
  * Chrome_Template_Extension
  *
- * ___SHORT_DIRSCRIPTION___
  *
  * @author		Alexander Book
  * @package		CHROME-PHP
@@ -51,7 +49,7 @@ abstract class Chrome_Template_Extension_Abstract
  * @license     http://chrome-php.de/license/new-bsd		New BSD License
  * @version		2009/04/08/15/25
  */
-class Chrome_Template_Extension extends Chrome_Plugin_Extension
+class Chrome_Template_Extension
 {
 	private static $_loadedExtensions = array();
 	private static $_extensionInstance = array();
@@ -64,7 +62,7 @@ class Chrome_Template_Extension extends Chrome_Plugin_Extension
 		self::$_instance = $this;
 	}
 
-	public static function &getInstance() {
+	public static function getInstance() {
 		if(isset(self::$_instance))
 			return self::$_instance;
 	}

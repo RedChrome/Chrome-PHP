@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2012 13:39:41] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.02.2013 17:04:02] --> $
  * @author     Alexander Book
  */
 
@@ -35,7 +35,7 @@ class Chrome_Design_Composite_Content extends Chrome_Design_Composite_Abstract
     protected function __construct() {
         parent::__construct();
 
-        Chrome_Design_Composite_Layout::getInstance()->setContent($this);
+        Chrome_Design_Composite_Body::getInstance()->setComposite($this);
         $this->_preComposite = new Chrome_Design_Composite_Container();
         $this->_composite = new Chrome_Design_Composite_Container();
         $this->_postComposite = new Chrome_Design_Composite_Container();

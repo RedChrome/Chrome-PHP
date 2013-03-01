@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 17:16:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 14:49:33] --> $
  * @link       http://chrome-php.de
  */
 
@@ -83,29 +83,34 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
     public function query($query, array $params = array())
     {
-        if($this->_sentQuery !== null) {
-            throw new Chrome_Exception_Database('Did not called clear() before executing another query!');
+        try {
+            if($this->_sentQuery !== null) {
+                throw new Chrome_Exception_Database('Did not called clear() before executing another query!');
+            }
+
+            if($query === null OR empty($query)) {
+                throw new Chrome_Exception_Database('Cannot execute an sql statement if no statement was set!');
+            }
+
+            $this->_query = $query;
+
+            if(count($params) > 0) {
+                $this->setParameters($params, true);
+            }
+
+            $query = $this->_prepareStatement($query);
+
+            Chrome_Database_Registry_Statement::addStatement($query);
+
+            $this->_adapter->query($query);
+
+            $this->_sentQuery = $query;
+
+            return $this->_result;
+        } catch(Chrome_Exception_Database $e) {
+            Chrome_Log::logException($e, E_ERROR);
+            throw $e;
         }
-
-        if($query === null OR empty($query)) {
-            throw new Chrome_Exception_Database('Cannot execute an sql statement if no statement was set!');
-        }
-
-        $this->_query = $query;
-
-        if(count($params) > 0) {
-            $this->setParameters($params, true);
-        }
-
-        $query = $this->_prepareStatement($query);
-
-        Chrome_Database_Registry_Statement::addStatement($query);
-
-        $this->_adapter->query($query);
-
-        $this->_sentQuery = $query;
-
-        return $this->_result;
     }
 
     public function setParameters(array $array, $escape = true)

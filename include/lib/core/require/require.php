@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.11.2012 22:11:09] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 19:38:12] --> $
  * @author     Alexander Book
  */
 
@@ -31,6 +31,19 @@ if(CHROME_PHP !== true)
 interface Chrome_Require_Interface
 {
 	public static function getInstance();
+
+	public function classLoad($class);
+
+    public static function setModel(Chrome_Model_Interface $model);
+}
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Require
+ */
+interface Chrome_Require_Loader_Interface
+{
+    public static function getInstance();
 
 	public function classLoad($class);
 }
@@ -68,6 +81,13 @@ interface Chrome_Require_Interface
  */
 class Chrome_Require implements Chrome_Require_Interface
 {
+    /**
+     * Contains the model to init class
+     *
+     * @var Chrome_Model_Interface
+     */
+    private static $_initModel = null;
+
 	/**
 	 * Contains Chrome_Model_Abstract instance
 	 *
@@ -110,8 +130,11 @@ class Chrome_Require implements Chrome_Require_Interface
 	 */
 	private function __construct()
 	{
-		require_once 'model.php';
-		$this->_model = Chrome_Model_Require::getInstance();
+        if(self::$_initModel !== null) {
+            $this->_model = self::$_initModel;
+        } else {
+            throw new Chrome_Exception('Call setModel before getInstance()!');
+        }
 
 		$this->_getRequirements();
 		$this->_getClasses();
@@ -147,6 +170,20 @@ class Chrome_Require implements Chrome_Require_Interface
 		$this->_require = $this->_model->getRequirements();
 	}
 
+    /**
+     * Chrome_Require::setModel()
+     *
+     * Sets the model to access class definitions (filepath, class, etc...)
+     * This has only affect if you call this _before_ getInstance()!
+     *
+     * @param Chrome_Model_Interface $model
+     * @return void
+     */
+    public static function setModel(Chrome_Model_Interface $model)
+    {
+        self::$_initModel = $model;
+    }
+
 	/**
 	 * Chrome_Require::_require()
 	 *
@@ -159,7 +196,7 @@ class Chrome_Require implements Chrome_Require_Interface
 	{
 		foreach($this->_require AS $key => $value) {
 			require_once BASEDIR.$value['path'];
-            if($value['require_class'] == true) {
+            if($value['class_loader'] == true) {
                 $this->_requireClass[] = $value['name'];
             }
 		}

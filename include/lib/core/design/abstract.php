@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 15:45:09] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 00:37:37] --> $
  * @author     Alexander Book
  */
 
@@ -33,6 +33,10 @@ interface Chrome_Design_Abstract_Interface
     public function get($string, Chrome_Design_Renderable $obj = null);
 
     public static function getInstance();
+
+    public function getStyle();
+
+    public function getMapper();
 }
 
 /**

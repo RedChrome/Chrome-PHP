@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.12.2010 14:57:19] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 16:29:02] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -34,7 +34,7 @@ if(CHROME_PHP !== true)
  * @license     http://chrome-php.de/license/new-bsd		New BSD License
  * @version		2009/04/08/15/25
  */
-class Chrome_Require_Validator implements Chrome_Require_Interface
+class Chrome_Require_Validator implements Chrome_Require_Loader_Interface
 {
 	private static $_instance;
 

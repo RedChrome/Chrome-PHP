@@ -17,7 +17,7 @@
  * @subpackage Chrome.View
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.10.2012 23:51:51] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 16:25:36] --> $
  * @author     Alexander Book
  */
 
@@ -29,43 +29,128 @@ if( CHROME_PHP !== true ) die();
  */
 interface Chrome_View_Interface extends Chrome_Design_Renderable
 {
-	/**
-	 * @deprecated
-	 */
-	public function renderInit();
-
-	/**
-	 * @deprecated
-	 */
-	public function renderShutdown();
+    /**
+     * @todo rename method
+     */
+    #public function style(Chrome_Design_Style_Interface $style);
 
     /**
-     * Returns the class name
+     * Sets a var
      *
-     * @return string
+     * @param string $key
+     * @param mixed $value
      */
-    public function getClassName();
+    public function setVar($key, $value);
+
+    /**
+     * Gets a set var
+     *
+     * @return mixed $value
+     */
+    public function getVar($key);
+
+    /**
+     * Sets the plugin object for every view
+     * The Plugin object is used to dynamically add functionality to all views.
+     * The Views can the access the functions using:
+     *  $this->additionalPluginFunction($args);
+     * at which additionalPluginFunction is any function given by the plugin object
+     *
+     * @param Chrome_View_Handler_Interface $plugin
+     * @return void
+     */
+    public static function setPluginObject(Chrome_View_Handler_Interface $object);
+
+    /**
+     * Returns the plugin object
+     *
+     * @return Chrome_View_Handler_Interface
+     */
+    public static function getPluginObject();
+}
+
+abstract class Chrome_View implements Chrome_View_Interface
+{
+    /**
+     * Contains data for plugin methods
+     *
+     * @var array
+     */
+    protected $_vars          = array();
+
+    /**
+     * Plugin object
+     *
+     * @var Chrome_View_Handler
+     */
+    protected static $_plugin = null;
+
+    /**
+     * magic method
+     *
+     * Calls a method from view helper if it exists
+     *
+     * @return mixed
+     */
+	public function __call( $func, $args )
+	{
+		//if( $this->_isPluginMethod( $func ) ) {
+			return $this->_callPluginMethod( $func, $args );
+		//} else {
+		//	throw new Chrome_Exception( 'Cannot call method ' . $func . ' with args (' . var_export( $args, true ) .
+		//		') in Chrome_View_Abstract::__call()!' );
+		//}
+	}
+
+    /**
+     * Checks whether the method __call tries to run, exists in view helper
+     *
+     * @return boolean
+     */
+	protected function _isPluginMethod( $func )
+	{
+		return self::$_plugin->isCallable( $func );
+	}
+
+    /**
+     * Calls the method $func with arguments $args
+     *
+     * @return mixed
+     */
+	protected function _callPluginMethod( $func, $args )
+	{
+		return self::$_plugin->call( $func, array_merge( array( $this ), $args ) );
+	}
+
+    public function setVar($key, $value) {
+        $this->_vars[$key] = $value;
+    }
+
+    public function getVar($key) {
+        return (isset($this->_vars[$key])) ? $this->_vars[$key] : null;
+    }
+
+    public static function setPluginObject(Chrome_View_Handler_Interface $plugin) {
+        self::$_plugin = $plugin;
+    }
+
+    public static function getPluginObject() {
+        return self::$_plugin;
+    }
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-abstract class Chrome_View_Abstract implements Chrome_View_Interface
+abstract class Chrome_View_Abstract extends Chrome_View
 {
     /**
      * Contains the controller
      *
      * @var Chrome_Controller_Abstract
      */
-	protected $_controller = null;
-
-    /**
-     * Cache for getClassName()
-     *
-     * @var string
-     */
-	protected $_className = null;
+	protected $_controller    = null;
 
     /**
      * Constructor
@@ -77,38 +162,6 @@ abstract class Chrome_View_Abstract implements Chrome_View_Interface
 		$this->_controller = $controller;
 	}
 
-	/**
-	 *@deprecated
-	 */
-	final protected function _preConstruct()
-	{
-		throw new Chrome_Exception( 'deprecated' );
-	}
-
-	/**
-	 *@deprecated
-	 */
-	final protected function _postConstruct()
-	{
-		throw new Chrome_Exception( 'deprecated' );
-	}
-
-    /**
-     *@deprecated
-     */
-	final public function renderInit()
-	{
-
-	}
-
-    /**
-     *@deprecated
-     */
-	final public function renderShutdown()
-	{
-
-	}
-
     /**
      * Renders the view
      *
@@ -116,58 +169,26 @@ abstract class Chrome_View_Abstract implements Chrome_View_Interface
      */
 	public function render( Chrome_Controller_Interface $controller )
 	{
-		Chrome_Design::getInstance()->render( $this->_controller );
+	   //TODO: remove this method (just in this class)
 	}
+}
 
-    /**
-     * magic method
-     *
-     * Calls a method from view helper if it exists
-     *
-     * @return mixed
-     */
-	public function __call( $func, $args )
-	{
-		if( $this->_isPluginMethod( $func ) ) {
-			return $this->_callPluginMethod( $func, $args );
-		} else {
-			throw new Chrome_Exception( 'Cannot call method ' . $func . ' with args (' . var_export( $args, true ) .
-				') in Chrome_View_Abstract::__call()!' );
-		}
-	}
+abstract class Chrome_View_Strategy_Abstract extends Chrome_View_Abstract
+{
+    protected $_views = null;
 
-    /**
-     * Checks whether the method __call tries to run, exists in view helper
-     *
-     * @return boolean
-     */
-	protected function _isPluginMethod( $func )
-	{
-		return Chrome_View_Handler::getInstance()->isCallable( $func );
-	}
+    public function render( Chrome_Controller_Interface $controller )
+    {
+        $return = '';
 
-    /**
-     * Calls the method $func with arguments $args
-     *
-     * @return mixed
-     */
-	protected function _callPluginMethod( $func, $args )
-	{
-		return Chrome_View_Handler::getInstance()->call( $func, array_merge( array( $this ), $args ) );
-	}
+        if(!is_array($this->_views)) {
+            $this->_views = array($this->_views);
+        }
 
-    /**
-     * returns the class name of this class
-     *
-     * @return mixed
-     */
-	public function getClassName()
-	{
+        foreach($this->_views as $view) {
+            $return .= $view->render($controller);
+        }
 
-		if( $this->_className === null ) {
-			$this->_className = get_class( $this );
-		}
-
-		return $this->_className;
-	}
+        return $return;
+    }
 }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Response
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 11:28:44] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.02.2013 17:46:03] --> $
  * @author     Alexander Book
  */
 
@@ -32,7 +32,11 @@ interface Chrome_Response_Interface
 {
 	public function setStatus($status);
 
+    public function getStatus();
+
 	public function addHeader($name, $value);
+
+    public function getHeader($name);
 
 	public function write($string);
 
@@ -149,5 +153,19 @@ abstract class Chrome_Response_Abstract implements Chrome_Response_Interface {
 	{
 		$this->_status = $status;
  	}
+
+    public function getStatus()
+    {
+        return $this->_status;
+    }
+
+    public function getHeader($name)
+    {
+        if(isset($this->_headers[$name])) {
+            return $this->_headers[$name];
+        }
+
+        return null;
+    }
 
 }

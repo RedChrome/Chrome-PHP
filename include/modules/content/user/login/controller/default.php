@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:10:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 16:30:17] --> $
  * @author     Alexander Book
  */
 
@@ -73,6 +73,5 @@ class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Content_
                 $e->show($e);
             }
         }
-        $this->_view->render($this);
     }
 }

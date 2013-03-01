@@ -17,7 +17,7 @@
  * @subpackage Chrome.View
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.08.2011 11:31:37] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 18:02:00] --> $
  * @author     Alexander Book
  */
 
@@ -27,7 +27,7 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.View
- */ 
+ */
 interface Chrome_View_Helper_Abstract_Interface
 {
     /**
@@ -42,10 +42,10 @@ interface Chrome_View_Helper_Abstract_Interface
  * Chrome_View_Helper_Abstract
  *
  * Parent class for all view helpers
- * 
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.View
- */ 
+ */
 abstract class Chrome_View_Helper_Abstract implements Chrome_View_Helper_Abstract_Interface
 {
     /**
@@ -109,7 +109,7 @@ abstract class Chrome_View_Helper_Abstract implements Chrome_View_Helper_Abstrac
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.View
- */ 
+ */
 interface Chrome_View_Handler_Interface
 {
     /**
@@ -134,6 +134,11 @@ interface Chrome_View_Handler_Interface
     public function call($function, array $arguments);
 
     /**
+     * @see call()
+     */
+    public function __call($function, $arguments);
+
+    /**
      * registerHelper()
      *
      * Registers a helper
@@ -148,10 +153,10 @@ interface Chrome_View_Handler_Interface
  * Chrome_View_Handler
  *
  * Helper for Chrome_View
- * 
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.View
- */ 
+ */
 class Chrome_View_Handler implements Chrome_View_Handler_Interface
 {
     /**
@@ -277,6 +282,7 @@ class Chrome_View_Handler implements Chrome_View_Handler_Interface
     {
         // check first whether the function is callable
         if(!$this->isCallable($function)) {
+            //TODO: var_export will fail with "Nesting level too deep - recursive dependency". use other export.
             throw new Chrome_Exception('Cannot call function '.$function.' with arguments ('.var_export($arguments, true).')! Function is not defined in Chrome_View_Handler::call()!');
         }
 

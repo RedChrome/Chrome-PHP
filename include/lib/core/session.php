@@ -17,7 +17,7 @@
  * @subpackage Chrome.Session
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.01.2013 19:22:21] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 16:37:51] --> $
  * @author     Alexander Book
  */
 
@@ -573,5 +573,3 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
         $this->_set($offset, null);
     }
 }
-
-Chrome_Session::getInstance();

@@ -15,7 +15,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.02.2012 00:10:25] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 18:02:11] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -24,8 +24,6 @@ if(CHROME_PHP !== true)
 class Chrome_View_Helper_Decorator extends Chrome_View_Helper_Abstract
 {
     private static $_instance = null;
-
-    private $_title = array();
 
     public static function getInstance()
     {
@@ -36,29 +34,39 @@ class Chrome_View_Helper_Decorator extends Chrome_View_Helper_Abstract
         return self::$_instance;
     }
 
-    public function setViewTitle(Chrome_View_Abstract $obj, $title) {
+    public function setViewTitle(Chrome_View_Interface $obj, $title) {
 
-        $this->_title[$obj->getClassName()] = $title;
-
+        $obj->setVar('view_title', $title);
     }
 
-    public function getViewTitle(Chrome_View_Abstract $obj) {
+    public function getViewTitle(Chrome_View_Interface $obj) {
 
-        if(!isset($this->_title[$obj->getClassName()])) {
+        $title = $obj->getVar('view_title');
+
+        if($title === null) {
             return 'No Title set';
         }
 
-        return $this->_title[$obj->getClassName()];
-
+        return $title;
     }
 
-    public function setAjaxEnvironment(Chrome_View_Abstract $obj) {
-        Chrome_Design::getInstance()->getStyle()->addStyle('ajax');
+    public function addStyle(Chrome_View_Interface $obj, $style) {
+        Chrome_Design::getInstance()->getStyle()->addStyle($style);
+    }
+
+    public function setStyle(Chrome_View_Interface $obj, $style) {
+        $styleObj = Chrome_Design::getInstance()->getStyle();
+        $styleObj->removeAllStyles();
+        $styleObj->addStyle($style);
+    }
+
+    public function setAjaxEnvironment(Chrome_View_Interface $obj) {
+        $this->addStyle($obj, 'ajax');
     }
 
     public function getMethods()
     {
-        return array('setViewTitle', 'getViewTitle', 'setAjaxEnvironment');
+        return array('setViewTitle', 'getViewTitle', 'setAjaxEnvironment', 'setStyle', 'addStyle');
     }
 
     public function getClassName()

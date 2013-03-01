@@ -1,14 +1,6 @@
 <?php
 
-class Chrome_Controller_Header_HTML_Head extends Chrome_Controller_Header_Abstract
-{
-    public function __construct(Chrome_Request_Handler_Interface $reqHandler)
-    {
-        Chrome_Design_Composite_Head::getInstance()->getComposite()->addView(new Chrome_View_Header_HTML_Head($this));
-    }
-}
-
-class Chrome_View_Header_HTML_Head extends Chrome_View_Abstract
+class Chrome_View_HTML_Head_CssIncluder extends Chrome_View
 {
     public function render(Chrome_Controller_Interface $controller) {
        return '<title>'.$this->getTitle().'</title>

@@ -15,7 +15,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.09.2012 19:18:32] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 13:48:16] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -35,7 +35,7 @@ class Chrome_View_Helper_Error extends Chrome_View_Helper_Abstract
         return self::$_instance;
     }
 
-    public function setError(Chrome_View_Abstract $obj, $errorCode) {
+    public function setError(Chrome_View_Interface $obj, $errorCode) {
         switch($errorCode) {
             default: {
                 echo $errorCode.' not found in Chrome_View_Helper_Error!';
