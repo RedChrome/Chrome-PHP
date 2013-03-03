@@ -17,7 +17,7 @@
  * @subpackage Chrome.Session
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.10.2012 13:01:37] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2013 19:34:33] --> $
  * @author     Alexander Book
  */
 
@@ -31,7 +31,7 @@ if(CHROME_PHP !== true)
 
 interface Chrome_Redirection_Interface
 {
-    public static function redirectToPreviousPage();
+    public static function redirectToPreviousPage(Chrome_Request_Data_Interface $requestData);
 
     public static function redirectToWebsite($website);
 
@@ -47,20 +47,18 @@ class Chrome_Redirection implements Chrome_Redirection_Interface
         $resp->addHeader('Location', $site);
     }
 
-    public static function redirectToPreviousPage() {
-        self::_redirect(self::getPreviousPage());
+    public static function redirectToPreviousPage(Chrome_Request_Data_Interface $requestData) {
+        self::_redirect(self::getPreviousPage($requestData));
     }
 
-    public static function getPreviousPage() {
+    public static function getPreviousPage(Chrome_Request_Data_Interface $requestData) {
 
-        $requestDataObject = Chrome_Request::getInstance()->getRequestDataObject();
-
-        if(($return = $requestDataObject->getSERVER('HTTP_REFERER')) != null) {
+        if(($return = $requestData->getSERVER('HTTP_REFERER')) != null) {
             return $return;
         } else {
 
             // we dont know where the user came, so get to the index.php
-            return 'http://'.$requestDataObject->getSERVER('HTTP_HOST').ROOT_URL;
+            return 'http://'.$requestData->getSERVER('HTTP_HOST').ROOT_URL;
         }
     }
 

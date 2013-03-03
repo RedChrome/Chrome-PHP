@@ -16,21 +16,82 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.12.2012 14:38:16] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 15:03:48] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true) die();
 
-interface Chrome_Cookie_Interface
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Cookie
+ */
+interface Chrome_Cookie_Interface extends ArrayAccess
 {
+    /**
+     * Gets the value of a cookie
+     *
+     * @param string $key the name/key of a cookie
+     * @return string the value
+     */
+    public function getCookie($key);
 
+    /**
+     * Returns all cookies as an array: <br>
+     * array(cookieName => cookieValue)
+     *
+     *
+     * @return array
+     */
+    public function getAllCookies();
+
+    /**
+     * Unsets all user cookies. This might not unset all cookies!
+     * Some system cookies for validation might not get unset!
+     *
+     * @return void
+     */
+    public function unsetAllCookies();
+
+    /**
+     * Sets the cookie and sends the instruction to create the cookie to the client
+     *
+     * Returns true if client received the instruction, false if not
+     *
+     * @param mixed   $name     Name of the cookie
+     * @param mixed   $value    Value of the cookie
+     * @param integer $expire   Expire date, < 0 => unlimited; = 0 => expire if user closes his browser; > 0 => adds time() to $expire
+     * @param string  $path     The path on the server in which the cookie will be available on
+     * @param string  $domain   The domain that the cookie is available
+     * @param bool    $secure   Indicates that the cookie should only be transmitted over a secure HTTPS connection from the client
+     * @param bool    $httponly When true the cookie will be made accessible only through the HTTP protocol
+     * @return bool   true on success
+     */
+    public function setCookie($name, $value = 0, $expire = 0, $path = self::CHROME_COOKIE_DEFAULT_PATH, $domain = '', $secure = false, $httponly = false);
+
+    /**
+     * Unsets a cookie and sends the instruction to delete the cookie to the client
+     *
+     * Returns true if client received the instruction, false if not
+     *
+     * Note: if you changed the default params in setCookie, then you have to take the same params in unsetCookie!
+     * If you do not, then the client creates a new cookie and does not unset the other one.
+     *
+     * @param mixed   $name     Name of the cookie
+     * @param mixed   $value    Value of the cookie
+     * @param string  $path     The path on the server in which the cookie will be available on
+     * @param string  $domain   The domain that the cookie is available
+     * @param bool    $secure   Indicates that the cookie should only be transmitted over a secure HTTPS connection from the client
+     * @param bool    $httponly When true the cookie will be made accessible only through the HTTP protocol
+     * @return bool   true on success
+     */
+    public function unsetCookie($name, $path = self::CHROME_COOKIE_DEFAULT_PATH, $domain = '', $secure = false, $httponly = false);
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Cookie
  */
-class Chrome_Cookie implements ArrayAccess, Chrome_Cookie_Interface
+class Chrome_Cookie implements Chrome_Cookie_Interface
 {
     /**
      * Maximum time accepted by a browser
@@ -62,43 +123,36 @@ class Chrome_Cookie implements ArrayAccess, Chrome_Cookie_Interface
     private $_validationCode = null;
 
     /**
-     * Contains instance of this class
+     * Contains the cookies
      *
-     * @var Chrome_cookie
+     * @var array
      */
-    private static $_instance = null;
-
     protected $_cookie = null;
+
+    /**
+     * Class to hash strings
+     *
+     * @var Chrome_Hash_Interface
+     */
+    protected $_hash = null;
 
     /**
      * Chrome_cookie::__construct()
      *
      * @return Chrome_cookie
      */
-    private function __construct()
+    public function __construct(Chrome_Hash_Interface $hash = null)
     {
+        $this->_hash = $hash;
+
         $this->_cookie = $_COOKIE;
 
         $this->_validateCookie();
     }
 
-    public function get($name)
+    public function getAllCookies()
     {
-        return (isset($this->_cookie[$name]) and !empty($this->_cookie[$name])) ? $this->_cookie[$name] : null;
-    }
-
-    /**
-     * Chrome_cookie::getInstance()
-     *
-     * @return Chrome_cookie
-     */
-    public static function getInstance()
-    {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
+        return $this->_cookie;
     }
 
     /**
@@ -136,6 +190,35 @@ class Chrome_Cookie implements ArrayAccess, Chrome_Cookie_Interface
     }
 
     /**
+     * Chrome_cookie::unsetCookie()
+     *
+     * Unsets a cookie
+     * If you changed default settings, then you have to add these here too, otherwise client will create a new cookie
+     *
+     * @param mixed   $name     Name of the cookie
+     * @param mixed   $value    Value of the cookie
+     * @param string  $path     The path on the server in which the cookie will be available on
+     * @param string  $domain   The domain that the cookie is available
+     * @param bool    $secure   Indicates that the cookie should only be transmitted over a secure HTTPS connection from the client
+     * @param bool    $httponly When true the cookie will be made accessible only through the HTTP protocol
+     * @return bool   true on success
+     */
+    public function unsetCookie($name, $path = self::CHROME_COOKIE_DEFAULT_PATH, $domain = '', $secure = false, $httponly = false)
+    {
+        if($path === null or $path === false) {
+            $path = self::CHROME_COOKIE_DEFAULT_PATH;
+        }
+
+        unset($this->_cookie[$name]);
+
+        if(!headers_sent()) {
+            return setcookie($name, '', (CHROME_TIME - self::CHROME_COOKIE_COOKIE_NO_EXPIRE), $path, $domain, $secure, $httponly);
+        }
+
+        return false;
+    }
+
+    /**
      * Chrome_cookie::getCookie()
      *
      * Returns the value of a cookie
@@ -149,33 +232,9 @@ class Chrome_Cookie implements ArrayAccess, Chrome_Cookie_Interface
     }
 
     /**
-     * Chrome_cookie::unsetCookie()
-     *
-     * Unsets a cookie
-     * If you changed default settings, then you have to add these here too, otherwise client will create a new cookie
-     *
-     * @param mixed   $name     Name of the cookie
-     * @param mixed   $value    Value of the cookie
-     * @param string  $path     The path on the server in which the cookie will be available on
-     * @param string  $domain   The domain that the cookie is available
-     * @param bool    $secure   Indicates that the cookie should only be transmitted over a secure HTTPS connection from the client
-     * @param bool    $httponly When true the cookie will be made accessible only through the HTTP protocol
-     * @return void
-     */
-    public function unsetCookie($name, $path = self::CHROME_COOKIE_DEFAULT_PATH, $domain = '', $secure = false, $httponly = false)
-    {
-        if($path === null or $path === false) {
-            $path = self::CHROME_COOKIE_DEFAULT_PATH;
-        }
-
-        if(!headers_sent()) {
-            setcookie($name, '', (CHROME_TIME - self::CHROME_COOKIE_COOKIE_NO_EXPIRE), $path, $domain, $secure, $httponly);
-        }
-        unset($this->_cookie[$name]);
-    }
-
-    /**
      * Chrome_cookie::_validateCookie()
+     *
+     * Note: if this gets called more than once, ensure that _getValidationCode always returns the same validationCode (uncomment the first lines)
      *
      * Checks wheter the cookies are valide
      *
@@ -204,14 +263,17 @@ class Chrome_Cookie implements ArrayAccess, Chrome_Cookie_Interface
      */
     private function _getValidationCode()
     {
-        if($this->_validationCode !== null) {
-            return $this->_validationCode;
-        }
+        /*
+            // we dont need this, because this method gets called just one time
+            if($this->_validationCode !== null) {
+                return $this->_validationCode;
+            }
+        */
 
         // you can modifie this, so you get a better protection against session hijacking
         $string = 'random_string.' . $_SERVER['HTTP_USER_AGENT'] . $_SERVER['HTTP_USER_AGENT'] {2} . $_SERVER['HTTP_USER_AGENT'] {0};
 
-        $this->_validationCode  = Chrome_Hash::getInstance()->hash($string);
+        $this->_validationCode  = $this->_hash->hash($string);
         $_SESSION['CHROME_PHP'] = $this->_validationCode;
 
         return $this->_validationCode;
@@ -226,10 +288,6 @@ class Chrome_Cookie implements ArrayAccess, Chrome_Cookie_Interface
      */
     public function unsetAllCookies()
     {
-        if(!isset($this->_cookie)) {
-            return;
-        }
-
         foreach($this->_cookie as $key => $name) {
             if($key === self::CHROME_COOKIE_COOKIE_VALIDATION_KEY) {
                 continue;
@@ -237,7 +295,6 @@ class Chrome_Cookie implements ArrayAccess, Chrome_Cookie_Interface
 
             $this->unsetCookie($key);
         }
-        unset($this->_cookie);
     }
 
     /**
@@ -249,7 +306,7 @@ class Chrome_Cookie implements ArrayAccess, Chrome_Cookie_Interface
     }
     public function offsetGet($offset)
     {
-        return $this->get($offset);
+        return $this->getCookie($offset);
     }
     public function offsetSet($offset, $value)
     {

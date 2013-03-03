@@ -10,6 +10,13 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
+        $db = Chrome_Database_Facade::getInterface('simple', 'assoc');
+
+        $db->query('DELETE FROM cpp_user WHERE name = "testfinishRegistration"');
+        $db->clear();
+        $db->query('DELETE FROM cpp_user_regist WHERE email LIKE "$email%%"');
+
+
         require_once CONTENT . 'register/model.php';
     }
 
@@ -45,7 +52,7 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
 
     public function testRegistrationRequestIsProperlyAdded()
     {
-        $this->assertTrue($this->_model->addRegistrationRequest('$name', '$password', '$email', '$activationKey'), 'module detected error inside!');
+        $this->assertTrue($this->_model->addRegistrationRequest('$name', '$password', '$email1', '$activationKey'), 'module detected error inside!');
 
         $this->_db->query('SELECT * FROM cpp_user_regist WHERE `key` = "$activationKey" LIMIT 0,1');
 
@@ -77,7 +84,7 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
 
     public function testCheckRegistrationWithValidActivationKey()
     {
-        $this->assertTrue($this->_model->addRegistrationRequest('$name', '$password', '$email', '$activationKey_2'));
+        $this->assertTrue($this->_model->addRegistrationRequest('$name', '$password', '$email2', '$activationKey_2'));
 
         $check = $this->_model->checkRegistration('$activationKey_2');
 
@@ -100,8 +107,10 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
 
     public function testfinishRegistration()
     {
-        $testFinishRegistrationPass = 'testfinishRegistrationPass_' . mt_rand(0, 1000);
-        $testfinishRegistrationPassSalt = 'testfinishRegistrationPass_' . mt_rand(0, 1000);
+        $testFinishRegistrationPass = 'testfinishRegistrationPass_' . mt_rand(0, 100000);
+        $testfinishRegistrationPassSalt = 'testfinishRegistrationPass_' . mt_rand(0, 100000);
+        $testfinishRegistrationEmail = 'testFinishRegistrationEmail_'.mt_rand(0, 100000);
+
 
         /**
          * setting up test place
@@ -109,12 +118,13 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
         //$this->_db->query('DELETE FROM cpp_user WHERE name = "testfinishRegistration"');
 
         //$this->_db->delete()->from( 'user' )->where( 'name = "testfinishRegistration" ' )->execute();
-        $this->_model->addRegistrationRequest('testfinishRegistration', $testFinishRegistrationPass, 'testfinishRegistrationEmail', 'testfinishRegistrationKey');
+        $success = $this->_model->addRegistrationRequest('testfinishRegistration', $testFinishRegistrationPass, $testfinishRegistrationEmail, 'testfinishRegistrationKey');
 
+        $this->assertTrue($success, 'could not add registration request');
 
         $resource = new Chrome_Authentication_Create_Resource_Database('testfinishRegistration', $testFinishRegistrationPass, $testfinishRegistrationPassSalt);
 
-        $return = $this->_model->finishRegistration('testfinishRegistration', $testFinishRegistrationPass, $testfinishRegistrationPassSalt, 'testfinishRegistrationEmail', 'testfinishRegistrationKey', $resource);
+        $return = $this->_model->finishRegistration('testfinishRegistration', $testFinishRegistrationPass, $testfinishRegistrationPassSalt, $testfinishRegistrationEmail, 'testfinishRegistrationKey', $resource);
 
         $this->assertTrue($return, 'maybe you have to set up test db?');
 

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 16:27:47] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:15:08] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -70,7 +70,7 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
 
     public function create() {
 
-        $captcha = new Chrome_Captcha($this->_form->getID(), array(), array());
+        $captcha = new Chrome_Captcha($this->_form->getID(), $this->_form->getRequestData(), array(), array());
         $captcha->create();
 
         return true;

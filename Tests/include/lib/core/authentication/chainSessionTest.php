@@ -1,18 +1,20 @@
 <?php
 
-require_once 'Tests/testsetup.php';
+require_once 'Tests/testsetupmodules.php';
 
 require_once 'Tests/dummies/authentication/resource.php';
 
-class AuthenticationChainSessionTest extends PHPUnit_Framework_TestCase
+class AuthenticationChainSessionTest extends Chrome_Test
 {
     protected $_chain = null;
 
     protected $_options = array('session_namespace' => '_AUTH_SESSION_TEST');
 
+    protected $_session;
+
     public function setUp()
     {
-        $this->_chain = new Chrome_Authentication_Chain_Session($this->_options);
+        $this->_chain = new Chrome_Authentication_Chain_Session($this->_session, $this->_options);
         $this->_chain->setChain(new Chrome_Authentication_Chain_Null());
     }
 
@@ -50,7 +52,7 @@ class AuthenticationChainSessionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Chrome_Authentication_Chain_Session', $authContainer->getAuthenticatedBy());
         $this->assertEquals($id, $authContainer->getID());
         $this->assertTrue($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
-        $this->assertTrue(Chrome_Session::getInstance()->offsetExists($this->_options['session_namespace']));
+        $this->assertTrue($this->_session->offsetExists($this->_options['session_namespace']));
 
         $this->_chain->deAuthenticate();
 
@@ -61,7 +63,7 @@ class AuthenticationChainSessionTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals('Chrome_Authentication_Chain_Session', $authContainer->getAuthenticatedBy());
         $this->assertNotEquals($id, $authContainer->getID());
         $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
-        $this->assertFalse(Chrome_Session::getInstance()->offsetExists($this->_options['session_namespace']));
+        $this->assertFalse($this->_session->offsetExists($this->_options['session_namespace']));
     }
 
     public function testUseCaseAuthenticationWithResourceUsingSession()
@@ -85,7 +87,7 @@ class AuthenticationChainSessionTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals('Chrome_Authentication_Chain_Session', $authContainer->getAuthenticatedBy());
         $this->assertNotEquals($id, $authContainer->getID());
         $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
-        $this->assertTrue(Chrome_Session::getInstance()->offsetExists($this->_options['session_namespace']));
+        $this->assertTrue($this->_session->offsetExists($this->_options['session_namespace']));
     }
 
     public function testCreateAuthenticationUsingSession()

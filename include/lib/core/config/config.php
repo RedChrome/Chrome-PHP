@@ -17,7 +17,7 @@
  * @subpackage Chrome.Config
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 23:05:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:01:35] --> $
  * @author     Alexander Book
  */
 
@@ -98,7 +98,7 @@ class Chrome_Config implements Chrome_Config_Interface
      */
     private function __construct()
     {
-        $this->_model = Chrome_Model_Config::getInstance();
+        $this->_model = new Chrome_Model_Config_Cache(new Chrome_Model_Config_DB());
 
         $this->_loadConfig();
     }

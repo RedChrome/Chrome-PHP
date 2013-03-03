@@ -17,7 +17,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 16:18:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:52:32] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -114,6 +114,17 @@ class Chrome_File
 	{
 		return (is_file($file) && self::hasExt($file)) ? true : false;
 	}
+
+    public static function existsUsingFilePointer($file, $openingMode = self::FILE_MODE_ENDING_WRITE_ONLY)
+    {
+        $fp = @fopen($file, $openingMode);
+
+        if(is_resource($fp)) {
+            return $fp;
+        }
+
+        return false;
+    }
 
 	/**
 	 * Wrapper for is_file function

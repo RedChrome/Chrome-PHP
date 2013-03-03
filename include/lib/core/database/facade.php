@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 18:18:52] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 14:09:59] --> $
  * @link       http://chrome-php.de
  */
 
@@ -120,6 +120,7 @@ class Chrome_Database_Facade
                     }
                     catch (Chrome_Exception_Database $e) {
                         // error while connecting to database
+                        Chrome_Log::logException($e, E_ERROR, new Chrome_Logger_Database());
                         throw $e;
                     }
                     catch (Chrome_Exception $e) {

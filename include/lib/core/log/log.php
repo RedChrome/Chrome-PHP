@@ -17,7 +17,7 @@
  * @subpackage Chrome.Log
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 14:47:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 13:56:47] --> $
  * @author     Alexander Book
  */
 
@@ -30,8 +30,6 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Log_Interface
 {
-    public static function getInstance();
-
     public static function log($string, $mode = E_WARNING, Chrome_Logger_Interface $logger = null);
 
     public static function logException(Exception $exception, $mode = E_WARNING, Chrome_Logger_Interface $logger = null);
@@ -54,21 +52,7 @@ interface Chrome_Logger_Interface
  */
 class Chrome_Log implements Chrome_Log_Interface
 {
-    private static $_instance = null;
-
     protected static $_logger = null;
-
-    private function __construct() {
-
-    }
-
-    public static function getInstance() {
-        if(self::$_instance === null)  {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
-    }
 
     public static function logException(Exception $exception, $mode = E_WARNING, Chrome_Logger_Interface $logger = null) {
 
@@ -82,9 +66,6 @@ class Chrome_Log implements Chrome_Log_Interface
         if($logger !== null) {
             $logger->log($string, $mode);
         } else {
-            if(self::$_logger == null) {
-                self::setLogger(new Chrome_Logger_File(TMP.CHROME_LOG_DIR.CHROME_LOG_FILE));
-            }
             self::$_logger->log($string, $mode);
         }
     }
@@ -107,30 +88,13 @@ class Chrome_Logger_File implements Chrome_Logger_Interface
 
         require_once LIB.'core/file/file.php';
 
-        if(!Chrome_File::exists($file)) {
-           $this->_filePointer =  Chrome_File::mkFileUsingFilePointer($file, 0777, 'a', false);
-        } else {
-           $this->_filePointer = @fopen($file, 'a');
+        if( ($this->_filePointer = Chrome_File::existsUsingFilePointer($file.'.log', 'a')) === false) {
+            $this->_filePointer = Chrome_File::mkFileUsingFilePointer($file.'.log', 0777, 'a', false);
         }
 
         if($this->_filePointer === false) {
-            throw new Chrome_Exception('Could not create file "'.$file.'" in Chrome_Logger_File!');
+            throw new Chrome_Exception('Could not create file "'.$file.'.log" in Chrome_Logger_File!');
         }
-
-
-        /*$this->_filePointer = @fopen($file, 'a');
-        if($this->_filePointer === false) {
-
-            require_once LIB.'core/file/file.php';
-            Chrome_File::mkFile($file);
-            $this->_filePointer = @fopen($file, 'a');
-
-            if($this->_filePointer === false) {
-                throw new Chrome_Exception('Could not create file "'.$file.'" in Chrome_Logger_File!');
-            }
-        }*/
-
-
     }
 
     public function __destruct() {

@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.12.2012 15:19:05] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:27:10] --> $
  * @link       http://chrome-php.de
  */
 
@@ -35,18 +35,26 @@ class Chrome_Authentication_Chain_Session extends Chrome_Authentication_Chain_Ab
 {
     protected $_options = array('session_namespace' => '_AUTH_SESSION');
 
-    public function __construct(array $options = array())
+    /**
+     * Implementation of Chrome_Session_Interface
+     *
+     * @var Chrome_Session_Interface
+     */
+    protected $_session = null;
+
+
+    public function __construct(Chrome_Session_Interface $session, array $options = array())
     {
+        $this->_session = $session;
+
         $this->_options = array_merge($this->_options, $options);
     }
 
     protected function _update(Chrome_Authentication_Data_Container_Interface $return)
     {
-        $session = Chrome_Session::getInstance();
-
         $array = array('id' => $return->getID());
 
-        $session->set($this->_options['session_namespace'], $array);
+        $this->_session->set($this->_options['session_namespace'], $array);
     }
 
     public function authenticate(Chrome_Authentication_Resource_Interface $resource = null)
@@ -55,9 +63,7 @@ class Chrome_Authentication_Chain_Session extends Chrome_Authentication_Chain_Ab
             return $this->_chain->authenticate($resource);
         }
 
-        $session = Chrome_Session::getInstance();
-
-        $data = $session->get($this->_options['session_namespace']);
+        $data = $this->_session[$this->_options['session_namespace']];
 
         if($data === null or empty($data) === true or !isset($data['id'])) {
             return $this->_chain->authenticate($resource);
@@ -74,9 +80,7 @@ class Chrome_Authentication_Chain_Session extends Chrome_Authentication_Chain_Ab
 
     protected function _deAuthenticate()
     {
-        $session = Chrome_Session::getInstance();
-
-        $session->set($this->_options['session_namespace'], null);
+        $this->_session->set($this->_options['session_namespace'], null);
     }
 
     protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)

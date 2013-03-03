@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2013 14:15:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:03:32] --> $
  * @author     Alexander Book
  */
 
@@ -85,29 +85,6 @@ class Chrome_Route_Static implements Chrome_Router_Route_Interface
 	public function url( Chrome_Router_Resource_Interface $resource )
 	{
 
-	}
-}
-
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.Router
- */
-class Chrome_Model_Route_Static extends Chrome_Model_Decorator_Abstract
-{
-	private static $_instance = null;
-
-	protected function __construct()
-	{
-		$this->_decorator = new Chrome_Model_Route_Static_Cache( new Chrome_Model_Route_Static_DB() );
-	}
-
-	public static function getInstance()
-	{
-		if( self::$_instance === null ) {
-			self::$_instance = new self();
-		}
-
-		return self::$_instance;
 	}
 }
 

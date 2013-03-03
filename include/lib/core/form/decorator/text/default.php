@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.10.2012 11:31:54] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 14:40:41] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -44,7 +44,7 @@ class Chrome_Form_Decorator_Text_Default extends Chrome_Form_Decorator_Abstract
 
 		$class = '';
 
-		if( $this->getOptions( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED ) === true ) {
+		if( $this->_formElement->getOptions( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED ) === true ) {
 			$this->setAttribute( 'required', 'required' );
 		}
 

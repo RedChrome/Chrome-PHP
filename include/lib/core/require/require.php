@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 19:38:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 14:33:05] --> $
  * @author     Alexander Book
  */
 
@@ -43,8 +43,6 @@ interface Chrome_Require_Interface
  */
 interface Chrome_Require_Loader_Interface
 {
-    public static function getInstance();
-
 	public function classLoad($class);
 }
 
@@ -197,7 +195,7 @@ class Chrome_Require implements Chrome_Require_Interface
 		foreach($this->_require AS $key => $value) {
 			require_once BASEDIR.$value['path'];
             if($value['class_loader'] == true) {
-                $this->_requireClass[] = $value['name'];
+                $this->_requireClass[] = new $value['name']();
             }
 		}
 	}
@@ -296,7 +294,7 @@ class Chrome_Require implements Chrome_Require_Interface
 		// $rClass -> $requireClass
 		foreach($this->_requireClass AS $rClass) {
 		    try {
-    			if( ($file = call_user_func(array($rClass, 'getInstance'))->classLoad($name)) !== false AND $file !== null) {
+    			if( ($file = $rClass->classLoad($name)) !== false AND $file !== null) {
     				$this->_model->setClass($name, $file);
                     require_once $file;
                     return true;
@@ -306,7 +304,7 @@ class Chrome_Require implements Chrome_Require_Interface
             }
 		}
 
-        Chrome_Log::logException(new Chrome_Exception_Require('Could not load class "'.$name.'"'), E_ERROR);
+        Chrome_Log::logException(new Chrome_Exception('Could not load class "'.$name.'"'), E_ERROR);
         // cannot throw an exception, because this function gets called mostly via __autoload => php crashes, fixed in newer php distributions...
 		//die('Could not load class "'.$name.'"! No extension is matching and class is not defined in table '.DB_PREFIX.'_class!');
 	}
@@ -346,7 +344,7 @@ class Chrome_Require implements Chrome_Require_Interface
 		// $rClass -> $requireClass
 		foreach($this->_requireClass AS $rClass) {
 		    try {
-    			if( ($file = call_user_func(array($rClass, 'getInstance'))->classLoad($name)) !== false AND $file !== null) {
+    			if( ($file = $rClass->classLoad($name)) !== false AND $file !== null) {
     				$this->_model->setClass($name, $file);
                     require_once $file;
                     return true;

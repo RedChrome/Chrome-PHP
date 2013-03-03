@@ -252,7 +252,8 @@ CREATE TABLE IF NOT EXISTS `cp1_user_regist` (
   `email` varchar(200) NOT NULL,
   `time` int(15) NOT NULL,
   `key` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 INSERT INTO `cp1_class` (`id`, `name`, `file`) VALUES

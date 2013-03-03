@@ -17,7 +17,7 @@
  * @subpackage Chrome.Request
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 14:50:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2013 18:24:34] --> $
  * @author     Alexander Book
  */
 
@@ -27,12 +27,9 @@ if( CHROME_PHP !== true ) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Request
  */
-class Chrome_Request_Handler_AJAX implements Chrome_Request_Handler_Interface
+class Chrome_Request_Handler_AJAX extends Chrome_Request_Handler_Abstract
 {
-	public function __construct()
-	{
-
-	}
+    protected $_requestClass = 'Chrome_Request_Data_AJAX';
 
 	public function canHandleRequest()
 	{
@@ -42,29 +39,13 @@ class Chrome_Request_Handler_AJAX implements Chrome_Request_Handler_Interface
 			return false;
 		}
 	}
-
-	public function getRequestData()
-	{
-		return Chrome_Request_Data_HTTP::getInstance();
-	}
 }
 
 class Chrome_Request_Data_AJAX extends Chrome_Request_Data_Abstract
 {
-	private static $_instance;
-
-	protected function __construct()
+	public function __construct(Chrome_Cookie_Interface $cookie, Chrome_Session_Interface $session)
 	{
-		parent::__construct();
+		parent::__construct($cookie, $session);
 		$this->_vars['FILES'] = null;
-	}
-
-	public static function getInstance()
-	{
-		if( self::$_instance === null ) {
-			self::$_instance = new self();
-		}
-
-		return self::$_instance;
 	}
 }

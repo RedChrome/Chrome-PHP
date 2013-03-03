@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 17:04:36] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 10:53:35] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -446,9 +446,17 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     protected $_isSent  = null;
 
     /**
+     * @todo: why is this private?
      * @var Chrome_Converter
      */
     private static $_converterInstance = null;
+
+    /**
+     * Instance of Chrome_Session_Interface
+     *
+     * @var Chrome_Session_Interface
+     */
+    protected $_session = null;
 
     /**
      * Chrome_Form_Element_Abstract::__construct()
@@ -462,6 +470,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     {
         $this->_id = $id;
         $this->_form = $form;
+        $this->_session = $this->_form->getRequestData()->getSession();
 
         $this->_options = array_merge($this->_defaultOption, $this->_defaultOptions, $form->getOptions($this), (array)$options);
 

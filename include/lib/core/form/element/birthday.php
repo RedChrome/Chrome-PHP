@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 16:24:41] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 10:54:29] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -144,25 +144,19 @@ class Chrome_Form_Element_Birthday extends Chrome_Form_Element_Abstract
             }
         }
 
-        $session = Chrome_Session::getInstance();
-
-        $array = $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+        $array = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
         $array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_BIRTHDAY_SESSION_NAMESPACE][$this->getID()] = $this->getData();
-        $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE] = $array;
+        $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE] = $array;
     }
 
     protected function _unSave($key)
     {
-        $session = Chrome_Session::getInstance();
-
-        $array = $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+        $array = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
         $array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_BIRTHDAY_SESSION_NAMESPACE][$this->getID()][$key] = null;
     }
 
     public function getSavedData()
     {
-        $session = Chrome_Session::getInstance();
-
-        return (isset($session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_BIRTHDAY_SESSION_NAMESPACE][$this->getID()])) ? $session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_BIRTHDAY_SESSION_NAMESPACE][$this->getID()] : null;
+        return (isset($this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_BIRTHDAY_SESSION_NAMESPACE][$this->getID()])) ? $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_BIRTHDAY_SESSION_NAMESPACE][$this->getID()] : null;
     }
 }

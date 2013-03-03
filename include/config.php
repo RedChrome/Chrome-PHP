@@ -20,7 +20,7 @@
  * @author    Alexander Book <alexander.book@gmx.de>
  * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
  * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 15:01:43] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 13:54:37] --> $
  * @link      http://chrome-php.de
  */
 
@@ -59,13 +59,14 @@ if(!defined('E_USER_DEPRECATED')) {
 }
 
 // Logs every exception
+// @deprecated, logging is activated by CHROME_DEVELOPER_STATUS
 define('CHROME_LOG_ERRORS', true);
 // Logs every SQL-Error
 define('CHROME_LOG_SQL_ERRORS', true);
 // log path
 define('CHROME_LOG_DIR', 'logs/');
-// log file, default
-define('CHROME_LOG_FILE', 'log.log');
+// log file, default, do not add an extension. this will be generated automatically
+define('CHROME_LOG_FILE', 'log');
 //E_ALL | E_STRICT | E_DEPRECATED | E_USER_DEPRECATED); # Display Errors, set to 0 to supress errors
 define('CHROME_DISPLAY_ERRORS', (E_ALL | E_STRICT));
 

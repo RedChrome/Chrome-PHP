@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 17:03:20] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:06:46] --> $
  * @link       http://chrome-php.de
  */
 
@@ -72,6 +72,36 @@ interface Chrome_Form_Handler_Interface
  */
 interface Chrome_Form_Interface
 {
+    /**
+     * ATTRIBUTE_METHOD: tells where the data comes from, post or get?
+     * ATTRIBUTE_DECORATOR: sets the extension for decorators, default is Default, so
+     *                      all decorators come from Chrome_Form_Decorator_XXX_Default
+     * ATTRIBUTE_ACTION: sets the form action
+     * ATTRIBUTE_NAME: sets the form name
+     * ATTRIBUTE_ID: sets the form id
+     *
+     * @var string
+     */
+    const ATTRIBUTE_METHOD    = 'method',
+          ATTRIBUTE_DECORATOR = 'decorator',
+          ATTRIBUTE_ACTION    = 'action',
+          ATTRIBUTE_NAME      = 'name',
+          ATTRIBUTE_ID        = 'id';
+
+    /**
+     * @var string
+     */
+    const CHROME_FORM_METHOD_POST = 'POST',
+          CHROME_FORM_METHOD_GET  = 'GET';
+
+    /**
+     * Creates a new form
+     *
+     * @param Chrome_Request_Handler_Interface $reqHandler
+     * @return Chrome_Form_Interface
+     */
+    public function __construct(Chrome_Request_Handler_Interface $reqHandler);
+
     /**
      * isCreated()
      *
@@ -392,27 +422,6 @@ interface Chrome_Form_Interface
 abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 {
     /**
-     * ATTRIBUTE_METHOD: tells where the data comes from, post or get?
-     * ATTRIBUTE_DECORATOR: sets the extension for decorators, default is Default, so
-     *                      all decorators come from Chrome_Form_Decorator_XXX_Default
-     * ATTRIBUTE_ACTION: sets the form action
-     * ATTRIBUTE_NAME: sets the form name
-     * ATTRIBUTE_ID: sets the form id
-     * @var string
-     */
-    const ATTRIBUTE_METHOD    = 'method',
-          ATTRIBUTE_DECORATOR = 'decorator',
-          ATTRIBUTE_ACTION    = 'action',
-          ATTRIBUTE_NAME      = 'name',
-          ATTRIBUTE_ID        = 'id';
-
-    /**
-     * @var string
-     */
-    const CHROME_FORM_METHOD_POST = 'POST',
-          CHROME_FORM_METHOD_GET  = 'GET';
-
-    /**
      * Name/Id of the form
      *
      * @var mixed
@@ -513,13 +522,25 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     protected $_requestDataObject = null;
 
     /**
+     * Session instance
+     *
+     * @var Chrome_Session_Interface
+     */
+    protected $_session           = null;
+
+    /**
      * Chrome_Form_Abstract::__construct()
      *
      * Constructor
      *
      * @return Chrome_Form_Abstract
      */
-    abstract protected function __construct();
+    public function __construct(Chrome_Request_Handler_Interface $reqHandler) {
+        $this->_requestDataObject = $reqHandler->getRequestData();
+        $this->_init();
+    }
+
+    abstract protected function _init();
 
     /**
      * Chrome_Form_Abstract::isCreated()
@@ -1030,8 +1051,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
             case self::ATTRIBUTE_ID:
                 {
                     $this->_id = $value;
+                    break;
                 }
-
         }
     }
 
@@ -1212,10 +1233,6 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function getRequestData()
     {
-        if($this->_requestDataObject === null) {
-            $this->_requestDataObject = Chrome_Request::getInstance()->getRequestDataObject();
-        }
-
         return $this->_requestDataObject;
     }
 }

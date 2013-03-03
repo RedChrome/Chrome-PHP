@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 16:28:54] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:42:22] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -35,38 +35,6 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Require_Filter implements Chrome_Require_Loader_Interface
 {
-    /**
-     * Contains instance of this class
-     *
-     * @var Chrome_Require_Filter
-     */
-    private static $_instance;
-
-    /**
-     * Chrome_Require_Filter::__construct()
-     *
-     * @return Chrome_Require_Filter
-     */
-    private function __construct()
-    {
-    }
-
-    /**
-     * Chrome_Require_Filter::getInstance()
-     *
-     * Singleton pattern
-     *
-     * @return Chrome_Require_Filter
-     */
-    public static function getInstance()
-    {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
-    }
-
     /**
      * Chrome_Require_Filter::classLoad()
      *

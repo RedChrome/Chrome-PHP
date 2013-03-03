@@ -14,29 +14,36 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.Converter
+ * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:50:07] --> $
- * @author     Alexander Book
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 13:52:15] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
 
 /**
+ *
+ * Logger for database
+ *
  * @package CHROME-PHP
- * @subpackage Chrome.Converter
+ * @subpackage Chrome.Log
  */
-class Chrome_Exception_Converter extends Chrome_Exception
+class Chrome_Logger_Database implements Chrome_Logger_Interface
 {
-    // TODO: where does this come from and where is it used? -> maybe delete this`?
-	public static function log($e) {
-		if(CHROME_LOG_ERRORS === true) {
+    protected static $_logger = null;
 
-			$text = 'NEW CONVERTER EXCEPTION AT '.date('H:i:s')."\n\n".var_export(debug_backtrace())."\n\n\n";
+    public function __construct()  {
+        if(self::$_logger === null AND CHROME_LOG_SQL_ERRORS === true) {
+            self::$_logger = new Chrome_Logger_File(TMP . CHROME_LOG_DIR . 'database');
+        }
+    }
 
-			Chome_File::createFile(BASEDIR.CHROME_LOG_FILE.'/Converter/error_'.date('Y_m_d').'.log', $text);
-		}
-	}
+    public function log($string, $mode)
+    {
+        if(self::$_logger !== null) {
+            self::$_logger->log($string, $mode);
+        }
+    }
 }

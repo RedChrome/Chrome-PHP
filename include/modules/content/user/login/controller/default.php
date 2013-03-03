@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 16:30:17] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:07:12] --> $
  * @author     Alexander Book
  */
 
@@ -36,11 +36,13 @@ class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Content_
 
     protected function _execute()
     {
-        $this->_form = Chrome_Form_Login::getInstance();
+        $this->_form = Chrome_Form_Login::getInstance($this->_requestHandler);
 
         $this->_view = new Chrome_View_User_Login_Default($this);
 
         $this->_model = new Chrome_Model_Login($this->_form);
+
+
 
         if($this->_model->isLoggedIn() == true) {
             $this->_view->alreadyLoggedIn();

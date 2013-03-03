@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 16:28:35] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:41:58] --> $
  */
 
 die('readme file! Not supposed to run in script!');
@@ -43,20 +43,6 @@ if (!$require->isClass('Chrome_Require_Readme')) {
  */
 class Chrome_Require_Readme implements Chrome_Require_Loader_Interface
 {
-    private static $_instance;
-
-	// can be public too
-    private function __construct()
-    {
-    }
-
-    // this method is needed, to get an instance of this class
-    // to call classLoad()
-    public static function getInstance()
-    {
-        return new Chrome_Require_Readme();
-    }
-
     // in this method you put your logic
     public function classLoad($class)
     {

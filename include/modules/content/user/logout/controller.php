@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd		New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 17:33:49] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2013 19:35:01] --> $
  * @author     Alexander Book
  */
 
@@ -35,6 +35,6 @@ class Chrome_Controller_Content_Logout extends Chrome_Controller_Module_Abstract
         Chrome_Authentication::getInstance()->deAuthenticate();
 
         // redirect
-        Chrome_Redirection::redirectToPreviousPage();
+        Chrome_Redirection::redirectToPreviousPage($this->_requestHandler->getRequestData());
 	}
 }

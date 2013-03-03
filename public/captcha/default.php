@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [31.10.2012 13:35:22] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:22:52] --> $
  */
 
 if(!isset($_GET['name'])) {
@@ -41,21 +41,30 @@ require_once LIB.'core/cookie.php';
 // need session to create image
 require_once LIB.'core/session.php';
 
+require_once LIB.'core/request/request.php';
+
+require_once LIB.'core/request/http.php';
+
 require_once LIB.'captcha/captcha.php';
 
 // need Chrome_Captcha_Engine_Default
 require_once PLUGIN.'Captcha/default.php';
 
-$key = Chrome_Session::getInstance()->get('CAPTCHA_'.$_GET['name']);
+$hash = Chrome_Hash::getInstance();
+$cookie = new Chrome_Cookie($hash);
+$session = new Chrome_Session($cookie, $hash);
+$reqHandler = new Chrome_Request_Handler_HTTP($cookie, $session);
+
+$key = $session['CAPTCHA_'.$_GET['name']];
 
 if($key === null) {
     die();
 }
 
 if(isset($_GET['renew'])) {
-    $captcha = new Chrome_Captcha($_GET['name'], array(), array());
+    $captcha = new Chrome_Captcha($_GET['name'],$reqHandler->getRequestData(), array(), array());
     $captcha->renew();
-    $key = Chrome_Session::getInstance()->get('CAPTCHA_'.$_GET['name']);
+    $key = $session['CAPTCHA_'.$_GET['name']];
 
     if($key === null) {
         die();

@@ -16,13 +16,16 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 19:58:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 13:43:10] --> $
  * @author     Alexander Book
  */
 
 // unfortunately PHPUnit now needs $GLOBALS to be set, but we dont allow this, so use this hack
+// and we need these vars to test Chrome_Session, Chrome_Cookie...
+// they get unset in Chrome_Request_Factory, cause no code should access these global vars
 $_tempServer = $_SERVER;
 $_tempGlobals = $GLOBALS;
+$_tempCookie = $_COOKIE;
 
 require_once 'testsetup.php';
 require_once 'testsetupdb.php';
@@ -31,3 +34,20 @@ Chrome_Front_Controller::getInstance();
 
 $_SERVER = $_tempServer;
 $GLOBALS = $_tempGlobals;
+$_COOKIE = $_tempCookie;
+
+class Chrome_Test extends PHPUnit_Framework_TestCase
+{
+    protected $_session, $_cookie;
+
+    public function __construct($name = NULL, array $data = array(), $dataName = '') {
+        $this->_session = Chrome_Front_Controller::getInstance()->getRequestHandler()->getRequestData()->getSession();
+        $this->_cookie  = Chrome_Front_Controller::getInstance()->getRequestHandler()->getRequestData()->getCookie();
+        parent::__construct($name, $data, $dataName);
+    }
+
+
+    public function test() {
+        // do nothing, just to avoid a warning "No tests found in class Chrome_Test"
+    }
+}

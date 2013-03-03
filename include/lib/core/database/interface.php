@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 14:49:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 13:49:00] --> $
  * @link       http://chrome-php.de
  */
 
@@ -108,7 +108,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
             return $this->_result;
         } catch(Chrome_Exception_Database $e) {
-            Chrome_Log::logException($e, E_ERROR);
+            Chrome_Log::logException($e, E_ERROR, new Chrome_Logger_Database());
             throw $e;
         }
     }
@@ -176,6 +176,8 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
         $statement = str_replace('?', '%s', $statement);
 
+        // Note: you have to escape % (if your using queries: select * form test where val LIKE "test%") with %
+        // so the query would look like: select * from test where val LIKE "test%%"
         return vsprintf($statement, $this->_params);
     }
 }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2013 13:44:14] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2013 19:01:57] --> $
  * @author     Alexander Book
  */
 
@@ -41,9 +41,9 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
      *
      * @return Chrome_Form_Login
      */
-    public static function getInstance() {
+    public static function getInstance(Chrome_Request_Handler_Interface $reqHandler) {
         if(self::$_instance === null) {
-            self::$_instance = new self();
+            self::$_instance = new self($reqHandler);
         }
 
         return self::$_instance;
@@ -53,7 +53,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
      *
      * @return Chrome_Form_Login
      */
-    protected function __construct()
+    protected function _init()
     {
         // get lang obj for this module
         $LANG = new Chrome_Language('modules/content/user/login');
