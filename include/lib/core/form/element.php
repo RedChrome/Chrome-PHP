@@ -129,7 +129,7 @@ interface Chrome_Form_Element_Interface
     public function getAttribute($key);
 
     /**
-     * setDecorator()
+     * Sets the decorator which renderes this element
      *
      * @param Chrome_Form_Decorator_Interface $obj
      * @return void
@@ -137,17 +137,17 @@ interface Chrome_Form_Element_Interface
     public function setDecorator(Chrome_Form_Decorator_Interface $obj);
 
     /**
-     * getDecorator()
+     * Returns an instance of a decorator which renders this element
      *
      * @return Chrome_Form_Decorator_Interface
      */
     public function getDecorator();
 
     /**
-     * setDefaultDecorator
-     *
-     * @param string $formElementClass
-     * @param string $decoratorClass
+     * Sets the default decorator, used to render the form
+     * 
+     * @param string $formElementClass the class name of the form element, which should get rendered with $decoratorClass
+     * @param string $decoratorClass the class name of the decorator
      * @return void
      */
     public static function setDefaultDecorator($formElementClass, $decoratorClass);
@@ -196,6 +196,8 @@ interface Chrome_Form_Element_Interface
 
 /**
  * Chrome_Form_Element_Abstract
+ *
+ * Abstract class of all form element classes.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Element
@@ -754,11 +756,19 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 
         return $data;
     }
-
+    
+    /**
+     * (non-PHPdoc)
+     * @see Chrome_Form_Element_Interface::setDefaultDecorator()
+     */
     public static function setDefaultDecorator($formElementClass, $decoratorClass) {
         self::$_defaultDecorator[$formElementClass] = $decoratorClass;
     }
-
+    
+    /**
+     * (non-PHPdoc)
+     * @see Chrome_Form_Element_Interface::getDecorator()
+     */
     public function getDecorator() {
 
         if($this->_decorator !== null) {
