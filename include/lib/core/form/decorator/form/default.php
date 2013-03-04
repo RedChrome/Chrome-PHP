@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.10.2012 01:06:29] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:17:36] --> $
  */
 if(CHROME_PHP !== true)
     die();

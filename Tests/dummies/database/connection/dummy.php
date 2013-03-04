@@ -16,9 +16,7 @@ class Chrome_Database_Connection_Dummy implements Chrome_Database_Connection_Int
     public function getConnection()
     {
         return $this->_connection;
-
     }
-
 
     public function disconnect()
     {

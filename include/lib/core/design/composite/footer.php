@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.08.2011 14:04:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.02.2013 12:05:32] --> $
  * @author     Alexander Book
  */
 
@@ -35,8 +35,8 @@ class Chrome_Design_Composite_Footer extends Chrome_Design_Composite_Abstract
     protected function __construct() {
         parent::__construct();
 
-        Chrome_Design_Composite_Layout::getInstance()->setFooter($this);
-        $this->_composite = new Chrome_Design_Composite_Container();
+        Chrome_Design_Composite_Body::getInstance()->setPostComposite($this);
+        $this->_composite = new Chrome_Design_Composite_Container_Box('footer_box_start', 'footer_box_end');
     }
 
     public static function getInstance() {

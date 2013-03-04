@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.09.2011 14:47:28] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:42:14] --> $
  */
 
 if (CHROME_PHP !== true)
@@ -33,42 +33,8 @@ if (CHROME_PHP !== true)
  * @version 2009/11/16/15/45
  * @access public
  */
-class Chrome_Require_Exception implements Chrome_Require_Interface
+class Chrome_Require_Exception implements Chrome_Require_Loader_Interface
 {
-    /**
-     * Contains instance of this class
-     *
-     * @var Chrome_Require_Exception
-     */
-    private static $_instance;
-
-    /**
-     * Chrome_Require_Exception::__construct()
-     *
-     * Singleton pattern
-     *
-     * @return Chrome_Require_Exception instance
-     */
-    private function __construct()
-    {
-    }
-
-    /**
-     * Chrome_Require_Exception::getInstance()
-     *
-     * Singleton pattern
-     *
-     * @return Chrome_Require_Exception instance
-     */
-    public static function getInstance()
-    {
-        if (self::$_instance === null) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
-    }
-
     /**
      * Chrome_Require_Exception::classLoad()
      *
@@ -86,7 +52,7 @@ class Chrome_Require_Exception implements Chrome_Require_Interface
                 throw new Chrome_Exception('Cannot load class '.$class.'! There is no file matching the requirements in Chrome_Require_Exception::classLoad()!');
             }
         }
-        
+
         // does the class contain 'Chrome_Exception_'?
         if (preg_match('#Chrome_Exception_(.{1,})#i', $class, $matches)) {
             if (_isFile(LIB.'exception/' . strtolower($matches[1]).'.php')) {
@@ -95,7 +61,7 @@ class Chrome_Require_Exception implements Chrome_Require_Interface
                 throw new Chrome_Exception('Cannot load class '.$class.'! There is no file matching the requirements in Chrome_Require_Exception::classLoad()!');
             }
         }
-        
+
         return false;
     }
 }

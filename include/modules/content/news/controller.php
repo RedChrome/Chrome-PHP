@@ -2,7 +2,7 @@
 
 require_once 'view.php';
 
-class Chrome_Controller_News extends Chrome_Controller_Content_Abstract
+class Chrome_Controller_News extends Chrome_Controller_Module_Abstract
 {
     protected function _initialize()
     {

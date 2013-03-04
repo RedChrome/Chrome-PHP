@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 14:10:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 15:50:08] --> $
  * @author     Alexander Book
  */
 
@@ -93,7 +93,6 @@ abstract class Chrome_Design_Composite_Abstract implements Chrome_Design_Composi
 
     public function render(Chrome_Controller_Interface $controller)
     {
-
         $return = '';
 
         if($this->_preComposite !== null) {

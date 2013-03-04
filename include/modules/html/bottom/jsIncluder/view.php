@@ -1,14 +1,8 @@
 <?php
 
-class Chrome_Controller_Header_HTML_JS extends Chrome_Controller_Header_Abstract
-{
-    public function __construct(Chrome_Request_Handler_Interface $reqHandler)
-    {
-        Chrome_Design_Composite_Body::getInstance()->getPostComposite()->addView(new Chrome_View_Header_HTML_JS($this));
-    }
-}
+// TODO: consider moving these js includes to a template
 
-class Chrome_View_Header_HTML_JS extends Chrome_View_Abstract
+class Chrome_View_HTML_Bottom_JsIncluder extends Chrome_View
 {
     public function render(Chrome_Controller_Interface $controller) {
        return '

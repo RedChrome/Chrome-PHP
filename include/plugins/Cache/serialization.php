@@ -19,7 +19,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:32:43] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 17:18:33] --> $
  * @link       http://chrome-php.de
  */
 
@@ -33,7 +33,7 @@ if(CHROME_PHP !== true)
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:32:43] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 17:18:33] --> $
  * @link       http://chrome-php.de
  */
 interface Chrome_Cache_Serialization_Interface extends Chrome_Cache_Interface
@@ -80,7 +80,7 @@ interface Chrome_Cache_Serialization_Interface extends Chrome_Cache_Interface
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [18.11.2012 14:32:43] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 17:18:33] --> $
  * @link       http://chrome-php.de
  */
 class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome_Cache_Serialization_Interface
@@ -333,8 +333,10 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
      {
         $this->_dataChanged = true;
 
-        // now we need to open the file!
-        $this->_filePointer = fopen($this->_fileName, 'wb');
+        // now we need to open the file, but just one time ;)
+        if($this->_filePointer === null) {
+            $this->_filePointer = fopen($this->_fileName, 'wb');
+        }
      }
 
     /**

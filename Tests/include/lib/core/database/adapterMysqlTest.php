@@ -130,6 +130,20 @@ class DatabaseAdapterMysqlTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertTrue($exists, 'no element found in table cpp_require? cannot be?');
+    }
 
+    public function testGetLastInsertedIdOnQueryNotContainingInsert()
+    {
+        $this->_db->query('SELECT * FROM cpp_require LIMIT 0,1');
+
+        $this->assertNull($this->_db->getResult()->getLastInsertId());
+
+        $this->_db->clear()->query('SELECT COUNT(id) FROM testing ');
+
+        $id = $this->_db->getResult()->getNext();
+
+        $this->_db->clear()->query('INSERT INTO  `testing` ( id, var1) VALUES ( NULL , "testing getLastInsertId" )');
+
+        $this->assertEquals($id['COUNT(id)'] +1, $this->_db->getResult()->getLastInsertId());
     }
 }

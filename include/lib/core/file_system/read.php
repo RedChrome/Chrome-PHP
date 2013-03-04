@@ -17,7 +17,7 @@
  * @subpackage Chrome.File_System
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.01.2013 20:33:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.02.2013 15:07:00] --> $
  * @author     Alexander Book
  */
 
@@ -242,7 +242,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 
         if($this->_fileHandler === false) {
             require_once LIB.'core/file/file.php';
-			Chrome_File::mkFile(TMP.self::FILE_SYSTEM_READ_CACHE, 0777);
+			Chrome_File::mkFile(TMP.self::FILE_SYSTEM_READ_CACHE, 0777, false);
 			$this->_fileHandler = @fopen(TMP.self::FILE_SYSTEM_READ_CACHE, 'wb');
 			return array();
         }
@@ -334,18 +334,16 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 		$this->_updateCache($path, self::FILE_SYSTEM_READ_TYPE_FILE);
 
 		// entry in cache AND file exists
-		if(isset($this->_cache[$path]) AND $this->_cache[$path][self::FILE_SYSTEM_KEY_TYPE] !== self::FILE_SYSTEM_DOES_NOT_EXIST) {
+		if(isset($this->_cache[$path])) {
 
 			if($this->_cache[$path][self::FILE_SYSTEM_KEY_TYPE] === self::FILE_SYSTEM_READ_TYPE_FILE)
 				return true;
 			else
 				return false;
 			// no entry in cache
-		} elseif(!isset($this->_cache[$path])) {
+		} else {
 			return $this->_isFile($path);
 			// entry in cache AND file does not exist
-		} else {
-			return false;
 		}
 	}
 

@@ -6,7 +6,7 @@ require_once LIB.'core/form/form.php';
 require_once LIB.'core/request/request.php';
 class Chrome_Form_Test_No_Elements extends Chrome_Form_Abstract
 {
-    public function __construct() {
+    protected function _init() {
 
     }
 }
@@ -32,81 +32,81 @@ class Chrome_Request_Data_Test extends Chrome_Request_Data_Abstract
 
 class FormTest extends PHPUnit_Framework_TestCase
 {
-    public function testIfNoElementsAreAdded() {
-        $form = new Chrome_Form_Test_No_Elements();
+    protected $_form;
 
-        $this->assertTrue($form->isSent());
-        $this->assertTrue($form->isCreated());
-        $this->assertTrue($form->isValid());
-        $this->assertEquals(array(), $form->getData());
-        $this->assertFalse($form->issetSentData('doesNotExist'));
-        $this->assertEquals($form->getElements('doesNotExist'), null);
-        $this->assertEquals($form->getElements(), array());
-        $this->assertEquals($form->getCreationErrors(), array());
-        $this->assertEquals($form->getReceivingErrors(), array());
-        $this->assertEquals($form->getValidationErrors(), array());
-        $this->assertEquals($form->getErrors(), array());
-        $this->assertEquals($form->getAttribute('doesNotExist'), null);
-        $this->assertInstanceOf('Chrome_Request_Data_Interface', $form->getRequestData());
-        $this->assertFalse($form->hasReceivingErrors(''));
-        $this->assertFalse($form->hasCreationErrors(''));
-        $this->assertFalse($form->hasValidationErrors(''));
-        $this->assertFalse($form->hasErrors(''));
+    public function setUp() {
+        $this->_form = new Chrome_Form_Test_No_Elements(Chrome_Front_Controller::getInstance()->getRequestHandler());
+    }
+
+    public function testIfNoElementsAreAdded() {
+
+        $this->assertTrue($this->_form->isSent());
+        $this->assertTrue($this->_form->isCreated());
+        $this->assertTrue($this->_form->isValid());
+        $this->assertEquals(array(), $this->_form->getData());
+        $this->assertFalse($this->_form->issetSentData('doesNotExist'));
+        $this->assertEquals($this->_form->getElements('doesNotExist'), null);
+        $this->assertEquals($this->_form->getElements(), array());
+        $this->assertEquals($this->_form->getCreationErrors(), array());
+        $this->assertEquals($this->_form->getReceivingErrors(), array());
+        $this->assertEquals($this->_form->getValidationErrors(), array());
+        $this->assertEquals($this->_form->getErrors(), array());
+        $this->assertEquals($this->_form->getAttribute('doesNotExist'), null);
+        $this->assertInstanceOf('Chrome_Request_Data_Interface', $this->_form->getRequestData());
+        $this->assertFalse($this->_form->hasReceivingErrors(''));
+        $this->assertFalse($this->_form->hasCreationErrors(''));
+        $this->assertFalse($this->_form->hasValidationErrors(''));
+        $this->assertFalse($this->_form->hasErrors(''));
 
     }
 
     public function testExceptionIfElementDoesNotExistInisSent() {
 
         $this->setExpectedException('Chrome_Exception');
-        $form = new Chrome_Form_Test_No_Elements();
 
-        $form->isSent('doesNotExist');
+        $this->_form->isSent('doesNotExist');
     }
 
     public function testExceptionIfElementDoesNotExistInisCreated() {
 
         $this->setExpectedException('Chrome_Exception');
-        $form = new Chrome_Form_Test_No_Elements();
 
-        $form->isCreated('doesNotExist');
+        $this->_form->isCreated('doesNotExist');
     }
 
     public function testExceptionIfElementDoesNotExistInisValid() {
 
         $this->setExpectedException('Chrome_Exception');
-        $form = new Chrome_Form_Test_No_Elements();
 
-        $form->isValid('doesNotExist');
+        $this->_form->isValid('doesNotExist');
     }
 
     public function testExceptionIfNoIdIsSet() {
 
         $this->setExpectedException('Chrome_Exception');
-        $form = new Chrome_Form_Test_No_Elements();
 
-        $form->getID();
+        $this->_form->getID();
     }
 
     public function testAttributes() {
-        $form = new Chrome_Form_Test_No_Elements();
 
-        $form->setAttribute('test', true);
-        $this->assertTrue($form->getAttribute('test'));
-        $form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_ID, 'myTestId');
-        $this->assertEquals($form->getID(), 'myTestId');
-        $form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_ACTION, 'myAction.html');
-        $this->assertEquals($form->getAttribute('action'), 'myAction.html');
+        $this->_form->setAttribute('test', true);
+        $this->assertTrue($this->_form->getAttribute('test'));
+        $this->_form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_ID, 'myTestId');
+        $this->assertEquals($this->_form->getID(), 'myTestId');
+        $this->_form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_ACTION, 'myAction.html');
+        $this->assertEquals($this->_form->getAttribute('action'), 'myAction.html');
     }
 
     public function testFormWithRequestData() {
 
-        $form = new Chrome_Form_Test_No_Elements();
-        $form->setRequestData(new Chrome_Request_Data_Test());
-        $form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, Chrome_Form_Abstract::CHROME_FORM_METHOD_GET);
-        $this->assertTrue($form->issetSentData('GET'));
-        $form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, Chrome_Form_Abstract::CHROME_FORM_METHOD_POST);
-        $this->assertTrue($form->issetSentData('POST'));
+
+        $this->_form->setRequestData(new Chrome_Request_Data_Test());
+        $this->_form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, Chrome_Form_Abstract::CHROME_FORM_METHOD_GET);
+        $this->assertTrue($this->_form->issetSentData('GET'));
+        $this->_form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, Chrome_Form_Abstract::CHROME_FORM_METHOD_POST);
+        $this->assertTrue($this->_form->issetSentData('POST'));
         $this->setExpectedException('Chrome_Exception', '', 1);
-        $form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, 'anyMethod...');
+        $this->_form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, 'anyMethod...');
     }
 }

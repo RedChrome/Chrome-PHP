@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.10.2012 23:42:23] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 18:02:50] --> $
  * @author     Alexander Book
  */
 
@@ -43,24 +43,28 @@ class Chrome_View_User_Login_Ajax extends Chrome_View_Abstract
         $this->setAjaxEnvironment();
     }
 
+    public function render(Chrome_Controller_Interface $controller) {
+        return $this->_views[0]->render($controller);
+    }
+
     public function alreadyLoggedIn() {
-        Chrome_Design_Composite_Laconic::getInstance()->getComposite()->addView(new Chrome_View_User_Ajax_AlreadyLoggedIn($this->_controller));
+        $this->_views[] = new Chrome_View_User_Ajax_AlreadyLoggedIn($this->_controller);
     }
 
     public function successfullyLoggedIn() {
-        Chrome_Design_Composite_Laconic::getInstance()->getComposite()->addView(new Chrome_View_User_Ajax_successfullyLoggedIn($this->_controller));
+        $this->_views[] = new Chrome_View_User_Ajax_successfullyLoggedIn($this->_controller);
     }
 
     public function formNotValid() {
-        Chrome_Design_Composite_Laconic::getInstance()->getComposite()->addView(new Chrome_View_User_Ajax_FormNotValid($this->_controller));
+        $this->_views[] = new Chrome_View_User_Ajax_FormNotValid($this->_controller);
     }
 
     public function showForm() {
-        Chrome_Design_Composite_Laconic::getInstance()->getComposite()->addView(new Chrome_View_User_Ajax_ShowForm($this->_controller));
+        $this->_views[] = new Chrome_View_User_Ajax_ShowForm($this->_controller);
     }
 
     public function errorWhileLoggingIn() {
-        Chrome_Design_Composite_Laconic::getInstance()->getComposite()->addView(new Chrome_View_User_Ajax_WrongPassword($this->_controller));
+        $this->_views[] = new Chrome_View_User_Ajax_WrongPassword($this->_controller);
     }
 }
 
@@ -84,7 +88,6 @@ class Chrome_View_User_Ajax_FormNotValid extends Chrome_View_Abstract {
 
 class Chrome_View_User_Ajax_ShowForm extends Chrome_View_Abstract {
     public function render(Chrome_Controller_Interface $controller) {
-
         return array('success' => false, 'message' => 'Login failed:<br>Form is invalid, reload!', 'reloadDelay' => Chrome_View_User_Login_Ajax::CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY);
     }
 }

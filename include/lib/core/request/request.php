@@ -18,7 +18,7 @@
  * @subpackage Chrome.Request
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.11.2012 21:57:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:05:59] --> $
  * @author     Alexander Book
  */
 
@@ -26,16 +26,8 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Request
  */
-interface Chrome_Request_Interface
+interface Chrome_Request_Factory_Interface
 {
-	/**
-     * Singleton pattern
-     *
-	 * @return Chrome_Request_Interface
-	 */
-	public static function getInstance();
-
-
 	/**
      * Returns the request handler
      *
@@ -78,6 +70,46 @@ interface Chrome_Request_Handler_Interface
 	 * @return Chrome_Request_Data_Interface
 	 */
 	public function getRequestData();
+
+    /**
+     *
+     * @param Chrome_Cookie_Interface $cookie
+     * @param Chrome_Session_Interface $session
+     * @return Chrome_Request_Handler_Interface
+     */
+    public function __construct(Chrome_Cookie_Interface $cookie, Chrome_Session_Interface $session);
+}
+
+abstract class Chrome_Request_Handler_Abstract implements Chrome_Request_Handler_Interface
+{
+    /**
+     * @var Chrome_Cookie_Interface
+     */
+    protected $_cookie = null;
+
+    /**
+     * @var Chrome_Session_Interface
+     */
+    protected $_session = null;
+
+    protected $_requestClass = '';
+
+    protected $_requestData = null;
+
+    public function __construct(Chrome_Cookie_Interface $cookie, Chrome_Session_Interface $session)
+    {
+        $this->_cookie = $cookie;
+        $this->_session = $session;
+    }
+
+	public function getRequestData()
+	{
+	    if($this->_requestData === null) {
+	       $this->_requestData = new $this->_requestClass($this->_cookie, $this->_session);
+	    }
+
+		return $this->_requestData;
+	}
 }
 
 /**
@@ -89,13 +121,6 @@ interface Chrome_Request_Handler_Interface
  */
 interface Chrome_Request_Data_Interface
 {
-	/**
-     * Singleton pattern
-     *
-	 * @return Chrome_Request_Data_Interface
-	 */
-	public static function getInstance();
-
     /**
      * Returns all data. GET,POST,SERVER,FILES, etc..
      *
@@ -111,10 +136,6 @@ interface Chrome_Request_Data_Interface
 
 	public function getFILES( $key = null );
 
-	public function getCOOKIE( $key = null );
-
-	public function getSESSION( $key = null );
-
 	public function getREQUEST( $key = null );
 
 	public function getENV( $key = null );
@@ -128,6 +149,16 @@ interface Chrome_Request_Data_Interface
 	public function setENV( array $array );
 
 	public function setSERVER( array $array );
+
+    /**
+     * @return Chrome_Session_Interface
+     */
+    public function getSession();
+
+    /**
+     * @return Chrome_Cookie_Interface
+     */
+    public function getCookie();
 }
 
 /**
@@ -136,47 +167,46 @@ interface Chrome_Request_Data_Interface
  */
 abstract class Chrome_Request_Data_Abstract implements Chrome_Request_Data_Interface
 {
-
     /**
      * @var array
      */
 	protected $_vars = array();
 
     /**
+     * @var Chrome_Cookie_Interface
+     */
+    protected $_cookie = null;
+
+    /**
+     * @var Chrome_Session_Interface
+     */
+    protected $_session = null;
+
+    /**
      * @return Chrome_Request_Data_Interface
      */
-	protected function __construct()
+	public function __construct(Chrome_Cookie_Interface $cookie, Chrome_Session_Interface $session)
 	{
+	    $this->_cookie = $cookie;
+        $this->_session = $session;
+
 		$this->_vars = array(
 			'SERVER' => $_SERVER,
 			'GET' => $_GET,
 			'POST' => $_POST,
 			'FILES' => $_FILES,
-			'COOKIE' => $_COOKIE,
-			'SESSION' => $_SESSION,
 			'REQUEST' => $_REQUEST,
 			'ENV' => $_ENV );
 	}
 
-	public static function getInstance()
-	{
-		if( self::$_instance === null ) {
-			self::$_instance = new self();
-		}
-
-		return self::$_instance;
-	}
-
 	public function getGET( $key = null )
 	{
-
 		if( $key === null ) {
 			return $this->_vars['GET'];
 		} else
 			if( isset( $this->_vars['GET'][$key] ) ) {
 				return $this->_vars['GET'][$key];
 			}
-
 	}
 
 	public function getPOST( $key = null )
@@ -206,26 +236,6 @@ abstract class Chrome_Request_Data_Abstract implements Chrome_Request_Data_Inter
 		} else
 			if( isset( $this->_vars['FILES'][$key] ) ) {
 				return $this->_vars['FILES'][$key];
-			}
-	}
-
-	public function getCOOKIE( $key = null )
-	{
-		if( $key === null ) {
-			return $this->_vars['COOKIE'];
-		} else
-			if( isset( $this->_vars['COOKIE'][$key] ) ) {
-				return $this->_vars['COOKIE'][$key];
-			}
-	}
-
-	public function getSESSION( $key = null )
-	{
-		if( $key === null ) {
-			return $this->_vars['SESSION'];
-		} else
-			if( isset( $this->_vars['SESSION'][$key] ) ) {
-				return $this->_vars['SESSION'][$key];
 			}
 	}
 
@@ -278,6 +288,20 @@ abstract class Chrome_Request_Data_Abstract implements Chrome_Request_Data_Inter
 	{
 		$this->_vars['SERVER'] = array_merge($this->_vars['SERVER'], $array);
 	}
+
+    /**
+     * @return Chrome_Session_Interface
+     */
+    public function getSession() {
+        return $this->_session;
+    }
+
+    /**
+     * @return Chrome_Cookie_Interface
+     */
+    public function getCookie() {
+        return $this->_cookie;
+    }
 }
 
 /**
@@ -289,34 +313,28 @@ abstract class Chrome_Request_Data_Abstract implements Chrome_Request_Data_Inter
  * @package CHROME-PHP
  * @subpackage Chrome.Request
  */
-class Chrome_Request implements Chrome_Request_Interface
+class Chrome_Request_Factory implements Chrome_Request_Factory_Interface
 {
-	/**
-	 * @var Chrome_Request
-	 */
-	private static $_instance = null;
-
 	/**
 	 * The currently used request object
 	 *
 	 * @var Chrome_Request_Handler_Interface
 	 */
-	private $_request = null;
+	protected $_request = null;
 
 	/**
 	 * A list of all request objects
 	 *
 	 * @var array
 	 */
-	private $_requests = array();
+	protected $_requests = array();
 
 	/**
 	 * @var Chrome_Request_Data_Interface
 	 */
-	private $_requestData = null;
+	protected $_requestData = null;
 
-
-	private function __construct()
+	public function __construct()
 	{
 
 	}
@@ -328,18 +346,6 @@ class Chrome_Request implements Chrome_Request_Interface
 	{
 		// the if is always true, well it should be...
 		return ( $this->_requestData === null or $this->getRequest() != null ) ? $this->_requestData : $this->_requestData;
-	}
-
-    /**
-     * @return Chrome_Request_Interface
-     */
-	public static function getInstance()
-	{
-		if( self::$_instance === null ) {
-			self::$_instance = new self();
-		}
-
-		return self::$_instance;
 	}
 
     /**

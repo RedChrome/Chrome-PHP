@@ -20,7 +20,7 @@
  * @author    Alexander Book <alexander.book@gmx.de>
  * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
  * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.11.2012 21:45:26] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:14:34] --> $
  * @link      http://chrome-php.de
  */
 
@@ -39,7 +39,7 @@ interface Chrome_Captcha_Interface
 
     const CHROME_CAPTCHA_ENABLE_RENEW = 'enable_renew', CHROME_CAPTCHA_MAX_TIME = 'max_time';
 
-    public function __construct($name, array $frontendOptions, array $backendOptions);
+    public function __construct($name, Chrome_Request_Data_Interface $reqData, array $frontendOptions, array $backendOptions);
 
     public function create();
 
@@ -65,7 +65,7 @@ interface Chrome_Captcha_Interface
  */
 interface Chrome_Captcha_Engine_Interface
 {
-    public function __construct($name, Chrome_Captcha_Interface $obj, array $backendOptions);
+    public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Request_Data_Interface $reqData, array $backendOptions);
 
     public function getOption($name);
 
@@ -91,8 +91,9 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
 
     protected $_engine = null;
 
-    public function __construct($name, array $frontendOptions, array $backendOptions)
+    public function __construct($name, Chrome_Request_Data_Interface $reqData, array $frontendOptions, array $backendOptions)
     {
+        $this->_reqData = $reqData;
 
         $frontendOptions[self::CHROME_CAPTCHA_NAME] = $name;
 
@@ -179,7 +180,7 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
 
         $engine = 'Chrome_Captcha_Engine_' . $engine;
 
-        $this->_engine = new $engine($this->_frontendOptions[self::CHROME_CAPTCHA_NAME], $this, $this->_backendOptions);
+        $this->_engine = new $engine($this->_frontendOptions[self::CHROME_CAPTCHA_NAME], $this, $this->_reqData, $this->_backendOptions);
     }
 
 }

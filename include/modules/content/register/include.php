@@ -2,7 +2,7 @@
 
 class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
 {
-	public function __construct()
+	protected function _init()
 	{
 		$this->_id = 'Register_StepOne';
 		$this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
@@ -28,7 +28,7 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
 
 class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 {
-	public function __construct()
+	protected function _init()
 	{
 		$this->_id = 'Register_StepTwo';
 		$this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );

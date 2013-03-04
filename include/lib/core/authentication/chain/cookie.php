@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.01.2013 16:53:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 14:51:10] --> $
  * @link       http://chrome-php.de
  */
 
@@ -44,29 +44,26 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
     protected $_cookie  = null;
 
     /**
-     * @var array $options:
+     * @param Chrome_Model_Abstract $model model which implements the methods of {@see Chrome_Model_Authentication_Cookie}
+     * @param Chrome_Cookie_Interface $this->_cookie
+     * @param array $options:
      *                  - cookie_namespace: (string) Namespace of the cookie, default: _AUTH
      *                  - cookie_renew_probability: (int) probability (1:x) when the cookie gets renewed, e.g.
      *                                              probability is set to 20, then the probability is 5% = 1/20, default: 10
-     *                  - cookie_instance: (object) instance of an class implementing Chrome_Cookie_Interface
      *
      * @return Chrome_Authentication_Chain_Cookie
      */
-    public function __construct(Chrome_Model_Abstract $model, array $options = array())
+    public function __construct(Chrome_Model_Abstract $model, Chrome_Cookie_Interface $cookie, array $options = array())
     {
         $this->_model         = $model;
         $this->_options       = array_merge($this->_options, $options);
 
-        if($this->_options['cookie_instance'] !== null AND $this->_options['cookie_instance'] instanceof Chrome_Cookie_Interface) {
-            $this->_cookie = $this->_options['cookie_instance'];
-        } else {
-            $this->_cookie = Chrome_Cookie::getInstance();
-        }
+        $this->_cookie        = $cookie;
     }
 
     protected function _update(Chrome_Authentication_Data_Container_Interface $return)
     {
-        $data = $this->_cookie->get($this->_options['cookie_namespace']);
+        $data = $this->_cookie->getCookie($this->_options['cookie_namespace']);
 
         if($data !== null) {
 
@@ -85,7 +82,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
             $this->_chain->authenticate($resource);
         }
 
-        $data = $this->_cookie->get($this->_options['cookie_namespace']);
+        $data = $this->_cookie->getCookie($this->_options['cookie_namespace']);
 
         if($data === null or $data == false) {
             return $this->_chain->authenticate($resource);

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Hash
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.09.2011 12:30:44] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2013 16:36:46] --> $
  * @author     Alexander Book
  */
 
@@ -25,10 +25,20 @@ if(CHROME_PHP !== true)
     die();
 
 /**
+ * @todo: finish hash interface
+ */
+interface Chrome_Hash_Interface
+{
+
+}
+
+/**
+ *
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Hash
  */
-class Chrome_Hash
+class Chrome_Hash implements Chrome_Hash_Interface
 {
     public static $instance = false;
     private $_hashAlgo = 'md5';
@@ -234,12 +244,12 @@ class Chrome_Hash
         if(!extension_loaded('mcrypt')) {// MCRYPT isn't available so we use xtea OR blowfish
             return $this->defaultCrypt($string, $key);
         }
-        
+
         $td = mcrypt_module_open($algorithm, '', $cipher, '');
         if(empty($iv)) {
             $iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
         }
-        
+
         mcrypt_generic_init($td, $key, $iv);
         $encrypted_data = mcrypt_generic($td, $input);
         mcrypt_generic_deinit($td);
@@ -267,7 +277,7 @@ class Chrome_Hash
         if(!extension_loaded('mcrypt')) { // MCRYPT isn't available so we use xtea OR blowfish
             return $this->defaultDecrypt($string, $key, $algorithm);
         }
-        
+
         $decrypted_data = mcrypt_decrypt($algorithm, $key, $string, $cipher, $iv);
         return array('string' => $string, 'key' => $key, 'algorithm' => $algorithm, 'cipher' => $cipher, 'IV' => $iv, 'decrypted' => rtrim($decrypted_data, "\0\4") // trim ONLY the nulls AND EOTs at the END
             );

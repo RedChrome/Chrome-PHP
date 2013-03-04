@@ -26,7 +26,7 @@
             <tr>
                 <td>Geburtstag:</td>
                 <td><?php echo $FORM->render('birthday'); ?></td>
-
+                <td></td>
             </tr>
             <tr>
                 <td>Captcha:</td>
@@ -38,6 +38,7 @@
             <tr>
                 <td><?php echo $FORM->render('buttons')->element('backward'); ?></td>
                 <td colspan="2"><?php echo $FORM->render('buttons')->element('submit'); ?></td>
+                <td></td>
             </tr>
         </table>
     <?php echo $FORM->render('Register_StepTwo'); ?>

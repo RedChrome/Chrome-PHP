@@ -10,6 +10,8 @@ class AuthenticationChainCookieTest extends PHPUnit_Framework_TestCase
 {
     protected $_chain = null;
 
+    protected $_cookie;
+
     protected $_options = array(
         'cookie_namespace' => '_AUTH_TEST',
         'cookie_renew_probability' => 1,
@@ -25,13 +27,14 @@ class AuthenticationChainCookieTest extends PHPUnit_Framework_TestCase
         }
 
         if(!isset($this->_options['cookie_instance']) OR $this->_options['cookie_instance'] !== false) {
-           $this->_options['cookie_instance'] = new Chrome_Cookie_Dummy();
+            $this->_cookie = new Chrome_Cookie_Dummy();
+            $this->_options['cookie_instance'] = $this->_cookie;
         } else {
-            $this->_options['cookie_instance'] = null;
+            $this->_cookie = Chrome_Front_Controller::getInstance()->getRequestHandler()->getRequestData()->getCookie();
         }
 
 
-        $this->_chain = new Chrome_Authentication_Chain_Cookie($this->_model, $this->_options);
+        $this->_chain = new Chrome_Authentication_Chain_Cookie($this->_model, $this->_cookie, $this->_options);
         $this->_chain->setChain(new Chrome_Authentication_Chain_Null());
     }
 
@@ -48,7 +51,7 @@ class AuthenticationChainCookieTest extends PHPUnit_Framework_TestCase
         if($this->_options['cookie_instance'] !== null) {
             $this->assertArrayHasKey($this->_options['cookie_namespace'], $this->_options['cookie_instance']->_cookie);
         } else {
-            $this->assertTrue(Chrome_Cookie::getInstance()->offsetExists($this->_options['cookie_namespace']));
+            $this->assertTrue($this->_cookie->offsetExists($this->_options['cookie_namespace']));
         }
 
         $this->_chain->update($container);
@@ -134,7 +137,7 @@ class AuthenticationChainCookieTest extends PHPUnit_Framework_TestCase
      * @depends testUpdate
      */
     public function testAuthenticateWithDefaultCookieInterface() {
-        $this->_options['cookie_instance'] = false;
+        $this->_options['cookie_instance'] = null;
         $this->setUp();
         $this->testUpdate();
     }

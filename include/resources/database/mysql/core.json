@@ -14,7 +14,7 @@
     "configLoadConfiguration": "SELECT `name`,`subclass`, `value` FROM cpp_config",
     "configSetConfiguration": "INSERT INTO cpp_config VALUES(?, ?, ?, ?, ?)",
 
-    "requireGetRequirements": "SELECT `name`, `path`, `require_class` FROM cpp_require AS `r` WHERE `activated` = 1 ORDER BY r.order ASC",
+    "requireGetRequirements": "SELECT `name`, `path`, `class_loader` FROM cpp_require AS `r` WHERE `activated` = 1 ORDER BY r.priority ASC",
     "requireGetClasses": "SELECT `name`, `file` FROM cpp_class",
     "requireDeleteEntryByName": "DELETE FROM cpp_class WHERE `name` = \"?\" LIMIT 0,1",
     "requireDoesNameExist": "SELECT `id` FROM cpp_class WHERE `name` = \"?\" LIMIT 0,1",

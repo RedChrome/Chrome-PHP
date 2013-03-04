@@ -4,12 +4,12 @@ if( CHROME_PHP !== true ) die();
 
 class Chrome_Form_Index extends Chrome_Form_Abstract
 {
-	public function __construct()
+	protected function _init()
 	{
-
 		$this->_id = 'Index';
 		$this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
 		$this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST );
+        // this sets $this->_id to 'Index'
 		$this->setAttribute( self::ATTRIBUTE_ID, 'Index' );
         $this->setAttribute( self::ATTRIBUTE_DECORATOR, 'Yaml');
 

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Session
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.01.2013 19:22:21] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 14:50:41] --> $
  * @author     Alexander Book
  */
 
@@ -28,39 +28,15 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Session
  */
-interface Chrome_Session_Interface
+interface Chrome_Session_Interface extends ArrayAccess
 {
-    /**
-     * getInstance()
-     *
-     * @return Chrome_Session
-     */
-    public static function getInstance();
-
-    /**
-     * get()
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public static function get($key);
-
-    /**
-     * set()
-     *
-     * @param string $key
-     * @param mixed $value
-     * @return void
-     */
-    public static function set($key, $value);
-
     /**
      * _get()
      *
      * @param string $key
      * @return mixed
      */
-    public function _get($key);
+    public function get($key);
 
     /**
      * _set()
@@ -69,7 +45,7 @@ interface Chrome_Session_Interface
      * @param mixed $value
      * @return void
      */
-    public function _set($key, $value);
+    public function set($key, $value);
 
     /**
      * regenerateId()
@@ -133,43 +109,42 @@ interface Chrome_Session_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Session
  */
-class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
+class Chrome_Session implements Chrome_Session_Interface
 {
-        /**
-         * Path where all sessions get saved
-         *
-         * @var string
-         */
-    const CHROME_SESSION_SESSION_SAVE_PATH              = CHROME_SESSION_SAVE_PATH;
+    /**
+     * Path where all sessions get saved
+     *
+     * @var string
+     */
+    const CHROME_SESSION_SESSION_SAVE_PATH             = CHROME_SESSION_SAVE_PATH;
 
-        /**
-         * Probability for the garbace collector to scan
-         *
-         * @var int
-         */
-    const CHROME_SESSION_GARBAGE_COLLECTOR_PROBABILITY  = 100;
+    /**
+     * Probability for the garbace collector to scan
+     *
+     * @var int
+     */
+    const CHROME_SESSION_GARBAGE_COLLECTOR_PROBABILITY = 100;
 
-        /**
-         * Lifetime for a session
-         *
-         * @var int
-         */
-    const CHROME_SESSION_SESSION_LIFETIME               = CHROME_SESSION_LIFETIME;
+    /**
+     * Lifetime for a session
+     *
+     * @var int
+     */
+    const CHROME_SESSION_SESSION_LIFETIME              = CHROME_SESSION_LIFETIME;
 
-        /**
-         * Time after the session id gets renewed
-         *
-         * @var int
-         */
-    const CHROME_SESSION_RENEW_TIME                     = CHROME_SESSION_RENEWTIME;
+    /**
+     * Time after the session id gets renewed
+     *
+     * @var int
+     */
+    const CHROME_SESSION_RENEW_TIME                    = CHROME_SESSION_RENEWTIME;
 
-
+    /**
+     * Namespaces for cookie AND session
+     *
+     * @var string
+     */
     const
-        /**
-         * Namespaces for cookie AND session
-         *
-         * @var string
-         */
         CHROME_SESSION_COOKIE_NAMESPACE         = 'CHROME_SESSION',
         CHROME_SESSION_SESSION_NAMESPACE        = 'SESSION',
         CHROME_SESSION_SALT_NAMESPACE           = 'SALT',
@@ -179,45 +154,44 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
         CHROME_SESSION_SESSION_ID_TIME          = 'ID_TIME';
 
     /**
-     * @var Chrome_Session
-     */
-    private static $_instance = null;
-
-    /**
      * Pointer to $_SESSION
      *
      * @var array
      */
-    private $_SESSION = null;
+    protected $_SESSION = null;
 
     /**
      * Is the session input closed?
      *
      * @var bool
      */
-    private $_isClosed = false;
+    protected $_isClosed = false;
 
     /**
-     * Chrome_Session::getInstance()
+     * Instance of a Chrome_Cookie_Interface, to send and receive cookies
      *
-     * @return Chrome_Session
+     * @var Chrome_Cookie_Interface
      */
-    public static function getInstance()
-    {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
+    protected $_cookie   = null;
 
-        return self::$_instance;
-    }
+    /**
+     * Instance of a Chrome_Hash_Interface to hash strings
+     *
+     * @var Chrome_Hash_Interface
+     */
+    protected $_hash     = null;
 
     /**
      * Chrome_Session::__construct()
      *
      * @return Chrome_Session
      */
-    private function __construct()
+    public function __construct(Chrome_Cookie_Interface $cookie, Chrome_Hash_Interface $hash)
     {
+        $this->_cookie = $cookie;
+        $this->_hash   = $hash;
+
+
         // garbace collector should never run... we have an own implementation
         @ini_set('session.gc_probability', 0);
         // do not add sessionID to url
@@ -257,13 +231,11 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
      */
     private function _start()
     {
-        $cookie = Chrome_Cookie::getInstance();
-
         // is there already a session?
-        if($cookie->get(self::CHROME_SESSION_COOKIE_NAMESPACE) !== null) {
+        if($this->_cookie->getCookie(self::CHROME_SESSION_COOKIE_NAMESPACE) !== null) {
 
             // start the session
-            session_id($cookie->get(self::CHROME_SESSION_COOKIE_NAMESPACE));
+            session_id($this->_cookie->getCookie(self::CHROME_SESSION_COOKIE_NAMESPACE));
 
             if(isset($_GET['SID'])) {
                 session_id($_GET['SID']);
@@ -301,15 +273,13 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
             return false;
         }
 
-        $hash = Chrome_Hash::getInstance();
-
         // has the user a different browser?
-        if(empty($this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_USER_AGENT_NAMESPACE]) OR $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_USER_AGENT_NAMESPACE] !== $hash->hash($_SERVER['HTTP_USER_AGENT'], $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SALT_NAMESPACE])) {
+        if(empty($this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_USER_AGENT_NAMESPACE]) OR $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_USER_AGENT_NAMESPACE] !== $this->_hash->hash($_SERVER['HTTP_USER_AGENT'], $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SALT_NAMESPACE])) {
             return false;
         }
 
         // is the ip-address different?
-        if(empty($this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_REMOTE_ADDR_NAMESPACE]) OR $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_REMOTE_ADDR_NAMESPACE] !== $hash->hash($_SERVER['REMOTE_ADDR'], $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SALT_NAMESPACE])) {
+        if(empty($this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_REMOTE_ADDR_NAMESPACE]) OR $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_REMOTE_ADDR_NAMESPACE] !== $this->_hash->hash($_SERVER['REMOTE_ADDR'], $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SALT_NAMESPACE])) {
             return false;
         }
 
@@ -335,23 +305,10 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
      *
      * Get the data from session
      *
-     * @param string $key
-     * @return mixed
-     */
-    public static function get($key)
-    {
-        return self::getInstance()->_get($key);
-    }
-
-    /**
-     * Chrome_Session::get()
-     *
-     * Get the data from session
-     *
      * @param string $key key of a session-value or null to get all data
      * @return mixed
      */
-    public function _get($key)
+    public function get($key)
     {
         if($key === null) {
             return $this->_SESSION;
@@ -369,21 +326,7 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
      * @param mixed $value
      * @return void
      */
-    public static function set($key, $value)
-    {
-        return self::getInstance()->_set($key, $value);
-    }
-
-    /**
-     * Chrome_Session::set()
-     *
-     * Sets data into session
-     *
-     * @param string $key
-     * @param mixed $value
-     * @return void
-     */
-    public function _set($key, $value)
+    public function set($key, $value)
     {
         if($this->_isClosed === true) {
             return;
@@ -406,19 +349,17 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
 
         $this->destroy(false);
 
-        $hash = Chrome_Hash::getInstance();
-
         // create new ID AND salt
-        $uniqid = $hash->hash(uniqid(mt_rand(), true));
-        $salt = $hash->hash(uniqid(mt_rand(), true));
-        $userAgent = $hash->hash($_SERVER['HTTP_USER_AGENT'], $salt);
-        $remoteAddr = $hash->hash($_SERVER['REMOTE_ADDR'], $salt);
+        $uniqid = $this->_hash->hash(uniqid(mt_rand(), true));
+        $salt = $this->_hash->hash(uniqid(mt_rand(), true));
+        $userAgent = $this->_hash->hash($_SERVER['HTTP_USER_AGENT'], $salt);
+        $remoteAddr = $this->_hash->hash($_SERVER['REMOTE_ADDR'], $salt);
 
 
         // start session AND set cookie
         session_id($uniqid);
         // httponly = true, so javascript can't manipulate the cookie
-        Chrome_Cookie::getInstance()->setCookie(self::CHROME_SESSION_COOKIE_NAMESPACE, $uniqid, self::CHROME_SESSION_SESSION_LIFETIME, null, '', false, true);
+        $this->_cookie->setCookie(self::CHROME_SESSION_COOKIE_NAMESPACE, $uniqid, self::CHROME_SESSION_SESSION_LIFETIME, null, '', false, true);
         session_start();
 
         // set old session
@@ -441,18 +382,16 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
      */
     public function renew()
     {
-        $hash = Chrome_Hash::getInstance();
-
         // create new ID and salt
-        $uniqid = $hash->hash(uniqid(mt_rand(), true));
-        $salt = $hash->hash(uniqid(mt_rand(), true));
-        $userAgent = $hash->hash($_SERVER['HTTP_USER_AGENT'], $salt);
-        $remoteAddr = $hash->hash($_SERVER['REMOTE_ADDR'], $salt);
+        $uniqid = $this->_hash->hash(uniqid(mt_rand(), true));
+        $salt = $this->_hash->hash(uniqid(mt_rand(), true));
+        $userAgent = $this->_hash->hash($_SERVER['HTTP_USER_AGENT'], $salt);
+        $remoteAddr = $this->_hash->hash($_SERVER['REMOTE_ADDR'], $salt);
 
         // start session AND set cookie
         session_id($uniqid);
         // httponly = true, so javascript cant manipulate the cookie
-        Chrome_Cookie::getInstance()->setCookie(self::CHROME_SESSION_COOKIE_NAMESPACE, $uniqid, self::CHROME_SESSION_SESSION_LIFETIME, null, '', false, true);
+        $this->_cookie->setCookie(self::CHROME_SESSION_COOKIE_NAMESPACE, $uniqid, self::CHROME_SESSION_SESSION_LIFETIME, null, '', false, true);
         session_start();
 
         // set the new ID AND salt
@@ -476,7 +415,7 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
     {
         $this->_SESSION = array();
         $_SESSION = array();
-        Chrome_Cookie::getInstance()->unsetCookie(self::CHROME_SESSION_COOKIE_NAMESPACE);
+        $this->_cookie->unsetCookie(self::CHROME_SESSION_COOKIE_NAMESPACE);
         session_destroy();
 
         if($renew === true) {
@@ -564,14 +503,12 @@ class Chrome_Session implements Chrome_Session_Interface, ArrayAccess
         return isset($this->_SESSION[$offset]);
     }
     public function offsetGet($offset) {
-        return $this->_get($offset);
+        return $this->get($offset);
     }
     public function offsetSet($offset, $value) {
-        $this->_set($offset, $value);
+        $this->set($offset, $value);
     }
     public function offsetUnset($offset) {
-        $this->_set($offset, null);
+        $this->set($offset, null);
     }
 }
-
-Chrome_Session::getInstance();

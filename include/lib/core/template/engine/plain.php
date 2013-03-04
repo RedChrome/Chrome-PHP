@@ -17,7 +17,7 @@
  * @subpackage Chrome.Template.Engine
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 14:46:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2013 13:25:53] --> $
  * @author     Alexander Book
  */
 
@@ -27,32 +27,31 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Template.Engine
- */ 
+ */
 class Chrome_Template_Engine_Plain extends Chrome_Template_Engine_Abstract
 {
     public function __construct(Chrome_Template_Abstract $obj)
     {
         $this->_templateInstance = $obj;
     }
-    
+
     public function render()
     {
-        
         // here we need to set vars, so that php knows the content of the tmpl-vars!!
         foreach($this->_var AS $key => $value) {
             $$key = $value;
         }
-                
+
         ob_start();
-        
+
         include($this->_file);
-        
+
         $return = ob_get_contents();
-        
+
         ob_end_clean();
-        
+
         // all assigned vars get destroyed automatically
-        
-        return $return;       
+
+        return $return;
     }
 }

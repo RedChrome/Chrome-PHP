@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.09.2012 20:01:34] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 14:31:34] --> $
  * @author     Alexander Book
  */
 
@@ -26,6 +26,8 @@ if(CHROME_PHP !== true)
 
 interface Chrome_Design_Style_Interface
 {
+    public function setRenderableList(Chrome_Design_Renderable_Container_List_Interface $list);
+
     public function addStyle($style);
 
     public function removeStyle($style);
@@ -35,9 +37,11 @@ interface Chrome_Design_Style_Interface
     public function apply(Chrome_Controller_Interface $controller);
 }
 
-class Chrome_Design_Style implements Chrome_Design_Style_Interface
+abstract class Chrome_Design_Style_Abstract implements Chrome_Design_Style_Interface
 {
     protected $_styles = array();
+
+    protected $_renderableList = null;
 
     public function __construct() {
 
@@ -59,45 +63,7 @@ class Chrome_Design_Style implements Chrome_Design_Style_Interface
         $this->_styles = array();
     }
 
-    public function apply(Chrome_Controller_Interface $controller) {
-
-        if(in_array('ajax', $this->_styles)) {
-
-            // this overrides the default Chrome_Design_Composite_HTML class
-            // because, if we respond to an ajax request, we dont need any
-            // unessential overhead, caused by html tags
-            Chrome_Design_Composite_Laconic::getInstance();
-
-            return;
-
-        }
-
-        // todo: add db support etc..
-        if(in_array('default', $this->_styles)) {
-
-            require_once BASEDIR.'modules/footer/benchmark/benchmark.php';
-            new Chrome_Controller_Footer_Benchmark($controller->getRequestHandler());
-
-            require_once BASEDIR.'modules/html/head/view.php';
-            new Chrome_Controller_Header_HTML_Head($controller->getRequestHandler());
-            require_once BASEDIR.'modules/html/body/view.php';
-            new Chrome_Controller_Header_HTML_JS($controller->getRequestHandler());
-            require_once BASEDIR.'modules/header/header/header.php';
-            new Chrome_Controller_Header_Header($controller->getRequestHandler());
-            require_once BASEDIR.'modules/box/login/controller.php';
-            new Chrome_Controller_Box_Login($controller->getRequestHandler());
-            require_once BASEDIR.'modules/box/test/test.php';
-
-            new Chrome_Controller_Box_Test($controller->getRequestHandler());
-            new Chrome_Controller_Box_Test($controller->getRequestHandler());
-            new Chrome_Controller_Box_Test($controller->getRequestHandler());
-
-            require_once BASEDIR.'modules/footer/var_dump/var_dump.php';
-            new Chrome_Controller_Footer_VarDump($controller->getRequestHandler());
-
-        }
-
+    public function setRenderableList(Chrome_Design_Renderable_Container_List_Interface $list) {
+        $this->_renderableList = $list;
     }
-
-
 }

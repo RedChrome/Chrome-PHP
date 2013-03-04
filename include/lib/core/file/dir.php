@@ -17,14 +17,10 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.01.2013 20:10:01] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 16:18:11] --> $
  */
 
 if(CHROME_PHP !== true) die();
-/**
- * load file_system class
- */
-require_once LIB . 'core/file_system/file_system.php';
 
 /**
  * Chrome_Dir Klasse
@@ -97,7 +93,7 @@ class Chrome_Dir
      * @since 1.0
      *
      */
-    public static function createDir($dest, $chmod = 0777)
+    public static function createDir($dest, $chmod = 0777, $doUpdateFileSystemCache = true)
     {
         $dest = trim($dest);
 
@@ -123,7 +119,9 @@ class Chrome_Dir
             ++$i;
         }
 
-        Chrome_File_System_Read::getInstance()->forceCacheUpdate($dest, false);
+        if($doUpdateFileSystemCache === true) {
+            Chrome_File_System_Read::getInstance()->forceCacheUpdate($dest, false);
+        }
 
         return true;
     }

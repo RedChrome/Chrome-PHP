@@ -17,27 +17,27 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2011 23:46:17] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 13:45:03] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
 
 /**
- * 
+ *
  * Null Object
- * 
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Log
  */
 class Chrome_Logger_Null implements Chrome_Logger_Interface
 {
     public function __construct()  {
-        
+
     }
-        
+
     public function log($string, $mode)
     {
-        
+        // do nothing
     }
 }

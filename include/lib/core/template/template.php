@@ -17,7 +17,7 @@
  * @subpackage Chrome.Template
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.08.2011 18:17:44] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2013 13:12:16] --> $
  * @author     Alexander Book
  */
 
@@ -25,8 +25,8 @@ if(CHROME_PHP !== true)
     die();
 
 /**
- * 
- */  
+ * load needed template core files
+ */
 require_once LIB.'core/template/factory.php';
 require_once LIB.'core/template/engine.php';
 require_once LIB.'core/template/engine/plain.php';
@@ -34,7 +34,7 @@ require_once LIB.'core/template/engine/plain.php';
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Template
- */ 
+ */
 interface Chrome_Template_Interface
 {
     public function setEngine(Chrome_Template_Engine_Abstract $engine);
@@ -44,7 +44,7 @@ interface Chrome_Template_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Template
  * @todo add plugin pattern!
- */ 
+ */
 abstract class Chrome_Template_Abstract implements Chrome_Template_Interface
 {
     private $_engine = null;
@@ -58,19 +58,15 @@ abstract class Chrome_Template_Abstract implements Chrome_Template_Interface
     {
         if(method_exists($this->_engine, $func)) {
             return call_user_func_array(array($this->_engine, $func), $args);
-        } else {
-           #$this->_callPluginMethod($func, $args);
         }
     }
-
-    #abstract protected function _callPluginMethod($method, $args);
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Template
  * @todo maybe add plugin methods to extend this class in runtime?
- */ 
+ */
 class Chrome_Template extends Chrome_Template_Abstract
 {
     public function __construct($engine = null)

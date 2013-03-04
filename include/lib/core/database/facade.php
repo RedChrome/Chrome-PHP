@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.01.2013 17:24:10] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 14:09:59] --> $
  * @link       http://chrome-php.de
  */
 
@@ -120,6 +120,7 @@ class Chrome_Database_Facade
                     }
                     catch (Chrome_Exception_Database $e) {
                         // error while connecting to database
+                        Chrome_Log::logException($e, E_ERROR, new Chrome_Logger_Database());
                         throw $e;
                     }
                     catch (Chrome_Exception $e) {
@@ -222,9 +223,4 @@ class Chrome_Database_Facade
     public static function getDefaultConnection() {
     	return self::$_defaultConnection;
     }
-
-    public static function getDefaultConnectionObject() {
-        return Chrome_Database_Registry_Connection::getInstance()->getConnectionObject(self::$_defaultConnection);
-    }
-
 }

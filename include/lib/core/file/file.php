@@ -17,16 +17,11 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.01.2013 20:08:52] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:52:32] --> $
  */
 
 if(CHROME_PHP !== true)
 	die();
-
-/**
- * load file_system class
- */
-require_once LIB.'core/file_system/file_system.php';
 
 /**
  * load Chrome_Dir class
@@ -120,6 +115,17 @@ class Chrome_File
 		return (is_file($file) && self::hasExt($file)) ? true : false;
 	}
 
+    public static function existsUsingFilePointer($file, $openingMode = self::FILE_MODE_ENDING_WRITE_ONLY)
+    {
+        $fp = @fopen($file, $openingMode);
+
+        if(is_resource($fp)) {
+            return $fp;
+        }
+
+        return false;
+    }
+
 	/**
 	 * Wrapper for is_file function
 	 *
@@ -186,7 +192,7 @@ class Chrome_File
 		}
 		else {
 			// Sets permission
-			if(self::chper($dest.$file, $chmod))
+			if(self::_chper($dest.$file, $chmod))
 				return true;
 			else
 				return false;
@@ -214,6 +220,16 @@ class Chrome_File
 		else
 			return true;
 	}
+
+    protected static function _chper($file, $chmod) {
+        if(strlen($chmod) == '3')
+			$chmod = '0'.$chmod;
+
+        if(!@chmod($file, $chmod))
+			throw new Chrome_File_Exception('Coudn\'t change permission to '.$chmod.'!');
+		else
+			return true;
+    }
 
 	/** Moves a file
 	 *
@@ -250,7 +266,7 @@ class Chrome_File
 			@unlink($src.$file);
 
 			// Sets permission
-			if(self::chper($dest.$file, $chmod))
+			if(self::_chper($dest.$file, $chmod))
 				return true;
 			else
 				return false;
@@ -265,11 +281,10 @@ class Chrome_File
 	 * @param string $file file
 	 * @param bool true on success, false else
 	 */
-	public static function mkFile($file, $chmod = 0777)
+	public static function mkFile($file, $chmod = 0777, $doUpdateFileSystemCache = true)
 	{
 		if(!self::dirExists($file)) {
-		    //var_dump($file);
-			Chrome_Dir::createDir($file, $chmod);
+			Chrome_Dir::createDir($file, $chmod, $doUpdateFileSystemCache);
         }
 
 		if(!self::exists($file)) {
@@ -277,13 +292,37 @@ class Chrome_File
 			if($fp === false)
 				return false;
 			fclose($fp);
-			self::chper($file, $chmod);
+			self::_chper($file, $chmod);
 
-            Chrome_File_System_Read::getInstance()->forceCacheUpdate($file, true);
+            if($doUpdateFileSystemCache === true) {
+                Chrome_File_System_Read::getInstance()->forceCacheUpdate($file, true);
+            }
 
 			return true;
 		} else return false;
 	}
+
+    public static function mkFileUsingFilePointer($file, $chmod = 0777,$openingMode = self::FILE_MODE_ENDING_WRITE_ONLY,$doUpdateFileSystemCache = true) {
+
+        if(!self::dirExists($file)) {
+			Chrome_Dir::createDir($file, $chmod, $doUpdateFileSystemCache);
+        }
+
+		if(!self::exists($file)) {
+			@$fp = fopen($file, $openingMode);
+			if($fp === false)
+				return false;
+
+			self::_chper($file, $chmod);
+
+            if($doUpdateFileSystemCache === true) {
+                Chrome_File_System_Read::getInstance()->forceCacheUpdate($file, true);
+            }
+
+			return $fp;
+		} else return false;
+    }
+
 	/**
 	 * Creates a new File
 	 *

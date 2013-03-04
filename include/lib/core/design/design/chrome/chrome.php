@@ -17,26 +17,31 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.08.2011 17:51:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 13:39:14] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
 
+require_once 'mapper.php';
+require_once 'style.php';
+
 /**#@!
  * load composite classes for chrome design
- **/ 
+ **/
 require_once LIB.'core/design/composite/html.php';
 require_once LIB.'core/design/composite/head.php';
 require_once LIB.'core/design/composite/body.php';
-require_once LIB.'core/design/composite/layout.php';
+require_once LIB.'core/design/composite/header.php';
+
+require_once 'columns.php';
+require_once 'content.php';
+require_once 'left_box.php';
+require_once 'right_box.php';
+
+require_once LIB.'core/design/composite/bottom.php';
 require_once LIB.'core/design/composite/container.php';
 require_once LIB.'core/design/composite/container_box.php';
-require_once LIB.'core/design/composite/left_box.php';
-require_once LIB.'core/design/composite/right_box.php';
-require_once LIB.'core/design/composite/content.php';
-require_once LIB.'core/design/composite/header.php';
-require_once LIB.'core/design/composite/footer.php';
 /**#@!*/
 
 /**
@@ -56,15 +61,10 @@ class Chrome_Design_Chrome extends Chrome_Design_Abstract
 
         return self::$_instance;
     }
-    protected function __construct() {
-        
-        $style = new Chrome_Design_Style();
-        $style->addStyle('default');
-        
-        Chrome_Design::setStyle($style);
-                
-    $this->_values = array(
 
+    protected function __construct() {
+
+    $this->_values = array(
 
         // Chrome_Design_Composite_HTML
         'html_start' =>
@@ -86,18 +86,17 @@ class Chrome_Design_Chrome extends Chrome_Design_Abstract
 
         // Chrome_Design_Composite_Body
         'body_start' => '
-<body class="body">
-<div id="Site">',
+<body>
+',
         'body_end' => '
-</div>
 </body>',
 
         // Chrome_Design_Composite_Header
         'header_start' => '
-<!-- HEADER -->
-<div id="Header">',
-        'header_end' => '</div>
-<!-- HEADER -->',
+<header>
+',
+        'header_end' => '
+</header>',
 
         // Chrome_Design_Composite_Left_Box
         'left_box_start' => '
@@ -119,20 +118,38 @@ class Chrome_Design_Chrome extends Chrome_Design_Abstract
 
         // Chrome_Design_Composite_Content
         'content_start' => '
-<!-- CONTENT -->
-<div id="Content">
-<div id="test">
+<div class="ym-column">
+  <div class="ym-col1">
+    <div class="ym-cbox">
+
 ',
-        'content_end' => '</div></div>
-<!-- CONTENT -->
+        'content_end' => '
+    </div>
+  </div>
+</div>
 ',
 
         // Chrome_Design_Composite_Footer
-        'footer_start' => '<!-- FOOTER -->
-<div id="Footer">
+        'footer_start' => '
+<footer>
+<div class="ym-column">
+  <div class="ym-col1">
+    <div class="ym-cbox">
+    </div>
+  </div>
+  <div class="ym-col2">
+    <div class="ym-cbox">
+    </div>
+  </div>
+  <div class="ym-col3">
+    <div class="ym-cbox">
 ',
-        'footer_end' => '</div>
-<!-- FOOTER -->
+        'footer_end' => '
+</footer>
+   </div>
+  </div>
+</div>
+
 '
     );
     }
@@ -151,12 +168,9 @@ class Chrome_Design_Chrome extends Chrome_Design_Abstract
             case 'left_box_decorator_start': {
 
                 $string = '
-<div class="Navi">
- <div>
-  <div>
-   <div>
-    <div>
-     <h3 class="title">'.$obj->getViewTitle().'</h3>
+<div class="Navi"><div><div><div>
+    <h3 class="boxtitle">'.$obj->getViewTitle().'</h3>
+    <div class="boxcontent">
 ';
 
                 break;
@@ -165,14 +179,21 @@ class Chrome_Design_Chrome extends Chrome_Design_Abstract
             case 'right_box_decorator_end':
             case 'left_box_decorator_end': {
 
-                $string = '
-</div>
-   </div>
-  </div>
- </div>
-</div>
+                $string = '</div></div></div></div></div>
 ';
                 break;
+            }
+
+            case 'footer_box_start': {
+
+                $string = '<div class="ym-wbox">
+';
+                break;
+            }
+
+            case 'footer_box_end': {
+                $string = '</div>
+';
             }
 
 
@@ -182,5 +203,18 @@ class Chrome_Design_Chrome extends Chrome_Design_Abstract
         }
 
         return $string;
+    }
+
+    public function getStyle() {
+
+        $style = new Chrome_Design_Style_Chrome();
+        $style->addStyle('default');
+
+        return $style;
+
+    }
+
+    public function getMapper() {
+        return new Chrome_Design_Mapper_Chrome();
     }
 }

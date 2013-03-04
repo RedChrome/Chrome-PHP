@@ -197,7 +197,7 @@ class DatabaseFacadeTest extends PHPUnit_Framework_TestCase
         $registry->addConnection(Chrome_Database_Facade::getDefaultConnection(), $connection, true);
 
         $this->setExpectedException('Chrome_Exception');
-        $interface = Chrome_Database_Facade::getInterface('model', 'assoc', '');
+        $interface = Chrome_Database_Facade::getInterface('model', 'assoc');
     }
 
     public function testFacadeThrowsChromeExceptionOnConnect()
@@ -213,23 +213,30 @@ class DatabaseFacadeTest extends PHPUnit_Framework_TestCase
         $interface = Chrome_Database_Facade::getInterface('model', 'assoc', '');
     }
 
-    public function testFacadeRequireClassConnection() {
-
-
+    public function testFacadeRequireClassConnection()
+    {
         $this->setExpectedException('Chrome_Exception');
 
         Chrome_Database_Facade::requireClass('connection', 'notExistingClassSuffix');
-
-
     }
 
-    public function testFacadeRequireClassWrongType() {
-
-
+    public function testFacadeRequireClassWrongType()
+    {
         $this->setExpectedException('Chrome_Exception');
 
         Chrome_Database_Facade::requireClass('notExistingType', 'anything');
+    }
 
+    public function testDefaultConnection() {
 
+        $conn = Chrome_Database_Facade::getDefaultConnection();
+
+        $testConnection = 'anyConnectionIdentifier';
+
+        Chrome_Database_Facade::setDefaultConnection($testConnection);
+
+        $this->assertEquals($testConnection, Chrome_Database_Facade::getDefaultConnection());
+
+        Chrome_Database_Facade::setDefaultConnection($conn);
     }
 }

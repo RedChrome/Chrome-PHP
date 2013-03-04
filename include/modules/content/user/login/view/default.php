@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.10.2012 23:41:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:01:37] --> $
  * @author     Alexander Book
  */
 
@@ -28,27 +28,26 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Chrome_View_User_Login_Default extends Chrome_View_Abstract
+class Chrome_View_User_Login_Default extends Chrome_View_Strategy_Abstract
 {
-
     public function alreadyLoggedIn() {
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_User_Default_AlreadyLoggedIn($this->_controller));
+        $this->_views[] = new Chrome_View_User_Default_AlreadyLoggedIn($this->_controller);
     }
 
     public function successfullyLoggedIn() {
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_User_Default_successfullyLoggedIn($this->_controller));
+        $this->_views[] = new Chrome_View_User_Default_successfullyLoggedIn($this->_controller);
     }
 
     public function formNotValid() {
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_User_Default_FormNotValid($this->_controller));
+        $this->_views[] = new Chrome_View_User_Default_FormNotValid($this->_controller);
     }
 
     public function showForm() {
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_User_Default_ShowForm($this->_controller));
+        $this->_views[] = new Chrome_View_User_Default_ShowForm($this->_controller);
     }
 
     public function errorWhileLoggingIn() {
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_User_Default_WrongPassword($this->_controller));
+        $this->_views[] = new Chrome_View_User_Default_WrongPassword($this->_controller);
     }
 }
 

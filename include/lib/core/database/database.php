@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.12.2012 21:07:23] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.02.2013 11:19:21] --> $
  * @link       http://chrome-php.de
  */
 
@@ -77,3 +77,5 @@ require_once 'facade.php';
  * this will set the default connection
  */
 require_once BASEDIR.'database.php';
+
+//TODO: add docs to all other classes...

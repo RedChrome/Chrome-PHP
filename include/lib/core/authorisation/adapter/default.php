@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authorisation
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 13:44:49] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 16:30:09] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -144,12 +144,14 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
      */
     public function setDataContainer(Chrome_Authentication_Data_Container $container)
     {
-
         $this->_userID  = (int) $container->getID();
 
         $this->_groupID = $this->_model->getUserGroupById($this->_userID);
 
         $this->_createIntegerRepresentation();
+
+        // reset cache
+        $this->_cache = array();
     }
 
     /**
@@ -160,7 +162,6 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
      */
     public function isAllowed(Chrome_Authorisation_Resource_Interface $resource)
     {
-
         $assert = $resource->getAssert();
 
         if($assert !== null) {

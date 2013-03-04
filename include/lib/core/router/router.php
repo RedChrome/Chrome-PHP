@@ -17,15 +17,10 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.10.2012 00:14:36] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 14:36:08] --> $
  * @author     Alexander Book
  */
 if( CHROME_PHP !== true ) die();
-
-/**
- * @see core/error/exception/router.php
- */
-require_once LIB . 'exception/router.php';
 
 /**
  * @package CHROME-PHP
@@ -148,7 +143,7 @@ class Chrome_Router_Resource implements Chrome_Router_Result_Interface
 				try {
 					import( $this->_class );
 				}
-				catch ( Chrome_Exceptopm $e ) {
+				catch ( Chrome_Exception $e ) {
 					throw new Chrome_Exception( 'No file found and could no find the corresponding file!', 2003 );
 				}
 				Chrome_Log::log( 'class "' . $this->_class .
@@ -201,11 +196,18 @@ class Chrome_Router implements Chrome_Router_Interface, Chrome_Exception_Process
 			}
 
 			if( $this->_resource == null or !( $this->_resource instanceof Chrome_Router_Result_Interface ) ) {
-				throw new Chrome_Exception( 'Could not found adequate controller class!', 2001 );
+
+                // already tried to route to 404.html and not found... there is smt. wrong!
+                if($url->getPath() === '404.html') {
+                    throw new Chrome_Exception( 'Could not found adequate controller class!', 2001 );
+                }
+
+                $url = new Chrome_URI();
+                $url->setPath('404.html');
+                $this->match($url, $data);
 			}
 
-		}
-		catch ( Chrome_Exception $e ) {
+		} catch ( Chrome_Exception $e ) {
 			$this->_exceptionHandler->exception( $e );
 		}
 	}

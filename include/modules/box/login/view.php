@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.10.2012 23:44:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 15:02:10] --> $
  * @author     Alexander Book
  */
 
@@ -30,6 +30,7 @@ if( CHROME_PHP !== true ) die();
  */
 class Chrome_View_Box_Login extends Chrome_View_Abstract
 {
+    protected $_view;
 
 	public function __construct( Chrome_Controller_Abstract $controller )
 	{
@@ -43,6 +44,7 @@ class Chrome_View_Box_Login extends Chrome_View_Abstract
 	 */
 	public function render( Chrome_Controller_Interface $controller )
 	{
+	    return $this->_view->render($controller);
 		// override parent, do nothing
 	}
 
@@ -53,8 +55,10 @@ class Chrome_View_Box_Login extends Chrome_View_Abstract
 	 */
 	public function showUserMenu()
 	{
+	    $this->setViewTitle( 'User Menu' );
+        $this->_view = new Chrome_View_Box_LoggedIn( $this->_controller );
 		// add view
-		$this->_controller->getDesign()->addView( new Chrome_View_Box_LoggedIn( $this->_controller ) );
+		#$this->_controller->getDesign()->addView( new Chrome_View_Box_LoggedIn( $this->_controller ) );
 	}
 
 	/**
@@ -62,13 +66,17 @@ class Chrome_View_Box_Login extends Chrome_View_Abstract
 	 */
 	public function showLoginForm()
 	{
+	    $this->setViewTitle( 'Login' );
+	    $this->_view = new Chrome_View_Box_Form_Login( $this->_controller );
 		// add view
-		$this->_controller->getDesign()->addView( new Chrome_View_Box_Form_Login( $this->_controller ) );
+		#$this->_controller->getDesign()->addView( new Chrome_View_Box_Form_Login( $this->_controller ) );
 	}
 }
 
 /**
  *
+ *
+ * TODO: move this to another box module
  * This is the View for the User Menu
  *
  * @package CHROME-PHP
@@ -76,13 +84,6 @@ class Chrome_View_Box_Login extends Chrome_View_Abstract
  */
 class Chrome_View_Box_LoggedIn extends Chrome_View_Abstract
 {
-	public function __construct( Chrome_Controller_Abstract $controller )
-	{
-		parent::__construct( $controller );
-		$this->setViewTitle( 'User Menu' );
-	}
-
-
 	public function render( Chrome_Controller_Interface $controller )
 	{
 		return 'Eingeloggt...<br>Hier kommt dann das User Menu hin ;)';
@@ -95,13 +96,6 @@ class Chrome_View_Box_LoggedIn extends Chrome_View_Abstract
  */
 class Chrome_View_Box_Form_Login extends Chrome_View_Abstract
 {
-    public function __construct( Chrome_Controller_Abstract $controller )
-	{
-		parent::__construct( $controller );
-		// set the title of the login box
-		$this->setViewTitle( 'Login' );
-	}
-
 	public function render( Chrome_Controller_Interface $controller )
 	{
 		// create template with the form

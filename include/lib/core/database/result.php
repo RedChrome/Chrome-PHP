@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 19:40:32] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.01.2013 15:56:59] --> $
  * @link       http://chrome-php.de
  */
 
@@ -50,6 +50,11 @@ abstract class Chrome_Database_Result_Abstract implements Chrome_Database_Result
     public function getAdapter()
     {
         return $this->_adapter;
+    }
+
+    public function getLastInsertId()
+    {
+        return $this->_adapter->getLastInsertId();
     }
 
     public function clear()

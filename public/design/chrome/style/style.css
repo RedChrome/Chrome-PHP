@@ -4,33 +4,39 @@ body {
     font-size: 100%;
     font-family: Helvetica,Arial,sans-serif;
     margin: 0; padding: 1em;
-	border: none;
-    min-width: 41em; /* Mindestbreite verhindert Umbruch und Anzeigefehler in modernen Browsern */
 }
 
-div#Site {
-  	width: 65em;
-  	margin: 0 auto;      /* standardkonforme horizontale Zentrierung */
-
+body > header {
+    min-width:  800px;
 }
 
-div#Header {
-  	/*background-image:  url;*/
+body > footer > div {
+    min-width: 800px;
+    background-color: white;
+}
 
+body > div.ym-column {
+    min-width: 800px;
+}
+
+.ym-wrapper {
+    max-width: 80em;
+}
+
+.ym-wbox {
+    padding: 10px;
 }
 
 div#lNavi {
-  	font-size: 0.83em;
+    font-size: 0.83em;
     float: left;
-	width: 12em;
-    margin: 0 0 1.2em;
-	padding: 0;
+    width: 100%;
+    margin: 0 0 0 0;
 }
 
 div#rNavi {
   	font-size: 0.83em;
-    float: right;
-	width: 12em;
+	width: 100%;
     margin: 0 0 1.2em;
 	padding: 0;
 }
@@ -39,40 +45,25 @@ div.Navi {
 	background: url(../images/green/box_fr.png) 100% 100% no-repeat;
 }
 
-div.Navi div {
+div.Navi > div {
 	background: url(../images/green/box_fl.png) 0 100% no-repeat;
 }
 
-div.Navi div div div div{
-	background: url(../images/green/box_tr.png) 100% 0 no-repeat;
-}
-
-div.Navi div div  {
-	/*background: url(../images/Box_Head_m.png) 0 0% repeat-x;*/
-}
-
-div.Navi div div div {
-	padding-left: 0.5em;
+div.Navi > div > div  {
+	padding-left: 13px;
 	padding-bottom: 1em;
 	background: url(../images/green/box_tl.png) 0 0 no-repeat;
 }
 
-div#Content{
-  	margin: 0 1em 0 12em;
-    /*padding: 0 1em;*/
-    /*border: 1px dashed silver;*/
-    width: 48em;
-    font-size: 90%;
+div.Navi > div > div > div {
+	background: url(../images/green/box_tr.png) 100% 0 no-repeat;
 }
 
-* html div#Content {
-    height: 1em;  /* Workaround gegen den 3-Pixel-Bug des Internet Explorer bis Version 6 */
+div.Navi > div > div > div > div.boxcontent {
+    margin-right: 13px;
+    margin-top: 10px;
 }
 
-div#Footer{
-  	clear:both;
-
-}
 
 img {
 	border: 0;
@@ -95,14 +86,8 @@ h1 {
     border: 2px dashed silver;
 }
 
-div#test {
-    border: 2px dashed silver;
-    margin: 0 0 0.7em; padding: 0.3em;
-}
-
-h3.title {
-	padding-top: 0.45em;
-	margin-left: 0.5em;
+h3.boxtitle {
+	padding-top: 8px;
 	font-size: 1.1em;
 	text-align: left;
 	color: white;

@@ -38,4 +38,8 @@ class Chrome_Database_Adapter_Dummy extends Chrome_Database_Adapter_Abstract
     public function getErrorMessage() {
         return '';
     }
+
+    public function getLastInsertId() {
+        return 0;
+    }
 }

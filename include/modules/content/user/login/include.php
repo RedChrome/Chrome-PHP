@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.10.2012 01:37:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2013 19:01:57] --> $
  * @author     Alexander Book
  */
 
@@ -41,9 +41,9 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
      *
      * @return Chrome_Form_Login
      */
-    public static function getInstance() {
+    public static function getInstance(Chrome_Request_Handler_Interface $reqHandler) {
         if(self::$_instance === null) {
-            self::$_instance = new self();
+            self::$_instance = new self($reqHandler);
         }
 
         return self::$_instance;
@@ -53,7 +53,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
      *
      * @return Chrome_Form_Login
      */
-    protected function __construct()
+    protected function _init()
     {
         // get lang obj for this module
         $LANG = new Chrome_Language('modules/content/user/login');
@@ -102,7 +102,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $this->_elements['stay_loggedin'] = new Chrome_Form_Element_Checkbox($this, 'stay_loggedin', array(
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => false,
             Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array(false),
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array(true),
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array(1),
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array($boolConverter)));
 
         // submit button, nothing special

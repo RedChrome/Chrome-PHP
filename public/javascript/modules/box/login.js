@@ -8,8 +8,8 @@ function AJAX_send_login() {
         handleAs: "json",
         timeout: 3000,
         content: {
-            request: "ajax"
-            ,submit: dojo.byId('login').submit.value
+            request: "ajax",
+            submit: dojo.byId('login').submit.value
 
         },
         load: function(data, ioArgs) {

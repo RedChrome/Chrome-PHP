@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:09:22] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2013 19:03:29] --> $
  * @author     Alexander Book
  */
 
@@ -25,12 +25,12 @@ if(CHROME_PHP !== true)
    die();
 
 /**
- * Class for controlling login box and user menu
+ * Class for controlling login box
  *
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Chrome_Controller_Box_Login extends Chrome_Controller_Box_Abstract
+class Chrome_Controller_Box_Login extends Chrome_Controller_Module_Abstract
 {
     /**
      * initialize the controller
@@ -54,7 +54,6 @@ class Chrome_Controller_Box_Login extends Chrome_Controller_Box_Abstract
 
         $this->_model = new Chrome_Model_Login(null);
         $this->_view = new Chrome_View_Box_Login($this);
-        $this->_design = Chrome_Design_Composite_Left_Box::getInstance()->getComposite();
 
         // if the user is logged in, then show the user menu
         if($this->_model->isLoggedIn() === true) {
@@ -63,7 +62,7 @@ class Chrome_Controller_Box_Login extends Chrome_Controller_Box_Abstract
 
         // else create the form and display it
         } else {
-            $this->_form = Chrome_Form_Login::getInstance();
+            $this->_form = Chrome_Form_Login::getInstance($this->_requestHandler);
 
             // form was sent
             if($this->_form->isSent()) {
@@ -73,7 +72,10 @@ class Chrome_Controller_Box_Login extends Chrome_Controller_Box_Abstract
             $this->_view->showLoginForm();
         }
 
-        // create the output
-        $this->_view->render($this);
+    }
+
+    public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
+        // add the view to output
+        $list->add($this->_view);
     }
 }

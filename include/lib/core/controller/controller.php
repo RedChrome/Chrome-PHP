@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:05:57] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 15:18:36] --> $
  * @author     Alexander Book
  */
 
@@ -55,6 +55,8 @@ interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Inter
      * @return Chrome_Controller_Interface
      */
     public function __construct(Chrome_Request_Handler_Interface $reqHandler);
+
+    public function addViews(Chrome_Design_Renderable_Container_List_Interface $list);
 }
 
 /**
@@ -121,12 +123,6 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      * @var Chrome_Form_Interface
      */
     protected $_form = null;
-
-    /**
-     *
-     * @var Chrome_Design_Composite_Interface
-     */
-    protected $_design = null;
 
     /**
      * @var Chrome_Request_Handler_Interface
@@ -235,11 +231,6 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         return $this->_model;
     }
 
-    public function getView()
-    {
-        return $this->_view;
-    }
-
     public function getForm()
     {
         return $this->_form;
@@ -259,16 +250,6 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         return $this->_response;
     }
 
-    public function setDesign(Chrome_Design_Composite_Interface $obj)
-    {
-        $this->_design = $obj;
-    }
-
-    public function getDesign()
-    {
-        return $this->_design;
-    }
-
     public function setRequestHandler(Chrome_Request_Handler_Interface $obj)
     {
         $this->_requestHandler = $obj;
@@ -283,5 +264,9 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
     public function getExceptionHandler()
     {
         return $this->_exceptionHandler;
+    }
+
+    public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
+        // do nothing
     }
 }

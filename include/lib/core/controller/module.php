@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 23:16:02] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 16:28:40] --> $
  * @author     Alexander Book
  */
 
@@ -27,7 +27,7 @@ if(CHROME_PHP !== true) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
-class Chrome_Controller_Box_Abstract extends Chrome_Controller_Abstract
+abstract class Chrome_Controller_Module_Abstract extends Chrome_Controller_Abstract
 {
     public function __construct(Chrome_Request_Handler_Interface $reqHandler)
     {
@@ -35,17 +35,19 @@ class Chrome_Controller_Box_Abstract extends Chrome_Controller_Abstract
 
         $this->_initialize();
 
-        $this->_require();
+        $this->_setFilter();
 
-        $this->execute();
+        $this->_require();
+    }
+
+    final public function execute()
+    {
+        $this->_execute();
+
+        $this->_shutdown();
     }
 
     protected function _initialize()
-    {
-
-    }
-
-    protected function _shutdown()
     {
 
     }
@@ -55,10 +57,15 @@ class Chrome_Controller_Box_Abstract extends Chrome_Controller_Abstract
 
     }
 
-    public function execute()
+    protected function _shutdown()
     {
-        $this->_execute();
 
-        $this->_shutdown();
+    }
+}
+
+abstract class Chrome_Controller_Content_Abstract extends Chrome_Controller_Module_Abstract
+{
+    public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
+        $list->addContainer(new Chrome_Design_Renderable_Container($this->_view, 'content'));
     }
 }

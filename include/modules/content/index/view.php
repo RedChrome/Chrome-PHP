@@ -3,42 +3,39 @@
 if(CHROME_PHP !== true)
     die();
 
-class Chrome_View_Index extends Chrome_View_Abstract
+class Chrome_View_Index extends Chrome_View_Strategy_Abstract
 {
 
-    public function __construct(Chrome_Controller_Abstract $controller) {
+    public function __construct(Chrome_Controller_Abstract $controller)
+    {
         parent::__construct($controller);
         $this->addTitle('Form');
     }
 
     public function doSTH()
     {
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Index_TODO($this->_controller));
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Index_STHOTHER($this->_controller));
+        $this->_views[] = new Chrome_View_Index_TODO($this->_controller);
+        $this->_views[] = new Chrome_View_Index_STHOTHER($this->_controller);
     }
 
     public function formIsValid() {
         $this->addTitle('valid');
-
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Index_Form_Is_Valid($this->_controller));
+        $this->_views[] = new Chrome_View_Index_Form_Is_Valid($this->_controller);
     }
 
     public function formIsInvalid() {
         $this->addTitle('invalid');
-
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Index_Form_Is_Invalid($this->_controller));
+        $this->_views[] = new Chrome_View_Index_Form_Is_Invalid($this->_controller);
     }
 
     public function formNotSent() {
         $this->addTitle('not sent');
-
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Index_Form_Not_Sent($this->_controller));
+        $this->_views[] = new Chrome_View_Index_Form_Not_Sent($this->_controller);
     }
 
     public function formNotCreated() {
         $this->addTitle('not created');
-
-        Chrome_Design_Composite_Content::getInstance()->getComposite()->addView(new Chrome_View_Index_Form_Not_Sent($this->_controller));
+        $this->_views[] = new Chrome_View_Index_Form_Not_Sent($this->_controller);
     }
 }
 
