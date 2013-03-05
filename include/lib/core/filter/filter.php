@@ -17,7 +17,7 @@
  * @subpackage Chrome.Filter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 14:55:02] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 17:28:13] --> $
  * @author     Alexander Book
  */
 
@@ -44,9 +44,6 @@ abstract class Chrome_Filter_Chain_Abstract
   		if($filterName === null) {
   			$filterName = get_class($this);
   		}
-
-		// add Filter to registry, so every $filterName must be unique, OR Chrome_Registry will throw an exception
-  		$this->_addFilterChainToRegistry($filterName);
 	}
 
 	/**
@@ -77,19 +74,6 @@ abstract class Chrome_Filter_Chain_Abstract
 		foreach($this->_filters AS $filter) {
 			$filter->execute($req, $res);
 		}
-	}
-
-	/**
-	 * Chrome_Filter_Chain_Abstract::_addFilterToRegistry()
-	 *
-	 * Adds filter chain to registry
-	 *
-	 * @param string $filterName
-	 * @return void
-	 */
-	final protected function _addFilterChainToRegistry($filterName)
-	{
-		Chrome_Registry::getInstance()->set('Chrome_Filter_Chain', $filterName, $this, true);
 	}
 }
 

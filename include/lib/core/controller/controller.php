@@ -17,11 +17,13 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 15:18:36] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 21:16:43] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true) die();
+
+require_once 'factory.php';
 
 /**
  * @package CHROME-PHP
@@ -56,6 +58,13 @@ interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Inter
      */
     public function __construct(Chrome_Request_Handler_Interface $reqHandler);
 
+    /**
+     * This method is used to add Renderable objects into $list. This should be done in this method!
+     * And only there.
+     *
+     * @param Chrome_Design_Renderable_Container_List_Interface $list
+     * @return void
+     */
     public function addViews(Chrome_Design_Renderable_Container_List_Interface $list);
 }
 
@@ -186,7 +195,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
 
         if(isset($this->_require['class'])) {
             foreach($this->_require['class'] as $class) {
-                classLoad($class);
+                loadClass($class);
             }
         }
     }
@@ -219,11 +228,6 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
                 $_filterChain->addFilter($filter);
             }
         }
-    }
-
-    protected function write($string)
-    {
-        $this->_response->write($string);
     }
 
     public function getModel()

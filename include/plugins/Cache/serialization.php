@@ -19,7 +19,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 17:18:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2013 00:14:19] --> $
  * @link       http://chrome-php.de
  */
 
@@ -33,7 +33,7 @@ if(CHROME_PHP !== true)
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 17:18:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2013 00:14:19] --> $
  * @link       http://chrome-php.de
  */
 interface Chrome_Cache_Serialization_Interface extends Chrome_Cache_Interface
@@ -80,7 +80,7 @@ interface Chrome_Cache_Serialization_Interface extends Chrome_Cache_Interface
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 17:18:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2013 00:14:19] --> $
  * @link       http://chrome-php.de
  */
 class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome_Cache_Serialization_Interface
@@ -156,11 +156,17 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
 
         $file = BASEDIR.$file;
 
+        $fileIsEmpty = false;
         // does the cache file already exist?
         if(!_isFile($file)) {
             // load Chrome_File class and create the file
             require_once LIB.'core/file/file.php';
-            Chrome_File::mkFile($file);
+            $this->_filePointer = Chrome_File::mkFileUsingFilePointer($file, 0777, 'wb');
+            $fileIsEmpty = true;
+            if(!is_resource($this->_filePointer)) {
+                throw new Chrome_Exception('Error while creating file '.$file.'');
+            }
+
         }
 
         // set lifetime for the cache
@@ -179,7 +185,7 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
         //}
 
         // get cached data
-        $this->_loadData();
+        $this->_loadData($fileIsEmpty);
 
         // check wheter cached data is valid
         // lifetime expired?
@@ -303,10 +309,15 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
      *
      * Loads the cache file and save it into var
      *
+     * @param boolean $fileIsEmpty true if file is empty, false if you dont know
      * @return void
      */
-    protected function _loadData()
+    protected function _loadData($fileIsEmpty = false)
     {
+        if($fileIsEmpty === true) {
+            return;
+        }
+
         $data = '';
 
         /*while(!feof($this->_filePointer)) {
@@ -316,7 +327,6 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
         $data = @file_get_contents($this->_fileName);
 
         if($data === '') {
-            $data = array();
             return;
         }
         $this->_data = unserialize($data);
@@ -353,7 +363,8 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome
         }
 
         // cache expired?
-        if($this->_data[self::CHROME_CACHE_SERIALIZATION_TIMESTAMP_KEY] + $this->_lifetime < CHROME_TIME) {
+        if(isset($this->_data[self::CHROME_CACHE_SERIALIZATION_TIMESTAMP_KEY])
+           AND $this->_data[self::CHROME_CACHE_SERIALIZATION_TIMESTAMP_KEY] + $this->_lifetime < CHROME_TIME) {
             $this->_data = array();
         }
     }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 14:33:05] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 22:59:57] --> $
  * @author     Alexander Book
  */
 
@@ -25,16 +25,22 @@ if(CHROME_PHP !== true)
     die();
 
 /**
+ * Interface for loading required files and loading classes
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Require
  */
-interface Chrome_Require_Interface
+interface Chrome_Require_Interface extends Chrome_Exception_Processable_Interface
 {
-	public static function getInstance();
+    public function loadRequiredFiles();
 
-	public function classLoad($class);
+    public function getRequiredFiles();
 
-    public static function setModel(Chrome_Model_Interface $model);
+	public function loadClass($className);
+
+    public function isClassLoaded($className);
+
+    public function getClasses();
 }
 
 /**
@@ -43,36 +49,11 @@ interface Chrome_Require_Interface
  */
 interface Chrome_Require_Loader_Interface
 {
-	public function classLoad($class);
+	public function loadClass($className);
 }
 
 /**
- * Chrome_Require
- *
- * Loads all required files AND classess<br>
- * This class loads all classes via classLoad(triggerd by __autoload) by calling all classes beginning with 'Chrome_Require_' (in folder 'plugins/Require/')
- *
- * <code>
- * // load all required files automatically
- * $require = Chrome_Require::getInstance();
- *
- * // now we want to add a new require class to load all classes beginning with e.g. 'Chrome_Test'
- * // Note: all require classes must beginn with 'Chrome_Require_'
- * if($require->isClass('Chrome_Require_Test')) {
- * 	$require->addClass('Chrome_Require_Test', 'plugins/Require/test.php', false);
- * } else {
- *	// require class already added
- * }
- *
- * // now on next website's call we can use this class
- *
- *
- * // Chrome_Test isn't defined, so PHP calls __autoload, which calls Chrome_Require::classLoad()
- * // AND classLoad() calls every require class, whether they know where the class is placed AND if they know, they include this file
- * // so that we can use the class now
- * $test = new Chrome_Test();
- *
- * </code>
+ * This class registers a autoloader to automatically load unknown classes via loadClass()
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Require
@@ -80,328 +61,247 @@ interface Chrome_Require_Loader_Interface
 class Chrome_Require implements Chrome_Require_Interface
 {
     /**
-     * Contains the model to init class
+     * Contains all loaded Classes
      *
-     * @var Chrome_Model_Interface
+     * @var array
      */
-    private static $_initModel = null;
+    protected $_loadedClasses = array();
 
 	/**
 	 * Contains Chrome_Model_Abstract instance
 	 *
 	 * @var Chrome_Model_Abstract
 	 */
-	private $_model = null;
-
-	/**
-	 * Contains Chrome_Require instance
-	 *
-	 * @var Chrome_Require
-	 */
-	private static $_instance;
+	protected $_model = null;
 
 	/**
 	 * Contains required files
 	 *
 	 * @var array
 	 */
-	private $_require = array();
+	protected $_require = array();
 
 	/**
 	 * Contains dir to a class
 	 *
 	 * @var array
 	 */
-	private $_class = array();
+	protected $_class = array();
 
 	/**
-	 * Contains all Require classes
+	 * Contains all class loaders
 	 *
 	 * @var array
 	 */
-	private $_requireClass = array();
+	protected $_classLoaders = array();
+
+    /**
+     * Determines whether {@see loadRequiredFiles()} was called
+     *
+     * @var boolean
+     */
+    protected $_requiredFilesLoaded = false;
+
+    /**
+     * @var Chrome_Exception_Handler_Interface
+     */
+    protected $_exceptionHandler = null;
 
 	/**
-	 * Chrome_Require::__construct()
-	 *
+     *
+     * Sets this class as an autoloader class via spl_autoload_register
+     *
 	 * @return Chrome_Require
 	 */
-	private function __construct()
+	public function __construct(Chrome_Model_Interface $model)
 	{
-        if(self::$_initModel !== null) {
-            $this->_model = self::$_initModel;
-        } else {
-            throw new Chrome_Exception('Call setModel before getInstance()!');
-        }
+        $this->_model = $model;
 
-		$this->_getRequirements();
 		$this->_getClasses();
-		$this->_require();
-	}
 
-	/**
-	 * Chrome_Require::getInstance()
-	 *
-	 * Get the instance of this class using the singleton pattern
-	 *
-	 * @return Chrome_Require
-	 */
-	public static function getInstance()
-	{
-	   if(self::$_instance === null) {
-	       self::$_instance = new self();
-	   }
-
-       return self::$_instance;
-	}
-
-	/**
-	 * Chrome_Require::getRequirements()
-	 *
-	 * only for internal usage<br>
-	 * saves required files into $_require
-	 *
-	 * @return void
-	 */
-	private function _getRequirements()
-	{
-		$this->_require = $this->_model->getRequirements();
+        spl_autoload_register(array($this, 'loadClass'), true, true);
 	}
 
     /**
-     * Chrome_Require::setModel()
+     * Adds a class to $_loadedClasses
      *
-     * Sets the model to access class definitions (filepath, class, etc...)
-     * This has only affect if you call this _before_ getInstance()!
-     *
-     * @param Chrome_Model_Interface $model
+     * @param string $class a loaded class name
      * @return void
      */
-    public static function setModel(Chrome_Model_Interface $model)
+    protected function _addClass($class)
     {
-        self::$_initModel = $model;
+        $this->_loadedClasses[] = $class;
+    }
+
+    /**
+     * Checks whether the given calss name was loaded by this class
+     *
+     * @return boolean true if class was loaded
+     */
+    public function isClassLoaded($className)
+    {
+        return in_array($className, $this->_loadedClasses, true);
+    }
+    /**
+     * Fetches requirements from model (only once)
+     *
+     * @return void
+     */
+    protected function _getRequirements()
+    {
+        // requirement not loaded
+        if($this->_require === null)
+        {
+            $this->_require = $this->_model->getRequirements();
+        }
     }
 
 	/**
-	 * Chrome_Require::_require()
-	 *
-	 * only for internal usage<br>
-	 * requires files from db<br>
-	 *
+     * Loads all required files
+     *
+     * Throws an exception if a file could not get loaded
+     *
 	 * @return void
 	 */
-	private function _require()
+	public function loadRequiredFiles()
 	{
-		foreach($this->_require AS $key => $value) {
-			require_once BASEDIR.$value['path'];
-            if($value['class_loader'] == true) {
-                $this->_requireClass[] = new $value['name']();
+	    // already loaded required files
+	    if($this->_requiredFilesLoaded === true) {
+	       return;
+	    }
+
+        $this->_require = $this->_model->getRequirements();
+
+		foreach($this->_require as $value)
+        {
+            $this->_loadFile(BASEDIR.$value['path']);
+            $this->_addClass($value['name']);
+
+            if($value['class_loader'] == true)
+            {
+                $this->_classLoaders[] = new $value['name']();
             }
 		}
+
+        $this->_requiredFilesLoaded = true;
 	}
 
+    /**
+     * Returns all required files
+     *
+     * Structure:
+     *  array(0 => array('path' => $path, 'name' => $class, 'class_loader' => $isClassLoader))
+     * where
+     *  $path:string is the path to the class
+     *  $class:string is the name of the class
+     *  $isClassLoader:boolean determines whether the class implements the Chrome_Require_Loader_Interface and thus is a class loader
+     *
+     * @return array
+     */
+    public function getRequiredFiles()
+    {
+        $this->_getRequirements();
+
+        return $this->_require;
+    }
+
 	/**
-	 * Chrome_Require::getClasses()
-	 *
-	 * only for internal usage<br>
-	 * gets saved classes from db
+	 * Gets saved classes from model
 	 *
 	 * @return void
 	 */
-	private function _getClasses()
+	protected function _getClasses()
 	{
-		$this->_class = $this->_model->getClasses();
+	    $this->_class = $this->_model->getClasses();
 	}
 
 	/**
-	 * Chrome_Require::getClasses()
-	 *
-	 * Get all classes saved in database<br>
-	 * Structure:<br>
-	 * 			array(array($class => $file), array(etc...), )
+	 * Get all classes saved in model
+	 * Structure:
+	 *  array(array($class => $file), array(etc...), )
 	 *
 	 *
 	 * @return array
 	 */
-	public function getClasses() {
+	public function getClasses()
+    {
 		return $this->_class;
 	}
 
-	/**
-	 * Chrome_Require::getClass()
+   	/**
+	 * Loads the file containing the corresponding class
 	 *
-	 * Gets a class<br>
-	 *
-	 * Structrue:<br>
-	 * 			array($class => $file)
-	 * 		or an empty array if class was not found
-	 *
-	 * @return array
+     * Throws Chrome_Exception on failure
+     *
+	 * @param string $className name of the class
+	 * @return boolean true on success
 	 */
-	public function getClass($class){
-		if($this->isClass($class)) {
-			return $this->_class[$class];
-		} else {
-			return array();
-		}
-	}
-
-	/**
-	 * Chrome_Require::isClass()
-	 *
-	 * Checks wheter a class is set<br>
-	 * Returns true if class is set, false else
-	 *
-	 * @param string $class Name of the class
-	 * @return bool
-	 */
-	public function isClass($class) {
-		return (isset($this->_class[$class]));
-	}
-
-	/**
-	 * Chrome_Require::classLoad()
-	 *
-	 * Loads the file, containing the class
-	 *
-	 * @param string $name name of the class
-	 * @throws Chrome_Exception if class isn't defined or file doesnt exist
-	 * @return boolean
-	 */
-	public function classLoad($name)
-	{
-	    if(isset($this->_class[$name])) {
-			if(_isFile(BASEDIR.$this->_class[$name])) {
-				require_once BASEDIR.$this->_class[$name];
-				return true;
-			} else {
-				die('Cannot load class: '.$name.'! File ('.BASEDIR.$this->_class[$name].') doesn\'t exist!');
-			}
-		}
-
-        foreach($this->_require AS $array) {
-
-            if($array['name'] == $name) {
+    public function loadClass($className)
+    {
+        try {
+            if($this->isClassLoaded($className) === true) {
                 return true;
             }
-        }
 
-        // cache
-        if(($file = $this->_model->getClass($name)) != false) {
-            require_once $file;
-        }
-
-		// $rClass -> $requireClass
-		foreach($this->_requireClass AS $rClass) {
-		    try {
-    			if( ($file = $rClass->classLoad($name)) !== false AND $file !== null) {
-    				$this->_model->setClass($name, $file);
-                    require_once $file;
-                    return true;
-    			}
-            } catch (Chrome_Exception $e) {
-                die($e);
+            if($this->_loadClass($className) === true) {
+                $this->_addClass($className);
+            } else {
+                Chrome_Log::logException(new Chrome_Exception('Could not load class "'.$className.'"'), E_ERROR);
             }
+        } catch(Chrome_Exception $e) {
+            $this->_exceptionHandler->exception($e);
+        }
+    }
+
+	/**
+	 * Loads the file containing the corresponding class
+	 *
+	 * @param string $className name of the class
+	 * @return boolean true on success
+	 */
+	public function _loadClass($className)
+	{
+	    // lookup classes
+	    if(isset($this->_class[$className]))
+        {
+            $this->_loadFile(BASEDIR.$this->_class[$className]);
+            return true;
 		}
 
-        Chrome_Log::logException(new Chrome_Exception('Could not load class "'.$name.'"'), E_ERROR);
-        // cannot throw an exception, because this function gets called mostly via __autoload => php crashes, fixed in newer php distributions...
-		//die('Could not load class "'.$name.'"! No extension is matching and class is not defined in table '.DB_PREFIX.'_class!');
+		foreach($this->_classLoaders AS $classLoader)
+        {
+		    if( ($file = $classLoader->loadClass($className)) !== false)
+            {
+                $this->_loadFile($file);
+                return true;
+   			}
+		}
+
+        return false;
 	}
 
     /**
-	 * Chrome_Require::classLoadWithoutDieing()
-	 *
-	 * Loads the file, containing the class
-     * Does not die, it throws exceptions
-	 *
-	 * @param string $name name of the class
-	 * @throws Chrome_Exception if class isn't defined OR file doesnt exist
-	 * @return boolean
-	 */
-    public function classLoadWithoutDieing($name)
+     * Loads a file using require_once
+     * If file does not exist an exception is thrown
+     *
+     * @param string $file file to include
+     */
+    protected function _loadFile($file)
     {
-        if(isset($this->_class[$name])) {
-			if(_isFile(BASEDIR.$this->_class[$name])) {
-				require_once BASEDIR.$this->_class[$name];
-				return true;
-			} else {
-				throw new Chrome_Exception('Cannot load class: '.$name.'! File ('.BASEDIR.$this->_class[$name].') doesn\'t exist!');
-			}
-		}
-
-        foreach($this->_require AS $array) {
-            if($array['name'] == $name) {
-                return true;
-            }
-        }
-
-        // cache
-        if(($file = $this->_model->getClass($name)) != false) {
+        if(_isFile($file)) {
             require_once $file;
+        } else {
+            throw new Chrome_Exception('Could not load file "'.$file.'".');
         }
-
-		// $rClass -> $requireClass
-		foreach($this->_requireClass AS $rClass) {
-		    try {
-    			if( ($file = $rClass->classLoad($name)) !== false AND $file !== null) {
-    				$this->_model->setClass($name, $file);
-                    require_once $file;
-                    return true;
-    			}
-            } catch (Chrome_Exception $e) {
-                throw $e;
-            }
-		}
-
-		throw new Chrome_Exception('Could not load class "'.$name.'"! No extension is matching AND class is not defined in table '.DB_PREFIX.'_class!');
     }
 
-
-	/**
-	 * Chrome_Require::addClass()
-	 *
-	 * Adds a class with it's file to database<br>
-	 * Returns true on success
-	 *
-	 * @param string  $name Name of the class
-	 * @param string  $file path to the file, containing the class
-	 * @param boolean $override override an existing class?
-	 * @throws Chrome_Exception if class is already defined in database AND $override is set to false
-	 * @return boolean
-	 */
-	public function addClass($name, $file, $override = false)
-	{
-		$this->_model->addClass($name, $file, $override);
-		return true;
-	}
-}
-
-function classLoad($name)
-{
-    static $_instance;
-
-    if($_instance === null) {
-        $_instance = Chrome_Require::getInstance();
+    public function setExceptionHandler(Chrome_Exception_Handler_Interface $handler)
+    {
+        $this->_exceptionHandler = $handler;
     }
 
-	return $_instance->classLoad($name);
-}
-
-function import($array)
-{
-    static $_instance;
-
-    if($_instance === null) {
-        $_instance = Chrome_Require::getInstance();
-    }
-
-    if(!is_array($array)) {
-        $array = array($array);
-    }
-    foreach($array as $class) {
-	   $_instance->classLoadWithoutDieing($class);
+    public function getExceptionHandler()
+    {
+        return $this->_exceptionHandler;
     }
 }
-
-spl_autoload_register('classLoad', true);

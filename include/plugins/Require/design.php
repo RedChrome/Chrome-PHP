@@ -16,62 +16,42 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:42:07] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 22:55:47] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
- * Chrome_Require_Exception
- *
  * Loads all classes beginning with 'Chrome_Design_'
  *
  * @package CHROME-PHP
- * @author Alexander Book
- * @copyright Alexander Book
- * @version 2009/11/16/15/45
- * @access public
+ * @subpackage Chrome.Require
  */
-class Chrome_Require_Design implements Chrome_Require_Loader_Interface
+class Chrome_Require_Loader_Design implements Chrome_Require_Loader_Interface
 {
-    /**
-     * Chrome_Require_Design::classLoad()
-     *
-     * Loads a class, if $class beginns with 'Chrome_Design_' AND the corresponding file exists
-     *
-     * @param string $class
-     * @return bool true if class was found
-     */
-    public function classLoad($class)
-    {
-        if(preg_match('#Chrome_Design_Composite_(.{1,})#i', $class, $matches)) {
+	/**
+	 * Loads a class, if $class beginns with 'Chrome_Design_'
+	 *
+	 * @param string $class
+	 * @return bool true if class was found
+	 */
+	public function loadClass($class)
+	{
+		if(preg_match('#Chrome_Design_Composite_(.{1,})#i', $class, $matches))
+		{
+			return LIB . 'core/design/composite/' . strtolower($matches[1]) . '.php';
 
-            $name = strtolower($matches[1]);
+		} else
+			if(preg_match('#Chrome_Design_Decorator_([a-z1-9]{1,})_([a-z1-9]{1,})_(.{1,})#iu', $class, $matches))
+			{
+				return LIB . 'core/design/decorator/default/' . strtolower($matches[2]) . '/' . strtolower($matches[3]) . '.php';
+			} else
+				if(preg_match('#Chrome_Design_Factory_Decorator_(.{1,})#i', $class, $matches))
+				{
+					return LIB . 'core/design/factory/decorator/' . strtolower($matches[1]) . '.php';
+				}
 
-            if(_isFile(LIB.'core/design/composite/'.$name.'.php')) {
-                return LIB.'core/design/composite/'.$name.'.php';
-            }
-
-        } elseif(preg_match('#Chrome_Design_Decorator_([a-z1-9]{1,})_([a-z1-9]{1,})_(.{1,})#iu', $class, $matches)) {
-            //$design = strtolower($matches[1]);
-            $type = strtolower($matches[2]);
-            $name = strtolower($matches[3]);
-
-            if(_isFile(LIB.'core/design/decorator/default/'.$type.'/'.$name.'.php')) {
-                return LIB.'core/design/decorator/default/'.$type.'/'.$name.'.php';
-            }
-
-        } elseif(preg_match('#Chrome_Design_Factory_Decorator_(.{1,})#i', $class, $matches)) {
-
-            $name = strtolower($matches[1]);
-
-            if(_isFile(LIB.'core/design/factory/decorator/'.$name.'.php')) {
-                return LIB.'core/design/factory/decorator/'.$name.'.php';
-            }
-        }
-
-        return false;
-    }
+		return false;
+	}
 
 }

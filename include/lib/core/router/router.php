@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 14:36:08] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 17:39:14] --> $
  * @author     Alexander Book
  */
 if( CHROME_PHP !== true ) die();
@@ -26,13 +26,11 @@ if( CHROME_PHP !== true ) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-interface Chrome_Router_Interface extends Chrome_Router_Route_Interface
+interface Chrome_Router_Interface extends Chrome_Router_Route_Interface, Chrome_Exception_Processable_Interface
 {
-	const CHROME_ROUTER_REGISTRY_NAMESPACE = 'Chrome_Router';
-
 	public function route( Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data );
 
-	public function addRouterClass( Chrome_Router_Route_Interface $obj );
+	public function addRoute( Chrome_Router_Route_Interface $obj );
 }
 
 /**
@@ -61,8 +59,6 @@ interface Chrome_Router_Result_Interface
 	public function setClass( $class );
 
 	public function getClass();
-
-	public function initClass( Chrome_Request_Handler_Interface $requestHandler );
 
 	public function setName( $name );
 
@@ -123,46 +119,14 @@ class Chrome_Router_Resource implements Chrome_Router_Result_Interface
 	{
 		$this->_name = $name;
 	}
-
-
-	public function initClass( Chrome_Request_Handler_Interface $requestHandler )
-	{
-
-		if( empty( $this->_class ) ) {
-			throw new Chrome_Exception( 'No Class set in Chrome_Router_Resource!', 2002 );
-		}
-
-		if( !class_exists( $this->_class, false ) ) {
-
-			$file = $this->_file;
-
-			if( $file != '' and _isFile( BASEDIR . $file ) ) {
-				require_once BASEDIR . $file;
-			} else {
-
-				try {
-					import( $this->_class );
-				}
-				catch ( Chrome_Exception $e ) {
-					throw new Chrome_Exception( 'No file found and could no find the corresponding file!', 2003 );
-				}
-				Chrome_Log::log( 'class "' . $this->_class .
-					'" were found by autoloader! But it should inserted into db to speed up website!', E_NOTICE );
-			}
-		}
-
-		return new $this->_class( $requestHandler );
-	}
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Router implements Chrome_Router_Interface, Chrome_Exception_Processable_Interface
+class Chrome_Router implements Chrome_Router_Interface
 {
-	private static $_instance = null;
-
 	protected $_routeInstance = null;
 
 	protected $_routerClasses = array();
@@ -171,17 +135,8 @@ class Chrome_Router implements Chrome_Router_Interface, Chrome_Exception_Process
 
 	protected $_exceptionHandler = null;
 
-	private function __construct()
+	public function __construct()
 	{
-	}
-
-	public static function getInstance()
-	{
-		if( self::$_instance === null ) {
-			self::$_instance = new self();
-		}
-
-		return self::$_instance;
 	}
 
 	public function match( Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data )
@@ -235,7 +190,7 @@ class Chrome_Router implements Chrome_Router_Interface, Chrome_Exception_Process
 		return $this->_resource;
 	}
 
-	public function addRouterClass( Chrome_Router_Route_Interface $obj )
+	public function addRoute( Chrome_Router_Route_Interface $obj )
 	{
 		$this->_routerClasses[] = $obj;
 	}
@@ -243,8 +198,6 @@ class Chrome_Router implements Chrome_Router_Interface, Chrome_Exception_Process
 	public function setExceptionHandler( Chrome_Exception_Handler_Interface $obj )
 	{
 		$this->_exceptionHandler = $obj;
-
-		return $this;
 	}
 
 	public function getExceptionHandler()

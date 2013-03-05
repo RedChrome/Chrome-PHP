@@ -17,7 +17,7 @@
  * @subpackage Chrome.View
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 16:25:36] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 18:25:33] --> $
  * @author     Alexander Book
  */
 
@@ -56,15 +56,15 @@ interface Chrome_View_Interface extends Chrome_Design_Renderable
      *  $this->additionalPluginFunction($args);
      * at which additionalPluginFunction is any function given by the plugin object
      *
-     * @param Chrome_View_Handler_Interface $plugin
+     * @param Chrome_View_Plugin_Facade_Interface $plugin
      * @return void
      */
-    public static function setPluginObject(Chrome_View_Handler_Interface $object);
+    public static function setPluginObject(Chrome_View_Plugin_Facade_Interface $object);
 
     /**
      * Returns the plugin object
      *
-     * @return Chrome_View_Handler_Interface
+     * @return Chrome_View_Plugin_Facade_Interface
      */
     public static function getPluginObject();
 }
@@ -130,7 +130,7 @@ abstract class Chrome_View implements Chrome_View_Interface
         return (isset($this->_vars[$key])) ? $this->_vars[$key] : null;
     }
 
-    public static function setPluginObject(Chrome_View_Handler_Interface $plugin) {
+    public static function setPluginObject(Chrome_View_Plugin_Facade_Interface $plugin) {
         self::$_plugin = $plugin;
     }
 

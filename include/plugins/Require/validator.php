@@ -16,39 +16,27 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:42:38] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 22:25:50] --> $
  */
 
-if(CHROME_PHP !== true)
-	die();
+if(CHROME_PHP !== true) die();
 
 /**
- * Chrome_Require_Exception
+ * Loads all classes beginning with 'Chrome_Validator_'
  *
- * ___SHORT_DESCRIPTION___
- *
- *
- * @author		Alexander Book
- * @package		CHROME-PHP
- * @copyright   Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license     http://chrome-php.de/license/new-bsd		New BSD License
- * @version		2009/04/08/15/25
+ * @package CHROME-PHP
+ * @subpackage Chrome.Require
  */
-class Chrome_Require_Validator implements Chrome_Require_Loader_Interface
+class Chrome_Require_Loader_Validator implements Chrome_Require_Loader_Interface
 {
- 	public function classLoad($class) {
- 		// does the class contain 'Chrome_Validator_'?
-		if(preg_match('#Chrome_Validator_(.{1,})#i', $class, $matches)) {
-
-            $file = strtolower(str_replace('_', '/', $matches[1]));
-
-			if(_isFile( BASEDIR.'plugins/Validate/'.$file.'.php')) {
-				return BASEDIR.'plugins/Validate/'.$file.'.php';
-			} else {
-				throw new Chrome_Exception('Cannot load class '.$class.'! There is no file matching the requirements in Chrome_Require_Validator::classLoad()!');
-			}
+	public function loadClass($class)
+	{
+		// does the class contain 'Chrome_Validator_'?
+		if(preg_match('#Chrome_Validator_(.{1,})#i', $class, $matches))
+		{
+			return BASEDIR . 'plugins/Validate/' . strtolower(str_replace('_', '/', $matches[1])) . '.php';
 		}
 
-        return false;
- 	}
+		return false;
+	}
 }

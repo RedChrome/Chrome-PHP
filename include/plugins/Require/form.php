@@ -16,63 +16,44 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:42:27] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 22:25:46] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
- * Chrome_Require_Form
- *
  * Loads all classes beginning with 'Chrome_Form_'
  *
- * @author		Alexander Book
- * @package		CHROME-PHP
- * @copyright   Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license     http://chrome-php.de/license/new-bsd		New BSD License
- * @version		2009/04/08/15/25
+ * @package CHROME-PHP
+ * @subpackage Chrome.Require
  */
-class Chrome_Require_Form implements Chrome_Require_Loader_Interface
+class Chrome_Require_Loader_Form implements Chrome_Require_Loader_Interface
 {
-    /**
-     * Chrome_Require_Form::classLoad()
-     *
-     * Checks whether this class knows where the other class is located
-     * AND loads it, then return true
-     * Throws Chrome_Exception if pattern matched, but file for the class does not exist
-     *
-     * @param stinrg $class name of the class
-     * @return boolean
-     * @throws Chrome_Exception
-     */
-    public function classLoad($class)
-    {
-        if(preg_match('#Chrome_Form_Element_(.{1,})#i', $class, $matches)) {
-            if(_isFile(LIB.'core/form/element/'.strtolower($matches[1].'.php'))) {
-                return LIB.'core/form/element/'.strtolower($matches[1]).'.php';
-            } else {
-                throw new Chrome_Exception('Cannot load class '.$class.'! There is no file matching the requirements in Chrome_Require_Form::classLoad()!');
-            }
-        }
+	/**
+	 * Checks whether this class knows where the other class is located
+	 * AND loads it, then return true
+	 *
+	 * @param stinrg $class name of the class
+	 * @return boolean
+	 * @throws Chrome_Exception
+	 */
+	public function loadClass($class)
+	{
+		if(preg_match('#Chrome_Form_Element_(.{1,})#i', $class, $matches))
+		{
+			return LIB . 'core/form/element/' . strtolower($matches[1]) . '.php';
+		}
 
-        if(preg_match('#Chrome_Form_Decorator_(.{1,})#i', $class, $matches)) {
-            $file = strtolower(str_replace('_', '/', $matches[1]));
-            if(_isFile(LIB.'core/form/decorator/'.$file.'.php')) {
-                return LIB.'core/form/decorator/'.$file.'.php';
-            } else {
-                throw new Chrome_Exception('Cannot load class '.$class.'! There is no file matching the requirements in Chrome_Require_Form::classLoad()!');
-            }
-        }
+		if(preg_match('#Chrome_Form_Decorator_(.{1,})#i', $class, $matches))
+		{
+			return LIB . 'core/form/decorator/' . strtolower(str_replace('_', '/', $matches[1])) . '.php';
+		}
 
-        if(preg_match('#Chrome_Form_Handler_(.{1,})#i', $class, $matches)) {
-            if(_isFile(LIB.'core/form/handler/'.strtolower($matches[1].'.php'))) {
-               return LIB.'core/form/handler/'.strtolower($matches[1]).'.php';
-            } else {
-                throw new Chrome_Exception('Cannot load class '.$class.'! There is no file matching the requirements in Chrome_Require_Form::classLoad()!');
-            }
-        }
+		if(preg_match('#Chrome_Form_Handler_(.{1,})#i', $class, $matches))
+		{
+			return LIB . 'core/form/handler/' . strtolower($matches[1]) . '.php';
+		}
 
-        return false;
-    }
+		return false;
+	}
 }

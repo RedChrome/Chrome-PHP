@@ -15,25 +15,14 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 18:02:11] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 18:22:20] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
 
-class Chrome_View_Helper_Decorator extends Chrome_View_Helper_Abstract
+class Chrome_View_Plugin_Decorator extends Chrome_View_Plugin_Abstract
 {
-    private static $_instance = null;
-
-    public static function getInstance()
-    {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
-    }
-
     public function setViewTitle(Chrome_View_Interface $obj, $title) {
 
         $obj->setVar('view_title', $title);
@@ -74,5 +63,3 @@ class Chrome_View_Helper_Decorator extends Chrome_View_Helper_Abstract
         return 'Chrome_View_Helper_Decorator';
     }
 }
-
-Chrome_View_Helper_Decorator::getInstance();

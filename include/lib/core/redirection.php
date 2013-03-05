@@ -17,7 +17,7 @@
  * @subpackage Chrome.Session
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2013 19:34:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 17:38:08] --> $
  * @author     Alexander Book
  */
 
@@ -67,8 +67,7 @@ class Chrome_Redirection implements Chrome_Redirection_Interface
     }
 
     public static function redirectToResource(Chrome_Router_Resource_Interface $resource) {
-        $resource->setReturnAsAbsolutPath(true);
-        $url = Chrome_Router::getInstance()->url($resource);
+        throw new Chrome_Exception('Not implemented yet');
 
         self::_redirect($url);
     }

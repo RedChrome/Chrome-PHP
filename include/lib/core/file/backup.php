@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2012 12:13:22] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 21:32:05] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -102,8 +102,6 @@ class Chrome_File_Backup
 				#break;
 
 			case 'bzip2':
-				if(classLoad('Chrome_File') === false)
-					throw new Chrome_Exception('Coudn\'t load class Chrome_File! Cannot make backup with BZip2!');
 				$this->_newBzip2Archive($file.'.bz2');
 				$this->_addFolderToBzip2($dir);
 				return $this->_closeBzip2Archive();

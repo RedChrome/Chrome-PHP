@@ -17,34 +17,29 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:41:58] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 21:40:11] --> $
  */
 
 die('readme file! Not supposed to run in script!');
 
 
-// before usage, you have to add this class, file to Chrome_Require
-$require = Chrome_Require::getInstance();
-if (!$require->isClass('Chrome_Require_Readme')) {
-    // add this file, class to Chrome_Require
-    // when this website is called again, this file is saved AS a require class
-    $require->addClass('Chrome_Require_Readme', 'plugins/Require/_readme.php', false);
-}
+//
+// use $requireModel->addClass('Chrome_Require_Loader_Readme', PLUGIN.'Require/_readme.php', false)
 
 /**
- * Chrome_Require_Readme, example implementation
+ * Chrome_Require_Loader_Readme, example implementation
  *
- *  class name must beginn with "Chrome_Require_"
- *  so Chrome_Require can identify that this class
- *  requires other classes
+ * Before usage you have to add this class to model and tell the model that this class
+ * is a require_loader class!
+ *
  *
  * @pacakge CHROME-PHP
  * @subpackage Chrome.Require
  */
-class Chrome_Require_Readme implements Chrome_Require_Loader_Interface
+class Chrome_Require_Loader_Readme implements Chrome_Require_Loader_Interface
 {
     // in this method you put your logic
-    public function classLoad($class)
+    public function loadClass($class)
     {
         switch ($class) {
 

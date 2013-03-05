@@ -17,7 +17,7 @@
  * @subpackage Chrome.Core
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.02.2013 16:18:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 18:24:58] --> $
  * @author     Alexander Book
  */
 
@@ -96,7 +96,7 @@ require_once 'config/config.php';
 /**
  * load view helper
  */
-require_once 'view/helper.php';
+require_once 'view/plugin.php';
 
 /**
  * load design classes, needed for view

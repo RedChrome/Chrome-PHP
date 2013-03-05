@@ -17,7 +17,7 @@
  * @subpackage Chrome.File_System
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.02.2013 15:07:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 23:19:54] --> $
  * @author     Alexander Book
  */
 
@@ -95,6 +95,8 @@ interface Chrome_File_System_Read_Interface
 }
 
 /**
+ * @todo use lazy creation of file pointer. (replace all $this->_change = true to $this->_cacheNeedsUpdate() or smth like that and create the file pointer in this method)
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.File_System
  */
@@ -242,8 +244,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 
         if($this->_fileHandler === false) {
             require_once LIB.'core/file/file.php';
-			Chrome_File::mkFile(TMP.self::FILE_SYSTEM_READ_CACHE, 0777, false);
-			$this->_fileHandler = @fopen(TMP.self::FILE_SYSTEM_READ_CACHE, 'wb');
+			$this->_fileHandler = Chrome_File::mkFileUsingFilePointer(TMP.self::FILE_SYSTEM_READ_CACHE, 0777, 'wb', false);
 			return array();
         }
 
@@ -605,7 +606,8 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	 * Chrome_File_System_Read::_getInfoDir()
 	 *
 	 * gathers data for a dir
-	 *
+     *
+	 * @todo do not get all data (is_readable) if they were already checked and the user just wants the files...
 	 * @param string $path
 	 * @return array
 	 */

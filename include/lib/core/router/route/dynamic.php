@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:04:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 17:34:06] --> $
  * @author     Alexander Book
  */
 
@@ -52,17 +52,6 @@ class Chrome_Route_Dynamic implements Chrome_Router_Route_Interface
     public function __construct(Chrome_Model_Abstract $model)
     {
         $this->_model = $model;
-        Chrome_Router::getInstance()->addRouterClass($this);
-
-        try {
-            Chrome_Registry::getInstance()->set(Chrome_Router_Interface::CHROME_ROUTER_REGISTRY_NAMESPACE,
-                'Chrome_Route_Dynamic', $this, false);
-        }
-        catch (Chrome_Exception $e) {
-            unset($e);
-            // do nothing
-        }
-
     }
 
     public function match(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data)
