@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.12.2012 17:04:39] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 16:05:00] --> $
  * @link       http://chrome-php.de
  */
 
@@ -43,7 +43,7 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
         if(!extension_loaded('postgresql')) {
             throw new Chrome_Exception('Extension PostgreSQL not loaded! Cannot use this adapter');
         }
-        
+
         $this->_host        = $host;
         $this->_username    = $username;
         $this->_password    = $password;
@@ -80,7 +80,7 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
         pg_close($this->_connection);
     }
 
-    public function getDefaultAdapter()
+    public function getDefaultAdapterSuffix()
     {
         return 'Postgresql';
     }

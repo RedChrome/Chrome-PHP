@@ -23,7 +23,8 @@ class AuthenticationChainCookieTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         if($this->_model === null) {
-            $this->_model = new Chrome_Model_Authentication_Cookie();
+            $this->_model = new Chrome_Model_Authentication_Cookie(array());
+            $this->_model->setDatabaseFactoryName(TEST_FACTORY);
         }
 
         if(!isset($this->_options['cookie_instance']) OR $this->_options['cookie_instance'] !== false) {

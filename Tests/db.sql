@@ -286,7 +286,7 @@ INSERT INTO `cp1_class` (`id`, `name`, `file`) VALUES
 (27, 'Chrome_Authorisation_Adapter_Default', 'lib/core/authorisation/adapter/default.php'),
 (28, 'Chrome_Authorisation_Adapter_Interface', 'lib/core/authorisation/authorisation.php'),
 (29, 'Chrome_Route_Administration', 'lib/core/router/route/administration.php'),
-(30, 'Chrome_Model_User', 'lib/classes/user/model.php'),
+(30, 'Chrome_Model_User_Database', 'lib/classes/user/model.php'),
 (31, 'Chrome_Form_Decorator_Individual_Abstract', 'lib/core/form/decorator.php'),
 (32, 'Chrome_Database_Connection_Mysql', 'lib/core/database/connection/mysql.php'),
 (33, 'Chrome_Database_Connection_Postgresql', 'lib/core/database/connection/postgresql.php');

@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 13:49:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 20:55:06] --> $
  * @link       http://chrome-php.de
  */
 
@@ -31,7 +31,7 @@ if(CHROME_PHP !== true) die();
 
 interface Chrome_Database_Interface_Interface
 {
-    public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result);
+    public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result, Chrome_Database_Registry_Statement_Interface $statementRegistry);
 
     public function getResult();
 
@@ -66,8 +66,11 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
     protected $_sentQuery = null;
 
-    public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result)
+    protected $_statementRegistry = null;
+
+    public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result, Chrome_Database_Registry_Statement_Interface $statementRegistry)
     {
+        $this->_statementRegistry = $statementRegistry;
         $this->_adapter = $adapter;
         $this->_result = $result;
     }
@@ -100,7 +103,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
             $query = $this->_prepareStatement($query);
 
-            Chrome_Database_Registry_Statement::addStatement($query);
+            $this->_statementRegistry->addStatement($query);
 
             $this->_adapter->query($query);
 

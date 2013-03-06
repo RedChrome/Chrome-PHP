@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.12.2012 17:57:44] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 16:04:44] --> $
  * @link       http://chrome-php.de
  */
 
@@ -44,7 +44,7 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
         if(!extension_loaded('mysqli')) {
             throw new Chrome_Exception('Extension MySQLi not loaded! Cannot use this adapter');
         }
-        
+
         $this->_host = $host;
         $this->_username = $username;
         $this->_password = $password;
@@ -69,7 +69,7 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
         if($this->_isSetConnectionOptions === false) {
             throw new Chrome_Exception('Cannot connect to MySQL Server without any information about the server! Call setConnectionOptions() before!');
         }
-        
+
         $this->_connection = @new mysqli($this->_host, $this->_username, $this->_password, $this->_database, $this->_port, $this->_socket);
 
         if(mysqli_connect_error() !== null or $this->_connection === null) {
@@ -109,7 +109,7 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
         // do nothing, we're using a persistent connection
     }
 
-    public function getDefaultAdapter()
+    public function getDefaultAdapterSuffix()
     {
         return 'Mysqli';
     }

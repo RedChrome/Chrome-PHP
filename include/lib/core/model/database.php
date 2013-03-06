@@ -17,12 +17,11 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.01.2013 17:34:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2013 00:29:25] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
  * @package    CHROME-PHP
@@ -30,222 +29,71 @@ if(CHROME_PHP !== true)
  */
 abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
 {
-    /**
-     * Adapter name e.g. MySQL
-     * <optional>
-     *
-     * @var string
-     */
-	protected $_dbAdapter				= null;
+	protected $_dbAdapter = Chrome_Database_Factory_Interface::DEFAULT_ADAPTER;
 
-    /**
-     * Which Interface gets used? e.g. Iterator
-     * <optional>
-     *
-     * @var string
-     */
-	protected $_dbInterface				= null;
+	protected $_dbInterface = Chrome_Database_Factory_Interface::DEFAULT_INTERFACE;
 
-    protected $_dbResult                = null;
+	protected $_dbResult = Chrome_Database_Factory_Interface::DEFAULT_RESULT;
 
-    protected $_dbConnection            = null;
+	protected $_dbConnection = Chrome_Database_Registry_Connection_Interface::DEFAULT_CONNECTION;
 
-    // this is a composition set INSIDE the child class
-    protected $_dbComposition           = null;
+	// this is a composition set INSIDE the child class
+	protected $_dbComposition = null;
 
-    // this is a composition injected from OUTSIDE the child class
-    protected $_dbDIComposition         = null;
+	// this is a composition injected from OUTSIDE the child class
+	protected $_dbDIComposition = null;
 
-    /**
-     * Server address
-     * <optional>
-     *
-     * @var string
-     */
-	protected $_dbServer				= null;
+	protected $_dbInterfaceInstance = null;
 
-    /**
-     * Database name
-     * <optional>
-     *
-     * @var string
-     */
-	protected $_dbDatabase 				= null;
+    protected $_dbFactoryName = Chrome_Database_Facade::DEFAULT_FACTORY;
 
-    /**
-     * Database user
-     * <optional>
-     *
-     * @var string
-     */
-	protected $_dbUser					= null;
+    public function __construct() {
 
-    /**
-     * Database password
-     * <optional>
-     *
-     * @var string
-     */
-	protected $_dbPassword				= null;
+    }
 
-    /**
-     * If no escaper is set, then connect to the default database
-     *
-     * @var bool
-     */
-    protected $_useDefaultDBConnectionForEscaper = true;
-
-    /**
-     * Database Object to escape data
-     *
-     * @var Chrome_DB_Adapter_Abstract
-     */
-    protected $_escaper                 = null;
-
-    /**
-     * Contains the instance of an DB_Interface
-     *
-     * @var Chrome_DB_Interface_Abstract
-     */
-	protected $_dbInterfaceInstance 	= null;
-
-	/**
-	 * Chrome_Model_Database_Abstract::__construct()
-	 *
-	 * @return Chrome_Model_Database_Abstract
-	 */
-	protected function __construct() {
-        $this->_connect();
-	}
-
-	/**
-	 * Chrome_Model_Database_Abstract::_connect()
-	 *
-     * Connects to a database, using $_dbAdapter, $_dbInterface, $_dbServer, $_dbDatabase, $_dbUser AND $_dbPassword
-     * if any value is changed, this creates a interface with these values.
-     * if nothing is changed it creates a default interface with the default connection settings
-     *
-	 * @return void
-	 */
-	protected function _connect() {
-
-		/*if( $this->_dbServer	!== null OR
-		 	$this->_dbDatabase	!== null OR
-			$this->_dbUser 		!== null OR
-			$this->_dbPassword	!== null ) {
-
-			$this->_dbInterfaceInstance = Chrome_DB_Interface_Factory::factory($this->_dbInterface, $this->_dbAdapter);
-			$this->_dbInterfaceInstance->connect($this->_dbServer, $this->_dbDatabase, $this->_dbUser, $this->_dbPassword);
+	protected function _connect()
+	{
+		if($this->_dbComposition !== null) {
+			$this->_dbInterfaceInstance = Chrome_Database_Facade::getFactory($this->_dbFactoryName)->buildInterfaceViaComposition($this->_dbComposition, $this->_dbDIComposition);
 		} else {
-			$this->_dbInterfaceInstance = Chrome_DB_Interface_Factory::factory($this->_dbInterface);
+			$this->_dbInterfaceInstance = Chrome_Database_Facade::getFactory($this->_dbFactoryName)->buildInterface($this->_dbInterface, $this->_dbResult, $this->_dbConnection, $this->_dbAdapter);
 		}
-        */
-        if($this->_dbComposition !== null) {
-            $this->_dbInterfaceInstance = Chrome_Database_Facade::initComposition($this->_dbComposition);
-        } else {
-            $this->_dbInterfaceInstance = Chrome_Database_Facade::getInterface($this->_dbInterface, $this->_dbResult, $this->_dbConnection, $this->_dbAdapter);
-        }
-
 	}
 
-	/**
-	 * Chrome_Model_Database_Abstract::_getNewDBInterface()
-	 *
-     * Creates a new Interface for database access,
-     * the new interface instance is saved in $_dbInterfaceInstance
-     *
-	 * @param Chrome_DB_Interface_Abstract $interface instance of the old interface, if you want the same connection settings
-	 * @return void
-	 */
-	protected function _getNewDBInterface(Chrome_DB_Interface_Abstract $interface = null) {
+	protected function _getDBInterface($clear = true)
+	{
+		if($this->_dbInterfaceInstance === null) {
+			$this->_connect();
+		} else
+            // if the interface was created the first time, we dont need to call clear
+			if($clear === true) {
+				$this->_dbInterfaceInstance->clear();
+			}
 
-        throw new Chrome_Exception('Not implemented yet');
-
-		/*$interface = ($interface === null) ? $this->_dbInterface : $interface;
-
-		$conID = $this->_dbInterfaceInstance->getConnectionID();
-
-		$instance = Chrome_DB_Interface_Factory::factory($interface);
-		$instance->setConnectionID($conID);
-
-		$this->_dbInterfaceInstance = $instance;<br />*/
+		return $this->_dbInterfaceInstance;
 	}
 
     /**
-     * Chrome_Model_Database_Abstract::_escape()
-     *
-     *
-     * @param mixed $data data that gets escaped
-     * @return mixed escaped data
+     * @deprecated
      */
-    protected function _escape($data) {
+	protected function _getDBInterfaceByComposition()
+	{
+	    throw new Exception('Do not use this method anymore');
 
-        throw new Chrome_Exception('Dont use _escape');
+		if($this->_dbComposition === null) {
+			throw new Chrome_Exception('No default database composition set!');
+		} else {
+            return $this->_connect();
+			//$this->_dbInterfaceInstance = Chrome_Database_Facade::getFactory($this->_dbFactoryName)->buildInterfaceViaComposition($this->_dbComposition, $this->_dbDIComposition);
+			//return $this->_dbInterfaceInstance;
+		}
+	}
 
-        if($this->_escaper !== null) {
-            return $this->_escaper->escape($data);
-        }
-
-        return $this->_dbInterfaceInstance->escape($data);
+    public function setDatabaseFactoryName($name) {
+        $this->_dbFactoryName = $name;
     }
 
-    /**
-     * Chrome_Model_Database_Abstract::setDBInterface()
-     *
-     * Sets the dbInterfaceInstnace object with the given one
-     *
-     * @param Chrome_Form_Interface_Abstract
-     * @return void
-     */
-    public function setDBInterface(Chrome_Form_Interface_Abstract $dbInterface) {
-        // TODO: wtf? wrong interface? form??
-        throw new Chrome_Exception('Dont use setDBInterface');
-        $this->_dbInterfaceInstance = $dbInterface;
-    }
-
-    /**
-     * Chrome_Form_Interface_Abstract::getDBInterface()
-     *
-     * You should not use this internal! Only for access from outside of this class
-     * Getter for $_dbInterfaceInstance
-     *
-     * @return Chrome_Form_Interface_Abstract|null
-     */
-    public function getDBInterface() {
-        return $this->_dbInterfaceInstance;
-    }
-
-    /**
-     * Chrome_Form_Interface_Abstract::_getDBInterface()
-     *
-     * This is the corresponding method for getDBInterface, but for internal usage!
-     * It creates a new dbInterfaceInstance if the current one is null. This will never
-     * return null, getDBInterface might return null...
-     * Another important information: If you call this method, then clean() is also called,
-     * so any not saved data is getting lost! (if $clean = true)
-     *
-     * @param $clean boolean true, then clean() is getting called
-     * @return Chrome_Form_Interface_Abstract
-     */
-    protected function _getDBInterface($clean = true) {
-        if($this->_dbInterfaceInstance === null) {
-            $this->_connect();
-        }
-        if($clean === true) {
-            $this->_dbInterfaceInstance->clear();
-        }
-
-        return $this->_dbInterfaceInstance;
-    }
-
-    protected function _getDBInterfaceByComposition()
-    {
-        if($this->_dbComposition === null) {
-            throw new Chrome_Exception('No default database composition set!');
-        } else {
-
-            $this->_dbInterfaceInstance = Chrome_Database_Facade::initComposition($this->_dbComposition, $this->_dbDIComposition);
-            return $this->_dbInterfaceInstance;
-        }
+    public function getDatabaseFactoryName() {
+        return $this->_dbFactoryName;
     }
 }

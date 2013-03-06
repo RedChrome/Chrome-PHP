@@ -11,7 +11,7 @@ class DatabaseInterfaceModelTest extends PHPUnit_Framework_TestCase
 {
     public function testSetModel()
     {
-        $db = Chrome_Database_Facade::getInterface('model', 'dummy');
+        $db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('model', 'dummy');
 
         require_once 'Tests/dummies/database/interfaceModel.php';
 
@@ -24,7 +24,7 @@ class DatabaseInterfaceModelTest extends PHPUnit_Framework_TestCase
     {
         $con = new Chrome_Database_Connection_Dummy('not Null');
 
-        $db = Chrome_Database_Facade::getInterface('model', 'dummy', $con);
+        $db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('model', 'dummy', $con);
 
         $model = new Chrome_Model_Database_Statement_Dummy();
         $model->_handler = $this;
@@ -46,7 +46,7 @@ class DatabaseInterfaceModelTest extends PHPUnit_Framework_TestCase
 
         $con = new Chrome_Database_Connection_Dummy('not Null');
 
-        $db = Chrome_Database_Facade::getInterface('model', 'dummy', $con);
+        $db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('model', 'dummy', $con);
 
         $this->setExpectedException('Chrome_Exception');
 

@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.12.2012 18:31:47] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 16:04:51] --> $
  * @link       http://chrome-php.de
  */
 
@@ -45,7 +45,7 @@ class Chrome_Database_Connection_DB2 extends Chrome_Database_Connection_Abstract
         if(!extension_loaded('db2')) {
             throw new Chrome_Exception('Extension DB2 not loaded! Cannot use this adapter');
         }
-        
+
         $this->_host        = $host;
         $this->_username    = $username;
         $this->_password    = $password;
@@ -53,15 +53,15 @@ class Chrome_Database_Connection_DB2 extends Chrome_Database_Connection_Abstract
         $this->_database    = $database;
         $this->_port        = $port;
         $this->_options     = $options;
-        
+
         if($connectionString !== null) {
             $this->_connectionString = $connectionString;
         } else {
             // set connection string appropriate to the given authorisation data
-            
+
             //TODO: set connection string for db2
             $this->_connectionString = 'DATABASE='.$database.';HOSTNAME='.$hostname.';PORT='.$port.';';
-            
+
         }
 
         $this->_isSetConnectionOptions = true;
@@ -81,13 +81,13 @@ class Chrome_Database_Connection_DB2 extends Chrome_Database_Connection_Abstract
 
         if($this->_connection === false) {
             // TODO: handle errors
-            
-            
-            
+
+
+
             return false;
         }
-        
-        
+
+
         $this->_isConnected = true;
 
         unset($this->_password, $this->_username, $this->_database, $this->_host, $this->_clientFlags, $this->_port, $this->_options, $this->_connectionString);
@@ -100,7 +100,7 @@ class Chrome_Database_Connection_DB2 extends Chrome_Database_Connection_Abstract
         // do nothing, we're using a persistent connection
     }
 
-    public function getDefaultAdapter()
+    public function getDefaultAdapterSuffix()
     {
         return 'Db2';
     }

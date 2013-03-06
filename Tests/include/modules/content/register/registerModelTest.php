@@ -10,7 +10,7 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        $db = Chrome_Database_Facade::getInterface('simple', 'assoc');
+        $db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('simple', 'assoc');
 
         $db->query('DELETE FROM cpp_user WHERE name = "testfinishRegistration"');
         $db->clear();
@@ -22,9 +22,10 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_model = Chrome_Model_Register::getInstance();
+        $this->_model = new Chrome_Model_Register();
+        $this->_model->setDatabaseFactoryName(TEST_FACTORY);
         //$this->_db = Chrome_DB_Interface_Factory::factory();
-        $this->_db = Chrome_Database_Facade::getInterface('simple', 'assoc');
+        $this->_db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('simple', 'assoc');
     }
 
     public function testGenerateActivationKeyIsUniqueAndValid()

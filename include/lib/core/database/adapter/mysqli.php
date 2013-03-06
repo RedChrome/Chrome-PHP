@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 12:57:28] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 16:59:15] --> $
  * @link       http://chrome-php.de
  */
 
@@ -48,11 +48,11 @@ class Chrome_Database_Adapter_Mysqli extends Chrome_Database_Adapter_Abstract
 
     public function setConnection(Chrome_Database_Connection_Interface $connection)
     {
+        parent::setConnection($connection);
+
         if(!($connection->getConnection() instanceof mysqli)) {
             throw new Chrome_Exception_Database('This adapter needs a mysqli connection!');
         }
-
-        parent::setConnection($connection);
     }
 
     public function query($query)

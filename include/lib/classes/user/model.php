@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.11.2012 19:52:47] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 23:39:06] --> $
  * @author     Alexander Book
  */
 
@@ -28,24 +28,8 @@ if(CHROME_PHP !== true) die();
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Chrome_Model_User_DB extends Chrome_Model_Database_Abstract
+class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
 {
-    private static $_instance = null;
-
-    protected function __construct()
-    {
-        //if($this->_escaper === null) $this->_escaper = Chrome_DB_Interface_Factory::factory('interface')->initDefaultConnection();
-    }
-
-    public static function getInstance()
-    {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
-    }
-
     public function addUser($id, $email, $username, $group = null)
     {
         if($group === null) {
@@ -150,7 +134,7 @@ class Chrome_Model_User extends Chrome_Model_Decorator_Abstract
     public static function getInstance()
     {
         if(self::$_instance == null) {
-            self::$_instance = new self(Chrome_Model_User_DB::getInstance());
+            self::$_instance = new self(new Chrome_Model_User_Database());
         }
 
         return self::$_instance;

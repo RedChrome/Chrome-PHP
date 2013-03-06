@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.12.2012 17:09:54] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 22:01:00] --> $
  * @link       http://chrome-php.de
  */
 
@@ -123,9 +123,6 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
                 $interface = $requiredComp->getInterface();
             } else {
 
-                Chrome_Database_Facade::requireClass('interface', $comp->getInterface());
-                Chrome_Database_Facade::requireClass('interface', $requiredComp->getInterface());
-
                 if(is_subclass_of('Chrome_Database_Interface_' . $comp->getInterface(), 'Chrome_Database_Interface_' . $requiredComp->getInterface())) {
                     $interface = $comp->getInterface();
                 } else {
@@ -146,9 +143,6 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
             if($comp->getAdapter() === null) {
                 $adapter = $requiredComp->getAdapter();
             } else {
-
-                Chrome_Database_Facade::requireClass('adapter', $comp->getAdapter());
-                Chrome_Database_Facade::requireClass('adapter', $requiredComp->getAdapter());
 
                 if(is_subclass_of('Chrome_Database_Adapter_' . $comp->getAdapter(), 'Chrome_Database_Adapter_' . $requiredComp->getAdapter())) {
                     $adapter = $comp->getAdapter();

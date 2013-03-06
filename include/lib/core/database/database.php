@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.02.2013 11:19:21] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 20:44:13] --> $
  * @link       http://chrome-php.de
  */
 
@@ -31,11 +31,6 @@ if(CHROME_PHP !== true) die();
  * load exception class
  */
 require_once LIB.'exception/database.php';
-
-/**
- * load registry, saves all database connections
- */
-require_once 'registry.php';
 
 /**
  * load class, which saves all sent queries
@@ -68,10 +63,20 @@ require_once 'interface.php';
 require_once 'composition.php';
 
 /**
+ * load interface for abstract factory
+ */
+require_once 'factory.php';
+
+/**
  * load class to easily configure a database access object
  *     this will include adapters, connection, result and interface
  */
 require_once 'facade.php';
+
+/**
+ * includes an autoloader for database classes
+ */
+require_once 'loader.php';
 
 /**
  * this will set the default connection

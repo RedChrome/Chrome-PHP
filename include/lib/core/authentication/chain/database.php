@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.01.2013 17:37:52] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2013 00:20:02] --> $
  * @link       http://chrome-php.de
  */
 
@@ -122,9 +122,9 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
     {
         if($resource instanceof Chrome_Authentication_Create_Resource_Database_Interface) {
 
-            $this->_model->createAuthentication($resource->getCredential(), $resource->getCredentialSalt());
+            $id = $this->_model->createAuthentication($resource->getCredential(), $resource->getCredentialSalt());
 
-            $resource->setID($this->_model->getIDByPassword($resource->getCredential(), $resource->getCredentialSalt()));
+            $resource->setID($id);
         }
     }
 }
@@ -264,7 +264,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
      */
     public function getPasswordAndSaltByIdentity($identity)
     {
-        $db = $this->_getDBInterfaceByComposition();
+        $db = $this->_getDBInterface();
 
         $result = $db->prepare('authenticationGetPasswordAndSaltByIdentity')
                         ->execute(array($identity));
@@ -288,7 +288,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
     {
         $id = (int) $id;
 
-        $db = $this->_getDBInterfaceByComposition();
+        $db = $this->_getDBInterface();
 
         $db->prepare('authenticationUpdateTimeById')
             ->execute(array(CHROME_TIME, $id));
@@ -303,21 +303,12 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
             $hash = $credential;
         }
 
-        $db = $this->_getDBInterfaceByComposition();
+        $db = $this->_getDBInterface();
 
         $db->prepare('authenticationCreateAuthentication')
             ->execute(array($hash, $salt, CHROME_TIME));
-    }
 
-    public function getIDByPassword($pw, $pwSalt)
-    {
-        $db = $this->_getDBInterfaceByComposition();
-
-        $result = $db->prepare('authenticationGetIdByPassword')
-            ->execute(array($pw, $pwSalt));
-
-        $return = $result->getNext();
-        return (int) $return['id'];
+        return $db->getResult()->getLastInsertId();
     }
 
     public static function hashUserPassword($password, $salt)

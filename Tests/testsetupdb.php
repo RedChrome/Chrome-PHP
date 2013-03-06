@@ -16,18 +16,20 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.12.2012 18:00:13] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 21:33:37] --> $
  * @author     Alexander Book
  */
 require_once 'testsetup.php';
 
 require_once LIB.'core/database/database.php';
-require_once LIB.'core/database/connection/mysqli.php';
-Chrome_Database_Facade::setDefaultConnection('testingConnection');
+
+// enable autoloading of database classes
+new Chrome_Database_Loader();
 
 // configure default database connection
 try {
-    $defaultConnection = new Chrome_Database_Connection_Mysqli();
+    $defaultConnectionClass = 'Chrome_Database_Connection_'.ucfirst(CHROME_DATABASE);
+    $defaultConnection = new $defaultConnectionClass();
     $defaultConnection->setConnectionOptions('localhost', 'test', '', 'chrome_2_test');
     $defaultConnection->connect();
 } catch(Chrome_Exception $e) {
@@ -36,18 +38,19 @@ try {
     die(var_dump($e));
 }
 
-$dbRegistry = Chrome_Database_Registry_Connection::getInstance();
-$dbRegistry->addConnection(Chrome_Database_Facade::getDefaultConnection(), $defaultConnection, true);
+$dbRegistry = new Chrome_Database_Registry_Connection();
+$dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
+
+$databaseFactory = new Chrome_Database_Factory($dbRegistry, new Chrome_Database_Registry_Statement());
+Chrome_Database_Facade::setFactory(TEST_FACTORY, $databaseFactory);
 
 if(TEST_DATABASE_CONNECTIONS === true) {
 
-    Chrome_Database_Facade::requireClass('connection', 'mysql');
     $mysqlTestConnection = new Chrome_Database_Connection_Mysql();
     $mysqlTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
     $mysqlTestConnection->connect();
     $dbRegistry->addConnection('mysql_test', $mysqlTestConnection, true);
 
-    Chrome_Database_Facade::requireClass('connection', 'mysqli');
     $mysqliTestConnection = new Chrome_Database_Connection_Mysqli();
     $mysqliTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
     $mysqliTestConnection->connect();

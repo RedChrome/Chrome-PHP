@@ -21,51 +21,102 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.11.2012 10:11:09] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 20:59:25] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true) die();
 
+
+/**
+ * Interface to store sent queries
+ *
+ * @todo consider to remove the static attribute
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 interface Chrome_Database_Registry_Statement_Interface
 {
-    public static function addStatement($statement);
+    public function addStatement($statement);
 
-    public static function getStatements();
+    public function getStatements();
 
-    public static function getLastStatement();
+    public function getLastStatement();
 
-    public static function count();
+    public function count();
 
-    public static function getStatement($number);
+    public function getStatement($number);
 }
 
+/**
+ * Default implementation of interface Chrome_Database_Registry_Statement_Interface
+ *
+ * @todo consider to remove the static methods
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.File_System
+ */
 class Chrome_Database_Registry_Statement implements Chrome_Database_Registry_Statement_Interface
 {
-    protected static $_statements = array();
+    /**
+     * Stores all sent queries
+     *
+     * @var array
+     */
+    protected $_statements = array();
 
-    public static function addStatement($statement)
+    /**
+     * Statement/query to add
+     *
+     * @param string $statement
+     * @return void
+     */
+    public function addStatement($statement)
     {
-        self::$_statements[] = $statement;
+        $this->_statements[] = $statement;
     }
 
-    public static function getStatements()
+    /**
+     * Returns all executed queries
+     *
+     * Structure: array($query1, $query2)
+     *
+     * @return array
+     */
+    public function getStatements()
     {
-        return self::$_statements;
+        return $this->_statements;
     }
 
-    public static function getLastStatement()
+    /**
+     * Returns the last executed query
+     *
+     * @return string
+     */
+    public function getLastStatement()
     {
-        return self::$_statements[self::count() - 1];
+        return $this->_statements[$this->count() - 1];
     }
 
-    public static function count()
+    /**
+     * Returns the number of executed queries
+     *
+     * @return int
+     */
+    public function count()
     {
-        return count(self::$_statements);
+        return count($this->_statements);
     }
 
-    public static function getStatement($number)
+    /**
+     * Returns the query which is executed after $number-1 other queries
+     *
+     * @param int $number
+     * @return string
+     */
+    public function getStatement($number)
     {
-        return !isset(self::$_statements[$number - 1]) ? null : self::$_statements[$number - 1];
+        return !isset($this->_statements[$number - 1]) ? null : $this->_statements[$number - 1];
     }
 }

@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 17:24:17] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2013 00:21:29] --> $
  * @link       http://chrome-php.de
  */
 
@@ -148,10 +148,10 @@ interface Chrome_Authentication_Interface
     public function isUser();
 
     /**
-     * This will created an authentication with the given information in $resource.
+     * This will create an authentication with the given information in $resource.
      * Every chain (which is added) gets the request to create the authentication.
      * You should call this method with a child interface of Chrome_Authentication_Create_Resource_Interface, because
-     * every new authentication need special data.
+     * every new authentication needs special data (thus special resources).
      *
      * @param Chrome_Authentication_Create_Resource_Interface $resource
      * @return void
@@ -209,6 +209,14 @@ interface Chrome_Authentication_Chain_Interface
      * @return void
      */
     public function setChain(Chrome_Authentication_Chain_Interface $chain);
+
+    /**
+     * Creates a new authentication
+     *
+     * @param Chrome_Authentication_Create_Resource_Interface $resource
+     * @return void
+     */
+    public function createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource);
 }
 
 /**
@@ -293,7 +301,7 @@ abstract class Chrome_Authentication_Chain_Abstract implements Chrome_Authentica
     abstract protected function _deAuthenticate();
 
     /**
-     * Just like update() a help
+     * deauthenticates a user
      *
      * @return void
      */
@@ -304,7 +312,7 @@ abstract class Chrome_Authentication_Chain_Abstract implements Chrome_Authentica
     }
 
     /**
-     * just like update( ) a help
+     * creates for the given resource an authentication
      *
      * @param Chrome_Authentication_Create_Resource_Interface $resource
      * @return void

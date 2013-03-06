@@ -6,59 +6,63 @@ require_once LIB.'core/database/database.php';
 
 class DatabaseStatementTest extends PHPUnit_Framework_TestCase
 {
-    public static $_count = 0;
-    public static $_random = 0;
+    protected $_statementRegistry;
 
-    public static function setUpBeforeClass() {
+    protected $_random;
 
-        self::$_count = Chrome_Database_Registry_Statement::count();
-
-        self::$_random = mt_rand(5, 20);
-        for($i = 1; $i <= self::$_random; ++$i) {
-            Chrome_Database_Registry_Statement::addStatement($i.'. Statement');
-        }
+    public function setUp() {
+        $this->_statementRegistry = new Chrome_Database_Registry_Statement();
+        $this->_random = 0;
     }
 
-    public function testCountIsValid() {
-        $this->assertEquals(self::$_count + self::$_random, Chrome_Database_Registry_Statement::count());
-    }
-
-    public function testGetLastStatement() {
-
-        $string = 'This should be my last statement';
-
-        Chrome_Database_Registry_Statement::addStatement($string);
-
-        $this->assertEquals($string, Chrome_Database_Registry_Statement::getLastStatement());
-    }
-
-    public function testGetStatement()
+    protected function _addRandomStatements($min, $max)
     {
-        $string = 'This should be my sql statement which i want to get again';
-
-        Chrome_Database_Registry_Statement::addStatement($string);
-
-        $count = Chrome_Database_Registry_Statement::count();
-
-        $random = mt_rand(5, 20);
-        for($i = 1; $i <= $random; ++$i) {
-            Chrome_Database_Registry_Statement::addStatement('Random created sql statement, just testing _ '.mt_rand());
-        }
-
-        $this->assertEquals($string, Chrome_Database_Registry_Statement::getStatement($count));
+        $this->_random = mt_rand($min, $max);
+		for($i = 1; $i <= $this->_random; ++$i) {
+			$this->_statementRegistry->addStatement('Random created sql statement, just testing _ '.mt_rand());
+		}
     }
 
-    public function testGetStatementsIsNotEmpty() {
+	public function testCountIsValid()
+	{
+        $this->_addRandomStatements(0, 100);
 
-        $string = 'Test statement which should be in getStatements()';
-        Chrome_Database_Registry_Statement::addStatement($string);
+		$this->assertEquals($this->_random, $this->_statementRegistry->count());
+	}
 
-        $this->assertNotEmpty(Chrome_Database_Registry_Statement::getStatements());
+	public function testGetLastStatement()
+	{
+	    $this->_addRandomStatements(1, 10);
 
-        $this->assertContains($string, Chrome_Database_Registry_Statement::getStatements());
+		$string = 'This should be my last statement';
 
-    }
+		$this->_statementRegistry->addStatement($string);
 
+		$this->assertEquals($string, $this->_statementRegistry->getLastStatement());
+	}
 
+	public function testGetStatement()
+	{
+        $this->_addRandomStatements(5, 20);
 
+		$string = 'This should be my sql statement which i want to get again';
+
+		$this->_statementRegistry->addStatement($string);
+
+		$count = $this->_statementRegistry->count();
+
+		$this->_addRandomStatements(1, 10);
+
+		$this->assertEquals($string, $this->_statementRegistry->getStatement($count));
+	}
+
+	public function testGetStatementsIsNotEmpty()
+	{
+		$string = 'Test statement which should be in getStatements()';
+		$this->_statementRegistry->addStatement($string);
+
+		$this->assertNotEmpty($this->_statementRegistry->getStatements());
+
+		$this->assertContains($string, $this->_statementRegistry->getStatements());
+	}
 }

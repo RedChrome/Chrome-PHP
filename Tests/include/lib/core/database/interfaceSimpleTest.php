@@ -23,7 +23,7 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         $this->_result = new Chrome_Database_Result_Dummy();
         $this->_result->setAdapter($this->_adapter);
 
-        $this->_interface = new Chrome_Database_Interface_Simple($this->_adapter, $this->_result);
+        $this->_interface = new Chrome_Database_Interface_Simple($this->_adapter, $this->_result, new Chrome_Database_Registry_Statement());
     }
 
     public function testInterfaceReturnsAdapterAndResultCorrectly()

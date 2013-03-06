@@ -17,29 +17,33 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2013 00:32:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 19:40:15] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true) die();
 
-interface Chrome_Model_Interface
-{
-}
-
 /**
- * @package CHROME-PHP
+ * @package    CHROME-PHP
  * @subpackage Chrome.Model
  */
-abstract class Chrome_Model_Abstract implements Chrome_Model_Interface
+class Chrome_Database_Loader
 {
+	public function __construct()
+	{
+		spl_autoload_register(array($this, 'loadClass'));
+    }
 
+	public function loadClass($className)
+	{
+		if(preg_match('#Chrome_Database_([a-z1-9]{1,})_(.{1,})#iu', $className, $matches)) {
+
+			$file = LIB.'core/database/'.strtolower($matches[1]).'/'.strtolower($matches[2]).'.php';
+
+			if(_isFile($file)) {
+				require_once $file;
+			}
+		}
+		return false;
+	}
 }
-
-/**#@!
- * load some specific model classes
- */
-require_once 'decorator.php';
-require_once 'database.php';
-require_once 'cache.php';
-/**#@!*/

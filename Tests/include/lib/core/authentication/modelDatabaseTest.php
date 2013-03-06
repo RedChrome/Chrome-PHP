@@ -16,9 +16,10 @@ class ModelDatabaseTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $comp = new Chrome_Database_Composition(null, null, null, Chrome_Database_Facade::getDefaultConnection());
+        $comp = new Chrome_Database_Composition(null, null, null, Chrome_Database_Registry_Connection_Interface::DEFAULT_CONNECTION);
 
         $this->_model = new Chrome_Model_Authentication_Database(array(), $comp);
+        $this->_model->setDatabaseFactoryName(TEST_FACTORY);
     }
 
     public function testModelHashesUserPassword() {
@@ -46,7 +47,7 @@ class ModelDatabaseTest extends PHPUnit_Framework_TestCase
             if($pw === false) {
                 $this->assertEquals(false, $this->_model->getPasswordAndSaltByIdentity($id));
             } else {
-                $this->assertEquals(array('password' => $pw, 'password_salt' => $salt), $this->_model->getPasswordAndSaltByIdentity($id));
+                $this->assertEquals(array('password' => $pw, 'password_salt' => $salt), $this->_model->getPasswordAndSaltByIdentity($id), 'got wrong array with id '.$id);
             }
         }
 

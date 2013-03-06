@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.12.2012 18:31:47] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 16:04:55] --> $
  * @link       http://chrome-php.de
  */
 
@@ -111,7 +111,7 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
         // do nothing, we're using a persistent connection
     }
 
-    public function getDefaultAdapter()
+    public function getDefaultAdapterSuffix()
     {
         return 'Mysql';
     }

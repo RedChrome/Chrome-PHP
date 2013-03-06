@@ -1,29 +1,26 @@
 <?php
 
+/**
+ * @todo remove singleton pattern
+ */
 class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 {
 	const CHROME_MODEL_REGISTER_PW_SALT_LENGTH = 20;
 
 	const CHROME_MODEL_REGISTER_TABLE = 'user_regist';
 
-	private static $_instance = null;
-
-	protected function __construct()
+	public function __construct()
 	{
-	    $this->_dbInterfaceInstance = Chrome_Database_Facade::getInterface('model', 'assoc');
+        $this->_dbInterface = 'model';
+        $this->_dbResult = 'assoc';
+
+	    parent::__construct();
+	}
+
+    protected function _connect() {
+        parent::_connect();
         $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::getInstance('register'));
-        $this->_dbInterfaceInstance->clear();
-		// do nothing
-	}
-
-	public static function getInstance()
-	{
-		if( self::$_instance === null ) {
-			self::$_instance = new self();
-		}
-
-		return self::$_instance;
-	}
+    }
 
 	public function sendRegisterEmail( $email, $name, $activationKey )
 	{
@@ -122,6 +119,11 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
                 $resource = new Chrome_Authentication_Create_Resource_Database( $pass, $pw_salt );
             }
 
+            /**
+             * @todo remove this hard coded dependency. this causes troubes in test RegisterModelTest::testfinishRegistration()
+             * Reason: test suit uses a test database, but this dependency uses the production database.
+             * This dependency must get injected with the right database dependency.
+             */
 			Chrome_Authentication::getInstance()->createAuthentication( $resource );
 			$id = $resource->getID();
 
@@ -160,7 +162,10 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 	 */
 	protected function _addUser( $id, $email, $username )
 	{
-		return Chrome_Model_User::getInstance()->addUser( $id, $email, $username );
+		$model = new Chrome_Model_User_Database();
+        $model->setDatabaseFactoryName($this->getDatabaseFactoryName());
+        return $model->addUser( $id, $email, $username );
+        //Chrome_Model_User::getInstance()->addUser( $id, $email, $username );
 	}
 
 	protected function _deleteActivationKey( $activationKey )

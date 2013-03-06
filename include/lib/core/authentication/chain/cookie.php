@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 14:51:10] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 23:12:28] --> $
  * @link       http://chrome-php.de
  */
 
@@ -147,26 +147,23 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
     }
 }
 
-class Chrome_Model_Authentication_Cookie extends Chrome_Model_Abstract
+class Chrome_Model_Authentication_Cookie extends Chrome_Model_Database_Abstract
 {
-    protected $_dbComposition = null;
-
     protected $_options = array(
-                           'dbComposition' => null,
                            'dbTable'       => 'authenticate',
                           );
 
     /**
      * @var array $options:
-     *                  - dbComposition: (Chrome_DB_Interface_Abstract) Instance of an db connection, default: null (creates a default connection)
      *                  - dbTable: (string) Name of the db-table, containing the cookie-token and id, default: authenticate
      *
      * @return Chrome_Model_Authentication_Cookie
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = array(), Chrome_Database_Composition_Interface $dbComposition = null)
     {
         $this->_options = array_merge($options, $this->_options);
         $this->_dbComposition = new Chrome_Database_Composition('model');
+        $this->_dbDIComposition = $dbComposition;
     }
 
     public function encodeCookieString($id, $token)
@@ -190,25 +187,25 @@ class Chrome_Model_Authentication_Cookie extends Chrome_Model_Abstract
 
     public function doesIdAndTokenExist($id, $token)
     {
-        $dbInterface = Chrome_Database_Facade::initComposition($this->_dbComposition, $this->_options['dbComposition']);
+        $db = $this->_getDBInterface();
 
         // user has sent an invalid token
-        if($token !== ($tokenEscaped = $dbInterface->escape($token))) {
+        if($token !== ($tokenEscaped = $db->escape($token))) {
             return null;
         }
 
-        $dbInterface->prepare('authenticationDoesIdAndTokenExist')
+        $db->prepare('authenticationDoesIdAndTokenExist')
             ->execute(array($this->_options['dbTable'], $id, $tokenEscaped));
 
-        return $dbInterface->getResult();
+        return $db->getResult();
     }
 
     public function updateIdAndToken($id, $token)
     {
-        $dbInterface = Chrome_Database_Facade::initComposition($this->_dbComposition, $this->_options['dbComposition']);
+        $db = $this->_getDBInterface();
 
         // update database
-        $dbInterface->prepare('authenticationUpdateTokenById')
+        $db->prepare('authenticationUpdateTokenById')
             ->execute(array($this->_options['dbTable'], $token, $id));
     }
 

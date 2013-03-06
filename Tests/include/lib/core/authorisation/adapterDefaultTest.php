@@ -20,8 +20,10 @@ class AuthorisationAdapterDefaultTest extends PHPUnit_Framework_TestCase
         );
 
     public function setUp() {
+        $model = new Chrome_Model_Authorisation_Default_DB();
+        $model->setDatabaseFactoryName(TEST_FACTORY);
         $this->_adapter = Chrome_Authorisation_Adapter_Default::getInstance();
-        $this->_adapter->setModel(new Chrome_Model_Authorisation_Default_DB());
+        $this->_adapter->setModel($model);
     }
 
     public function testSetDataContainer() {
@@ -77,6 +79,7 @@ class AuthorisationAdapterDefaultModelDefaultTest extends PHPUnit_Framework_Test
 
     public function setUp() {
         $this->_model = new Chrome_Model_Authorisation_Default_DB();
+        $this->_model->setDatabaseFactoryName(TEST_FACTORY);
     }
 
     public function testGetAccessById() {

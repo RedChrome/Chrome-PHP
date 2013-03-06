@@ -14,33 +14,35 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2012 00:44:50] --> $
- * @author     Alexander Book
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 16:42:28] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
+ * Loads all classes beginning with 'Chrome_Database_'
+ *
  * @package CHROME-PHP
- * @subpackage Chrome.Model
+ * @subpackage Chrome.Require
  */
-abstract class Chrome_Model_Form_Abstract extends Chrome_Model_Abstract
+class Chrome_Require_Loader_Design implements Chrome_Require_Loader_Interface
 {
-    protected $_form = null;
+	/**
+	 * Loads a class, if $class beginns with 'Chrome_Database_'
+	 *
+	 * @param string $class
+	 * @return bool true if class was found
+	 */
+	public function loadClass($class)
+	{
+        if(preg_match('#Chrome_Database_([a-z1-9]{1,})_(.{1,})#iu', $class, $matches))
+		{
+			return LIB . 'core/database/'.strtolower($matches[1]).'/' . strtolower($matches[2]) . '.php';
+		}
 
-    protected function __construct() {
+        return false;
+	}
 
-    }
-
-    public function setForm(Chrome_Form_Interface $form) {
-        $this->_form = $form;
-    }
-
-    public function getForm() {
-        return $this->_form;
-    }
 }

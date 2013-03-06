@@ -3,7 +3,7 @@
 if(CHROME_PHP !== true)
     die();
 
-class Chrome_Model_HTTP_Index extends Chrome_Model_HTTP_Abstract
+class Chrome_Model_HTTP_Index extends Chrome_Model_Abstract
 {
     public function __construct() {
 

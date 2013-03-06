@@ -15,7 +15,7 @@ class DatabaseResultInteratorTest extends PHPUnit_Framework_TestCase
     public function testInitResultIterator() {
 
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
-        $db = Chrome_Database_Facade::getInterface('Simple', 'Iterator', $connection);
+        $db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('Simple', 'Iterator', $connection);
         $this->assertTrue(is_subclass_of($db->getResult(), 'Iterator'));
     }
 
@@ -26,7 +26,7 @@ class DatabaseResultInteratorTest extends PHPUnit_Framework_TestCase
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
         // Dummy_Adapter gets used via connection_dummy as default adapter
-        $db = Chrome_Database_Facade::getInterface('Simple', 'Iterator', $connection);
+        $db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('Simple', 'Iterator', $connection);
 
         // this will force the adapter to access this class using method getNext()
         // and this will access the $_dataArray
@@ -48,7 +48,7 @@ class DatabaseResultInteratorTest extends PHPUnit_Framework_TestCase
 
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
-        $db = Chrome_Database_Facade::getInterface('Simple', 'Iterator', $connection);
+        $db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('Simple', 'Iterator', $connection);
 
         $db->getAdapter()->setDataResource($this);
 
@@ -60,7 +60,7 @@ class DatabaseResultInteratorTest extends PHPUnit_Framework_TestCase
     }
 
     public function testAffectedRows() {
-        $db = Chrome_Database_Facade::getInterface('Simple', 'Iterator', null, 'Dummy');
+        $db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('Simple', 'Iterator', null, 'Dummy');
         $db->getAdapter()->_affectedRows = 6;
         $this->assertEquals(6, $db->getResult()->getAffectedRows());
     }

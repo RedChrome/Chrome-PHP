@@ -17,6 +17,7 @@ class AuthenticationChainDatabaseTest extends PHPUnit_Framework_TestCase
     {
         if($this->_model === null) {
             $this->_model = new Chrome_Model_Authentication_Database();
+            $this->_model->setDatabaseFactoryName(TEST_FACTORY);
         }
 
         $this->_chain = new Chrome_Authentication_Chain_Database($this->_model, $this->_updateTime, $this->_setTime);

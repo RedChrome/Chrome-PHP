@@ -17,7 +17,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
     {
         //TODO: move those out of class
         $this->_view = new Chrome_View_Register($this);
-        $this->_model = Chrome_Model_Register::getInstance();
+        $this->_model = new Chrome_Model_Register();
     }
 
     protected function _execute()

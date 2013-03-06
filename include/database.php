@@ -21,17 +21,28 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.12.2012 13:14:10] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 20:59:42] --> $
  * @link       http://chrome-php.de
  */
 
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
-Chrome_Database_Facade::requireClass('connection', 'Mysqli');
+// enable autoloading of database classes
+new Chrome_Database_Loader();
 
+$connectionClass = 'Chrome_Database_Connection_'.ucfirst(CHROME_DATABASE);
+$defaultConnection = new $connectionClass();
 // configure default database connection
-$defaultConnection = new Chrome_Database_Connection_Mysqli();
 $defaultConnection->setConnectionOptions(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-$dbRegistry = Chrome_Database_Registry_Connection::getInstance();
-$dbRegistry->addConnection(Chrome_Database_Facade::getDefaultConnection(), $defaultConnection);
+// create new connection registry
+$connectionRegistry = new Chrome_Database_Registry_Connection();
+// add default connection
+$connectionRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection);
+
+// create new database factory with connection registry and statement registry
+$databaseFactory = new Chrome_Database_Factory($connectionRegistry, new Chrome_Database_Registry_Statement());
+
+
+Chrome_Database_Facade::setFactory(Chrome_Database_Facade::DEFAULT_FACTORY, $databaseFactory);

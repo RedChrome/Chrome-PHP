@@ -19,7 +19,7 @@ class DatabaseResultAssocTest extends PHPUnit_Framework_TestCase
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
         // Dummy_Adapter gets used via connection_dummy as default adapter
-        $db = Chrome_Database_Facade::getInterface('Simple', 'Assoc', $connection);
+        $db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('Simple', 'Assoc', $connection);
 
         // this will force the adapter to access this class using method getNext()
         // and this will access the $_dataArray
@@ -39,7 +39,7 @@ class DatabaseResultAssocTest extends PHPUnit_Framework_TestCase
     {
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
-        $db = Chrome_Database_Facade::getInterface('Simple', 'Assoc', $connection);
+        $db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('Simple', 'Assoc', $connection);
 
         $db->getAdapter()->_affectedRows = 5;
         $this->assertEquals(5, $db->getResult()->getAffectedRows());
@@ -56,7 +56,7 @@ class DatabaseResultAssocTest extends PHPUnit_Framework_TestCase
 
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
-        $db = Chrome_Database_Facade::getInterface('Simple', 'Assoc', $connection);
+        $db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('Simple', 'Assoc', $connection);
 
         $db->getAdapter()->setDataResource($this);
 

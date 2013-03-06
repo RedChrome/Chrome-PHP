@@ -11,7 +11,7 @@ class DatabaseRegistryConnectionTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_registry = Chrome_Database_Registry_Connection::getInstance();
+        $this->_registry = new Chrome_Database_Registry_Connection();
     }
 
     public function testGetInstance()
