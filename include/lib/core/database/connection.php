@@ -21,43 +21,118 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 20:43:24] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 12:57:46] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true) die();
 
+/**
+ * Interface for a database connection
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 interface Chrome_Database_Connection_Interface
 {
+    /**
+     * Returns the database connection
+     *
+     * @return mixed the database connection
+     */
     public function getConnection();
 
+    /**
+     * disconnect the database
+     *
+     * @return void
+     */
     public function disconnect();
 
+    /**
+     * Connects to a database. The needed information can be set in setConnectionOptions(). See for
+     * further information about setConnectionOptions() the concrete implementation.
+     *
+     * @return bool if connection was successfully established, false else
+     */
     public function connect();
 
+    /**
+     * Returns true if connected to database
+     *
+     * @return bool true if connected to database, false else
+     */
     public function isConnected();
 
+    /**
+     * Returns the default adapter suffix.
+     *
+     * Every connection has a default adapter which is compatible with the connection. This method returns
+     * the suffix to identify the adapter class
+     *
+     * @return string default adapter suffix
+     */
     public function getDefaultAdapterSuffix();
 }
 
 /**
- * @todo finish docu
+ * Interface for a connection registry
+ *
+ * These classes are storing the connection, associated with a connection name
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
 interface Chrome_Database_Registry_Connection_Interface
 {
+    /**
+     * name of the default connection
+     *
+     * @var string
+     */
     const DEFAULT_CONNECTION = '';
 
+    /**
+     * Adds a new connection with the given name.
+     *
+     * This method will throw an exception if $overwrite = false and the conenction name already exists.
+     *
+     * @param string $name name of the connection
+     * @param Chrome_Database_Connection_Interface connection object containing the actual database connection
+     * @param bool $overwrite [optional] true if you want to overwrite an existing connection name
+     */
     public function addConnection($name, Chrome_Database_Connection_Interface $connection, $overwrite = false);
 
+    /**
+     * Returns the connection inside the connection object
+     *
+     * This will throw an exception if $name does not exist or the connection was not established
+     *
+     * @param string $name name of the connection
+     * @return mixed the connection
+     */
     public function getConnection($name);
 
+    /**
+     * Returns the connection object (set by addConnection) with the given name
+     *
+     * @param string $name name of the connection
+     * @return Chrome_Database_Connection_Interface the connection object associated by $name
+     */
     public function getConnectionObject($name);
 
+    /**
+     * Determines whether the connection with the name $name has established a connection
+     *
+     * @return bool true if $name exists and is connected
+     */
     public function isConnected($name);
 
+    /**
+     * Determines whether the connection with the name $name exists in this registry
+     *
+     * @return bool true if $name exists
+     */
     public function isExisting($name);
 }
 
@@ -117,13 +192,6 @@ class Chrome_Database_Registry_Connection implements Chrome_Database_Registry_Co
         return $this->_connections[$name];
     }
 
-    /**
-     * Returns true if connection exists and connection is established
-     * false else
-     *
-     * @param string $name name of the connection
-     * @return bool
-     */
     public function isConnected($name)
     {
         return $this->isExisting($name) ? $this->_connections[$name]->isConnected() : false;

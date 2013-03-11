@@ -35,4 +35,16 @@ class DatabaseAdapterMysqliTest extends DatabaseAdapterMysqlTest
         $result2 = $this->_db->query('SELECT * FROM cpp_class LIMIT 0,1');
 
     }
+
+    public function testSetConnectionAndConnectionIsNotEstablishedTheFirstTime() {
+        $connection = new Chrome_Database_Connection_Dummy();
+        $connection->_isConnected = false;
+        $connection->_connection  = new mysqli();
+
+        // call handleConnection on connect(), see parent class for handleConnection()
+        $connection->_connectionHandler = $this;
+
+        $this->_db->getAdapter()->setConnection($connection);
+        $this->assertEquals($connection, $this->_db->getAdapter()->getConnection());
+    }
 }

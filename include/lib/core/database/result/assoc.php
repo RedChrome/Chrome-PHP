@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.12.2012 00:20:18] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 14:20:20] --> $
  * @link       http://chrome-php.de
  */
 
@@ -60,16 +60,10 @@ class Chrome_Database_Result_Assoc extends Chrome_Database_Result_Abstract imple
         return $this->_currentResult;
     }
 
-    public function setAdapter(Chrome_Database_Adapter_Result_Interface $adapter)
-    {
-        $this->_adapter = $adapter;
-    }
-
     public function getAffectedRows()
     {
         return $this->_adapter->getAffectedRows();
     }
-
 
     /*
         ArrayAccess methods

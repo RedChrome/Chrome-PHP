@@ -78,4 +78,11 @@ class DatabaseResultAssocTest extends Chrome_TestCase
         $this->assertFalse($result->offsetExists('anyKey'));
     }
 
+    public function testGetAdapter() {
+
+        $db = $this->_appContext->getDatabaseFactory()->buildInterface('Simple', 'Assoc');
+        $this->assertEquals($db->getAdapter(), $db->getResult()->getAdapter());
+        $this->assertTrue($db->getResult()->getAdapter() instanceof Chrome_Database_Adapter_Interface);
+    }
+
 }

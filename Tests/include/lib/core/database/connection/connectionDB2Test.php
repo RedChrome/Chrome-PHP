@@ -2,7 +2,7 @@
 
 require_once 'Tests/testsetup.php';
 
-require_once 'Tests/include/lib/core/database/connectionMysqlTest.php';
+require_once 'Tests/include/lib/core/database/connection/connectionMysqlTest.php';
 
 require_once LIB.'core/database/database.php';
 require_once LIB.'core/database/connection/db2.php';

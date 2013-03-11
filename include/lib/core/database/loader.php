@@ -14,26 +14,40 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.Model
+ * @subpackage Chrome.Database
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 19:40:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 11:33:52] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true) die();
 
 /**
+ * Autoloader for database classes
+ *
  * @package    CHROME-PHP
- * @subpackage Chrome.Model
+ * @subpackage Chrome.Database
  */
 class Chrome_Database_Loader
 {
+    /**
+     * Register autoloader
+     */
 	public function __construct()
 	{
 		spl_autoload_register(array($this, 'loadClass'));
     }
 
+    /**
+     * loads the corresponding file for $className
+     *
+     * Loads the file if $className beginns with 'Chrome_Database_'
+     * and the file exists.
+     *
+     * @param string $className
+     * @return boolean true if file could get loaded
+     */
 	public function loadClass($className)
 	{
 		if(preg_match('#Chrome_Database_([a-z1-9]{1,})_(.{1,})#iu', $className, $matches)) {
@@ -42,6 +56,7 @@ class Chrome_Database_Loader
 
 			if(_isFile($file)) {
 				require_once $file;
+                return true;
 			}
 		}
 		return false;

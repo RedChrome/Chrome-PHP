@@ -8,6 +8,8 @@ class Chrome_Database_Connection_Dummy implements Chrome_Database_Connection_Int
 
     public $_connectionException = null;
 
+    public $_connectionHandler = null;
+
     public function __construct($connection = null)
     {
         $this->_connection = $connection;
@@ -27,6 +29,10 @@ class Chrome_Database_Connection_Dummy implements Chrome_Database_Connection_Int
     {
         if($this->_connectionException !== null) {
             throw new $this->_connectionException();
+        }
+
+        if($this->_connectionHandler !== null) {
+            $this->_connectionHandler->handleConnection($this);
         }
     }
 

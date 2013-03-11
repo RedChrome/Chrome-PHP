@@ -68,7 +68,4 @@ class DatabaseResultInteratorTest extends Chrome_TestCase
     public function getNext() {
         return array_shift($this->_dataArray);
     }
-
-
-
 }

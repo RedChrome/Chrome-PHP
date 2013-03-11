@@ -21,36 +21,129 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 20:55:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 12:43:55] --> $
  * @link       http://chrome-php.de
  */
 
 //TODO: enable right_handler support
 
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
+/**
+ * Interface for all database interfaces
+ *
+ * Do not use setParameter/s() and query($query, array('containsParams')) or execute(array('containingParams')) together. Just
+ * use one at the same time, because the merging of the parameters might return an unexpected numerical order.
+ *
+ * {@link execute()} and {@link query()} are escaping the given parameters. If you dont want to escape the parameters use setParameter/s.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 interface Chrome_Database_Interface_Interface
 {
+    /**
+     * Constructor
+     *
+     * @param Chrome_Database_Adapter_Interface $adapter
+     * @param Chrome_Database_Result_Interface $result
+     * @param Chrome_Database_Registry_Statement_Interface $statementRegistry
+     *
+     * @return Chrome_Database_Interface_Interface
+     */
     public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result, Chrome_Database_Registry_Statement_Interface $statementRegistry);
 
+    /**
+     * Returns the result class, set in constructor
+     *
+     * @return Chrome_Database_Result_Interface
+     */
     public function getResult();
 
+    /**
+     * Returns the adapter class, set in constructor
+     *
+     * @return Chrome_Database_Adapter_Interface
+     */
     public function getAdapter();
 
+    /**
+     * Executes a prepared query using the provieded parameters. All parameters are getting escaped.
+     * A prepared query might be a prepared query (by the usual understanding) or a query which is loaded from a file etc.. It dependes on the interface you use.
+     *
+     * Note: to prepare a query you have to use a specific interface. This interface does not provide the functionality.
+     *
+     * To execute a given query use {@link query()}.
+     *
+     * @param array $parameters containing the parameters in numerical order to replace '?' in query string. every parameter get escaped
+     * @return Chrome_Database_Result_Interface the result class containing the answer for the prepared query
+     */
     public function execute(array $parameters = array());
 
+    /**
+     * Executes a given query with the given parameters. All parameters are getting escaped.
+     *
+     * @param string $query a query
+     * @param array $parameters containing the parameters in numerical order to replace '?' in query string. every parameter get escaped
+     * @return Chrome_Database_Result_Interface the result class containing the answer for $query
+     */
     public function query($query, array $params = array());
 
+    /**
+     * Sets parameters for the next query
+     *
+     * The parameters are needed to replace '?' in a query string
+     *
+     * @param array $array containing parameters, numerically indexed.
+     * @param bool  $escape true if the parameter gets escaped, false if you want the raw parameter
+     * @return void
+     */
     public function setParameters(array $array, $escape = true);
 
+    /**
+     * Sets a parameter for the next query
+     *
+     * The parameters are needed to replace '?' in a query string
+     *
+     * @param int $key      The index of the parameter
+     * @param string $value The value of the parameter
+     * @param bool $escape  true if the value gets escaped, false else
+     * @return void
+     */
     public function setParameter($key, $value, $escape = true);
 
+    /**
+     * Escapes a given string, using the current connection/adapter setting
+     *
+     * @param string $data data to escape
+     * @return string the escaped data
+     */
     public function escape($data);
 
+    /**
+     * Returns the raw query without a replaceing of '?' or anythign else.
+     *
+     * @return string the raw query
+     */
     public function getStatement();
 
+    /**
+     * Returns the query, which was actual sent to the database. The query must have been executed to retrieve this value
+     *
+     * The query contains all replaced parameters and all other preparations
+     *
+     * @return string the sent query
+     */
     public function getQuery();
 
+    /**
+     * Clears the interface to sent another query.
+     *
+     * This is needed to execute another query. The result instance of the old query will still work.
+     *
+     * @return Chrome_Database_Interface_Interface
+     */
     public function clear();
 }
 

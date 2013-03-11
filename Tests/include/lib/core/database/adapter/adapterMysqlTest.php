@@ -5,6 +5,8 @@ require_once 'Tests/testsetup.php';
 require_once LIB . 'core/database/database.php';
 require_once LIB . 'core/database/connection/mysql.php';
 
+require_once 'Tests/dummies/database/connection/dummy.php';
+
 class DatabaseAdapterMysqlTest extends Chrome_TestCase
 {
     protected $_db;
@@ -146,4 +148,43 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
 
         $this->assertEquals($id['COUNT(id)'] +1, $this->_db->getResult()->getLastInsertId());
     }
+
+    public function testSetConnectionAndCannotConnect() {
+
+        $connection = new Chrome_Database_Connection_Dummy();
+        $connection->_isConnected = false;
+
+        $this->setExpectedException('Chrome_Exception_Database');
+
+        $this->_db->getAdapter()->setConnection($connection);
+    }
+
+    public function testSetConnectionAndConnectionIsNull() {
+
+        $connection = new Chrome_Database_Connection_Dummy();
+        $connection->_isConnected = true;
+        $connection->_connection  = null;
+
+        $this->setExpectedException('Chrome_Exception_Database');
+
+        $this->_db->getAdapter()->setConnection($connection);
+    }
+
+    public function testSetConnectionAndConnectionIsNotEstablishedTheFirstTime() {
+
+        $connection = new Chrome_Database_Connection_Dummy();
+        $connection->_isConnected = true;
+        $connection->_connection  = 'myConnectionTest';
+        // call handleConnection on connect()
+        $connection->_connectionHandler = $this;
+
+        $this->_db->getAdapter()->setConnection($connection);
+        $this->assertEquals($connection, $this->_db->getAdapter()->getConnection());
+    }
+
+    public function handleConnection(Chrome_Database_Connection_Interface $con) {
+        $con->_isConnected = true;
+    }
+
+
 }

@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @todo remove singleton pattern
- */
 class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 {
 	const CHROME_MODEL_REGISTER_PW_SALT_LENGTH = 20;
@@ -118,13 +115,6 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
             }
 
             $this->_applicationContext->getAuthentication()->createAuthentication($resource);
-
-            /**
-             * @todo remove this hard coded dependency. this causes troubes in test RegisterModelTest::testfinishRegistration()
-             * Reason: test suit uses a test database, but this dependency uses the production database.
-             * This dependency must get injected with the right database dependency.
-             */
-			//Chrome_Authentication::getInstance()->createAuthentication( $resource );
 			$id = $resource->getID();
 
 			if( !is_numeric( $id ) or $id <= 0 ) {

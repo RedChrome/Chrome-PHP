@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2013 23:08:05] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 15:33:13] --> $
  * @link       http://chrome-php.de
  */
 
@@ -71,13 +71,19 @@ interface Chrome_Database_Adapter_Result_Interface
 }
 
 /**
- * @todo why does this interface exist? move it to Chrome_Database_Adapter_Interface?
+ * Concrete interface for adapters
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Adapter_Interface_Interface
+interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Interface_Interface, Chrome_Database_Adapter_Result_Interface
 {
+    /**
+     * @param Chrome_Database_Connection_Interface $connection
+     * @return Chrome_Database_Adapter_Interface
+     */
+    public function __construct(Chrome_Database_Connection_Interface $connection);
+
     /**
      * Sends a query to database
      *
@@ -93,21 +99,6 @@ interface Chrome_Database_Adapter_Interface_Interface
      * @return string
      */
     public function escape($data);
-}
-
-/**
- * Concrete interface for adapters
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Database
- */
-interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Interface_Interface, Chrome_Database_Adapter_Result_Interface
-{
-    /**
-     * @param Chrome_Database_Connection_Interface $connection
-     * @return Chrome_Database_Adapter_Interface
-     */
-    public function __construct(Chrome_Database_Connection_Interface $connection);
 
     /**
      * Sets for this adapter a connection
@@ -117,12 +108,32 @@ interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Inte
      */
     public function setConnection(Chrome_Database_Connection_Interface $connection);
 
+    /**
+     * Returns the connection object. not the actual connection!
+     *
+     * @return Chrome_Database_Connection_Interface
+     */
     public function getConnection();
 
+    /**
+     * Clears the adapter to send a new query
+     *
+     * @return Chrome_Database_Adapter_Interface the cleared adapter
+     */
     public function clear();
 
+    /**
+     * Returns an error message if an error occured.
+     *
+     * @return string the error message
+     */
     public function getErrorMessage();
 
+    /**
+     * Returns an error code if an error occured
+     *
+     * @return int the error code
+     */
     public function getErrorCode();
 }
 
@@ -145,12 +156,10 @@ abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapt
 
     public function setConnection(Chrome_Database_Connection_Interface $connection)
     {
-        $this->_connectionObject = $connection;
+        if($connection->isConnected() === false) {
+            $connection->connect();
 
-        if($this->_connectionObject->isConnected() === false) {
-            $this->_connectionObject->connect();
-
-            if($this->_connectionObject->isConnected() === false) {
+            if($connection->isConnected() === false) {
                 throw new Chrome_Exception_Database('Given connection object could not connect to database');
             }
         }
@@ -158,6 +167,8 @@ abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapt
         if(($resource = $connection->getConnection()) === null ) {
              throw new Chrome_Exception_Database('Given database connection is null');
         }
+
+        $this->_connectionObject = $connection;
         $this->_connection = $resource;
     }
 

@@ -21,12 +21,16 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 16:22:18] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 15:30:44] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true)
     die();
+
+/**
+ * @todo enable transactions
+ */
 
 /**
  * load exception class
@@ -77,5 +81,3 @@ require_once 'loader.php';
  * this will load the initializer interface
  */
 require_once 'initializer.php';
-
-//TODO: add docs to all other classes...

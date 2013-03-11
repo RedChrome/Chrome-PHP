@@ -141,4 +141,19 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
         $this->setUp();
         $this->testUpdate();
     }
+
+    public function testCreateAuthentication() {
+        $resource = new Chrome_Authentication_Create_Resource_Dummy();
+
+        // does nothing
+        $this->_chain->createAuthentication($resource);
+    }
+
+    public function testGetChain() {
+
+        $chain = new Chrome_Authentication_Chain_Null();
+        $this->_chain->addChain($chain);
+
+        $this->assertSame($chain, $this->_chain->getChain());
+    }
 }

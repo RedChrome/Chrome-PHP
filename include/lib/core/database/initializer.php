@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 16:22:34] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 11:35:23] --> $
  * @link       http://chrome-php.de
  */
 
@@ -58,8 +58,16 @@ interface Chrome_Database_Initializer_Interface
  */
 class Chrome_Database_Initializer implements Chrome_Database_Initializer_Interface
 {
+    /**
+     * @var Chrome_Database_Factory_Interface
+     */
     protected $_databaseFactory = null;
 
+    /**
+     * Initializes the database
+     *
+     * @return void
+     */
     public function initialize()
     {
         // enable autoloading of database classes
@@ -79,6 +87,11 @@ class Chrome_Database_Initializer implements Chrome_Database_Initializer_Interfa
         $this->_databaseFactory = new Chrome_Database_Factory($connectionRegistry, new Chrome_Database_Registry_Statement());
     }
 
+    /**
+     * Returns a database factory
+     *
+     * @return Chrome_Database_Factory_Interface
+     */
     public function getFactory()
     {
         return $this->_databaseFactory;
