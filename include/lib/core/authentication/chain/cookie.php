@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 23:12:28] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:37:04] --> $
  * @link       http://chrome-php.de
  */
 
@@ -159,8 +159,9 @@ class Chrome_Model_Authentication_Cookie extends Chrome_Model_Database_Abstract
      *
      * @return Chrome_Model_Authentication_Cookie
      */
-    public function __construct(array $options = array(), Chrome_Database_Composition_Interface $dbComposition = null)
+    public function __construct(Chrome_Application_Context_Interface $app, array $options = array(), Chrome_Database_Composition_Interface $dbComposition = null)
     {
+        parent::__construct($app);
         $this->_options = array_merge($options, $this->_options);
         $this->_dbComposition = new Chrome_Database_Composition('model');
         $this->_dbDIComposition = $dbComposition;

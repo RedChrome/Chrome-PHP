@@ -1,32 +1,38 @@
 <?php
 
 require_once 'Tests/testsetupmodules.php';
-require_once 'Tests/testsetupdb.php';
+require_once CONTENT . 'register/model.php';
 
-class RegisterModelTest extends PHPUnit_Framework_TestCase
+class RegisterModelTest extends Chrome_TestCase
 {
     protected $_model;
     protected $_db;
 
-    public static function setUpBeforeClass()
-    {
-        $db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('simple', 'assoc');
-
-        $db->query('DELETE FROM cpp_user WHERE name = "testfinishRegistration"');
-        $db->clear();
-        $db->query('DELETE FROM cpp_user_regist WHERE email LIKE "$email%%"');
-
-
-        require_once CONTENT . 'register/model.php';
-    }
+    private static $_int = 0;
 
     public function setUp()
     {
-        $this->_model = new Chrome_Model_Register();
-        $this->_model->setDatabaseFactoryName(TEST_FACTORY);
-        //$this->_db = Chrome_DB_Interface_Factory::factory();
-        $this->_db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('simple', 'assoc');
+        $this->_model = new Chrome_Model_Register($this->_appContext);
+        $this->_db = $this->_appContext->getDatabaseFactory()->buildInterface('simple', 'assoc');
+
+        $auth = new Chrome_Authentication();
+
+        $dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($this->_appContext));
+        $auth->addChain($dbAuth);
+
+        $this->_appContext->setAuthentication($auth);
+
+        // just run this the first time. dont know why this does not work in setUpBeforeClass...
+        if(self::$_int === 0) {
+            $this->_db->query('DELETE FROM cpp_user WHERE name = "testfinishRegistration"');
+            $this->_db->clear();
+            $this->_db->query('DELETE FROM cpp_user_regist WHERE email LIKE "$email%%"');
+            $this->_db->clear();
+            self::$_int++;
+        }
+
     }
+
 
     public function testGenerateActivationKeyIsUniqueAndValid()
     {
@@ -108,9 +114,11 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
 
     public function testfinishRegistration()
     {
-        $testFinishRegistrationPass = 'testfinishRegistrationPass_' . mt_rand(0, 100000);
-        $testfinishRegistrationPassSalt = 'testfinishRegistrationPass_' . mt_rand(0, 100000);
-        $testfinishRegistrationEmail = 'testFinishRegistrationEmail_'.mt_rand(0, 100000);
+        $rand = mt_rand(0, 100000);
+        $testFinishRegistrationName = 'testfinishRegistrationPass_'.$rand;
+        $testFinishRegistrationPass = 'testfinishRegistrationPass_' . $rand;
+        $testfinishRegistrationPassSalt = 'testfinishRegistrationPass_' .$rand;
+        $testfinishRegistrationEmail = 'testFinishRegistrationEmail_'.$rand;
 
 
         /**
@@ -119,13 +127,13 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
         //$this->_db->query('DELETE FROM cpp_user WHERE name = "testfinishRegistration"');
 
         //$this->_db->delete()->from( 'user' )->where( 'name = "testfinishRegistration" ' )->execute();
-        $success = $this->_model->addRegistrationRequest('testfinishRegistration', $testFinishRegistrationPass, $testfinishRegistrationEmail, 'testfinishRegistrationKey');
+        $success = $this->_model->addRegistrationRequest($testFinishRegistrationName, $testFinishRegistrationPass, $testfinishRegistrationEmail, 'testfinishRegistrationKey');
 
         $this->assertTrue($success, 'could not add registration request');
 
-        $resource = new Chrome_Authentication_Create_Resource_Database('testfinishRegistration', $testFinishRegistrationPass, $testfinishRegistrationPassSalt);
+        $resource = new Chrome_Authentication_Create_Resource_Database($testFinishRegistrationName, $testFinishRegistrationPass, $testfinishRegistrationPassSalt);
 
-        $return = $this->_model->finishRegistration('testfinishRegistration', $testFinishRegistrationPass, $testfinishRegistrationPassSalt, $testfinishRegistrationEmail, 'testfinishRegistrationKey', $resource);
+        $return = $this->_model->finishRegistration($testFinishRegistrationName, $testFinishRegistrationPass, $testfinishRegistrationPassSalt, $testfinishRegistrationEmail, 'testfinishRegistrationKey', $resource);
 
         $this->assertTrue($return, 'maybe you have to set up test db?');
 
@@ -136,7 +144,7 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->_db->getResult()->getNext(), 'activationKey not deleted aferwards');
 
         $this->_db->clear();
-        $this->_db->query('SELECT * FROM cpp_user WHERE name = "testfinishRegistration" ORDER BY id DESC');
+        $this->_db->query('SELECT * FROM cpp_user WHERE name = "'.$testFinishRegistrationName.'" ORDER BY id DESC');
         $result = $this->_db->getResult()->getNext();
 
         $this->assertTrue($result !== false, 'no user created');
@@ -145,10 +153,6 @@ class RegisterModelTest extends PHPUnit_Framework_TestCase
         $this->_db->query('SELECT * FROM cpp_authenticate WHERE id = "?"', array($result['id']));
         $result2 = $this->_db->getResult()->getNext();
 
-        $this->assertTrue($result2 !== false, 'no entry created in authenticate');
-
-        $this->assertTrue($result2['password'] == $testFinishRegistrationPass, 'password does not match');
-
-        $this->assertTrue($result2['password_salt'] == $testfinishRegistrationPassSalt, 'password salt does not match');
+        $this->assertTrue(! $this->_db->getResult()->isEmpty(), 'no entry created in authenticate');
     }
 }

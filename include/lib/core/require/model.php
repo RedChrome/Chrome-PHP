@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:01:57] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:38:08] --> $
  * @author     Alexander Book
  */
 
@@ -65,13 +65,9 @@ class Chrome_Model_Require extends Chrome_Model_Decorator_Abstract
 class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
 {
     /**
-     * Chrome_Model_Require_DB::__construct()
-     *
-     * connects to database
-     *
-     * @return Chrome_Model_Require_DB
+     * Set database options
      */
-    public function __construct()
+    protected function _setDatabaseOptions()
     {
         $this->_dbComposition = new Chrome_Database_Composition('model', 'iterator');
     }

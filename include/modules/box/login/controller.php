@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2013 19:03:29] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:25:46] --> $
  * @author     Alexander Book
  */
 
@@ -52,7 +52,7 @@ class Chrome_Controller_Box_Login extends Chrome_Controller_Module_Abstract
     {
         // setting up
 
-        $this->_model = new Chrome_Model_Login(null);
+        $this->_model = new Chrome_Model_Login($this->_applicationContext, null);
         $this->_view = new Chrome_View_Box_Login($this);
 
         // if the user is logged in, then show the user menu

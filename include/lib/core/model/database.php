@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2013 00:29:25] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.03.2013 23:27:15] --> $
  * @author     Alexander Book
  */
 
@@ -45,18 +45,19 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
 
 	protected $_dbInterfaceInstance = null;
 
-    protected $_dbFactoryName = Chrome_Database_Facade::DEFAULT_FACTORY;
-
-    public function __construct() {
-
+    public function __construct(Chrome_Application_Context_Interface $appContext)
+    {
+        $this->setApplicationContext($appContext);
     }
 
 	protected function _connect()
 	{
+        $this->_setDatabaseOptions();
+
 		if($this->_dbComposition !== null) {
-			$this->_dbInterfaceInstance = Chrome_Database_Facade::getFactory($this->_dbFactoryName)->buildInterfaceViaComposition($this->_dbComposition, $this->_dbDIComposition);
+			$this->_dbInterfaceInstance = $this->_applicationContext->getDatabaseFactory()->buildInterfaceViaComposition($this->_dbComposition, $this->_dbDIComposition);
 		} else {
-			$this->_dbInterfaceInstance = Chrome_Database_Facade::getFactory($this->_dbFactoryName)->buildInterface($this->_dbInterface, $this->_dbResult, $this->_dbConnection, $this->_dbAdapter);
+			$this->_dbInterfaceInstance = $this->_applicationContext->getDatabaseFactory()->buildInterface($this->_dbInterface, $this->_dbResult, $this->_dbConnection, $this->_dbAdapter);
 		}
 	}
 
@@ -74,26 +75,10 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
 	}
 
     /**
-     * @deprecated
+     * Put here your db connection settings
+     * e.g. $this->_dbInterface = 'simple'
      */
-	protected function _getDBInterfaceByComposition()
-	{
-	    throw new Exception('Do not use this method anymore');
+    protected function _setDatabaseOptions() {
 
-		if($this->_dbComposition === null) {
-			throw new Chrome_Exception('No default database composition set!');
-		} else {
-            return $this->_connect();
-			//$this->_dbInterfaceInstance = Chrome_Database_Facade::getFactory($this->_dbFactoryName)->buildInterfaceViaComposition($this->_dbComposition, $this->_dbDIComposition);
-			//return $this->_dbInterfaceInstance;
-		}
-	}
-
-    public function setDatabaseFactoryName($name) {
-        $this->_dbFactoryName = $name;
-    }
-
-    public function getDatabaseFactoryName() {
-        return $this->_dbFactoryName;
     }
 }

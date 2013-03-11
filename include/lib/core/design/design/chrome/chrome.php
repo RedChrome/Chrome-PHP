@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 13:39:14] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:59:54] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -54,15 +54,9 @@ class Chrome_Design_Chrome extends Chrome_Design_Abstract
 
     protected $_values = array();
 
-    public static function getInstance() {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
+    public function __construct(Chrome_Application_Context_Interface $app) {
 
-        return self::$_instance;
-    }
-
-    protected function __construct() {
+    parent::__construct($app);
 
     $this->_values = array(
 
@@ -215,6 +209,6 @@ class Chrome_Design_Chrome extends Chrome_Design_Abstract
     }
 
     public function getMapper() {
-        return new Chrome_Design_Mapper_Chrome();
+        return new Chrome_Design_Mapper_Chrome($this->_applicationContext);
     }
 }

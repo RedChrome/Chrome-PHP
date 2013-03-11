@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2013 19:17:27] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:57:46] --> $
  * @author     Alexander Book
  */
 
@@ -25,13 +25,13 @@ if(CHROME_PHP !== true)
     die();
 
 /**
+ * @todo interface sucks?
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
 interface Chrome_Design_Factory_Interface
 {
-    public static function getInstance();
-
     public function factory($design);
 }
 
@@ -47,17 +47,13 @@ class Chrome_Design_Factory implements Chrome_Design_Factory_Interface
 
     private $_model = null;
 
-    private function __construct()
-    {
-        $this->_model = Chrome_Model_Design_Factory::getInstance();
-    }
+    protected $_applicationContext = null;
 
-    public static function getInstance()
+    public function __construct(Chrome_Application_Context_Interface $appContext)
     {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
-        return self::$_instance;
+        $this->_applicationContext = $appContext;
+
+        $this->_model = new Chrome_Model_Design_Factory();
     }
 
     public function factory($design)
@@ -74,7 +70,10 @@ class Chrome_Design_Factory implements Chrome_Design_Factory_Interface
             define('DESIGN_NAME', strtolower($design));
         }
 
-        return call_user_func_array(array('Chrome_Design_'.ucfirst($design), 'getInstance'), array());
+        $className = 'Chrome_Design_'.ucfirst($design);
+        return new $className($this->_applicationContext);
+
+        //return call_user_func_array(array('Chrome_Design_'.ucfirst($design), 'getInstance'), array());
     }
 
     public function getDesign()
@@ -91,16 +90,6 @@ class Chrome_Model_Design_Factory extends Chrome_Model_Abstract
 {
     const CHROME_MODEL_DESIGN_USER_DESIGN_COOKIE_KEY = 'USER_DESIGN';
 
-    private static $_instance = null;
-
-    public static function getInstance()
-    {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
-    }
     //TODO: move this to any other class, but NOT IN Model_Design...
     /*
     public function getUserDesign()

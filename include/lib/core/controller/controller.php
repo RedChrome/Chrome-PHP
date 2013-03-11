@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 21:16:43] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 12:30:23] --> $
  * @author     Alexander Book
  */
 
@@ -53,10 +53,10 @@ interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Inter
     public function execute();
 
     /**
-     * @param Chrome_Request_Handler_Interface $reqHandler
+     * @param Chrome_Application_Context_Interface $appContext
      * @return Chrome_Controller_Interface
      */
-    public function __construct(Chrome_Request_Handler_Interface $reqHandler);
+    public function __construct(Chrome_Application_Context_Interface $appContext);
 
     /**
      * This method is used to add Renderable objects into $list. This should be done in this method!
@@ -66,6 +66,21 @@ interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Inter
      * @return void
      */
     public function addViews(Chrome_Design_Renderable_Container_List_Interface $list);
+
+    /**
+     * Sets the application context
+     *
+     * @param Chrome_Application_Context_Interface $appContext
+     * @return void
+     */
+    public function setApplicationContext(Chrome_Application_Context_Interface $appContext);
+
+    /**
+     * Returns the application context
+     *
+     * @return Chrome_Application_Context_Interface
+     */
+    public function getApplicationContext();
 }
 
 /**
@@ -74,6 +89,13 @@ interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Inter
  */
 abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
 {
+    /**
+     * Contains the context to the current application
+     *
+     * @var Chrome_Application_Context_Interface
+     */
+    protected $_applicationContext = null;
+
     /**
      * exceptionHandler class which takes care of thrown exceptions
      * <code>
@@ -165,9 +187,11 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      */
     abstract protected function _shutdown();
 
-    public function __construct(Chrome_Request_Handler_Interface $reqHandler)
+    public function __construct(Chrome_Application_Context_Interface $appContext)
     {
-        $this->setRequestHandler($reqHandler);
+        $this->setApplicationContext($appContext);
+
+        $this->setRequestHandler($appContext->getRequestHandler());
     }
     /**
      * singletone pattern
@@ -272,5 +296,13 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
 
     public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
         // do nothing
+    }
+
+    public function setApplicationContext(Chrome_Application_Context_Interface $appContext) {
+        $this->_applicationContext = $appContext;
+    }
+
+    public function getApplicationContext() {
+        return $this->_applicationContext;
     }
 }

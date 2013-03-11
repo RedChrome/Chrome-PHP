@@ -21,11 +21,12 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 20:44:13] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 16:22:18] --> $
  * @link       http://chrome-php.de
  */
 
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
 /**
  * load exception class
@@ -68,19 +69,13 @@ require_once 'composition.php';
 require_once 'factory.php';
 
 /**
- * load class to easily configure a database access object
- *     this will include adapters, connection, result and interface
- */
-require_once 'facade.php';
-
-/**
  * includes an autoloader for database classes
  */
 require_once 'loader.php';
 
 /**
- * this will set the default connection
+ * this will load the initializer interface
  */
-require_once BASEDIR.'database.php';
+require_once 'initializer.php';
 
 //TODO: add docs to all other classes...

@@ -41,7 +41,7 @@ class Chrome_Controller_Index extends Chrome_Controller_Content_Abstract
 
     public function addViews(Chrome_Design_Renderable_Container_List_Interface $list)
     {
-        $obj = new Chrome_Controller_User_Login_Page($this->_requestHandler);
+        $obj = new Chrome_Controller_User_Login_Page($this->_applicationContext);
         $obj->execute();
         $obj->addViews($list);
 

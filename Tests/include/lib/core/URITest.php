@@ -2,6 +2,10 @@
 
 require_once 'Tests/testsetup.php';
 
+require_once 'Tests/dummies/session.php';
+require_once 'Tests/dummies/cookie.php';
+require_once 'Tests/dummies/request/data.php';
+
 class URITest extends PHPUnit_Framework_TestCase
 {
     protected $uri = null;
@@ -106,11 +110,18 @@ class URITest extends PHPUnit_Framework_TestCase
 
     public function testConstructor() {
 
-        $requestHandler = Chrome_Front_Controller::getInstance()->getRequestHandler();
+        $reqData  = new Chrome_Request_Data_Dummy(new Chrome_Cookie_Dummy(), new Chrome_Session_Dummy());
+        $reqData->_SERVER = array('SERVER_NAME' => 'localhost', 'REQUEST_URI' => '');
 
-        $uri = new Chrome_URI($requestHandler->getRequestData(), true);
+        $uri = new Chrome_URI($reqData, true);
 
-        $this->assertNotNull($uri->getURL());
+        $this->assertEquals('http://localhost', $uri->getURL());
+
+        $reqData->_SERVER = array('SERVER_NAME' => 'anyAdress.exp', 'REQUEST_URI' => '/testSite/test?test=true');
+        $uri = new Chrome_URI($reqData, true);
+
+        $this->assertEquals('http://anyAdress.exp/testSite/test?test=true', $uri->getURL());
+
     }
 
     public function testGetURLWithNoProtocoll() {

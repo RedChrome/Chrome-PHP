@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 17:22:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 16:00:21] --> $
  * @link       http://chrome-php.de
  */
 
@@ -30,8 +30,8 @@ if(CHROME_PHP !== true)
 
 class Chrome_Design_Mapper_Chrome extends Chrome_Design_Mapper_Database_Static_Abstract
 {
-    public function __construct() {
-        $this->_model = new Chrome_Model_Design_Mapper_Static();
+    public function __construct(Chrome_Application_Context_Interface $appContext) {
+        $this->_model = new Chrome_Model_Design_Mapper_Static($appContext);
     }
 
     protected function _map(Chrome_Design_Renderable_Container_Interface $container) {

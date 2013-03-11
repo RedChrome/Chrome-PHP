@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 16:59:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.03.2013 22:22:48] --> $
  * @link       http://chrome-php.de
  */
 
@@ -57,6 +57,7 @@ class Chrome_Database_Adapter_Mysqli extends Chrome_Database_Adapter_Abstract
 
     public function query($query)
     {
+        #var_dump($this->_connection);
         $this->_result = $this->_connection->query($query);
 
         if($this->_result === false) {

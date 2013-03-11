@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 00:37:37] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:59:36] --> $
  * @author     Alexander Book
  */
 
@@ -32,19 +32,25 @@ interface Chrome_Design_Abstract_Interface
 {
     public function get($string, Chrome_Design_Renderable $obj = null);
 
-    public static function getInstance();
-
     public function getStyle();
 
     public function getMapper();
+
+    public function __construct(Chrome_Application_Context_Interface $appContext);
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
-abstract class Chrome_Design_Abstract
+abstract class Chrome_Design_Abstract implements Chrome_Design_Abstract_Interface
 {
+    protected $_applicationContext = null;
+
+    public function __construct(Chrome_Application_Context_Interface $appContext) {
+        $this->_applicationContext = $appContext;
+    }
+
     protected $_values = array();
 
     public function get($string, Chrome_Design_Renderable $obj = null) {

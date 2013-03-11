@@ -3,7 +3,12 @@
 require_once 'Tests/testsetup.php';
 require_once LIB.'core/language.php';
 require_once LIB.'core/form/form.php';
-require_once LIB.'core/request/request.php';
+
+
+require_once 'Tests/dummies/session.php';
+require_once 'Tests/dummies/cookie.php';
+require_once 'Tests/dummies/request/handler.php';
+
 class Chrome_Form_Test_No_Elements extends Chrome_Form_Abstract
 {
     protected function _init() {
@@ -35,7 +40,14 @@ class FormTest extends PHPUnit_Framework_TestCase
     protected $_form;
 
     public function setUp() {
-        $this->_form = new Chrome_Form_Test_No_Elements(Chrome_Front_Controller::getInstance()->getRequestHandler());
+
+        $cookie = new Chrome_Cookie_Dummy();
+        $session = new Chrome_Session_Dummy();
+
+        $handler = new Chrome_Request_Handler_Dummy($cookie, $session);
+        $handler->setRequestData(new Chrome_Request_Data_Dummy($cookie, $session));
+
+        $this->_form = new Chrome_Form_Test_No_Elements($handler);
     }
 
     public function testIfNoElementsAreAdded() {

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authorisation
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 15:28:22] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 01:06:18] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -188,12 +188,12 @@ abstract class Chrome_Authorisation_Assert_Abstract implements Chrome_Authorisat
 interface Chrome_Authorisation_Adapter_Interface
 {
     /**
-     * setDataContainer()
+     * Returns a new authorisation adapter instance
      *
-     * @param Chrome_Authentication_Data_Container $container
-     * @return void
+     * @param Chrome_Authentication_Interface $auth authentication object
+     * @return Chrome_Authorisation_Adapter_Interface
      */
-    public function setDataContainer(Chrome_Authentication_Data_Container $container);
+    public function __construct(Chrome_Authentication_Interface $auth);
 
     /**
      * isAllowed()
@@ -211,13 +211,12 @@ interface Chrome_Authorisation_Adapter_Interface
 interface Chrome_Authorisation_Interface
 {
     /**
-     * getInstance()
+     * Returns a new authorisation instance
      *
-     * Singleton pattern
-     *
+     * @param Chrome_Authorisation_Adapter_Interface $auth authorisation adapter
      * @return Chrome_Authorisation_Interface
      */
-    public static function getInstance();
+    public function __construct(Chrome_Authorisation_Adapter_Interface $auth);
 
     /**
      * setAuthorisationAdapter()
@@ -227,7 +226,7 @@ interface Chrome_Authorisation_Interface
      * @param Chrome_Authorisation_Adapter_Interface $adapter
      * @return void
      */
-    public static function setAuthorisationAdapter(Chrome_Authorisation_Adapter_Interface $adapter);
+    public function setAuthorisationAdapter(Chrome_Authorisation_Adapter_Interface $adapter);
 
     /**
      * getAuthorisationAdapter()
@@ -236,7 +235,7 @@ interface Chrome_Authorisation_Interface
      *
      * @return Chrome_Authorisation_Adapter_Interface
      */
-    public static function getAuthorisationAdapter();
+    public function getAuthorisationAdapter();
 
     /**
      * isAllowed()
@@ -244,7 +243,7 @@ interface Chrome_Authorisation_Interface
      * @param Chrome_Authorisation_Resource_Interface $obj
      * @return boolean true if allowed to access resource, false else
      */
-    public static function isAllowed(Chrome_Authorisation_Resource_Interface $obj);
+    public function isAllowed(Chrome_Authorisation_Resource_Interface $obj);
 }
 
 /**
@@ -253,32 +252,16 @@ interface Chrome_Authorisation_Interface
  */
 class Chrome_Authorisation implements Chrome_Authorisation_Interface
 {
-    private static $_adapter = null;
+    private $_adapter = null;
 
     /**
      * Chrome_Authorisation::__construct()
      *
      * @return Chrome_Authorisation
      */
-    private function __construct()
+    public function __construct(Chrome_Authorisation_Adapter_Interface $adapter)
     {
-    }
-
-    /**
-     * Chrome_Authorisation::getInstance()
-     *
-     * Singleton pattern
-     *
-     * @return Chrome_Authorisation
-     */
-    public static function getInstance()
-    {
-        // no adapter set, so use default adapter...
-        if(self::$_adapter === null) {
-            self::$_adapter = CHROME_AUTHORISATION_DEFAULT_ADAPTER::getInstance();
-        }
-
-        return self::$_adapter;
+        $this->_adapter = $adapter;
     }
 
     /**
@@ -289,9 +272,9 @@ class Chrome_Authorisation implements Chrome_Authorisation_Interface
      * @param Chrome_Authorisation_Adapter_Interface $adapter
      * @return void
      */
-    public static function setAuthorisationAdapter(Chrome_Authorisation_Adapter_Interface $adapter)
+    public function setAuthorisationAdapter(Chrome_Authorisation_Adapter_Interface $adapter)
     {
-        self::$_adapter = $adapter;
+        $this->_adapter = $adapter;
     }
 
     /**
@@ -299,9 +282,9 @@ class Chrome_Authorisation implements Chrome_Authorisation_Interface
      *
      * @return Chrome_Authorisation_Adapter_Interface
      */
-    public static function getAuthorisationAdapter()
+    public function getAuthorisationAdapter()
     {
-        return self::$_adapter;
+        return $this->_adapter;
     }
 
     /**
@@ -310,7 +293,7 @@ class Chrome_Authorisation implements Chrome_Authorisation_Interface
      * @param Chrome_Authorisation_Resource_Interface $obj
      * @return boolean true if allowed to access resource, false else
      */
-    public static function isAllowed(Chrome_Authorisation_Resource_Interface $resource) {
-        self::$_adapter->isAllowed($resource);
+    public function isAllowed(Chrome_Authorisation_Resource_Interface $resource) {
+        return $this->_adapter->isAllowed($resource);
     }
 }

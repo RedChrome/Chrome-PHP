@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2013 00:21:29] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.03.2013 22:40:32] --> $
  * @link       http://chrome-php.de
  */
 
@@ -66,13 +66,8 @@ interface Chrome_Authentication_Create_Resource_Interface
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-interface Chrome_Authentication_Interface
+interface Chrome_Authentication_Interface extends Chrome_Exception_Processable_Interface
 {
-    /**
-     * @return Chrome_Authentication_Interface
-     */
-    public static function getInstance();
-
     /**
      * @param Chrome_Authentication_Resource_Interface $resource [optional] if we want to authenticate with special options then
      *        we use $resource. if we just want to authenticate using cookies or whatever then use no $resource  (you could but
@@ -157,6 +152,13 @@ interface Chrome_Authentication_Interface
      * @return void
      */
     public function createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource);
+
+    /**
+     * Returns the data container created to authenticate
+     *
+     * @return Chrome_Authentication_Data_Container_Interface
+     */
+    public function getAuthenticationDataContainer();
 }
 
 /**
@@ -332,17 +334,14 @@ abstract class Chrome_Authentication_Chain_Abstract implements Chrome_Authentica
     abstract protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource);
 }
 
+require_once 'chain/null.php';
+
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Chrome_Authentication implements Chrome_Authentication_Interface, Chrome_Exception_Processable_Interface
+class Chrome_Authentication implements Chrome_Authentication_Interface
 {
-    /**
-     * @var Chrome_Authentication
-     */
-    private static $_instance = null;
-
     /**
      * @var Chrome_Authentication_Chain_Interface
      */
@@ -371,21 +370,8 @@ class Chrome_Authentication implements Chrome_Authentication_Interface, Chrome_E
     /**
      * @return Chrome_Authentication
      */
-    public static function getInstance()
+    public function __construct()
     {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
-    }
-
-    /**
-     * @return Chrome_Authentication
-     */
-    private function __construct()
-    {
-        require_once 'chain/null.php';
         $this->_chain = new Chrome_Authentication_Chain_Null();
     }
 
@@ -432,27 +418,25 @@ class Chrome_Authentication implements Chrome_Authentication_Interface, Chrome_E
         try {
             // $return is an instance of Chrome_Authentication_Data_Container_Interface
             $this->_container = $this->_chain->authenticate($resource);
+            $id = $this->_container->getID();
 
             // user could not authenticate or he should not authenticate
-            if(($id = $this->_container->getID()) === false) {
+            if( $id === false) {
                 throw new Chrome_Exception_Authentication('ID was not an integer, as expected!', 201);
-            } else  $this->_isAuthenticated = true;
+            } else {
+                $this->_isAuthenticated = true;
+            }
 
             // user should get authenticated as guest
             if($id === 0 or $this->_container->getStatus() !== Chrome_Authentication_Data_Container_Interface::STATUS_USER) {
 
                 $this->_authenticationID = 0;
 
-                // set guest id
-                Chrome_Authorisation::getInstance()->setDataContainer($this->_container);
-
             } else // successfully authenticated
 
                 if($id > 0) {
 
                     $this->_authenticationID = $id;
-                    // set user id
-                    Chrome_Authorisation::getInstance()->setDataContainer($this->_container);
 
                     // update other chains, so that they know that sb. has successfully authenticated
                     // -> maybe any chain needs to update sth.?
@@ -520,6 +504,13 @@ class Chrome_Authentication implements Chrome_Authentication_Interface, Chrome_E
     public function getAuthenticationID()
     {
         return $this->_authenticationID;
+    }
+
+    /**
+     * @return Chrome_Authentication_Data_Container_Interface
+     */
+    public function getAuthenticationDataContainer() {
+        return $this->_container;
     }
 
     /**

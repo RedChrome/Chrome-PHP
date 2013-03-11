@@ -12,7 +12,7 @@ class DatabaseAdapterMysqliTest extends DatabaseAdapterMysqlTest
     public function setUp()
     {
         try {
-            $this->_db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('simple', 'assoc', 'mysqli_test');
+            $this->_db = $this->_appContext->getDatabaseFactory()->buildInterface('simple', 'assoc', 'mysqli_test');
         }
         catch (Chrome_Exception $e) {
             $this->_db = null;

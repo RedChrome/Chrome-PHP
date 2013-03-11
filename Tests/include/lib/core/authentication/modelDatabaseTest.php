@@ -1,8 +1,8 @@
 <?php
-require_once 'Tests/testsetupmodules.php';
+require_once 'Tests/testsetupdb.php';
 require_once LIB.'core/authentication/chain/database.php';
 
-class ModelDatabaseTest extends PHPUnit_Framework_TestCase
+class ModelDatabaseTest extends Chrome_TestCase
 {
     protected $_model;
 
@@ -18,8 +18,7 @@ class ModelDatabaseTest extends PHPUnit_Framework_TestCase
     {
         $comp = new Chrome_Database_Composition(null, null, null, Chrome_Database_Registry_Connection_Interface::DEFAULT_CONNECTION);
 
-        $this->_model = new Chrome_Model_Authentication_Database(array(), $comp);
-        $this->_model->setDatabaseFactoryName(TEST_FACTORY);
+        $this->_model = new Chrome_Model_Authentication_Database($this->_appContext, array(), $comp);
     }
 
     public function testModelHashesUserPassword() {

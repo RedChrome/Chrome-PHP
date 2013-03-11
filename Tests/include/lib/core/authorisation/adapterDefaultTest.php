@@ -1,9 +1,12 @@
 <?php
 
-require_once 'Tests/testsetupmodules.php';
+require_once 'Tests/testsetupdb.php';
 
-class AuthorisationAdapterDefaultTest extends PHPUnit_Framework_TestCase
+require_once 'Tests/dummies/authentication/authentication.php';
+
+class AuthorisationAdapterDefaultTest extends Chrome_TestCase
 {
+    protected $_auth = null;
 
     protected $_adapter = null;
 
@@ -20,42 +23,39 @@ class AuthorisationAdapterDefaultTest extends PHPUnit_Framework_TestCase
         );
 
     public function setUp() {
-        $model = new Chrome_Model_Authorisation_Default_DB();
-        $model->setDatabaseFactoryName(TEST_FACTORY);
-        $this->_adapter = Chrome_Authorisation_Adapter_Default::getInstance();
+        $this->_auth = new Chrome_Authentication_Dummy();
+        $model = new Chrome_Model_Authorisation_Default_DB($this->_appContext);
+        $this->_adapter = new Chrome_Authorisation_Adapter_Default($this->_auth);
         $this->_adapter->setModel($model);
     }
 
-    public function testSetDataContainer() {
 
-        $container = new Chrome_Authentication_Data_Container(__class__);
-        $container->setID(126546224769764);
-
-        $this->_adapter->setDataContainer($container);
-    }
-
-    public function testGetGroupId() {
+    public function testGetGroupId()
+    {
+        $this->_auth->id = 0;
 
         $container = new Chrome_Authentication_Data_Container(__class__);
         $container->setID(0);
 
-        $this->_adapter->setDataContainer($container);
+        $this->_auth->dataContainer = $container;
 
         $this->assertEquals(1, $this->_adapter->getGroupId());
 
         $container->setID(1);
-        $this->_adapter->setDataContainer($container);
 
         $this->assertEquals(123456, $this->_adapter->getGroupId());
     }
+
 
     public function testIsAllowed() {
 
         $container = new Chrome_Authentication_Data_Container(__class__);
 
+        $this->_auth->dataContainer = $container;
+
         foreach($this->_array as $key => $array) {
             $container->setID($array[0]);
-            $this->_adapter->setDataContainer($container);
+            //$this->_adapter->setDataContainer($container);
 
             $resource = new Chrome_Authorisation_Resource($array[1], $array[2]);
 
@@ -68,18 +68,14 @@ class AuthorisationAdapterDefaultTest extends PHPUnit_Framework_TestCase
         }
     }
 
-
-
-
 }
 
-class AuthorisationAdapterDefaultModelDefaultTest extends PHPUnit_Framework_TestCase
+class AuthorisationAdapterDefaultModelDefaultTest extends Chrome_TestCase
 {
     protected $_model = null;
 
     public function setUp() {
-        $this->_model = new Chrome_Model_Authorisation_Default_DB();
-        $this->_model->setDatabaseFactoryName(TEST_FACTORY);
+        $this->_model = new Chrome_Model_Authorisation_Default_DB($this->_appContext);
     }
 
     public function testGetAccessById() {

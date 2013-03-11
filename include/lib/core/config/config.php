@@ -17,7 +17,7 @@
  * @subpackage Chrome.Config
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:01:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 16:27:52] --> $
  * @author     Alexander Book
  */
 
@@ -49,14 +49,6 @@ interface Chrome_Config_Interface
      * @return mixed
      */
     public function _getConfig($subclass, $name = '');
-
-    /**
-     * Sets the configuration for $name in subclass $subclass with value $value
-     * and type $type.
-     *
-     * @return void
-     */
-    public function setConfig($name, $subclass, $value, $type, $modul = '');
 }
 
 
@@ -98,7 +90,11 @@ class Chrome_Config implements Chrome_Config_Interface
      */
     private function __construct()
     {
-        $this->_model = new Chrome_Model_Config_Cache(new Chrome_Model_Config_DB());
+    }
+
+    public function setModel(Chrome_Model_Interface $model)
+    {
+        $this->_model = $model;
 
         $this->_loadConfig();
     }
@@ -172,22 +168,5 @@ class Chrome_Config implements Chrome_Config_Interface
 
         if($name != '') return $this->_config[$subclass][$name];
         else  return $this->_config[$subclass];
-    }
-
-    /**
-     * Chrome_Config::setConfig()
-     *
-     * sets a configuraiton
-     *
-     * @param mixed $name name
-     * @param mixed $subclass subclass
-     * @param mixed $value value
-     * @param mixed $type type
-     * @param string $modul modul
-     * @return void
-     */
-    public function setConfig($name, $subclass, $value, $type, $modul = '')
-    {
-        $this->_model->setConfig($name, $subclass, $value, $type, $modul);
     }
 }

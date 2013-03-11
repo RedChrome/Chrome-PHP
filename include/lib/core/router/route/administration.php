@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 17:34:13] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:41:11] --> $
  * @author     Alexander Book
  */
 
@@ -126,10 +126,6 @@ class Chrome_Router_Resource_Administration extends Chrome_Router_Resource
 
 class Chrome_Model_Route_Administration extends Chrome_Model_Abstract
 {
-    public function __construct() {
-
-    }
-
     public function getDefaultResourceFile() {
 
     }

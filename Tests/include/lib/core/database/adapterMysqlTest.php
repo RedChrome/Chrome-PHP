@@ -5,14 +5,14 @@ require_once 'Tests/testsetup.php';
 require_once LIB . 'core/database/database.php';
 require_once LIB . 'core/database/connection/mysql.php';
 
-class DatabaseAdapterMysqlTest extends PHPUnit_Framework_TestCase
+class DatabaseAdapterMysqlTest extends Chrome_TestCase
 {
     protected $_db;
 
     public function setUp()
     {
         try {
-            $this->_db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('simple', 'assoc', 'mysql_test');
+            $this->_db = $this->_appContext->getDatabaseFactory()->buildInterface('simple', 'assoc', 'mysql_test');
         }
         catch (Chrome_Exception $e) {
             $this->_db = null;

@@ -47,13 +47,13 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 		$nicknameValidator = new Chrome_Validator_Form_NicknameRegister();
 
 		$emailConverter = new Chrome_Converter_Value();
-		$emailConverter->addFilter( 'escape' );
+		//$emailConverter->addFilter( 'escape' );
 		$emailConverter->addFilter( 'convert_char_to_html' );
 		$emailConverter->addFilter( 'stripHTML' );
         $emailConverter->addFilter( 'strToLower');
 
         $nameConverter = new Chrome_Converter_Value();
-		$nameConverter->addFilter( 'escape' );
+		//$nameConverter->addFilter( 'escape' );
 		$nameConverter->addFilter( 'convert_char_to_html' );
 		$nameConverter->addFilter( 'stripHTML' );
 

@@ -4,7 +4,7 @@ require_once 'Tests/testsetupmodules.php';
 
 require_once 'Tests/dummies/authentication/resource.php';
 
-class AuthenticationChainSessionTest extends Chrome_Test
+class AuthenticationChainSessionTest extends Chrome_TestCase
 {
     protected $_chain = null;
 

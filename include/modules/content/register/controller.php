@@ -17,12 +17,14 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
     {
         //TODO: move those out of class
         $this->_view = new Chrome_View_Register($this);
-        $this->_model = new Chrome_Model_Register();
+        $this->_model = new Chrome_Model_Register($this->_applicationContext);
     }
 
     protected function _execute()
     {
-        if(Chrome_Authorisation::getInstance()->isAllowed(new Chrome_Authorisation_Resource('register', 'register')) === false) {
+        $authorisation = $this->_applicationContext->getAuthorisation();
+
+        if($authorisation->isAllowed(new Chrome_Authorisation_Resource('register', 'register')) === false) {
             $this->_view->alreadyRegistered();
             //$this->view->setError(403);
             return;

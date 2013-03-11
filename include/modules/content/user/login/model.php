@@ -6,13 +6,13 @@ class Chrome_Model_Login extends Chrome_Model_Database_Abstract
 
 	protected $_form = null;
 
-	public function __construct(Chrome_Form_Interface $form = null)
+	public function __construct(Chrome_Application_Context $app, Chrome_Form_Interface $form = null)
 	{
 		$this->_dbInterface = 'simple';
 		$this->_dbResult = 'assoc';
 		$this->_form = $form;
 
-		parent::__construct();
+		parent::__construct($app);
 	}
 
 	public function login()
@@ -25,7 +25,7 @@ class Chrome_Model_Login extends Chrome_Model_Database_Abstract
 
 			$id = $this->getIDByIdentity($identity);
 
-			$authenticate = Chrome_Authentication::getInstance();
+			$authenticate = $this->_applicationContext->getAuthentication();
 
 			$authenticate->authenticate(new Chrome_Authentication_Resource_Database($id, $password, $stayLoggedIn));
 
@@ -47,7 +47,9 @@ class Chrome_Model_Login extends Chrome_Model_Database_Abstract
      */
 	public function isLoggedIn()
 	{
-		return Chrome_User_Login::getInstance()->isLoggedIn();
+	    $auth = $this->_applicationContext->getAuthentication();
+
+        return $auth->isUser();
 	}
 
 	public function getIDByIdentity($identity)

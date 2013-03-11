@@ -17,7 +17,7 @@
  * @subpackage Chrome.Config
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:01:45] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 16:25:37] --> $
  * @author     Alexander Book
  */
 
@@ -25,30 +25,16 @@ if(CHROME_PHP !== true)
     die();
 
 /**
- * @todo: remove
- * @package CHROME-PHP
- * @subpackage Chrome.Config
- */
-class Chrome_Model_Config extends Chrome_Model_Decorator_Abstract
-{
-    public function __construct(Chrome_Model_Interface $model)
-    {
-        $this->_decorator = new Chrome_Model_Config_Cache(new Chrome_Model_Config_DB());
-    }
-}
-
-/**
  * @package CHROME-PHP
  * @subpackage Chrome.Config
  */
 class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
 {
-    protected $_dbInterface = 'model';
-
-    protected $_dbResult    = 'iterator';
-
-    public function __construct()
+    protected function _setDatabaseOptions()
     {
+        $this->_dbInterface = 'model';
+
+        $this->_dbResult    = 'iterator';
     }
 
     public function loadConfig()

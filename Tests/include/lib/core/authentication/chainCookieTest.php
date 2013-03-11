@@ -1,12 +1,12 @@
 <?php
 
-require_once 'Tests/testsetup.php';
+require_once 'Tests/testsetupdb.php';
 
 require_once 'Tests/dummies/authentication/resource.php';
 require_once 'Tests/dummies/cookie.php';
 
 
-class AuthenticationChainCookieTest extends PHPUnit_Framework_TestCase
+class AuthenticationChainCookieTest extends Chrome_TestCase
 {
     protected $_chain = null;
 
@@ -23,8 +23,7 @@ class AuthenticationChainCookieTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         if($this->_model === null) {
-            $this->_model = new Chrome_Model_Authentication_Cookie(array());
-            $this->_model->setDatabaseFactoryName(TEST_FACTORY);
+            $this->_model = new Chrome_Model_Authentication_Cookie($this->_appContext, array());
         }
 
         if(!isset($this->_options['cookie_instance']) OR $this->_options['cookie_instance'] !== false) {

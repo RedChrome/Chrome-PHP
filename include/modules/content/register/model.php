@@ -9,12 +9,10 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 
 	const CHROME_MODEL_REGISTER_TABLE = 'user_regist';
 
-	public function __construct()
+	protected function _setDatabaseOptions()
 	{
         $this->_dbInterface = 'model';
         $this->_dbResult = 'assoc';
-
-	    parent::__construct();
 	}
 
     protected function _connect() {
@@ -119,12 +117,14 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
                 $resource = new Chrome_Authentication_Create_Resource_Database( $pass, $pw_salt );
             }
 
+            $this->_applicationContext->getAuthentication()->createAuthentication($resource);
+
             /**
              * @todo remove this hard coded dependency. this causes troubes in test RegisterModelTest::testfinishRegistration()
              * Reason: test suit uses a test database, but this dependency uses the production database.
              * This dependency must get injected with the right database dependency.
              */
-			Chrome_Authentication::getInstance()->createAuthentication( $resource );
+			//Chrome_Authentication::getInstance()->createAuthentication( $resource );
 			$id = $resource->getID();
 
 			if( !is_numeric( $id ) or $id <= 0 ) {
@@ -162,10 +162,8 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 	 */
 	protected function _addUser( $id, $email, $username )
 	{
-		$model = new Chrome_Model_User_Database();
-        $model->setDatabaseFactoryName($this->getDatabaseFactoryName());
+		$model = new Chrome_Model_User_Database($this->_applicationContext);
         return $model->addUser( $id, $email, $username );
-        //Chrome_Model_User::getInstance()->addUser( $id, $email, $username );
 	}
 
 	protected function _deleteActivationKey( $activationKey )

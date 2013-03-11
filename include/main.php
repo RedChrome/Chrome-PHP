@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2013 19:33:29] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 16:27:39] --> $
  * @link       http://chrome-php.de
  */
 
@@ -78,12 +78,6 @@ interface Chrome_Front_Controller_Interface extends Chrome_Exception_Processable
     public function setResponse(Chrome_Response $response);
 
     /**
-     *
-     * @return Chrome_Request_Handler_Interface
-     */
-    public function getRequestHandler();
-
-    /**
      * init()
      *
      * @return void
@@ -96,6 +90,8 @@ interface Chrome_Front_Controller_Interface extends Chrome_Exception_Processable
      * @return void
      */
     public function execute();
+
+    public function getApplicationContext();
 }
 
 /**
@@ -106,6 +102,11 @@ interface Chrome_Front_Controller_Interface extends Chrome_Exception_Processable
 class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
 {
     private static $_instance = null;
+
+    /**
+     * @var Chrome_Application_Context_Interface
+     */
+    protected $_applicationContext = null;
 
     /**
      * @var Chrome_Filter_Chain_Preprocessor
@@ -184,16 +185,6 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
     }
 
     /**
-     * Returns the request handler
-     *
-     * @return Chrome_Request_Handler_Interface
-     */
-    public function getRequestHandler()
-    {
-        return $this->_requestHandler;
-    }
-
-    /**
      * Chrome_Front_Controller::getInstance()
      *
      * @return Chrome_Front_Controller
@@ -234,6 +225,12 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
      */
     public function init()
     {
+        $datbaseInitializer = new Chrome_Database_Initializer();
+        $datbaseInitializer->initialize();
+
+        $this->_applicationContext = new Chrome_Application_Context();
+        $this->_applicationContext->setDatabaseFactory($datbaseInitializer->getFactory());
+
         // only log sth. if we're in developer mode
         if(CHROME_DEVELOPER_STATUS === true) {
             Chrome_Log::setLogger(new Chrome_Logger_File(TMP . CHROME_LOG_DIR . CHROME_LOG_FILE));
@@ -249,16 +246,17 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
         require_once LIB.'core/require/model.php';
         // init require-class, can be skipped if every class is defined
         // but if not, then we get nasty error, that cannot get handled easily
-        $require = new Chrome_Require(new Chrome_Model_Require_Cache(new Chrome_Model_Require_DB()));
+        $require = new Chrome_Require(new Chrome_Model_Require_Cache(new Chrome_Model_Require_DB($this->_applicationContext)));
         $require->setExceptionHandler(new Chrome_Exception_Handler_Default());
         $require->loadRequiredFiles();
-        // startup registry, can be skipped
-        #$registry = Chrome_Registry::getInstance();
 
         $hash = Chrome_Hash::getInstance();
 
         $cookie  = new Chrome_Cookie($hash);
         $session = new Chrome_Session($cookie, $hash);
+
+        $config  = Chrome_Config::getInstance();
+        $config->setModel(new Chrome_Model_Config_Cache(new Chrome_Model_Config_DB($this->_applicationContext)));
 
         // distinct which request is sent
         $requestFactory = new Chrome_Request_Factory();
@@ -273,9 +271,10 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             $requestFactory->addRequestObject(new Chrome_Request_Handler_HTTP($cookie, $session));
         }
 
-        $this->_requestHandler = $requestFactory->getRequest();
+        $reqHandler = $requestFactory->getRequest();
         $this->_requestData = $requestFactory->getRequestDataObject();
 
+        $this->_applicationContext->setRequestHandler($reqHandler);
 
 
         // startup filters
@@ -287,11 +286,11 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
         {
             $handler = new Chrome_Exception_Handler_Authentication();
 
-            $authentication = Chrome_Authentication::getInstance();
+            $authentication = new Chrome_Authentication();
             $authentication->setExceptionHandler($handler);
 
-            $dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database());
-            $cookieAuth = new Chrome_Authentication_Chain_Cookie(new Chrome_Model_Authentication_Cookie(), $cookie);
+            $dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($this->_applicationContext));
+            $cookieAuth = new Chrome_Authentication_Chain_Cookie(new Chrome_Model_Authentication_Cookie($this->_applicationContext), $cookie);
             $sessionAuth = new Chrome_Authentication_Chain_Session($session);
 
             // set authentication chains in the right order
@@ -301,10 +300,10 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
 
             // set authorisation service
             //Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB())); // better one, but not finished ;)
-            $adapter = Chrome_Authorisation_Adapter_Default::getInstance();
-            $adapter->setModel(new Chrome_Model_Authorisation_Default_DB());
+            $adapter = new Chrome_Authorisation_Adapter_Default($authentication);
+            $adapter->setModel(new Chrome_Model_Authorisation_Default_DB($this->_applicationContext));
 
-            Chrome_Authorisation::setAuthorisationAdapter($adapter);
+            $authorisation = new Chrome_Authorisation($adapter);
 
             // first authentication
             // user gets authenticated if session or cookie is set
@@ -316,17 +315,20 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             $authentication->authenticate();
         }
 
+        $this->_applicationContext->setAuthentication($authentication);
+        $this->_applicationContext->setAuthorisation($authorisation);
+
         $this->_router = new Chrome_Router();
         $this->_router->setExceptionHandler(new Chrome_Exception_Handler_Default());
         // enable route matching
         {
             //import(array('Chrome_Route_Static', 'Chrome_Route_Dynamic') );
             // matches static routes
-            $this->_router->addRoute(new Chrome_Route_Static(new Chrome_Model_Route_Static_Cache(new Chrome_Model_Route_Static_DB())));
+            $this->_router->addRoute(new Chrome_Route_Static(new Chrome_Model_Route_Static_Cache(new Chrome_Model_Route_Static_DB($this->_applicationContext))));
             // matches dynamic created routes
-            $this->_router->addRoute(new Chrome_Route_Dynamic(new Chrome_Model_Route_Dynamic_Cache(new Chrome_Model_Route_Dynamic_DB())));
+            $this->_router->addRoute(new Chrome_Route_Dynamic(new Chrome_Model_Route_Dynamic_Cache(new Chrome_Model_Route_Dynamic_DB($this->_applicationContext))));
             // matches routes to administration site
-            $this->_router->addRoute(new Chrome_Route_Administration(new Chrome_Model_Route_Administration()));
+            $this->_router->addRoute(new Chrome_Route_Administration(new Chrome_Model_Route_Administration($this->_applicationContext)));
         }
 
         Chrome_View::setPluginObject(new Chrome_View_Plugin_Facade());
@@ -350,7 +352,7 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             $resource = $this->_router->route(new Chrome_URI($this->_requestData, true), $this->_requestData);
 
             // create controller class and set exception handler
-            $controllerFactory = new Chrome_Controller_Factory($this->_requestHandler);
+            $controllerFactory = new Chrome_Controller_Factory($this->_applicationContext);
             $controllerFactory->loadControllerClass($resource->getFile());
             $this->_controller = $controllerFactory->build($resource->getClass());
             $this->_controller->setExceptionHandler(new Chrome_Exception_Handler_Default());
@@ -362,7 +364,19 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
 
             $this->_controller->execute();
 
-            Chrome_Design::getInstance()->render($this->_controller);
+
+            {
+                $design =  Chrome_Design::getInstance();
+
+                $factory = new Chrome_Design_Factory($this->_applicationContext);
+                $theme = $factory->getDesign();
+
+                $design->setDesign($theme);
+
+                $design->render($this->_controller);
+
+            }
+
 
             $this->_postprocessor->processFilters($this->_requestData, $this->_response);
 
@@ -392,5 +406,9 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
     public static function getExceptionHandler()
     {
         return self::$_exceptionHandler;
+    }
+
+    public function getApplicationContext() {
+        return $this->_applicationContext;
     }
 }

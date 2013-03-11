@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authorisation
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 16:30:09] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 01:05:56] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -52,11 +52,9 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
     const CHROME_AUTHORISATION_DEFAULT_MAX_GROUPS = 24;
 
     /**
-     * Instance of this class
-     *
-     * @var Chrome_Authorisation_Adapter_Default
+     * @var Chrome_Authentication_Interface
      */
-    private static $_instance = null;
+    protected $_auth = null;
 
     /**
      * Instance of a model, which fetches the required information.
@@ -100,27 +98,12 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
     /**
      * __construct()
      *
+     * @param Chrome_Authentication_Interface $auth
      * @return Chrome_Authorisation_Adapter_Default
      */
-    private function __construct()
+    public function __construct(Chrome_Authentication_Interface $auth)
     {
-
-    }
-
-    /**
-     * getInstance()
-     *
-     * Singleton pattern
-     *
-     * @return Chrome_Authorisation_Adapter_Default
-     */
-    public static function getInstance()
-    {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
+        $this->_auth = $auth;
     }
 
     /**
@@ -137,13 +120,20 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
     }
 
     /**
-     * setDataContainer()
      *
-     * @param Chrome_Authentication_Data_Container $container
      * @return void
      */
-    public function setDataContainer(Chrome_Authentication_Data_Container $container)
+    protected function _setUp()
     {
+        if(!$this->_auth->isAuthenticated()) {
+            //throw new Chrome_Exception('Authentication must have been done before authorisation!');
+            // no access
+            $this->_int = 0;
+            return;
+        }
+
+        $container = $this->_auth->getAuthenticationDataContainer();
+
         $this->_userID  = (int) $container->getID();
 
         $this->_groupID = $this->_model->getUserGroupById($this->_userID);
@@ -162,6 +152,8 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
      */
     public function isAllowed(Chrome_Authorisation_Resource_Interface $resource)
     {
+        $this->_setUp();
+
         $assert = $resource->getAssert();
 
         if($assert !== null) {
@@ -179,6 +171,8 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
             return $this->_cache[$id][$transformation];
         }
 
+
+
         // int has to be between 0 and 2^(self::CHROME_AUTHORISATION_DEFAULT_MAX_GROUPS+1) - 1
         $int    = $this->_model->getAccessById($id, $transformation);
         $access = ($int & $this->_int);
@@ -191,7 +185,6 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
 
         $this->_cache[$id][$transformation] = $access;
         return $access;
-
     }
 
     /**
@@ -219,6 +212,8 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
      */
     public function getGroupId()
     {
+        $this->_setUp();
+
         return $this->_groupID;
     }
 }
@@ -232,11 +227,8 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
  */
 class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_Database_Abstract
 {
-    protected $_dbInterface = 'model';
-
-    public function __construct()
-    {
-
+    protected function _setDatabaseOptions() {
+        $this->_dbInterface = 'model';
     }
 
     public function getAccessById($id, $transformation)

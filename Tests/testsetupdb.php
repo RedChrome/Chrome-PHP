@@ -16,14 +16,13 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 21:33:37] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.03.2013 16:24:35] --> $
  * @author     Alexander Book
  */
 require_once 'testsetup.php';
 
 require_once LIB.'core/database/database.php';
 
-// enable autoloading of database classes
 new Chrome_Database_Loader();
 
 // configure default database connection
@@ -42,7 +41,6 @@ $dbRegistry = new Chrome_Database_Registry_Connection();
 $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
 
 $databaseFactory = new Chrome_Database_Factory($dbRegistry, new Chrome_Database_Registry_Statement());
-Chrome_Database_Facade::setFactory(TEST_FACTORY, $databaseFactory);
 
 if(TEST_DATABASE_CONNECTIONS === true) {
 
@@ -55,4 +53,39 @@ if(TEST_DATABASE_CONNECTIONS === true) {
     $mysqliTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
     $mysqliTestConnection->connect();
     $dbRegistry->addConnection('mysqli_test', $mysqliTestConnection, true);
+}
+
+global $databaseContext;
+$databaseContext = new Chrome_Application_Context();
+$databaseContext->setDatabaseFactory($databaseFactory);
+
+if(class_exists('PHPUnit_Framework_TestCase')) {
+
+    abstract class Chrome_TestCase extends PHPUnit_Framework_TestCase
+    {
+        protected $_session, $_cookie, $_appContext;
+
+        public function __construct($name = NULL, array $data = array(), $dataName = '') {
+
+            global $databaseContext;
+            global $applicationContext;
+
+            if($applicationContext !== null) {
+
+                $this->_appContext = $applicationContext;
+
+                $this->_session = $this->_appContext->getRequestHandler()->getRequestData()->getSession();
+                $this->_cookie  = $this->_appContext->getRequestHandler()->getRequestData()->getCookie();
+            } else {
+                $appContext = new Chrome_Application_Context();
+
+                $appContext->setDatabaseFactory($databaseContext->getDatabaseFactory());
+
+                $this->_appContext = $appContext;
+            }
+
+
+            parent::__construct($name, $data, $dataName);
+        }
+    }
 }

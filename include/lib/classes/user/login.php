@@ -2,8 +2,6 @@
 
 interface Chrome_User_Login_Interface
 {
-    public static function getInstance();
-
     public function isLoggedIn();
 
     public function checkIsLoggedIn();
@@ -17,17 +15,6 @@ interface Chrome_User_Login_Interface
 
 class Chrome_User_Login implements Chrome_User_Login_Interface
 {
-    private static $_instance = null;
-
-    public static function getInstance()
-    {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
-    }
-
     /**
      * @return bool
      */

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 17:56:10] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 12:32:21] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -49,7 +49,7 @@ class Chrome_Design_Style_Chrome extends Chrome_Design_Style_Abstract
             $this->_renderableList->add(new Chrome_View_Footer_Benchmark());
 
             require_once BASEDIR.'modules/footer/var_dump/var_dump.php';
-            $controller = new Chrome_Controller_Footer_VarDump($controller->getRequestHandler());
+            $controller = new Chrome_Controller_Footer_VarDump($controller->getApplicationContext());
             $controller->execute();
             $controller->addViews($this->_renderableList);
 
@@ -63,7 +63,7 @@ class Chrome_Design_Style_Chrome extends Chrome_Design_Style_Abstract
             $this->_renderableList->add(new Chrome_View_Header_Header());
 
             require_once BASEDIR.'modules/box/login/controller.php';
-            $controller = new Chrome_Controller_Box_Login($controller->getRequestHandler());
+            $controller = new Chrome_Controller_Box_Login($controller->getApplicationContext());
             $controller->execute();
             $controller->addViews($this->_renderableList);
 

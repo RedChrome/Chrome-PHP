@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 21:00:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 12:31:12] --> $
  * @author     Alexander Book
  */
 
@@ -25,11 +25,11 @@ if(CHROME_PHP !== true) die();
 
 class Chrome_Controller_Factory
 {
-    protected $_requestHandler = null;
+    protected $_appContext = null;
 
-    public function __construct(Chrome_Request_Handler_Interface $requestHandler)
+    public function __construct(Chrome_Application_Context $appContext)
     {
-        $this->_requestHandler = $requestHandler;
+        $this->_appContext = $appContext;
     }
 
     public function build($controllerClass)
@@ -38,7 +38,7 @@ class Chrome_Controller_Factory
             throw new Chrome_Exception('Cannot initialize controller "'.$controllerClass.'" if class is not loaded!');
         }
 
-        $controller = new $controllerClass($this->_requestHandler);
+        $controller = new $controllerClass($this->_appContext);
 
         return $controller;
     }

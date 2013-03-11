@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 17:48:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:58:23] --> $
  * @author     Alexander Book
  */
 
@@ -48,7 +48,7 @@ require_once 'factory.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
-interface Chrome_Design_Interface extends Chrome_Design_Abstract_Interface
+interface Chrome_Design_Interface
 {
     public function getDesign();
 
@@ -73,9 +73,9 @@ class Chrome_Design implements Chrome_Design_Interface
 
     private $_mapper = null;
 
-    private function __construct()
+    public function __construct()
     {
-        $this->_createDesign();
+
     }
 
     public static function getInstance()
@@ -85,6 +85,14 @@ class Chrome_Design implements Chrome_Design_Interface
         }
 
         return self::$_instance;
+    }
+
+    public function setDesign(Chrome_Design_Abstract_Interface $design) {
+        $this->_design = $design;
+
+        $this->_style = $this->_design->getStyle();
+
+        $this->_mapper = $this->_design->getMapper();
     }
 
     public function getDesign()
@@ -100,19 +108,6 @@ class Chrome_Design implements Chrome_Design_Interface
     public function getComposite()
     {
         return $this->_composite;
-    }
-
-    protected function _createDesign()
-    {
-        if($this->_design !== null) {
-            return;
-        }
-
-        $this->_design = Chrome_Design_Factory::getInstance()->getDesign();
-
-        $this->_style = $this->_design->getStyle();
-
-        $this->_mapper = $this->_design->getMapper();
     }
 
     public function render(Chrome_Controller_Interface $controller)

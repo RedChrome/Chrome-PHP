@@ -1,9 +1,9 @@
 <?php
 
-require_once 'Tests/testsetup.php';
+require_once 'Tests/testsetupdb.php';
 require_once 'Tests/dummies/authentication/resource.php';
 
-class AuthenticationChainDatabaseTest extends PHPUnit_Framework_TestCase
+class AuthenticationChainDatabaseTest extends Chrome_TestCase
 {
     protected $_chain = null;
 
@@ -16,8 +16,7 @@ class AuthenticationChainDatabaseTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         if($this->_model === null) {
-            $this->_model = new Chrome_Model_Authentication_Database();
-            $this->_model->setDatabaseFactoryName(TEST_FACTORY);
+            $this->_model = new Chrome_Model_Authentication_Database($this->_appContext);
         }
 
         $this->_chain = new Chrome_Authentication_Chain_Database($this->_model, $this->_updateTime, $this->_setTime);

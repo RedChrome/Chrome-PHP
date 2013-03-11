@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 17:45:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:30:19] --> $
  * @link       http://chrome-php.de
  */
 
@@ -109,14 +109,14 @@ abstract class Chrome_Design_Mapper_Database_Static_Abstract implements Chrome_D
 
 class Chrome_Model_Design_Mapper_Static extends Chrome_Model_Database_Abstract
 {
-    public function __construct() {
+    protected function _setDatabaseOptions() {
         $this->_dbInterface = 'simple';
         $this->_dbResult = 'assoc';
     }
 
     public function getPositionAndPriorityById($id) {
 
-        $db = $this->_getDBInterface(true);
+        $db = $this->_getDBInterface();
 
         $result = $db->query('SELECT `position`, `priority` FROM cpp_design_mapper_static WHERE `view_id` = "?"', array($id) );
 

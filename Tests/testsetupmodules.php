@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 13:43:10] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 17:04:30] --> $
  * @author     Alexander Book
  */
 
@@ -32,22 +32,12 @@ require_once 'testsetupdb.php';
 require_once 'include/main.php';
 Chrome_Front_Controller::getInstance();
 
+global $applicationContext, $databaseContext;
+$context = Chrome_Front_Controller::getInstance()->getApplicationContext();
+$applicationContext = clone $context;
+$applicationContext->setDatabaseFactory($databaseContext->getDatabaseFactory());
+
+
 $_SERVER = $_tempServer;
 $GLOBALS = $_tempGlobals;
 $_COOKIE = $_tempCookie;
-
-class Chrome_Test extends PHPUnit_Framework_TestCase
-{
-    protected $_session, $_cookie;
-
-    public function __construct($name = NULL, array $data = array(), $dataName = '') {
-        $this->_session = Chrome_Front_Controller::getInstance()->getRequestHandler()->getRequestData()->getSession();
-        $this->_cookie  = Chrome_Front_Controller::getInstance()->getRequestHandler()->getRequestData()->getCookie();
-        parent::__construct($name, $data, $dataName);
-    }
-
-
-    public function test() {
-        // do nothing, just to avoid a warning "No tests found in class Chrome_Test"
-    }
-}

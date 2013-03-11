@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 16:28:40] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 12:31:26] --> $
  * @author     Alexander Book
  */
 
@@ -29,9 +29,9 @@ if(CHROME_PHP !== true) die();
  */
 abstract class Chrome_Controller_Module_Abstract extends Chrome_Controller_Abstract
 {
-    public function __construct(Chrome_Request_Handler_Interface $reqHandler)
+    public function __construct(Chrome_Application_Context_Interface $appContext)
     {
-        parent::__construct($reqHandler);
+        parent::__construct($appContext);
 
         $this->_initialize();
 

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 17:34:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:40:11] --> $
  * @author     Alexander Book
  */
 
@@ -168,11 +168,10 @@ class Chrome_Model_Route_Dynamic_Cache extends Chrome_Model_Cache_Abstract
  */
 class Chrome_Model_Route_Dynamic_DB extends Chrome_Model_Database_Abstract
 {
-    protected $_dbInterface = 'model';
 
-    public function __construct()
+    protected function _setDatabaseOptions()
     {
-
+        $this->_dbInterface = 'model';
     }
 
     public function getResourcesAsArray()

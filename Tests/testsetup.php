@@ -16,13 +16,12 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 21:16:11] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 17:31:02] --> $
  * @author     Alexander Book
  */
 
 if(!defined('CHROME_PHP')) {
     define('CHROME_PHP', true);
-    define('DB_DEFAULT_CONNECTION', 'testingConnection');
 }
 
 $_SERVER['REQUEST_URI'] = '/root/CHROME_2/';
@@ -32,6 +31,7 @@ $_SERVER['SCRIPT_NAME'] = 'index.php';
 $_SERVER['SERVER_NAME'] = "localhost";
 
 require_once 'include/config.php';
+require_once LIB.'core/core.php';
 require_once LIB.'core/error/exception.php';
 require_once LIB.'core/mime.php';
 require_once LIB.'core/file_system/file_system.php';
@@ -44,4 +44,3 @@ define('MYSQL_DB', 'chrome_2_test');
 define('MYSQL_PORT', 3306);
 
 define('TEST_DATABASE_CONNECTIONS', true);
-define('TEST_FACTORY', 'test');

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Converter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 19:42:32] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 01:01:35] --> $
  * @author     Alexander Book
  */
 
@@ -43,7 +43,6 @@ class Chrome_Converter_Default extends Chrome_Converter_Abstract
 		'boolean',
 		'string',
 		'str',
-		'escape',
 		'url_encode',
 		'url_decode',
 		'strip_repeat',
@@ -60,7 +59,6 @@ class Chrome_Converter_Default extends Chrome_Converter_Abstract
 		'boolean' => '_toBool',
 		'string' => '_toString',
 		'str' => '_toString',
-		'escape' => '_escape',
 		'url_encode' => '_urlEncode',
 		'url_decode' => '_urlDecode',
 		'strip_repeat' => '_stripRepeat',
@@ -180,26 +178,6 @@ class Chrome_Converter_Default extends Chrome_Converter_Abstract
 
 			$var = strip_tags( $var, $allowedHTML );
 		}
-	}
-
-	/**
-	 * Chrome_Converter_Default::_escape()
-	 *
-	 * @param mixed $var
-	 * @param array $option: (Chrome_DB_Interface_Abstract) 'interface': which interface should be used
-	 */
-	protected function _escape( &$var, $option )
-	{
-		if( isset( $option['interface'] ) ) {
-			if( $option['interface'] instanceof Chrome_Database_Interface_Interface ) {
-				$obj = $option['interface'];
-			} else {
-				throw new Chrome_Exception( 'Option "interface" must be an instance of Chrome_DB_Interface_Abstract! Cannot access an escape method without a valid DB_Interface in Chrome_Converter_Default::_escape()!' );
-			}
-		} else {
-			$obj = Chrome_Database_Facade::getFactory()->buildInterface(Chrome_Database_Factory_Interface::DEFAULT_INTERFACE, Chrome_Database_Factory_Interface::DEFAULT_RESULT);
-		}
-		$var = $obj->escape( $var );
 	}
 }
 

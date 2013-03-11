@@ -17,7 +17,8 @@ if($query == false) {
 }
 
 $queries = explode(';', $query);
-$db = Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('simple', 'assoc');
+$db = $databaseContext->getDatabaseFactory()->buildInterface('simple', 'assoc');
+//Chrome_Database_Facade::getFactory(TEST_FACTORY)->buildInterface('simple', 'assoc');
 
 foreach($queries as $_query) {
 

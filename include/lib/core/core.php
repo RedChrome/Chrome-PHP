@@ -17,7 +17,7 @@
  * @subpackage Chrome.Core
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 18:24:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 12:23:56] --> $
  * @author     Alexander Book
  */
 
@@ -152,3 +152,9 @@ require_once 'language.php';
  * load require class to require other files
  */
 require_once 'require/require.php';
+
+/**
+ * load application interface
+ */
+require_once BASEDIR.'application.php';
+
