@@ -75,7 +75,7 @@ interface Chrome_Form_Interface
     /**
      * ATTRIBUTE_METHOD: tells where the data comes from, post or get?
      * ATTRIBUTE_DECORATOR: sets the extension for decorators, default is Default, so
-     *                      all decorators come from Chrome_Form_Decorator_XXX_Default
+     *                      all decorators come from Chrome_Form_Decorator_XYZ_Default
      * ATTRIBUTE_ACTION: sets the form action
      * ATTRIBUTE_NAME: sets the form name
      * ATTRIBUTE_ID: sets the form id

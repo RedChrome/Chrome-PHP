@@ -76,7 +76,7 @@ interface Chrome_Database_Adapter_Result_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Interface_Interface, Chrome_Database_Adapter_Result_Interface
+interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Result_Interface
 {
     /**
      * @param Chrome_Database_Connection_Interface $connection

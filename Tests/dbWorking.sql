@@ -555,11 +555,11 @@ CREATE TABLE IF NOT EXISTS `cp1_require` (
 --
 
 INSERT INTO `cp1_require` (`id`, `name`, `path`, `activated`, `priority`, `class_loader`) VALUES
-(1, 'Chrome_Require_Filter', 'plugins/Require/filter.php', 1, 4, 1),
-(2, 'Chrome_Require_Exception', 'plugins/Require/exception.php', 1, 4, 1),
-(3, 'Chrome_Require_Validator', 'plugins/Require/validator.php', 1, 4, 1),
-(5, 'Chrome_Require_Design', 'plugins/Require/design.php', 1, 4, 1),
-(6, 'Chrome_Require_Form', 'plugins/Require/form.php', 1, 4, 1),
+(1, 'Chrome_Require_Loader_Filter', 'plugins/Require/filter.php', 1, 4, 1),
+(2, 'Chrome_Require_Loader_Exception', 'plugins/Require/exception.php', 1, 4, 1),
+(3, 'Chrome_Require_Loader_Validator', 'plugins/Require/validator.php', 1, 4, 1),
+(5, 'Chrome_Require_Loader_Design', 'plugins/Require/design.php', 1, 4, 1),
+(6, 'Chrome_Require_Loader_Form', 'plugins/Require/form.php', 1, 4, 1),
 (7, 'Chrome_View_Helper_HTML', 'plugins/View/html.php', 1, 6, 0),
 (8, 'Chrome_View_Helper_Decorator', 'plugins/View/decorator.php', 1, 6, 0),
 (9, 'Chrome_View_Helper_Error', 'plugins/View/error.php', 1, 6, 0),

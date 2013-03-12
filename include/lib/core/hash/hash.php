@@ -25,16 +25,40 @@ if(CHROME_PHP !== true)
     die();
 
 /**
- * @todo: finish hash interface
+ * 
  */
 interface Chrome_Hash_Interface
 {
-
+    /**
+     * Hashes $string appending $salt with the default hash algorithm 
+     * 
+     * @param string $string string to hash
+     * @param string $salt salt to append
+     * @return string the hashed string with salt
+     */
+    public function hash($string, $salt = '');
+    
+    /**
+     * Hashes a string
+     *
+     * @param string $string string you want to hash
+     * @param string $algorithm hash const. e.g. MHASH_CRC32 OR 'crc32'
+     * @return string hashed string
+     */
+    public function hash_algo($string, $algorithm, $salt = '');
+    
+    /**
+     * Get random chars, only chars of the american keyboard
+     *
+     * @param int $numbers how many chars?
+     * @return string
+     */
+    public static function randomChars($numbers = 5);
 }
 
 /**
  *
- *
+ * @todo refactor this class... looks ugly 
  * @package CHROME-PHP
  * @subpackage Chrome.Hash
  */

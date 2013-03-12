@@ -25,38 +25,6 @@ if(CHROME_PHP !== true)
     die();
 
 /**
- * @todo: remove
- * @package CHROME-PHP
- * @subpackage Chrome.Require
- */
-class Chrome_Model_Require extends Chrome_Model_Decorator_Abstract
-{
-    /**
-     * Chrome_Model_Require::__construct()
-     *
-     * Constructor, sets decorator
-     *
-     * @return Chrome_Model_Require
-     */
-    public function __construct(Chrome_Model_Interface $model)
-    {
-        $this->_decorator = $model;
-    }
-
-    public function setClass($class, $file) {
-        return $this->_decorator->setClass($class, $file);
-    }
-
-    public function getClasses() {
-        return $this->_decorator->getClasses();
-    }
-
-    public function getClass($name) {
-        return $this->_decorator->getClass($name);
-    }
-}
-
-/**
  * Chrome_Model_Require_DB
  *
  * @package    CHROME-PHP

@@ -26,29 +26,65 @@ if(CHROME_PHP !== true)
 
 /**
  * defines the path to all validator classes (plugins)
- *
+ * @todo is this used? if not, remove it
  * @var string
  */
 define('VALIDATOR', LIB.'plugins/Validate/');
 
+
+
 /**
- * @todo add doc for interface
- *
+ * Interface for validator classes
+ * 
+ * The validation logic should be inside validate().
+ * 
  * @package CHROME-PHP
  * @subpackage Chrome.Validator
  */
 interface Chrome_Validator_Interface
-{
+{    
+    /**
+     * Sets the data to validate
+     * 
+     * @param mixed $data
+     * @return void
+     */
     public function setData($data);
-
+    
+    /**
+     * Sets additional options for validator
+     * 
+     * @param array $options array containing options, see impl. for concrete options
+     * @return void
+     */
     public function setOptions(array $options);
-
+    
+    /**
+     * Validates the data
+     * 
+     * @return void
+     */
     public function validate();
-
+    
+    /**
+     * Returns true if data is valid
+     * 
+     * @return bool true if data is valid, false else
+     */
     public function isValid();
-
+    
+    /**
+     * Returns one error while validating or an error with the data
+     * 
+     * @return string
+     */
     public function getError();
-
+    
+    /**
+     * Returns all errors
+     * 
+     * @return array numerically indexed
+     */
     public function getAllErrors();
 }
 
@@ -139,7 +175,7 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
     public function validate() {
         //if($this->_isValidated === false) {
             $this->_validate();
-            $this->_isValidated = true;
+        //    $this->_isValidated = true;
         //}
     }
 
@@ -149,7 +185,7 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      */
     public function setData($data) {
         $this->_data = $data;
-        $this->_isValidated = false;
+        //$this->_isValidated = false;
     }
 
 	/**
