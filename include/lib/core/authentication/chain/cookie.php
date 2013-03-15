@@ -195,7 +195,7 @@ class Chrome_Model_Authentication_Cookie extends Chrome_Model_Database_Abstract
             return null;
         }
 
-        $db->prepare('authenticationDoesIdAndTokenExist')
+        $db->loadQuery('authenticationDoesIdAndTokenExist')
             ->execute(array($this->_options['dbTable'], $id, $tokenEscaped));
 
         return $db->getResult();
@@ -206,7 +206,7 @@ class Chrome_Model_Authentication_Cookie extends Chrome_Model_Database_Abstract
         $db = $this->_getDBInterface();
 
         // update database
-        $db->prepare('authenticationUpdateTokenById')
+        $db->loadQuery('authenticationUpdateTokenById')
             ->execute(array($this->_options['dbTable'], $token, $id));
     }
 

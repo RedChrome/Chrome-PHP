@@ -20,7 +20,7 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
         $this->assertSame($db, $db->setModel($model));
     }
 
-    public function testPrepare()
+    public function testloadQuery()
     {
         $con = new Chrome_Database_Connection_Dummy('not Null');
 
@@ -31,14 +31,14 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
 
         $db->setModel($model);
 
-        $db->prepare('anyKey');
+        $db->loadQuery('anyKey');
 
         $db->execute();
 
         $this->assertEquals('any string', $db->getQuery());
 
         $this->setExpectedException('Chrome_Exception_Database');
-        $db->prepare('anything else');
+        $db->loadQuery('anything else');
     }
 
     public function testDefaultModelImplementation()
@@ -50,7 +50,7 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
 
         $this->setExpectedException('Chrome_Exception');
 
-        $db->prepare('notExisting');
+        $db->loadQuery('notExisting');
     }
 
     public function getStatement($key)

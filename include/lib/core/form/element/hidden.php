@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 16:28:28] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.03.2013 14:16:32] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -83,9 +83,7 @@ class Chrome_Form_Element_Hidden extends Chrome_Form_Element_Abstract
             return $this->_data;
         }
 
-        $data = $this->_form->getSentData($this->_id);
-
-        $this->_data = $this->_convert($data);
+        $this->_data = $this->_convert($this->_form->getSentData($this->_id));
 
         return $this->_data;
     }

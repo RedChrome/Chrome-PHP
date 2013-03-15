@@ -17,7 +17,7 @@
  * @subpackage Chrome.Response
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 17:30:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.03.2013 14:07:44] --> $
  * @author     Alexander Book
  */
 
@@ -32,7 +32,9 @@ class Chrome_Response_AJAX extends Chrome_Response_Abstract
 {
 	private static $_instance = null;
 
-	private $_body 		= array();
+    private function __construct() {
+        $this->_body = array();
+    }
 
     public function __destruct()
     {
@@ -65,16 +67,6 @@ class Chrome_Response_AJAX extends Chrome_Response_Abstract
     {
 		$this->_body = array();
 	}
-
- 	public function getBody()
-    {
- 		return $this->_body;
- 	}
-
- 	public function setBody($string)
-    {
- 		$this->_body = $string;
- 	}
 
 	public static function getInstance()
     {

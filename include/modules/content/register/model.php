@@ -50,7 +50,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 		$db = $this->_getDBInterface();
         $db->clear();
 
-		$result = $db->prepare('registerCheckKeyExists')->execute(array($key));
+		$result = $db->loadQuery('registerCheckKeyExists')->execute(array($key));
 
 		// key is unique
 		if( $result->isEmpty() ) {
@@ -69,7 +69,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 		$password = Chrome_Hash::getInstance()->hash_algo( $password, CHROME_USER_HASH_ALGORITHM, $passwordSalt );
 		try {
 
-            $db->prepare('registerAddRegistrationRequest')
+            $db->loadQuery('registerAddRegistrationRequest')
                 ->execute(array($name,$password, $passwordSalt, $email, CHROME_TIME, $activationKey));
 		}
 		catch ( Chrome_Exception_Database $e ) {
@@ -89,7 +89,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 		try {
 			$db = $this->_getDBInterface();
             $db->clear();
-            $resultObj = $db->prepare('registerGetRegistrationRequest')
+            $resultObj = $db->loadQuery('registerGetRegistrationRequest')
                 ->execute(array($activationKey));
 
 
@@ -161,7 +161,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 		try {
 
 			$db = $this->_getDBInterface();
-    		$db->prepare('registerDeleteActivationKey')->execute(array($activationKey));
+    		$db->loadQuery('registerDeleteActivationKey')->execute(array($activationKey));
 		}
 		catch ( Chrome_Exception_DB $e ) {
 			throw new Chrome_Exception( 'Could not delete activation key "' . $activationKey . '"', 0, $e );

@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 12:43:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.03.2013 20:11:59] --> $
  * @link       http://chrome-php.de
  */
 
@@ -69,17 +69,11 @@ interface Chrome_Database_Interface_Interface
     public function getAdapter();
 
     /**
-     * Executes a prepared query using the provieded parameters. All parameters are getting escaped.
-     * A prepared query might be a prepared query (by the usual understanding) or a query which is loaded from a file etc.. It dependes on the interface you use.
+     * Returns the statement registry, set in constructor
      *
-     * Note: to prepare a query you have to use a specific interface. This interface does not provide the functionality.
-     *
-     * To execute a given query use {@link query()}.
-     *
-     * @param array $parameters containing the parameters in numerical order to replace '?' in query string. every parameter get escaped
-     * @return Chrome_Database_Result_Interface the result class containing the answer for the prepared query
+     * @return Chrome_Database_Registry_Statement_Interface
      */
-    public function execute(array $parameters = array());
+    public function getStatementRegistry();
 
     /**
      * Executes a given query with the given parameters. All parameters are getting escaped.
@@ -147,6 +141,13 @@ interface Chrome_Database_Interface_Interface
     public function clear();
 }
 
+interface Chrome_Database_Interface_Decorator_Interface extends Chrome_Database_Interface_Interface
+{
+    public function setDecorable(Chrome_Database_Interface_Interface $obj);
+
+    public function getDecorable();
+}
+
 abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Interface_Interface
 {
     protected $_query = null;
@@ -166,15 +167,6 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
         $this->_statementRegistry = $statementRegistry;
         $this->_adapter = $adapter;
         $this->_result = $result;
-    }
-
-    public function execute(array $parameters = array())
-    {
-        if(count($parameters) >= 1) {
-            $this->setParameters($parameters, true);
-        }
-
-        return $this->query($this->_query);
     }
 
     public function query($query, array $params = array())
@@ -239,6 +231,11 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
         return $this->_adapter;
     }
 
+    public function getStatementRegistry()
+    {
+        return $this->_statementRegistry;
+    }
+
     public function escape($data)
     {
         return $this->_adapter->escape($data);
@@ -275,5 +272,41 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
         // Note: you have to escape % (if your using queries: select * form test where val LIKE "test%") with %
         // so the query would look like: select * from test where val LIKE "test%%"
         return vsprintf($statement, $this->_params);
+    }
+}
+
+abstract class Chrome_Database_Interface_Decorator_Abstract extends Chrome_Database_Interface_Abstract implements Chrome_Database_Interface_Decorator_Interface
+{
+    protected $_decorable = null;
+
+    public function __call($methodName, $arguments)
+    {
+        if($this->_decorable !== null) {
+            return call_user_func_array(array($this->_decorable, $methodName), $arguments);
+        }
+    }
+
+    public function setDecorable(Chrome_Database_Interface_Interface $obj)
+    {
+        $this->_decorable = $obj;
+    }
+
+    public function getDecorable()
+    {
+        return $this->_decorable;
+    }
+
+    public function clear()
+    {
+        if($this->_decorable !== null) {
+            $this->_decorable->clear();
+            $this->_adapter = $this->_decorable->getAdapter();
+            $this->_result  = $this->_decorable->getResult();
+        }
+
+        $this->_params    = null;
+        $this->_query     = null;
+        $this->_sentQuery = null;
+        return $this;
     }
 }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:57:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.03.2013 22:37:25] --> $
  * @author     Alexander Book
  */
 
@@ -72,8 +72,6 @@ class Chrome_Design_Factory implements Chrome_Design_Factory_Interface
 
         $className = 'Chrome_Design_'.ucfirst($design);
         return new $className($this->_applicationContext);
-
-        //return call_user_func_array(array('Chrome_Design_'.ucfirst($design), 'getInstance'), array());
     }
 
     public function getDesign()

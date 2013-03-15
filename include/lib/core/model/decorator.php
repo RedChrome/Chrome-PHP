@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:01:02] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.03.2013 19:45:20] --> $
  * @author     Alexander Book
  */
 
@@ -44,6 +44,9 @@ abstract class Chrome_Model_Decorator_Abstract extends Chrome_Model_Abstract
 
 	}
 
+    /**
+     *@todo rename it to setDecorable
+     */
     public function setDecorator(Chrome_Model_Abstract $instance) {
         $this->_decorator = $instance;
     }

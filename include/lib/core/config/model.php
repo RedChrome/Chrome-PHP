@@ -41,7 +41,7 @@ class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
     {
         $db = $this->_getDBInterface();
 
-        $result = $db->prepare('configLoadConfiguration')->execute();
+        $result = $db->loadQuery('configLoadConfiguration')->execute();
         $config = array();
         foreach($result as $item) {
 
@@ -56,7 +56,7 @@ class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
     {
         $db = $this->_getDBInterface();
 
-        $db->prepare('configSetConfiguration')
+        $db->loadQuery('configSetConfiguration')
             ->execute(array(
                  $name,
                  $subclass,

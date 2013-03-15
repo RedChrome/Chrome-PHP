@@ -189,7 +189,7 @@ class Chrome_Model_Route_Dynamic_DB extends Chrome_Model_Database_Abstract
 
         $db = $this->_getDBInterface();
 
-        $result = $db->prepare('routeDynamicGetResourceById')
+        $result = $db->loadQuery('routeDynamicGetResourceById')
             ->execute(array($id));
 
         $row = $result->getNext();

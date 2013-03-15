@@ -235,7 +235,7 @@ class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_Database_Abstra
     {
         $db = $this->_getDBInterface();
 
-        $result = $db->prepare('authorisationGetAccessById')
+        $result = $db->loadQuery('authorisationGetAccessById')
             ->execute(array($id, $transformation));
 
         $return = $result->getNext();
@@ -248,7 +248,7 @@ class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_Database_Abstra
 
         $db = $this->_getDBInterface();
 
-        $result = $db->prepare('authorisationGetUserGroupById')
+        $result = $db->loadQuery('authorisationGetUserGroupById')
             ->execute(array($id));
 
         $return = $result->getNext();

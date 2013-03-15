@@ -267,7 +267,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
     {
         $db = $this->_getDBInterface();
 
-        $result = $db->prepare('authenticationGetPasswordAndSaltByIdentity')
+        $result = $db->loadQuery('authenticationGetPasswordAndSaltByIdentity')
                         ->execute(array($identity));
 
         if($result->isEmpty() === false) {
@@ -291,7 +291,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
 
         $db = $this->_getDBInterface();
 
-        $db->prepare('authenticationUpdateTimeById')
+        $db->loadQuery('authenticationUpdateTimeById')
             ->execute(array(CHROME_TIME, $id));
     }
 
@@ -306,7 +306,7 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
 
         $db = $this->_getDBInterface();
 
-        $db->prepare('authenticationCreateAuthentication')
+        $db->loadQuery('authenticationCreateAuthentication')
             ->execute(array($hash, $salt, CHROME_TIME));
 
         return $db->getResult()->getLastInsertId();

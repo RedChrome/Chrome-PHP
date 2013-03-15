@@ -53,7 +53,7 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
 
         $db = $this->_getDBInterface();
 
-        $result = $db->prepare('requireGetRequirements')
+        $result = $db->loadQuery('requireGetRequirements')
             ->execute();
 
         // loop through every result
@@ -75,7 +75,7 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
 
         $db = $this->_getDBInterface();
 
-        $result = $db->prepare('requireGetClasses')
+        $result = $db->loadQuery('requireGetClasses')
             ->execute();
 
         // loop through
@@ -102,13 +102,13 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
         if($override === true) {
             // make sql query AND clean up DB interface
 
-            $db->prepare('requireDeleteEntryByName')
+            $db->loadQuery('requireDeleteEntryByName')
                 ->execute(array($name));
 
         } else {
 
             // check whether there is already the same class defined
-            $resultObj = $db->prepare('requireDoesNameExist')
+            $resultObj = $db->loadQuery('requireDoesNameExist')
                 ->execute(array($name));
 
             if(!$resultObj->isEmpty()) {
@@ -120,7 +120,7 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
         $db = $this->_getDBInterface();
 
          // insert the class to db
-        $db->prepare('requireSetClass')
+        $db->loadQuery('requireSetClass')
             ->execute(array($name, $file));
     }
 

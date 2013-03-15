@@ -139,7 +139,7 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Abstract
 
         $db = $this->_getDBInterface();
 
-        $result = $db->prepare('routeStaticGetRoute')
+        $result = $db->loadQuery('routeStaticGetRoute')
             ->execute(array($search));
 
 
@@ -185,7 +185,7 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Abstract
 	{
         $db = $this->_getDBInterface();
 
-        $result = $db->prepare('routeStaticFindRoute')
+        $result = $db->loadQuery('routeStaticFindRoute')
             ->execute(array($name));
 
         $row = $result->getNext();

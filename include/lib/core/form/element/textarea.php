@@ -17,11 +17,13 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 10:58:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.03.2013 14:23:03] --> $
  * @author     Alexander Book
  */
 
 if( CHROME_PHP !== true ) die();
+
+require_once 'text.php';
 
 /**
  * Chrome_Form_Element_Textarea
@@ -29,10 +31,10 @@ if( CHROME_PHP !== true ) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Textarea extends Chrome_Form_Element_Abstract
+class Chrome_Form_Element_Textarea extends Chrome_Form_Element_Text
 {
 	const CHROME_FORM_ELEMENT_TEXTAREA_SESSION_NAMESPACE = 'TEXTAREA';
-
+    /*
 	protected $_defaultOptions = array( self::CHROME_FORM_ELEMENT_READONLY => false, self::CHROME_FORM_ELEMENT_SAVE_DATA => false );
 
 	public function isCreated()
@@ -86,7 +88,7 @@ class Chrome_Form_Element_Textarea extends Chrome_Form_Element_Abstract
 		}
 
 		// if textarea is read only, then the user can't send anything
-		if( $this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true ) {
+		if($this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true) {
 			return null;
 		}
 
@@ -94,7 +96,7 @@ class Chrome_Form_Element_Textarea extends Chrome_Form_Element_Abstract
 
 		return $data;
 	}
-
+    */
 	public function save()
 	{
 		if( $this->_options[self::CHROME_FORM_ELEMENT_SAVE_DATA] === false ) {

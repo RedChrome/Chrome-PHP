@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 10:58:27] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.03.2013 14:04:47] --> $
  * @author     Alexander Book
  */
 
@@ -62,7 +62,6 @@ class Chrome_Form_Element_Text extends Chrome_Form_Element_Abstract
 
 	protected function _isSent()
 	{
-
 		if( $this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true ) {
 			return true;
 		}
@@ -93,11 +92,7 @@ class Chrome_Form_Element_Text extends Chrome_Form_Element_Abstract
             return null;
         }
 
-		$data = $this->_form->getSentData( $this->_id );
-
-		$data = $this->_convert($data);
-
-		$this->_data = $data;
+		$this->_data = $this->_convert($this->_form->getSentData( $this->_id ));
 
 		return $this->_data;
 	}
@@ -115,8 +110,7 @@ class Chrome_Form_Element_Text extends Chrome_Form_Element_Abstract
 		}
 
 		$array = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
-		$array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXT_SESSION_NAMESPACE][$this->getID()] =
-			$this->getData();
+		$array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXT_SESSION_NAMESPACE][$this->getID()] = $this->getData();
 		$this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE] = $array;
 	}
 
@@ -128,7 +122,7 @@ class Chrome_Form_Element_Text extends Chrome_Form_Element_Abstract
 
 	public function getSavedData()
 	{
-		return ( isset( $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXT_SESSION_NAMESPACE][$this->getID
-			()] ) ) ? $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXT_SESSION_NAMESPACE][$this->getID()] : null;
+		return ( isset( $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXT_SESSION_NAMESPACE][$this->getID()] ) ) ?
+            $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXT_SESSION_NAMESPACE][$this->getID()] : null;
 	}
 }
