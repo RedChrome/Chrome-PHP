@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 12:30:23] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.03.2013 22:02:34] --> $
  * @author     Alexander Book
  */
 
@@ -31,20 +31,6 @@ require_once 'factory.php';
  */
 interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Interface
 {
-    /**
-     * getRequestHandler()
-     *
-     * @return Chrome_Request_Handler_Interface
-     */
-    public function getRequestHandler();
-
-    /**
-     * getResponse()
-     *
-     * @return Chrome_Response_Interface
-     */
-    public function getResponse();
-
     /**
      * execute()
      *
@@ -120,13 +106,6 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
     protected $_require = array();
 
     /**
-     * contains an instance of Chrome_Responde_Interface
-     *
-     * @var Chrome_Response_Interface
-     */
-    protected $_response = null;
-
-    /**
      * contains an instance of Chrome_Model_Abstract
      *
      * @var Chrome_Model_Abstract
@@ -191,13 +170,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
     {
         $this->setApplicationContext($appContext);
 
-        $this->setRequestHandler($appContext->getRequestHandler());
-    }
-    /**
-     * singletone pattern
-     */
-    final private function __clone()
-    {
+        $this->_setRequestHandler($appContext->getRequestHandler());
     }
 
     /**
@@ -264,21 +237,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         return $this->_form;
     }
 
-    public function getRequestHandler()
-    {
-        return $this->_requestHandler;
-    }
-
-    public function getResponse()
-    {
-        if($this->_response === null) {
-            $this->_response = Chrome_Response::getInstance();
-        }
-
-        return $this->_response;
-    }
-
-    public function setRequestHandler(Chrome_Request_Handler_Interface $obj)
+    protected function _setRequestHandler(Chrome_Request_Handler_Interface $obj)
     {
         $this->_requestHandler = $obj;
         $this->_requestData    = $obj->getRequestData();

@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 16:27:39] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 12:35:57] --> $
  * @link       http://chrome-php.de
  */
 
@@ -70,14 +70,6 @@ interface Chrome_Front_Controller_Interface extends Chrome_Exception_Processable
     public static function getInstance();
 
     /**
-     * setResponse()
-     *
-     * @param mixed $response
-     * @return
-     */
-    public function setResponse(Chrome_Response $response);
-
-    /**
      * init()
      *
      * @return void
@@ -119,21 +111,6 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
     private $_postprocessor = null;
 
     /**
-     * @var Chrome_Request_Data_Interface
-     */
-    private $_requestData = null;
-
-    /**
-     * @var Chrome_Request_Handler_Interface
-     */
-    private $_requestHandler;
-
-    /**
-     * @var Chrome_Response
-     */
-    private $_response = null;
-
-    /**
      * @var Chrome_Controller_Abstract
      */
     private $_controller = null;
@@ -147,19 +124,6 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
      * @var Chrome_Exception_Handler_Interface
      */
     private static $_exceptionHandler = null;
-
-    /**
-     * Chrome_Front_Controller::setResponse()
-     *
-     * Sets the Request class
-     *
-     * @param Chrome_Request $response
-     * @return void
-     */
-    public function setResponse(Chrome_Response $response)
-    {
-        $this->_response = $response;
-    }
 
     /**
      * Chrome_Front_Controller::setController()
@@ -250,11 +214,6 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
         $require->setExceptionHandler(new Chrome_Exception_Handler_Default());
         $require->loadRequiredFiles();
 
-        $hash = Chrome_Hash::getInstance();
-
-        $cookie  = new Chrome_Cookie($hash);
-        $session = new Chrome_Session($cookie, $hash);
-
         $config  = Chrome_Config::getInstance();
         $config->setModel(new Chrome_Model_Config_Cache(new Chrome_Model_Config_DB($this->_applicationContext)));
 
@@ -266,19 +225,31 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             // the more stricter handlers are the first, which get added, the less stricter are the last
             // the last one should _always_ return true in canHandleRequest
             //$request->addRequestObject();
-            $requestFactory->addRequestObject(new Chrome_Request_Handler_AJAX($cookie, $session));
             // this handler is always capable of handling a request, so it always returns true in canHandleRequest
-            $requestFactory->addRequestObject(new Chrome_Request_Handler_HTTP($cookie, $session));
+            $requestFactory->addRequestObject(new Chrome_Request_Handler_HTTP());
+            $requestFactory->addRequestObject(new Chrome_Request_Handler_Console());
         }
 
         $reqHandler = $requestFactory->getRequest();
-        $this->_requestData = $requestFactory->getRequestDataObject();
+        $requestData = $requestFactory->getRequestDataObject();
 
         $this->_applicationContext->setRequestHandler($reqHandler);
+        $session = $requestData->getSession();
+        $cookie  = $requestData->getCookie();
 
+        // distinct which response gets send
+        $responseFactory = new Chrome_Response_Factory();
+        // set up the available response handlers
+        {
+            $responseFactory->addResponseHandler(new Chrome_Response_Handler_JSON($reqHandler));
+            $responseFactory->addResponseHandler(new Chrome_Response_Handler_HTTP($reqHandler));
+            $responseFactory->addResponseHandler(new Chrome_Response_Handler_Console($reqHandler));
+        }
+
+        $response = $responseFactory->getResponse();
+        $this->_applicationContext->setResponse($response);
 
         // startup filters
-
         $this->_preprocessor = new Chrome_Filter_Chain_Preprocessor();
         $this->_postprocessor = new Chrome_Filter_Chain_Postprocessor();
 
@@ -349,7 +320,7 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
     {
         try {
             // get the accessed resource by Router
-            $resource = $this->_router->route(new Chrome_URI($this->_requestData, true), $this->_requestData);
+            $resource = $this->_router->route(new Chrome_URI($this->_applicationContext->getRequestHandler()->getRequestData(), true), $this->_applicationContext->getRequestHandler()->getRequestData());
 
             // create controller class and set exception handler
             $controllerFactory = new Chrome_Controller_Factory($this->_applicationContext);
@@ -357,13 +328,9 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             $this->_controller = $controllerFactory->build($resource->getClass());
             $this->_controller->setExceptionHandler(new Chrome_Exception_Handler_Default());
 
-
-            $this->_response = $this->_controller->getResponse();
-
-            $this->_preprocessor->processFilters($this->_requestData, $this->_response);
+            $this->_preprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
 
             $this->_controller->execute();
-
 
             {
                 $design =  Chrome_Design::getInstance();
@@ -377,10 +344,9 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
 
             }
 
+            $this->_postprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
 
-            $this->_postprocessor->processFilters($this->_requestData, $this->_response);
-
-            $this->_response->flush();
+            $this->_applicationContext->getResponse()->flush();
 
         } catch (Chrome_Exception $e) {
             self::$_exceptionHandler->exception($e);

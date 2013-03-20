@@ -17,7 +17,7 @@
  * @subpackage Chrome.Session
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 14:50:41] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 12:07:10] --> $
  * @author     Alexander Book
  */
 
@@ -234,12 +234,10 @@ class Chrome_Session implements Chrome_Session_Interface
         // is there already a session?
         if($this->_cookie->getCookie(self::CHROME_SESSION_COOKIE_NAMESPACE) !== null) {
 
+            session_name(self::CHROME_SESSION_COOKIE_NAMESPACE);
+
             // start the session
             session_id($this->_cookie->getCookie(self::CHROME_SESSION_COOKIE_NAMESPACE));
-
-            if(isset($_GET['SID'])) {
-                session_id($_GET['SID']);
-            }
 
             session_start();
 

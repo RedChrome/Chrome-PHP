@@ -16,10 +16,11 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 15:03:48] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 12:44:58] --> $
  * @author     Alexander Book
  */
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
 /**
  * @package CHROME-PHP
@@ -87,6 +88,7 @@ interface Chrome_Cookie_Interface extends ArrayAccess
     public function unsetCookie($name, $path = self::CHROME_COOKIE_DEFAULT_PATH, $domain = '', $secure = false, $httponly = false);
 }
 
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Cookie
@@ -141,11 +143,15 @@ class Chrome_Cookie implements Chrome_Cookie_Interface
      *
      * @return Chrome_cookie
      */
-    public function __construct(Chrome_Hash_Interface $hash = null)
+    public function __construct(Chrome_Request_Data_Interface $requestData, Chrome_Hash_Interface $hash = null)
     {
         $this->_hash = $hash;
 
-        $this->_cookie = $_COOKIE;
+        $this->_cookie = $requestData->getCOOKIEData();
+
+        if(!is_array($this->_cookie)) {
+            $this->_cookie = array();
+        }
 
         $this->_validateCookie();
     }

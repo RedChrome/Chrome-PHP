@@ -22,11 +22,11 @@ class Chrome_Request_Data_Test extends Chrome_Request_Data_Abstract
 
     }
 
-    public function getPOST($key = null) {
+    public function getPOSTData($key = null) {
         return array('POST' => 'testPOST');
     }
 
-    public function getGET($key = null) {
+    public function getGETData($key = null) {
         return array('GET' => 'testGET');
     }
 
@@ -41,12 +41,7 @@ class FormTest extends PHPUnit_Framework_TestCase
 
     public function setUp() {
 
-        $cookie = new Chrome_Cookie_Dummy();
-        $session = new Chrome_Session_Dummy();
-
-        $handler = new Chrome_Request_Handler_Dummy($cookie, $session);
-        $handler->setRequestData(new Chrome_Request_Data_Dummy($cookie, $session));
-
+        $handler = new Chrome_Request_Handler_Dummy();
         $this->_form = new Chrome_Form_Test_No_Elements($handler);
     }
 

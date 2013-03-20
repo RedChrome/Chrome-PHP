@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.03.2013 09:34:24] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.03.2013 21:21:23] --> $
  * @author     Alexander Book
  */
 
@@ -128,7 +128,7 @@ class Chrome_Design implements Chrome_Design_Interface
         // call mapper
         $this->_mapper->mapAll($renderableList);
 
-        $controller->getResponse()->write($this->_composite->render($controller));
+        $controller->getApplicationContext()->getResponse()->write($this->_composite->render($controller));
     }
 
     public function get($string, Chrome_Design_Renderable $obj = null) {

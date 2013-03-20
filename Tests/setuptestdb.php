@@ -9,6 +9,7 @@ $_SERVER['SCRIPT_NAME'] = 'index.php';
 $_SERVER['SERVER_NAME'] = "localhost";
 
 require_once 'testsetupdb.php';
+require_once PLUGIN.'Log/database.php';
 
 $query = file_get_contents('Tests/db.sql');
 

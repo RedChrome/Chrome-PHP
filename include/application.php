@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 16:07:23] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.03.2013 21:18:05] --> $
  * @link       http://chrome-php.de
  */
 
@@ -45,6 +45,10 @@ interface Chrome_Application_Context_Interface
     public function setAuthorisation(Chrome_Authorisation_Interface $auth);
 
     public function getAuthorisation();
+
+    public function setResponse(Chrome_Response_Interface $response);
+
+    public function getResponse();
 }
 
 class Chrome_Application_Context implements Chrome_Application_Context_Interface
@@ -56,6 +60,8 @@ class Chrome_Application_Context implements Chrome_Application_Context_Interface
     protected $_databaseFactory = null;
 
     protected $_authorisation   = null;
+
+    protected $_response        = null;
 
     public function setRequestHandler(Chrome_Request_Handler_Interface $reqHandler)
     {
@@ -93,5 +99,13 @@ class Chrome_Application_Context implements Chrome_Application_Context_Interface
 
     public function getAuthorisation() {
         return $this->_authorisation;
+    }
+
+    public function setResponse(Chrome_Response_Interface $response) {
+        $this->_response = $response;
+    }
+
+    public function getResponse() {
+        return $this->_response;
     }
 }

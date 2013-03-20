@@ -1,6 +1,6 @@
 <?php
 
-require_once LIB.'core/cookie.php';
+#require_once LIB.'core/cookie.php';
 
 class Chrome_Cookie_Dummy extends Chrome_Cookie
 {

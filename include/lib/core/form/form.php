@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:06:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 12:49:55] --> $
  * @link       http://chrome-php.de
  */
 
@@ -1011,12 +1011,12 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
                     switch($value) {
                         case self::CHROME_FORM_METHOD_POST:
                             {
-                                $this->setSentData($this->getRequestData()->getPOST());
+                                $this->setSentData($this->getRequestData()->getPOSTData());
                                 break;
                             }
                         case self::CHROME_FORM_METHOD_GET:
                             {
-                                $this->setSentData($this->getRequestData()->getGET());
+                                $this->setSentData($this->getRequestData()->getGETData());
                                 break;
                             }
                         default:

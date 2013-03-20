@@ -17,7 +17,7 @@
  * @subpackage Chrome.Request
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2013 18:34:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 12:35:31] --> $
  * @author     Alexander Book
  */
 
@@ -27,17 +27,28 @@ if( CHROME_PHP !== true ) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Request
  */
-class Chrome_Request_Handler_HTTP extends Chrome_Request_Handler_Abstract
+class Chrome_Request_Handler_Console implements Chrome_Request_Handler_Interface
 {
-    protected $_requestClass = 'Chrome_Request_Data_HTTP';
+    protected $_requestData = null;
 
-	public function canHandleRequest()
+    public function canHandleRequest()
 	{
-		return true;
+	   return isset($_SERVER['argc']);
+	}
+
+	public function getRequestData()
+	{
+
+
+	    if($this->_requestData === null) {
+	       $this->_requestData = new Chrome_Request_Data_Console();
+	    }
+
+		return $this->_requestData;
 	}
 }
 
-class Chrome_Request_Data_HTTP extends Chrome_Request_Data_Abstract
+class Chrome_Request_Data_Console extends Chrome_Request_Data_Abstract
 {
-
+    //TODO: finish request data console
 }

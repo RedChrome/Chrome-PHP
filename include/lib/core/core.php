@@ -17,7 +17,7 @@
  * @subpackage Chrome.Core
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 12:23:56] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 11:29:53] --> $
  * @author     Alexander Book
  */
 
@@ -72,16 +72,6 @@ require_once 'database/database.php';
  * load cache classes
  */
 require_once 'cache/factory.php';
-
-/**
- * load cookie class
- */
-require_once 'cookie.php';
-
-/**
- * load session class
- */
-require_once 'session.php';
 
 /**
  * load model classes

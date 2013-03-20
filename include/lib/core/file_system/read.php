@@ -17,7 +17,7 @@
  * @subpackage Chrome.File_System
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 23:19:54] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.03.2013 21:24:52] --> $
  * @author     Alexander Book
  */
 
@@ -211,7 +211,9 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	public function __destruct()
 	{
 		$this->_update();
-		fclose($this->_fileHandler);
+        if(is_resource($this->_fileHandler)) {
+		  fclose($this->_fileHandler);
+        }
 	}
 
 	/**
@@ -228,29 +230,29 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 		}
 		return self::$_instance;
 	}
-    
+
 	/**
-	 * Sets the $_change attribute to true and tries to open a file Handler 
-	 * 
+	 * Sets the $_change attribute to true and tries to open a file Handler
+	 *
 	 * Use this method to signalize that the cache needs an update. Do not set $_change manually!
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function _cacheChanged() {
-	    
+
 	    $this->_change = true;
-	    
+
 	    if($this->_fileHandler === null) {
-	        
+
 	        $this->_fileHandler = @fopen(TMP.self::FILE_SYSTEM_READ_CACHE, 'r+b');
-	        
+
 	        if($this->_fileHandler === false) {
 	            require_once LIB.'core/file/file.php';
 	            $this->_fileHandler = Chrome_File::mkFileUsingFilePointer(TMP.self::FILE_SYSTEM_READ_CACHE, 0777, 'wb', false);
 	        }
 	    }
 	}
-	
+
 	/**
 	 * Chrome_File_System_Read::readCache()
 	 *
@@ -310,7 +312,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	    if($this->_change !== true) {
 	        return;
 	    }
-	    
+
 		fwrite($this->_fileHandler, serialize($this->_cache));
 
 		$this->_change = false;
@@ -524,7 +526,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	private function _add($path, $type)
 	{
 	    $this->_cacheChanged();
-	    
+
 		switch($type) {
 			case self::FILE_SYSTEM_READ_TYPE_FILE:
 				{
@@ -593,7 +595,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 			default:
 				throw new Chrome_Exception('Wrong type given in Chrome_File_System_Read::_updateCache()!');
 		}
-		
+
 		$this->_cacheChanged();
 	}
 
@@ -669,7 +671,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 
 			if($files === true) {
 				if($this->_cache[$path][self::FILE_SYSTEM_KEY_FILE] === false) {
-                    
+
 				    $this->_cacheChanged();
 					$this->_cache[$path][self::FILE_SYSTEM_KEY_FILE] = true;
 					$this->_cache[$path] = $this->_getInfoDir($path, true);

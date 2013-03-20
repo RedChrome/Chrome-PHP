@@ -17,7 +17,7 @@
  * @subpackage Chrome.Modules
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 15:05:10] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.03.2013 22:00:32] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -36,6 +36,7 @@ class Chrome_Controller_Footer_VarDump extends Chrome_Controller_Module_Abstract
 {
     protected function _execute() {
         $this->_view = new Chrome_View_Footer_VarDump($this);
+        $this->_view->setData($this->_requestData->getData(), $this->_requestData->getCookie(), $this->_requestData->getSession());
     }
 
     public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
@@ -55,11 +56,19 @@ class Chrome_Controller_Footer_VarDump extends Chrome_Controller_Module_Abstract
  */
 class Chrome_View_Footer_VarDump extends Chrome_View_Abstract
 {
+    protected $_data = array();
+
+    protected $_cookie, $_session;
+
+    public function setData($data, Chrome_Cookie_Interface $cookie, Chrome_Session_Interface $session) {
+        $this->_data = $data;
+        $this->_cookie = $cookie;
+        $this->_session = $session;
+    }
+
     public function render(Chrome_Controller_Interface $controller) {
 
-        $data = $this->_controller->getRequestHandler()->getRequestData()->getData();
-
-        $requestData = $this->_controller->getRequestHandler()->getRequestData();
+        $data = $this->_data;
 
         return $return = '<table align="center" border="1">
             <tr><td>GET</td><td>'.$this->exportArray($data['GET']).'</td></tr>
@@ -67,8 +76,8 @@ class Chrome_View_Footer_VarDump extends Chrome_View_Abstract
 
 
             <tr><td>FILES</td><td>'.$this->exportArray($data['FILES']).'</td></tr>
-            <tr><td>COOKIE</td><td>'.$this->exportArray($requestData->getCookie()->getAllCookies()).'</td></tr>
-            <tr><td>SESSION</td><td>'.$this->exportArray($requestData->getSession()->get(null)).'</td></tr>
+            <tr><td>COOKIE</td><td>'.$this->exportArray($this->_cookie->getAllCookies()).'</td></tr>
+            <tr><td>SESSION</td><td>'.$this->exportArray($this->_session->get(null)).'</td></tr>
             <tr><td>SERVER</td><td>'.$this->exportArray($data['SERVER']).'</td></tr>
 
             <tr><td>REQUEST</td><td>'.$this->exportArray($data['REQUEST']).'</td></tr>

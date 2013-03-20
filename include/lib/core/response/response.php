@@ -17,12 +17,11 @@
  * @subpackage Chrome.Response
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.03.2013 13:57:01] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.03.2013 20:38:16] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
  * @package CHROME-PHP
@@ -30,154 +29,60 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Response_Interface
 {
-	public function setStatus($status);
-
-    public function getStatus();
-
-	public function addHeader($name, $value);
-
-    public function getHeader($name);
-
-	public function write($string);
+	public function write($mixed);
 
 	public function flush();
 
 	public function clear();
 
-	public function setBody($string);
+	public function setBody($mixed);
 
 	public function getBody();
-
-	public static function getInstance();
 }
 
 /**
- *
- * All classes (Chrome_Response_$SUFFIX) have to be saved in $suffix.php <-- only lower chars!
- *
  * @package CHROME-PHP
  * @subpackage Chrome.Response
  */
-final class Chrome_Response
+interface Chrome_Response_Handler_Interface
 {
-	const CHROME_RESPONSE_CLASS_PATH = 'core/response/';
+	public function canHandle();
 
-	const CHROME_RESPONSE_DEFAULT_CLASS = 'HTTP';
-
-	private static $_responseClass = null;
-
-	private static $_responseInstance = null;
-
-	private function __construct() {}
-
-	private function __clone() {}
-
-	public static function getInstance() {
-		if(self::$_responseInstance === null) {
-			self::$_responseInstance = self::_createResponseInstance();
-		}
-		return self::$_responseInstance;
-	}
-
-	public static function setResponseClass($class) {
-	    $class = strtoupper($class);
-		$_class = 'Chrome_Response_'.$class;
-		$class .= '.php';
-		if(!_isDir(LIB.self::CHROME_RESPONSE_CLASS_PATH)) {
-			throw new Chrome_Exception('Cannot find include path for Chrome_Response classes in Chrome_Response::setResponseClass()!');
-		}
-
-        /**
-        $files = _getFilesInDir(LIB.self::CHROME_RESPONSE_CLASS_PATH);
-
-		if(($key = array_search($class, $files)) === false) {
-			throw new Chrome_Exception('Cannot find file '.LIB.self::CHROME_RESPONSE_CLASS_PATH.$class.' in Chrome_Response::setResponseClass()!');
-		} else {
-			require_once $files[$key];
-		}*/
-
-        // faster
-        if(!_isFile(LIB.self::CHROME_RESPONSE_CLASS_PATH.$class)) {
-            throw new Chrome_Exception('Cannot find file '.LIB.self::CHROME_RESPONSE_CLASS_PATH.$class.' in Chrome_Response::setResponseClass()!');
-        } else {
-            require_once LIB.self::CHROME_RESPONSE_CLASS_PATH.$class;
-        }
-
-        // unneeded check, if class not exists, then there will be an error ...
-		//if(!class_exists($_class, false)) {
-		//	throw new Chrome_Exception('Cannot create an instance of '.$_class.'! Class is not defined in file '.LIB.self::CHROME_RESPONSE_CLASS_PATH.$class.' in Chrome_Response::setResponseClass()!');
-		//}
-
-		self::$_responseClass = $_class;
-	}
-
-	private static function _createResponseInstance() {
-
-		if(self::$_responseClass === null) {
-			self::setResponseClass(self::CHROME_RESPONSE_DEFAULT_CLASS);
-		}
-
-		return call_user_func(array(self::$_responseClass, 'getInstance'));
-	}
+	public function getResponse();
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Response
  */
-abstract class Chrome_Response_Abstract implements Chrome_Response_Interface {
+interface Chrome_Response_Factory_Interface
+{
+	public function getResponse();
 
-    protected $_status = '200 OK';
-    protected $_headers = array();
+	public function addResponseHandler(Chrome_Response_Handler_Interface $responseHandler);
+}
 
-    protected $_body = '';
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Response
+ */
+class Chrome_Response_Factory implements Chrome_Response_Factory_Interface
+{
+	protected $_responseHanlders = array();
 
-    protected function _printHeaders() {
-        if(!headers_sent()) {
-    		header('HTTP/1.0 '.$this->_status);
-
-            if(empty($this->_headers)) {
-                return;
-            }
-
-        	foreach($this->_headers AS $key => $value) {
-        	   header($key.': '.$value);
-            }
-        }
-    }
-
-    public function addHeader($name, $value)
+	public function addResponseHandler(Chrome_Response_Handler_Interface $responseHandler)
 	{
-		$this->_headers[$name] = $value;
+		$this->_responseHanlders[] = $responseHandler;
 	}
 
-    public function setStatus($status)
+	public function getResponse()
 	{
-		$this->_status = $status;
- 	}
+		foreach($this->_responseHanlders as $responseHandler) {
 
-    public function getStatus()
-    {
-        return $this->_status;
-    }
+			if($responseHandler->canHandle() === true) {
+				return $responseHandler->getResponse();
+			}
 
-    public function getHeader($name)
-    {
-        if(isset($this->_headers[$name])) {
-            return $this->_headers[$name];
-        }
-
-        return null;
-    }
-
- 	public function getBody()
-    {
- 		return $this->_body;
- 	}
-
- 	public function setBody($string)
-    {
- 		$this->_body = $string;
- 	}
-
+		}
+	}
 }

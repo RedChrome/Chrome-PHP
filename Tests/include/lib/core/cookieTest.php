@@ -5,12 +5,12 @@ require_once 'Tests/testsetup.php';
 class CookieTest extends PHPUnit_Framework_TestCase
 {
     public function setUp() {
-        $this->_cookie = new Chrome_Cookie(Chrome_Hash::getInstance());
+        $this->_cookie = new Chrome_Cookie(new Chrome_Request_Data_Dummy(), Chrome_Hash::getInstance());
     }
 
     public function testConstruct() {
 
-        $this->_cookie = new Chrome_Cookie(Chrome_Hash::getInstance());
+        $this->_cookie = new Chrome_Cookie(new Chrome_Request_Data_Dummy(), Chrome_Hash::getInstance());
 
         $this->assertTrue($this->_cookie instanceof Chrome_Cookie_Interface);
 
@@ -103,16 +103,12 @@ class CookieTest extends PHPUnit_Framework_TestCase
 
     public function testValidationWithWrongValues() {
 
-        $_COOKIE[Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY] = 'anInvalidKey';
-        $_COOKIE['anotherKey'] = 'anyValue';
-
-        $this->setUp();
+        $requestData = new Chrome_Request_Data_Dummy();
+        $requestData->_COOKIEData = array(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY => 'anInvalidKey',
+               'anotherKey' => 'anyValue' );
+        $this->_cookie = new Chrome_Cookie($requestData, Chrome_Hash::getInstance());
 
         $this->assertNull($this->_cookie->getCookie('anotherKey') );
-
-
-        unset($_COOKIE[Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY]);
-        $_COOKIE['anotherKey'] = 'anyValue';
 
         $this->setUp();
 
@@ -121,12 +117,12 @@ class CookieTest extends PHPUnit_Framework_TestCase
 
     public function testValidationWithRightValues() {
 
-        // no the environment for the cookie class is set up properly
-        $_COOKIE[Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY] = $this->_cookie->getCookie(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY);
-        $_COOKIE['testKey'] = 'anyTestValue';
+        // the environment for the cookie class is set up properly
+        $requestData = new Chrome_Request_Data_Dummy();
+        $requestData->_COOKIEData = array(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY => $this->_cookie->getCookie(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY),
+               'testKey' => 'anyTestValue' );
 
-        // set up cookie again
-        $this->setUp();
+        $this->_cookie = new Chrome_Cookie($requestData, Chrome_Hash::getInstance());
 
         $this->assertEquals('anyTestValue', $this->_cookie->getCookie('testKey'));
 

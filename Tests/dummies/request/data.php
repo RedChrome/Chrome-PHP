@@ -2,11 +2,21 @@
 
 class Chrome_Request_Data_Dummy implements Chrome_Request_Data_Interface
 {
-	public $_GET, $_POST, $_SERVER, $_REQUEST, $_ENV, $_FILES;
+	public $_GET, $_POST, $_SERVER, $_REQUEST, $_ENV, $_FILES, $_COOKIEData;
 
-    public function __construct(Chrome_Cookie_Interface $cookie, Chrome_Session_Interface $session)
+    public $_session, $_cookie;
+
+    public function __construct(Chrome_Cookie_Interface $cookie = null, Chrome_Session_Interface $session = null)
 	{
-	    $this->_cookie = $cookie;
+	    if($cookie === null) {
+	       $cookie = new Chrome_Cookie_Dummy();
+	    }
+
+        if($session === null) {
+            $session = new Chrome_Session_Dummy();
+        }
+
+ 	    $this->_cookie = $cookie;
         $this->_session = $session;
 	}
 
@@ -18,10 +28,11 @@ class Chrome_Request_Data_Dummy implements Chrome_Request_Data_Interface
 			'POST' => $this->_POST,
 			'FILES' => $this->_FILES,
 			'REQUEST' => $this->_REQUEST,
-			'ENV' => $this->_ENV);
+			'ENV' => $this->_ENV,
+            'COOKIE' => $this);
 	}
 
-	public function getGET($key = null)
+	public function getGETData($key = null)
 	{
 		if($key === null) {
 			return $this->_GET;
@@ -32,7 +43,7 @@ class Chrome_Request_Data_Dummy implements Chrome_Request_Data_Interface
 	}
 
 
-	public function getPOST($key = null) {
+	public function getPOSTData($key = null) {
 	   if($key === null) {
 			return $this->_POST;
 		} else
@@ -41,7 +52,7 @@ class Chrome_Request_Data_Dummy implements Chrome_Request_Data_Interface
 			}
 	}
 
-	public function getSERVER($key = null) {
+	public function getSERVERData($key = null) {
 	   if($key === null) {
 			return $this->_SERVER;
 		} else
@@ -50,7 +61,7 @@ class Chrome_Request_Data_Dummy implements Chrome_Request_Data_Interface
 			}
 	}
 
-	public function getFILES($key = null) {
+	public function getFILESData($key = null) {
 	   if($key === null) {
 			return $this->_FILES;
 		} else
@@ -59,7 +70,7 @@ class Chrome_Request_Data_Dummy implements Chrome_Request_Data_Interface
 			}
 	}
 
-	public function getREQUEST($key = null) {
+	public function getREQUESTData($key = null) {
 	   if($key === null) {
 			return $this->_REQUEST;
 		} else
@@ -68,7 +79,7 @@ class Chrome_Request_Data_Dummy implements Chrome_Request_Data_Interface
 			}
 	}
 
-	public function getENV($key = null) {
+	public function getENVData($key = null) {
 	   if($key === null) {
 			return $this->_ENV;
 		} else
@@ -77,25 +88,38 @@ class Chrome_Request_Data_Dummy implements Chrome_Request_Data_Interface
 			}
 	}
 
-	public function setGET(array $array) {
+    public function getCOOKIEData($key = null) {
+        if($key === null) {
+			return $this->_COOKIEData;
+		} else
+			if(isset($this->_COOKIEData[$key])) {
+				return $this->_COOKIEData[$key];
+			}
+    }
+
+	public function setGETData(array $array) {
 
 	}
 
-	public function setPOST(array $array) {
+	public function setPOSTData(array $array) {
 
 	}
 
-	public function setFILES(array $array) {
+	public function setFILESData(array $array) {
 
 	}
 
-	public function setENV(array $array) {
+	public function setENVData(array $array) {
 
 	}
 
-	public function setSERVER(array $array) {
+	public function setSERVERData(array $array) {
 
 	}
+
+    public function setCOOKIEData(array $array) {
+
+    }
 
 	/**
 	 * @return Chrome_Session_Interface
