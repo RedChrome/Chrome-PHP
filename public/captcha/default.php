@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:22:52] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 16:55:12] --> $
  */
 
 if(!isset($_GET['name'])) {
@@ -36,24 +36,18 @@ require_once LIB.'core/file_system/file_system.php';
 
 require_once LIB.'core/hash/hash.php';
 
-require_once LIB.'core/cookie.php';
-
-// need session to create image
-require_once LIB.'core/session.php';
-
 require_once LIB.'core/request/request.php';
 
-require_once LIB.'core/request/http.php';
+require_once LIB.'core/request/request/http.php';
 
 require_once LIB.'captcha/captcha.php';
 
 // need Chrome_Captcha_Engine_Default
 require_once PLUGIN.'Captcha/default.php';
 
-$hash = Chrome_Hash::getInstance();
-$cookie = new Chrome_Cookie($hash);
-$session = new Chrome_Session($cookie, $hash);
-$reqHandler = new Chrome_Request_Handler_HTTP($cookie, $session);
+$reqHandler = new Chrome_Request_Handler_HTTP();
+
+$session = $reqHandler->getRequestData()->getSession();
 
 $key = $session['CAPTCHA_'.$_GET['name']];
 

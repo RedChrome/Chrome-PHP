@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 16:02:40] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 15:06:04] --> $
  * @author     Alexander Book
  */
 
@@ -37,7 +37,7 @@ class Chrome_Controller_Content_Login extends Chrome_Controller_Module_Abstract
 
 	protected function _execute()
 	{
-		if( $this->_requestHandler instanceof Chrome_Request_Handler_AJAX ) {
+		if( $this->_applicationContext->getResponse() instanceof Chrome_Response_JSON ) {
 			require_once 'controller/ajax.php';
 			$this->_controller = new Chrome_Controller_Content_Login_AJAX($this->_applicationContext);
             $this->_controller->setExceptionHandler(new Chrome_Exception_Handler_JSON());

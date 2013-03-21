@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.10.2012 22:36:23] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 23:25:18] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -349,6 +349,12 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
 	public function setFormElement( Chrome_Form_Element_Interface $obj )
 	{
 		$this->_formElement = $obj;
+
+        if(!isset($this->_attribute['id'])) {
+            $this->_attribute['id'] = $obj->getID();
+        }
+
+
 		return $this;
 	}
 

@@ -20,7 +20,7 @@
  * @author    Alexander Book <alexander.book@gmx.de>
  * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
  * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:14:34] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 13:35:03] --> $
  * @link      http://chrome-php.de
  */
 
@@ -55,7 +55,11 @@ interface Chrome_Captcha_Interface
 
     public function setFrontendOption($name, $value);
 
+    public function getEngine();
+
     public function isValid($key);
+
+    public function getError();
 }
 
 
@@ -76,6 +80,8 @@ interface Chrome_Captcha_Engine_Interface
     public function renew();
 
     public function destroy();
+
+    public function getError();
 }
 
 
@@ -104,7 +110,6 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
 
     public function create()
     {
-
         $this->_setEngine();
 
         $this->_engine->create();
@@ -112,7 +117,6 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
 
     public function renew()
     {
-
         $this->_setEngine();
 
         $this->_engine->renew();
@@ -154,7 +158,6 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
 
     protected function _setEngine()
     {
-
         if($this->_engine !== null) {
             return;
         }
@@ -181,6 +184,14 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
         $engine = 'Chrome_Captcha_Engine_' . $engine;
 
         $this->_engine = new $engine($this->_frontendOptions[self::CHROME_CAPTCHA_NAME], $this, $this->_reqData, $this->_backendOptions);
+    }
+
+    public function getEngine() {
+        return $this->_engine;
+    }
+
+    public function getError() {
+        return $this->_engine->getError();
     }
 
 }

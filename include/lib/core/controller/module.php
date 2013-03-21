@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 12:31:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 12:50:36] --> $
  * @author     Alexander Book
  */
 
@@ -66,6 +66,8 @@ abstract class Chrome_Controller_Module_Abstract extends Chrome_Controller_Abstr
 abstract class Chrome_Controller_Content_Abstract extends Chrome_Controller_Module_Abstract
 {
     public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
-        $list->addContainer(new Chrome_Design_Renderable_Container($this->_view, 'content'));
+        if($this->_view instanceof Chrome_Design_Renderable) {
+            $list->addContainer(new Chrome_Design_Renderable_Container($this->_view, 'content'));
+        }
     }
 }

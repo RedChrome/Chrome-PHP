@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 01. Mrz 2013 um 18:10
+-- Erstellungszeit: 21. Mrz 2013 um 13:57
 -- Server Version: 5.5.16
 -- PHP-Version: 5.3.8
 
@@ -27,6 +27,7 @@ SET time_zone = "+00:00";
 -- Tabellenstruktur für Tabelle `cp1_admin_navi`
 --
 
+DROP TABLE IF EXISTS `cp1_admin_navi`;
 CREATE TABLE IF NOT EXISTS `cp1_admin_navi` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `parentid` int(5) NOT NULL,
@@ -56,6 +57,7 @@ INSERT INTO `cp1_admin_navi` (`id`, `parentid`, `isparent`, `name`, `action`, `u
 -- Tabellenstruktur für Tabelle `cp1_authenticate`
 --
 
+DROP TABLE IF EXISTS `cp1_authenticate`;
 CREATE TABLE IF NOT EXISTS `cp1_authenticate` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `password` varchar(256) NOT NULL,
@@ -79,6 +81,7 @@ INSERT INTO `cp1_authenticate` (`id`, `password`, `password_salt`, `cookie_token
 -- Tabellenstruktur für Tabelle `cp1_authorisation_rbac`
 --
 
+DROP TABLE IF EXISTS `cp1_authorisation_rbac`;
 CREATE TABLE IF NOT EXISTS `cp1_authorisation_rbac` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `user_id` int(10) NOT NULL,
@@ -99,6 +102,7 @@ INSERT INTO `cp1_authorisation_rbac` (`id`, `user_id`, `group`) VALUES
 -- Tabellenstruktur für Tabelle `cp1_authorisation_resource_default`
 --
 
+DROP TABLE IF EXISTS `cp1_authorisation_resource_default`;
 CREATE TABLE IF NOT EXISTS `cp1_authorisation_resource_default` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `_resource_id` varchar(256) NOT NULL,
@@ -124,6 +128,7 @@ INSERT INTO `cp1_authorisation_resource_default` (`id`, `_resource_id`, `_transf
 -- Tabellenstruktur für Tabelle `cp1_authorisation_user_default`
 --
 
+DROP TABLE IF EXISTS `cp1_authorisation_user_default`;
 CREATE TABLE IF NOT EXISTS `cp1_authorisation_user_default` (
   `user_id` int(10) NOT NULL,
   `group_id` mediumint(10) NOT NULL,
@@ -144,12 +149,13 @@ INSERT INTO `cp1_authorisation_user_default` (`user_id`, `group_id`) VALUES
 -- Tabellenstruktur für Tabelle `cp1_class`
 --
 
+DROP TABLE IF EXISTS `cp1_class`;
 CREATE TABLE IF NOT EXISTS `cp1_class` (
-  `id` int(2) NOT NULL AUTO_INCREMENT,
+  `id` int(3) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `file` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=35 ;
 
 --
 -- Daten für Tabelle `cp1_class`
@@ -188,7 +194,8 @@ INSERT INTO `cp1_class` (`id`, `name`, `file`) VALUES
 (NULL, 'Chrome_Model_User_Database', 'lib/classes/user/model.php'),
 (NULL, 'Chrome_Form_Decorator_Individual_Abstract', 'lib/core/form/decorator.php'),
 (NULL, 'Chrome_Database_Connection_Mysql', 'lib/core/database/connection/mysql.php'),
-(NULL, 'Chrome_Database_Connection_Postgresql', 'lib/core/database/connection/postgresql.php');
+(NULL, 'Chrome_Database_Connection_Postgresql', 'lib/core/database/connection/postgresql.php'),
+(NULL, 'Chrome_Captcha_Interface', 'lib/captcha/captcha.php');
 
 -- --------------------------------------------------------
 
@@ -196,6 +203,7 @@ INSERT INTO `cp1_class` (`id`, `name`, `file`) VALUES
 -- Tabellenstruktur für Tabelle `cp1_config`
 --
 
+DROP TABLE IF EXISTS `cp1_config`;
 CREATE TABLE IF NOT EXISTS `cp1_config` (
   `name` varchar(50) NOT NULL,
   `subclass` varchar(50) NOT NULL,
@@ -227,7 +235,10 @@ INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 ('Title_Beginning', 'Site', 'Chrome-PHP', 'string', '', 0),
 ('Title_Ending', 'Site', '', 'string', '', 0),
 ('Title_Separator', 'Site', ' :: ', 'string', '', 0),
-('name', 'Site', 'CHROME-PHP', 'string', '', 0);
+('name', 'Site', 'CHROME-PHP', 'string', '', 0),
+('public_key', 'Captcha', '6LcQrt4SAAAAAIPs9toLqZ761XTA39aS_AWP-Nog', 'string', '', 0),
+('private_key', 'Captcha', '6LcQrt4SAAAAAF7flTN8uwi_9eSFy43jOuUcPGm3', 'string', '', 0),
+('recaptcha_theme', 'Captcha', 'clean', 'string', '', 0);
 
 -- --------------------------------------------------------
 
@@ -235,6 +246,7 @@ INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 -- Tabellenstruktur für Tabelle `cp1_design`
 --
 
+DROP TABLE IF EXISTS `cp1_design`;
 CREATE TABLE IF NOT EXISTS `cp1_design` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `name` varchar(75) NOT NULL,
@@ -264,6 +276,7 @@ INSERT INTO `cp1_design` (`id`, `name`, `file`, `class`, `position`, `order`) VA
 -- Tabellenstruktur für Tabelle `cp1_design_controller`
 --
 
+DROP TABLE IF EXISTS `cp1_design_controller`;
 CREATE TABLE IF NOT EXISTS `cp1_design_controller` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `controller_class` varchar(255) NOT NULL,
@@ -277,6 +290,7 @@ CREATE TABLE IF NOT EXISTS `cp1_design_controller` (
 -- Tabellenstruktur für Tabelle `cp1_design_layout`
 --
 
+DROP TABLE IF EXISTS `cp1_design_layout`;
 CREATE TABLE IF NOT EXISTS `cp1_design_layout` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `controller` varchar(256) NOT NULL,
@@ -289,6 +303,7 @@ CREATE TABLE IF NOT EXISTS `cp1_design_layout` (
 -- Tabellenstruktur für Tabelle `cp1_design_mapper_static`
 --
 
+DROP TABLE IF EXISTS `cp1_design_mapper_static`;
 CREATE TABLE IF NOT EXISTS `cp1_design_mapper_static` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `view_id` varchar(256) NOT NULL,
@@ -316,6 +331,7 @@ INSERT INTO `cp1_design_mapper_static` (`id`, `view_id`, `position`, `priority`)
 -- Tabellenstruktur für Tabelle `cp1_news`
 --
 
+DROP TABLE IF EXISTS `cp1_news`;
 CREATE TABLE IF NOT EXISTS `cp1_news` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `title` varchar(200) NOT NULL,
@@ -339,6 +355,7 @@ INSERT INTO `cp1_news` (`id`, `title`, `text`, `author`, `time`, `access`) VALUE
 -- Tabellenstruktur für Tabelle `cp1_news_comments`
 --
 
+DROP TABLE IF EXISTS `cp1_news_comments`;
 CREATE TABLE IF NOT EXISTS `cp1_news_comments` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `news_id` int(5) NOT NULL,
@@ -376,6 +393,7 @@ INSERT INTO `cp1_news_comments` (`id`, `news_id`, `user_id`, `text`, `time`, `IP
 -- Tabellenstruktur für Tabelle `cp1_rbac_group`
 --
 
+DROP TABLE IF EXISTS `cp1_rbac_group`;
 CREATE TABLE IF NOT EXISTS `cp1_rbac_group` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) NOT NULL,
@@ -398,6 +416,7 @@ INSERT INTO `cp1_rbac_group` (`id`, `name`) VALUES
 -- Tabellenstruktur für Tabelle `cp1_rbac_group_role`
 --
 
+DROP TABLE IF EXISTS `cp1_rbac_group_role`;
 CREATE TABLE IF NOT EXISTS `cp1_rbac_group_role` (
   `group_id` int(10) NOT NULL,
   `role_id` int(10) NOT NULL
@@ -417,6 +436,7 @@ INSERT INTO `cp1_rbac_group_role` (`group_id`, `role_id`) VALUES
 -- Tabellenstruktur für Tabelle `cp1_rbac_role`
 --
 
+DROP TABLE IF EXISTS `cp1_rbac_role`;
 CREATE TABLE IF NOT EXISTS `cp1_rbac_role` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) NOT NULL,
@@ -439,6 +459,7 @@ INSERT INTO `cp1_rbac_role` (`id`, `name`) VALUES
 -- Tabellenstruktur für Tabelle `cp1_rbac_role_transaction`
 --
 
+DROP TABLE IF EXISTS `cp1_rbac_role_transaction`;
 CREATE TABLE IF NOT EXISTS `cp1_rbac_role_transaction` (
   `role_id` int(10) NOT NULL,
   `transaction_id` int(10) NOT NULL
@@ -458,6 +479,7 @@ INSERT INTO `cp1_rbac_role_transaction` (`role_id`, `transaction_id`) VALUES
 -- Tabellenstruktur für Tabelle `cp1_rbac_transaction`
 --
 
+DROP TABLE IF EXISTS `cp1_rbac_transaction`;
 CREATE TABLE IF NOT EXISTS `cp1_rbac_transaction` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) NOT NULL,
@@ -479,6 +501,7 @@ INSERT INTO `cp1_rbac_transaction` (`id`, `name`) VALUES
 -- Tabellenstruktur für Tabelle `cp1_rbac_transformation`
 --
 
+DROP TABLE IF EXISTS `cp1_rbac_transformation`;
 CREATE TABLE IF NOT EXISTS `cp1_rbac_transformation` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `transaction_id` int(10) NOT NULL,
@@ -504,6 +527,7 @@ INSERT INTO `cp1_rbac_transformation` (`id`, `transaction_id`, `transformation`,
 -- Tabellenstruktur für Tabelle `cp1_rbac_user_group`
 --
 
+DROP TABLE IF EXISTS `cp1_rbac_user_group`;
 CREATE TABLE IF NOT EXISTS `cp1_rbac_user_group` (
   `user_id` int(10) NOT NULL,
   `group_id` int(10) NOT NULL
@@ -522,6 +546,7 @@ INSERT INTO `cp1_rbac_user_group` (`user_id`, `group_id`) VALUES
 -- Tabellenstruktur für Tabelle `cp1_rbac_user_role`
 --
 
+DROP TABLE IF EXISTS `cp1_rbac_user_role`;
 CREATE TABLE IF NOT EXISTS `cp1_rbac_user_role` (
   `user_id` int(10) NOT NULL,
   `role_id` int(10) NOT NULL
@@ -540,6 +565,7 @@ INSERT INTO `cp1_rbac_user_role` (`user_id`, `role_id`) VALUES
 -- Tabellenstruktur für Tabelle `cp1_require`
 --
 
+DROP TABLE IF EXISTS `cp1_require`;
 CREATE TABLE IF NOT EXISTS `cp1_require` (
   `id` int(3) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -548,18 +574,18 @@ CREATE TABLE IF NOT EXISTS `cp1_require` (
   `priority` int(2) NOT NULL DEFAULT '6',
   `class_loader` int(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=31 ;
 
 --
 -- Daten für Tabelle `cp1_require`
 --
 
 INSERT INTO `cp1_require` (`id`, `name`, `path`, `activated`, `priority`, `class_loader`) VALUES
-(NULL, 'Chrome_Require_Filter', 'plugins/Require/filter.php', 1, 4, 1),
-(NULL, 'Chrome_Require_Exception', 'plugins/Require/exception.php', 1, 4, 1),
-(NULL, 'Chrome_Require_Validator', 'plugins/Require/validator.php', 1, 4, 1),
-(NULL, 'Chrome_Require_Design', 'plugins/Require/design.php', 1, 4, 1),
-(NULL, 'Chrome_Require_Form', 'plugins/Require/form.php', 1, 4, 1),
+(NULL, 'Chrome_Require_Loader_Filter', 'plugins/Require/filter.php', 1, 4, 1),
+(NULL, 'Chrome_Require_Loader_Exception', 'plugins/Require/exception.php', 1, 4, 1),
+(NULL, 'Chrome_Require_Loader_Validator', 'plugins/Require/validator.php', 1, 4, 1),
+(NULL, 'Chrome_Require_Loader_Design', 'plugins/Require/design.php', 1, 4, 1),
+(NULL, 'Chrome_Require_Loader_Form', 'plugins/Require/form.php', 1, 4, 1),
 (NULL, 'Chrome_View_Plugin_HTML', 'plugins/View/html.php', 1, 6, 0),
 (NULL, 'Chrome_View_Plugin_Decorator', 'plugins/View/decorator.php', 1, 6, 0),
 (NULL, 'Chrome_View_Plugin_Error', 'plugins/View/error.php', 1, 6, 0),
@@ -575,12 +601,12 @@ INSERT INTO `cp1_require` (`id`, `name`, `path`, `activated`, `priority`, `class
 (NULL, 'Chrome_Route_Static', 'lib/core/router/route/static.php', 1, 6, 0),
 (NULL, 'Chrome_Route_Dynamic', 'lib/core/router/route/dynamic.php', 1, 6, 0),
 (NULL, 'Chrome_Route_Administration', 'lib/core/router/route/administration.php', 1, 6, 0),
-(NULL, 'Chrome_Request_Handler_HTTP', 'lib/core/request/request/http.php', 1, 6, 0),
 (NULL, 'Chrome_Request_Handler_Console', 'lib/core/request/request/console.php', 1, 6, 0),
+(NULL, 'Chrome_Request_Handler_HTTP', 'lib/core/request/request/http.php', 1, 6, 0),
+(NULL, 'Chrome_Controller_Module_Abstract', 'lib/core/controller/module.php', 1, 6, 0),
 (NULL, 'Chrome_Response_Handler_HTTP', 'lib/core/response/response/http.php', 1, 6, 0),
 (NULL, 'Chrome_Response_Handler_JSON', 'lib/core/response/response/json.php', 1, 6, 0),
-(NULL, 'Chrome_Response_Handler_Console', 'lib/core/response/response/console.php', 1, 6, 0),
-(NULL, 'Chrome_Request_Handler_Console', 'lib/core/request/request/console.php', 1, 6, 0);
+(NULL, 'Chrome_Response_Handler_Console', 'lib/core/response/response/console.php', 1, 6, 0);
 
 -- --------------------------------------------------------
 
@@ -588,6 +614,7 @@ INSERT INTO `cp1_require` (`id`, `name`, `path`, `activated`, `priority`, `class
 -- Tabellenstruktur für Tabelle `cp1_route_administration`
 --
 
+DROP TABLE IF EXISTS `cp1_route_administration`;
 CREATE TABLE IF NOT EXISTS `cp1_route_administration` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) NOT NULL,
@@ -604,6 +631,7 @@ CREATE TABLE IF NOT EXISTS `cp1_route_administration` (
 -- Tabellenstruktur für Tabelle `cp1_route_dynamic`
 --
 
+DROP TABLE IF EXISTS `cp1_route_dynamic`;
 CREATE TABLE IF NOT EXISTS `cp1_route_dynamic` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -627,6 +655,7 @@ INSERT INTO `cp1_route_dynamic` (`id`, `name`, `class`, `file`, `GET`, `POST`) V
 -- Tabellenstruktur für Tabelle `cp1_route_static`
 --
 
+DROP TABLE IF EXISTS `cp1_route_static`;
 CREATE TABLE IF NOT EXISTS `cp1_route_static` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -636,7 +665,7 @@ CREATE TABLE IF NOT EXISTS `cp1_route_static` (
   `POST` varchar(511) NOT NULL,
   `GET` varchar(511) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 --
 -- Daten für Tabelle `cp1_route_static`
@@ -650,7 +679,8 @@ INSERT INTO `cp1_route_static` (`id`, `name`, `search`, `class`, `file`, `POST`,
 (5, 'register', 'registrieren', 'Chrome_Controller_Register', 'modules/content/register/controller.php', '', 'action=register'),
 (6, 'news', 'news', 'Chrome_Controller_News', 'modules/content/news/controller.php', '', 'action=show'),
 (7, 'logout', 'logout', 'Chrome_Controller_Content_Logout', 'modules/content/user/logout/controller.php', '', ''),
-(8, 'register_confirm', 'registrierung_bestaetigen', 'Chrome_Controller_Register', 'modules/content/register/controller.php', '', 'action=confirm_registration');
+(8, 'register_confirm', 'registrierung_bestaetigen', 'Chrome_Controller_Register', 'modules/content/register/controller.php', '', 'action=confirm_registration'),
+(9, 'captcha', 'captcha', 'Chrome_Controller_Captcha', 'modules/content/captcha/controller.php', '', '');
 
 -- --------------------------------------------------------
 
@@ -658,6 +688,7 @@ INSERT INTO `cp1_route_static` (`id`, `name`, `search`, `class`, `file`, `POST`,
 -- Tabellenstruktur für Tabelle `cp1_user`
 --
 
+DROP TABLE IF EXISTS `cp1_user`;
 CREATE TABLE IF NOT EXISTS `cp1_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
@@ -684,6 +715,7 @@ INSERT INTO `cp1_user` (`id`, `name`, `email`, `group`, `time`, `avatar`, `addre
 -- Tabellenstruktur für Tabelle `cp1_user_regist`
 --
 
+DROP TABLE IF EXISTS `cp1_user_regist`;
 CREATE TABLE IF NOT EXISTS `cp1_user_regist` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
@@ -694,7 +726,7 @@ CREATE TABLE IF NOT EXISTS `cp1_user_regist` (
   `key` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
 --
 -- Constraints der exportierten Tabellen

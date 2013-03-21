@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 10:53:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 12:04:45] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -145,7 +145,7 @@ interface Chrome_Form_Element_Interface
 
     /**
      * Sets the default decorator, used to render the form
-     * 
+     *
      * @param string $formElementClass the class name of the form element, which should get rendered with $decoratorClass
      * @param string $decoratorClass the class name of the decorator
      * @return void
@@ -765,7 +765,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 
         return $data;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Chrome_Form_Element_Interface::setDefaultDecorator()
@@ -773,7 +773,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     public static function setDefaultDecorator($formElementClass, $decoratorClass) {
         self::$_defaultDecorator[$formElementClass] = $decoratorClass;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Chrome_Form_Element_Interface::getDecorator()
@@ -789,10 +789,10 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 
         } else {
 
-            $class = str_replace('Element', 'Decorator',get_class($this)).'_'.$this->_form->getAttribute('decorator');
+            $class = str_replace('Element', 'Decorator',get_class($this)).'_'.$this->_form->getAttribute(Chrome_Form_Interface::ATTRIBUTE_DECORATOR);
 
             if(!class_exists($class, true)) {
-                throw new Chrome_Exception('Could not load form decorator '.get_class($this).'!');
+                throw new Chrome_Exception('Could not load form decorator '.$class.'!');
             }
         }
 

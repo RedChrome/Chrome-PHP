@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:39:59] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 14:25:38] --> $
  * @author     Alexander Book
  */
 
@@ -59,10 +59,10 @@ class Chrome_Route_Static implements Chrome_Router_Route_Interface
 			$this->_resource->setClass( $row['class'] );
 
 			if( count( $row['GET'] ) > 0 ) {
-				$data->setGET( $row['GET'] );
+				$data->setGETData( $row['GET'] );
 			}
 			if( count( $row['POST'] ) > 0 ) {
-				$data->setPOST( $row['POST'] );
+				$data->setPOSTData( $row['POST'] );
 			}
 			return true;
 		}

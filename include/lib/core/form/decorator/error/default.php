@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 17:07:32] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 13:07:44] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -30,17 +30,21 @@ class Chrome_Form_Decorator_Error_Default extends Chrome_Form_Decorator_Abstract
 {
     const CHROME_FORM_DECORATOR_ERROR_EXCLUDE_ELEMENTS = 'EXCLUDEELEMENTS';
     const CHROME_FORM_DECORATOR_ERROR_LANGUAGE_OBJ = 'LANGOBJ';
+    const CHROME_FORM_DECORATOR_ERROR_DISPLAY_ALL = 'DISPLAYALL';
 
     protected $_defaultOptions = array(self::CHROME_FORM_DECORATOR_ERROR_EXCLUDE_ELEMENTS => array(),
-                                       self::CHROME_FORM_DECORATOR_ERROR_LANGUAGE_OBJ => null);
+                                       self::CHROME_FORM_DECORATOR_ERROR_LANGUAGE_OBJ => null,
+                                       self::CHROME_FORM_DECORATOR_ERROR_DISPLAY_ALL => false);
 
     public function render()
     {
         $return = '<div class="wrongInput" align="left"><ul>';
 
-        $errors = array_merge($this->_formElement->getForm()->getValidationErrors());
-
-        #$errors = $this->_formElement->getForm()->getErrors();
+        if($this->_options[self::CHROME_FORM_DECORATOR_ERROR_DISPLAY_ALL] === true) {
+            $errors = $this->_formElement->getForm()->getErrors();
+        } else {
+            $errors = array_merge($this->_formElement->getForm()->getValidationErrors());
+        }
 
         $lang = $this->_options[self::CHROME_FORM_DECORATOR_ERROR_LANGUAGE_OBJ];
 

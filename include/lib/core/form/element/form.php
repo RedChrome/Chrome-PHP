@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:17:27] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 10:30:03] --> $
  * @author     Alexander Book
  */
 
@@ -26,13 +26,13 @@ if(CHROME_PHP !== true)
 
 /**
  * Basic form element class for ALL forms!
- * 
+ *
  * This element checks whether the user has sent a proper form, that means:
- *     1. The user has to send the right token. This token is created randomly and saved in session. 
+ *     1. The user has to send the right token. This token is created randomly and saved in session.
  *         To retriev the token use getOptions(self::CHROME_FORM_ELEMENT_FORM_TOKEN)
  *     2. The user has to send the form in a specific time intervall
- *     
- * Any violation of these rules will cause the form to be invalid! 
+ *
+ * Any violation of these rules will cause the form to be invalid!
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
@@ -41,28 +41,28 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
 {
     /**
      * Options for this element:
-     * 
-     * - CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE: 
+     *
+     * - CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE:
      *     Cannot be set! Namespace in session
-     *     
+     *
      * - CHROME_FORM_ELEMENT_FORM_TOKEN:
      *     Cannot be set! Namespace in session for token
      *         => Wil raise CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN, if sent token didn't macht the saved(in session) token
-     *     
+     *
      * - CHROME_FORM_ELEMENT_FORM_TOKEN_NAMESPACE:
      *     (string) the name of the input field for sending the token, default: 'token'
-     *     
+     *
      * - CHROME_FORM_ELEMENT_FORM_TIME:
      *     Cannot be set! Namespace in session for time
-     *     
+     *
      * - CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME:
      *     (int): Time in seconds to accomplish the sending of the form.
      *         => Will raise CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME
-     *     
+     *
      * - CHROME_FORM_ELEMENT_FORM_MIN_ALLOWED_TIME:
      *     (int): Time in seconds the user needs at least to send the form.
      *         => Will raise CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME
-     * 
+     *
      * @var string
      */
     const
@@ -73,19 +73,19 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
         CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME   = 'MAXALLOWEDTIME',
         CHROME_FORM_ELEMENT_FORM_MIN_ALLOWED_TIME   = 'MINALLOWEDTIME';
 
-        
+
     /**
      * Errors of this element:
-     * 
-     * CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME: 
+     *
+     * CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME:
      *     Happens if the user waitet more than $CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME seconds
-     * 
+     *
      * CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME:
      *     Happens if the user was faster than $CHROME_FORM_ELEMENT_FORM_MIN_ALLOWED_TIME seconds
-     *    
+     *
      * CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN:
      *     Happens if the sent token didnt match the saved token -> Protection against XSRF
-     *     
+     *
      * @var unknown
      */
     const
@@ -100,7 +100,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
 
     /**
      * Default constructor of all form elements
-     * 
+     *
      * @param Chrome_Form_Interface $form the form which should contain this element
      * @param mixed $id the id of this new element, must be unique
      * @param array $options additional options for this element
@@ -117,14 +117,14 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
             $sessionData = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$id][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE];
             if(isset($sessionData[self::CHROME_FORM_ELEMENT_FORM_TOKEN]) AND !isset($options[self::CHROME_FORM_ELEMENT_FORM_TOKEN])) {
                 $options[self::CHROME_FORM_ELEMENT_FORM_TOKEN] = $sessionData[self::CHROME_FORM_ELEMENT_FORM_TOKEN];
-        
+
                 // renew the timer
                 $sessionData[self::CHROME_FORM_ELEMENT_FORM_TIME] = CHROME_TIME;
             }
         }
         parent::__construct($form, $id, $options);
     }
-        
+
     protected function _isCreated()
     {
         if(!isset($this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE])) {
@@ -175,7 +175,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
         } else {
             $this->_renewTimer();
             $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
-                                     
+
             return false;
         }
     }
@@ -232,11 +232,11 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
     protected function _createToken() {
         return md5(uniqid(mt_rand(), true));
     }
-    
+
     /**
      * sets the timer for this form to the current time
      * This does not check whether its needed or not. For this see {@see _renewTimerIfNeeded}
-     * 
+     *
      * @return void
      */
     protected function _renewTimer() {

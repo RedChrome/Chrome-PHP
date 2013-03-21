@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:12:52] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 13:31:59] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -105,5 +105,7 @@ class Chrome_Captcha_Engine_Default implements Chrome_Captcha_Engine_Interface
          $this->_session['CAPTCHA_'.$this->_backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME]] = array('key' => $this->_key);
     }
 
-
+    public function getError() {
+        return '';
+    }
 }

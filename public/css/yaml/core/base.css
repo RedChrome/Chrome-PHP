@@ -293,7 +293,7 @@
 	.ym-form fieldset { overflow:hidden; }
 
 	.ym-form div { position:relative; }
-	
+
 	.ym-form label,
 	.ym-form .ym-message {
 		position:relative;
@@ -319,6 +319,7 @@
 	.ym-form input[type=hidden] { display:none !important; }
 
 	/* styling containing DIV elements | Gestaltung der kapselnden DIV-Elemente */
+    .ym-form .ym-fbox-birthday:before, /* add birthday */
 	.ym-form .ym-fbox-text:before,
 	.ym-form .ym-fbox-select:before,
 	.ym-form .ym-fbox-check:before,
@@ -327,6 +328,7 @@
 		display:table;
 	}
 
+    .ym-form .ym-fbox-birthday:after,  /* add birthday */
 	.ym-form .ym-fbox-text:after,
 	.ym-form .ym-fbox-select:after,
 	.ym-form .ym-fbox-check:after,
@@ -368,7 +370,7 @@
 	}
 
 	/* Indent Checkbox fields to match label-width | Checkboxen um den gleichen Wert einrücken, wie die Breite der labels */
-
+    .ym-form .ym-fbox-birthday select,/* add birthday */
 	.ym-full .ym-fbox-select select,
 	.ym-full .ym-fbox-text input,
 	.ym-full .ym-fbox-text textarea {
@@ -395,6 +397,7 @@
 
 	/* Columnar display | Spalten-Darstellung */
 	.ym-columnar .ym-fbox-text label,
+    .ym-columnar .ym-fbox-birthday label, /* add birthday */
 	.ym-columnar .ym-fbox-select label {
 		display:inline;
 		float:left;

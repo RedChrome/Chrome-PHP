@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 12:15:08] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 13:38:53] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -35,7 +35,12 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
 
     const CHROME_FORM_ELEMENT_CAPTCHA_ERROR_NOT_VALID = 'CAPTCHANOTVALID';
 
-    protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => true);
+    const CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS = 'CAPTCHAFRONTEND';
+    const CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS  = 'CAPTCHA_BACKEND';
+
+    protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
+                                        self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS => array(),
+                                        self::CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS => array());
 
     public function isCreated() {
         return true;
@@ -45,12 +50,19 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
 
         $data = $this->_form->getSentData($this->_id);
 
-        $captcha = new Chrome_Captcha($this->_form->getID(), array(), array());
+        $captcha = new Chrome_Captcha($this->_form->getID(), $this->_form->getRequestData(), $this->_getFrontendOptions(), $this->_getBackendOptions());
 
         $valid = $captcha->isValid($data);
 
         if($valid == false) {
+
+            $error = $captcha->getError();
+
+            if($error != null) {
+                $this->_errors[] = $error;
+            }
             $this->_errors[] = self::CHROME_FORM_ELEMENT_CAPTCHA_ERROR_NOT_VALID;
+
         }
 
         return $valid;
@@ -70,7 +82,8 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
 
     public function create() {
 
-        $captcha = new Chrome_Captcha($this->_form->getID(), $this->_form->getRequestData(), array(), array());
+        $captcha = new Chrome_Captcha($this->_form->getID(), $this->_form->getRequestData(), $this->_getFrontendOptions(), $this->_getBackendOptions());
+
         $captcha->create();
 
         return true;
@@ -86,5 +99,45 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
 
     public function getSavedData() {
 
+    }
+
+    protected function _getFrontendOptions() {
+
+        if(isset($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS]) && is_array($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS])) {
+            return $this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS];
+        }
+
+        return array();
+    }
+
+    protected function _getBackendOptions() {
+
+        if(isset($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS]) && is_array($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS])) {
+            return $this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS];
+        }
+
+        return array();
+    }
+
+    public function getDecorator() {
+
+        // we dont care about a default decorator, the decorator depends on the captcha engine...
+
+        if($this->_decorator !== null) {
+            return $this->_decorator;
+        }
+
+        if(!isset($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS][Chrome_Captcha_Interface::CHROME_CAPTCHA_ENGINE])) {
+            $class = 'Chrome_Form_Decorator_Captcha_Default';
+        } else {
+            $class = 'Chrome_Form_Decorator_Captcha_'.ucfirst(strtolower($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS][Chrome_Captcha_Interface::CHROME_CAPTCHA_ENGINE]));
+        }
+
+        $this->_decorator = new $class($this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS], $this->_options[self::
+                CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES]);
+        $this->_decorator->setFormElement($this);
+
+
+        return $this->_decorator;
     }
 }

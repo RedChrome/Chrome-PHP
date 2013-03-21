@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:48:06] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 23:33:15] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -31,8 +31,8 @@ class Chrome_Form_Decorator_Form_Yaml extends Chrome_Form_Decorator_Form_Default
 {
 	public function render()
 	{
-		$this->setAttribute( 'class', 'ym-form' );
+		$this->setAttribute( 'class', 'ym-form ym-columnar' );
 
-		return parent::render(  );
+		return parent::render();
 	}
 }

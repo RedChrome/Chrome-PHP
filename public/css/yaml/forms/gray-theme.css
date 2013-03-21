@@ -41,10 +41,12 @@
 		box-sizing: border-box;
 	}
 
+    .ym-columnar .ym-fbox-birthday select,  /* add birthday */
 	.ym-columnar .ym-fbox-select select,
 	.ym-columnar .ym-fbox-text input,
 	.ym-columnar .ym-fbox-text textarea { width:70%; }
 
+    .ym-full .ym-fbox-birthday select,  /* add birthday */
 	.ym-full .ym-fbox-select select,
 	.ym-full .ym-fbox-text input,
 	.ym-full .ym-fbox-text textarea { width:100%; }
@@ -99,7 +101,8 @@
 	}
 
 	/* styling containing DIV elements | Gestaltung der kapselnden DIV-Elemente */
-	.ym-form div.ym-fbox-text,
+	.ym-form div.ym-fbox-birthday,  /* add birthday */
+    .ym-form div.ym-fbox-text,
 	.ym-form div.ym-fbox-select,
 	.ym-form div.ym-fbox-check,
 	.ym-form div.ym-fbox-button {
@@ -140,6 +143,14 @@
 		margin-top: -2px;
 	}
 
+    /**
+        Adds Birthday input to ym-form
+
+        works with ym-form, ym-full, ym-columnar
+
+    */
+
+    .ym-form .ym-fbox-birthday select, /* add birthday */
 	.ym-form .ym-fbox-select select {
 		line-height: 1em;
 		padding: 0.25em 2px 0.25em 1px;
@@ -147,13 +158,44 @@
         width: 80%;
 	}
 
+    .ym-form .ym-fbox-birthday select {
+        float: left;
+        display: inline;
+        margin: 0;
+    }
+
+    .ym-form .ym-fbox-birthday select {
+        width: 19%; /* thats 1/3 * (60 - 3)% */
+    }
+
+    .ym-form .ym-fbox-birthday .ym-fbox-birthday-middle {
+        margin: 0 1.5% 0 1.5%; /* we gained 3% from .ym-form .ym-fbox-birthday select*/
+    }
+
+     /* add birthday */
+    .ym-columnar .ym-fbox-birthday select {
+        width: 22%; /* thats 1/3 * (70 - 4)%, the 4 comes from 2* 2% for margin left/right in .ym-fbox-birthday-middle */
+    }
+
+    .ym-full .ym-fbox-birthday .ym-fbox-birthday-middle,
+    .ym-columnar .ym-fbox-birthday .ym-fbox-birthday-middle {
+        margin: 0 2% 0 2%;
+    }
+
+    .ym-full .ym-fbox-birthday select {
+        width: 32%; /* thats 1/3 * (100 - 4)%*/
+    }
+
+
+
+
 	/* proportional fonts for all form elements */
 	.ym-form input,
 	.ym-form textarea,
 	.ym-form select,
 	.ym-form optgroup {
 		font-family:Arial, Helvetica, sans-serif;
-		-webkit-box-shadow: inset 0 0 4px #eee;
+		-webkit-box-shadow: in    set 0 0 4px #eee;
 		-moz-box-shadow: inset 0 0 4px #eee;
 		box-shadow: inset 0 0 4px #eee;
 	}
@@ -165,6 +207,7 @@
 
 	.ym-form .ym-fbox-text input,
 	.ym-form .ym-fbox-text textarea,
+    .ym-form .ym-fbox-birthday select,  /* add birthday */
 	.ym-form .ym-fbox-select select {
 		border:1px solid #ddd;
 	}

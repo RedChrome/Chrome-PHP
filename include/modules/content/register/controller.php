@@ -32,7 +32,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
 
         $this->_session = $this->_requestHandler->getRequestData()->getSession();
 
-        if($this->_requestData->getGET('action') === 'register') {
+        if($this->_requestData->getGETData('action') === 'register') {
 
             if(!isset($this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE])) {
 

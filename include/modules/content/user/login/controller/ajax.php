@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 16:03:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 15:06:59] --> $
  * @author     Alexander Book
  */
 
@@ -33,7 +33,7 @@ class Chrome_Controller_Content_Login_AJAX extends Chrome_Controller_Content_Abs
 	protected function _initialize() {
 
         // this is important!! This encodes the rendered data from the views with json
-	    $this->_filter['postprocessor'][] = new Chrome_Filter_JSON();
+	    //$this->_filter['postprocessor'][] = new Chrome_Filter_JSON();
 
         $this->_require = array('file' => array(CONTENT.'user/login/include.php', CONTENT.'user/login/view/ajax.php', CONTENT.'user/login/model.php'));
 	}

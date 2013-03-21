@@ -12,7 +12,14 @@ class Chrome_View_HTML_Head_CssIncluder extends Chrome_View
 
 <!-- CSS -->
 <link href="'._PUBLIC.'css/yaml/flexible-grids.css" rel="stylesheet" type="text/css"/>
-'.$this->getCSS().'<!-- CSS -->';
+'.$this->getCSS().'<!-- CSS -->
+
+<script type="text/javascript">
+ var RecaptchaOptions = {
+    theme : \''.Chrome_Config::getConfig('Captcha', 'recaptcha_theme').'\'
+ };
+ </script>
+';
 
     }
 }
