@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.10.2012 21:51:04] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 16:29:51] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -30,10 +30,13 @@ require_once 'default.php';
  */
 class Chrome_Form_Decorator_Text_Yaml extends Chrome_Form_Decorator_Text_Default
 {
+    protected $_labelManipulated = false;
+
     public function render() {
 
-        if($this->_formElement->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED) === true AND ($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null) {
+        if($this->_formElement->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED) === true AND ($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null AND $this->_labelManipulated === false ) {
             $this->setOption(self::CHROME_FORM_DECORATOR_LABEL, $label.'<sup class="ym-required">*</sup>');
+            $this->_labelManipulated = true;
         }
 
         return '<div class="ym-fbox-text">'.parent::render().'</div>';

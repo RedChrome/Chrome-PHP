@@ -1,12 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 3.4.5
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Erstellungszeit: 21. Mrz 2013 um 13:57
--- Server Version: 5.5.16
--- PHP-Version: 5.3.8
-
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -37,19 +28,16 @@ CREATE TABLE IF NOT EXISTS `cp1_admin_navi` (
   `url` varchar(100) NOT NULL,
   `access` int(5) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=8 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC AUTO_INCREMENT=0;
 
---
--- Daten für Tabelle `cp1_admin_navi`
---
 
 INSERT INTO `cp1_admin_navi` (`id`, `parentid`, `isparent`, `name`, `action`, `url`, `access`) VALUES
-(1, 0, 1, 'Gallery', 'Gallery', 'gallery/gallery.php', 2),
-(2, 1, 0, 'Events', 'Gallery_Events', 'gallery/events.php', 2),
-(3, 1, 0, 'Bilder', 'Gallery_Images', 'gallery/images.php', 2),
-(4, 0, 1, 'News', 'News', 'news/news.php', 2),
-(6, 4, 0, 'Hinzuf&uuml;gen', 'News_add', 'news/news_add.php', 2),
-(7, 1, 0, 'Bild Hochladen', 'Gallery_Image_Upload', 'gallery/upload_image.php', 2);
+(NULL, 0, 1, 'Gallery', 'Gallery', 'gallery/gallery.php', 2),
+(NULL, 1, 0, 'Events', 'Gallery_Events', 'gallery/events.php', 2),
+(NULL, 1, 0, 'Bilder', 'Gallery_Images', 'gallery/images.php', 2),
+(NULL, 0, 1, 'News', 'News', 'news/news.php', 2),
+(NULL, 4, 0, 'Hinzuf&uuml;gen', 'News_add', 'news/news_add.php', 2),
+(NULL, 1, 0, 'Bild Hochladen', 'Gallery_Image_Upload', 'gallery/upload_image.php', 2);
 
 -- --------------------------------------------------------
 
@@ -65,15 +53,15 @@ CREATE TABLE IF NOT EXISTS `cp1_authenticate` (
   `cookie_token` varchar(50) NOT NULL,
   `time` int(12) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
 --
 -- Daten für Tabelle `cp1_authenticate`
 --
 
 INSERT INTO `cp1_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
-(0, '', '', '', 0),
-(3, 'b10617e307e7731817dac8b39f19d1418bde2e49db95139b', 'Gd{|Yw"BA4z4,czCw~g0', '7d70621628d3bbc2eba84b0a1d8685bddcc8ad19c6d39e9e', 1361099522);
+(NULL, '', '', '', 0),
+(NULL, 'b10617e307e7731817dac8b39f19d1418bde2e49db95139b', 'Gd{|Yw"BA4z4,czCw~g0', '7d70621628d3bbc2eba84b0a1d8685bddcc8ad19c6d39e9e', 1361099522);
 
 -- --------------------------------------------------------
 
@@ -700,14 +688,14 @@ CREATE TABLE IF NOT EXISTS `cp1_user` (
   `design` varchar(20) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4;
 
 --
 -- Daten für Tabelle `cp1_user`
 --
 
 INSERT INTO `cp1_user` (`id`, `name`, `email`, `group`, `time`, `avatar`, `address`, `design`) VALUES
-(3, 'Alex', 'redchrome@gmx.de', 0, 1349179579, '', '', 'default');
+(2, 'Alex', 'redchrome@gmx.de', 0, 1349179579, '', '', 'default');
 
 -- --------------------------------------------------------
 
@@ -726,7 +714,7 @@ CREATE TABLE IF NOT EXISTS `cp1_user_regist` (
   `key` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;
 
 --
 -- Constraints der exportierten Tabellen

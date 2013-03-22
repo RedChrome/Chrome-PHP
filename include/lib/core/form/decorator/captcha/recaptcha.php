@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 13:38:11] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 14:34:18] --> $
  */
 if(CHROME_PHP !== true) die();
 
@@ -52,7 +52,10 @@ class Chrome_Form_Decorator_Captcha_Recaptcha extends Chrome_Form_Decorator_Abst
 
         // add a hidden input text. This is needed for the captcha element to return isSent() = true
 
-		return '<script type="text/javascript" src="'.$server.'/challenge?k='.$publickey.$errorpart.'"></script>
+		return '
+        <label for="recaptcha_response_field">Captcha: </label>
+
+        <script type="text/javascript" src="'.$server.'/challenge?k='.$publickey.$errorpart.'"></script>
 
             	<noscript>
               		<iframe src="'.$server.'/noscript?k='.$publickey.$errorpart.'" height="300" width="500" frameborder="0"></iframe><br/>

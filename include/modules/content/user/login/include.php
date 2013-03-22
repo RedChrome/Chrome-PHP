@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2013 19:01:57] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 16:24:20] --> $
  * @author     Alexander Book
  */
 
@@ -75,7 +75,8 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $this->_elements['identity'] = new Chrome_Form_Element_Text($this, 'identity', array(
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
-                Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => $LANG->get('email')
+                Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => $LANG->get('email'),
+                Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $LANG->get('email')
             ),
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array(
                 'onblur' => 'if(this.value==\'\')this.value=\''.$LANG->get('email').'\'',
@@ -87,6 +88,9 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         // for better ergonomics
         $this->_elements['password'] = new Chrome_Form_Element_Password($this, 'password', array(
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
+                Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $LANG->get('password')
+            ),
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array(
                 'onblur' => 'if(this.value==\'\')this.value=\''.$LANG->get('password').'\'',
                 'onfocus' => 'if(this.value==\''.$LANG->get('password').'\')this.value=\'\'',
@@ -101,9 +105,9 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         // this determines, whether the user stays logged in, even if he leaves the website
         $this->_elements['stay_loggedin'] = new Chrome_Form_Element_Checkbox($this, 'stay_loggedin', array(
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => false,
-            Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array(false),
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array(1),
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array($boolConverter)));
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array($boolConverter),
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => array($LANG->get('stay_loggedin')))));
 
         // submit button, nothing special
         $this->_elements['submit'] = new Chrome_Form_Element_Submit($this, 'submit', array(

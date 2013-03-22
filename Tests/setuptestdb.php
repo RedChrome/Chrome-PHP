@@ -11,21 +11,30 @@ $_SERVER['SERVER_NAME'] = "localhost";
 require_once 'testsetupdb.php';
 require_once PLUGIN.'Log/database.php';
 
-$query = file_get_contents('Tests/db.sql');
+function applySQLQueries($query) {
 
-if($query == false) {
-    die('db.sql is empty');
-}
+    global $databaseContext;
 
-$queries = explode(';', $query);
-$db = $databaseContext->getDatabaseFactory()->buildInterface('simple', 'assoc');
-
-foreach($queries as $_query) {
-
-    if(trim($_query) == '') {
-        continue;
+    if($query == false) {
+        die('Query string is empty');
     }
 
-    $db->query($_query);
-    $db->clear();
+    $queries = explode(";\r\n", $query); // use \n on windows systems
+    $db = $databaseContext->getDatabaseFactory()->buildInterface('simple', 'assoc');
+
+    foreach($queries as $_query) {
+
+        if(trim($_query) == '') {
+            continue;
+        }
+
+
+       $db->query($_query);
+       $db->clear();
+
+    }
 }
+
+applySQLQueries(file_get_contents('Tests/sql/product.sql'));
+applySQLQueries(file_get_contents('Tests/sql/deltaProductTest.sql'));
+

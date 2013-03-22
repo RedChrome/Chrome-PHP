@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.10.2012 22:36:02] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 14:31:43] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -32,17 +32,35 @@ class Chrome_Form_Decorator_Birthday_Default extends Chrome_Form_Decorator_Indiv
 
     const OPTION_LANGUAGE = 'LANG';
 
+    protected $_int = 0;
+    protected $_class = null;
+
 	public function renderAll()
 	{
+        $class = null;
+        if(isset($this->_attribute['class'])) {
+            $class = $this->_attribute['class'];
+        }
+
 		$lang = $this->getLanguage();
 
 		$date = new Chrome_Date();
 
 		$data = $this->_formElement->getSavedData();
 
-		$return = $this->_renderMonths( $lang, $date, $data );
+        $return = '';
+
+       	if(($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null) {
+			$return .= '<label for="'.$this->_formElement->getID().'">'.$label.'</label>';
+		}
+
+		$return .= $this->_renderMonths( $lang, $date, $data );
+
+        $this->_attribute['class'] = $class .' ym-fbox-birthday-middle';
 
 		$return .= $this->_renderDays( $lang, $date, $data );
+
+        $this->_attribute['class'] = $class;
 
 		$return .= $this->_renderYears( $lang, $date, $data );
 
@@ -51,6 +69,21 @@ class Chrome_Form_Decorator_Birthday_Default extends Chrome_Form_Decorator_Indiv
 
 	public function element( $name, array $options = array() )
 	{
+        $this->_int++;
+        if($this->_int === 1) {
+            	if(($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null) {
+			 $return .= '<label for="'.$this->_formElement->getID().'">'.$label.'</label>';
+		  }
+        } else if($this->_int === 2) {
+            $this->_class = null;
+            if(isset($this->_attribute['class'])) {
+                $this->_class = $this->_attribute['class'];
+            }
+            $this->_attribute['class'] = $this->_class .' ym-fbox-birthday-middle';
+        } else if($this->_int === 3) {
+           $this->_attribute['class'] = $this->_class;
+        }
+
 	    if(isset($options[self::OPTION_LANGUAGE])) {
 	       $lang = $options[self::OPTION_LANGUAGE];
 	    } else {

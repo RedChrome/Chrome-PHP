@@ -8,6 +8,7 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
 		$this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
 		$this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST );
 		$this->setAttribute( self::ATTRIBUTE_ID, $this->_id );
+        $this->setAttribute( self::ATTRIBUTE_DECORATOR, 'Yaml');
 
 		$lang = new Chrome_Language( 'modules/content/user/registration' );
 
@@ -17,9 +18,13 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
 		$this->_elements['error'] = new Chrome_Form_Element_Error( $this, 'error', array( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS =>
 				array( Chrome_Form_Decorator_Error_Default::CHROME_FORM_DECORATOR_ERROR_EXCLUDE_ELEMENTS =>
 					array( 'submit', $this->_id ) ) ) );
+        $this->_elements['error']->setDecorator(new Chrome_Form_Decorator_Error_Default(array(), array()));
 
 		$this->_elements['accept'] = new Chrome_Form_Element_Checkbox( $this, 'accept', array( Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
-				Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array( 'accepted' ) ) );
+				Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array( 'accepted' ),
+                Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => array($lang->get('rules_agree')))
+
+                 ) );
 
 		$this->_elements['submit'] = new Chrome_Form_Element_Submit( $this, 'submit', array( Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_SUBMIT_VALUES =>
 				array( $lang->get( 'register' ) ) ) );
@@ -34,7 +39,7 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 		$this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
 		$this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST );
 		$this->setAttribute( self::ATTRIBUTE_ID, $this->_id );
-        //$this->setAttribute( self::ATTRIBUTE_DECORATOR, 'Yaml');
+        $this->setAttribute( self::ATTRIBUTE_DECORATOR, 'Yaml');
 
 		$lang = new Chrome_Language( 'modules/content/user/registration' );
 
@@ -77,26 +82,38 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 
         $this->_elements['buttons'] = new Chrome_Form_Element_Buttons($this, 'buttons', array(Chrome_Form_Element_Buttons::CHROME_FORM_ELEMENT_BUTTONS => array($submitButton, $backwardButton)));
 
-		$this->_elements['captcha'] = new Chrome_Form_Element_Captcha( $this, 'captcha', array( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES =>
-				array( 'size' => 30 ), Chrome_Form_Element_Captcha::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS => array(Chrome_Captcha_Interface::CHROME_CAPTCHA_ENGINE => 'recaptcha') )  );
+		$this->_elements['captcha'] = new Chrome_Form_Element_Captcha( $this, 'captcha', array(
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ),
+            //Chrome_Form_Element_Captcha::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS => array(
+            //    Chrome_Captcha_Interface::CHROME_CAPTCHA_ENGINE => 'default'),
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('captcha')),
+            )  );
 
-		$this->_elements['birthday'] = new Chrome_Form_Element_Birthday( $this, 'birthday', array( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA => true ) );
+		$this->_elements['birthday'] = new Chrome_Form_Element_Birthday( $this, 'birthday', array(
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA => true,
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS  => array(
+                Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('birthday')),
+            )
+          );
 
 		$this->_elements['email'] = new Chrome_Form_Element_Text( $this, 'email', array(
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array( $emailValidator, $emailExistsValidator, $emailBlacklistValidator ),
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ),
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('email')),
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array( $emailConverter  ) ) );
 
 		$this->_elements['password'] = new Chrome_Form_Element_Password( $this, 'password', array(
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array( $passwordValidator ),
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('password')),
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ) ) );
 
 		// add a validator, to check whether the pws are the same or not
 		$this->_elements['password2'] = new Chrome_Form_Element_Password( $this, 'password2', array(
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array( $passwordValidator ),
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('password_confirm')),
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ) ) );
 
 		// add nickname validator
@@ -104,6 +121,7 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array( $nicknameValidator ),
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ),
+            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('nickname')),
 			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array( $nameConverter ) ) );
 	}
 }

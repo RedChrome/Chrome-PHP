@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.10.2012 19:51:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 14:40:27] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -32,9 +32,14 @@ class Chrome_Form_Decorator_Captcha_Default extends Chrome_Form_Decorator_Abstra
 
         $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL);
 
+        $label = '';
+        if(($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null) {
+			$label = '<label for="'.$this->_formElement->getID().'">'.$label.'</label>';
+		}
+
         $img = '<img src="'._PUBLIC.'captcha/default.php?name='.$this->_formElement->getForm()->getID().'" id="captcha_'.$this->_formElement->getForm()->getID().'" />';
-        $input = '<br><input type="text" name="'.$this->_formElement->getID().'" value="" '.$this->_getPreparedAttrs().'"><br>
+        $input = '<input type="text" name="'.$this->_formElement->getID().'" value="" '.$this->_getPreparedAttrs().'"><br><br>
                 <a onclick="javascript:document.getElementById(\'captcha_'.$this->_formElement->getForm()->getID().'\').src=\''._PUBLIC.'captcha/default.php?name='.$this->_formElement->getForm()->getID().'&renew=\'+getToken()">'.$lang->get('captcha_renew').'</a>';
-        return $img.$input;
+        return $label.$img.$input;
     }
 }

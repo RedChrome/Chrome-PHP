@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.03.2013 20:11:59] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 15:23:26] --> $
  * @link       http://chrome-php.de
  */
 
@@ -266,6 +266,10 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
     {
         // replace table prefix
         $statement = str_replace('cpp_', DB_PREFIX . '_', $statement);
+
+        if(count($this->_params) === 0) {
+            return $statement;
+        }
 
         $statement = str_replace('?', '%s', $statement);
 

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:46:41] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 15:36:24] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -31,6 +31,6 @@ class Chrome_Form_Decorator_Birthday_Yaml extends Chrome_Form_Decorator_Birthday
 {
 	public function renderAll()
 	{
-        return '<div class="ym-fbox-select">'. parent::renderAll().'</div>';
+        return '<div class="ym-fbox-birthday">'. parent::renderAll().'</div>';
 	}
 }

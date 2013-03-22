@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:48:28] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 15:46:44] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -33,6 +33,6 @@ class Chrome_Form_Decorator_Submit_Yaml extends Chrome_Form_Decorator_Submit_Def
 	{
 		$this->setAttribute( 'class', 'ym-button' );
 
-		return '<div class="ym-fbox-button">' . parent::render() . '</div>';
+		return parent::render();
 	}
 }

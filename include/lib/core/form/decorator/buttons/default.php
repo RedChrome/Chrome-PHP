@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 20:00:37] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 15:52:52] --> $
  */
 if( CHROME_PHP !== true ) die();
 
@@ -27,31 +27,16 @@ if( CHROME_PHP !== true ) die();
  */
 class Chrome_Form_Decorator_Buttons_Default extends Chrome_Form_Decorator_Individual_Abstract
 {
-    protected $_int = 0;
-
 	public function element( $name, array $options = array())
 	{
-	    $return = '';
-
-	    if($this->_int === 0) {
-	       $return .= '<div class="ym-fbox-button">';
-	    }
-
 		$buttons = $this->_formElement->getOptions( Chrome_Form_Element_Buttons::CHROME_FORM_ELEMENT_BUTTONS );
 
 		foreach( $buttons as $key => $button ) {
 			if( $key === $name or $button->getID() === $name ) {
-				$return .= $button->getDecorator()->render();
+				return $button->getDecorator()->render();
 			}
 		}
 
-        $this->_int ++;
-
-        if($this->_int === count($buttons)) {
-            $return .= '</div>';
-        }
-
-        return $return;
 	}
 
 	public function renderAll()
