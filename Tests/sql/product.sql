@@ -562,7 +562,7 @@ CREATE TABLE IF NOT EXISTS `cp1_require` (
   `priority` int(2) NOT NULL DEFAULT '6',
   `class_loader` int(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=31 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
 --
 -- Daten für Tabelle `cp1_require`

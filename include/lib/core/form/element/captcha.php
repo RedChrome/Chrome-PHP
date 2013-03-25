@@ -38,7 +38,7 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
     const CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS = 'CAPTCHAFRONTEND';
     const CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS  = 'CAPTCHA_BACKEND';
 
-    protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
+    protected $_defaultOptions = array(self::IS_REQUIRED => true,
                                         self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS => array(),
                                         self::CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS => array());
 
@@ -70,7 +70,7 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
 
     protected function _isSent() {
 
-        if($this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === true) {
+        if($this->_options[self::IS_REQUIRED] === true) {
             if($this->_form->getSentData($this->_id) === null) {
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
                 return false;

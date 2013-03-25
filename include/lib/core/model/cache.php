@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.11.2012 23:49:45] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 01:57:40] --> $
  * @author     Alexander Book
  */
 
@@ -52,8 +52,6 @@ abstract class Chrome_Model_Cache_Abstract extends Chrome_Model_Decorator_Abstra
     protected $_cache = null;
 
     /**
-     * Chrome_Model_Cache_Abstract::__construct()
-     *
      * Creates a new cache model
      *
      * This is a decorator pattern. To cache a model you can use this class.
@@ -64,25 +62,21 @@ abstract class Chrome_Model_Cache_Abstract extends Chrome_Model_Decorator_Abstra
     public function __construct(Chrome_Model_Abstract $instance)
     {
         if(self::$_cacheFactory === null) {
-            self::$_cacheFactory = Chrome_Cache_Factory::getInstance();
+            self::$_cacheFactory = new Chrome_Cache_Factory();
         }
 
         parent::__construct($instance);
-        $this->_cache();
+        $this->_setUpCache();
     }
 
     /**
-     * Chrome_Model_Cache_Abstract::_cache()
-     *
-     * This method is used to e.g create a new cache object
+     * This method is used to set up a new cache object
      *
      * @return void
      */
-    abstract protected function _cache();
+    abstract protected function _setUpCache();
 
     /**
-     * Chrome_Model_Cache_Abstract::clearCache()
-     *
      * This methods clears the entire cache
      *
      * @return bool

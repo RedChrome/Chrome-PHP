@@ -17,87 +17,71 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2012 18:51:30] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 00:25:18] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
  */
-interface Chrome_Cache_Files_Interface
+class Chrome_Cache_Files implements Chrome_Cache_Interface
 {
-    public function isCached($file);
+	protected $_dir = null;
 
-    public function load($file);
+	protected $_extension = null;
 
-    public function save($file, $data);
+	public function __construct($dir, $extension = '.cache')
+	{
+		$this->_dir = CACHE.$dir;
 
-    public function removeCache($file);
-}
+		if($dir{strlen($dir) - 1} !== '/') {
+			$this->_dir .= '/';
+		}
 
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.Cache
- */
-class Chrome_Cache_Files extends Chrome_Cache_Abstract implements Chrome_Cache_Files_Interface
-{
-    private $_dir = null;
+		if(!_isDir($this->_dir)) {
+			Chrome_Dir::createDir($this->_dir);
+		}
 
-    private $_extension = null;
+		if(strstr($extension, '.') === false) {
+			$extension = '.'.$extension;
+		}
 
-    public static function factory($dir, $extension = '.cache')
-    {
-        return new self($dir, $extension);
-    }
+		$this->_extension = $extension;
+	}
 
-    public function __construct($dir, $extension)
-    {
-        $this->_dir = CACHE.$dir;
+	public function has($file)
+	{
+		return _isFile($this->_dir.$file.$this->_extension);
+	}
 
-        if($dir{strlen($dir)-1} !== '/') {
-            $this->_dir .= '/';
-        }
+	public function get($file)
+	{
+		if($this->isCached($file)) {
+			return file_get_contents($this->_dir.$file.$this->_extension);
+		} else {
+			return null;
+		}
+	}
 
-        if(!_isDir($this->_dir)) {
-            Chrome_Dir::createDir($this->_dir);
-        }
+	public function remove($file)
+	{
+		return _rmFile($this->_dir.$file.$this->_extension);
+	}
 
-        if(strstr($extension, '.') === false) {
-            $extension = '.'.$extension;
-        }
+	public function clear()
+	{
+		return _rmDir($this->_dir);
+	}
 
-        $this->_extension = $extension;
-    }
+	public function set($file, $content)
+	{
+		return file_put_contents($this->_dir.$file.$this->_extension, $content);
+	}
 
-    public function isCached($file)
-    {
-        return _isFile($this->_dir.$file.$this->_extension);
-    }
-
-    public function load($file)
-    {
-        if($this->isCached($file)) {
-            return file_get_contents($this->_dir.$file.$this->_extension);
-        } else {
-            return null;
-        }
-    }
-
-    public function removeCache($file)
-    {
-        return _rmFile($this->_dir.$file.$this->_extension);
-    }
-
-    public function clear()
-    {
-        return _rmDir($this->_dir);
-    }
-
-    public function save($file, $content)
-    {
-        return file_put_contents($this->_dir.$file.$this->_extension, $content);
-    }
+	public function flush()
+	{
+		// do nothing
+	}
 }

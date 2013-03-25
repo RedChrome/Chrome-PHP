@@ -112,9 +112,9 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
         // we have to renew the timer!
 
         $this->_session = $form->getRequestData()->getSession();
-        if(isset($this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$id][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE])) {
+        if(isset($this->_session[self::SESSION_NAMESPACE][$id][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE])) {
 
-            $sessionData = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$id][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE];
+            $sessionData = $this->_session[self::SESSION_NAMESPACE][$id][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE];
             if(isset($sessionData[self::CHROME_FORM_ELEMENT_FORM_TOKEN]) AND !isset($options[self::CHROME_FORM_ELEMENT_FORM_TOKEN])) {
                 $options[self::CHROME_FORM_ELEMENT_FORM_TOKEN] = $sessionData[self::CHROME_FORM_ELEMENT_FORM_TOKEN];
 
@@ -127,13 +127,13 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
 
     protected function _isCreated()
     {
-        if(!isset($this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE])) {
+        if(!isset($this->_session[self::SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE])) {
             $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_CREATED;
             return false;
         }
 
         // is it expired?
-        if($this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE][self::CHROME_FORM_ELEMENT_FORM_TIME] +  $this->_options[self::CHROME_FORM_ELEMENT_FORM_MIN_ALLOWED_TIME] > CHROME_TIME) {
+        if($this->_session[self::SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE][self::CHROME_FORM_ELEMENT_FORM_TIME] +  $this->_options[self::CHROME_FORM_ELEMENT_FORM_MIN_ALLOWED_TIME] > CHROME_TIME) {
             $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_CREATED;
             return false;
         }
@@ -143,11 +143,11 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
 
     protected function _isValid()
     {
-        if(!isset($this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE])) {
+        if(!isset($this->_session[self::SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE])) {
             return false;
         }
 
-        $sessionData = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE];
+        $sessionData = $this->_session[self::SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE];
 
         if($sessionData[self::CHROME_FORM_ELEMENT_FORM_TOKEN] !== $this->getData()) {
             $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN;
@@ -182,9 +182,9 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
 
     public function delete()
     {
-        $data = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+        $data = $this->_session[self::SESSION_NAMESPACE];
         unset($data[$this->_form->getID()][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE]);
-        $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE] = $data;
+        $this->_session[self::SESSION_NAMESPACE] = $data;
     }
 
     public function getData()
@@ -198,20 +198,20 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
             $this->_options[self::CHROME_FORM_ELEMENT_FORM_TOKEN] = $this->_createToken();
         }
 
-        $formData = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+        $formData = $this->_session[self::SESSION_NAMESPACE];
         $formData
             [$this->_form->getID()]
                 [self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE] = array(self::CHROME_FORM_ELEMENT_FORM_TIME => $this->_options[self::CHROME_FORM_ELEMENT_FORM_TIME],
                                                                             self::CHROME_FORM_ELEMENT_FORM_TOKEN => $this->_options[self::CHROME_FORM_ELEMENT_FORM_TOKEN]);
 
-        $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE] = $formData;
+        $this->_session[self::SESSION_NAMESPACE] = $formData;
     }
 
     public function renew() {
 
         $token = $this->_createToken();
 
-        $formData = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+        $formData = $this->_session[self::SESSION_NAMESPACE];
 
         $formData[$this->_form->getID()][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE] =
                                                 array(
@@ -219,7 +219,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
                                                     self::CHROME_FORM_ELEMENT_FORM_TOKEN => $token
                                                     );
 
-        $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE] = $formData;
+        $this->_session[self::SESSION_NAMESPACE] = $formData;
 
         $this->_options[self::CHROME_FORM_ELEMENT_FORM_TOKEN] = $token;
         $this->_options[self::CHROME_FORM_ELEMENT_FORM_TIME] = CHROME_TIME;
@@ -240,10 +240,10 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
      * @return void
      */
     protected function _renewTimer() {
-        $formData = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+        $formData = $this->_session[self::SESSION_NAMESPACE];
 
         $formData[$this->_form->getID()][self::CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE][self::CHROME_FORM_ELEMENT_FORM_TIME] = CHROME_TIME;
 
-        $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE] = $formData;
+        $this->_session[self::SESSION_NAMESPACE] = $formData;
     }
 }

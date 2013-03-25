@@ -31,7 +31,7 @@ class Chrome_Form_Decorator_Password_Default extends Chrome_Form_Decorator_Abstr
 	{
 		$return = '';
 
-		if( $this->_formElement->getOptions( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED )
+		if( $this->_formElement->getOptions( Chrome_Form_Element_Abstract::IS_REQUIRED )
 			=== true ) {
 			$this->setAttribute( 'required', 'required' );
 		}

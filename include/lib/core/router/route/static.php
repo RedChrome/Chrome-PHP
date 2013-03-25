@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 14:25:38] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:25:08] --> $
  * @author     Alexander Book
  */
 
@@ -87,20 +87,23 @@ class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
 {
 	const CHROME_MODEL_ROUTE_STATIC_CACHE_CACHE_FILE = 'tmp/cache/router/_static.cache';
 
-	protected function _cache()
+	protected function _setUpCache()
 	{
-		$this->_cache = parent::$_cacheFactory->factory( 'serialization', self::CHROME_MODEL_ROUTE_STATIC_CACHE_CACHE_FILE );
+	    $options = new Chrome_Cache_Option_Serialization();
+        $options->setCacheFile(self::CHROME_MODEL_ROUTE_STATIC_CACHE_CACHE_FILE);
+
+		$this->_cache = parent::$_cacheFactory->factory( 'serialization', $options );
 	}
 
 	public function getRoute( $search )
 	{
 
-		if( ( $return = $this->_cache->load( 'getRoute_' . $search ) ) === null ) {
+		if( ( $return = $this->_cache->get( 'getRoute_' . $search ) ) === null ) {
 
 			$return = $this->_decorator->getRoute( $search );
 
 			if( $return !== false ) {
-				$this->_cache->save( 'getRoute_' . $search, $return );
+				$this->_cache->set( 'getRoute_' . $search, $return );
 			}
 		}
 
@@ -110,12 +113,12 @@ class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
 	public function findRoute( $search )
 	{
 
-		if( ( $return = $this->_cache->load( 'findRoute_' . $search ) ) === null ) {
+		if( ( $return = $this->_cache->get( 'findRoute_' . $search ) ) === null ) {
 
 			$return = $this->_decorator->findRoute( $search );
 
 			if( $return !== false ) {
-				$this->_cache->save( 'findRoute_' . $search, $return );
+				$this->_cache->set( 'findRoute_' . $search, $return );
 			}
 		}
 

@@ -35,7 +35,7 @@ class Chrome_Form_Element_Checkbox extends Chrome_Form_Element_Abstract
 {
     const CHROME_FORM_ELEMENT_CHECKBOX_SESSION_NAMESPACE = 'CHECKBOX';
 
-    protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => false);
+    protected $_defaultOptions = array(self::IS_REQUIRED => false);
 
     protected $_data = null;
 
@@ -49,7 +49,7 @@ class Chrome_Form_Element_Checkbox extends Chrome_Form_Element_Abstract
 
         $data = $this->_form->getSentData($this->_id);
 
-        if($this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === true AND empty($data) == true ) {
+        if($this->_options[self::IS_REQUIRED] === true AND empty($data) == true ) {
             $isValid = false;
             $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
         }
@@ -78,7 +78,7 @@ class Chrome_Form_Element_Checkbox extends Chrome_Form_Element_Abstract
 
     protected function _isSent()
     {
-        if($this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === true) {
+        if($this->_options[self::IS_REQUIRED] === true) {
             if($this->_form->getSentData($this->_id) === null) {
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
                 return false;
@@ -106,7 +106,7 @@ class Chrome_Form_Element_Checkbox extends Chrome_Form_Element_Abstract
         }
 
         /*
-        if($data === null AND $this->_options[self::CHROME_FORM_ELEMENT_DEFAULT_SELECTION] !== null AND $this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === false) {
+        if($data === null AND $this->_options[self::CHROME_FORM_ELEMENT_DEFAULT_SELECTION] !== null AND $this->_options[self::IS_REQUIRED] === false) {
             return $this->_options[self::CHROME_FORM_ELEMENT_DEFAULT_SELECTION];
         }
         */
@@ -136,17 +136,17 @@ class Chrome_Form_Element_Checkbox extends Chrome_Form_Element_Abstract
             }
         }
 
-        $array = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+        $array = $this->_session[self::SESSION_NAMESPACE];
         $array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_CHECKBOX_SESSION_NAMESPACE][$this->getID()] = $this->getData();
-        $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE] = $array;
+        $this->_session[self::SESSION_NAMESPACE] = $array;
     }
 
     protected function _unSave($key) {
-        $array = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+        $array = $this->_session[self::SESSION_NAMESPACE];
         $array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_CHECKBOX_SESSION_NAMESPACE][$this->getID()][$key] = null;
     }
 
     public function getSavedData() {
-        return (isset($this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_CHECKBOX_SESSION_NAMESPACE][$this->getID()])) ? $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_CHECKBOX_SESSION_NAMESPACE][$this->getID()] : null;
+        return (isset($this->_session[self::SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_CHECKBOX_SESSION_NAMESPACE][$this->getID()])) ? $this->_session[self::SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_CHECKBOX_SESSION_NAMESPACE][$this->getID()] : null;
     }
 }

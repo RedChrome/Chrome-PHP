@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 22:25:36] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:50:53] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -37,17 +37,20 @@ class Chrome_Require_Loader_Exception implements Chrome_Require_Loader_Interface
 	 */
 	public function loadClass($class)
 	{
-		if(preg_match('#Chrome_Exception_Handler_(.{1,})#i', $class, $matches))
-		{
-			return LIB . 'exception/' . strtolower($matches[1]) . '.php';
+		if(preg_match('#Chrome_Exception_Handler_(.{1,})#i', $class, $matches)) {
+			return LIB.'exception/'.strtolower($matches[1]).'.php';
 		}
 
 		// does the class contain 'Chrome_Exception_'?
-		if(preg_match('#Chrome_Exception_(.{1,})#i', $class, $matches))
-		{
-			return LIB . 'exception/' . strtolower($matches[1]) . '.php';
+		if(preg_match('#Chrome_Exception_(.{1,})#i', $class, $matches)) {
+			return LIB.'exception/'.strtolower($matches[1]).'.php';
 		}
 
 		return false;
+	}
+
+	public function init(Chrome_Require_Autoloader_Interface $autoloader)
+	{
+		// do nothing
 	}
 }

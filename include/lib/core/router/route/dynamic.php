@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:40:11] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:23:50] --> $
  * @author     Alexander Book
  */
 
@@ -140,21 +140,23 @@ class Chrome_Model_Route_Dynamic_Cache extends Chrome_Model_Cache_Abstract
 {
     const CHROME_MODEL_ROUTER_DYNAMIC_CACHE_CACHE_FILE = 'tmp/cache/router/_dynamic.cache';
 
-    protected function _cache()
+    protected function _setUpCache()
     {
-        $this->_cache = parent::$_cacheFactory->factory('serialization', self::
-            CHROME_MODEL_ROUTER_DYNAMIC_CACHE_CACHE_FILE);
+        $options = new Chrome_Cache_Option_Serialization();
+        $options->setCacheFile(self::CHROME_MODEL_ROUTER_DYNAMIC_CACHE_CACHE_FILE);
+
+        $this->_cache = parent::$_cacheFactory->factory('serialization', $options);
     }
 
     public function getResourceByID($id)
     {
 
-        if(($return = $this->_cache->load('getResource_' . $id)) === null) {
+        if(($return = $this->_cache->get('getResource_' . $id)) === null) {
 
             $return = $this->_decorator->getResourceByID($id);
 
             if($return !== false) {
-                $this->_cache->save('getResource_' . $id, $return);
+                $this->_cache->set('getResource_' . $id, $return);
             }
         }
 

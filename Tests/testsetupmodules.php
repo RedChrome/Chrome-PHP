@@ -16,10 +16,12 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 17:04:30] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 17:03:08] --> $
  * @author     Alexander Book
  */
-
+if(!defined('CHROME_TEST_ENVIRONMENT')) {
+    define('CHROME_TEST_ENVIRONMENT', 4);
+}
 // unfortunately PHPUnit now needs $GLOBALS to be set, but we dont allow this, so use this hack
 // and we need these vars to test Chrome_Session, Chrome_Cookie...
 // they get unset in Chrome_Request_Factory, cause no code should access these global vars

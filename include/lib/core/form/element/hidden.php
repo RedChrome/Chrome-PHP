@@ -63,7 +63,7 @@ class Chrome_Form_Element_Hidden extends Chrome_Form_Element_Abstract
     }
 
     protected function _isSent() {
-        if($this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === true) {
+        if($this->_options[self::IS_REQUIRED] === true) {
             if($this->_form->getSentData($this->_id) === null) {
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
                 return false;

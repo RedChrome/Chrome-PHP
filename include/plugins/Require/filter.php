@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 22:25:39] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:18:37] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -40,18 +40,20 @@ class Chrome_Require_Loader_Filter implements Chrome_Require_Loader_Interface
 	public function loadClass($class)
 	{
 		// beginn with 'Chrome_Filter_Chain_'
-		if(preg_match('#Chrome_Filter_Chain_(.{1,})#i', $class, $matches))
-		{
-
-			return BASEDIR . 'plugins/Filter/chain/' . strtolower($matches[1]) . '.php';
+		if(preg_match('#Chrome_Filter_Chain_(.{1,})#i', $class, $matches)) {
+			return BASEDIR.'plugins/Filter/chain/'.strtolower($matches[1]).'.php';
 
 			// beginn with 'Chrome_Filter_'
 		} else
-			if(preg_match('#Chrome_Filter_(.{1,})#i', $class, $matches))
-			{
-				return BASEDIR . 'plugins/Filter/' . strtolower($matches[1]) . '.php';
+			if(preg_match('#Chrome_Filter_(.{1,})#i', $class, $matches)) {
+				return BASEDIR.'plugins/Filter/'.strtolower($matches[1]).'.php';
 			}
 
 		return false;
+	}
+
+	public function init(Chrome_Require_Autoloader_Interface $autoloader)
+	{
+		// do nothing
 	}
 }

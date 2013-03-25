@@ -60,7 +60,7 @@ class Chrome_Form_Decorator_Select_Default extends Chrome_Form_Decorator_Abstrac
 		}
 
 		$defaultSelection = (array) $this->getOption( Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT );
-		$isRequired = ( boolean ) $this->_formElement->getOptions( Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_IS_REQUIRED );
+		$isRequired = ( boolean ) $this->_formElement->getOptions( Chrome_Form_Element_Select::IS_REQUIRED );
 
 		$int = 0;
 

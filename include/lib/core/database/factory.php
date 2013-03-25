@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 12:15:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 22:12:01] --> $
  * @link       http://chrome-php.de
  */
 
@@ -33,7 +33,7 @@ if(CHROME_PHP !== true) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Factory_Interface
+interface Chrome_Database_Factory_Interface extends Chrome_Logable_Interface
 {
     /**
      * Use this if you want to build an interface with any default adapter/result/interface
@@ -168,6 +168,8 @@ abstract class Chrome_Database_Factory_Abstract implements Chrome_Database_Facto
 
 	protected $_statementRegistry  = null;
 
+    protected $_logger = null;
+
 	public function __construct(Chrome_Database_Registry_Connection_Interface $connectionRegistry, Chrome_Database_Registry_Statement_Interface $statementRegistry)
 	{
 		$this->setConnectionRegistry($connectionRegistry);
@@ -193,6 +195,16 @@ abstract class Chrome_Database_Factory_Abstract implements Chrome_Database_Facto
 	{
 		return $this->_statementRegistry;
 	}
+
+    public function setLogger(Chrome_Logger_Interface $logger = null)
+    {
+        $this->_logger = $logger;
+    }
+
+    public function getLogger()
+    {
+        return $this->_logger;
+    }
 }
 
 class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
@@ -213,6 +225,8 @@ class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
 
 		// create interface with adapter and result
 		$interface = $this->_createInterface($interfaceName, $result, $adapter);
+
+        $interface->setLogger($this->_logger);
 
 		return $interface;
 	}

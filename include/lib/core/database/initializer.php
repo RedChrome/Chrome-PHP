@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 11:35:23] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 13:00:05] --> $
  * @link       http://chrome-php.de
  */
 
@@ -70,9 +70,6 @@ class Chrome_Database_Initializer implements Chrome_Database_Initializer_Interfa
      */
     public function initialize()
     {
-        // enable autoloading of database classes
-        new Chrome_Database_Loader();
-
         $connectionClass = 'Chrome_Database_Connection_'.ucfirst(CHROME_DATABASE);
         $defaultConnection = new $connectionClass();
         // configure default database connection

@@ -52,12 +52,12 @@ class Chrome_Form_Decorator_Checkbox_Default extends Chrome_Form_Decorator_Abstr
 
 		$value = $values[$this->_int];
 
-		if($this->_formElement->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED) === true) {
+		if($this->_formElement->getOptions(Chrome_Form_Element_Abstract::IS_REQUIRED) === true) {
 
 			$this->setAttribute('required', 'required');
 		}
 		$required = '';
-		if(in_array($value, (array )($this->_formElement->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED)))) {
+		if(in_array($value, (array )($this->_formElement->getOptions(Chrome_Form_Element_Abstract::IS_REQUIRED)))) {
 			$required = ' required="required"';
 		}
 

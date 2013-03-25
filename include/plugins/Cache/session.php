@@ -17,48 +17,65 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2011 19:31:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 01:49:18] --> $
  */
- 
+
+interface Chrome_Cache_Option_Session_Interface extends Chrome_Cache_Option_Interface
+{
+    // todo finish this interface
+}
+
 /**
  *
- * Null Object for caching
- * 
  * @package CHROME-PHP
  * @subpackag Chrome.Cache
- * @deprecated
- */  
-class Chrome_Cache_Session extends Chrome_Cache_Abstract
+ */
+class Chrome_Cache_Session implements Chrome_Cache_Interface
 {
-    private static $_instance = null;
-    
-    protected $_namespace = null;
-    
-    protected function __construct($namespace) {
-        $this->_namespace = $namespace;
-    }
-    
-    public static function factory($namespace) {
-        return new self($namespace);
-    }
-    
-    public function clear() {
-        $session = Chrome_Session::getInstance();
-        
-        $session->set($this->_namespace, null);
-    }
-    
-    public function save($key, $data) {
-        $session = Chrome_Session::getInstance();
-        
-        $session->set($this->_namespace, array($key => $data) );
-    }
-    
-    public function load($key) {
-        $session = Chrome_Session::getInstance();
-        
-        $cache = $session->get($this->_namespace);
-        
-        return (isset($cache[$key])) ? $cache[$key] : null;
+	protected $_session;
+
+	protected $_namespace = null;
+
+	public function __construct(Chrome_Session_Interface $session, $namespace)
+	{
+		$this->_namespace = $namespace;
+		$this->_session = $session;
+		$this->_session[$namespace] = array();
+	}
+
+	public function clear()
+	{
+		unset($this->_session[$this->_namespace]);
+	}
+
+	public function set($key, $data)
+	{
+		$this->_session[$this->_namespace] = array_merge($this->_session[$this->_namespace], array($key => $data));
+	}
+
+	public function get($key)
+	{
+		$cache = $this->_session[$this->_namespace];
+
+		return (isset($cache[$key])) ? $cache[$key] : null;
+	}
+
+	public function flush()
+	{
+		// do nothing
+	}
+
+	public function has($name)
+	{
+		$cache =  $this->_session[$this->_namespace];
+
+		return (isset($cache[$key]));
+	}
+
+    public function remove($name) {
+        $cache = $this->_session[$this->_namespace];
+
+        unset($cache[$name]);
+        $this->_session[$this->_namespace] = $cache;
     }
 }

@@ -30,7 +30,7 @@ if(CHROME_PHP !== true)
 class Chrome_Form_Element_Error extends Chrome_Form_Element_Abstract
 {
 
-    //protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => false);
+    //protected $_defaultOptions = array(self::IS_REQUIRED => false);
 
     public function isCreated() {
         return true;

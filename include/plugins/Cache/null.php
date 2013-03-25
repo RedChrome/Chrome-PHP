@@ -17,45 +17,48 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2011 23:41:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 00:13:15] --> $
  */
 
-if(CHROME_PHP !== true)
-    die(); 
- 
+if(CHROME_PHP !== true) die();
+
 /**
  *
  * Null Object for caching
  * Same as Chrome_Cache_Void
- * 
+ *
  * @package CHROME-PHP
  * @subpackag Chrome.Cache
- */  
-class Chrome_Cache_Null extends Chrome_Cache_Abstract
+ */
+class Chrome_Cache_Null implements Chrome_Cache_Interface
 {
-    private static $_instance = null;
-    
-    public function __call($method, $params) {
-        return null;
-    }
-    
-    public function __get($key) {
-        return null;
-    }
-    
-    public function __set($key, $value) {
-        return null;
-    }
-    
-    public static function factory($file) {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
-        
-        return self::$_instance;
-    }
-    
-    public function clear() {
-        return null;
-    }
+	public function set($key, $data)
+	{
+        // do nothing
+	}
+
+	public function get($key)
+	{
+        // do nothing
+	}
+
+	public function has($key)
+	{
+        // do nothing
+	}
+
+	public function remove($key)
+	{
+        // do nothing
+	}
+
+	public function flush()
+	{
+        // do nothing
+	}
+
+	public function clear()
+	{
+        // do nothing
+	}
 }

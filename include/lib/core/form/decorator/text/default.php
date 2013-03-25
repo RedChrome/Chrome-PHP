@@ -44,7 +44,7 @@ class Chrome_Form_Decorator_Text_Default extends Chrome_Form_Decorator_Abstract
 
 		$class = '';
 
-		if($this->_formElement->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED) === true) {
+		if($this->_formElement->getOptions(Chrome_Form_Element_Abstract::IS_REQUIRED) === true) {
 			$this->setAttribute('required', 'required');
 		}
 

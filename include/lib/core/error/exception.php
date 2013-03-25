@@ -17,7 +17,7 @@
  * @subpackage Chrome.Exception
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 13:18:22] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 11:45:53] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -247,3 +247,5 @@ class Chrome_Exception extends Exception
         return str_replace(DB_PASS, 'DB_PASS', $this->getTraceAsString());
     }
 }
+
+class Chrome_InvalidArgumentException extends Chrome_Exception {}

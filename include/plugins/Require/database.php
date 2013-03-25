@@ -17,7 +17,7 @@
  * @subpackage Chrome.Database
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 11:33:52] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:18:15] --> $
  * @author     Alexander Book
  */
 
@@ -27,18 +27,10 @@ if(CHROME_PHP !== true) die();
  * Autoloader for database classes
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.Database
+ * @subpackage Chrome.Require.Loader
  */
-class Chrome_Database_Loader
+class Chrome_Require_Loader_Database implements Chrome_Require_Loader_Interface
 {
-    /**
-     * Register autoloader
-     */
-	public function __construct()
-	{
-		spl_autoload_register(array($this, 'loadClass'));
-    }
-
     /**
      * loads the corresponding file for $className
      *
@@ -50,15 +42,14 @@ class Chrome_Database_Loader
      */
 	public function loadClass($className)
 	{
-		if(preg_match('#Chrome_Database_([a-z1-9]{1,})_(.{1,})#iu', $className, $matches)) {
+		if(preg_match('#Chrome_Database_([a-z1-9]{1,})_(.{1,})#i', $className, $matches)) {
 
-			$file = LIB.'core/database/'.strtolower($matches[1]).'/'.strtolower($matches[2]).'.php';
-
-			if(_isFile($file)) {
-				require_once $file;
-                return true;
-			}
+            return LIB.'core/database/'.strtolower($matches[1]).'/'.strtolower($matches[2]).'.php';
 		}
 		return false;
 	}
+
+    public function init(Chrome_Require_Autoloader_Interface $autoloader) {
+        // do nothing
+    }
 }

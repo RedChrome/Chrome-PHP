@@ -73,7 +73,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         // it is required, of course, to login
         // set onblur, and onfocus
         $this->_elements['identity'] = new Chrome_Form_Element_Text($this, 'identity', array(
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
+            Chrome_Form_Element_Abstract::IS_REQUIRED => true,
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
                 Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => $LANG->get('email'),
                 Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $LANG->get('email')
@@ -87,7 +87,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         // it is required too and if you click on the input, then the default input vanishes
         // for better ergonomics
         $this->_elements['password'] = new Chrome_Form_Element_Password($this, 'password', array(
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
+            Chrome_Form_Element_Abstract::IS_REQUIRED => true,
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
                 Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $LANG->get('password')
             ),
@@ -104,14 +104,14 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         // only true or false are allowed, to be sure the user has sent on of them, we add the boolConverter
         // this determines, whether the user stays logged in, even if he leaves the website
         $this->_elements['stay_loggedin'] = new Chrome_Form_Element_Checkbox($this, 'stay_loggedin', array(
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => false,
+            Chrome_Form_Element_Abstract::IS_REQUIRED => false,
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array(1),
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array($boolConverter),
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => array($LANG->get('stay_loggedin')))));
 
         // submit button, nothing special
         $this->_elements['submit'] = new Chrome_Form_Element_Submit($this, 'submit', array(
-            Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
+            Chrome_Form_Element_Submit::IS_REQUIRED => true,
             Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_SUBMIT_VALUES => array($LANG->get('login'))));
 
         // cause this form can get used everywhere, we need to be sure

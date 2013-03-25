@@ -74,9 +74,10 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
 
         $this->doSkipTestsIfNeeded();
 
-        //$this->setExpectedException('Chrome_Exception_Database');
+        // do not log the exception, we're expecting it
+        $this->_db->setLogger(new Chrome_Logger_Null());
         try {
-        $this->_db->query('SELECT * FROM cpp_require LIgMIT 0,1');
+            $this->_db->query('SELECT * FROM cpp_require LIgMIT 0,1');
         } catch(Chrome_Exception_Database $e) {
             // do nothing
         }
@@ -90,6 +91,8 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
     {
         $this->doSkipTestsIfNeeded();
 
+        // do not log the exception, we're expecting it
+        $this->_db->setLogger(new Chrome_Logger_Null());
         try {
             $this->_db->query('SELEC * FROM cpp_require LIMIT 0,1'); // this will result in an exception
         }
@@ -166,7 +169,6 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         $connection->_connection  = null;
 
         $this->setExpectedException('Chrome_Exception_Database');
-
         $this->_db->getAdapter()->setConnection($connection);
     }
 
@@ -186,5 +188,10 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         $con->_isConnected = true;
     }
 
+    public function setExpectedException($string, $exceptionMessage = '', $exceptionCode = 0) {
+        // do not log the exception, we're expecting it
+        $this->_db->setLogger(new Chrome_Logger_Null());
+        parent::setExpectedException($string, $exceptionMessage, $exceptionCode);
+    }
 
 }

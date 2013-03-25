@@ -17,14 +17,10 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 21:40:11] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:39:03] --> $
  */
 
 die('readme file! Not supposed to run in script!');
-
-
-//
-// use $requireModel->addClass('Chrome_Require_Loader_Readme', PLUGIN.'Require/_readme.php', false)
 
 /**
  * Chrome_Require_Loader_Readme, example implementation
@@ -64,5 +60,11 @@ class Chrome_Require_Loader_Readme implements Chrome_Require_Loader_Interface
                     return false;
                 }
         }
+    }
+
+    public function init(Chrome_Require_Autoloader_Interface $autoloader) {
+        require_once 'needed file.php';
+
+        // require needed files for your plugin
     }
 }

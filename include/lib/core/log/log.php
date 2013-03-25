@@ -17,7 +17,7 @@
  * @subpackage Chrome.Log
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 13:56:47] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 22:11:45] --> $
  * @author     Alexander Book
  */
 
@@ -44,6 +44,28 @@ interface Chrome_Log_Interface
 interface Chrome_Logger_Interface
 {
     public function log($string, $mode);
+}
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Log
+ */
+interface Chrome_Logable_Interface
+{
+    /**
+     * Sets a logger
+     *
+     * @param Chrome_Logger_Interface $logger
+     * @return void
+     */
+    public function setLogger(Chrome_Logger_Interface $logger = null);
+
+    /**
+     * Returns the set logger
+     *
+     * @return Chrome_Logger_Interface
+     */
+    public function getLogger();
 }
 
 /**

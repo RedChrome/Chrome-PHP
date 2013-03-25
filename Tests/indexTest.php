@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Tests/testsetup.php';
+require_once 'Tests/testsetupmodules.php';
 
 class IndexTest extends PHPUnit_Framework_TestCase
 {

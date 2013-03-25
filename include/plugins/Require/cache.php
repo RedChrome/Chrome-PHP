@@ -16,25 +16,31 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:18:08] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:18:12] --> $
  */
 
 if(CHROME_PHP !== true) die();
 
 /**
- * Loads all classes beginning with 'Chrome_Validator_'
+ * Loads all classes beginning with 'Chrome_Cache_'
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Require
+ * @subpackage Chrome.Require.Loader
  */
-class Chrome_Require_Loader_Validator implements Chrome_Require_Loader_Interface
+class Chrome_Require_Loader_Cache implements Chrome_Require_Loader_Interface
 {
+	/**
+	 * Loads a class, if $class beginns with 'Chrome_Cache_'
+	 *
+	 * @param string $class
+	 * @return bool true if class was found
+	 */
 	public function loadClass($class)
 	{
-		// does the class contain 'Chrome_Validator_'?
-		if(preg_match('#Chrome_Validator_(.{1,})#i', $class, $matches))
-		{
-			return BASEDIR . 'plugins/Validate/' . strtolower(str_replace('_', '/', $matches[1])) . '.php';
+	    if(preg_match('#Chrome_Cache_Option_(.{1,})_Interface#i', $class, $matches)) {
+			return PLUGIN.'Cache/'.strtolower($matches[1]).'.php';
+		} else if(preg_match('#Chrome_Cache_Option_(.{1,})#i', $class, $matches)) {
+			return PLUGIN.'Cache/'.strtolower($matches[1]).'.php';
 		}
 
 		return false;
@@ -43,4 +49,5 @@ class Chrome_Require_Loader_Validator implements Chrome_Require_Loader_Interface
     public function init(Chrome_Require_Autoloader_Interface $autoloader) {
         // do nothing
     }
+
 }

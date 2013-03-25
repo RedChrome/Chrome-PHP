@@ -16,12 +16,23 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 17:31:02] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 21:48:36] --> $
  * @author     Alexander Book
  */
 
 if(!defined('CHROME_PHP')) {
-    define('CHROME_PHP', true);
+	define('CHROME_PHP', true);
+}
+
+/**
+ * Environments are:
+ *  1: normal test
+ *  2: tests using db
+ *  4: teting modules
+ *
+ */
+if(!defined('CHROME_TEST_ENVIRONMENT')) {
+    define('CHROME_TEST_ENVIRONMENT', 1);
 }
 
 $_SERVER['REQUEST_URI'] = '/root/CHROME_2/';
@@ -44,3 +55,5 @@ define('MYSQL_DB', 'chrome_2_test');
 define('MYSQL_PORT', 3306);
 
 define('TEST_DATABASE_CONNECTIONS', true);
+
+Chrome_Log::setLogger(new Chrome_Logger_File(TMP . CHROME_LOG_DIR . CHROME_LOG_FILE));

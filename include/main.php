@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 12:35:57] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 22:10:26] --> $
  * @link       http://chrome-php.de
  */
 
@@ -189,30 +189,50 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
      */
     public function init()
     {
-        $datbaseInitializer = new Chrome_Database_Initializer();
-        $datbaseInitializer->initialize();
-
         $this->_applicationContext = new Chrome_Application_Context();
-        $this->_applicationContext->setDatabaseFactory($datbaseInitializer->getFactory());
 
-        // only log sth. if we're in developer mode
-        if(CHROME_DEVELOPER_STATUS === true) {
-            Chrome_Log::setLogger(new Chrome_Logger_File(TMP . CHROME_LOG_DIR . CHROME_LOG_FILE));
-            self::$_exceptionHandler = new Chrome_Exception_Handler_Default();
-        } else {
-            Chrome_Log::setLogger(new Chrome_Logger_Null());
+        // logging
+        {
+            // only log sth. if we're in developer mode
+            if(CHROME_DEVELOPER_STATUS === true) {
+                Chrome_Log::setLogger(new Chrome_Logger_File(TMP . CHROME_LOG_DIR . CHROME_LOG_FILE));
+                self::$_exceptionHandler = new Chrome_Exception_Handler_Default();
+            } else {
+                Chrome_Log::setLogger(new Chrome_Logger_Null());
+            }
+
+            require_once PLUGIN.'Log/database.php';
+
         }
 
-        if(CHROME_LOG_SQL_ERRORS === true) {
-            require_once PLUGIN.'Log/database.php';
+        // autoloader
+        $autoloader = new Chrome_Require_Autoloader();
+        {
+            $autoloader->setExceptionHandler(new Chrome_Exception_Handler_Default());
+
+            require_once PLUGIN.'Require/database.php';
+            require_once PLUGIN.'Require/cache.php';
+
+            $autoloader->appendAutoloader(new Chrome_Require_Loader_Database());
+            $autoloader->appendAutoloader(new Chrome_Require_Loader_Cache());
+        }
+
+        // database
+        {
+            $datbaseInitializer = new Chrome_Database_Initializer();
+            $datbaseInitializer->initialize();
+
+            $factory = $datbaseInitializer->getFactory();
+            $factory->setLogger(new Chrome_Logger_Database());
+
+            $this->_applicationContext->setDatabaseFactory($factory);
         }
 
         require_once LIB.'core/require/model.php';
         // init require-class, can be skipped if every class is defined
         // but if not, then we get nasty error, that cannot get handled easily
-        $require = new Chrome_Require(new Chrome_Model_Require_Cache(new Chrome_Model_Require_DB($this->_applicationContext)));
-        $require->setExceptionHandler(new Chrome_Exception_Handler_Default());
-        $require->loadRequiredFiles();
+        $autoloader->prependAutoloader(new Chrome_Require_Loader_Model(new Chrome_Model_Require_Cache(new Chrome_Model_Require_DB($this->_applicationContext))));
+
 
         $config  = Chrome_Config::getInstance();
         $config->setModel(new Chrome_Model_Config_Cache(new Chrome_Model_Config_DB($this->_applicationContext)));

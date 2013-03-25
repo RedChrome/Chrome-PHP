@@ -24,6 +24,7 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         $this->_result->setAdapter($this->_adapter);
 
         $this->_interface = new Chrome_Database_Interface_Simple($this->_adapter, $this->_result, new Chrome_Database_Registry_Statement());
+        $this->_interface->setLogger(new Chrome_Logger_Database());
     }
 
     public function testInterfaceReturnsAdapterAndResultCorrectly()
@@ -149,5 +150,10 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         $this->_interface->query('');
     }
 
+    public function setExpectedException($string, $exceptionMessage = '', $exceptionCode = 0) {
+        // do not log the exception, we're expecting it
+        $this->_interface->setLogger(new Chrome_Logger_Null());
+        parent::setExpectedException($string, $exceptionMessage, $exceptionCode);
+    }
 
 }

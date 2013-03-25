@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 22:25:46] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:34:55] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -39,21 +39,25 @@ class Chrome_Require_Loader_Form implements Chrome_Require_Loader_Interface
 	 */
 	public function loadClass($class)
 	{
-		if(preg_match('#Chrome_Form_Element_(.{1,})#i', $class, $matches))
-		{
-			return LIB . 'core/form/element/' . strtolower($matches[1]) . '.php';
+
+
+		if(preg_match('#Chrome_Form_Element_(.{1,})#i', $class, $matches)) {
+			return LIB.'core/form/element/'.strtolower($matches[1]).'.php';
 		}
 
-		if(preg_match('#Chrome_Form_Decorator_(.{1,})#i', $class, $matches))
-		{
-			return LIB . 'core/form/decorator/' . strtolower(str_replace('_', '/', $matches[1])) . '.php';
+		if(preg_match('#Chrome_Form_Decorator_(.{1,})#i', $class, $matches)) {
+			return LIB.'core/form/decorator/'.strtolower(str_replace('_', '/', $matches[1])).'.php';
 		}
 
-		if(preg_match('#Chrome_Form_Handler_(.{1,})#i', $class, $matches))
-		{
-			return LIB . 'core/form/handler/' . strtolower($matches[1]) . '.php';
+		if(preg_match('#Chrome_Form_Handler_(.{1,})#i', $class, $matches)) {
+			return LIB.'core/form/handler/'.strtolower($matches[1]).'.php';
 		}
 
 		return false;
+	}
+
+	public function init(Chrome_Require_Autoloader_Interface $autoloader)
+	{
+		// do nothing
 	}
 }

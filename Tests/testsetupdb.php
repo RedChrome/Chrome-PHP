@@ -16,14 +16,26 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.03.2013 16:24:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 22:15:52] --> $
  * @author     Alexander Book
  */
+if(!defined('CHROME_TEST_ENVIRONMENT')) {
+    define('CHROME_TEST_ENVIRONMENT', 2);
+}
+
 require_once 'testsetup.php';
 
-require_once LIB.'core/database/database.php';
+// autoloader
 
-new Chrome_Database_Loader();
+require_once PLUGIN.'Log/null.php';
+require_once PLUGIN.'Log/database.php';
+require_once PLUGIN.'Require/database.php';
+$autoloader = new Chrome_Require_Autoloader();
+$autoloader->setExceptionHandler(new Chrome_Exception_Handler_Default());
+$autoloader->setLogger(new Chrome_Logger_Null());
+$autoloader->appendAutoloader(new Chrome_Require_Loader_Database());
+
+require_once LIB.'core/database/database.php';
 
 // configure default database connection
 try {
@@ -41,6 +53,7 @@ $dbRegistry = new Chrome_Database_Registry_Connection();
 $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
 
 $databaseFactory = new Chrome_Database_Factory($dbRegistry, new Chrome_Database_Registry_Statement());
+$databaseFactory->setLogger(new Chrome_Logger_Database());
 
 if(TEST_DATABASE_CONNECTIONS === true) {
 
@@ -65,7 +78,7 @@ if(class_exists('PHPUnit_Framework_TestCase')) {
     {
         protected $_session, $_cookie, $_appContext;
 
-        public function __construct($name = NULL, array $data = array(), $dataName = '') {
+        public function __construct($name = null, array $data = array(), $dataName = '') {
 
             global $databaseContext;
             global $applicationContext;

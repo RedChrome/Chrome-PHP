@@ -66,7 +66,7 @@ class Chrome_Form_Element_Textarea extends Chrome_Form_Element_Text
 			return true;
 		}
 
-		if( $this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === true ) {
+		if( $this->_options[self::IS_REQUIRED] === true ) {
 			if( $this->_form->getSentData( $this->_id ) === null ) {
 				$this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
 				return false;
@@ -109,20 +109,20 @@ class Chrome_Form_Element_Textarea extends Chrome_Form_Element_Text
 			}
 		}
 
-		$array = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+		$array = $this->_session[self::SESSION_NAMESPACE];
 		$array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXTAREA_SESSION_NAMESPACE][$this->getID()] = $this->_getData();
-		$this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE] = $array;
+		$this->_session[self::SESSION_NAMESPACE] = $array;
 	}
 
     protected function _unSave()
     {
-		$array = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+		$array = $this->_session[self::SESSION_NAMESPACE];
 		$array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXTAREA_SESSION_NAMESPACE][$this->getID()] = null;
     }
 
 	public function getSavedData()
 	{
-		return ( isset( $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXTAREA_SESSION_NAMESPACE][$this->getID()] ) ) ?
-			$this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXTAREA_SESSION_NAMESPACE][$this->getID()] : null;
+		return ( isset( $this->_session[self::SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXTAREA_SESSION_NAMESPACE][$this->getID()] ) ) ?
+			$this->_session[self::SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXTAREA_SESSION_NAMESPACE][$this->getID()] : null;
 	}
 }

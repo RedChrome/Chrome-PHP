@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:38:08] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 12:29:02] --> $
  * @author     Alexander Book
  */
 
@@ -179,9 +179,13 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      *
      * @return void
      */
-    protected function _cache()
+    protected function _setUpCache()
     {
-        $this->_cache = parent::$_cacheFactory->forceCaching()->factory('serialization', self::CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE);
+        require_once PLUGIN.'Cache/serialization.php';
+        $option = new Chrome_Cache_Option_Serialization();
+        $option->setCacheFile(self::CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE);
+
+        $this->_cache = self::$_cacheFactory->forceCaching()->factory('serialization', $option);
     }
 
     /**
@@ -193,10 +197,10 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      */
     public function getRequirements()
     {
-        if(($return = $this->_cache->load('getRequirements')) === null) {
+        if(($return = $this->_cache->get('getRequirements')) === null) {
 
             $return = $this->_decorator->getRequirements();
-            $this->_cache->save('getRequirements', $return);
+            $this->_cache->set('getRequirements', $return);
         }
 
         return $return;
@@ -211,11 +215,11 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      */
     public function getClasses()
     {
-        if(($return = $this->_cache->load('getClasses')) === null OR count($return) == 0) {
+        if(($return = $this->_cache->get('getClasses')) === null OR count($return) == 0) {
 
             $return = $this->_decorator->getClasses();
 
-            $this->_cache->save('getClasses', $return);
+            $this->_cache->set('getClasses', $return);
         }
 
         return $return;
@@ -230,7 +234,7 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      * @return string
      */
     public function getClass($name) {
-        if(($return = $this->_cache->load(self::CHROME_MODEL_REQUIRE_CACHE_CLASS_NAMESPACE.$name)) !== null) {
+        if(($return = $this->_cache->get(self::CHROME_MODEL_REQUIRE_CACHE_CLASS_NAMESPACE.$name)) !== null) {
 
             return $return;
         }
@@ -248,6 +252,6 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      *
      */
     public function setClass($name, $file) {
-        $this->_cache->save(self::CHROME_MODEL_REQUIRE_CACHE_CLASS_NAMESPACE.$name, $file);
+        $this->_cache->set(self::CHROME_MODEL_REQUIRE_CACHE_CLASS_NAMESPACE.$name, $file);
     }
 }

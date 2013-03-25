@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.03.2013 22:33:34] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 12:31:27] --> $
  * @link       http://chrome-php.de
  */
 
@@ -120,16 +120,19 @@ class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implem
         return self::$_instances[$database][$namespace];
     }
 
-    protected function _cache()
+    protected function _setUpCache()
     {
         // we NEED this cache
-        self::$_cacheFactory->forceCaching();
-        $this->_cache = self::$_cacheFactory->factory('json', RESOURCE . 'database/' . strtolower($this->_database) . '/' . strtolower($this->_namespace) . '.json');
+
+        $options = new Chrome_Cache_Option_Json();
+        $options->setCacheFile(RESOURCE . 'database/' . strtolower($this->_database) . '/' . strtolower($this->_namespace) . '.json');
+
+        $this->_cache = self::$_cacheFactory->forceCaching()->factory('json', $options);
     }
 
     public function getStatement($key)
     {
-        $statement = $this->_cache->load($key);
+        $statement = $this->_cache->get($key);
 
         // could not get statement
         if($statement === null) {

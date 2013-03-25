@@ -19,56 +19,51 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2013 00:14:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 21:55:33] --> $
  * @link       http://chrome-php.de
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
- * @category   CHROME-PHP
- * @package    CHROME-PHP
- * @subpackage Chrome.Cache
- * @author     Alexander Book <alexander.book@gmx.de>
- * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2013 00:14:19] --> $
- * @link       http://chrome-php.de
+ * @package CHROME-PHP
+ * @subpackage Chrome.Cache.Option
  */
-interface Chrome_Cache_Serialization_Interface extends Chrome_Cache_Interface
+class Chrome_Cache_Option_Serialization implements Chrome_Cache_Option_Interface
 {
-    /**
-     * save()
-     *
-     * Saves data into the cache
-     *
-     * @param mixed $name name of the key
-     * @param mixed $data data to save
-     * @return bool true on success
-     */
-    public function save($name, $data);
+	protected $_file = '';
 
-    /**
-     * load()
-     *
-     * Loads data from the cache,<br>
-     * returns null if no entry was found
-     *
-     * @param mixed $name name of the key
-     * @return mixed on success, null on failure
-     */
-    public function load($name);
+	protected $_lifeTime = 0;
 
-    /**
-     * remove()
-     *
-     * Removes an entry from cache
-     *
-     * @param mixed $name name of the key
-     * @return bool true on success
-     */
-    public function remove($name);
+	public function setCacheFile($file)
+	{
+
+		if(!is_string($file)) {
+			throw new Chrome_InvalidArgumentException('Excepted $file to be a string, given '.gettype($file));
+		}
+
+		$this->_file = $file;
+	}
+
+	public function getCacheFile()
+	{
+		return $this->_file;
+	}
+
+	public function setLifeTime($time)
+	{
+
+		if(!is_int($time) or $time < 0) {
+			throw new Chrome_InvalidArgumentException('Excepted $time to be a non-negative integer, given '.gettype($time));
+		}
+
+		$this->_lifeTime = $time;
+	}
+
+	public function getLifeTime()
+	{
+		return $this->_lifeTime;
+	}
 }
 
 /**
@@ -80,292 +75,307 @@ interface Chrome_Cache_Serialization_Interface extends Chrome_Cache_Interface
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2013 00:14:19] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 21:55:33] --> $
  * @link       http://chrome-php.de
  */
-class Chrome_Cache_Serialization extends Chrome_Cache_Abstract implements Chrome_Cache_Serialization_Interface
+class Chrome_Cache_Serialization implements Chrome_Cache_Interface
 {
-    /**
-     * Key of the timestamp, should never get used via save()
+	/**
+	 * Key of the timestamp, should never get used via save()
+	 *
+	 * @var string
+	 */
+	const CHROME_CACHE_SERIALIZATION_TIMESTAMP_KEY = '_time_';
+
+	/**
+	 * File pointer to the cache file
+	 *
+	 * @var resource
+	 */
+	protected $_filePointer = null;
+
+	/**
+	 * Name of the cache file
+	 *
+	 * @var string
+	 */
+	protected $_fileName = null;
+
+	/**
+	 * Contains cached data
+	 *
+	 * @var array
+	 */
+	protected $_data = array();
+
+	/**
+	 * Does the cached data been modified?
+	 *
+	 * @var bool
+	 */
+	protected $_dataChanged = false;
+
+	/**
+	 * Lifetime for a cache,<br>
+	 * 0 for unlimited lifetime<br>
+	 * x for x sec lifetime
+	 *
+	 * @var int
+	 */
+	protected $_lifetime = null;
+
+	/**
+	 * Chrome_Cache_Serialization::__construct()
+	 *
+     * Sets options and loads data from cache. Opens the file handle only if its needed.
      *
-     * @var string
-     */
-    const CHROME_CACHE_SERIALIZATION_TIMESTAMP_KEY 	= '_time_';
+	 * @param string $file file where you want to save the cache
+	 * @param integer $lifetime lifetime of the cache in sec. : 0 = unlimited
+	 * @return Chrome_Cache_Serialization instance
+	 */
+	public function __construct(Chrome_Cache_Option_Interface $options)
+	{
 
-    /**
-     * File pointer to the cache file
-     *
-     * @var resource
-     */
-    protected $_filePointer							= null;
+		if(!($options instanceof Chrome_Cache_Option_Serialization)) {
+			throw new Chrome_InvalidArgumentException('Expected subclass of Chrome_Cache_Option_Serialization, got class '.get_class($options));
+		}
 
-    /**
-     * Name of the cache file
-     *
-     * @var string
-     */
-    protected $_fileName							= null;
+		// set lifetime for the cache
+		$this->_lifetime = $options->getLifeTime();
+        // be lazy! open the file, if we really change the cache. See _dataChanged()
+		$this->_fileName = BASEDIR.$options->getCacheFile();
 
-    /**
-     * Contains cached data
-     *
-     * @var array
-     */
-    protected $_data 								= array();
 
-    /**
-     * Does the cached data been modified?
-     *
-     * @var bool
-     */
-    protected $_dataChanged 						= false;
+		$fileIsEmpty = false;
 
-    /**
-     * Lifetime for a cache,<br>
-     * 0 for unlimited lifetime<br>
-     * x for x sec lifetime
-     *
-     * @var int
-     */
-    protected $_lifetime 							= null;
+		// does the cache file already exist?
+		if(!_isFile($this->_fileName)) {
+			// this actually creates the file if it does not exist
+			$this->_openFile();
+			$fileIsEmpty = true;
+		}
 
-    /**
-     * Chrome_Cache_Serialization::factory()
-     *
-     * @param string $file file where you want to save the cache
-     * @param integer $lifetime lifetime of the cache in sec. : 0 = unlimited
-     * @return Chrome_Cache_Serialization instance
-     */
-    public static function factory($file, $lifetime = 0)
-    {
-        return new self($file, $lifetime);
-    }
+        // only load data if the file is not empty...
+		if($fileIsEmpty === false) {
+			// get cached data
+			$this->_loadData($fileIsEmpty);
 
-    /**
-     * Chrome_Cache_Serialization::__construct()
-     *
-     * @param string $file file where you want to save the cache
-     * @param integer $lifetime lifetime of the cache in sec. : 0 = unlimited
-     * @return Chrome_Cache_Serialization instance
-     */
-    public function __construct($file, $lifetime = 0)
-    {
-        if(!is_string($file)) {
-            throw new Chrome_Exception('Not supported variable type $file! $file must be a string in Chrome_Cache_Serialization::__construct()!');
-        }
+			// check wheter cached data is valid
+			// lifetime expired?
+			$this->_isValid();
+		}
+	}
 
-        $file = BASEDIR.$file;
+	/**
+	 * Chrome_Cache_Serialization::__destruct()
+	 *
+	 * Destructor
+	 *
+	 * @return void
+	 */
+	public function __destruct()
+	{
+		// rewrite the cache if data has changed
+		$this->_applyChanges();
+		// close file pointer
+		$this->_closeFile();
+	}
 
-        $fileIsEmpty = false;
-        // does the cache file already exist?
-        if(!_isFile($file)) {
-            // load Chrome_File class and create the file
-            require_once LIB.'core/file/file.php';
-            $this->_filePointer = Chrome_File::mkFileUsingFilePointer($file, 0777, 'wb');
-            $fileIsEmpty = true;
-            if(!is_resource($this->_filePointer)) {
-                throw new Chrome_Exception('Error while creating file '.$file.'');
-            }
+	/**
+	 * Checks whether cache entry exists
+	 *
+	 * @param string $name
+	 */
+	public function has($name)
+	{
+		return isset($this->_data[$name]);
+	}
 
-        }
+	/**
+	 * Save data to cache
+	 *
+	 * @param string $name name of the key
+	 * @param mixed $data data you want to save
+	 * @return true on success, false else
+	 */
+	public function set($name, $data)
+	{
+		$this->_data[$name] = $data;
+		$this->_dataChanged();
 
-        // set lifetime for the cache
-        $this->_lifetime    = ($lifetime >= 0) ? $lifetime : 0;
+		return true;
+	}
 
-        // be lazy! open the file, if we really change the cache!
+	/**
+	 * gets data from cache
+	 *
+	 * @param string $name name of the key
+	 * @return mixed data OR null if entry does not exist
+	 */
+	public function get($name)
+	{
+		return (isset($this->_data[$name])) ? $this->_data[$name] : null;
+	}
 
-        // set file pointer
-        //$this->_filePointer = fopen($file, 'r+b');
-        // set file name
-        $this->_fileName    = $file;
+	/**
+	 * Chrome_Cache_Serialization::remove()
+	 *
+	 * Remove an entry from cache
+	 *
+	 * @param string $name name of the key
+	 * @return bool true on success, false else
+	 */
+	public function remove($name)
+	{
+		unset($this->_data[$name]);
+		$this->_dataChanged();
 
-        // is the file opened?
-        //if(!is_resource($this->_filePointer)) {
-        //    throw new Chrome_Exception('Unexpected error in Chrome_Cache_Serialization! File pointer is not a resource in Chrome_Cache_Serialization::__construct()!');
-        //}
+		return true;
+	}
 
-        // get cached data
-        $this->_loadData($fileIsEmpty);
+	/**
+	 * Flushes the cache
+	 *
+	 * @return boolean
+	 */
+	public function flush()
+	{
+		$this->_applyChanges();
+		return true;
+	}
 
-        // check wheter cached data is valid
-        // lifetime expired?
-        $this->_isValid();
-    }
+	/**
+	 * Chrome_Cache_Serialization::clear()
+	 *
+	 * Clears the cache, delete the cache file
+	 *
+	 * @return bool true on success, false else
+	 */
+	public function clear()
+	{
+		$this->_data = array();
+		$this->_closeFile();
+		$this->_dataChanged = false;
 
-    /**
-     * Chrome_Cache_Serialization::__destruct()
-     *
-     * Destructor
-     *
-     * @return void
-     */
-    public function __destruct()
-    {
-        // rewrite the cache if data has changed
-        $this->_applyChanges();
-        // close file pointer
-        $this->_closeFile();
-    }
+		return @unlink($this->_fileName);
+	}
 
-    /**
-     * Chrome_Cache_Serialization::save()
-     *
-     * Save data to cache
-     *
-     * @param string $name name of the key
-     * @param mixed $data data you want to save
-     * @return true on success, false else
-     */
-    public function save($name, $data)
-    {
-        $this->_data[$name] = $data;
-        $this->_dataChanged();
+	/**
+	 * Chrome_Cache_Serialization::_closeFile()
+	 *
+	 * Close the file pointer
+	 *
+	 * @return void
+	 */
+	protected function _closeFile()
+	{
+		if(is_resource($this->_filePointer)) {
+			fclose($this->_filePointer);
+		}
+	}
 
-        return true;
-    }
+	/**
+	 * Chrome_Cache_Serialization::_applyChanges()
+	 *
+	 * If the data changed, rewrite the cache
+	 *
+	 * @return void
+	 */
+	protected function _applyChanges()
+	{
+		if($this->_dataChanged === false) {
+			return;
+		}
 
-    /**
-     * Chrome_Cache_Serialization::load()
-     *
-     * Load data from cache
-     *
-     * @param string $name name of the key
-     * @return mixed data OR null if entry does not exist
-     */
-    public function load($name)
-    {
-        return (isset($this->_data[$name])) ? $this->_data[$name] : null;
-    }
+		if(!is_resource($this->_filePointer)) {
+			throw new Chrome_Exception('Error, filepointer was no resource');
+		}
 
-    /**
-     * Chrome_Cache_Serialization::remove()
-     *
-     * Remove an entry from cache
-     *
-     * @param string $name name of the key
-     * @return bool true on success, false else
-     */
-    public function remove($name)
-    {
-        unset($this->_data[$name]);
-        $this->_dataChanged();
+		$this->_data[self::CHROME_CACHE_SERIALIZATION_TIMESTAMP_KEY] = CHROME_TIME;
 
-        return true;
-    }
+		// truncate file and seek to position 0
+		//ftruncate($this->_filePointer, 0);
+		//fseek($this->_filePointer, 0);
+		// write the serialized data
 
-    /**
-     * Chrome_Cache_Serialization::clear()
-     *
-     * Clears the cache, delete the cache file
-     *
-     * @return bool true on success, false else
-     */
-    public function clear()
-    {
-        $this->_data = array();
-        $this->_closeFile();
+		rewind($this->_filePointer);
+		fwrite($this->_filePointer, serialize($this->_data));
+	}
 
-        return @unlink($this->_fileName);
-    }
+	/**
+	 * Chrome_Cache_Serialization::_loadData()
+	 *
+	 * Loads the cache file and save it into var
+	 *
+	 * @return void
+	 */
+	protected function _loadData()
+	{
+		$data = '';
 
-    /**
-     * Chrome_Cache_Serialization::_closeFile()
-     *
-     * Close the file pointer
-     *
-     * @return void
-     */
-    protected function _closeFile()
-    {
-        if(is_resource($this->_filePointer)) {
-            fclose($this->_filePointer);
-        }
-    }
+		/*while(!feof($this->_filePointer)) {
+		* $data .= fgets($this->_filePointer, 8192);
+		* }*/
 
-    /**
-     * Chrome_Cache_Serialization::_applyChanges()
-     *
-     * If the data changed, rewrite the cache
-     *
-     * @return void
-     */
-    protected function _applyChanges()
-    {
-        if($this->_dataChanged === false) {
-            return;
-        }
+		$data = @file_get_contents($this->_fileName);
 
-        $this->_data[self::CHROME_CACHE_SERIALIZATION_TIMESTAMP_KEY] = CHROME_TIME;
+		if($data === '') {
+			return;
+		}
+		$this->_data = unserialize($data);
+	}
 
-        // truncate file and seek to position 0
-        //ftruncate($this->_filePointer, 0);
-        //fseek($this->_filePointer, 0);
-        // write the serialized data
-        fwrite($this->_filePointer, serialize($this->_data));
-    }
+	/**
+	 * Chrome_Cache_Serialization::_dataChanged()
+	 *
+	 * Sets the $_dataChanged() var
+	 *
+	 * @return void
+	 */
+	protected function _dataChanged()
+	{
+		$this->_dataChanged = true;
 
-    /**
-     * Chrome_Cache_Serialization::_loadData()
-     *
-     * Loads the cache file and save it into var
-     *
-     * @param boolean $fileIsEmpty true if file is empty, false if you dont know
-     * @return void
-     */
-    protected function _loadData($fileIsEmpty = false)
-    {
-        if($fileIsEmpty === true) {
-            return;
-        }
+		$this->_openFile();
+	}
 
-        $data = '';
+	/**
+	 * This method ensures that only one file handle is used.
+	 * This opens the cache file, if it does not exist, the file gets created (with all dirs)
+	 * and the file handler gets saved in $_filePointer.
+	 *
+	 * @return void
+	 */
+	protected function _openFile()
+	{
+		if($this->_filePointer !== null) {
+			return;
+		}
 
-        /*while(!feof($this->_filePointer)) {
-            $data .= fgets($this->_filePointer, 8192);
-        }*/
+		// load Chrome_File class and create the file
+		require_once LIB.'core/file/file.php';
+		$this->_filePointer = Chrome_File::mkFileUsingFilePointer($this->_fileName, 0777, 'wb');
+		if(!is_resource($this->_filePointer)) {
+			throw new Chrome_Exception('Error while creating file '.$this->_fileName.'');
+		}
+	}
 
-        $data = @file_get_contents($this->_fileName);
+	/**
+	 * Chrome_Cache_Serialization::_isValid()
+	 *
+	 * Check wheter cache data is valid and if not unset data
+	 *
+	 * @return void
+	 */
+	protected function _isValid()
+	{
+		if($this->_lifetime == 0) {
+			return;
+		}
 
-        if($data === '') {
-            return;
-        }
-        $this->_data = unserialize($data);
-    }
-
-    /**
-     * Chrome_Cache_Serialization::_dataChanged()
-     *
-     * Sets the $_dataChanged() var
-     *
-     * @return void
-     */
-     protected function _dataChanged()
-     {
-        $this->_dataChanged = true;
-
-        // now we need to open the file, but just one time ;)
-        if($this->_filePointer === null) {
-            $this->_filePointer = fopen($this->_fileName, 'wb');
-        }
-     }
-
-    /**
-     * Chrome_Cache_Serialization::_isValid()
-     *
-     * Check wheter cache data is valid and if not unset data
-     *
-     * @return void
-     */
-    protected function _isValid()
-    {
-        if($this->_lifetime == 0) {
-            return;
-        }
-
-        // cache expired?
-        if(isset($this->_data[self::CHROME_CACHE_SERIALIZATION_TIMESTAMP_KEY])
-           AND $this->_data[self::CHROME_CACHE_SERIALIZATION_TIMESTAMP_KEY] + $this->_lifetime < CHROME_TIME) {
-            $this->_data = array();
-        }
-    }
+		// cache expired?
+		if(isset($this->_data[self::CHROME_CACHE_SERIALIZATION_TIMESTAMP_KEY]) and $this->_data[self::CHROME_CACHE_SERIALIZATION_TIMESTAMP_KEY] + $this->_lifetime < CHROME_TIME) {
+			$this->_data = array();
+		}
+	}
 }

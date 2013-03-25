@@ -17,7 +17,7 @@
  * @subpackage Chrome.Core
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 11:29:53] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 13:45:44] --> $
  * @author     Alexander Book
  */
 
@@ -34,11 +34,6 @@ require_once 'error/error.php';
 require_once 'log/log.php';
 
 /**
- * load registry class to save singleton AND other stuff
- */
-require_once 'registry/registry.php';
-
-/**
  * load mime class to get mime info of a file
  */
 require_once 'mime.php';
@@ -52,6 +47,7 @@ require_once 'date.php';
  * load Chrome_File, Chrome_Dir classes, for easy file and dir manipulation
  */
 require_once 'file/file.php';
+require_once 'file/dir.php';
 
 /**
  * load file_system class for fast isFile & isDir functions
@@ -139,7 +135,7 @@ require_once 'validator/validator.php';
 require_once 'language.php';
 
 /**
- * load require class to require other files
+ * load require class to load other files
  */
 require_once 'require/require.php';
 

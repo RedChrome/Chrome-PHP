@@ -28,16 +28,16 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 
 
 		$this->_elements['radio'] = new Chrome_Form_Element_Radio( $this, 'radio', array(
-			Chrome_Form_Element_Radio::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
+			Chrome_Form_Element_Radio::IS_REQUIRED => true,
             Chrome_Form_Element_Radio::CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA => true,
 			Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => 'test',
 			Chrome_Form_Element_Radio::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array( 'test', 'test2' ),
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_READONLY => array('test') ) );
 
-		$this->_elements['text'] = new Chrome_Form_Element_Text( $this, 'text', array( Chrome_Form_Element_Text::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
+		$this->_elements['text'] = new Chrome_Form_Element_Text( $this, 'text', array( Chrome_Form_Element_Text::IS_REQUIRED => true,
 				Chrome_Form_Element_Text::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => $textValidators ) );
 
-		$this->_elements['password'] = new Chrome_Form_Element_Password( $this, 'password', array( Chrome_Form_Element_Password::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
+		$this->_elements['password'] = new Chrome_Form_Element_Password( $this, 'password', array( Chrome_Form_Element_Password::IS_REQUIRED => true,
 				Chrome_Form_Element_Password::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array( $emptyValidator ) ) );
 
 
@@ -46,7 +46,7 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 				'Value1',
 				'Value2',
 				'Value3' ),
-                Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED => array('Value1', 'Value2'),
+                Chrome_Form_Element_Abstract::IS_REQUIRED => array('Value1', 'Value2'),
                 Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
                     Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array('Value1', 'Value2')
                 ) ) );
@@ -59,7 +59,7 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 				'Value3' ),
 			Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_SELECT_MULTIPLE => true,
             Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_READONLY => array('Value2'),
-			Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_IS_REQUIRED => false,
+			Chrome_Form_Element_Select::IS_REQUIRED => false,
 			Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
                 Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array('Value1') ) ) );
 

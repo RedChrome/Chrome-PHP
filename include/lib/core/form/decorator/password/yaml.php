@@ -17,9 +17,9 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.10.2012 21:51:31] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 17:05:16] --> $
  */
-if( CHROME_PHP !== true ) die();
+if(CHROME_PHP !== true) die();
 
 require_once 'default.php';
 
@@ -30,14 +30,16 @@ require_once 'default.php';
  */
 class Chrome_Form_Decorator_Password_Yaml extends Chrome_Form_Decorator_Password_Default
 {
+    protected $_labelModified = false;
+
 	public function render()
 	{
-		if( $this->_formElement->getOptions( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED )
-			=== true and ( $label = $this->getOption( self::CHROME_FORM_DECORATOR_LABEL ) ) !== null ) {
-			$this->setOption( self::CHROME_FORM_DECORATOR_LABEL, $label .
-				'<sup class="ym-required">*</sup>' );
+		if($this->_formElement->getOptions(Chrome_Form_Element_Abstract::IS_REQUIRED) === true AND
+            ($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null AND $this->_labelModified !== true) {
+			$this->setOption(self::CHROME_FORM_DECORATOR_LABEL, $label.'<sup class="ym-required">*</sup>');
+            $this->_labelModified = true;
 		}
 
-		return '<div class="ym-fbox-text">' . parent::render() . '</div>';
+		return '<div class="ym-fbox-text">'.parent::render().'</div>';
 	}
 }

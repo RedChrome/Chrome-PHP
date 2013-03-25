@@ -39,7 +39,7 @@ class Chrome_Form_Element_Birthday extends Chrome_Form_Element_Abstract
     const CHROME_FORM_ELEMENT_BIRTHDAY_ERROR_YEAR = 'ERRORYEAR';
     const CHROME_FORM_ELEMENT_BIRTHDAY_ERROR_DATE = 'ERRORDATE';
 
-    protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => true, self::CHROME_FORM_ELEMENT_SAVE_DATA => true);
+    protected $_defaultOptions = array(self::IS_REQUIRED => true, self::CHROME_FORM_ELEMENT_SAVE_DATA => true);
 
     protected $_data = null;
 
@@ -54,7 +54,7 @@ class Chrome_Form_Element_Birthday extends Chrome_Form_Element_Abstract
 
         $data = $this->getData();
 
-        if($this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === true) {
+        if($this->_options[self::IS_REQUIRED] === true) {
             if($data[self::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_MONTH] == null or $data[self::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_YEAR] == null or $data[self::CHROME_FORM_ELEMENT_BIRTHDAY_NAMESPACE_DAY] == null) {
                 $isValid = false;
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
@@ -144,19 +144,19 @@ class Chrome_Form_Element_Birthday extends Chrome_Form_Element_Abstract
             }
         }
 
-        $array = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+        $array = $this->_session[self::SESSION_NAMESPACE];
         $array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_BIRTHDAY_SESSION_NAMESPACE][$this->getID()] = $this->getData();
-        $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE] = $array;
+        $this->_session[self::SESSION_NAMESPACE] = $array;
     }
 
     protected function _unSave($key)
     {
-        $array = $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE];
+        $array = $this->_session[self::SESSION_NAMESPACE];
         $array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_BIRTHDAY_SESSION_NAMESPACE][$this->getID()][$key] = null;
     }
 
     public function getSavedData()
     {
-        return (isset($this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_BIRTHDAY_SESSION_NAMESPACE][$this->getID()])) ? $this->_session[self::CHROME_FORM_ELEMENT_SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_BIRTHDAY_SESSION_NAMESPACE][$this->getID()] : null;
+        return (isset($this->_session[self::SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_BIRTHDAY_SESSION_NAMESPACE][$this->getID()])) ? $this->_session[self::SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_BIRTHDAY_SESSION_NAMESPACE][$this->getID()] : null;
     }
 }

@@ -29,7 +29,7 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Form_Element_Submit extends Chrome_Form_Element_Abstract
 {
-    protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_IS_REQUIRED => true,
+    protected $_defaultOptions = array(self::IS_REQUIRED => true,
                                        self::CHROME_FORM_ELEMENT_SUBMIT_VALUES => array());
 
     protected $_data = null;
@@ -55,7 +55,7 @@ class Chrome_Form_Element_Submit extends Chrome_Form_Element_Abstract
     }
 
     protected function _isSent() {
-        if($this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === true) {
+        if($this->_options[self::IS_REQUIRED] === true) {
             if($this->_form->getSentData($this->_id) === null) {
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
                 return false;

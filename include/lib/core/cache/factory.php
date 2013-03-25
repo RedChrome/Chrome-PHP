@@ -17,7 +17,7 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2012 18:38:43] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 11:31:17] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -27,30 +27,56 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
  */
-abstract class Chrome_Cache_Abstract implements Chrome_Cache_Interface
-{
-}
-
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.Cache
- */
 interface Chrome_Cache_Interface
 {
     /**
-     * factory()
+     * Creates a new cache object using given options
      *
-     * Creates a new cache instance
-     *
-     * @param string $file
-     * @return
+     * @param Chrome_Cache_Option_Interface $options additional options for cache adapter
+     * @return Chrome_Cache_Interface
      */
-    public static function factory($file);
+    public function __construct(Chrome_Cache_Option_Interface $options);
 
     /**
-     * clear()
+     * Sets a cache entry
      *
-     * Deletes the cache
+     * @param string $key
+     * @param mixed $data
+     * @return boolean true on success
+     */
+    public function set($key, $data);
+
+    /**
+     * Returns the data for the $key
+     *
+     * @return mixed null on failure
+     */
+    public function get($key);
+
+    /**
+     * Determines whether the cache entry with the name $key exists
+     *
+     * @return boolean, true if entry exists
+     */
+    public function has($key);
+
+    /**
+     * Removes an entry from cache. If $key does not exist, nothing happens
+     *
+     * @param string $key
+     * @return void
+     */
+    public function remove($key);
+
+    /**
+     * Flushes the cache
+     *
+     * @return boolean
+     */
+     public function flush();
+
+    /**
+     * Deletes the whole cache
      *
      * @return bool
      */
@@ -58,76 +84,28 @@ interface Chrome_Cache_Interface
 }
 
 /**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Cache.Option
+ */
+interface Chrome_Cache_Option_Interface
+{
+
+}
+
+/**
  * Chrome_Cache_Factory
  *
  * @package     CHROME-PHP
  * @subpackage  Chrome.Cache
- * @todo remove _getFilesInDir, use _isFile instead!
  */
 class Chrome_Cache_Factory
 {
-    /**
-     * Instance of this class
-     *
-     * @var Chrome_Cache_Factory
-     */
-    private static $_instance;
-
-    /**
-     * Contains available cache factories
-     *
-     * @var array
-     */
-    private $_factories = array();
-
-    /**
-     * Default cache fatory
-     *
-     * @var string
-     */
-    private $_defaultFactory = 'File';
-
     /**
      * Force to cache
      *
      * @var bool
      */
     private $_forceCaching = false;
-
-    /**
-     * Path where all cache factories are saved
-     *
-     * @var string
-     */
-    const CHROME_CACHE_FACTORY_PATH_TO_CACHE_FACTORIES = 'include/plugins/Cache/';
-
-    /**
-     * Chrome_Cache_Factory::__construct()
-     *
-     * @return Chrome_Cache_Factory
-     */
-    private function __construct()
-    {
-        $this->_getFactories();
-    }
-
-    /**
-     * Chrome_Cache_Factory::_getFactories()
-     *
-     * Get all cache factories from dir
-     *
-     * @return void
-     */
-    private function _getFactories()
-    {
-        // check wheter the dir exists
-        if(!_isDir(self::CHROME_CACHE_FACTORY_PATH_TO_CACHE_FACTORIES)) {
-            throw new Chrome_Exception('Path '.self::CHROME_CACHE_FACTORY_PATH_TO_CACHE_FACTORIES.' does not exist! Cannot load cache factories in Chrome_Cache_Factory::_getFactories()!');
-        }
-
-        // get the files
-        $this->_factories = _getFilesInDir(self::CHROME_CACHE_FACTORY_PATH_TO_CACHE_FACTORIES);
-    }
 
     /**
      * Chrome_Cache_Factory::getInstance()
@@ -138,47 +116,29 @@ class Chrome_Cache_Factory
      */
     public static function getInstance()
     {
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
-        return self::$_instance;
+        return new self();
     }
 
     /**
-     * Chrome_Cache_Factory::factory()
-     *
      * Create a new cache
-     * Any additional argument gets passed to factory() of the specific cache factory class
      *
-     * @param string $factory Factory
-     * @param mixed $args pass any arguments to factory
+     * @param string $cacheAdapter cache adapter, just suffix of Chrome_Cache_*
+     * @param Chrome_Cache_Option_Interface $options options for adapter
      * @return Chrome_Cache_Abstract
      */
-    public function factory($factory = null)
+    public function factory($cacheAdapter, Chrome_Cache_Option_Interface $options)
     {
-        if($factory === null OR $factory === false) {
-            $factory = $this->_defaultFactory;
-        }
-
         // use a null object
-        if(CHROME_ENABLE_CACHING === false AND $this->_forceCaching == false) {
-            $factory = 'null';
+        if(CHROME_ENABLE_CACHING === false AND $this->_forceCaching === false) {
+            $cacheAdapter = 'null';
         }
 
-        // get args AND shift first one
-        $args = func_get_args();
-        array_shift($args);
-
-        // check whether factory exists
-        if(!in_array($factory.'.php', $this->_factories)) {
-            throw new Chrome_Exception('Cannot load cache factory '.$factory.'! File does not exist in Chrome_Cache_Factory::factory()!');
-        }
-
-        require_once self::CHROME_CACHE_FACTORY_PATH_TO_CACHE_FACTORIES.$factory.'.php';
+        // naming conventions
+        $cacheAdapter = ucfirst(strtolower($cacheAdapter));
 
         $this->_forceCaching = false;
 
-        return $this->_createNewFactory($factory, $args);
+        return $this->_createNewFactory($cacheAdapter, $options);
     }
 
     /**
@@ -198,12 +158,29 @@ class Chrome_Cache_Factory
      * Chrome_Cache_Factory::_createNewFactory()
      *
      * @param string $factory Factory
-     * @param array $args Arguments, to pass to factory
+     * @param Chrome_Cache_Option_Interface $options Options, to pass to factory
      * @return Chrome_Cache_Abstract
      */
-    private function _createNewFactory($factory, $args)
+    private function _createNewFactory($factory, $options)
     {
         // need call_user_func_array, because we pass an array as arguments, not an array as an argument!
-        return call_user_func_array(array('Chrome_Cache_'.$factory, 'factory'), $args);
+
+        $class =  'Chrome_Cache_'.$factory;
+
+        return new $class($options);
+
+        switch(count($options)) {
+            case 0:
+                return new $class();
+            case 1:
+                return new $class(array_pop($args));
+            case 2:
+                return new $class(array_pop($args), array_pop($args));
+            case 3:
+                return new $class(array_pop($args), array_pop($args), array_pop($args));
+            default: {
+                throw new Chrome_Exception('Well this code gets deleted, we are going to use an option class instead');
+            }
+        }
     }
 }

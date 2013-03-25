@@ -32,7 +32,7 @@ class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract
 
     const CHROME_FORM_ELEMENT_ERROR_NO_BUTTON_PRESSED = 'NOBUTTONPRESSED';
 
-	protected $_defaultOptions = array( self::CHROME_FORM_ELEMENT_IS_REQUIRED => true, self::CHROME_FORM_ELEMENT_BUTTONS =>
+	protected $_defaultOptions = array( self::IS_REQUIRED => true, self::CHROME_FORM_ELEMENT_BUTTONS =>
 			array() );
 
 	protected $_data = null;
@@ -63,7 +63,7 @@ class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract
 
 	protected function _isSent()
 	{
-		if( $this->_options[self::CHROME_FORM_ELEMENT_IS_REQUIRED] === false ) {
+		if( $this->_options[self::IS_REQUIRED] === false ) {
 			foreach( $this->_options[self::CHROME_FORM_ELEMENT_BUTTONS] as $button ) {
                 // call isSent, but we dont care about the result
 				$button->isSent();

@@ -17,16 +17,10 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:52:32] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 22:26:07] --> $
  */
 
-if(CHROME_PHP !== true)
-	die();
-
-/**
- * load Chrome_Dir class
- */
-require_once LIB.'core/file/dir.php';
+if(CHROME_PHP !== true) die();
 
 /**
  * Chrome_File Klasse
@@ -68,13 +62,13 @@ class Chrome_File
 {
 
 	const FILE_MODE_BEGINNING_READ_ONLY = 'rb';
-	const FILE_MODE_BEGINNING_WRITE 	= 'r+b';
+	const FILE_MODE_BEGINNING_WRITE = 'r+b';
 
 	const FILE_MODE_TRUNCATE_WRITE_ONLY = 'wb';
-	const FILE_MODE_TRUNCATE_WRITE 		= 'w+b';
+	const FILE_MODE_TRUNCATE_WRITE = 'w+b';
 
-	const FILE_MODE_ENDING_WRITE_ONLY 	= 'ab';
-	const FILE_MODE_ENDING_WRITE		= 'a+b';
+	const FILE_MODE_ENDING_WRITE_ONLY = 'ab';
+	const FILE_MODE_ENDING_WRITE = 'a+b';
 
 	/**
 	 * Get Extension of a file name
@@ -97,10 +91,8 @@ class Chrome_File
 	 */
 	public static function hasExt($file)
 	{
-		if(strpos($file, '.') === false)
-			return false;
-		else
-			return true;
+		if(strpos($file, '.') === false) return false;
+		else  return true;
 	}
 
 	/**
@@ -115,16 +107,16 @@ class Chrome_File
 		return (is_file($file) && self::hasExt($file)) ? true : false;
 	}
 
-    public static function existsUsingFilePointer($file, $openingMode = self::FILE_MODE_ENDING_WRITE_ONLY)
-    {
-        $fp = @fopen($file, $openingMode);
+	public static function existsUsingFilePointer($file, $openingMode = self::FILE_MODE_ENDING_WRITE_ONLY)
+	{
+		$fp = @fopen($file, $openingMode);
 
-        if(is_resource($fp)) {
-            return $fp;
-        }
+		if(is_resource($fp)) {
+			return $fp;
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 	/**
 	 * Wrapper for is_file function
@@ -156,10 +148,8 @@ class Chrome_File
 	 */
 	public static function size($file)
 	{
-		if(self::exists($file))
-			return filesize($file);
-		else
-			return 0;
+		if(self::exists($file)) return filesize($file);
+		else  return 0;
 	}
 
 	/** Copy a file
@@ -174,12 +164,10 @@ class Chrome_File
 	public static function copy($src, $file, $dest, $chmod = 0777)
 	{
 		// Check src path
-		if(!is_dir($src) OR !is_readable($src))
-			return false;
+		if(!is_dir($src) or !is_readable($src)) return false;
 
 		// Check file
-		if(self::exists($file))
-			return false;
+		if(self::exists($file)) return false;
 
 		// Check path to destination
 		if(!is_dir($dest)) {
@@ -189,13 +177,10 @@ class Chrome_File
 
 		if(!@copy($src.$file, $dest.$file)) {
 			throw new Chrome_File_Exception('The File: '.$file.' coudn\'t be copied from '.$src.' to '.$dest.'!');
-		}
-		else {
+		} else {
 			// Sets permission
-			if(self::_chper($dest.$file, $chmod))
-				return true;
-			else
-				return false;
+			if(self::_chper($dest.$file, $chmod)) return true;
+			else  return false;
 		}
 
 	}
@@ -209,27 +194,21 @@ class Chrome_File
 	 */
 	public static function chper($file, $chmod)
 	{
-		if(!self::exists($file))
-			throw new Chrome_File_Exception('Cannot change permission to '.$chmod.' because file '.$file.' doesn\'t exist!');
+		if(!self::exists($file)) throw new Chrome_File_Exception('Cannot change permission to '.$chmod.' because file '.$file.' doesn\'t exist!');
 
-		if(strlen($chmod) == '3')
-			$chmod = '0'.$chmod;
+		if(strlen($chmod) == '3') $chmod = '0'.$chmod;
 
-		if(!@chmod($file, $chmod))
-			throw new Chrome_File_Exception('Coudn\'t change permission to '.$chmod.'!');
-		else
-			return true;
+		if(!@chmod($file, $chmod)) throw new Chrome_File_Exception('Coudn\'t change permission to '.$chmod.'!');
+		else  return true;
 	}
 
-    protected static function _chper($file, $chmod) {
-        if(strlen($chmod) == '3')
-			$chmod = '0'.$chmod;
+	protected static function _chper($file, $chmod)
+	{
+		if(strlen($chmod) == '3') $chmod = '0'.$chmod;
 
-        if(!@chmod($file, $chmod))
-			throw new Chrome_File_Exception('Coudn\'t change permission to '.$chmod.'!');
-		else
-			return true;
-    }
+		if(!@chmod($file, $chmod)) throw new Chrome_File_Exception('Coudn\'t change permission to '.$chmod.'!');
+		else  return true;
+	}
 
 	/** Moves a file
 	 *
@@ -243,15 +222,12 @@ class Chrome_File
 	public static function move($src, $file, $dest, $chmod = 0777)
 	{
 		// Check src path
-		if(!is_dir($src) OR !is_readable($src))
-			return false;
+		if(!is_dir($src) or !is_readable($src)) return false;
 
-		if($src{strlen($src)-1} !== '/')
-			$src .= '/';
+		if($src{strlen($src) - 1} !== '/') $src .= '/';
 
 		// Check file
-		if(!self::exists($src.$file))
-			return false;
+		if(!self::exists($src.$file)) return false;
 
 		// Check path to destination
 		if(!is_dir($dest)) {
@@ -261,15 +237,12 @@ class Chrome_File
 
 		if(!@copy($src.$file, $dest.$file)) {
 			throw new Chrome_File_Exception('The File: '.$file.' coudn\'t be moved from '.$src.' to '.$dest.'!');
-		}
-		else {
+		} else {
 			@unlink($src.$file);
 
 			// Sets permission
-			if(self::_chper($dest.$file, $chmod))
-				return true;
-			else
-				return false;
+			if(self::_chper($dest.$file, $chmod)) return true;
+			else  return false;
 		}
 	}
 
@@ -285,43 +258,42 @@ class Chrome_File
 	{
 		if(!self::dirExists($file)) {
 			Chrome_Dir::createDir($file, $chmod, $doUpdateFileSystemCache);
-        }
+		}
 
 		if(!self::exists($file)) {
 			@$fp = fopen($file, 'xb');
-			if($fp === false)
-				return false;
+			if($fp === false) return false;
 			fclose($fp);
 			self::_chper($file, $chmod);
 
-            if($doUpdateFileSystemCache === true) {
-                Chrome_File_System_Read::getInstance()->forceCacheUpdate($file, true);
-            }
+			if($doUpdateFileSystemCache === true) {
+				Chrome_File_System_Read::getInstance()->forceCacheUpdate($file, true);
+			}
 
 			return true;
-		} else return false;
+		} else  return false;
 	}
 
-    public static function mkFileUsingFilePointer($file, $chmod = 0777,$openingMode = self::FILE_MODE_ENDING_WRITE_ONLY,$doUpdateFileSystemCache = true) {
+	public static function mkFileUsingFilePointer($file, $chmod = 0777, $openingMode = self::FILE_MODE_ENDING_WRITE_ONLY, $doUpdateFileSystemCache = true)
+	{
 
-        if(!self::dirExists($file)) {
+		if(!self::dirExists($file)) {
 			Chrome_Dir::createDir($file, $chmod, $doUpdateFileSystemCache);
-        }
+		}
 
-		if(!self::exists($file)) {
-			@$fp = fopen($file, $openingMode);
-			if($fp === false)
-				return false;
 
-			self::_chper($file, $chmod);
+		@$fp = fopen($file, $openingMode);
+		if($fp === false) return false;
 
-            if($doUpdateFileSystemCache === true) {
-                Chrome_File_System_Read::getInstance()->forceCacheUpdate($file, true);
-            }
+		self::_chper($file, $chmod);
 
-			return $fp;
-		} else return false;
-    }
+		if($doUpdateFileSystemCache === true) {
+			Chrome_File_System_Read::getInstance()->forceCacheUpdate($file, true);
+		}
+
+		return $fp;
+
+	}
 
 	/**
 	 * Creates a new File
@@ -335,7 +307,7 @@ class Chrome_File
 	 */
 	public static function createFile($file, $text = '', $fmode = self::FILE_MODE_ENDING_WRITE_ONLY)
 	{
-		if(!self::dirExists($file) ) {
+		if(!self::dirExists($file)) {
 			self::mkFile($file);
 		}
 		$fp = fopen($file, $fmode);
@@ -357,8 +329,7 @@ class Chrome_File
 	 */
 	public static function write($file, $text, $fmode = self::FILE_MODE_ENDING_WRITE_ONLY)
 	{
-		if(!self::exists($file))
-			return false;
+		if(!self::exists($file)) return false;
 
 		$fp = fopen($file, $fmode);
 
@@ -377,8 +348,7 @@ class Chrome_File
 	 */
 	public static function truncate($file)
 	{
-		if(!self::exists($file))
-			return false;
+		if(!self::exists($file)) return false;
 
 		fclose(fopen($file, self::FILE_MODE_TRUNCATE_WRITE_ONLY));
 
@@ -393,16 +363,13 @@ class Chrome_File
 	 */
 	public static function delete($file)
 	{
-		if(is_array($file))
-			$files = $file;
-		else
-			$files[] = $file;
+		if(is_array($file)) $files = $file;
+		else  $files[] = $file;
 
-		foreach($files AS $file) {
+		foreach($files as $file) {
 			// sets permission to 777 to delete file
 			@chmod($file, 0777);
-			if(!@unlink($file))
-				throw new Chrome_File_Exception('The File '.$file.' coudn\'t be deleted!');
+			if(!@unlink($file)) throw new Chrome_File_Exception('The File '.$file.' coudn\'t be deleted!');
 		}
 
 		return true;
@@ -419,8 +386,7 @@ class Chrome_File
 	 */
 	public static function rename($file, $newName)
 	{
-		if(!self::exists($file))
-			return false;
+		if(!self::exists($file)) return false;
 
 		return @rename($file, $newName);
 	}
@@ -433,7 +399,10 @@ class Chrome_File
 	 */
 	public static function clean($file)
 	{
-		$regex = array('#(\.){2,}#', '#[^A-Za-z0-9\.\_\- ]#', '#^\.#');
+		$regex = array(
+			'#(\.){2,}#',
+			'#[^A-Za-z0-9\.\_\- ]#',
+			'#^\.#');
 		return preg_replace($regex, '', $file);
 	}
 
@@ -450,21 +419,19 @@ class Chrome_File
 	 */
 	public static function insertLine($line, $srcFile, $text, $mode = 'start')
 	{
-		if(!self::exists($file))
-			return false;
+		if(!self::exists($file)) return false;
 
 		$line = (int)$line - 1;
 
 		$file = file($srcFile);
 
-		if($mode === 'end')
-			$line = count($file) - $line;
+		if($mode === 'end') $line = count($file) - $line;
 
 		$file[$line] = $file[$line]."\n".$text;
 
 		$fp = fopen($srcFile.'.tmp', 'w+');
 
-		foreach($file AS $value) {
+		foreach($file as $value) {
 			fwrite($fp, $value);
 		}
 
@@ -497,27 +464,23 @@ class Chrome_File
 	 */
 	public static function replaceLines($lines, $srcFile, $texts)
 	{
-		if(!self::exists($file))
-			return false;
+		if(!self::exists($file)) return false;
 
-		if(!is_array($lines))
-			$lines[] = $lines;
+		if(!is_array($lines)) $lines[] = $lines;
 
-		if(!is_array($texts))
-			$texts[] = $texts;
+		if(!is_array($texts)) $texts[] = $texts;
 
-		if(count($texts) != count($lines))
-			return false;
+		if(count($texts) != count($lines)) return false;
 
 		$file = file($srcFile);
 
-		foreach($lines AS $key => $value) {
+		foreach($lines as $key => $value) {
 			$file[$value] = $texts[$key];
 		}
 
 		$fp = fopen($srcFile.'.tmp', 'w+');
 
-		foreach($file AS $value) {
+		foreach($file as $value) {
 			fwrite($fp, $value);
 		}
 
@@ -541,13 +504,12 @@ class Chrome_File
 	 */
 	public static function commentLine($lineNr, $srcFile, $comment = '//')
 	{
-		if(self::exists($srcFile))
-			return false;
+		if(self::exists($srcFile)) return false;
 
 		$lineNr = (int)$lineNr;
 		$file = file($srcFile);
 
-		if($comment != '//' AND $comment != '#' AND $commecnt != ';') //php AND ini comments
+		if($comment != '//' and $comment != '#' and $commecnt != ';') //php AND ini comments
 
 			$comment = '//';
 
@@ -555,7 +517,7 @@ class Chrome_File
 
 		$fp = fopen($srcFile.'.tmp', 'w+');
 
-		foreach($file AS $value) {
+		foreach($file as $value) {
 			fwrite($fp, $value);
 		}
 
@@ -579,8 +541,7 @@ class Chrome_File
 	 */
 	public static function unCommentLine($lineNr, $srcFile)
 	{
-		if(!self::exists($srcFile))
-			return false;
+		if(!self::exists($srcFile)) return false;
 
 		$lineNr = (int)$lineNr;
 		$file = file($srcFile);
@@ -588,12 +549,11 @@ class Chrome_File
 		if(preg_match('$\A\s(//|#|;)$', $file[$lineNr])) //checks wheter a ' ' OR a \t OR a \n is at the front of the string
 
 			$file[$lineNr] = preg_replace('$\A(\s)(//|#|;)$', '\1', $file[$lineNr]); //replaces the # AND // but not the ' ' OR \t
-		else
-			$file[$lineNr] = preg_replace('$\A(//|#|;)$', '', $file[$lineNr]); //replaces # AND // if its at the front of the string
+		else  $file[$lineNr] = preg_replace('$\A(//|#|;)$', '', $file[$lineNr]); //replaces # AND // if its at the front of the string
 
 		$fp = fopen($srcFile.'.tmp', 'w+');
 
-		foreach($file AS $value) {
+		foreach($file as $value) {
 			fwrite($fp, $value);
 		}
 
@@ -624,31 +584,22 @@ class Chrome_File
 	 */
 	public static function getContent($file, $type = 'array', $mode = 'start')
 	{
-		if(!self::exists($file))
-			throw new Chrome_Exception('Cannot read file("'.$file.'")! File does not exist!');
+		if(!self::exists($file)) throw new Chrome_Exception('Cannot read file("'.$file.'")! File does not exist!');
 
-		if($mode !== 'start' AND $mode !== 'end')
-			throw new Chrome_Exception('Unexpected mode: '.$mode.'! Available modes are \'start\' OR \'end\'!');
+		if($mode !== 'start' and $mode !== 'end') throw new Chrome_Exception('Unexpected mode: '.$mode.'! Available modes are \'start\' OR \'end\'!');
 
-		if($type !== 'array' AND $type !== 'string')
-			throw new Chrome_Exception('Unexpected return type: '.$type.'! Available types are \'array\' OR \'string\'!');
+		if($type !== 'array' and $type !== 'string') throw new Chrome_Exception('Unexpected return type: '.$type.'! Available types are \'array\' OR \'string\'!');
 
-		if(CHROME_MEMORY_LIMIT * 1000000 <= ($size = self::size($file)))
-			// not a good method, but it works
-			throw new Chrome_Exception('Cannot get content of file: '.$file.'! Not enough memory available! File: '.$size.', Available: '.CHROME_MEMORY_LIMIT);
+		if(CHROME_MEMORY_LIMIT * 1000000 <= ($size = self::size($file))) // not a good method, but it works
+ 				throw new Chrome_Exception('Cannot get content of file: '.$file.'! Not enough memory available! File: '.$size.', Available: '.CHROME_MEMORY_LIMIT);
 
 		$file_array = file($file);
 
-		if($type === 'array' AND $mode === 'start')
-			return $file_array;
-		elseif($type === 'array' AND $mode === 'end')
-			return array_reverse($file_array, true);
-		elseif($type === 'string' AND $mode === 'start')
-			return implode("\n", $file_array);
-		elseif($type === 'string' AND $mode === 'end')
-			return implode("\n", array_reverse($file_array));
-		else
-			throw new Chrome_Exception('Unknown Error with file: '.$file.', type: '.$type.', mode: '.$mode.'!');
+		if($type === 'array' and $mode === 'start') return $file_array;
+		elseif($type === 'array' and $mode === 'end') return array_reverse($file_array, true);
+		elseif($type === 'string' and $mode === 'start') return implode("\n", $file_array);
+		elseif($type === 'string' and $mode === 'end') return implode("\n", array_reverse($file_array));
+		else  throw new Chrome_Exception('Unknown Error with file: '.$file.', type: '.$type.', mode: '.$mode.'!');
 	}
 
 	/**
@@ -663,12 +614,10 @@ class Chrome_File
 	public static function search($file, $text, $mode = 'start')
 	{
 		$content = self::getContent($file, 'array', $mode);
-		if(!is_array($content))
-			return 0;
+		if(!is_array($content)) return 0;
 
-		foreach($content AS $key => $array) {
-			if(preg_match('#'.$text.'#i', $array))
-				return $key + 1;
+		foreach($content as $key => $array) {
+			if(preg_match('#'.$text.'#i', $array)) return $key + 1;
 		}
 
 		return 0;
@@ -686,27 +635,22 @@ class Chrome_File
 	 */
 	public static function write_ini_file($file, $array, $process_sections = false)
 	{
-		if(self::hasExt($file) === false)
-			$file .= '.ini';
+		if(self::hasExt($file) === false) $file .= '.ini';
 
-		if(self::exists($file))
-			throw new Chrome_Exception('File: '.$file.' already exists!');
+		if(self::exists($file)) throw new Chrome_Exception('File: '.$file.' already exists!');
 
 		$write = '';
 
-		foreach($array AS $key => $value) {
-			if($process_sections === true AND is_array($value)) {
+		foreach($array as $key => $value) {
+			if($process_sections === true and is_array($value)) {
 				$write .= "[$key]\n";
-				foreach($value AS $_key => $_value) {
+				foreach($value as $_key => $_value) {
 					$write .= "$_key\t\t\t\t=\t\t$_value\n";
 				}
-			}
-			else
-				$write .= "$key\t\t\t\t=\t\t$value\n";
+			} else  $write .= "$key\t\t\t\t=\t\t$value\n";
 		}
 
-		if(empty($write))
-			return false;
+		if(empty($write)) return false;
 
 		return self::createFile($file, $write);
 	}

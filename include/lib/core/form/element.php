@@ -17,20 +17,41 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 12:04:45] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.03.2013 17:36:03] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
     die();
 
 /**
- * Chrome_Form_Element_Interface
+ * Interface for all form elements
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Element
  */
 interface Chrome_Form_Element_Interface
 {
+    /**
+     * Option to determine whether the form element is required or not.
+     * If the element is not sent and isrequired set to true then the
+     * element will raise ERROR_NOT_SENT.
+     *
+     * Structure: boolean
+     *
+     * @var string
+     */
+    const IS_REQUIRED = 'ISREQUIRED',
+
+    /**
+     * If the user clicks on the submit button, then e.g. the user sends 'login'
+     * This option says which submit values are accepted
+     *
+     * Structure: array('submit1', 'login', 'logout')
+     *
+     * @var string
+     */
+    CHROME_FORM_ELEMENT_SUBMIT_VALUES = 'SUBMITVALUES';
+
     /**
      * isCreated()
      *
@@ -209,22 +230,13 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     /**
      * Session namespace for form, validator and converter
      *
+     * @todo remove validator... this should be done in model, same goes to converter
      * @var string
      */
-    const CHROME_FORM_ELEMENT_SESSION_NAMESPACE = 'FORMS',
+    const SESSION_NAMESPACE = 'FORMS',
         CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE = 'VALIDATOR',
         CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE = 'CONVERTER';
 
-    /**
-     * Option to determine whether the form element is required or not.
-     * If the element is not sent and isrequired set to true then the
-     * element will raise ERROR_NOT_SENT.
-     *
-     * Structure: boolean
-     *
-     * @var string
-     */
-    const CHROME_FORM_ELEMENT_IS_REQUIRED = 'ISREQUIRED',
 
     /**
      * This error will be raised if the element is marked as required and the user
@@ -232,7 +244,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      *
      * @var string
      */
-    CHROME_FORM_ELEMENT_ERROR_NOT_SENT = 'ERRORNOTSENT';
+    const CHROME_FORM_ELEMENT_ERROR_NOT_SENT = 'ERRORNOTSENT';
 
     /**
      * This is an option for multiple user input, e.g. radio, checkbox, selection
@@ -250,17 +262,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      *
      * @var string
      */
-    CHROME_FORM_ELEMENT_ERROR_WRONG_SELECTION = 'ERRORWRONGSELECTION';
-
-    /**
-     * If the user clicks on the submit button, then e.g. the user sends 'login'
-     * This option says which submit values are accepted
-     *
-     * Structure: array('submit1', 'login', 'logout')
-     *
-     * @var string
-     */
-    const CHROME_FORM_ELEMENT_SUBMIT_VALUES = 'SUBMITVALUES',
+    CHROME_FORM_ELEMENT_ERROR_WRONG_SELECTION = 'ERRORWRONGSELECTION',
 
     /**
      * If the user has sent a wrong submit type e.g. he has sent 'register', but only
@@ -272,7 +274,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 
     /**
      * This determines whether the user cannot change the form element
-     * Note: If this is set to true, than the return value of this element is null, not
+     * Note: If this is set to true, then the return value of this element is null, not
      *       the default value set in decorator!!
      *
      * Structure: Use boolean if the user can only send one input (e.g. textarea)

@@ -203,7 +203,7 @@ class Chrome_Form_Decorator_Birthday_Default extends Chrome_Form_Decorator_Indiv
     public function setFormElement(Chrome_Form_Element_Interface $obj) {
         parent::setFormElement($obj);
 
-        if($obj->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED) === true) {
+        if($obj->getOptions(Chrome_Form_Element_Abstract::IS_REQUIRED) === true) {
             $this->_attribute['required'] = 'required';
 
         }

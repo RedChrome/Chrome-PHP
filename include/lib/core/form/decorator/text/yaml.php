@@ -34,7 +34,7 @@ class Chrome_Form_Decorator_Text_Yaml extends Chrome_Form_Decorator_Text_Default
 
     public function render() {
 
-        if($this->_formElement->getOptions(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_IS_REQUIRED) === true AND ($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null AND $this->_labelManipulated === false ) {
+        if($this->_formElement->getOptions(Chrome_Form_Element_Abstract::IS_REQUIRED) === true AND ($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null AND $this->_labelManipulated === false ) {
             $this->setOption(self::CHROME_FORM_DECORATOR_LABEL, $label.'<sup class="ym-required">*</sup>');
             $this->_labelManipulated = true;
         }

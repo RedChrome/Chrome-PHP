@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 15:23:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 22:17:57] --> $
  * @link       http://chrome-php.de
  */
 
@@ -41,7 +41,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Interface_Interface
+interface Chrome_Database_Interface_Interface extends Chrome_Logable_Interface
 {
     /**
      * Constructor
@@ -162,6 +162,8 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
     protected $_statementRegistry = null;
 
+    protected $_logger = null;
+
     public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result, Chrome_Database_Registry_Statement_Interface $statementRegistry)
     {
         $this->_statementRegistry = $statementRegistry;
@@ -196,7 +198,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
             return $this->_result;
         } catch(Chrome_Exception_Database $e) {
-            Chrome_Log::logException($e, E_ERROR, new Chrome_Logger_Database());
+            Chrome_Log::logException($e, E_ERROR, $this->_logger);
             throw $e;
         }
     }
@@ -276,6 +278,16 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
         // Note: you have to escape % (if your using queries: select * form test where val LIKE "test%") with %
         // so the query would look like: select * from test where val LIKE "test%%"
         return vsprintf($statement, $this->_params);
+    }
+
+    public function setLogger(Chrome_Logger_Interface $logger = null)
+    {
+        $this->_logger = $logger;
+    }
+
+    public function getLogger()
+    {
+        return $this->_logger;
     }
 }
 

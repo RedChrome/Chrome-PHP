@@ -21,16 +21,12 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 15:30:44] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 12:59:26] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true)
     die();
-
-/**
- * @todo enable transactions
- */
 
 /**
  * load exception class
@@ -71,11 +67,6 @@ require_once 'composition.php';
  * load interface for abstract factory
  */
 require_once 'factory.php';
-
-/**
- * includes an autoloader for database classes
- */
-require_once 'loader.php';
 
 /**
  * this will load the initializer interface

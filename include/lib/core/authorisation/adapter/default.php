@@ -17,7 +17,7 @@
  * @subpackage Chrome.Authorisation
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 01:05:56] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:22:24] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -255,12 +255,13 @@ class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_Database_Abstra
         return (int) $return['group_id'];
     }
 }
+
 /**
  * Chrome_Database_Right_Handler_Default
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Authorisation
- */
+ *
 class Chrome_Database_Right_Handler_Default implements Chrome_Database_Right_Handler_Interface
 {
     public function addHasRight($sqlStatement, Chrome_Authorisation_Resource_Interface $resource, $dbColumn)
@@ -283,4 +284,4 @@ class Chrome_Database_Right_Handler_Default implements Chrome_Database_Right_Han
 
         return $sqlStatementOptions;
     }
-}
+}*/
