@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 15:02:10] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 14:32:52] --> $
  * @author     Alexander Book
  */
 
@@ -42,11 +42,11 @@ class Chrome_View_Box_Login extends Chrome_View_Abstract
 	/**
 	 * @return void
 	 */
-	public function render( Chrome_Controller_Interface $controller )
+	public function render()
 	{
-	    return $this->_view->render($controller);
-		// override parent, do nothing
+	    return $this->_view->render();
 	}
+
 
 	/**
 	 * sets the actual rendered view
@@ -84,7 +84,7 @@ class Chrome_View_Box_Login extends Chrome_View_Abstract
  */
 class Chrome_View_Box_LoggedIn extends Chrome_View_Abstract
 {
-	public function render( Chrome_Controller_Interface $controller )
+	public function render()
 	{
 		return 'Eingeloggt...<br>Hier kommt dann das User Menu hin ;)';
 	}
@@ -96,7 +96,7 @@ class Chrome_View_Box_LoggedIn extends Chrome_View_Abstract
  */
 class Chrome_View_Box_Form_Login extends Chrome_View_Abstract
 {
-	public function render( Chrome_Controller_Interface $controller )
+	public function render()
 	{
 		// create template with the form
 		$template = new Chrome_Template();

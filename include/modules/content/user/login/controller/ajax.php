@@ -28,7 +28,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Chrome_Controller_Content_Login_AJAX extends Chrome_Controller_Content_Abstract
+class Chrome_Controller_Content_Login_AJAX extends Chrome_Controller_Module_Abstract
 {
 	protected function _initialize() {
 

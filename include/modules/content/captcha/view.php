@@ -26,7 +26,7 @@ class Chrome_View_Captcha extends Chrome_View_Strategy_Abstract
 
 class Chrome_View_Captcha_Template extends Chrome_View_Abstract
 {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
 
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/captcha/captcha_test');
@@ -38,7 +38,7 @@ class Chrome_View_Captcha_Template extends Chrome_View_Abstract
 
 class Chrome_View_Captcha_Template_Success extends Chrome_View_Abstract
 {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
 
         return 'Captcha correctly filled!';
 

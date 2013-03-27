@@ -17,7 +17,7 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.03.2013 22:02:34] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:55:42] --> $
  * @author     Alexander Book
  */
 
@@ -43,15 +43,6 @@ interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Inter
      * @return Chrome_Controller_Interface
      */
     public function __construct(Chrome_Application_Context_Interface $appContext);
-
-    /**
-     * This method is used to add Renderable objects into $list. This should be done in this method!
-     * And only there.
-     *
-     * @param Chrome_Design_Renderable_Container_List_Interface $list
-     * @return void
-     */
-    public function addViews(Chrome_Design_Renderable_Container_List_Interface $list);
 
     /**
      * Sets the application context
@@ -237,6 +228,10 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         return $this->_form;
     }
 
+    public function getView() {
+        return $this->_view;
+    }
+
     protected function _setRequestHandler(Chrome_Request_Handler_Interface $obj)
     {
         $this->_requestHandler = $obj;
@@ -253,7 +248,8 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         return $this->_exceptionHandler;
     }
 
-    public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
+    // todo remove this method
+    final public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
         // do nothing
     }
 

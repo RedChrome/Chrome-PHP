@@ -4,7 +4,7 @@ require_once 'model.php';
 require_once 'view.php';
 require_once 'include.php';
 
-class Chrome_Controller_Register extends Chrome_Controller_Content_Abstract
+class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
 {
     const CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE = 'REGISTER';
 

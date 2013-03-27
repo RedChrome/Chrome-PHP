@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.03.2013 13:07:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 12:12:58] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -27,18 +27,23 @@ if(CHROME_PHP !== true)
  * @package    CHROME-PHP
  * @subpackage Chrome.Design
  */
-interface Chrome_Design_Factory_Interface
+class Chrome_Renderable_Template extends Chrome_Renderable_Composition
 {
-    public function __construct(Chrome_Application_Context_Interface $appContext);
+    protected $_template = null;
 
-    public function build();
-}
+    public function __construct(Chrome_Template_Interface $template) {
+        $this->_template = $template;
+        parent::__construct();
+    }
 
-abstract class Chrome_Design_Factory_Abstract implements Chrome_Design_Factory_Interface
-{
-    protected $_applicationContext = null;
+    public function render() {
 
-    public function __construct(Chrome_Application_Context_Interface $appContext) {
-        $this->_applicationContext = $appContext;
+        $this->_template->assign('VIEW', $this->_renderables);
+
+        return $this->_template->render();
+    }
+
+    public function getRequiredRenderables(Chrome_Renderable_Options_Interface $options) {
+        // do nothing
     }
 }

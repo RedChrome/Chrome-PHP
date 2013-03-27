@@ -42,7 +42,7 @@ class Chrome_View_Register extends Chrome_View_Strategy_Abstract
 
 class Chrome_View_Register_StepOne extends Chrome_View_Abstract
 {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
 
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/stepOne');
@@ -55,7 +55,7 @@ class Chrome_View_Register_StepOne extends Chrome_View_Abstract
 
 class Chrome_View_Register_StepTwo extends Chrome_View_Abstract
 {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/stepTwo');
         $template->assign('FORM', $this->_controller->getForm());
@@ -66,7 +66,7 @@ class Chrome_View_Register_StepTwo extends Chrome_View_Abstract
 
 class Chrome_View_Register_StepThree extends Chrome_View_Abstract
 {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/stepThree');
         return $template->render();
@@ -75,7 +75,7 @@ class Chrome_View_Register_StepThree extends Chrome_View_Abstract
 
 class Chrome_View_Register_AlreadyRegistered extends Chrome_View_Abstract
 {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/alreadyRegistered');
         return $template->render();
@@ -83,7 +83,7 @@ class Chrome_View_Register_AlreadyRegistered extends Chrome_View_Abstract
 }
 
 class Chrome_View_Register_Registration_Finished extends Chrome_View_Abstract {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/registrationFinished');
         return $template->render();
@@ -91,7 +91,7 @@ class Chrome_View_Register_Registration_Finished extends Chrome_View_Abstract {
 }
 
 class Chrome_View_Register_Registration_Failed extends Chrome_View_Abstract {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/registrationFailed');
         return $template->render();
@@ -99,7 +99,7 @@ class Chrome_View_Register_Registration_Failed extends Chrome_View_Abstract {
 }
 
 class Chrome_View_Register_StepEmailNotSent extends Chrome_View_Abstract {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
 
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/emailNotSent');

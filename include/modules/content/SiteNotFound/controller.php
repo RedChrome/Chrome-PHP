@@ -1,6 +1,6 @@
 <?php
 
-class Chrome_Controller_SiteNotFound extends Chrome_Controller_Content_Abstract
+class Chrome_Controller_SiteNotFound extends Chrome_Controller_Module_Abstract
 {
     protected function _initialize()
     {
@@ -17,14 +17,14 @@ class Chrome_View_Content_SiteNotFound extends Chrome_View
         $this->addTitle($lang->get('title'));
     }
 
-    public function render(Chrome_Controller_Interface $controller) {
-        return $this->_view->render($controller);
+    public function render() {
+        return $this->_view->render();
     }
 }
 
 class Chrome_View_SiteNotFound extends Chrome_View
 {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
         $tpl = new Chrome_Template();
 
         $tpl->assignTemplate('modules/content/SiteNotFound/SiteNotFound.tpl');

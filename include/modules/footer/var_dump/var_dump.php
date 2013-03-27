@@ -17,7 +17,7 @@
  * @subpackage Chrome.Modules
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.03.2013 22:00:32] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:54:28] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -37,11 +37,6 @@ class Chrome_Controller_Footer_VarDump extends Chrome_Controller_Module_Abstract
     protected function _execute() {
         $this->_view = new Chrome_View_Footer_VarDump($this);
         $this->_view->setData($this->_requestData->getData(), $this->_requestData->getCookie(), $this->_requestData->getSession());
-    }
-
-    public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
-        // add the view to output
-        $list->add($this->_view);
     }
 }
 
@@ -66,7 +61,7 @@ class Chrome_View_Footer_VarDump extends Chrome_View_Abstract
         $this->_session = $session;
     }
 
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
 
         $data = $this->_data;
 
@@ -98,7 +93,6 @@ class Chrome_View_Footer_VarDump extends Chrome_View_Abstract
             } else {
 
                 $return .= '<tr><td>'.$key.'</td><td>'.$value.'</td></tr>';
-
             }
         }
 

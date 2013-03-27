@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:25:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 14:27:26] --> $
  * @author     Alexander Book
  */
 
@@ -72,10 +72,5 @@ class Chrome_Controller_Box_Login extends Chrome_Controller_Module_Abstract
             $this->_view->showLoginForm();
         }
 
-    }
-
-    public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
-        // add the view to output
-        $list->add($this->_view);
     }
 }

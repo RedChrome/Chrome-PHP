@@ -3,7 +3,7 @@
 require_once 'view.php';
 require_once 'include.php';
 
-class Chrome_Controller_Captcha extends Chrome_Controller_Content_Abstract
+class Chrome_Controller_Captcha extends Chrome_Controller_Module_Abstract
 {
 	protected function _initialize()
 	{

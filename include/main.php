@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 22:10:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 16:32:20] --> $
  * @link       http://chrome-php.de
  */
 
@@ -31,6 +31,7 @@ if(!defined('CHROME_PHP')) {
      */
     define('CHROME_PHP', true);
 }
+
 /**
  * load config
  */
@@ -83,16 +84,23 @@ interface Chrome_Front_Controller_Interface extends Chrome_Exception_Processable
      */
     public function execute();
 
+    /**
+     * Returns the current application context instance
+     *
+     * @return Chrome_Application_Context_Interface
+     */
     public function getApplicationContext();
 }
 
 /**
- *
  * @package CHROME-PHP
  * @subpackage Chrome.FrontController
  */
 class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
 {
+    /**
+     * @todo remove singleton pattern -> then change the exception handler interface to a non-static one
+     */
     private static $_instance = null;
 
     /**
@@ -353,15 +361,14 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             $this->_controller->execute();
 
             {
-                $design =  Chrome_Design::getInstance();
+                $design = new Chrome_Design($this->_applicationContext, $this->_controller);
 
-                $factory = new Chrome_Design_Factory($this->_applicationContext);
-                $theme = $factory->getDesign();
+                require_once LIB.'core/design/theme/chrome/theme.php';
+                $theme = new Chrome_Design_Theme_Chrome();
 
-                $design->setDesign($theme);
+                $theme->initDesign($design);
 
-                $design->render($this->_controller);
-
+                $design->render();
             }
 
             $this->_postprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());

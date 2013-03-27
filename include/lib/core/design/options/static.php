@@ -17,28 +17,24 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.03.2013 13:07:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:09:44] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Design
  */
-interface Chrome_Design_Factory_Interface
+class Chrome_Renderable_Options_Static implements Chrome_Renderable_Options_Interface
 {
-    public function __construct(Chrome_Application_Context_Interface $appContext);
+    protected $_position = null;
 
-    public function build();
-}
+    public function setPosition($pos) {
+        $this->_position = $pos;
+    }
 
-abstract class Chrome_Design_Factory_Abstract implements Chrome_Design_Factory_Interface
-{
-    protected $_applicationContext = null;
-
-    public function __construct(Chrome_Application_Context_Interface $appContext) {
-        $this->_applicationContext = $appContext;
+    public function getPosition() {
+        return $this->_position;
     }
 }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.03.2013 13:07:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.03.2013 23:44:51] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -25,20 +25,9 @@ if(CHROME_PHP !== true)
 
 /**
  * @package    CHROME-PHP
- * @subpackage Chrome.Design
+ * @subpackage Chrome.Design.Theme
  */
-interface Chrome_Design_Factory_Interface
+interface Chrome_Design_Theme_Interface
 {
-    public function __construct(Chrome_Application_Context_Interface $appContext);
-
-    public function build();
-}
-
-abstract class Chrome_Design_Factory_Abstract implements Chrome_Design_Factory_Interface
-{
-    protected $_applicationContext = null;
-
-    public function __construct(Chrome_Application_Context_Interface $appContext) {
-        $this->_applicationContext = $appContext;
-    }
+    public function initDesign(Chrome_Design_Interface $design);
 }

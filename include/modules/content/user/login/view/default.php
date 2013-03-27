@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 11:01:37] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:51:07] --> $
  * @author     Alexander Book
  */
 
@@ -52,7 +52,7 @@ class Chrome_View_User_Login_Default extends Chrome_View_Strategy_Abstract
 }
 
 class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
 
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/user/login/already_logged_in');
@@ -64,7 +64,7 @@ class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract {
 }
 
 class Chrome_View_User_Default_successfullyLoggedIn extends Chrome_View_Abstract {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/user/login/already_logged_in');
         return $template->render();
@@ -73,13 +73,13 @@ class Chrome_View_User_Default_successfullyLoggedIn extends Chrome_View_Abstract
 }
 
 class Chrome_View_User_Default_FormNotValid extends Chrome_View_Abstract {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
         return 'form was not valid!';
     }
 }
 
 class Chrome_View_User_Default_ShowForm extends Chrome_View_Abstract {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
         $lang = new Chrome_Language('modules/content/user/login');
 
         $template = new Chrome_Template();
@@ -91,7 +91,7 @@ class Chrome_View_User_Default_ShowForm extends Chrome_View_Abstract {
 }
 
 class Chrome_View_User_Default_WrongPassword extends Chrome_View_Abstract{
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
         $lang = new Chrome_Language('modules/content/user/login');
 
         $template = new Chrome_Template();

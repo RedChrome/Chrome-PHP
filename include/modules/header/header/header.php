@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 15:08:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:40:55] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -24,7 +24,7 @@ if(CHROME_PHP !== true)
 
 class Chrome_View_Header_Header extends Chrome_View
 {
-    public function render(Chrome_Controller_Interface $controller) {
-        return '<h1>Chrome-PHP Preview</h1>';
+    public function render() {
+        return '<header><h1>Chrome-PHP Preview</h1></header>';
     }
 }

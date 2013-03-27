@@ -4,7 +4,7 @@ require_once 'model.php';
 require_once 'view.php';
 require_once 'include.php';
 
-class Chrome_Controller_Index extends Chrome_Controller_Content_Abstract
+class Chrome_Controller_Index extends Chrome_Controller_Module_Abstract
 {
 	protected function _initialize()
 	{
@@ -16,6 +16,11 @@ class Chrome_Controller_Index extends Chrome_Controller_Content_Abstract
 	protected function _execute()
 	{
 		$this->_form = new Chrome_Form_Index($this->_requestHandler);
+
+        $obj = new Chrome_Controller_User_Login_Page($this->_applicationContext);
+        $obj->execute();
+
+        $this->_view->addRenderable($obj->getView());
 
 		if( $this->_form->isCreated() ) {
 
@@ -38,13 +43,4 @@ class Chrome_Controller_Index extends Chrome_Controller_Content_Abstract
 
 		$this->_view->doSTH();
 	}
-
-    public function addViews(Chrome_Design_Renderable_Container_List_Interface $list)
-    {
-        $obj = new Chrome_Controller_User_Login_Page($this->_applicationContext);
-        $obj->execute();
-        $obj->addViews($list);
-
-        parent::addViews($list);
-    }
 }

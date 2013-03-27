@@ -231,87 +231,35 @@ INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `cp1_design`
+-- Tabellenstruktur für Tabelle `cp1_design_static`
 --
 
-DROP TABLE IF EXISTS `cp1_design`;
-CREATE TABLE IF NOT EXISTS `cp1_design` (
+CREATE TABLE IF NOT EXISTS `cp1_design_static` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `name` varchar(75) NOT NULL,
   `file` varchar(100) NOT NULL,
   `class` varchar(150) NOT NULL,
   `position` varchar(50) NOT NULL,
+  `type` varchar(10) NOT NULL,
   `order` int(3) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
--- Daten für Tabelle `cp1_design`
+-- Daten für Tabelle `cp1_design_static`
 --
 
-INSERT INTO `cp1_design` (`id`, `name`, `file`, `class`, `position`, `order`) VALUES
-(1, 'right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'right_box', 1),
-(2, 'right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'right_box', 2),
-(3, 'right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'right_box', 3),
-(4, 'left_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'left_box', 1),
-(5, 'Benchmark', 'modules/footer/benchmark/benchmark.php', 'Chrome_View_Footer_Benchmark', 'footer', 1),
-(6, 'Header', 'modules/header/header/header.php', 'Chrome_View_Header_Header', 'header', 1),
-(7, 'Login', 'modules/box/login/controller.php', 'Chrome_Controller_Box_Login', 'controller', 0);
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `cp1_design_controller`
---
-
-DROP TABLE IF EXISTS `cp1_design_controller`;
-CREATE TABLE IF NOT EXISTS `cp1_design_controller` (
-  `id` int(5) NOT NULL AUTO_INCREMENT,
-  `controller_class` varchar(255) NOT NULL,
-  `design_class` varchar(500) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `cp1_design_layout`
---
-
-DROP TABLE IF EXISTS `cp1_design_layout`;
-CREATE TABLE IF NOT EXISTS `cp1_design_layout` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `controller` varchar(256) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `cp1_design_mapper_static`
---
-
-DROP TABLE IF EXISTS `cp1_design_mapper_static`;
-CREATE TABLE IF NOT EXISTS `cp1_design_mapper_static` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `view_id` varchar(256) NOT NULL,
-  `position` varchar(256) NOT NULL,
-  `priority` int(2) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
-
---
--- Daten für Tabelle `cp1_design_mapper_static`
---
-
-INSERT INTO `cp1_design_mapper_static` (`id`, `view_id`, `position`, `priority`) VALUES
-(1, 'Chrome_View_HTML_Bottom_JsIncluder', 'bottom', 0),
-(2, 'Chrome_View_Footer_Benchmark', 'footer', 0),
-(3, 'Chrome_View_HTML_Head_CssIncluder', 'head', 0),
-(4, 'Chrome_View_Footer_VarDump', 'footer', 0),
-(5, 'Chrome_View_Header_Header', 'header', 0),
-(6, 'Chrome_View_Box_Login', 'left_box', 0),
-(7, 'Chrome_View_Box_Test', 'right_box', 0);
+INSERT INTO `cp1_design_static` (`id`, `name`, `file`, `class`, `position`, `type`, `order`) VALUES
+(1, 'right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 1),
+(2, 'right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 2),
+(3, 'right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 3),
+(4, 'left_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'leftBox', 'view', 1),
+(5, 'Benchmark', 'modules/footer/benchmark/benchmark.php', 'Chrome_View_Footer_Benchmark', 'footer', 'view', 1),
+(6, 'Header', 'modules/header/header/header.php', 'Chrome_View_Header_Header', 'preBodyIn', 'view', 1),
+(7, 'Login', 'modules/box/login/controller.php', 'Chrome_Controller_Box_Login', 'leftBox', 'controller', 0),
+(9, 'cssIncluder', 'modules/html/head/cssIncluder/view.php', 'Chrome_View_Html_Head_CssIncluder', 'head', 'view', 0),
+(10, 'VarDum', 'modules/footer/var_dump/var_dump.php', 'Chrome_Controller_Footer_VarDump', 'footer', 'controller', 2),
+(11, 'jsIncluder', 'modules/html/bottom/jsIncluder/view.php', 'Chrome_View_HTML_Bottom_JsIncluder', 'postBody', 'view', 0);
 
 -- --------------------------------------------------------
 

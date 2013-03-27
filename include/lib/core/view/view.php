@@ -17,7 +17,7 @@
  * @subpackage Chrome.View
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 18:25:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 16:31:49] --> $
  * @author     Alexander Book
  */
 
@@ -27,13 +27,8 @@ if( CHROME_PHP !== true ) die();
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-interface Chrome_View_Interface extends Chrome_Design_Renderable
+interface Chrome_View_Interface extends Chrome_Renderable
 {
-    /**
-     * @todo rename method
-     */
-    #public function style(Chrome_Design_Style_Interface $style);
-
     /**
      * Sets a var
      *
@@ -161,23 +156,13 @@ abstract class Chrome_View_Abstract extends Chrome_View
 	{
 		$this->_controller = $controller;
 	}
-
-    /**
-     * Renders the view
-     *
-     * @return mixed
-     */
-	public function render( Chrome_Controller_Interface $controller )
-	{
-	   //TODO: remove this method (just in this class)
-	}
 }
 
 abstract class Chrome_View_Strategy_Abstract extends Chrome_View_Abstract
 {
-    protected $_views = null;
+    protected $_views = array();
 
-    public function render( Chrome_Controller_Interface $controller )
+    public function render()
     {
         $return = '';
 
@@ -186,9 +171,13 @@ abstract class Chrome_View_Strategy_Abstract extends Chrome_View_Abstract
         }
 
         foreach($this->_views as $view) {
-            $return .= $view->render($controller);
+            $return .= $view->render();
         }
 
         return $return;
+    }
+
+    public function addRenderable(Chrome_Renderable $renderable) {
+        $this->_views[] = $renderable;
     }
 }

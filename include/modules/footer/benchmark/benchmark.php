@@ -17,7 +17,7 @@
  * @subpackage Chrome.Modules
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.03.2013 13:45:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:31:08] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -34,7 +34,7 @@ if(CHROME_PHP !== true)
  */
 class Chrome_View_Footer_Benchmark extends Chrome_View
 {
-    public function render(Chrome_Controller_Interface $controller) {
+    public function render() {
         return 'rendered in '.sprintf('%01.2f', (microtime(true)- CHROME_MTIME)* 1000).' msec<br>
 Consumed '.memory_get_usage(true) .' Byte so far<br>
 Peak usage was '.memory_get_peak_usage(true) .' Byte so far
