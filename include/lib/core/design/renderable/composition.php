@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:08:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 19:03:54] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -59,17 +59,15 @@ abstract class Chrome_Renderable_Composition implements Chrome_Renderable_Compos
 
 class Chrome_Renderable_Composition_Impl extends Chrome_Renderable_Composition
 {
-    protected $_position = '';
+	protected $_option = null;
 
-    public function setPosition($pos) {
-        $this->_position = $pos;
-    }
+	public function setOption(Chrome_Renderable_Options_Interface $option)
+	{
+		$this->_option = $option;
+	}
 
-    public function getRequiredRenderables(Chrome_Renderable_Options_Interface $options) {
-        if($options instanceof Chrome_Renderable_Options_Static) {
-            $options->setPosition($this->_position);
-        }
-
-        // do nothing
-    }
+	public function getRequiredRenderables()
+	{
+		return $this->_option;
+	}
 }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Template
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.02.2013 13:12:16] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 18:35:15] --> $
  * @author     Alexander Book
  */
 
@@ -35,7 +35,7 @@ require_once LIB.'core/template/engine/plain.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Template
  */
-interface Chrome_Template_Interface
+interface Chrome_Template_Interface extends Chrome_Renderable
 {
     public function setEngine(Chrome_Template_Engine_Abstract $engine);
 }
@@ -47,7 +47,7 @@ interface Chrome_Template_Interface
  */
 abstract class Chrome_Template_Abstract implements Chrome_Template_Interface
 {
-    private $_engine = null;
+    protected $_engine = null;
 
     public function setEngine(Chrome_Template_Engine_Abstract $engine)
     {
@@ -72,5 +72,10 @@ class Chrome_Template extends Chrome_Template_Abstract
     public function __construct($engine = null)
     {
         $this->setEngine(Chrome_Template_Engine_Factory::factory($this, $engine));
+    }
+
+    public function render()
+    {
+        return $this->_engine->render();
     }
 }

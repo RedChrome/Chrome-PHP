@@ -17,11 +17,11 @@
  * @subpackage Chrome.View
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 16:31:49] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 18:33:31] --> $
  * @author     Alexander Book
  */
 
-if( CHROME_PHP !== true ) die();
+if(CHROME_PHP !== true) die();
 
 /**
  * @package CHROME-PHP
@@ -29,109 +29,113 @@ if( CHROME_PHP !== true ) die();
  */
 interface Chrome_View_Interface extends Chrome_Renderable
 {
-    /**
-     * Sets a var
-     *
-     * @param string $key
-     * @param mixed $value
-     */
-    public function setVar($key, $value);
+	/**
+	 * Sets a var
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 */
+	public function setVar($key, $value);
 
-    /**
-     * Gets a set var
-     *
-     * @return mixed $value
-     */
-    public function getVar($key);
+	/**
+	 * Gets a set var
+	 *
+	 * @return mixed $value
+	 */
+	public function getVar($key);
 
-    /**
-     * Sets the plugin object for every view
-     * The Plugin object is used to dynamically add functionality to all views.
-     * The Views can the access the functions using:
-     *  $this->additionalPluginFunction($args);
-     * at which additionalPluginFunction is any function given by the plugin object
-     *
-     * @param Chrome_View_Plugin_Facade_Interface $plugin
-     * @return void
-     */
-    public static function setPluginObject(Chrome_View_Plugin_Facade_Interface $object);
+	/**
+	 * Sets the plugin object for every view
+	 * The Plugin object is used to dynamically add functionality to all views.
+	 * The Views can the access the functions using:
+	 *  $this->additionalPluginFunction($args);
+	 * at which additionalPluginFunction is any function given by the plugin object
+	 *
+	 * @param Chrome_View_Plugin_Facade_Interface $plugin
+	 * @return void
+	 */
+	public static function setPluginObject(Chrome_View_Plugin_Facade_Interface $object);
 
-    /**
-     * Returns the plugin object
-     *
-     * @return Chrome_View_Plugin_Facade_Interface
-     */
-    public static function getPluginObject();
+	/**
+	 * Returns the plugin object
+	 *
+	 * @return Chrome_View_Plugin_Facade_Interface
+	 */
+	public static function getPluginObject();
 }
 
 abstract class Chrome_View implements Chrome_View_Interface
 {
-    /**
-     * Contains data for plugin methods
-     *
-     * @var array
-     */
-    protected $_vars          = array();
+	/**
+	 * Contains data for plugin methods
+	 *
+	 * @var array
+	 */
+	protected $_vars = array();
 
-    /**
-     * Plugin object
-     *
-     * @var Chrome_View_Handler
-     */
-    protected static $_plugin = null;
+	/**
+	 * Plugin object
+	 *
+	 * @var Chrome_View_Handler
+	 */
+	protected static $_plugin = null;
 
-    /**
-     * magic method
-     *
-     * Calls a method from view helper if it exists
-     *
-     * @return mixed
-     */
-	public function __call( $func, $args )
+	/**
+	 * magic method
+	 *
+	 * Calls a method from view helper if it exists
+	 *
+	 * @return mixed
+	 */
+	public function __call($func, $args)
 	{
 		//if( $this->_isPluginMethod( $func ) ) {
-			return $this->_callPluginMethod( $func, $args );
+		return $this->_callPluginMethod($func, $args);
 		//} else {
 		//	throw new Chrome_Exception( 'Cannot call method ' . $func . ' with args (' . var_export( $args, true ) .
 		//		') in Chrome_View_Abstract::__call()!' );
 		//}
 	}
 
-    /**
-     * Checks whether the method __call tries to run, exists in view helper
-     *
-     * @return boolean
-     */
-	protected function _isPluginMethod( $func )
+	/**
+	 * Checks whether the method __call tries to run, exists in view helper
+	 *
+	 * @return boolean
+	 */
+	protected function _isPluginMethod($func)
 	{
-		return self::$_plugin->isCallable( $func );
+		return self::$_plugin->isCallable($func);
 	}
 
-    /**
-     * Calls the method $func with arguments $args
-     *
-     * @return mixed
-     */
-	protected function _callPluginMethod( $func, $args )
+	/**
+	 * Calls the method $func with arguments $args
+	 *
+	 * @return mixed
+	 */
+	protected function _callPluginMethod($func, $args)
 	{
-		return self::$_plugin->call( $func, array_merge( array( $this ), $args ) );
+		return self::$_plugin->call($func, array_merge(array($this), $args));
 	}
 
-    public function setVar($key, $value) {
-        $this->_vars[$key] = $value;
-    }
+	public function setVar($key, $value)
+	{
+		$this->_vars[$key] = $value;
+	}
 
-    public function getVar($key) {
-        return (isset($this->_vars[$key])) ? $this->_vars[$key] : null;
-    }
+	public function getVar($key)
+	{
+		return (isset($this->_vars[$key])) ? $this->_vars[$key] : null;
+	}
 
-    public static function setPluginObject(Chrome_View_Plugin_Facade_Interface $plugin) {
-        self::$_plugin = $plugin;
-    }
+	public static function setPluginObject(Chrome_View_Plugin_Facade_Interface $plugin)
+	{
+		self::$_plugin = $plugin;
+	}
 
-    public static function getPluginObject() {
-        return self::$_plugin;
-    }
+	public static function getPluginObject()
+	{
+		return self::$_plugin;
+	}
 }
 
 /**
@@ -140,19 +144,19 @@ abstract class Chrome_View implements Chrome_View_Interface
  */
 abstract class Chrome_View_Abstract extends Chrome_View
 {
-    /**
-     * Contains the controller
-     *
-     * @var Chrome_Controller_Abstract
-     */
-	protected $_controller    = null;
+	/**
+	 * Contains the controller
+	 *
+	 * @var Chrome_Controller_Abstract
+	 */
+	protected $_controller = null;
 
-    /**
-     * Constructor
-     *
-     * @return Chrome_View_Abstract
-     */
-	public function __construct( Chrome_Controller_Abstract $controller )
+	/**
+	 * Constructor
+	 *
+	 * @return Chrome_View_Abstract
+	 */
+	public function __construct(Chrome_Controller_Abstract $controller)
 	{
 		$this->_controller = $controller;
 	}
@@ -160,24 +164,25 @@ abstract class Chrome_View_Abstract extends Chrome_View
 
 abstract class Chrome_View_Strategy_Abstract extends Chrome_View_Abstract
 {
-    protected $_views = array();
+	protected $_views = array();
 
-    public function render()
-    {
-        $return = '';
+	public function render()
+	{
+		$return = '';
 
-        if(!is_array($this->_views)) {
-            $this->_views = array($this->_views);
-        }
+		if(!is_array($this->_views)) {
+			$this->_views = array($this->_views);
+		}
 
-        foreach($this->_views as $view) {
-            $return .= $view->render();
-        }
+		foreach($this->_views as $view) {
+			$return .= $view->render();
+		}
 
-        return $return;
-    }
+		return $return;
+	}
 
-    public function addRenderable(Chrome_Renderable $renderable) {
-        $this->_views[] = $renderable;
-    }
+	public function addRenderable(Chrome_Renderable $renderable)
+	{
+		$this->_views[] = $renderable;
+	}
 }

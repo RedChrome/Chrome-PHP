@@ -17,11 +17,10 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 12:12:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 19:03:46] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
  * @package    CHROME-PHP
@@ -29,21 +28,24 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Renderable_Template extends Chrome_Renderable_Composition
 {
-    protected $_template = null;
+	protected $_template = null;
 
-    public function __construct(Chrome_Template_Interface $template) {
-        $this->_template = $template;
-        parent::__construct();
-    }
+	public function __construct(Chrome_Template_Interface $template)
+	{
+		$this->_template = $template;
+		parent::__construct();
+	}
 
-    public function render() {
+	public function render()
+	{
 
-        $this->_template->assign('VIEW', $this->_renderables);
+		$this->_template->assign('VIEW', $this->_renderables);
 
-        return $this->_template->render();
-    }
+		return $this->_template->render();
+	}
 
-    public function getRequiredRenderables(Chrome_Renderable_Options_Interface $options) {
-        // do nothing
-    }
+	public function getRequiredRenderables()
+	{
+		return null;
+	}
 }

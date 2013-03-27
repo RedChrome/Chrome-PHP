@@ -17,13 +17,21 @@
  * @subpackage Chrome.Controller
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 12:31:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 19:06:42] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true) die();
 
-class Chrome_Controller_Factory
+interface Chrome_Controller_Factory_Interface
+{
+    /**
+     * @return Chrome_Controller_Interface
+     */
+    public function build($controllerClass);
+}
+
+class Chrome_Controller_Factory implements Chrome_Controller_Factory_Interface
 {
     protected $_appContext = null;
 
@@ -50,12 +58,12 @@ class Chrome_Controller_Factory
 		} else {
 
 			try {
-				import( $this->_class );
+				loadClass( $this->_class );
 			}
 			catch ( Chrome_Exception $e ) {
 				throw new Chrome_Exception( 'No file found and could no find the corresponding file!', 2003 );
 			}
-			Chrome_Log::log( 'class "' . $this->_class .
+			Chrome_Log::log( 'Class "' . $this->_class .
 				'" were found by autoloader! But it should inserted into db to speed up website!', E_NOTICE );
 		}
     }

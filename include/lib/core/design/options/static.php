@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:09:44] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 19:03:50] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -28,13 +28,15 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Renderable_Options_Static implements Chrome_Renderable_Options_Interface
 {
-    protected $_position = null;
+	protected $_position = null;
 
-    public function setPosition($pos) {
-        $this->_position = $pos;
-    }
+	public function setPosition($pos)
+	{
+		$this->_position = $pos;
+	}
 
-    public function getPosition() {
-        return $this->_position;
-    }
+	public function getPosition()
+	{
+		return $this->_position;
+	}
 }
