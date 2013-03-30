@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 19:05:24] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.03.2013 12:44:47] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -110,6 +110,10 @@ interface Chrome_Design_Theme_Interface
 require_once 'renderable/composition.php';
 require_once 'renderable/template.php';
 require_once 'design/default.php';
+require_once 'factory.php';
+require_once 'factory/design.php';
+require_once 'factory/theme.php';
+
 
 class Chrome_Renderable_List implements Chrome_Renderable_List_Interface
 {

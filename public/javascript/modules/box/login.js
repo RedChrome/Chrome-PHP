@@ -1,60 +1,68 @@
-function AJAX_send_login() {
+$("#login").submit(function(evt) {
+   evt.preventDefault();
+   AJAX_request_login();
+});
 
-    AJAX_waiting('login');
+function AJAX_request_login() {
 
-    dojo.xhrPost({
-        form: "login",
-        url: dojo.byId('login').action,
-        handleAs: "json",
-        timeout: 3000,
-        content: {
-            request: "ajax",
-            submit: dojo.byId('login').submit.value
+   AJAX_waiting("login");
 
-        },
-        load: function(data, ioArgs) {
+   var form = $("#login");
 
-            AJAX_unwaiting('login');
+   $.ajax({
 
-            // login failed
-            if(data.success != true) {
+      url: form.attr("action"),
 
-                // renew the token
-                if(typeof data.token != "undefined") {
-                    dojo.query('#login > input[name=token]')[0].value = data.token;
-                }
+      // add button value...
+      data: form.serialize()+"&submit="+$("#login [type='submit']").attr("value"),
 
-                // setting css classes
-                dojo.query('#login > input[type=text]').addClass("wrongInput");
-                dojo.query('#login > input[type=password]').addClass("wrongInput");
+      type: form.attr("method"),
 
-                message_show(data.message, 5000);
+      dataType: "json",
 
-            } else {
+      error: function(xhr, status) {
+         message_show("Got an error while sending ajax request. Error message: " + status, TYPE_ERROR, 10000);
+      },
 
-                message_show(data.message, 5000);
+      success: function(response) {
+         // login failed
+         if (response.success != true) {
 
-                // remove css class
-                dojo.query('#login > input').removeClass("wrongInput");
-
-                // set reloadDelay, if not sent by server
-                if(typeof data.reloadDelay == "undefined") {
-                    data.reloadDelay = 5000;
-                }
-
-                // if redirect url is not set, then reload current page
-                if(typeof data.url != "undefined") {
-                    setTimeout("window.location.href = data.url", data.reloadDelay);
-                } else {
-                   setTimeout("window.location.reload()", data.reloadDelay);
-                }
+            // renew the token
+            if (typeof response.token != "undefined") {
+               $('#login input[id="token"]')[0].value = response.token;
             }
 
-        },
-        error: function(err, ioArgs) {
-            AJAX_unwaiting('login');
-            message_show(err, 5000);
-            alert(ioArgs);
-        }
-    });
+            // setting css classes
+            //dojo.query('#login > input[type=text]').addClass("wrongInput");
+            //dojo.query('#login > input[type=password]').addClass("wrongInput");
+
+            message_show(response.message, TYPE_WARNING, 5000);
+
+         } else {
+
+            message_show(response.message, TYPE_SUCCESS, 5000);
+
+            // remove css class
+            //dojo.query('#login > input').removeClass("wrongInput");
+
+            // set reloadDelay, if not sent by server
+            if (typeof response.reloadDelay == "undefined") {
+               response.reloadDelay = 5000;
+            }
+
+            // if redirect url is not set, then reload current page
+            if (typeof response.url != "undefined") {
+               setTimeout("window.location.href = response.url", response.reloadDelay);
+            } else {
+               setTimeout("window.location.reload()", response.reloadDelay);
+            }
+         }
+      },
+
+      complete: function(xhr, status) {
+         AJAX_unwaiting("login");
+      }
+   });
+
 }

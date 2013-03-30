@@ -17,32 +17,38 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.03.2013 14:23:21] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.03.2013 12:49:26] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
 
-class Chrome_Design_Factory_Theme implements Chrome_Design_Factory_Interface
+class Chrome_Design_Factory_Theme extends Chrome_Design_Factory_Abstract
 {
     const DEFAULT_THEME = '';
 
-    public function build($theme = self::DEFAULT_THEME) {
-
+    public function build($theme = self::DEFAULT_THEME)
+    {
         if($theme === self::DEFAULT_THEME) {
             // todo: get special theme, if default theme was given
+            $theme = 'chrome';
+
+            if($this->_applicationContext->getResponse() instanceof Chrome_Response_JSON) {
+                $theme = 'json';
+            }
+
         }
 
         $theme = strtolower(trim($theme));
 
-        if(!_isFile(LIB.'core/design/theme/'.$theme.'/theme.php')) {
+        if(!_isFile(THEME.$theme.'/theme.php')) {
             throw new Chrome_Exception('Cannot load theme "'.$theme.'"! Theme is not valid. Corresponding theme.php missing');
         }
 
-        require_once LIB.'core/design/theme/'.$theme.'/theme.php';
+        require_once THEME.$theme.'/theme.php';
 
         $themeClass = 'Chrome_Design_Theme_'.ucfirst($theme);
 
-        return $themeClass($this->_applicationContext);
+        return new $themeClass($this->_applicationContext);
     }
 }

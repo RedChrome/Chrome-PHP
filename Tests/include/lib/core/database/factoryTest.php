@@ -1,50 +1,62 @@
 <?php
 
 require_once 'Tests/testsetup.php';
-require_once LIB . 'core/database/database.php';
+require_once LIB.'core/database/database.php';
 
 class DatabaseFactoryTest extends PHPUnit_Framework_TestCase
 {
 
-    public function testConstructor() {
+	public function testConstructor()
+	{
+		$connection = new Chrome_Database_Registry_Connection();
 
-        $connection = new Chrome_Database_Registry_Connection();
+		$statement = new Chrome_Database_Registry_Statement();
 
-        $statement = new Chrome_Database_Registry_Statement();
+		$factory = new Chrome_Database_Factory($connection, $statement);
 
-        $factory = new Chrome_Database_Factory($connection, $statement);
+		$this->assertSame($connection, $factory->getConnectionRegistry());
 
-        $this->assertSame($connection, $factory->getConnectionRegistry());
+		$this->assertSame($statement, $factory->getStatementRegistry());
+	}
 
-        $this->assertSame($statement, $factory->getStatementRegistry());
-    }
+	public function testSetRegistry()
+	{
+		$connection = new Chrome_Database_Registry_Connection();
 
-    public function testSetRegistry() {
+		$statement = new Chrome_Database_Registry_Statement();
 
-        $connection = new Chrome_Database_Registry_Connection();
+		$factory = new Chrome_Database_Factory(new Chrome_Database_Registry_Connection(), new Chrome_Database_Registry_Statement());
 
-        $statement = new Chrome_Database_Registry_Statement();
+		$factory->setConnectionRegistry($connection);
+		$factory->setStatementRegistry($statement);
 
-        $factory = new Chrome_Database_Factory(new Chrome_Database_Registry_Connection(), new Chrome_Database_Registry_Statement());
+		$this->assertSame($connection, $factory->getConnectionRegistry());
 
-        $factory->setConnectionRegistry($connection);
-        $factory->setStatementRegistry($statement);
+		$this->assertSame($statement, $factory->getStatementRegistry());
+	}
 
-        $this->assertSame($connection, $factory->getConnectionRegistry());
+	public function testSetDefault()
+    {
+		$factory = new Chrome_Database_Factory(new Chrome_Database_Registry_Connection(), new Chrome_Database_Registry_Statement());
 
-        $this->assertSame($statement, $factory->getStatementRegistry());
-    }
+		$factory->setDefaultInterfaceSuffix('simple');
+		$this->assertEquals('Chrome_Database_Interface_Simple', $factory->getDefaultInterfaceClass());
 
-    public function testSetDefault() {
+		$factory->setDefaultResultSuffix('assoc');
+		$this->assertEquals('Chrome_Database_Result_Assoc', $factory->getDefaultResultClass());
+	}
 
-        $factory = new Chrome_Database_Factory(new Chrome_Database_Registry_Connection(), new Chrome_Database_Registry_Statement());
+	public function testLogger()
+	{
+		$factory = new Chrome_Database_Factory(new Chrome_Database_Registry_Connection(), new Chrome_Database_Registry_Statement());
 
+		$this->assertTrue($factory->getLogger() instanceof Chrome_Logger_Interface or $factory->getLogger() === null);
 
-        $factory->setDefaultInterfaceSuffix('simple');
-        $this->assertEquals('Chrome_Database_Interface_Simple', $factory->getDefaultInterfaceClass());
+		$logger = new Chrome_Logger_Database();
 
-        $factory->setDefaultResultSuffix('assoc');
-        $this->assertEquals('Chrome_Database_Result_Assoc', $factory->getDefaultResultClass());
-    }
+		$factory->setLogger($logger);
+
+		$this->assertSame($logger, $factory->getLogger());
+	}
 
 }

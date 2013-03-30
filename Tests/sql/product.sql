@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `cp1_authenticate` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `password` varchar(256) NOT NULL,
   `password_salt` varchar(256) NOT NULL,
-  `cookie_token` varchar(50) NOT NULL,
+  `cookie_token` varchar(50) NULL,
   `time` int(12) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
@@ -233,7 +233,7 @@ INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 --
 -- Tabellenstruktur für Tabelle `cp1_design_static`
 --
-
+DROP TABLE IF EXISTS `cp1_design_static`;
 CREATE TABLE IF NOT EXISTS `cp1_design_static` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `name` varchar(75) NOT NULL,
@@ -631,8 +631,8 @@ CREATE TABLE IF NOT EXISTS `cp1_user` (
   `email` varchar(200) NOT NULL,
   `group` int(2) NOT NULL DEFAULT '0',
   `time` int(15) NOT NULL,
-  `avatar` varchar(50) NOT NULL,
-  `address` varchar(300) NOT NULL,
+  `avatar` varchar(50) NULL,
+  `address` varchar(300) NULL,
   `design` varchar(20) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)

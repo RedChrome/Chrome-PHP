@@ -45,10 +45,10 @@ INSERT INTO `cp1_authorisation_resource_default` (`_resource_id`, `_transformati
 DROP TABLE IF EXISTS `testing`;
 CREATE TABLE IF NOT EXISTS `testing` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
-  `var1` varchar(50) NOT NULL,
-  `var2` varchar(50) NOT NULL,
-  `var3` varchar(100) NOT NULL,
-  `var4` varchar(100) NOT NULL,
+  `var1` varchar(50) NULL,
+  `var2` varchar(50) NULL,
+  `var3` varchar(100) NULL,
+  `var4` varchar(100) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 SET FOREIGN_KEY_CHECKS=1;

@@ -20,7 +20,7 @@
  * @author    Alexander Book <alexander.book@gmx.de>
  * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
  * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 12:04:35] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.03.2013 12:06:54] --> $
  * @link      http://chrome-php.de
  */
 
@@ -142,6 +142,7 @@ define('TMP', BASEDIR . 'tmp/');
 define('CACHE', TMP . 'cache/');
 define('PLUGIN', BASEDIR . 'plugins/');
 define('RESOURCE', BASEDIR.'resources/');
+define('THEME', BASEDIR.'themes/');
 
 // not needed anymore
 unset($fileLevel, $intFileLevel, $rooturl, $found);

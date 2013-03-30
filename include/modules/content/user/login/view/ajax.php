@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:51:25] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.03.2013 14:59:41] --> $
  * @author     Alexander Book
  */
 
@@ -43,8 +43,8 @@ class Chrome_View_User_Login_Ajax extends Chrome_View_Abstract
         $this->setAjaxEnvironment();
     }
 
-    public function render(Chrome_Controller_Interface $controller) {
-        return $this->_views[0]->render($controller);
+    public function render() {
+        return $this->_views[0]->render();
     }
 
     public function alreadyLoggedIn() {
@@ -88,7 +88,7 @@ class Chrome_View_User_Ajax_FormNotValid extends Chrome_View_Abstract {
 
 class Chrome_View_User_Ajax_ShowForm extends Chrome_View_Abstract {
     public function render() {
-        return array('success' => false, 'message' => 'Login failed:<br>Form is invalid, reload!', 'reloadDelay' => Chrome_View_User_Login_Ajax::CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY);
+        return array('success' => false, 'message' => 'Login failed:<br>Form is invalid, reload!'.var_export($this->_controller->getForm()->getErrors(), true), 'reloadDelay' => Chrome_View_User_Login_Ajax::CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY);
     }
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Tests/testsetup.php';
+require_once 'Tests/testsetupdb.php';
 
 require_once LIB . 'core/database/database.php';
 require_once 'Tests/dummies/database/connection/dummy.php';
@@ -122,6 +122,45 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($statement, $this->_interface->getStatement());
     }
 
+    public function testEscapeingSpecialChars() {
+
+        // $statement, $expected_statement, [array $params]
+        $array = array(
+            array('cpp_', DB_PREFIX.'_'),
+            array('\?', '?'),
+            array('?', 'parameter', array('parameter')),
+            array('? ?', 'param1 param2', array('param1', 'param2')),
+            array('?{1} ?{1}', 'param1 param1', array('param1', 'param2')),
+            array('?{1} \\?{1} ?{2}', 'param1 ?{1} param2', array('param1', 'param2')),
+            array('?{1} \\? ?{2}', 'param1 ? param2', array('param1', 'param2')),
+            array('?{1} \\\\? ?{2}', 'param1 \\? param2', array('param1', 'param2')),
+            array('?{1} ? ?{2}', '?{1} ? ?{2}') // should work, cause we given no parameters
+        );
+
+        foreach($array as $test) {
+
+            $params = array();
+
+            if(isset($test[2]) AND is_array($test[2])) {
+                $params = $test[2];
+            }
+
+            $this->_interface->query($test[0], $params);
+
+            $this->assertEquals($test[1], $this->_interface->getQuery());
+
+            $this->_interface->clear();
+        }
+
+    }
+
+    public function testEscapingThrowsExceptionWhenUsingBothTypesOfParameterReplacement()
+    {
+        $this->setExpectedException('Chrome_Exception_Database');
+
+        $this->_interface->query('? ?{1}', array('param1', 'param2'));
+    }
+
     public function testGetStatementWhenNothingIsDone()
     {
         $this->assertNull($this->_interface->getStatement());
@@ -133,7 +172,7 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
 
         $this->setExpectedException('Chrome_Exception_Database');
 
-        $this->_interface->query('this should throw an exception');
+        $this->_interface->query('this should throw an exception, cause clear() wasnt called');
     }
 
     public function testExceptionIsThrownIfNoQueryWasGiven()
@@ -154,6 +193,17 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         // do not log the exception, we're expecting it
         $this->_interface->setLogger(new Chrome_Logger_Null());
         parent::setExpectedException($string, $exceptionMessage, $exceptionCode);
+    }
+
+    public function testGetStatementRegistry() {
+
+        $this->assertTrue($this->_interface->getStatementRegistry() instanceof Chrome_Database_Registry_Statement, 'getStatementRegistry has to return a subclass of Registry_Statement');
+
+    }
+
+    public function testGetLogger() {
+
+        $this->assertTrue($this->_interface->getLogger() instanceof Chrome_Logger_Interface OR $this->_interface->getLogger() === null, 'getLogger has to return a subclass of Chrome_Logger_Interface or null');
     }
 
 }

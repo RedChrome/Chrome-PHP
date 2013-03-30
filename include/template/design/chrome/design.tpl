@@ -76,11 +76,13 @@
         </div>
     </footer>
 </body>
-<?php echo $VIEW->getRenderable(6)->render(); ?>
-<!--<script type="text/javascript" src="'._PUBLIC.'javascript/Framework/dojo.js" djConfig="parseOnLoad:true, isDebug: true"></script>-->
-<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js" type="text/javascript"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"></script>
 <script type="text/javascript" src="<?php echo _PUBLIC;?>javascript/dojo.js"></script>
 <script type="text/javascript" src="<?php echo _PUBLIC;?>javascript/ganalytics.js"></script>
-<script type="text/javascript" src="<?php echo _PUBLIC;?>javascript/chrome.js"></script>
 <script type="text/javascript" src="<?php echo _PUBLIC;?>javascript/form_utility.js"></script>
+<?php echo $VIEW->getRenderable(6)->render(); ?>
+<!--<script type="text/javascript" src="'._PUBLIC.'javascript/Framework/dojo.js" djConfig="parseOnLoad:true, isDebug: true"></script>-->
+
 </html>

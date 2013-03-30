@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 12:29:02] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 18:34:30] --> $
  * @author     Alexander Book
  */
 
@@ -182,10 +182,9 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
     protected function _setUpCache()
     {
         require_once PLUGIN.'Cache/serialization.php';
-        $option = new Chrome_Cache_Option_Serialization();
-        $option->setCacheFile(self::CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE);
-
-        $this->_cache = self::$_cacheFactory->forceCaching()->factory('serialization', $option);
+        $this->_cacheOption = new Chrome_Cache_Option_Serialization();
+        $this->_cacheOption->setCacheFile(self::CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE);
+        $this->_cacheInterface = 'serialization';
     }
 
     /**
