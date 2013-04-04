@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 16:32:20] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.03.2013 12:45:45] --> $
  * @link       http://chrome-php.de
  */
 
@@ -359,12 +359,12 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             $this->_preprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
 
             $this->_controller->execute();
-
             {
                 $design = new Chrome_Design($this->_applicationContext, $this->_controller);
 
-                require_once LIB.'core/design/theme/chrome/theme.php';
-                $theme = new Chrome_Design_Theme_Chrome();
+
+                $themeFactory = new Chrome_Design_Factory_Theme($this->_applicationContext);
+                $theme = $themeFactory->build();
 
                 $theme->initDesign($design);
 

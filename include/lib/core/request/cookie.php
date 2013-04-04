@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 12:44:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 13:28:24] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -248,39 +248,31 @@ class Chrome_Cookie implements Chrome_Cookie_Interface
      */
     private function _validateCookie()
     {
-        if(!isset($this->_cookie[self::CHROME_COOKIE_COOKIE_VALIDATION_KEY])) {
-            $this->unsetAllCookies();
-            $this->setCookie(self::CHROME_COOKIE_COOKIE_VALIDATION_KEY, $this->_getValidationCode(), -1);
-        } else {
-            if($this->_cookie[self::CHROME_COOKIE_COOKIE_VALIDATION_KEY] != $this->_getValidationCode()) {
-                $this->unsetAllCookies();
-                $this->setCookie(self::CHROME_COOKIE_COOKIE_VALIDATION_KEY, $this->_getValidationCode(), -1);
-            }
+        if(isset($this->_cookie[self::CHROME_COOKIE_COOKIE_VALIDATION_KEY]) AND $this->_cookie[self::CHROME_COOKIE_COOKIE_VALIDATION_KEY] === $this->_getValidationCode() ) {
+            return;
         }
+
+        $this->unsetAllCookies();
+        $this->setCookie(self::CHROME_COOKIE_COOKIE_VALIDATION_KEY, $this->_getValidationCode(), -1, self::CHROME_COOKIE_DEFAULT_PATH, '', false, true);
     }
 
     /**
-     * Chrome_cookie::_getValidationCode()
      *
      * Creates a validation code AND returns this
-     * The code should always be the same for the same user, ()so no timestamp OR anything like that!)
+     * The code should always be the same for the same user, (so no timestamp OR anything like that!)
      *
      * @return string
      */
     private function _getValidationCode()
     {
-        /*
-            // we dont need this, because this method gets called just one time
-            if($this->_validationCode !== null) {
-                return $this->_validationCode;
-            }
-        */
+        if($this->_validationCode !== null) {
+            return $this->_validationCode;
+        }
 
         // you can modifie this, so you get a better protection against session hijacking
         $string = 'random_string.' . $_SERVER['HTTP_USER_AGENT'] . $_SERVER['HTTP_USER_AGENT'] {2} . $_SERVER['HTTP_USER_AGENT'] {0};
 
         $this->_validationCode  = $this->_hash->hash($string);
-        $_SESSION['CHROME_PHP'] = $this->_validationCode;
 
         return $this->_validationCode;
     }

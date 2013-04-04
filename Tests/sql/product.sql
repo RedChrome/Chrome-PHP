@@ -630,7 +630,11 @@ CREATE TABLE IF NOT EXISTS `cp1_user` (
   `name` varchar(50) NOT NULL,
   `email` varchar(200) NOT NULL,
   `group` int(2) NOT NULL DEFAULT '0',
+<<<<<<< HEAD
   `time` int(15) NULL,
+=======
+  `time` int(15) NOT NULL,
+>>>>>>> b08c2fc5cf5a418289bedbf4ca58c619434a037c
   `avatar` varchar(50) NULL,
   `address` varchar(300) NULL,
   `design` varchar(20) NOT NULL DEFAULT 'default',

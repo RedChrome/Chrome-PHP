@@ -17,7 +17,7 @@
  * @subpackage Chrome.Response
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 12:13:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 13:09:30] --> $
  * @author     Alexander Book
  */
 
@@ -69,7 +69,7 @@ interface Chrome_Response_HTTP_Interface extends Chrome_Response_Interface
 class Chrome_Response_HTTP implements Chrome_Response_Interface
 {
 	protected $_status = '200 OK';
-	protected $_headers = array();
+	protected $_headers = array('Content-Type' => 'text/html');
 	protected $_body = '';
 	protected $_serverProtocol = '';
 

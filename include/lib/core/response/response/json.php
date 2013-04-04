@@ -17,7 +17,7 @@
  * @subpackage Chrome.Response
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 12:27:32] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 17:51:12] --> $
  * @author     Alexander Book
  */
 
@@ -40,7 +40,7 @@ class Chrome_Response_Handler_JSON extends Chrome_Response_Handler_HTTP
 
         $requestData = $this->_request->getRequestData();
 
-		return (strtolower($requestData->getENVData('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest' OR strtolower($requestData->getGETData('respondAs')) === 'json');
+		return (strtolower($requestData->getSERVERData('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest');
 	}
 
 	public function getResponse()
@@ -56,6 +56,8 @@ class Chrome_Response_Handler_JSON extends Chrome_Response_Handler_HTTP
 class Chrome_Response_JSON extends Chrome_Response_HTTP
 {
     protected $_body = array();
+
+    protected $_headers = array('Content-Type' => 'application/json');
 
 	public function __destruct()
 	{

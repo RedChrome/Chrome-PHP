@@ -17,7 +17,7 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 11:31:17] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 18:50:06] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -93,12 +93,21 @@ interface Chrome_Cache_Option_Interface
 }
 
 /**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Cache.Factory
+ */
+interface Chrome_Cache_Factory_Interface
+{
+    // todo: finish
+}
+
+/**
  * Chrome_Cache_Factory
  *
  * @package     CHROME-PHP
- * @subpackage  Chrome.Cache
+ * @subpackage  Chrome.Cache.Factory
  */
-class Chrome_Cache_Factory
+class Chrome_Cache_Factory implements Chrome_Cache_Factory_Interface
 {
     /**
      * Force to cache
@@ -108,29 +117,21 @@ class Chrome_Cache_Factory
     private $_forceCaching = false;
 
     /**
-     * Chrome_Cache_Factory::getInstance()
-     *
-     * Get instance
-     *
-     * @return Chrome_Cache_Factory
-     */
-    public static function getInstance()
-    {
-        return new self();
-    }
-
-    /**
      * Create a new cache
      *
      * @param string $cacheAdapter cache adapter, just suffix of Chrome_Cache_*
      * @param Chrome_Cache_Option_Interface $options options for adapter
      * @return Chrome_Cache_Abstract
      */
-    public function factory($cacheAdapter, Chrome_Cache_Option_Interface $options)
+    public function build($cacheAdapter, Chrome_Cache_Option_Interface $options)
     {
         // use a null object
         if(CHROME_ENABLE_CACHING === false AND $this->_forceCaching === false) {
             $cacheAdapter = 'null';
+        }
+
+        if($cacheAdapter === null OR empty($cacheAdapter)) {
+            throw new Chrome_InvalidArgumentException('No valid cache adapter given!');
         }
 
         // naming conventions

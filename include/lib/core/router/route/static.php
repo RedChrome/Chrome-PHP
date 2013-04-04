@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:25:08] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 18:38:42] --> $
  * @author     Alexander Book
  */
 
@@ -89,10 +89,10 @@ class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
 
 	protected function _setUpCache()
 	{
-	    $options = new Chrome_Cache_Option_Serialization();
-        $options->setCacheFile(self::CHROME_MODEL_ROUTE_STATIC_CACHE_CACHE_FILE);
+	    $this->_cacheOption = new Chrome_Cache_Option_Serialization();
+        $this->_cacheOption->setCacheFile(self::CHROME_MODEL_ROUTE_STATIC_CACHE_CACHE_FILE);
 
-		$this->_cache = parent::$_cacheFactory->factory( 'serialization', $options );
+        $this->_cacheInterface = 'serialization';
 	}
 
 	public function getRoute( $search )

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 19:42:51] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.03.2013 12:13:09] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -34,10 +34,13 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 
 	protected $_model = null;
 
-	public function __construct(Chrome_Controller_Factory $controllerFactory, Chrome_Model_Abstract $model)
+    protected $_theme = '';
+
+	public function __construct(Chrome_Controller_Factory $controllerFactory, Chrome_Model_Abstract $model, $theme)
 	{
 		$this->_controllerFactory = $controllerFactory;
 		$this->_model = $model;
+        $this->_theme = $theme;
 	}
 
 	public function addComposition(Chrome_Renderable_Composition_Interface $composition)
@@ -59,14 +62,14 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
                 continue;
             }
 
-			$this->_loadViewsByPosition($composition, $option->getPosition());
+			$this->_loadViewsByPosition($composition, $option->getPosition(), $this->_theme);
 		}
 	}
 
 	// this should get moved to a model
-	protected function _loadViewsByPosition(Chrome_Renderable_Composition_Interface $composition, $position)
+	protected function _loadViewsByPosition(Chrome_Renderable_Composition_Interface $composition, $position, $theme)
 	{
-		$result = $this->_model->getViewsByPosition($position);
+		$result = $this->_model->getViewsByPosition($position, $theme);
 
 		if($result->isEmpty()) {
 			return;
@@ -125,10 +128,10 @@ class Chrome_Model_Design_Loader_Static extends Chrome_Model_Database_Abstract
 		$this->_dbResult = array('Iterator', 'Assoc');
 	}
 
-	public function getViewsByPosition($position)
+	public function getViewsByPosition($position, $theme)
 	{
 		$db = $this->_getDBInterface();
 
-		return $db->query('SELECT file, class, type FROM cpp_design_static WHERE position = "?" ORDER BY `order` ASC', array($position));
+		return $db->query('SELECT `file`, `class`, `type` FROM cpp_design_static WHERE `position` = "?" AND `theme` = "?"  ORDER BY `order` ASC', array($position, $theme));
 	}
 }

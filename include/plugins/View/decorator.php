@@ -15,7 +15,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 15:09:02] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.03.2013 12:01:20] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -41,7 +41,7 @@ class Chrome_View_Plugin_Decorator extends Chrome_View_Plugin_Abstract
 
     public function addStyle(Chrome_View_Interface $obj, $style) {
 
-        Chrome_Design::getInstance()->getStyle()->addStyle($style);
+       # Chrome_Design::getInstance()->getStyle()->addStyle($style);
     }
 
     public function setStyle(Chrome_View_Interface $obj, $style) {

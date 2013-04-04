@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 22:17:57] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 18:06:41] --> $
  * @link       http://chrome-php.de
  */
 
@@ -78,6 +78,35 @@ interface Chrome_Database_Interface_Interface extends Chrome_Logable_Interface
     /**
      * Executes a given query with the given parameters. All parameters are getting escaped.
      *
+     * Special chars in $query:
+     *  '?': acts like a placeholder for a parameter. To use '?' in a query, without a replacement use '\?'
+     *      Examples:
+     *          'SELECT * FROM test WHERE cond = ?' -> valid, ? gets replaced by first parameter
+     *          'SELECT * FROM test WHERE cond = \?' -> valid, \? gets replaced by ?, so you can use a ? in your query
+     *          'SELECT * FROM test WHERE cond LIKE "test\?"', a real example ;)
+     *
+     *  '?{$anyInteger}': acts like a placeholder for a parameter, given with $anyInteger which is the index of the parameter.
+     *                    $anyInteger must not be empty.
+     *      Examples:
+     *          'SELECT * FROM test WHERE cond = ?{}' -> invalid, well it just gets not replaced ;)
+     *          'SELECT * FROM test WHERE cond = ?{1}' -> valid
+     *          'SELECT * FROM test WHERE cond = ?{132}' -> valid ( then you have at least 132 parameters...)
+     *  'cpp_': (chrome php prefix) get replaced to current table prefix. (Only cpp_ gets replaced, cpp stays the same..)
+     *      Example:
+     *          'SELECT * FROM cpp_test' get replaced to: 'SELECT * FROM cp1_test'
+     *
+     * This method throws a database exception if you try to use ? with ?{} together. Do not use them together!
+     *  Example:
+     *      'SELECT * FROM cpp_test WHERE cond1 = ? AND cond2 = ?{1}' -> throws an exception
+     *      'SELECT * FROM cpp_test WHERE cond1 = ?{1} AND cond2 = ?{1}' works fine
+     *      'SELECT * FROM cpp_test WHERE cond1 = ? AND cond2 = ?' works fine
+     *
+     * Note that if you call this method without an empty array as parameters, then there will be no replacement of ? and ?{}. Of course,
+     * the strings cpp and \? get correct replaced. So in this case you can use ? and ?{} together, but not recommended!
+     *  Example:
+     *      query('SELECT * FROM cpp_test WHERE cond1 = ? OR cond2 LIKE "?{1} \?" ', array())
+     *          -> actual query: 'SELECT * FROM cp1_test WHERE cond1 = ? OR cond2 LIKE "?{1} ?"
+     *
      * @param string $query a query
      * @param array $parameters containing the parameters in numerical order to replace '?' in query string. every parameter get escaped
      * @return Chrome_Database_Result_Interface the result class containing the answer for $query
@@ -116,7 +145,7 @@ interface Chrome_Database_Interface_Interface extends Chrome_Logable_Interface
     public function escape($data);
 
     /**
-     * Returns the raw query without a replaceing of '?' or anythign else.
+     * Returns the raw query without a replaceing of '?', '?{int*}' or anything else.
      *
      * @return string the raw query
      */
@@ -268,15 +297,29 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
     {
         // replace table prefix
         $statement = str_replace('cpp_', DB_PREFIX . '_', $statement);
+        // do not allow to modifie the behavior of vsprintf manually...
+        $statement = str_replace('%', '%%', $statement);
 
         if(count($this->_params) === 0) {
-            return $statement;
+            return str_replace('\\?', '?', $statement);
         }
 
-        $statement = str_replace('?', '%s', $statement);
+        $countFirst = 0;
+        $countSecond = 0;
 
-        // Note: you have to escape % (if your using queries: select * form test where val LIKE "test%") with %
-        // so the query would look like: select * from test where val LIKE "test%%"
+        // if \? is given, then we ignore it (int both reg exprs...). this can be achieved by: (?<!\\)
+        // this replaces ?{int} where int must contain at least one integer.
+        $statement = preg_replace('@(?<!\\\\)\?{(\d{1,})}@sU', '%\1$s', $statement, -1, $countFirst);
+        // this replaces simple ?
+        $statement = preg_replace('@(?<!\\\\)\?(?!{)@sU', '%s', $statement, -1, $countSecond);
+        // now replace \? to ?, escapeing the ?...
+        $statement = str_replace('\\?', '?', $statement);
+
+        // vsprintf cant handle that..
+        if($countFirst > 0 AND $countSecond > 0) {
+            throw new Chrome_Exception_Database('Cannot mix "?" with "?{int*}". Do not use them at the same time');
+        }
+
         return vsprintf($statement, $this->_params);
     }
 

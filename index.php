@@ -20,7 +20,7 @@
  * @author    Alexander Book <alexander.book@gmx.de>
  * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
  * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.03.2013 19:32:55] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.03.2013 18:34:02] --> $
  * @link      http://chrome-php.de
  */
 // debugin...
@@ -42,3 +42,6 @@ Chrome_Front_Controller::getInstance()->execute();
 //TODO: remove constants from form_elements, just use the ids... -> code reduction
 //TODO: remove converters from form. they have to get moved to model..
 //TODO: remove all forms from controller, replace them by models (Chrome_Model_Form_Abstract)
+//TODO: remove default decorator and set default decorator to yaml
+//TODO: render errors in forms correct with ym-error and ym-message
+//TODO: decide whether view or controller can change the theme...

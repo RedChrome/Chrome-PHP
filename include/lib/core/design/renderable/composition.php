@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 19:03:54] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.03.2013 12:49:59] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -71,3 +71,18 @@ class Chrome_Renderable_Composition_Impl extends Chrome_Renderable_Composition
 		return $this->_option;
 	}
 }
+
+class Chrome_Renderable_Composition_Array_Impl extends Chrome_Renderable_Composition_Impl
+{
+    public function render() {
+        $array = array();
+
+        foreach($this->_renderables as $renderable) {
+            $array = array_merge($array, (array) $renderable->render());
+		}
+
+        return $array;
+    }
+}
+
+
