@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 16:04:51] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 14:50:05] --> $
  * @link       http://chrome-php.de
  */
 
@@ -76,17 +76,12 @@ class Chrome_Database_Connection_DB2 extends Chrome_Database_Connection_Abstract
         if($this->_isSetConnectionOptions === false) {
             throw new Chrome_Exception('Cannot connect with no information! Call setConnectionOptions() before!');
         }
-
-        $this->_connection = @db2_pconnect($this->_connectionString, $this->_username, $this->_password, $this->_options);
-
-        if($this->_connection === false) {
-            // TODO: handle errors
-
-
-
-            return false;
+        try {
+            $this->_connection = db2_pconnect($this->_connectionString, $this->_username, $this->_password, $this->_options);
+        } catch(Chrome_Exception $e) {
+           // TODO: handle errors
+           throw $e;
         }
-
 
         $this->_isConnected = true;
 

@@ -14,34 +14,38 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.FrontController
+ * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 15:06:25] --> $
- * @author     Alexander Book
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.04.2013 14:09:49] --> $
  */
 
 if(CHROME_PHP !== true)
-    die();
+	die();
 
 /**
- * @package CHROME-PHP
- * @subpackage Chrome.FrontController
+ *
+ * @package		CHROME-PHP
+ * @subpackage  Chrome.Validator
  */
-class Chrome_Exception_Handler_FrontController implements Chrome_Exception_Handler_Interface
+class Chrome_Validator_Composition_Or extends Chrome_Validator_Composition_Abstract
 {
-    public function exception(Exception $e)
+	public function __construct()
+	{
+	}
+
+    public function validate()
     {
-        switch(get_class($e)) {
-
-            case 'Chrome_Exception_Database': {
-                die('There was an error with the database.');
+        foreach($this->_validators as $validator) {
+            $validator->validate();
+            if($validator->isValid) {
+                $this->_errorMsg = array();
+                return true;
+            } else {
+                $this->_errorMsg = array_merge($this->_errorMsg, $validator->getAllErrors());
             }
+		}
 
-            default: {
-
-                die('There was an error in processing the request! Please try it again later!<br>'. $e->show($e));
-            }
-        }
+        return false;
     }
 }

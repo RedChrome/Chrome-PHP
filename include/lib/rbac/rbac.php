@@ -17,7 +17,7 @@
  * @subpackage Chrome.RBAC
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2012 17:11:00] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 20:22:10] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -259,7 +259,7 @@ class Chrome_Model_RBAC_Cache extends Chrome_Model_Cache_Abstract
 
     protected function _cache()
     {
-        $this->_cache = parent::$_cacheFactory->forceCaching()->factory('serialization', self::CHROME_MODEL_RBAC_CACHE_CACHE_FILE);
+        $this->_cache = parent::$_cacheFactory->factory('serialization', self::CHROME_MODEL_RBAC_CACHE_CACHE_FILE);
     }
 
     public function getRBACInstance()

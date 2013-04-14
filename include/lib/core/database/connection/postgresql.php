@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 16:05:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 14:49:21] --> $
  * @link       http://chrome-php.de
  */
 
@@ -64,10 +64,16 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
             throw new Chrome_Exception('Cannot connect with no information! Call setConnectionOptions() before!');
         }
 
-        $this->_connection = pg_connect('host=' . $this->_host . ' port="' . $this->_port . ' user=' . $this->_username . ' password=' . $this->_password . ' dbname=' . $this->_database. ' connect_timeout=1');
+        try {
+            $this->_connection = pg_connect('host=' . $this->_host . ' port="' . $this->_port . ' user=' . $this->_username . ' password=' . $this->_password . ' dbname=' . $this->_database. ' connect_timeout=1');
 
-        if($this->_connection === false) {
-            throw new Chrome_Exception_Database('Could not connect to PostgreSQL server!');
+            if($this->_connection === false) {
+                throw new Chrome_Exception_Database('Could not connect to PostgreSQL server!');
+            }
+
+        } catch(Chrome_Exception $e) {
+            //todo: finish
+            throw $e;
         }
 
         $this->_isConnected = true;

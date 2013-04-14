@@ -16,26 +16,126 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 22:23:57] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 19:24:54] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+if(CHROME_PHP !== true) die();
 
 /**
  * @package CHROME-PHP
  */
 class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Interface
 {
-    public function exception(Exception $e)
-    {
-        if($e instanceof Chrome_Exception) {
-            $e->show($e);
-        } else {
-            var_dump($e);
-        }
+	public function exception(Exception $e)
+	{
+		if($e->handleException() === false) {
+			die();
+		}
 
-        die();
+		echo '<h1>Uncaught Exception of type '.get_class($e).' </h1>';
+		echo '<h3>'.$e->getMessage().'</h3>';
+		echo '<h4>Caused by '.$e->getFile().'('.$e->getLine().')<br></h4>Call Stack<br>';
+
+        echo $this->_printExceptionTrace($e);
+
+		die();
+	}
+
+    protected function _printExceptionTrace(Exception $e) {
+
+        $trace = $e->getTrace();
+
+        $return = '';
+
+        foreach($trace as $key => $value) {
+
+			if(isset($value['file'])) {
+				$return .= $value['file'].'('.@$value['line'].'): ';
+			}
+
+			if(!isset($value['class'])) {
+				$return .= $value['function'].$this->_getArgs($value['args']);
+
+			} else {
+				$return .= $value['class'].$value['type'].$value['function'];
+
+				$return .= $this->_getArgs($value['args']);
+			}
+			$return .= '<br>'."\n";
+		}
+
+        if($e instanceof Chrome_Exception) {
+
+            $prev = $e->getPrevious();
+
+            if( ($prev instanceof Exception) AND !($prev instanceof Chrome_Exception AND $prev->handleException() === false) ) {
+
+                $return .= '<h4>...caused by '.$prev->getFile().'('.$prev->getLine().')</h4>';
+
+    			$return .= $this->_printExceptionTrace($prev);
+            }
+		}
+
+        return $return;
     }
+
+	protected function _getArgs($args)
+	{
+		if($args === null or $args === array()) {
+			return '(<i>void</i>)';
+		}
+
+		$return = '(';
+
+		foreach($args as $key => $value) {
+			if(is_int($key)) {
+				if($key == 0) {
+					$return .= ''.$this->_getValue($value);
+					continue;
+				}
+				$return .= ', '.$this->_getValue($value);
+				;
+			} else {
+				$return .= ' '.$key.' => '.$this->_getValue($value);
+				;
+			}
+		}
+		$return .= ')';
+		return $return;
+	}
+
+	protected function _getValue($value)
+	{
+		if(is_string($value)) {
+			if(strlen($value) > 117) {
+				return '"'.substr($value, 0, 117).'..."';
+			}
+			return '"'.$value.'"';
+
+		} else
+			if(is_object($value)) {
+				return 'Object(<i>'.get_class($value).'</i>)';
+			} else
+				if(is_array($value)) {
+
+					$return = '<i>Array</i>( ';
+
+					if(count($value) !== 0) {
+						foreach($value as $key => $value) {
+							$return .= $key.' => '.$this->_getValue($value).', ';
+						}
+					} else {
+						$return .= '<i>void</i>  ';
+					}
+
+					return substr($return, 0, strlen($return) - 2).' )';
+
+				} else
+					if($value !== null) {
+						return gettype($value).'('.$value.')';
+					}
+
+		return '<i>null</i>';
+	}
 }

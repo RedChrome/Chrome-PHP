@@ -17,7 +17,7 @@
  * @subpackage Chrome.Router
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 18:38:42] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 14:53:11] --> $
  * @author     Alexander Book
  */
 
@@ -100,7 +100,7 @@ class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
 
 		if( ( $return = $this->_cache->get( 'getRoute_' . $search ) ) === null ) {
 
-			$return = $this->_decorator->getRoute( $search );
+			$return = $this->_decorable->getRoute( $search );
 
 			if( $return !== false ) {
 				$this->_cache->set( 'getRoute_' . $search, $return );
@@ -115,7 +115,7 @@ class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
 
 		if( ( $return = $this->_cache->get( 'findRoute_' . $search ) ) === null ) {
 
-			$return = $this->_decorator->findRoute( $search );
+			$return = $this->_decorable->findRoute( $search );
 
 			if( $return !== false ) {
 				$this->_cache->set( 'findRoute_' . $search, $return );

@@ -17,10 +17,15 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 00:13:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 20:25:40] --> $
  */
 
 if(CHROME_PHP !== true) die();
+
+class Chrome_Cache_Option_Null implements Chrome_Cache_Option_Interface
+{
+    // no methods or attributes
+}
 
 /**
  *
@@ -32,6 +37,11 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Cache_Null implements Chrome_Cache_Interface
 {
+    public function __construct(Chrome_Cache_Option_Interface $options)
+    {
+        // do nothing
+    }
+
 	public function set($key, $data)
 	{
         // do nothing

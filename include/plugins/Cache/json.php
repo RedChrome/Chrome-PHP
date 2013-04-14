@@ -17,7 +17,7 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:15:56] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 19:16:43] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -134,7 +134,7 @@ class Chrome_Cache_Json implements Chrome_Cache_Interface
         $this->_changed = true;
 
         if($this->_filePointer === null) {
-            $this->_filePointer = fopen($this->_fileName, 'r+b', false);
+            $this->_filePointer = Chrome_File::openFile($this->_fileName, 'r+b');
         }
     }
 }

@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 22:12:01] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 14:43:25] --> $
  * @link       http://chrome-php.de
  */
 
@@ -215,20 +215,26 @@ class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
 
 	public function buildInterface($interfaceName, $resultName, $connectionName = Chrome_Database_Registry_Connection_Interface::DEFAULT_CONNECTION, $adapterName = self::DEFAULT_ADAPTER)
 	{
-		$connection = $this->_getConnection($connectionName);
+	    try {
+    		$connection = $this->_getConnection($connectionName);
 
-		// create adapter, set connection
-		$adapter = $this->_createAdapter($adapterName, $connection);
+    		// create adapter, set connection
+    		$adapter = $this->_createAdapter($adapterName, $connection);
 
-		// create result using adapter
-		$result = $this->_createResult($resultName, $adapter);
+    		// create result using adapter
+    		$result = $this->_createResult($resultName, $adapter);
 
-		// create interface with adapter and result
-		$interface = $this->_createInterface($interfaceName, $result, $adapter);
+    		// create interface with adapter and result
+    		$interface = $this->_createInterface($interfaceName, $result, $adapter);
 
-        $interface->setLogger($this->_logger);
+            $interface->setLogger($this->_logger);
 
-		return $interface;
+    		return $interface;
+        } catch(Chrome_Exception $e) {
+            Chrome_Log::logException($e, E_ERROR);
+            throw $e;
+            #throw new Chrome_Exception_Database($e->getMessage(), $e->getCode(), $e);
+        }
 	}
 
 	protected function _createAdapter($adapterName, Chrome_Database_Connection_Interface $connection)

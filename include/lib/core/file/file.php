@@ -17,7 +17,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 22:26:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 19:25:07] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -109,13 +109,13 @@ class Chrome_File
 
 	public static function existsUsingFilePointer($file, $openingMode = self::FILE_MODE_ENDING_WRITE_ONLY)
 	{
-		$fp = @fopen($file, $openingMode);
+        try {
+		  $fp = fopen($file, $openingMode);
+        } catch(Chrome_Exception $e) {
+            return false;
+        }
 
-		if(is_resource($fp)) {
-			return $fp;
-		}
-
-		return false;
+        return $fp;
 	}
 
 	/**
@@ -246,6 +246,35 @@ class Chrome_File
 		}
 	}
 
+    /**
+     * Opens a file using $openingMode. If the file does not exists, it gets created
+     *
+     *
+     *
+     */
+    public static function openFile($file, $openingMode = self::FILE_MODE_ENDING_WRITE_ONLY, $doUpdateFileSystemCache = true)
+    {
+        if(!self::dirExists($file)) {
+			Chrome_Dir::createDir($file, 0777, $doUpdateFileSystemCache);
+		}
+
+        try {
+            $fp = fopen($file, $openingMode);
+        } catch(Chrome_Exception $e) {
+            $fp = fopen($file, 'x+b');
+        }
+
+		if($doUpdateFileSystemCache === true) {
+			Chrome_File_System_Read::getInstance()->forceCacheUpdate($file, true);
+		}
+
+        if(!is_resource($fp)) {
+            throw new Chrome_Exception('File handle is not a resource');
+        }
+
+		return $fp;
+    }
+
 	/**
 	 * Creates a file
 	 *
@@ -261,8 +290,12 @@ class Chrome_File
 		}
 
 		if(!self::exists($file)) {
-			@$fp = fopen($file, 'xb');
-			if($fp === false) return false;
+			try {
+    		  $fp = fopen($file, 'xb');
+            } catch(Chrome_Exception $e) {
+                return false;
+            }
+
 			fclose($fp);
 			self::_chper($file, $chmod);
 
@@ -276,14 +309,15 @@ class Chrome_File
 
 	public static function mkFileUsingFilePointer($file, $chmod = 0777, $openingMode = self::FILE_MODE_ENDING_WRITE_ONLY, $doUpdateFileSystemCache = true)
 	{
-
 		if(!self::dirExists($file)) {
 			Chrome_Dir::createDir($file, $chmod, $doUpdateFileSystemCache);
 		}
 
-
-		@$fp = fopen($file, $openingMode);
-		if($fp === false) return false;
+        try {
+		  $fp = fopen($file, $openingMode);
+        } catch(Chrome_Exception $e) {
+            return false;
+        }
 
 		self::_chper($file, $chmod);
 

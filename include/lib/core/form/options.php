@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.03.2013 19:53:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.04.2013 13:39:12] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -79,6 +79,14 @@ interface Chrome_Form_Option_Element_Interface
     public function setDecoratorOption(Chrome_Form_Options_Decorator_Interface $decOptions);
 
     public function getDecoratorOption();
+
+    public function addValidator(Chrome_Validator_Interface $validator);
+
+    public function setValidator(Chrome_Validator_Interface $validator);
+
+    public function getValidator();
+
+    public function getValidators();
 }
 
 /**

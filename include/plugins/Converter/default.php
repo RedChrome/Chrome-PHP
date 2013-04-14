@@ -17,7 +17,7 @@
  * @subpackage Chrome.Converter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 01:01:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.04.2013 15:46:40] --> $
  * @author     Alexander Book
  */
 
@@ -50,7 +50,8 @@ class Chrome_Converter_Default extends Chrome_Converter_Abstract
 		'convertCharToHtml',
 		'stripHTML',
 		'database',
-		'db' );
+		'db',
+        'stripNull');
 
 	protected $_methods = array(
 		'integer' => '_toInt',
@@ -64,7 +65,8 @@ class Chrome_Converter_Default extends Chrome_Converter_Abstract
 		'strip_repeat' => '_stripRepeat',
 		'convert_char_to_html' => '_convertCharToHtml',
 		'convertCharToHTML' => '_convertCharToHtml',
-		'stripHTML' => '_stripHTML' );
+		'stripHTML' => '_stripHTML',
+        'stripNull' => '_stripNull' );
 
 
 	public function __construct()
@@ -179,6 +181,22 @@ class Chrome_Converter_Default extends Chrome_Converter_Abstract
 			$var = strip_tags( $var, $allowedHTML );
 		}
 	}
+
+    /**
+     * Removes all null bytes from a string
+     *
+     * @param string $var
+     * @param array $options: string 'replacement': replaces all \0 with replacement
+     *
+     */
+    protected function _stripNull(&$var, $option) {
+
+        if(!isset($option['replacement'])) {
+            $option['replacement'] = '';
+        }
+
+        $var = str_replace(chr(0), $option['replacement'], $var);
+    }
 }
 
 new Chrome_Converter_Default();

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Cache
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 18:50:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 20:22:24] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -98,7 +98,14 @@ interface Chrome_Cache_Option_Interface
  */
 interface Chrome_Cache_Factory_Interface
 {
-    // todo: finish
+    /**
+     * Creates a new cache
+     *
+     * @param string $cacheAdapter cache adapter, just suffix of Chrome_Cache_*, see plugins/Cache for available caches
+     * @param Chrome_Cache_Option_Interface $options options for adapter
+     * @return Chrome_Cache_Abstract new cache object
+     */
+    public function build($cacheAdapter, Chrome_Cache_Option_Interface $options);
 }
 
 /**
@@ -110,13 +117,6 @@ interface Chrome_Cache_Factory_Interface
 class Chrome_Cache_Factory implements Chrome_Cache_Factory_Interface
 {
     /**
-     * Force to cache
-     *
-     * @var bool
-     */
-    private $_forceCaching = false;
-
-    /**
      * Create a new cache
      *
      * @param string $cacheAdapter cache adapter, just suffix of Chrome_Cache_*
@@ -125,11 +125,6 @@ class Chrome_Cache_Factory implements Chrome_Cache_Factory_Interface
      */
     public function build($cacheAdapter, Chrome_Cache_Option_Interface $options)
     {
-        // use a null object
-        if(CHROME_ENABLE_CACHING === false AND $this->_forceCaching === false) {
-            $cacheAdapter = 'null';
-        }
-
         if($cacheAdapter === null OR empty($cacheAdapter)) {
             throw new Chrome_InvalidArgumentException('No valid cache adapter given!');
         }
@@ -137,51 +132,8 @@ class Chrome_Cache_Factory implements Chrome_Cache_Factory_Interface
         // naming conventions
         $cacheAdapter = ucfirst(strtolower($cacheAdapter));
 
-        $this->_forceCaching = false;
-
-        return $this->_createNewFactory($cacheAdapter, $options);
-    }
-
-    /**
-     * Chrome_Cache_Factory::forceCaching()
-     *
-     * Force to cache, even if CHROME_ENABLE_CACHING is set to false
-     *
-     * @return Chrome_Cache_Factory
-     */
-    public function forceCaching()
-    {
-        $this->_forceCaching = true;
-        return $this;
-    }
-
-    /**
-     * Chrome_Cache_Factory::_createNewFactory()
-     *
-     * @param string $factory Factory
-     * @param Chrome_Cache_Option_Interface $options Options, to pass to factory
-     * @return Chrome_Cache_Abstract
-     */
-    private function _createNewFactory($factory, $options)
-    {
-        // need call_user_func_array, because we pass an array as arguments, not an array as an argument!
-
-        $class =  'Chrome_Cache_'.$factory;
+        $class = 'Chrome_Cache_'.$cacheAdapter;
 
         return new $class($options);
-
-        switch(count($options)) {
-            case 0:
-                return new $class();
-            case 1:
-                return new $class(array_pop($args));
-            case 2:
-                return new $class(array_pop($args), array_pop($args));
-            case 3:
-                return new $class(array_pop($args), array_pop($args), array_pop($args));
-            default: {
-                throw new Chrome_Exception('Well this code gets deleted, we are going to use an option class instead');
-            }
-        }
     }
 }

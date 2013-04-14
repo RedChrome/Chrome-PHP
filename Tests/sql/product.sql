@@ -226,7 +226,8 @@ INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 ('name', 'Site', 'CHROME-PHP', 'string', '', 0),
 ('public_key', 'Captcha', '6LcQrt4SAAAAAIPs9toLqZ761XTA39aS_AWP-Nog', 'string', '', 0),
 ('private_key', 'Captcha', '6LcQrt4SAAAAAF7flTN8uwi_9eSFy43jOuUcPGm3', 'string', '', 0),
-('recaptcha_theme', 'Captcha', 'clean', 'string', '', 0);
+('recaptcha_theme', 'Captcha', 'clean', 'string', '', 0),
+('default_theme', 'Theme', 'chrome', 'string', '', 0);
 
 -- --------------------------------------------------------
 

@@ -20,7 +20,7 @@
  * @author    Alexander Book <alexander.book@gmx.de>
  * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
  * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.03.2013 12:06:54] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 20:20:29] --> $
  * @link      http://chrome-php.de
  */
 
@@ -72,7 +72,6 @@ define('CHROME_DISPLAY_ERRORS', (E_ALL | E_STRICT));
 
 define('CHROME_CACHE_DIR', 'tmp/cache/');
 define('CHROME_CACHE_LIFETIME', 7200);
-define('CHROME_ENABLE_CACHING', true);
 define('CHROME_FILE_NAME_PREFIX', null);
 
 //########### SECURITY ###########

@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 18:41:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 20:21:48] --> $
  * @link       http://chrome-php.de
  */
 
@@ -122,8 +122,6 @@ class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implem
 
 	protected function _setUpCache()
 	{
-		// we NEED this cache
-		$this->_cacheFactory->forceCaching();
 		$this->_cacheOption = new Chrome_Cache_Option_Json();
 		$this->_cacheOption->setCacheFile(RESOURCE.'database/'.strtolower($this->_database).'/'.strtolower($this->_namespace).'.json');
 		$this->_cacheInterface = 'json';

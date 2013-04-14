@@ -19,7 +19,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 21:55:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 19:06:49] --> $
  * @link       http://chrome-php.de
  */
 
@@ -37,7 +37,6 @@ class Chrome_Cache_Option_Serialization implements Chrome_Cache_Option_Interface
 
 	public function setCacheFile($file)
 	{
-
 		if(!is_string($file)) {
 			throw new Chrome_InvalidArgumentException('Excepted $file to be a string, given '.gettype($file));
 		}
@@ -52,7 +51,6 @@ class Chrome_Cache_Option_Serialization implements Chrome_Cache_Option_Interface
 
 	public function setLifeTime($time)
 	{
-
 		if(!is_int($time) or $time < 0) {
 			throw new Chrome_InvalidArgumentException('Excepted $time to be a non-negative integer, given '.gettype($time));
 		}
@@ -75,7 +73,7 @@ class Chrome_Cache_Option_Serialization implements Chrome_Cache_Option_Interface
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 21:55:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 19:06:49] --> $
  * @link       http://chrome-php.de
  */
 class Chrome_Cache_Serialization implements Chrome_Cache_Interface
@@ -257,7 +255,7 @@ class Chrome_Cache_Serialization implements Chrome_Cache_Interface
 		$this->_closeFile();
 		$this->_dataChanged = false;
 
-		return @unlink($this->_fileName);
+		return unlink($this->_fileName);
 	}
 
 	/**
@@ -316,13 +314,13 @@ class Chrome_Cache_Serialization implements Chrome_Cache_Interface
 		/*while(!feof($this->_filePointer)) {
 		* $data .= fgets($this->_filePointer, 8192);
 		* }*/
+        try {
+    		$data = file_get_contents($this->_fileName);
 
-		$data = @file_get_contents($this->_fileName);
+    		$this->_data = unserialize($data);
+        } catch(Chrome_Exception $e) {
 
-		if($data === '') {
-			return;
-		}
-		$this->_data = unserialize($data);
+        }
 	}
 
 	/**
@@ -354,10 +352,7 @@ class Chrome_Cache_Serialization implements Chrome_Cache_Interface
 
 		// load Chrome_File class and create the file
 		require_once LIB.'core/file/file.php';
-		$this->_filePointer = Chrome_File::mkFileUsingFilePointer($this->_fileName, 0777, 'wb');
-		if(!is_resource($this->_filePointer)) {
-			throw new Chrome_Exception('Error while creating file '.$this->_fileName.'');
-		}
+		$this->_filePointer = Chrome_File::openFile($this->_fileName, 'wb');
 	}
 
 	/**

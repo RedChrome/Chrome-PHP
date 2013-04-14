@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 18:34:30] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 15:05:40] --> $
  * @author     Alexander Book
  */
 
@@ -198,7 +198,7 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
     {
         if(($return = $this->_cache->get('getRequirements')) === null) {
 
-            $return = $this->_decorator->getRequirements();
+            $return = $this->_decorable->getRequirements();
             $this->_cache->set('getRequirements', $return);
         }
 
@@ -216,7 +216,7 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
     {
         if(($return = $this->_cache->get('getClasses')) === null OR count($return) == 0) {
 
-            $return = $this->_decorator->getClasses();
+            $return = $this->_decorable->getClasses();
 
             $this->_cache->set('getClasses', $return);
         }

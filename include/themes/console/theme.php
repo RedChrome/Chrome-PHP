@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.04.2013 19:36:41] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.04.2013 19:38:48] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -26,15 +26,16 @@ if(CHROME_PHP !== true) die();
  * @package    CHROME-PHP
  * @subpackage Chrome.Design.Theme
  */
-class Chrome_Design_Theme_Json implements Chrome_Design_Theme_Interface
+class Chrome_Design_Theme_Console implements Chrome_Design_Theme_Interface
 {
 	public function initDesign(Chrome_Design_Interface $design)
 	{
-	    $html = new Chrome_Renderable_Composition_Array_Impl();
-        $design->setRenderable($html);
-
 		$htmlList = new Chrome_Renderable_List();
+        $html = new Chrome_Renderable_Composition_Impl();
 		$html->setRenderableList($htmlList);
+
+		$design->setRenderable($html);
+
 		$html->getRenderableList()->addRenderable($design->getController()->getView());
 	}
 }

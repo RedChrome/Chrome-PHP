@@ -17,7 +17,7 @@
  * @subpackage Chrome.Config
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 18:37:39] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 15:05:55] --> $
  * @author     Alexander Book
  */
 
@@ -87,7 +87,7 @@ class Chrome_Model_Config_Cache extends Chrome_Model_Cache_Abstract
         if(($cache = $this->_cache->get('config')) === null) {
             // cache miss
 
-            $cache = $this->_decorator->loadConfig();
+            $cache = $this->_decorable->loadConfig();
             $this->_cache->set('config', $cache);
         }
 

@@ -17,7 +17,7 @@
  * @subpackage Chrome.File_System
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.03.2013 21:24:52] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 19:17:07] --> $
  * @author     Alexander Book
  */
 
@@ -30,14 +30,6 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_File_System_Read_Interface
 {
-	/**
-	 * read()
-	 *
-	 * @param string $path
-	 * @return bool false, OR content of the file if it exists
-	 */
-	public function read($path);
-
 	/**
 	 * isFile()
 	 *
@@ -95,6 +87,8 @@ interface Chrome_File_System_Read_Interface
 }
 
 /**
+ * TODO: check is_readable and is_writable etc.. only if we ask. Do not call them before..
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.File_System
  */
@@ -212,7 +206,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	{
 		$this->_update();
         if(is_resource($this->_fileHandler)) {
-		  fclose($this->_fileHandler);
+            fclose($this->_fileHandler);
         }
 	}
 
@@ -244,12 +238,8 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 
 	    if($this->_fileHandler === null) {
 
-	        $this->_fileHandler = @fopen(TMP.self::FILE_SYSTEM_READ_CACHE, 'r+b');
-
-	        if($this->_fileHandler === false) {
-	            require_once LIB.'core/file/file.php';
-	            $this->_fileHandler = Chrome_File::mkFileUsingFilePointer(TMP.self::FILE_SYSTEM_READ_CACHE, 0777, 'wb', false);
-	        }
+            require_once LIB.'core/file/file.php';
+            $this->_fileHandler = Chrome_File::openFile(TMP.self::FILE_SYSTEM_READ_CACHE, 'wb', false);
 	    }
 	}
 
@@ -262,42 +252,13 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	 */
 	public function readCache()
 	{
-		$content = @file_get_contents(TMP.self::FILE_SYSTEM_READ_CACHE);
+        try {
+            $content = file_get_contents(TMP.self::FILE_SYSTEM_READ_CACHE);
 
-        if($content == null) {
+            return unserialize($content);
+        } catch(Chrome_Exception $e) {
             return array();
         }
-
-		return unserialize($content);
-	}
-
-	/**
-	 * Chrome_File_System_Read::read()
-	 *
-	 * reads an entire file
-	 *
-	 * @param string $path file
-	 * @return bool false if file doesn't exist, OR content of the file AS string
-	 */
-	public function read($path)
-	{
-		$path = self::_sanitizePath($path);
-
-		if(isset($this->_cache[$path])) {
-
-			if(!$this->isFile($path))
-				return false;
-			else {
-				return $this->_read($path);
-			}
-		} else {
-
-			if(!$this->_isFile($path)) {
-				return false;
-			} else {
-				return $this->_read($path);
-			}
-		}
 	}
 
 	/**
@@ -316,19 +277,6 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 		fwrite($this->_fileHandler, serialize($this->_cache));
 
 		$this->_change = false;
-	}
-
-	/**
-	 * Chrome_File_System_Read::_read()
-	 *
-	 * returns content of a file
-	 *
-	 * @param string $path
-	 * @return mixed false on error, OR string
-	 */
-	private function _read($path)
-	{
-		return file_get_contents($path);
 	}
 
 	/**
@@ -647,6 +595,10 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
      */
     private function _sanitizePath($path)
     {
+        if(strpos($path, chr(0)) !== false) {
+            throw new Chrome_Exception('Path contains Null-Byte \\0. Not allowed in application!');
+        }
+
         return ltrim(trim($path, '/'), './');
     }
 
