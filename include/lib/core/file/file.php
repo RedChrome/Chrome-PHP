@@ -17,7 +17,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 19:25:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.04.2013 18:07:23] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -110,7 +110,7 @@ class Chrome_File
 	public static function existsUsingFilePointer($file, $openingMode = self::FILE_MODE_ENDING_WRITE_ONLY)
 	{
         try {
-		  $fp = fopen($file, $openingMode);
+            $fp = fopen($file, $openingMode);
         } catch(Chrome_Exception $e) {
             return false;
         }

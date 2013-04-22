@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 22:15:52] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.04.2013 19:11:34] --> $
  * @author     Alexander Book
  */
 if(!defined('CHROME_TEST_ENVIRONMENT')) {
@@ -26,12 +26,12 @@ if(!defined('CHROME_TEST_ENVIRONMENT')) {
 require_once 'testsetup.php';
 
 // autoloader
-
+global $errorConfig;
 require_once PLUGIN.'Log/null.php';
 require_once PLUGIN.'Log/database.php';
 require_once PLUGIN.'Require/database.php';
 $autoloader = new Chrome_Require_Autoloader();
-$autoloader->setExceptionHandler(new Chrome_Exception_Handler_Default());
+$autoloader->setExceptionHandler($errorConfig->getExceptionHandler());
 $autoloader->setLogger(new Chrome_Logger_Null());
 $autoloader->appendAutoloader(new Chrome_Require_Loader_Database());
 
@@ -43,8 +43,6 @@ try {
     $defaultConnection = new $defaultConnectionClass();
     $defaultConnection->setConnectionOptions('localhost', 'test', '', 'chrome_2_test');
     $defaultConnection->connect();
-} catch(Chrome_Exception $e) {
-    die($e->show($e));
 } catch(Exception $e) {
     die(var_dump($e));
 }

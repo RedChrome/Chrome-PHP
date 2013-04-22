@@ -21,88 +21,16 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.03.2013 12:45:45] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.04.2013 17:41:28] --> $
  * @link       http://chrome-php.de
  */
 
-if(!defined('CHROME_PHP')) {
-    /**
-     * @var boolean
-     */
-    define('CHROME_PHP', true);
-}
-
-/**
- * load config
- */
-require_once 'config.php';
-
-/**
- * load chrome-php core
- */
-require_once 'lib/core/core.php';
-
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.FrontController
  */
-interface Chrome_Front_Controller_Interface extends Chrome_Exception_Processable_Static_Interface
+class Chrome_Application_Default implements Chrome_Application_Interface
 {
-    /**
-     * setController()
-     *
-     * @param mixed $controller
-     * @return
-     */
-    public function setController(Chrome_Controller_Abstract $controller);
-
-    /**
-     * getController()
-     *
-     * @return
-     */
-    public function getController();
-
-    /**
-     * getInstance()
-     *
-     * @return
-     */
-    public static function getInstance();
-
-    /**
-     * init()
-     *
-     * @return void
-     */
-    public function init();
-
-    /**
-     * execute()
-     *
-     * @return void
-     */
-    public function execute();
-
-    /**
-     * Returns the current application context instance
-     *
-     * @return Chrome_Application_Context_Interface
-     */
-    public function getApplicationContext();
-}
-
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.FrontController
- */
-class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
-{
-    /**
-     * @todo remove singleton pattern -> then change the exception handler interface to a non-static one
-     */
-    private static $_instance = null;
-
     /**
      * @var Chrome_Application_Context_Interface
      */
@@ -131,20 +59,12 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
     /**
      * @var Chrome_Exception_Handler_Interface
      */
-    private static $_exceptionHandler = null;
+    private $_exceptionHandler = null;
 
     /**
-     * Chrome_Front_Controller::setController()
-     *
-     * Sets the controller class
-     *
-     * @param Chrome_Controller_Abstract $controller
-     * @return void
+     * @var Chrome_Exception_Configuration_Interface
      */
-    public function setController(Chrome_Controller_Abstract $controller)
-    {
-        $this->_controller = $controller;
-    }
+    private $_exceptionConfiguration = null;
 
     /**
      * Chrome_Front_Controller::getController()
@@ -157,36 +77,28 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
     }
 
     /**
-     * Chrome_Front_Controller::getInstance()
      *
      * @return Chrome_Front_Controller
      */
-    public static function getInstance()
+    public function __construct(Chrome_Exception_Handler_Interface $exceptionHandler = null)
     {
-        if(self::$_exceptionHandler === null) {
-
+        if($exceptionHandler === null) {
             require_once LIB.'exception/frontcontroller.php';
-            self::$_exceptionHandler = new Chrome_Exception_Handler_FrontController();
+            $exceptionHandler = new Chrome_Exception_Handler_FrontController();
         }
 
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
+        $this->_exceptionHandler = $exceptionHandler;
     }
 
     /**
-     * Chrome_Front_Controller::__construct()
-     *
-     * @return Chrome_Front_Controller
+     * @return void
      */
-    private function __construct()
+    public function init()
     {
-        try {
-            $this->init();
+       try {
+            $this->_init();
         } catch (Chrome_Exception $e) {
-            self::$_exceptionHandler->exception($e);
+            $this->_exceptionHandler->exception($e);
         }
     }
 
@@ -195,8 +107,12 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
      *
      * @return void
      */
-    public function init()
+    protected function _init()
     {
+        $this->_exceptionConfiguration = new Chrome_Exception_Configuration();
+        $this->_exceptionConfiguration->setExceptionHandler($this->_exceptionHandler);
+        $this->_exceptionConfiguration->setErrorHandler(new Chrome_Exception_Error_Handler_Default());
+
         $this->_applicationContext = new Chrome_Application_Context();
 
         // logging
@@ -204,13 +120,12 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             // only log sth. if we're in developer mode
             if(CHROME_DEVELOPER_STATUS === true) {
                 Chrome_Log::setLogger(new Chrome_Logger_File(TMP . CHROME_LOG_DIR . CHROME_LOG_FILE));
-                self::$_exceptionHandler = new Chrome_Exception_Handler_Default();
+                $this->_exceptionHandler = new Chrome_Exception_Handler_Default();
             } else {
                 Chrome_Log::setLogger(new Chrome_Logger_Null());
             }
 
             require_once PLUGIN.'Log/database.php';
-
         }
 
         // autoloader
@@ -376,7 +291,7 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
             $this->_applicationContext->getResponse()->flush();
 
         } catch (Chrome_Exception $e) {
-            self::$_exceptionHandler->exception($e);
+            $this->_exceptionHandler->exception($e);
         }
     }
 
@@ -386,9 +301,9 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
      * @param mixed $obj
      * @return void
      */
-    public static function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)
+    public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)
     {
-        self::$_exceptionHandler = $obj;
+        $this->_exceptionHandler = $obj;
     }
 
     /**
@@ -396,12 +311,16 @@ class Chrome_Front_Controller implements Chrome_Front_Controller_Interface
      *
      * @return Chrome_Exception_Handler_Interface
      */
-    public static function getExceptionHandler()
+    public function getExceptionHandler()
     {
-        return self::$_exceptionHandler;
+        return $this->_exceptionHandler;
     }
 
     public function getApplicationContext() {
         return $this->_applicationContext;
+    }
+
+    public function getExceptionConfiguration() {
+        return $this->_exceptionConfiguration;
     }
 }

@@ -17,65 +17,120 @@
  * @subpackage Chrome.Exception
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 14:54:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.04.2013 19:32:40] --> $
  */
 if(CHROME_PHP !== true)
     die();
 
 /**
+ * Interface for classes which are able to handle exceptions
+ *
  * @pacakge CHROME-PHP
  * @subpackage Chrome.Exception
  */
 interface Chrome_Exception_Handler_Interface
 {
-    /**
-     * exception()
-     *
-     * @param Exception $e
-     * @return void
-     */
-    public function exception(Exception $e);
+	/**
+	 * This handles an exception
+	 *
+	 * @param Exception $e
+	 * @return void
+	 */
+	public function exception(Exception $e);
 }
 
 /**
+ * Interface for classes which are able to handle errors
+ *
+ * @pacakge CHROME-PHP
+ * @subpackage Chrome.Exception
+ */
+interface Chrome_Exception_Error_Handler_Interface
+{
+    /**
+     * This handles an error
+     *
+     * {@see http://php.net/manual/en/function.set-error-handler.php} for more information about parameters
+     *
+     * @param int $errorType
+     * @param string $message
+     * @param string $file [optional]
+     * @param int $line [option]
+     * @param array $context
+     * @return void
+     */
+	public function error($errorType, $message, $file = null, $line = null, $context = null);
+}
+
+/**
+ * Interface for classes which can catch exceptions and need for handling those exceptions
+ * a Chrome_Exception_Handler_Interface class.
+ *
  * @pacakge CHROME-PHP
  * @subpackage Chrome.Exception
  */
 interface Chrome_Exception_Processable_Interface
 {
+	/**
+	 * setExceptionHandler()
+	 *
+	 * @param mixed $obj
+	 * @return void
+	 */
+	public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj);
 
-    /**
-     * setExceptionHandler()
-     *
-     * @param mixed $obj
-     * @return void
-     */
-    public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj);
-
-    /**
-     * getExceptionHandler()
-     *
-     * @return Chrome_Exception_Handler_Interface
-     */
-    public function getExceptionHandler();
+	/**
+	 * getExceptionHandler()
+	 *
+	 * @return Chrome_Exception_Handler_Interface
+	 */
+	public function getExceptionHandler();
 }
 
-interface Chrome_Exception_Processable_Static_Interface
+/**
+ * Interface for error/exception configuration
+ *
+ * @pacakge CHROME-PHP
+ * @subpackage Chrome.Exception
+ */
+interface Chrome_Exception_Configuration_Interface extends Chrome_Exception_Processable_Interface
 {
-    /**
-     * setExceptionHandler()
-     *
-     * @param mixed $obj
-     * @return void
-     */
-    public static function setExceptionHandler(Chrome_Exception_Handler_Interface $obj);
+	/**
+	 * Handles an exception
+	 *
+	 * @param Exception $e Exception
+	 * @return void
+	 */
+	public function handleException(exception $exception);
 
     /**
-     * getExceptionHandler()
+     * Handles an error
      *
-     * @return Chrome_Exception_Handler_Interface
+     * {@see http://php.net/manual/en/function.set-error-handler.php} for more information about parameters
+     *
+     * @param int $errorType
+     * @param string $message
+     * @param string $file [optional]
+     * @param int $line [option]
+     * @param array $context
+     * @return void
      */
-    public static function getExceptionHandler();
+	public function handleError($errorType, $message, $file = null, $line = null, $context = null);
+
+    /**
+     * Sets the error handler
+     *
+     * @param Chrome_Exception_Error_Handler_Interface $obj
+     * @return void
+     */
+	public function setErrorHandler(Chrome_Exception_Error_Handler_Interface $obj);
+
+    /**
+     * Returns the error handler, set by setErrorHandler()
+     *
+     * @return Chrome_Exception_Error_Handler_Interface
+     */
+	public function getErrorHandler();
 }
 
 /**
@@ -84,98 +139,193 @@ interface Chrome_Exception_Processable_Static_Interface
 require_once LIB.'exception/default.php';
 
 /**
- * Displays an uncaught exception
+ * Default implementation of an error handler
  *
- * @param Exception $e Exception
- * @return void
- */
-function exception_handler($e)
-{
-    $obj = new Chrome_Exception_Handler_Default();
-    $obj->exception($e);
-}
-
-/**
- * Set exception handler, so all uncaught exceptions get displayed by exception_handler()
- */
-set_exception_handler('exception_handler');
-
-/**
- * Throws an exception on an error
+ * This class throws for every error a Chrome_Exception. So no @ is needed anymore to supress E_* errors.
+ * Instead use try-catch for errors.
  *
- * @return void
+ * E.g.
+ *
+ * $content = @file_get_contents(etc...);
+ *
+ * if($content === false) $content = '';
+ *
+ *
+ * ->
+ *
+ * try {
+ *  $content = file_get_contents(etc...);
+ * } catch(Chrome_Exception $e) {
+ *  $content = '';
+ * }
+ *
+ *
+ * @pacakge CHROME-PHP
+ * @subpackage Chrome.Exception
  */
-function error_handler($errorType, $message)
+class Chrome_Exception_Error_Handler_Default implements Chrome_Exception_Error_Handler_Interface
 {
-    throw new Chrome_Exception($message, $errorType);
+	/**
+	 * Throws an Chrome_Exception on an error
+	 *
+	 * @return void
+	 */
+	public function error($errorType, $message, $file = null, $line = null, $context = null)
+	{
+	    // this is desired behavior
+		throw new Chrome_Exception($message, $errorType);
+	}
 }
-
-/**
- * Set error handler to throw an exception on error
- */
-set_error_handler('error_handler');
-
 
 /**
  * Chrome_Exception
  *
  * Default exception class for Chrome-PHP
  *
+ * Use _getPreviousException instead of getPreviousException to ensure code compatibility with php version lower than 5.3.0
+ * getPreviousException was introduced in PHP 5.3.0...
+ *
  * @package CHROME-PHP
  * @subpackage Chrome-Exception
  */
 class Chrome_Exception extends Exception
 {
-    protected $_handleException = null;
-    protected $_prevException = null;
+    /**
+     * @todo remove this?
+     * @var boolean
+     */
+	protected $_handleException = null;
 
     /**
-     * Chrome_Exception::__construct()
+     * previous exception, used for php version < 5.3.0
      *
-     * @param string $msg
-     * @param double $code
-     * @param mixed $prevException
-     * @param bool $handleException
-     * @return Chrome_Exception
+     * @var Exception
      */
-    public function __construct($msg = '', $code = 0, Exception $prevException = null, $handleException = true)
-    {
-        $this->_handleException = $handleException;
-        $this->_prevException = $prevException;
+	protected $_prevException = null;
 
-        parent::__construct((string )$msg, (double)$code, $prevException);
-    }
+	/**
+	 * Chrome_Exception::__construct()
+	 *
+	 * @param string $msg Message of the exception
+	 * @param double $code a unique code to identify the exception
+	 * @param mixed $prevException a previous exception which caused this exception
+	 * @param bool $handleException ...
+	 * @return Chrome_Exception
+	 */
+	public function __construct($msg = '', $code = 0, Exception $prevException = null, $handleException = true)
+	{
+		$this->_handleException = $handleException;
+		$this->_prevException = $prevException;
 
-    /**
-     * Chrome_Exception::handleException()
-     *
-     * @return boolean
-     */
-    public function handleException()
-    {
-        return $this->_handleException;
-    }
+		parent::__construct((string )$msg, (double)$code, $prevException);
+	}
 
-    /**
-     * Chrome_Exception::_getPrevious()
-     *
-     * @return Chrome_Exception
-     */
-    public function _getPrevious()
-    {
-        return $this->_prevException;
-    }
+	/**
+	 * Chrome_Exception::handleException()
+	 *
+	 * @return boolean
+	 */
+	public function handleException()
+	{
+		return $this->_handleException;
+	}
 
-    /**
-     * Chrome_Exception::_getTraceAsString()
-     *
-     * Returns the trace AS a string, but replaces the DB password
-     *
-     * @return string
-     */
-    public function _getTraceAsString() {
-        return str_replace(DB_PASS, 'DB_PASS', $this->getTraceAsString());
-    }
+	/**
+	 * Chrome_Exception::_getPrevious()
+	 *
+	 * @return Chrome_Exception
+	 */
+	public function _getPrevious()
+	{
+		return $this->_prevException;
+	}
+
+	/**
+	 * Chrome_Exception::_getTraceAsString()
+	 *
+	 * Returns the trace AS a string, but replaces the DB password
+	 *
+	 * @return string
+	 */
+	public function _getTraceAsString()
+	{
+		return str_replace(DB_PASS, 'DB_PASS', $this->getTraceAsString());
+	}
 }
 
-class Chrome_InvalidArgumentException extends Chrome_Exception {}
+/**
+ * Class for exceptions to symbolize that a method/function got invalid arguments.
+ *
+ * @pacakge CHROME-PHP
+ * @subpackage Chrome.Exception
+ */
+class Chrome_InvalidArgumentException extends Chrome_Exception
+{
+}
+
+/**
+ * Example implementation of the exception/error configuration
+ *
+ * This class sets the exception/error_handler.
+ *
+ * @pacakge CHROME-PHP
+ * @subpackage Chrome.Exception
+ */
+class Chrome_Exception_Configuration implements Chrome_Exception_Configuration_Interface
+{
+    /**
+     * exception handler
+     *
+     * @var Chrome_Exception_Handler_Interface
+     */
+	protected $_exceptionHandler = null;
+
+    /**
+     * error handler
+     *
+     * @var Chrome_Exception_Error_Handler_Interface
+     */
+	protected $_errorHandler = null;
+
+    /**
+     * Sets the exception and error handler functions for php.
+     * So every error or uncaught exception will inflict this class.
+     *
+     * @return Chrome_Exception_Configuration
+     */
+	public function __construct()
+	{
+		set_exception_handler(array($this, 'handleException'));
+		set_error_handler(array($this, 'handleError'));
+	}
+
+	public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)
+	{
+		$this->_exceptionHandler = $obj;
+	}
+
+	public function getExceptionHandler()
+	{
+		return $this->_exceptionHandler;
+	}
+
+	public function setErrorHandler(Chrome_Exception_Error_Handler_Interface $obj)
+	{
+		$this->_errorHandler = $obj;
+	}
+
+	public function getErrorHandler()
+	{
+		return $this->_errorHandler;
+	}
+
+	public function handleException(exception $exception)
+	{
+		$this->_exceptionHandler->exception($exception);
+	}
+
+	public function handleError($errorType, $message, $file = null, $line = null, $context = null)
+	{
+		$this->_errorHandler->error($errorType, $message, $file, $line, $context);
+	}
+}

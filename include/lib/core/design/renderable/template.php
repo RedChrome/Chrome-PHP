@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 19:03:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.04.2013 19:45:38] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -30,17 +30,20 @@ class Chrome_Renderable_Template extends Chrome_Renderable_Composition
 {
 	protected $_template = null;
 
-	public function __construct(Chrome_Template_Interface $template)
+    protected $_exceptionHandler = null;
+
+	public function __construct(Chrome_Template_Interface $template, Chrome_Exception_Handler_Interface $exceptionHandler)
 	{
 		$this->_template = $template;
+        $this->_exceptionHandler = $exceptionHandler;
+        // todo: set default exception handler
 		parent::__construct();
 	}
 
 	public function render()
 	{
-
 		$this->_template->assign('VIEW', $this->_renderables);
-
+        $this->_template->assign('exceptionHandler', $this->_exceptionHandler);
 		return $this->_template->render();
 	}
 

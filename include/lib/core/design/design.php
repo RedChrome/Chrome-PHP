@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.03.2013 12:44:47] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 20:15:08] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -106,7 +106,7 @@ interface Chrome_Design_Theme_Interface
     public function initDesign(Chrome_Design_Interface $design);
 }
 
-// remove those includes, place them anywhere else
+// todo remove those includes, place them anywhere else
 require_once 'renderable/composition.php';
 require_once 'renderable/template.php';
 require_once 'design/default.php';

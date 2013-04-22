@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 14:46:22] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 18:58:46] --> $
  * @link       http://chrome-php.de
  */
 
@@ -91,7 +91,7 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
 					}
 				default:
 					{
-						throw new Chrome_Exception_Database($e->getMessage(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN, $e);
+						throw new Chrome_Exception_Database($e->getMessage(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
 					}
 			}
 

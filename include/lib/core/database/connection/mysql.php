@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 14:46:35] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 18:59:01] --> $
  * @link       http://chrome-php.de
  */
 
@@ -80,7 +80,7 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
 				default:
 					{
 
-						throw new Chrome_Exception_Database('('.mysql_errno().') '.mysql_error(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN, $e);
+						throw new Chrome_Exception_Database('('.mysql_errno().') '.mysql_error(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
 					}
 			}
 

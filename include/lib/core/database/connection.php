@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 12:57:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 21:17:52] --> $
  * @link       http://chrome-php.de
  */
 
@@ -90,7 +90,7 @@ interface Chrome_Database_Registry_Connection_Interface
      *
      * @var string
      */
-    const DEFAULT_CONNECTION = '';
+    const DEFAULT_CONNECTION = 'default';
 
     /**
      * Adds a new connection with the given name.

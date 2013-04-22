@@ -21,12 +21,54 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.03.2013 21:18:05] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.04.2013 17:41:42] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true)
     die();
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.FrontController
+ */
+interface Chrome_Application_Interface extends Chrome_Exception_Processable_Interface
+{
+    /**
+     * getController()
+     *
+     * @return
+     */
+    public function getController();
+
+    /**
+     * init()
+     *
+     * @return void
+     */
+    public function init();
+
+    /**
+     * execute()
+     *
+     * @return void
+     */
+    public function execute();
+
+    /**
+     * Returns the current application context instance
+     *
+     * @return Chrome_Application_Context_Interface
+     */
+    public function getApplicationContext();
+
+    /**
+     * Returns the exception configuration for this application
+     *
+     * @return Chrome_Exception_Configuration_Interface
+     */
+    public function getExceptionConfiguration();
+}
 
 interface Chrome_Application_Context_Interface
 {

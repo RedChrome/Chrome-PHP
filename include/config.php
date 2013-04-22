@@ -20,11 +20,12 @@
  * @author    Alexander Book <alexander.book@gmx.de>
  * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
  * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 20:20:29] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 17:22:25] --> $
  * @link      http://chrome-php.de
  */
 
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
 //########### DATABASE ###########
 
@@ -142,13 +143,14 @@ define('CACHE', TMP . 'cache/');
 define('PLUGIN', BASEDIR . 'plugins/');
 define('RESOURCE', BASEDIR.'resources/');
 define('THEME', BASEDIR.'themes/');
+define('APPLICATION', BASEDIR.'application/');
 
 // not needed anymore
 unset($fileLevel, $intFileLevel, $rooturl, $found);
 
 // SET SOME .INI VARS
 // @codingStandardsIgnoreStart
-@ini_set('zlib.output_compression', true);
+@ini_set('zlib.output_compression', 'On');
 @ini_set('register_globals', false);
 @ini_set('magic_quotes_gpc', false);
 @ini_set('include_path', '');

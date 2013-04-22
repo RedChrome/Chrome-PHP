@@ -17,7 +17,7 @@
  * @subpackage Chrome.File_System
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 19:17:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.04.2013 21:39:32] --> $
  * @author     Alexander Book
  */
 
@@ -192,7 +192,9 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 	{
 	    clearstatcache();
 
-		$this->_cache = array_merge($this->readCache(), $this->_cache);
+        $cache = $this->readCache();
+
+		$this->_cache = array_merge($cache, $this->_cache);
 	}
 
 	/**

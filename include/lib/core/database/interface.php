@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 13:55:49] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 22:41:24] --> $
  * @link       http://chrome-php.de
  */
 
@@ -170,10 +170,30 @@ interface Chrome_Database_Interface_Interface extends Chrome_Logable_Interface
     public function clear();
 }
 
+/**
+ * Interface for all database interface classes which shall allow to set another database interface class
+ * as dercorable.
+ * Usefull to combine multiple database interfaces to a single one and use all the functionality from those
+ * database interfaces.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 interface Chrome_Database_Interface_Decorator_Interface extends Chrome_Database_Interface_Interface
 {
+    /**
+     * Sets a database interface as an decorable to use its functionality
+     *
+     * @param Chrome_Database_Interface_Interface $obj
+     * @return void
+     */
     public function setDecorable(Chrome_Database_Interface_Interface $obj);
 
+    /**
+     * Returns the database interface set by setDecorable
+     *
+     * @return Chrome_Database_Interface_Interface
+     */
     public function getDecorable();
 }
 

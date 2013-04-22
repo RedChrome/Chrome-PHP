@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.03.2013 16:07:30] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.04.2013 19:46:55] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -34,12 +34,14 @@ class Chrome_Design_Theme_Chrome implements Chrome_Design_Theme_Interface
 		require_once LIB.'core/design/options/static.php';
 		require_once LIB.'core/design/loader/static.php';
 
+        $exceptionHandler = new Chrome_Exception_Handler_Dummy(true);
+
 		$template = new Chrome_Template();
 		$template->assignTemplate('design/chrome/design.tpl');
 
 		// this list need 7 renderables
 		$htmlList = new Chrome_Renderable_List();
-		$html = new Chrome_Renderable_Template($template);
+		$html = new Chrome_Renderable_Template($template, $exceptionHandler);
 		$html->setRenderableList($htmlList);
 
 		$design->setRenderable($html);

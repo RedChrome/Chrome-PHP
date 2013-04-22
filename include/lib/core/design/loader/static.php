@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.03.2013 12:13:09] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 20:32:43] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -66,7 +66,7 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 		}
 	}
 
-	// this should get moved to a model
+	// todo: this should get moved to a model
 	protected function _loadViewsByPosition(Chrome_Renderable_Composition_Interface $composition, $position, $theme)
 	{
 		$result = $this->_model->getViewsByPosition($position, $theme);
@@ -111,7 +111,7 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 
 				default:
 					{
-						//todo: finish default case
+                        throw new Chrome_Exception('Unknown type '.$row['type'].'. Available types are: controller, view');
 					}
 			}
 

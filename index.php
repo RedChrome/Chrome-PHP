@@ -20,7 +20,7 @@
  * @author    Alexander Book <alexander.book@gmx.de>
  * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
  * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.03.2013 18:34:02] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 17:14:18] --> $
  * @link      http://chrome-php.de
  */
 // debugin...
@@ -31,13 +31,17 @@ if( !isset( $_SERVER['REMOTE_ADDR'] ) ) {
 	$_SERVER['SCRIPT_NAME']     = 'index.php';
 	$_SERVER['SERVER_NAME']     = 'localhost';
 }
+
 /**
- *load front controller
+ * load chrome-php framework
  */
+require_once 'include/chrome.php';
 
-require_once 'include/main.php';
+require_once APPLICATION.'default.php';
 
-Chrome_Front_Controller::getInstance()->execute();
+$application = new Chrome_Application_Default();
+$application->init();
+$application->execute();
 //TODO: set up Zend_Mail properly
 //TODO: remove constants from form_elements, just use the ids... -> code reduction
 //TODO: remove converters from form. they have to get moved to model..

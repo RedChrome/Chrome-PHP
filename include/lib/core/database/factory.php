@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 14:43:25] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 18:59:39] --> $
  * @link       http://chrome-php.de
  */
 
@@ -233,7 +233,6 @@ class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
         } catch(Chrome_Exception $e) {
             Chrome_Log::logException($e, E_ERROR);
             throw $e;
-            #throw new Chrome_Exception_Database($e->getMessage(), $e->getCode(), $e);
         }
 	}
 

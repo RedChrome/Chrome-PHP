@@ -30,7 +30,7 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
             $this->_cookie = new Chrome_Cookie_Dummy();
             $this->_options['cookie_instance'] = $this->_cookie;
         } else {
-            $this->_cookie = Chrome_Front_Controller::getInstance()->getRequestHandler()->getRequestData()->getCookie();
+            $this->_cookie = $this->_appContext->getRequestHandler()->getRequestData()->getCookie();
         }
 
 

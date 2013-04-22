@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 21:48:36] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.04.2013 14:42:13] --> $
  * @author     Alexander Book
  */
 
@@ -32,7 +32,7 @@ if(!defined('CHROME_PHP')) {
  *
  */
 if(!defined('CHROME_TEST_ENVIRONMENT')) {
-    define('CHROME_TEST_ENVIRONMENT', 1);
+	define('CHROME_TEST_ENVIRONMENT', 1);
 }
 
 $_SERVER['REQUEST_URI'] = '/root/CHROME_2/';
@@ -46,6 +46,12 @@ require_once LIB.'core/core.php';
 require_once LIB.'core/error/exception.php';
 require_once LIB.'core/mime.php';
 require_once LIB.'core/file_system/file_system.php';
+require_once LIB.'exception/console.php';
+
+global $errorConfig;
+$errorConfig = new Chrome_Exception_Configuration();
+$errorConfig->setErrorHandler(new Chrome_Exception_Error_Handler_Default());
+$errorConfig->setExceptionHandler(new Chrome_Exception_Handler_Console());
 
 // Put here your vars for testing database connections
 define('MYSQL_HOST', 'localhost');
@@ -56,4 +62,4 @@ define('MYSQL_PORT', 3306);
 
 define('TEST_DATABASE_CONNECTIONS', true);
 
-Chrome_Log::setLogger(new Chrome_Logger_File(TMP . CHROME_LOG_DIR . CHROME_LOG_FILE));
+Chrome_Log::setLogger(new Chrome_Logger_File(TMP.CHROME_LOG_DIR.CHROME_LOG_FILE));
