@@ -57,7 +57,24 @@ interface Chrome_Hash_Interface
 }
 
 /**
+ * Warning: Do not use Tiger160! With php versions < 5.4 there was a bug computing this hash. This
+ * can get fixed with tiger128 or tiger192, BUT NOT with tiger160. See:
+ * 
+ * Hashing empty string '':
+ * Tiger using PHP >= 5.4:
  *
+ * 3293ac630c13f0245f92bbb1766e1616                    128
+ * 3293ac630c13f0245f92bbb1766e16167a4e5849            160
+ * 3293ac630c13f0245f92bbb1766e16167a4e58492dde73f3    192
+ *
+ * Tiger using PHP < 5.4:
+ * 24f0130c63ac933216166e76b1bb925f                    128  
+ * 24f0130c63ac933216166e76b1bb925ff373de2d            160
+ * 24f0130c63ac933216166e76b1bb925ff373de2d49584e7a    192
+ *
+ * In Tiger160(<5.4) you're loosing the information "7a4e5849". So there is no chance to fix this.
+ * Tiger160 cuts the wrong information.
+ * 
  * @todo refactor this class... looks ugly 
  * @package CHROME-PHP
  * @subpackage Chrome.Hash
@@ -123,7 +140,7 @@ class Chrome_Hash implements Chrome_Hash_Interface
         }
 
     }
-
+    
     /**
      * Hashes a string
      *
@@ -132,6 +149,21 @@ class Chrome_Hash implements Chrome_Hash_Interface
      * @return hashed string
      */
     public function hash_algo($string, $algorithm, $salt = '')
+    {
+        $hash = $this->_hash_algo($string, $algorithm, $salt);
+        
+        // phpversions <= 5.4.0 have flipped the tiger hash. now we correct the bug...
+        if(version_compare(PHP_VERSION, '5.4.0') == -1 AND stripos($algorithm, 'tiger') !== false) {
+            if(strlen($hash) === 40) {
+                throw new Chrome_Exception('Do not use Tiger160 with php<5.4! You might not be able to migrate to php>=5.4!');
+            }
+            $hash = $this->_correctOldTigerHash($hash);
+        }
+        return $hash;
+    }
+    
+    
+    protected function _hash_algo($string, $algorithm, $salt = '')
     {
         if($this->_hashFunction === 'hash') {
             if($this->_hasHashAlgo($algorithm, 'hash'))
@@ -150,11 +182,13 @@ class Chrome_Hash implements Chrome_Hash_Interface
             return $this->_defaultHash($salt.$string);
         }
     }
-
+    
+    protected function _correctOldTigerHash($wrongHash) {
+        return implode('', array_map('bin2hex', array_map('strrev', array_map('hex2bin',str_split($wrongHash,16)))));
+    }
+    
     /**
      * Hashes a string with the default algorithm (default: md5)
-     * only for internal use
-     *
      */
     private function _defaultHash($string)
     {
@@ -173,8 +207,6 @@ class Chrome_Hash implements Chrome_Hash_Interface
 
     /**
      * Checks wheter the server has this algorithm
-     * only for internal use
-     *
      */
     private function _hasHashAlgo($algorithm, $function = 'hash')
     {
