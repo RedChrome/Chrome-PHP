@@ -105,6 +105,7 @@ define('CHROME_MEMORY_USAGE', memory_get_usage());
 define('CHROME_MEMORY_LIMIT', ini_get('memory_limit'));
 // charset, UTF-8, ISO-8859-1 http://www.iana.org/assignments/character-sets
 define('CHROME_CHARSET', 'ISO-8859-1');
+define('CHROME_TIMEZONE', 'Europe/Berlin');
 define('CHROME_VERSION', '0.1');
 define('CHROME_VERSION_SUFFIX', 'beta');
 define('CHROME_DEFAULT_LANGUAGE', 'ger');
@@ -154,4 +155,5 @@ unset($fileLevel, $intFileLevel, $rooturl, $found);
 @ini_set('register_globals', false);
 @ini_set('magic_quotes_gpc', false);
 @ini_set('include_path', '');
+@ini_set('date.timezone', CHROME_TIMEZONE);
 // @codingStandardsIngoreEnd
