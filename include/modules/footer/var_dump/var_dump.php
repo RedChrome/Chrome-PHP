@@ -17,7 +17,7 @@
  * @subpackage Chrome.Modules
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:54:28] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [31.05.2013 20:12:23] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -35,7 +35,7 @@ if(CHROME_PHP !== true)
 class Chrome_Controller_Footer_VarDump extends Chrome_Controller_Module_Abstract
 {
     protected function _execute() {
-        $this->_view = new Chrome_View_Footer_VarDump($this);
+        $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Footer_VarDump', $this);
         $this->_view->setData($this->_requestData->getData(), $this->_requestData->getCookie(), $this->_requestData->getSession());
     }
 }

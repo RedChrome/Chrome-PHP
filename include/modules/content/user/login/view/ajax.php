@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.03.2013 14:59:41] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.06.2013 13:59:02] --> $
  * @author     Alexander Book
  */
 
@@ -37,9 +37,8 @@ class Chrome_View_User_Login_Ajax extends Chrome_View_Abstract
      */
     const CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY = 5000;
 
-    public function __construct(Chrome_Controller_Abstract $controller) {
-        parent::__construct($controller);
-        // the script has to know that this view handles ajax request. This sets an special style and enables json encoding of objects
+    protected function _setUp()
+    {
         $this->setAjaxEnvironment();
     }
 
@@ -48,23 +47,23 @@ class Chrome_View_User_Login_Ajax extends Chrome_View_Abstract
     }
 
     public function alreadyLoggedIn() {
-        $this->_views[] = new Chrome_View_User_Ajax_AlreadyLoggedIn($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Ajax_AlreadyLoggedIn', $this->_controller);
     }
 
     public function successfullyLoggedIn() {
-        $this->_views[] = new Chrome_View_User_Ajax_successfullyLoggedIn($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Ajax_successfullyLoggedIn', $this->_controller);
     }
 
     public function formNotValid() {
-        $this->_views[] = new Chrome_View_User_Ajax_FormNotValid($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Ajax_FormNotValid', $this->_controller);
     }
 
     public function showForm() {
-        $this->_views[] = new Chrome_View_User_Ajax_ShowForm($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Ajax_ShowForm', $this->_controller);
     }
 
     public function errorWhileLoggingIn() {
-        $this->_views[] = new Chrome_View_User_Ajax_WrongPassword($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Ajax_WrongPassword', $this->_controller);
     }
 }
 

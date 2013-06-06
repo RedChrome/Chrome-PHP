@@ -5,37 +5,35 @@ if(CHROME_PHP !== true)
 
 class Chrome_View_Index extends Chrome_View_Strategy_Abstract
 {
-
-    public function __construct(Chrome_Controller_Abstract $controller)
+    protected function _setUp()
     {
-        parent::__construct($controller);
         $this->addTitle('Form');
     }
 
     public function doSTH()
     {
-        $this->_views[] = new Chrome_View_Index_TODO($this->_controller);
-        $this->_views[] = new Chrome_View_Index_STHOTHER($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_TODO', $this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_STHOTHER', $this->_controller);
     }
 
     public function formIsValid() {
         $this->addTitle('valid');
-        $this->_views[] = new Chrome_View_Index_Form_Is_Valid($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_Form_Is_Valid', $this->_controller);
     }
 
     public function formIsInvalid() {
         $this->addTitle('invalid');
-        $this->_views[] = new Chrome_View_Index_Form_Is_Invalid($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_Form_Is_Invalid', $this->_controller);
     }
 
     public function formNotSent() {
         $this->addTitle('not sent');
-        $this->_views[] = new Chrome_View_Index_Form_Not_Sent($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_Form_Not_Sent', $this->_controller);
     }
 
     public function formNotCreated() {
         $this->addTitle('not created');
-        $this->_views[] = new Chrome_View_Index_Form_Not_Sent($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_Form_Not_Sent', $this->_controller);
     }
 }
 

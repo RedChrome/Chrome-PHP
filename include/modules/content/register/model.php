@@ -1,16 +1,26 @@
 <?php
 
+//todo: refactor this class. e.g. sendRegisterEmail has nothign to do with this model
+
 class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 {
 	const CHROME_MODEL_REGISTER_PW_SALT_LENGTH = 20;
 
 	const CHROME_MODEL_REGISTER_TABLE = 'user_regist';
 
+    protected $_applicationContext = null;
+
 	protected function _setDatabaseOptions()
 	{
         $this->_dbInterface = 'model';
         $this->_dbResult = 'assoc';
 	}
+
+    public function __construct(Chrome_Context_Application_Interface $app)
+    {
+        $this->_applicationContext = $app;
+        parent::__construct($app->getModelContext());
+    }
 
     protected function _connect() {
         parent::_connect();
@@ -152,7 +162,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 	 */
 	protected function _addUser( $id, $email, $username )
 	{
-		$model = new Chrome_Model_User_Database($this->_applicationContext);
+		$model = new Chrome_Model_User_Database($this->_modelContext);
         return $model->addUser( $id, $email, $username );
 	}
 

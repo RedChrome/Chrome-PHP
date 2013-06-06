@@ -7,7 +7,7 @@ class Chrome_Controller_Captcha extends Chrome_Controller_Module_Abstract
 {
 	protected function _initialize()
 	{
-        $this->_view = new Chrome_View_Captcha($this);
+	    $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Captcha', $this);
 	}
 
 	protected function _execute()

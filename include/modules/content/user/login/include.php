@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 16:24:20] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.06.2013 11:48:30] --> $
  * @author     Alexander Book
  */
 
@@ -97,8 +97,8 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
                 'value' => $LANG->get('password'))));
 
         // create an boolean converter, cause 'stay_loggedin' only accepts true or false
-        $boolConverter = new Chrome_Converter_Value();
-        $boolConverter->addFilter('bool');
+        $boolConverter = new Chrome_Converter_List();
+        $boolConverter->addConversion('bool');
 
         // stay_loggedin input, default selection is false
         // only true or false are allowed, to be sure the user has sent on of them, we add the boolConverter

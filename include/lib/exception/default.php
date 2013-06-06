@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 19:24:54] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.05.2013 20:34:46] --> $
  * @author     Alexander Book
  */
 
@@ -133,6 +133,9 @@ class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Inter
 
 				} else
 					if($value !== null) {
+					    if(is_bool($value)) {
+					       return ($value === true) ? 'true' : 'false';
+					    }
 						return gettype($value).'('.$value.')';
 					}
 

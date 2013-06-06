@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.04.2013 20:00:45] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.06.2013 14:46:08] --> $
  * @author     Alexander Book
  */
 
@@ -28,25 +28,13 @@ if( CHROME_PHP !== true ) die();
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Chrome_View_Box_Login extends Chrome_View_Abstract
+class Chrome_View_Box_Login extends Chrome_View_Strategy_Abstract
 {
-    protected $_view;
-
-	public function __construct( Chrome_Controller_Abstract $controller )
-	{
-		parent::__construct( $controller );
-		// add the .js file for ajax support
+    protected function _setUp()
+    {
+        // add the .js file for ajax support
 		$this->addJS( 'javascript/modules/box/login.js' );
-	}
-
-	/**
-	 * @return void
-	 */
-	public function render()
-	{
-	    return $this->_view->render();
-	}
-
+    }
 
 	/**
 	 * sets the actual rendered view
@@ -56,9 +44,7 @@ class Chrome_View_Box_Login extends Chrome_View_Abstract
 	public function showUserMenu()
 	{
 	    $this->setViewTitle( 'User Menu' );
-        $this->_view = new Chrome_View_Box_LoggedIn( $this->_controller );
-		// add view
-		#$this->_controller->getDesign()->addView( new Chrome_View_Box_LoggedIn( $this->_controller ) );
+        $this->_views = $this->_viewContext->getFactory()->build('Chrome_View_Box_LoggedIn', $this->_controller);
 	}
 
 	/**
@@ -67,9 +53,7 @@ class Chrome_View_Box_Login extends Chrome_View_Abstract
 	public function showLoginForm()
 	{
 	    $this->setViewTitle( 'Login' );
-	    $this->_view = new Chrome_View_Box_Form_Login( $this->_controller );
-		// add view
-		#$this->_controller->getDesign()->addView( new Chrome_View_Box_Form_Login( $this->_controller ) );
+	    $this->_views = $this->_viewContext->getFactory()->build('Chrome_View_Box_Form_Login', $this->_controller);
 	}
 }
 

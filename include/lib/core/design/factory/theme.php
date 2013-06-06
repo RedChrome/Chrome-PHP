@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.04.2013 22:22:59] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.06.2013 16:10:35] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -30,7 +30,7 @@ class Chrome_Design_Factory_Theme extends Chrome_Design_Factory_Abstract
     public function build($theme = self::DEFAULT_THEME)
     {
         if($theme === self::DEFAULT_THEME) {
-            $theme = Chrome_Config::getConfig('Theme', 'default_theme');
+            $theme = $this->_applicationContext->getConfig()->getConfig('Theme', 'default_theme');
 
             if($this->_applicationContext->getResponse() instanceof Chrome_Response_JSON) {
                 $theme = 'json';

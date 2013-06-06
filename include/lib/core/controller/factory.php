@@ -35,7 +35,7 @@ class Chrome_Controller_Factory implements Chrome_Controller_Factory_Interface
 {
     protected $_appContext = null;
 
-    public function __construct(Chrome_Application_Context $appContext)
+    public function __construct(Chrome_Context_Application $appContext)
     {
         $this->_appContext = $appContext;
     }

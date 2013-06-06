@@ -46,7 +46,7 @@ function AJAX_request_login() {
             // remove css class
             //dojo.query('#login > input').removeClass("wrongInput");
 
-            // set reloadDelay, if not sent by server
+            // set reloadDelay, if not set by server
             if (typeof response.reloadDelay == "undefined") {
                response.reloadDelay = 5000;
             }

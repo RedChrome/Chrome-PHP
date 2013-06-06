@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 20:32:43] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [31.05.2013 20:06:44] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -32,13 +32,16 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 
 	protected $_controllerFactory = null;
 
+    protected $_viewFactory = null;
+
 	protected $_model = null;
 
     protected $_theme = '';
 
-	public function __construct(Chrome_Controller_Factory $controllerFactory, Chrome_Model_Abstract $model, $theme)
+	public function __construct(Chrome_Controller_Factory $controllerFactory, Chrome_View_Factory_Interface $viewFactory, Chrome_Model_Abstract $model, $theme)
 	{
 		$this->_controllerFactory = $controllerFactory;
+        $this->_viewFactory = $viewFactory;
 		$this->_model = $model;
         $this->_theme = $theme;
 	}
@@ -88,7 +91,7 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 			switch(strtolower($row['type'])) {
 				case 'view':
 					{
-						$view = new $row['class']();
+					    $view = $this->_viewFactory->build($row['class']);
 
 						break;
 					}

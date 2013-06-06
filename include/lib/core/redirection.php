@@ -43,7 +43,7 @@ class Chrome_Redirection implements Chrome_Redirection_Interface
 {
     protected $_applicationContext = null;
 
-    public function __construct(Chrome_Application_Context_Interface $context) {
+    public function __construct(Chrome_Context_Application_Interface $context) {
         $this->_applicationContext = $context;
     }
 

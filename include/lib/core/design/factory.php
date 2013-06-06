@@ -29,7 +29,7 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Design_Factory_Interface
 {
-    public function __construct(Chrome_Application_Context_Interface $appContext);
+    public function __construct(Chrome_Context_Application_Interface $appContext);
 
     public function build();
 }
@@ -38,7 +38,7 @@ abstract class Chrome_Design_Factory_Abstract implements Chrome_Design_Factory_I
 {
     protected $_applicationContext = null;
 
-    public function __construct(Chrome_Application_Context_Interface $appContext) {
+    public function __construct(Chrome_Context_Application_Interface $appContext) {
         $this->_applicationContext = $appContext;
     }
 }

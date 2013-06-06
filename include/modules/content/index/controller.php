@@ -8,7 +8,8 @@ class Chrome_Controller_Index extends Chrome_Controller_Module_Abstract
 {
 	protected function _initialize()
 	{
-		$this->_view = new Chrome_View_Index( $this );
+	    $factory = $this->_applicationContext->getViewContext()->getFactory();
+		$this->_view = $factory->build('Chrome_View_Index', $this);
 
 		$this->_model = new Chrome_Model_HTTP_Index();
 	}

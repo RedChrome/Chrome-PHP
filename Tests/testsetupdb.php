@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.04.2013 19:11:34] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.05.2013 22:54:28] --> $
  * @author     Alexander Book
  */
 if(!defined('CHROME_TEST_ENVIRONMENT')) {
@@ -66,9 +66,9 @@ if(TEST_DATABASE_CONNECTIONS === true) {
     $dbRegistry->addConnection('mysqli_test', $mysqliTestConnection, true);
 }
 
-global $databaseContext;
-$databaseContext = new Chrome_Application_Context();
-$databaseContext->setDatabaseFactory($databaseFactory);
+global $modelContext;
+$modelContext = new Chrome_Context_Model();
+$modelContext->setDatabaseFactory($databaseFactory);
 
 if(class_exists('PHPUnit_Framework_TestCase')) {
 
@@ -78,7 +78,7 @@ if(class_exists('PHPUnit_Framework_TestCase')) {
 
         public function __construct($name = null, array $data = array(), $dataName = '') {
 
-            global $databaseContext;
+            global $modelContext;
             global $applicationContext;
 
             if($applicationContext !== null) {
@@ -88,9 +88,9 @@ if(class_exists('PHPUnit_Framework_TestCase')) {
                 $this->_session = $this->_appContext->getRequestHandler()->getRequestData()->getSession();
                 $this->_cookie  = $this->_appContext->getRequestHandler()->getRequestData()->getCookie();
             } else {
-                $appContext = new Chrome_Application_Context();
 
-                $appContext->setDatabaseFactory($databaseContext->getDatabaseFactory());
+                $appContext = new Chrome_Context_Application();
+                $appContext->setModelContext($modelContext);
 
                 $this->_appContext = $appContext;
             }

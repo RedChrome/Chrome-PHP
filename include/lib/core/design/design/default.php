@@ -34,7 +34,7 @@ class Chrome_Design implements Chrome_Design_Interface
 
     protected $_controller = null;
 
-	public function __construct(Chrome_Application_Context_Interface $appContext, Chrome_Controller_Interface $controller)
+	public function __construct(Chrome_Context_Application_Interface $appContext, Chrome_Controller_Interface $controller)
 	{
 	    $this->_controller = $controller;
 		$this->_applicationContext = $appContext;

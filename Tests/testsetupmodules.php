@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.04.2013 12:07:52] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.05.2013 22:53:36] --> $
  * @author     Alexander Book
  */
 if(!defined('CHROME_TEST_ENVIRONMENT')) {
@@ -39,10 +39,10 @@ require_once LIB.'exception/frontcontroller.php';
 $application = new Chrome_Application_Default(new Chrome_Exception_Handler_Console());
 $application->init();
 
-global $applicationContext, $databaseContext;
+global $applicationContext, $modelContext;
 $context = $application->getApplicationContext();
 $applicationContext = clone $context;
-$applicationContext->setDatabaseFactory($databaseContext->getDatabaseFactory());
+$applicationContext->setModelContext($modelContext);
 
 $_SERVER = $_tempServer;
 $GLOBALS = $_tempGlobals;

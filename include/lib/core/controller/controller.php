@@ -39,23 +39,23 @@ interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Inter
     public function execute();
 
     /**
-     * @param Chrome_Application_Context_Interface $appContext
+     * @param Chrome_Context_Application_Interface $appContext
      * @return Chrome_Controller_Interface
      */
-    public function __construct(Chrome_Application_Context_Interface $appContext);
+    public function __construct(Chrome_Context_Application_Interface $appContext);
 
     /**
      * Sets the application context
      *
-     * @param Chrome_Application_Context_Interface $appContext
+     * @param Chrome_Context_Application_Interface $appContext
      * @return void
      */
-    public function setApplicationContext(Chrome_Application_Context_Interface $appContext);
+    public function setApplicationContext(Chrome_Context_Application_Interface $appContext);
 
     /**
      * Returns the application context
      *
-     * @return Chrome_Application_Context_Interface
+     * @return Chrome_Context_Application_Interface
      */
     public function getApplicationContext();
 }
@@ -69,7 +69,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
     /**
      * Contains the context to the current application
      *
-     * @var Chrome_Application_Context_Interface
+     * @var Chrome_Context_Application_Interface
      */
     protected $_applicationContext = null;
 
@@ -157,7 +157,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      */
     abstract protected function _shutdown();
 
-    public function __construct(Chrome_Application_Context_Interface $appContext)
+    public function __construct(Chrome_Context_Application_Interface $appContext)
     {
         $this->setApplicationContext($appContext);
 
@@ -253,7 +253,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         // do nothing
     }
 
-    public function setApplicationContext(Chrome_Application_Context_Interface $appContext) {
+    public function setApplicationContext(Chrome_Context_Application_Interface $appContext) {
         $this->_applicationContext = $appContext;
     }
 

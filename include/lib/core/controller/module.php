@@ -29,7 +29,7 @@ if(CHROME_PHP !== true) die();
  */
 abstract class Chrome_Controller_Module_Abstract extends Chrome_Controller_Abstract
 {
-    public function __construct(Chrome_Application_Context_Interface $appContext)
+    public function __construct(Chrome_Context_Application_Interface $appContext)
     {
         parent::__construct($appContext);
 

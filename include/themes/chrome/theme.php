@@ -17,7 +17,7 @@
  * @subpackage Chrome.Design
  * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.04.2013 19:46:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [31.05.2013 20:06:10] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -68,8 +68,9 @@ class Chrome_Design_Theme_Chrome implements Chrome_Design_Theme_Interface
 			'footer' => $footer,
 			'postBody' => $postBody);
 
-		$model = new Chrome_Model_Design_Loader_Static($design->getApplicationContext());
+		$model = new Chrome_Model_Design_Loader_Static($design->getApplicationContext()->getModelContext());
 		$controllerFactory = new Chrome_Controller_Factory($design->getApplicationContext());
+        $viewFactory = $design->getApplicationContext()->getViewContext()->getFactory();
 
 		$option = new Chrome_Renderable_Options_Static();
 
@@ -79,7 +80,7 @@ class Chrome_Design_Theme_Chrome implements Chrome_Design_Theme_Interface
 			$option->setPosition($key);
 			$composition->setOption($option);
 
-			$loader = new Chrome_Design_Loader_Static($controllerFactory, $model, 'chrome');
+			$loader = new Chrome_Design_Loader_Static($controllerFactory, $viewFactory, $model, 'chrome');
 			$loader->addComposition($composition);
 			$loader->load();
 

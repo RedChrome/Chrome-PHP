@@ -4,6 +4,7 @@ require_once 'Tests/testsetup.php';
 
 require_once 'Tests/dummies/authentication/resource.php';
 require_once 'Tests/dummies/authentication/chain.php';
+require_once 'Tests/dummies/authentication/fail.php';
 require_once 'Tests/dummies/cookie.php';
 
 class AuthenticationTest extends PHPUnit_Framework_TestCase
@@ -30,7 +31,6 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($chain, $this->_auth->getChain());
     }
-
 
     public function testAddChain() {
 
@@ -85,7 +85,9 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $resource = new Chrome_Authentication_Create_Resource_Dummy();
 
 
-        $this->_auth->setExceptionHandler(new Chrome_Exception_Handler_Dummy());
+        $exceptionHandler = new Chrome_Exception_Handler_Dummy();
+        $this->_auth->setExceptionHandler($exceptionHandler);
+        $this->assertSame($exceptionHandler, $this->_auth->getExceptionHandler());
 
         // throws a exception while creating authentication
         $this->_auth->setChain(new Chrome_Authentication_Chain_Wrapper(true))->createAuthentication($resource);
@@ -94,5 +96,49 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
 
 
         $this->_auth->setChain($chain);
+    }
+
+    public function testAuthenticateCouldNotAuthenticate()
+    {
+        $chain = new Chrome_Authentication_Chain_Fail();
+        $this->_auth->addChain($chain);
+
+        $this->setExpectedException('Chrome_Exception_Authentication');
+
+        $this->_auth->authenticate();
+    }
+
+    public function testAuthenticateHandlesWrongIDs()
+    {
+        $chain = new Chrome_Authentication_Chain_Fail();
+        $this->_auth->addChain($chain);
+        $chain->_id = '1f921';
+
+        $this->setExpectedException('Chrome_Exception_Authentication');
+
+        $this->_auth->authenticate();
+    }
+
+    public function testAuthenticateSuccessfull()
+    {
+        $chain = new Chrome_Authentication_Chain_Fail();
+        $this->_auth->addChain($chain);
+        $chain->_id = 1;
+
+        $this->_auth->authenticate();
+
+        $this->assertEquals(1, $this->_auth->getAuthenticationID());
+        $this->assertTrue($this->_auth->isAuthenticated());
+        $this->assertTrue($this->_auth->getAuthenticationDataContainer() instanceof Chrome_Authentication_Data_Container_Interface);
+    }
+
+    public function testDeauthenticate()
+    {
+        $this->testAuthenticateSuccessfull();
+
+        $this->_auth->deAuthenticate();
+        $this->assertFalse($this->_auth->isAuthenticated());
+        $this->assertEquals(null, $this->_auth->getAuthenticationID());
+        $this->assertEquals(null, $this->_auth->getAuthenticationDataContainer());
     }
 }

@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.04.2013 17:41:42] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.06.2013 16:03:35] --> $
  * @link       http://chrome-php.de
  */
 
@@ -58,7 +58,7 @@ interface Chrome_Application_Interface extends Chrome_Exception_Processable_Inte
     /**
      * Returns the current application context instance
      *
-     * @return Chrome_Application_Context_Interface
+     * @return Chrome_Context_Application_Interface
      */
     public function getApplicationContext();
 
@@ -70,8 +70,30 @@ interface Chrome_Application_Interface extends Chrome_Exception_Processable_Inte
     public function getExceptionConfiguration();
 }
 
-interface Chrome_Application_Context_Interface
+interface Chrome_Context_View_Interface
 {
+    public function setPluginFacade(Chrome_View_Plugin_Facade_Interface $pluginFacade);
+
+    public function getPluginFacade();
+
+    public function setFactory(Chrome_View_Factory_Interface $factory);
+
+    public function getFactory();
+}
+
+interface Chrome_Context_Model_Interface
+{
+    public function setDatabaseFactory(Chrome_Database_Factory_Interface $factory);
+
+    public function getDatabaseFactory();
+}
+
+interface Chrome_Context_Application_Interface
+{
+    public function setConfig(Chrome_Config_Interface $config);
+
+    public function getConfig();
+
     public function setRequestHandler(Chrome_Request_Handler_Interface $reqHandler);
 
     public function getRequestHandler();
@@ -80,9 +102,9 @@ interface Chrome_Application_Context_Interface
 
     public function getAuthentication();
 
-    public function setDatabaseFactory(Chrome_Database_Factory_Interface $factory);
+    public function setModelContext(Chrome_Context_Model_Interface $modelContext);
 
-    public function getDatabaseFactory();
+    public function getModelContext();
 
     public function setAuthorisation(Chrome_Authorisation_Interface $auth);
 
@@ -91,19 +113,57 @@ interface Chrome_Application_Context_Interface
     public function setResponse(Chrome_Response_Interface $response);
 
     public function getResponse();
+
+    public function setViewContext(Chrome_Context_View_Interface $viewContext);
+
+    public function getViewContext();
 }
 
-class Chrome_Application_Context implements Chrome_Application_Context_Interface
+class Chrome_Context_Application implements Chrome_Context_Application_Interface
 {
     protected $_requestHandler  = null;
 
     protected $_authentication  = null;
 
-    protected $_databaseFactory = null;
-
     protected $_authorisation   = null;
 
     protected $_response        = null;
+
+    protected $_modelContext    = null;
+
+    protected $_viewContext     = null;
+
+    protected $_config          = null;
+
+    public function setConfig(Chrome_Config_Interface $config)
+    {
+        $this->_config = $config;
+    }
+
+    public function getConfig()
+    {
+        return $this->_config;
+    }
+
+    public function setViewContext(Chrome_Context_View_Interface $viewContext)
+    {
+        $this->_viewContext = $viewContext;
+    }
+
+    public function getViewContext()
+    {
+        return $this->_viewContext;
+    }
+
+    public function setModelContext(Chrome_Context_Model_Interface $modelContext)
+    {
+        $this->_modelContext = $modelContext;
+    }
+
+    public function getModelContext()
+    {
+        return $this->_modelContext;
+    }
 
     public function setRequestHandler(Chrome_Request_Handler_Interface $reqHandler)
     {
@@ -125,6 +185,31 @@ class Chrome_Application_Context implements Chrome_Application_Context_Interface
         return $this->_authentication;
     }
 
+    public function setAuthorisation(Chrome_Authorisation_Interface $auth)
+    {
+        $this->_authorisation = $auth;
+    }
+
+    public function getAuthorisation()
+    {
+        return $this->_authorisation;
+    }
+
+    public function setResponse(Chrome_Response_Interface $response)
+    {
+        $this->_response = $response;
+    }
+
+    public function getResponse()
+    {
+        return $this->_response;
+    }
+}
+
+class Chrome_Context_Model implements Chrome_Context_Model_Interface
+{
+    protected $_databaseFactory = null;
+
     public function setDatabaseFactory(Chrome_Database_Factory_Interface $factory)
     {
         $this->_databaseFactory = $factory;
@@ -134,20 +219,31 @@ class Chrome_Application_Context implements Chrome_Application_Context_Interface
     {
         return $this->_databaseFactory;
     }
+}
 
-    public function setAuthorisation(Chrome_Authorisation_Interface $auth) {
-        $this->_authorisation = $auth;
+class Chrome_Context_View implements Chrome_Context_View_Interface
+{
+    protected $_pluginFacade = null;
+
+    protected $_factory      = null;
+
+    public function setPluginFacade(Chrome_View_Plugin_Facade_Interface $pluginFacade)
+    {
+        $this->_pluginFacade = $pluginFacade;
     }
 
-    public function getAuthorisation() {
-        return $this->_authorisation;
+    public function getPluginFacade()
+    {
+        return $this->_pluginFacade;
     }
 
-    public function setResponse(Chrome_Response_Interface $response) {
-        $this->_response = $response;
+    public function setFactory(Chrome_View_Factory_Interface $factory)
+    {
+        $this->_factory = $factory;
     }
 
-    public function getResponse() {
-        return $this->_response;
+    public function getFactory()
+    {
+        return $this->_factory;
     }
 }

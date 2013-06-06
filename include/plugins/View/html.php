@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 18:22:36] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.06.2013 16:34:09] --> $
  */
 
 if(CHROME_PHP !== true) die();

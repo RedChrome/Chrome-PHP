@@ -12,10 +12,15 @@ class DatabaseResultInteratorTest extends Chrome_TestCase
 
     public $_connection = null;
 
+    protected function _getDatabaseFactory() {
+        return $this->_appContext->getModelContext()->getDatabaseFactory();
+    }
+
+
     public function testInitResultIterator() {
 
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
-        $db = $this->_appContext->getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
+        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
         $this->assertTrue(is_subclass_of($db->getResult(), 'Iterator'));
     }
 
@@ -26,7 +31,7 @@ class DatabaseResultInteratorTest extends Chrome_TestCase
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
         // Dummy_Adapter gets used via connection_dummy as default adapter
-        $db = $this->_appContext->getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
+        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
 
         // this will force the adapter to access this class using method getNext()
         // and this will access the $_dataArray
@@ -48,7 +53,7 @@ class DatabaseResultInteratorTest extends Chrome_TestCase
 
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
-        $db = $this->_appContext->getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
+        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
 
         $db->getAdapter()->setDataResource($this);
 
@@ -60,7 +65,7 @@ class DatabaseResultInteratorTest extends Chrome_TestCase
     }
 
     public function testAffectedRows() {
-        $db = $this->_appContext->getDatabaseFactory()->buildInterface('Simple', 'Iterator', null, 'Dummy');
+        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', null, 'Dummy');
         $db->getAdapter()->_affectedRows = 6;
         $this->assertEquals(6, $db->getResult()->getAffectedRows());
     }

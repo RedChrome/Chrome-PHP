@@ -24,7 +24,7 @@ class AuthorisationAdapterDefaultTest extends Chrome_TestCase
 
     public function setUp() {
         $this->_auth = new Chrome_Authentication_Dummy();
-        $model = new Chrome_Model_Authorisation_Default_DB($this->_appContext);
+        $model = new Chrome_Model_Authorisation_Default_DB($this->_appContext->getModelContext());
         $this->_adapter = new Chrome_Authorisation_Adapter_Default($this->_auth);
         $this->_adapter->setModel($model);
     }
@@ -75,7 +75,7 @@ class AuthorisationAdapterDefaultModelDefaultTest extends Chrome_TestCase
     protected $_model = null;
 
     public function setUp() {
-        $this->_model = new Chrome_Model_Authorisation_Default_DB($this->_appContext);
+        $this->_model = new Chrome_Model_Authorisation_Default_DB($this->_appContext->getModelContext());
     }
 
     public function testGetAccessById() {

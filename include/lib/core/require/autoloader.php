@@ -17,7 +17,7 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 22:12:31] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.05.2013 17:23:50] --> $
  * @author     Alexander Book
  */
 
@@ -71,6 +71,22 @@ interface Chrome_Require_Loader_Interface
 	public function init(Chrome_Require_Autoloader_Interface $autoloader);
 }
 
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Require.Autoloader
+ */
+abstract class Chrome_Require_Loader_Abstract implements Chrome_Require_Loader_Interface
+{
+    public function init(Chrome_Require_Autoloader_Interface $autoloader)
+    {
+        // do nothing
+    }
+}
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Require.Autoloader
+ */
 class Chrome_Require_Autoloader implements Chrome_Require_Autoloader_Interface
 {
 	/**

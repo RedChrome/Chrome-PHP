@@ -2,41 +2,40 @@
 
 class Chrome_View_Register extends Chrome_View_Strategy_Abstract
 {
-    public function __construct(Chrome_Controller_Abstract $controller) {
+    protected function _setUp(){
         $this->addTitle('Registrieren');
-        parent::__construct($controller);
     }
 
     public function setStepOne() {
 
-        $this->_views[] = new Chrome_View_Register_StepOne($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_StepOne', $this->_controller);
     }
 
     public function setStepTwo() {
 
-        $this->_views[] = new Chrome_View_Register_StepTwo($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_StepTwo', $this->_controller);
     }
 
     public function setStepThree() {
-        $this->_views[] = new Chrome_View_Register_StepThree($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_StepThree', $this->_controller);
     }
 
     public function setStepNoEmailSent() {
-       $this->_views[] = new Chrome_View_Register_StepEmailNotSent($this->_controller);
+       $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_StepEmailNotSent', $this->_controller);
     }
 
     public function alreadyRegistered() {
-        $this->_views[] = new Chrome_View_Register_AlreadyRegistered($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_AlreadyRegistered', $this->_controller);
     }
 
     public function registrationFinished() {
         $this->addTitle('Fertig');
-        $this->_views[] = new Chrome_View_Register_Registration_Finished($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_Registration_Finished', $this->_controller);
     }
 
     public function registrationFailed() {
         $this->addTitle('Fehlgeschlagen');
-        $this->_views[] = new Chrome_View_Register_Registration_Failed($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build(' Chrome_View_Register_Registration_Failed', $this->_controller);
     }
 }
 

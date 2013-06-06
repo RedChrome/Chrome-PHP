@@ -21,306 +21,320 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.04.2013 17:41:28] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.06.2013 00:03:05] --> $
  * @link       http://chrome-php.de
  */
 
 /**
  * @package CHROME-PHP
- * @subpackage Chrome.FrontController
+ * @subpackage Chrome.Application
  */
 class Chrome_Application_Default implements Chrome_Application_Interface
 {
-    /**
-     * @var Chrome_Application_Context_Interface
-     */
-    protected $_applicationContext = null;
+	/**
+	 * @var Chrome_Context_Application_Interface
+	 */
+	protected $_applicationContext = null;
 
-    /**
-     * @var Chrome_Filter_Chain_Preprocessor
-     */
-    private $_preprocessor = null;
+	/**
+	 * @var Chrome_Filter_Chain_Preprocessor
+	 */
+	private $_preprocessor = null;
 
-    /**
-     * @var Chrome_Filter_Chain_Postprocessor
-     */
-    private $_postprocessor = null;
+	/**
+	 * @var Chrome_Filter_Chain_Postprocessor
+	 */
+	private $_postprocessor = null;
 
-    /**
-     * @var Chrome_Controller_Abstract
-     */
-    private $_controller = null;
+	/**
+	 * @var Chrome_Controller_Abstract
+	 */
+	private $_controller = null;
 
-    /**
-     * @var Chrome_Router_Interface
-     */
-    private $_router = null;
+	/**
+	 * @var Chrome_Router_Interface
+	 */
+	private $_router = null;
 
-    /**
-     * @var Chrome_Exception_Handler_Interface
-     */
-    private $_exceptionHandler = null;
+	/**
+	 * @var Chrome_Exception_Handler_Interface
+	 */
+	private $_exceptionHandler = null;
 
-    /**
-     * @var Chrome_Exception_Configuration_Interface
-     */
-    private $_exceptionConfiguration = null;
+	/**
+	 * @var Chrome_Exception_Configuration_Interface
+	 */
+	private $_exceptionConfiguration = null;
 
-    /**
-     * Chrome_Front_Controller::getController()
-     *
-     * @return Chrome_Controller_Abstract
-     */
-    public function getController()
-    {
-        return $this->_controller;
-    }
+	/**
+	 * Chrome_Front_Controller::getController()
+	 *
+	 * @return Chrome_Controller_Abstract
+	 */
+	public function getController()
+	{
+		return $this->_controller;
+	}
 
-    /**
-     *
-     * @return Chrome_Front_Controller
-     */
-    public function __construct(Chrome_Exception_Handler_Interface $exceptionHandler = null)
-    {
-        if($exceptionHandler === null) {
-            require_once LIB.'exception/frontcontroller.php';
-            $exceptionHandler = new Chrome_Exception_Handler_FrontController();
-        }
+	/**
+	 *
+	 * @return Chrome_Front_Controller
+	 */
+	public function __construct(Chrome_Exception_Handler_Interface $exceptionHandler = null)
+	{
+		if($exceptionHandler === null) {
+			require_once LIB.'exception/frontcontroller.php';
+			$exceptionHandler = new Chrome_Exception_Handler_FrontController();
+		}
 
-        $this->_exceptionHandler = $exceptionHandler;
-    }
+		$this->_exceptionHandler = $exceptionHandler;
+	}
 
-    /**
-     * @return void
-     */
-    public function init()
-    {
-       try {
-            $this->_init();
-        } catch (Chrome_Exception $e) {
-            $this->_exceptionHandler->exception($e);
-        }
-    }
+	/**
+	 * @return void
+	 */
+	public function init()
+	{
+		try {
+			$this->_init();
+		} catch (Chrome_Exception $e) {
+			$this->_exceptionHandler->exception($e);
+		}
+	}
 
-    /**
-     * Set up all needed classes and dependencies
-     *
-     * @return void
-     */
-    protected function _init()
-    {
-        $this->_exceptionConfiguration = new Chrome_Exception_Configuration();
-        $this->_exceptionConfiguration->setExceptionHandler($this->_exceptionHandler);
-        $this->_exceptionConfiguration->setErrorHandler(new Chrome_Exception_Error_Handler_Default());
+	/**
+	 * Set up all needed classes and dependencies
+	 *
+	 * @return void
+	 */
+	protected function _init()
+	{
+		$this->_exceptionConfiguration = new Chrome_Exception_Configuration();
+		$this->_exceptionConfiguration->setExceptionHandler($this->_exceptionHandler);
+		$this->_exceptionConfiguration->setErrorHandler(new Chrome_Exception_Error_Handler_Default());
 
-        $this->_applicationContext = new Chrome_Application_Context();
+        $viewContext               = new Chrome_Context_View();
+        $modelContext              = new Chrome_Context_Model();
+		$this->_applicationContext = new Chrome_Context_Application();
 
-        // logging
+        $this->_applicationContext->setViewContext($viewContext);
+        $this->_applicationContext->setModelContext($modelContext);
+
+        $viewFactory = new Chrome_View_Factory($viewContext);
+        $viewContext->setFactory($viewFactory);
+
+		// logging
+		{
+			// only log sth. if we're in developer mode
+			if(CHROME_DEVELOPER_STATUS === true) {
+				Chrome_Log::setLogger(new Chrome_Logger_File(TMP.CHROME_LOG_DIR.CHROME_LOG_FILE));
+				$this->_exceptionHandler = new Chrome_Exception_Handler_Default();
+			} else {
+				Chrome_Log::setLogger(new Chrome_Logger_Null());
+			}
+
+			require_once PLUGIN.'Log/database.php';
+		}
+
+		// autoloader
+		$autoloader = new Chrome_Require_Autoloader();
         {
-            // only log sth. if we're in developer mode
-            if(CHROME_DEVELOPER_STATUS === true) {
-                Chrome_Log::setLogger(new Chrome_Logger_File(TMP . CHROME_LOG_DIR . CHROME_LOG_FILE));
-                $this->_exceptionHandler = new Chrome_Exception_Handler_Default();
-            } else {
-                Chrome_Log::setLogger(new Chrome_Logger_Null());
-            }
+			$autoloader->setExceptionHandler(new Chrome_Exception_Handler_Default());
 
-            require_once PLUGIN.'Log/database.php';
-        }
+			require_once PLUGIN.'Require/database.php';
+			require_once PLUGIN.'Require/cache.php';
 
-        // autoloader
-        $autoloader = new Chrome_Require_Autoloader();
+			$autoloader->appendAutoloader(new Chrome_Require_Loader_Database());
+			$autoloader->appendAutoloader(new Chrome_Require_Loader_Cache());
+		}
+
+		// database
+		{
+			$datbaseInitializer = new Chrome_Database_Initializer();
+			$datbaseInitializer->initialize();
+
+			$factory = $datbaseInitializer->getFactory();
+			$factory->setLogger(new Chrome_Logger_Database());
+
+			$modelContext->setDatabaseFactory($factory);
+		}
+
+		require_once LIB.'core/require/model.php';
+		// init require-class, can be skipped if every class is defined
+		// but if not, then we get nasty error, that cannot get handled easily
+		$autoloader->prependAutoloader(new Chrome_Require_Loader_Model(new Chrome_Model_Require_Cache(new Chrome_Model_Require_DB($modelContext))));
+
+        // todo: fix the configuation problem: config should be accessible from everywhere...
+        // configuration
         {
-            $autoloader->setExceptionHandler(new Chrome_Exception_Handler_Default());
-
-            require_once PLUGIN.'Require/database.php';
-            require_once PLUGIN.'Require/cache.php';
-
-            $autoloader->appendAutoloader(new Chrome_Require_Loader_Database());
-            $autoloader->appendAutoloader(new Chrome_Require_Loader_Cache());
+            $config = Chrome_Config::getInstance();
+            $config->setModel(new Chrome_Model_Config_Cache(new Chrome_Model_Config_DB($modelContext)));
+            $this->_applicationContext->setConfig($config);
         }
 
-        // database
-        {
-            $datbaseInitializer = new Chrome_Database_Initializer();
-            $datbaseInitializer->initialize();
-
-            $factory = $datbaseInitializer->getFactory();
-            $factory->setLogger(new Chrome_Logger_Database());
-
-            $this->_applicationContext->setDatabaseFactory($factory);
-        }
-
-        require_once LIB.'core/require/model.php';
-        // init require-class, can be skipped if every class is defined
-        // but if not, then we get nasty error, that cannot get handled easily
-        $autoloader->prependAutoloader(new Chrome_Require_Loader_Model(new Chrome_Model_Require_Cache(new Chrome_Model_Require_DB($this->_applicationContext))));
-
-
-        $config  = Chrome_Config::getInstance();
-        $config->setModel(new Chrome_Model_Config_Cache(new Chrome_Model_Config_DB($this->_applicationContext)));
 
         // distinct which request is sent
-        $requestFactory = new Chrome_Request_Factory();
-        // set up the available request handler
-        {
-            // watch out for the right order you add those handlers,
-            // the more stricter handlers are the first, which get added, the less stricter are the last
-            // the last one should _always_ return true in canHandleRequest
-            //$request->addRequestObject();
-            // this handler is always capable of handling a request, so it always returns true in canHandleRequest
-            $requestFactory->addRequestObject(new Chrome_Request_Handler_HTTP());
-            $requestFactory->addRequestObject(new Chrome_Request_Handler_Console());
-        }
+		$requestFactory = new Chrome_Request_Factory();
+		// set up the available request handler
+		{
+			// watch out for the right order you add those handlers,
+			// the more stricter handlers are the first, which get added, the less stricter are the last
+			// the last one should _always_ return true in canHandleRequest
+			//$request->addRequestObject();
+			// this handler is always capable of handling a request, so it always returns true in canHandleRequest
+			$requestFactory->addRequestObject(new Chrome_Request_Handler_HTTP());
+			$requestFactory->addRequestObject(new Chrome_Request_Handler_Console());
+		}
 
-        $reqHandler = $requestFactory->getRequest();
-        $requestData = $requestFactory->getRequestDataObject();
+		$reqHandler = $requestFactory->getRequest();
+		$requestData = $requestFactory->getRequestDataObject();
 
-        $this->_applicationContext->setRequestHandler($reqHandler);
-        $session = $requestData->getSession();
-        $cookie  = $requestData->getCookie();
+		$this->_applicationContext->setRequestHandler($reqHandler);
+		$session = $requestData->getSession();
+		$cookie = $requestData->getCookie();
 
-        // distinct which response gets send
-        $responseFactory = new Chrome_Response_Factory();
-        // set up the available response handlers
-        {
-            $responseFactory->addResponseHandler(new Chrome_Response_Handler_JSON($reqHandler));
-            $responseFactory->addResponseHandler(new Chrome_Response_Handler_HTTP($reqHandler));
-            $responseFactory->addResponseHandler(new Chrome_Response_Handler_Console($reqHandler));
-        }
+		// distinct which response gets send
+		$responseFactory = new Chrome_Response_Factory();
+		// set up the available response handlers
+		{
+			$responseFactory->addResponseHandler(new Chrome_Response_Handler_JSON($reqHandler));
+			$responseFactory->addResponseHandler(new Chrome_Response_Handler_HTTP($reqHandler));
+			$responseFactory->addResponseHandler(new Chrome_Response_Handler_Console($reqHandler));
+		}
 
-        $response = $responseFactory->getResponse();
-        $this->_applicationContext->setResponse($response);
+		$response = $responseFactory->getResponse();
+		$this->_applicationContext->setResponse($response);
 
-        // startup filters
-        $this->_preprocessor = new Chrome_Filter_Chain_Preprocessor();
-        $this->_postprocessor = new Chrome_Filter_Chain_Postprocessor();
+		// startup filters
+		$this->_preprocessor = new Chrome_Filter_Chain_Preprocessor();
+		$this->_postprocessor = new Chrome_Filter_Chain_Postprocessor();
 
-        // setting up authentication, authorisation service
-        {
-            $handler = new Chrome_Exception_Handler_Authentication();
+		// setting up authentication, authorisation service
+		{
+			$handler = new Chrome_Exception_Handler_Authentication();
 
-            $authentication = new Chrome_Authentication();
-            $authentication->setExceptionHandler($handler);
+			$authentication = new Chrome_Authentication();
+			$authentication->setExceptionHandler($handler);
 
-            $dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($this->_applicationContext));
-            $cookieAuth = new Chrome_Authentication_Chain_Cookie(new Chrome_Model_Authentication_Cookie($this->_applicationContext), $cookie);
-            $sessionAuth = new Chrome_Authentication_Chain_Session($session);
+			$dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($modelContext));
+			$cookieAuth = new Chrome_Authentication_Chain_Cookie(new Chrome_Model_Authentication_Cookie($modelContext), $cookie);
+			$sessionAuth = new Chrome_Authentication_Chain_Session($session);
 
-            // set authentication chains in the right order
-            // the first chain should be session, because its the fastest one
-            // the last should be the slowest, thats the db
-            $authentication->addChain($cookieAuth)->addChain($sessionAuth)->addChain($dbAuth);
+			// set authentication chains in the right order
+			// the first chain should be session, because its the fastest one
+			// the last should be the slowest, thats the db
+			$authentication->addChain($cookieAuth)->addChain($sessionAuth)->addChain($dbAuth);
 
-            // set authorisation service
-            //Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB())); // better one, but not finished ;)
-            $adapter = new Chrome_Authorisation_Adapter_Default($authentication);
-            $adapter->setModel(new Chrome_Model_Authorisation_Default_DB($this->_applicationContext));
+			// set authorisation service
+			//Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB())); // better one, but not finished ;)
+			$adapter = new Chrome_Authorisation_Adapter_Default($authentication);
+			$adapter->setModel(new Chrome_Model_Authorisation_Default_DB($modelContext));
 
-            $authorisation = new Chrome_Authorisation($adapter);
+			$authorisation = new Chrome_Authorisation($adapter);
 
-            // first authentication
-            // user gets authenticated if session or cookie is set
-            // for db authentication use:
-            //
-            //$authentication->authenticate(new Chrome_Authentication_Resource_Database($userName, $password, $autoLogin));
-            //
-            //$authentication->authenticate(new Chrome_Authentication_Resource_Database('RedChrome', 'tiger', true));
-            $authentication->authenticate();
-        }
+			// first authentication
+			// user gets authenticated if session or cookie is set
+			// for db authentication use:
+			//
+			//$authentication->authenticate(new Chrome_Authentication_Resource_Database($userName, $password, $autoLogin));
+			//
+			//$authentication->authenticate(new Chrome_Authentication_Resource_Database('RedChrome', 'tiger', true));
+			$authentication->authenticate();
+		}
 
-        $this->_applicationContext->setAuthentication($authentication);
-        $this->_applicationContext->setAuthorisation($authorisation);
+		$this->_applicationContext->setAuthentication($authentication);
+		$this->_applicationContext->setAuthorisation($authorisation);
 
-        $this->_router = new Chrome_Router();
-        $this->_router->setExceptionHandler(new Chrome_Exception_Handler_Default());
-        // enable route matching
-        {
-            //import(array('Chrome_Route_Static', 'Chrome_Route_Dynamic') );
-            // matches static routes
-            $this->_router->addRoute(new Chrome_Route_Static(new Chrome_Model_Route_Static_Cache(new Chrome_Model_Route_Static_DB($this->_applicationContext))));
-            // matches dynamic created routes
-            $this->_router->addRoute(new Chrome_Route_Dynamic(new Chrome_Model_Route_Dynamic_Cache(new Chrome_Model_Route_Dynamic_DB($this->_applicationContext))));
-            // matches routes to administration site
-            $this->_router->addRoute(new Chrome_Route_Administration(new Chrome_Model_Route_Administration($this->_applicationContext)));
-        }
+		$this->_router = new Chrome_Router();
+		$this->_router->setExceptionHandler(new Chrome_Exception_Handler_Default());
+		// enable route matching
+		{
+			//import(array('Chrome_Route_Static', 'Chrome_Route_Dynamic') );
+			// matches static routes
+			$this->_router->addRoute(new Chrome_Route_Static(new Chrome_Model_Route_Static_Cache(new Chrome_Model_Route_Static_DB($modelContext))));
+			// matches dynamic created routes
+			$this->_router->addRoute(new Chrome_Route_Dynamic(new Chrome_Model_Route_Dynamic_Cache(new Chrome_Model_Route_Dynamic_DB($modelContext))));
+			// matches routes to administration site
+			$this->_router->addRoute(new Chrome_Route_Administration(new Chrome_Model_Route_Administration($modelContext)));
+		}
 
-        Chrome_View::setPluginObject(new Chrome_View_Plugin_Facade());
+        $pluginFacade = new Chrome_View_Plugin_Facade();
+        $viewContext->setPluginFacade($pluginFacade);
 
-        /**
-         * @todo remove them from here
-         */
-        new Chrome_View_Plugin_HTML();
-        new Chrome_View_Plugin_Decorator();
-    }
+		/**
+		 * @todo remove them from here
+		 */
+		$pluginFacade->registerPlugin(new Chrome_View_Plugin_HTML($this->_applicationContext));
+		$pluginFacade->registerPlugin(new Chrome_View_Plugin_Decorator($this->_applicationContext));
+	}
 
-    /**
-     * Executes the controller
-     *
-     * @return void
-     */
-    public function execute()
-    {
-        try {
-            // get the accessed resource by Router
-            $resource = $this->_router->route(new Chrome_URI($this->_applicationContext->getRequestHandler()->getRequestData(), true), $this->_applicationContext->getRequestHandler()->getRequestData());
+	/**
+	 * Executes the controller
+	 *
+	 * @return void
+	 */
+	public function execute()
+	{
+		try {
+			// get the accessed resource by Router
+			$resource = $this->_router->route(new Chrome_URI($this->_applicationContext->getRequestHandler()->getRequestData(), true), $this->_applicationContext->getRequestHandler()->getRequestData());
 
-            // create controller class and set exception handler
-            $controllerFactory = new Chrome_Controller_Factory($this->_applicationContext);
-            $controllerFactory->loadControllerClass($resource->getFile());
-            $this->_controller = $controllerFactory->build($resource->getClass());
-            $this->_controller->setExceptionHandler(new Chrome_Exception_Handler_Default());
+			// create controller class and set exception handler
+			$controllerFactory = new Chrome_Controller_Factory($this->_applicationContext);
+			$controllerFactory->loadControllerClass($resource->getFile());
+			$this->_controller = $controllerFactory->build($resource->getClass());
+			$this->_controller->setExceptionHandler(new Chrome_Exception_Handler_Default());
 
-            $this->_preprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
+			$this->_preprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
 
-            $this->_controller->execute();
+			$this->_controller->execute();
             {
-                $design = new Chrome_Design($this->_applicationContext, $this->_controller);
+				$design       = new Chrome_Design($this->_applicationContext, $this->_controller);
+				$themeFactory = new Chrome_Design_Factory_Theme($this->_applicationContext);
+				$theme        = $themeFactory->build();
 
+				$theme->initDesign($design);
 
-                $themeFactory = new Chrome_Design_Factory_Theme($this->_applicationContext);
-                $theme = $themeFactory->build();
+				$design->render();
+			}
 
-                $theme->initDesign($design);
+			$this->_postprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
 
-                $design->render();
-            }
+			$this->_applicationContext->getResponse()->flush();
 
-            $this->_postprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
+		} catch (Chrome_Exception $e) {
+			$this->_exceptionHandler->exception($e);
+		}
+	}
 
-            $this->_applicationContext->getResponse()->flush();
+	/**
+	 * setExceptionHandler()
+	 *
+	 * @param mixed $obj
+	 * @return void
+	 */
+	public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)
+	{
+		$this->_exceptionHandler = $obj;
+	}
 
-        } catch (Chrome_Exception $e) {
-            $this->_exceptionHandler->exception($e);
-        }
-    }
+	/**
+	 * getExceptionHandler()
+	 *
+	 * @return Chrome_Exception_Handler_Interface
+	 */
+	public function getExceptionHandler()
+	{
+		return $this->_exceptionHandler;
+	}
 
-    /**
-     * setExceptionHandler()
-     *
-     * @param mixed $obj
-     * @return void
-     */
-    public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)
-    {
-        $this->_exceptionHandler = $obj;
-    }
+	public function getApplicationContext()
+	{
+		return $this->_applicationContext;
+	}
 
-    /**
-     * getExceptionHandler()
-     *
-     * @return Chrome_Exception_Handler_Interface
-     */
-    public function getExceptionHandler()
-    {
-        return $this->_exceptionHandler;
-    }
-
-    public function getApplicationContext() {
-        return $this->_applicationContext;
-    }
-
-    public function getExceptionConfiguration() {
-        return $this->_exceptionConfiguration;
-    }
+	public function getExceptionConfiguration()
+	{
+		return $this->_exceptionConfiguration;
+	}
 }

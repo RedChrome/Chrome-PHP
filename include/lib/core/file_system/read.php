@@ -17,7 +17,7 @@
  * @subpackage Chrome.File_System
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.04.2013 21:39:32] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.05.2013 20:37:24] --> $
  * @author     Alexander Book
  */
 
@@ -257,7 +257,14 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
         try {
             $content = file_get_contents(TMP.self::FILE_SYSTEM_READ_CACHE);
 
-            return unserialize($content);
+            $unserialized = unserialize($content);
+
+            if(!is_array($unserialized)) {
+                return array();
+            }
+
+            return $unserialized;
+
         } catch(Chrome_Exception $e) {
             return array();
         }

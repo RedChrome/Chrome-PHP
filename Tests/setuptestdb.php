@@ -13,14 +13,16 @@ require_once PLUGIN.'Log/database.php';
 
 function applySQLQueries($query) {
 
-    global $databaseContext;
+    echo 'executing queries...'."\n";
+
+    global $modelContext;
 
     if($query == false) {
         die('Query string is empty');
     }
 
     $queries = explode(";\r\n", $query); // use \n on windows systems
-    $db = $databaseContext->getDatabaseFactory()->buildInterface('simple', 'assoc');
+    $db = $modelContext->getDatabaseFactory()->buildInterface('simple', 'assoc');
 
     foreach($queries as $_query) {
 
@@ -31,8 +33,10 @@ function applySQLQueries($query) {
 
        $db->query($_query);
        $db->clear();
+       echo '.';
 
     }
+    echo "\n\n";
 }
 
 applySQLQueries(file_get_contents('Tests/sql/product.sql'));

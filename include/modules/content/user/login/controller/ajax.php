@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 18:36:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.06.2013 13:48:28] --> $
  * @author     Alexander Book
  */
 
@@ -44,7 +44,7 @@ class Chrome_Controller_Content_Login_AJAX extends Chrome_Controller_Module_Abst
         // after the user has sent this form, it is not immediately deleted
         // so the user may send another login?
 
-        $this->_view = new Chrome_View_User_Login_Ajax($this);
+        $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_User_Login_Ajax', $this);
 
         $this->_model = new Chrome_Model_Login($this->_applicationContext, $this->_form);
 

@@ -12,11 +12,10 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
 
     protected $_session;
 
-
     protected function _initialize()
     {
         //TODO: move those out of class
-        $this->_view = new Chrome_View_Register($this);
+        $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Register', $this);
         $this->_model = new Chrome_Model_Register($this->_applicationContext);
     }
 

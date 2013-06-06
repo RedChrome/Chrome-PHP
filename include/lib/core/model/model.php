@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:00:39] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.06.2013 15:09:44] --> $
  * @author     Alexander Book
  */
 
@@ -25,7 +25,7 @@ if(CHROME_PHP !== true) die();
 
 interface Chrome_Model_Interface
 {
-    public function setApplicationContext(Chrome_Application_Context_Interface $appContext);
+    public function setModelContext(Chrome_Context_Model_Interface $modelContext);
 }
 
 /**
@@ -35,12 +35,13 @@ interface Chrome_Model_Interface
 abstract class Chrome_Model_Abstract implements Chrome_Model_Interface
 {
     /**
-     * @var Chrome_Application_Context
+     * @var Chrome_Context_Model_Interface
      */
-    protected $_applicationContext = null;
+    protected $_modelContext = null;
 
-    public function setApplicationContext(Chrome_Application_Context_Interface $appContext) {
-        $this->_applicationContext = $appContext;
+    public function setModelContext(Chrome_Context_Model_Interface $modelContext)
+    {
+        $this->_modelContext = $modelContext;
     }
 }
 

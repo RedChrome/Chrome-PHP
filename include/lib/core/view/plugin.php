@@ -17,7 +17,7 @@
  * @subpackage Chrome.View
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.03.2013 19:32:37] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.06.2013 15:59:23] --> $
  * @author     Alexander Book
  */
 
@@ -59,29 +59,16 @@ interface Chrome_View_Plugin_Interface
  */
 abstract class Chrome_View_Plugin_Abstract implements Chrome_View_Plugin_Interface
 {
+    protected $_applicationContext = null;
+
     /**
      * Chrome_View_Helper_Abstract::__construct()
      *
-     * Registers a new helper
-     *
      * @return Chrome_View_Helper_Abstract
      */
-    public function __construct()
+    public function __construct(Chrome_Context_Application_Interface $appContext)
     {
-        $this->registerHelper();
-    }
-
-    /**
-     * Chrome_View_Helper_Abstract::registerHelper()
-     *
-     * registers a helper
-     *
-     * @return void
-     */
-    protected function registerHelper()
-    {
-        // register the helper
-        Chrome_View::getPluginObject()->registerPlugin($this);
+        $this->_applicationContext = $appContext;
     }
 }
 

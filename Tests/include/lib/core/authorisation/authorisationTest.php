@@ -13,7 +13,7 @@ class AuthorisationTest extends Chrome_TestCase
 
     public function setUp() {
 
-        $model = new Chrome_Model_Authorisation_Default_DB($this->_appContext);
+        $model = new Chrome_Model_Authorisation_Default_DB($this->_appContext->getModelContext());
 
         $this->_authAdapter = new Chrome_Authorisation_Adapter_Default(new Chrome_Authentication_Dummy());
 

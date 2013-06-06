@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.03.2013 23:27:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.06.2013 14:30:05] --> $
  * @author     Alexander Book
  */
 
@@ -45,9 +45,9 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
 
 	protected $_dbInterfaceInstance = null;
 
-    public function __construct(Chrome_Application_Context_Interface $appContext)
+    public function __construct(Chrome_Context_Model_Interface $modelContext)
     {
-        $this->setApplicationContext($appContext);
+        $this->setModelContext($modelContext);
     }
 
 	protected function _connect()
@@ -55,9 +55,9 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
         $this->_setDatabaseOptions();
 
 		if($this->_dbComposition !== null) {
-			$this->_dbInterfaceInstance = $this->_applicationContext->getDatabaseFactory()->buildInterfaceViaComposition($this->_dbComposition, $this->_dbDIComposition);
+			$this->_dbInterfaceInstance = $this->_modelContext->getDatabaseFactory()->buildInterfaceViaComposition($this->_dbComposition, $this->_dbDIComposition);
 		} else {
-			$this->_dbInterfaceInstance = $this->_applicationContext->getDatabaseFactory()->buildInterface($this->_dbInterface, $this->_dbResult, $this->_dbConnection, $this->_dbAdapter);
+			$this->_dbInterfaceInstance = $this->_modelContext->getDatabaseFactory()->buildInterface($this->_dbInterface, $this->_dbResult, $this->_dbConnection, $this->_dbAdapter);
 		}
 	}
 

@@ -17,143 +17,211 @@
  * @subpackage Chrome.Converter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [26.03.2013 18:52:36] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.06.2013 23:48:22] --> $
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true) die();
-
-/**
- *
- */
-require_once 'value.php';
+if(CHROME_PHP !== true)
+    die();
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Converter
  */
-class Chrome_Converter
+interface Chrome_Converter_List_Interface extends Iterator
 {
-    private static $_instance = null;
+    public function setConversion(array $filters, array $params = null);
 
-    protected $_tmpVar = null;
+    public function addConversion($filter, array $params = null);
 
-    protected $_filters = array();
+    public function getAllConversions();
 
-    protected $_converters = array();
-
-    private function __construct()
-    {
-
-    }
-
-    public static function getInstance()
-    {
-
-        if(self::$_instance === null) {
-            self::$_instance = new self();
-        }
-
-        return self::$_instance;
-    }
-
-    public function convert(Chrome_Converter_Value_Interface $filterList, $var)
-    {
-        $this->_tmpVar = $var;
-        foreach($filterList as $key => $filter) {
-            $this->_convert($this->_getConverterID($filter), $filter, $filterList->getParam($key));
-        }
-
-        return $this->_tmpVar;
-    }
-
-    protected function _convert($converterID, $filterName, $params)
-    {
-
-        $this->_converters[$converterID]->convert($this->_tmpVar, $filterName, $params);
-    }
-
-    protected function _getConverterID($filter)
-    {
-
-        if(!$this->_hasFilter($filter)) {
-            throw new Chrome_Exception('Cannot apply filter "' . $filter . '"! Filter does not exist OR is not added to Chrome_Converter!');
-        }
-
-        return $this->_filters[$filter];
-    }
-
-    protected function _hasConverter($converter)
-    {
-        return (isset($this->_converters[$converter]));
-    }
-
-    protected function _hasFilter($filter)
-    {
-        return (isset($this->_filters[$filter]));
-    }
-
-    public function addConverter(Chrome_Converter_Interface $converter)
-    {
-
-        $filters = $converter->getFilters();
-
-        $this->_converters[] = $converter;
-        $id = (count($this->_converters) - 1);
-
-        foreach($filters as $filter) {
-            $this->_filters[$filter] = $id;
-        }
-    }
+    public function getParam($key);
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Converter
  */
-interface Chrome_Converter_Interface
+class Chrome_Converter_List implements Chrome_Converter_List_Interface
 {
-    public function convert(&$var, $filterName, $params = array());
+    protected $_array = array();
 
-    public function getFilters();
-}
+    protected $_params = array();
 
-/**
- * Chrome_Converter_Abstract
- *
- * Abstract class for Chrome_Converter_$Extension
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Converter
- */
-abstract class Chrome_Converter_Abstract implements Chrome_Converter_Interface
-{
-    protected $_filters = array();
-
-    protected $_methods = array();
+    protected $_position = 0;
 
     public function __construct()
     {
-        Chrome_Converter::getInstance()->addConverter($this);
+        $this->_array = array();
     }
 
-    public function getFilters()
+    public function current()
     {
-        return $this->_filters;
+        return $this->_array[$this->_position];
     }
 
-    public function convert(&$var, $filterName, $params = array())
+    public function key()
     {
-        if(!isset($this->_methods[$filterName])) {
-            throw new Chrome_Exception('Cannot apply filter "' . $filterName . '"! There is no association to the filter($this->_methods) in Chrome_Converter_Abstract::convert()!');
+        return $this->_position;
+    }
+
+    public function next()
+    {
+        ++$this->_position;
+    }
+
+    public function rewind()
+    {
+        $this->_position = 0;
+    }
+
+    public function valid()
+    {
+        return (isset($this->_array[$this->_position]));
+    }
+
+    public function setConversion(array $filters, array $params = null)
+    {
+        $this->_array = array_values($filters);
+        $this->_params = (is_array($params)) ? $params : array();
+    }
+
+    public function addConversion($filter, array $params = null)
+    {
+        $id = count($this->_array);
+        $this->_array[] = $filter;
+        $this->_params[$id] = $params;
+
+        return $this;
+    }
+
+    public function getAllConversions()
+    {
+        return $this->_array;
+    }
+
+    public function getParam($key)
+    {
+        return $this->_params[$key];
+    }
+}
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Converter
+ */
+interface Chrome_Converter_Delegator_Interface
+{
+    public function convert(Chrome_Converter_List_Interface $converterList, $toBeConverted);
+
+    public function addConverterDelegate(Chrome_Converter_Delegate_Interface $delegate);
+}
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Converter
+ */
+interface Chrome_Converter_Delegate_Interface
+{
+    public function getConversions();
+}
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Converter
+ */
+class Chrome_Converter implements Chrome_Converter_Delegator_Interface
+{
+    protected $_converters = array();
+
+    protected $_conversions = array();
+
+    public function convert(Chrome_Converter_List_Interface $converterList, $toBeConverted)
+    {
+        $converted = $toBeConverted;
+
+        foreach($converterList as $key => $conversion) {
+
+            if(!isset($this->_conversions[$conversion])) {
+                throw new Chrome_Exception('Could not convert using conversion '.$conversion);
+            }
+
+            try {
+                $converted = $this->_converters[$this->_conversions[$conversion]]->$conversion($converted, $converterList->getParam($key));
+            } catch(Chrome_Exception $e) {
+                throw new Chrome_Exception('Exception thrown converting value using conversion '.$conversion, 0, $e);
+            }
         }
 
-        $this->{$this->_methods[$filterName]}($var, $params);
+        return $converted;
+    }
+
+    public function addConverterDelegate(Chrome_Converter_Delegate_Interface $delegate)
+    {
+        $key = sizeof($this->_converters);
+        $this->_converters[$key] = $delegate;
+
+        foreach($delegate->getConversions() as $conversion) {
+            $this->_conversions[$conversion] = $key;
+        }
     }
 }
 
 /**
- * @todo add BASEDIR.'plugins/Converter/default.php' to db OR anywhere else, autoloading?
+ * @package CHROME-PHP
+ * @subpackage Chrome.Converter
  */
-require_once BASEDIR . 'plugins/Converter/default.php';
-require_once BASEDIR . 'plugins/Converter/string.php';
+abstract class Chrome_Converter_Delegate_Abstract implements Chrome_Converter_Delegate_Interface
+{
+    protected $_conversions = array();
+
+    public function __call($methodName, $parameters)
+    {
+        throw new Chrome_Exception('No suchs method');
+    }
+
+    public function getConversions()
+    {
+        return $this->_conversions;
+    }
+}
+
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Converter
+ */
+class Chrome_Converter_String extends Chrome_Converter_Delegate_Abstract
+{
+	protected $_conversions = array(
+		'strToLower',
+		'strToUpper',
+		'strUcFirst',
+		'strUcWords',
+		'strLcFirst' );
+
+	protected function strToLower( $var, $option )
+	{
+		return strtolower( $var );
+	}
+
+	protected function strToUpper( $var, $option )
+	{
+		return strtoupper( $var );
+	}
+
+	protected function strUcFirst($var, $option )
+	{
+		return ucfirst( $var );
+	}
+
+	protected function strUcWords( $var, $option )
+	{
+		return ucwords( $var );
+	}
+
+	protected function strLcFirst( $var, $option )
+	{
+		return lcfirst( $var );
+	}
+}

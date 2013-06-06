@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:51:07] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.06.2013 13:56:48] --> $
  * @author     Alexander Book
  */
 
@@ -31,23 +31,23 @@ if(CHROME_PHP !== true)
 class Chrome_View_User_Login_Default extends Chrome_View_Strategy_Abstract
 {
     public function alreadyLoggedIn() {
-        $this->_views[] = new Chrome_View_User_Default_AlreadyLoggedIn($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Default_AlreadyLoggedIn', $this->_controller);
     }
 
     public function successfullyLoggedIn() {
-        $this->_views[] = new Chrome_View_User_Default_successfullyLoggedIn($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Default_successfullyLoggedIn', $this->_controller);
     }
 
     public function formNotValid() {
-        $this->_views[] = new Chrome_View_User_Default_FormNotValid($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Default_FormNotValid', $this->_controller);
     }
 
     public function showForm() {
-        $this->_views[] = new Chrome_View_User_Default_ShowForm($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Default_ShowForm', $this->_controller);
     }
 
     public function errorWhileLoggingIn() {
-        $this->_views[] = new Chrome_View_User_Default_WrongPassword($this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build(' hrome_View_User_Default_WrongPassword', $this->_controller);
     }
 }
 

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 23:39:06] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.06.2013 16:17:43] --> $
  * @author     Alexander Book
  */
 
@@ -107,7 +107,6 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
 
     public function getUserNameByEmail($email)
     {
-
         $dbObj = Chrome_DB_Interface_Factory::factory('interface')->select('name')->from('user')->where('email = "' . $this->_escape($email) . '"')->limit(0, 1)->execute();
 
         $data = $dbObj->next();

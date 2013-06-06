@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:50:53] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.05.2013 17:24:32] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -27,7 +27,7 @@ if(CHROME_PHP !== true) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Require
  */
-class Chrome_Require_Loader_Exception implements Chrome_Require_Loader_Interface
+class Chrome_Require_Loader_Exception extends Chrome_Require_Loader_Abstract
 {
 	/**
 	 * Loads a class, if $class beginns with 'Chrome_Exception_'
@@ -47,10 +47,5 @@ class Chrome_Require_Loader_Exception implements Chrome_Require_Loader_Interface
 		}
 
 		return false;
-	}
-
-	public function init(Chrome_Require_Autoloader_Interface $autoloader)
-	{
-		// do nothing
 	}
 }

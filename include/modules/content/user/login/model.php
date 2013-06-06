@@ -6,19 +6,25 @@ class Chrome_Model_Login extends Chrome_Model_Database_Abstract
 
 	protected $_form = null;
 
-	public function __construct(Chrome_Application_Context $app, Chrome_Form_Interface $form = null)
+    protected $_apllicationContext = null;
+
+	public function __construct(Chrome_Context_Application_Interface $app, Chrome_Form_Interface $form = null)
 	{
 		$this->_dbInterface = 'simple';
 		$this->_dbResult = 'assoc';
 		$this->_form = $form;
 
-		parent::__construct($app);
+        $this->_applicationContext = $app;
+
+		parent::__construct($app->getModelContext());
 	}
 
 	public function login()
 	{
-
 		try {
+
+            //todo: dont do that,... get them as parameters, do not fetch them directly from form.
+            // the fetching should be done in controller, or anything above this!
 			$password = $this->_form->get('password');
 			$identity = $this->_form->get('identity');
 			$stayLoggedIn = $this->_form->getSentData('stay_loggedin');
@@ -52,6 +58,7 @@ class Chrome_Model_Login extends Chrome_Model_Database_Abstract
         return $auth->isUser();
 	}
 
+    // todo: this should be a separate class
 	public function getIDByIdentity($identity)
 	{
 		$db = $this->_getDBInterface();

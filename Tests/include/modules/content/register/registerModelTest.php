@@ -13,11 +13,11 @@ class RegisterModelTest extends Chrome_TestCase
     public function setUp()
     {
         $this->_model = new Chrome_Model_Register($this->_appContext);
-        $this->_db = $this->_appContext->getDatabaseFactory()->buildInterface('simple', 'assoc');
+        $this->_db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('simple', 'assoc');
 
         $auth = new Chrome_Authentication();
 
-        $dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($this->_appContext));
+        $dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($this->_appContext->getModelContext()));
         $auth->addChain($dbAuth);
 
         $this->_appContext->setAuthentication($auth);
