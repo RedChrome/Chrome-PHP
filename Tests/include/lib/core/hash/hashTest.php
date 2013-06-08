@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Tests/testsetup.php';
+;
 
 class HashTest extends PHPUnit_Framework_TestCase
 {

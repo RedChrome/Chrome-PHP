@@ -17,7 +17,7 @@
  * @subpackage Chrome.Hash
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.03.2013 16:36:46] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.06.2013 15:43:25] --> $
  * @author     Alexander Book
  */
 
@@ -25,19 +25,19 @@ if(CHROME_PHP !== true)
     die();
 
 /**
- * 
+ *
  */
 interface Chrome_Hash_Interface
 {
     /**
-     * Hashes $string appending $salt with the default hash algorithm 
-     * 
+     * Hashes $string appending $salt with the default hash algorithm
+     *
      * @param string $string string to hash
      * @param string $salt salt to append
      * @return string the hashed string with salt
      */
     public function hash($string, $salt = '');
-    
+
     /**
      * Hashes a string
      *
@@ -46,7 +46,7 @@ interface Chrome_Hash_Interface
      * @return string hashed string
      */
     public function hash_algo($string, $algorithm, $salt = '');
-    
+
     /**
      * Get random chars, only chars of the american keyboard
      *
@@ -59,7 +59,7 @@ interface Chrome_Hash_Interface
 /**
  * Warning: Do not use Tiger160! With php versions < 5.4 there was a bug computing this hash. This
  * can get fixed with tiger128 or tiger192, BUT NOT with tiger160. See:
- * 
+ *
  * Hashing empty string '':
  * Tiger using PHP >= 5.4:
  *
@@ -68,14 +68,14 @@ interface Chrome_Hash_Interface
  * 3293ac630c13f0245f92bbb1766e16167a4e58492dde73f3    192
  *
  * Tiger using PHP < 5.4:
- * 24f0130c63ac933216166e76b1bb925f                    128  
+ * 24f0130c63ac933216166e76b1bb925f                    128
  * 24f0130c63ac933216166e76b1bb925ff373de2d            160
  * 24f0130c63ac933216166e76b1bb925ff373de2d49584e7a    192
  *
  * In Tiger160(<5.4) you're loosing the information "7a4e5849". So there is no chance to fix this.
  * Tiger160 cuts the wrong information.
- * 
- * @todo refactor this class... looks ugly 
+ *
+ * @todo refactor this class... looks ugly
  * @package CHROME-PHP
  * @subpackage Chrome.Hash
  */
@@ -140,7 +140,7 @@ class Chrome_Hash implements Chrome_Hash_Interface
         }
 
     }
-    
+
     /**
      * Hashes a string
      *
@@ -151,7 +151,7 @@ class Chrome_Hash implements Chrome_Hash_Interface
     public function hash_algo($string, $algorithm, $salt = '')
     {
         $hash = $this->_hash_algo($string, $algorithm, $salt);
-        
+
         // phpversions <= 5.4.0 have flipped the tiger hash. now we correct the bug...
         if(version_compare(PHP_VERSION, '5.4.0') == -1 AND stripos($algorithm, 'tiger') !== false) {
             if(strlen($hash) === 40) {
@@ -161,8 +161,8 @@ class Chrome_Hash implements Chrome_Hash_Interface
         }
         return $hash;
     }
-    
-    
+
+
     protected function _hash_algo($string, $algorithm, $salt = '')
     {
         if($this->_hashFunction === 'hash') {
@@ -182,11 +182,12 @@ class Chrome_Hash implements Chrome_Hash_Interface
             return $this->_defaultHash($salt.$string);
         }
     }
-    
+
     protected function _correctOldTigerHash($wrongHash) {
-        return implode('', array_map('bin2hex', array_map('strrev', array_map('hex2bin',str_split($wrongHash,16)))));
+        return $wrongHash;
+        #return implode('', array_map('bin2hex', array_map('strrev', array_map('hex2bin',str_split($wrongHash,16)))));
     }
-    
+
     /**
      * Hashes a string with the default algorithm (default: md5)
      */

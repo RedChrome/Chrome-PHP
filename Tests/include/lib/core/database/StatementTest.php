@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Tests/testsetupdb.php';
+;
 
 require_once LIB.'core/database/database.php';
 

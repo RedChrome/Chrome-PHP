@@ -1,28 +1,21 @@
 <?php
-
 error_reporting(E_ALL);
-// setting up, unimportant, just to get no notices from php
-$_SERVER['REQUEST_URI'] = '/root/CHROME_2/';
-$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
-$_SERVER['HTTP_USER_AGENT'] = 'Mozilla Firefox 5.0';
-$_SERVER['SCRIPT_NAME'] = 'index.php';
-$_SERVER['SERVER_NAME'] = "localhost";
 
-require_once 'testsetupdb.php';
-require_once PLUGIN.'Log/database.php';
+require_once 'phpUnit/testsetup.php';
 
-function applySQLQueries($query) {
+$testsetup = new Chrome_TestSetup();
+$testsetup->testDb();
+
+function applySQLQueries($query, Chrome_Database_Factory_Abstract $databaseFactory) {
 
     echo 'executing queries...'."\n";
-
-    global $modelContext;
 
     if($query == false) {
         die('Query string is empty');
     }
 
     $queries = explode(";\r\n", $query); // use \n on windows systems
-    $db = $modelContext->getDatabaseFactory()->buildInterface('simple', 'assoc');
+    $db = $databaseFactory->buildInterface('simple', 'assoc');
 
     foreach($queries as $_query) {
 
@@ -39,6 +32,8 @@ function applySQLQueries($query) {
     echo "\n\n";
 }
 
-applySQLQueries(file_get_contents('Tests/sql/product.sql'));
-applySQLQueries(file_get_contents('Tests/sql/deltaProductTest.sql'));
+$databaseFactory = $testsetup->getApplicationContext()->getModelContext()->getDatabaseFactory();
+
+applySQLQueries(file_get_contents('Tests/sql/product.sql'), $databaseFactory);
+applySQLQueries(file_get_contents('Tests/sql/deltaProductTest.sql'), $databaseFactory);
 

@@ -1,8 +1,5 @@
 <?php
 
-require_once 'Tests/testsetupdb.php';
-require_once 'Tests/dummies/authentication/resource.php';
-
 class AuthenticationChainDatabaseTest extends Chrome_TestCase
 {
     protected $_chain = null;

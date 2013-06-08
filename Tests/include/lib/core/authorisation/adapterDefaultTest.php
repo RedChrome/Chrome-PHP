@@ -1,9 +1,5 @@
 <?php
 
-require_once 'Tests/testsetupdb.php';
-
-require_once 'Tests/dummies/authentication/authentication.php';
-
 class AuthorisationAdapterDefaultTest extends Chrome_TestCase
 {
     protected $_auth = null;

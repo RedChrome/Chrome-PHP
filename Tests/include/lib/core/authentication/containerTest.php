@@ -1,8 +1,5 @@
 <?php
 
-require_once 'Tests/testsetup.php';
-
-require_once LIB.'core/authentication/chain/null.php';
 
 class authenticationContainerTest extends PHPUnit_Framework_TestCase
 {

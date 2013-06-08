@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Tests/testsetup.php';
-
 require_once 'Tests/dummies/authentication/resource.php';
 
 class AuthenticationChainNullTest extends PHPUnit_Framework_TestCase

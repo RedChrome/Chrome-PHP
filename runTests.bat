@@ -1,2 +1,3 @@
 @Echo Off
-@Start phpunit Tests
+php Tests\phpUnit.php --configuration Tests\phpUnit\config.xml Tests\
+pause

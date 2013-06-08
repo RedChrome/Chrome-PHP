@@ -1,0 +1,13 @@
+<!-- Modify configCodeCoverage.xml too, if you change anything here -->
+<phpunit
+    stopOnFailure="false">
+
+    <filter>
+        <blacklist>
+            <directory suffix=".php">./</directory>
+        </blacklist>
+    </filter>
+
+
+
+</phpunit>

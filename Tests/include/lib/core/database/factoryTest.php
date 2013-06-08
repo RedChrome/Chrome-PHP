@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Tests/testsetup.php';
+;
 require_once LIB.'core/database/database.php';
 
 class DatabaseFactoryTest extends PHPUnit_Framework_TestCase

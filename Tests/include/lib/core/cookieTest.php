@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Tests/testsetup.php';
+;
 
 class CookieTest extends PHPUnit_Framework_TestCase
 {

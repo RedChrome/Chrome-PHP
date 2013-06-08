@@ -1,0 +1,15 @@
+<!-- Modify config.xml too, if you change anything here -->
+<phpunit
+    stopOnFailure="false">
+
+    <filter>
+        <blacklist>
+            <directory suffix=".php">../../Tests</directory>
+        </blacklist>
+    </filter>
+
+    <logging>
+        <!-- Put in target your own dir-->
+        <log type="coverage-html" target="../../../CHROME_2 Tools/CodeCoverage/" charset="UTF-8" yui="true" highlight="true"/>
+    </logging>
+</phpunit>

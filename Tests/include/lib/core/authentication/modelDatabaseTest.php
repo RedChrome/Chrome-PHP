@@ -1,6 +1,5 @@
 <?php
 
-require_once 'Tests/testsetupdb.php';
 require_once LIB.'core/authentication/chain/database.php';
 
 class ModelDatabaseTest extends Chrome_TestCase

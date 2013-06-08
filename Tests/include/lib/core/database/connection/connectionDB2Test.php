@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Tests/testsetup.php';
+;
 
 require_once 'Tests/include/lib/core/database/connection/connectionMysqlTest.php';
 

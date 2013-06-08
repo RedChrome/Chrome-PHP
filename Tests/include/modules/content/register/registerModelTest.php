@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Tests/testsetupmodules.php';
+;
 require_once CONTENT . 'register/model.php';
 
 class RegisterModelTest extends Chrome_TestCase

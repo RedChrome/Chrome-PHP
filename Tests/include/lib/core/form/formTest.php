@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Tests/testsetup.php';
+;
 require_once LIB.'core/language.php';
 require_once LIB.'core/form/form.php';
 

@@ -1,11 +1,5 @@
 <?php
 
-require_once 'Tests/testsetup.php';
-
-require_once 'Tests/dummies/session.php';
-require_once 'Tests/dummies/cookie.php';
-require_once 'Tests/dummies/request/data.php';
-
 class URITest extends PHPUnit_Framework_TestCase
 {
     protected $uri = null;

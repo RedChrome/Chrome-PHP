@@ -1,8 +1,5 @@
 <?php
 
-require_once 'Tests/testsetup.php';
-
-
 class CacheFactoryTest extends PHPUnit_Framework_TestCase
 {
     public function testBuildNullCache() {

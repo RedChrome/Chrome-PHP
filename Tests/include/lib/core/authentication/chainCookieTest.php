@@ -1,11 +1,5 @@
 <?php
 
-require_once 'Tests/testsetupdb.php';
-
-require_once 'Tests/dummies/authentication/resource.php';
-require_once 'Tests/dummies/cookie.php';
-
-
 class AuthenticationChainCookieTest extends Chrome_TestCase
 {
     protected $_chain = null;

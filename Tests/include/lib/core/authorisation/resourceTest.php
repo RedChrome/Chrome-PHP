@@ -1,10 +1,6 @@
 <?php
 
-require_once 'Tests/testsetupmodules.php';
-
 require_once LIB.'core/authorisation/authorisation.php';
-
-require_once 'Tests/dummies/authorisation/assert.php';
 
 class AuthorisationResourceTest extends PHPUnit_Framework_TestCase
 {

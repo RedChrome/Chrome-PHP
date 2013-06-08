@@ -1,9 +1,6 @@
 <?php
 
-require_once 'Tests/testsetupdb.php';
-
 require_once LIB.'core/authorisation/authorisation.php';
-require_once 'Tests/dummies/authentication/authentication.php';
 
 class AuthorisationTest extends Chrome_TestCase
 {
