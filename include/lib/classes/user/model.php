@@ -17,11 +17,7 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
-<<<<<<< Updated upstream
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 11:49:36] --> $
-=======
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.06.2013 16:17:43] --> $
->>>>>>> Stashed changes
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 19:04:44] --> $
  * @author     Alexander Book
  */
 

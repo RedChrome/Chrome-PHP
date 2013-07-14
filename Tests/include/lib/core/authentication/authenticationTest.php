@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Tests/testsetup.php';
-
 require_once 'Tests/dummies/authentication/resource.php';
 require_once 'Tests/dummies/authentication/chain.php';
 require_once 'Tests/dummies/cookie.php';

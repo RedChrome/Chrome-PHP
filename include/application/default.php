@@ -21,11 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
-<<<<<<< Updated upstream
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 18:04:17] --> $
-=======
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.06.2013 00:03:05] --> $
->>>>>>> Stashed changes
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 18:54:26] --> $
  * @link       http://chrome-php.de
  */
 
@@ -121,11 +117,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $viewContext               = new Chrome_Context_View();
         $modelContext              = new Chrome_Context_Model();
-<<<<<<< Updated upstream
         $this->_applicationContext = new Chrome_Context_Application();
-=======
-		$this->_applicationContext = new Chrome_Context_Application();
->>>>>>> Stashed changes
 
         $this->_applicationContext->setViewContext($viewContext);
         $this->_applicationContext->setModelContext($modelContext);
@@ -150,7 +142,6 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 		$autoloader = new Chrome_Require_Autoloader();
         {
 			$autoloader->setExceptionHandler(new Chrome_Exception_Handler_Default());
-<<<<<<< Updated upstream
 
 			require_once PLUGIN.'Require/database.php';
 			require_once PLUGIN.'Require/cache.php';
@@ -181,41 +172,6 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $this->_applicationContext->setConfig($config);
         }
 
-=======
-
-			require_once PLUGIN.'Require/database.php';
-			require_once PLUGIN.'Require/cache.php';
-
-			$autoloader->appendAutoloader(new Chrome_Require_Loader_Database());
-			$autoloader->appendAutoloader(new Chrome_Require_Loader_Cache());
-		}
-
-		// database
-		{
-			$datbaseInitializer = new Chrome_Database_Initializer();
-			$datbaseInitializer->initialize();
-
-			$factory = $datbaseInitializer->getFactory();
-			$factory->setLogger(new Chrome_Logger_Database());
-
-			$modelContext->setDatabaseFactory($factory);
-		}
-
-		require_once LIB.'core/require/model.php';
-		// init require-class, can be skipped if every class is defined
-		// but if not, then we get nasty error, that cannot get handled easily
-		$autoloader->prependAutoloader(new Chrome_Require_Loader_Model(new Chrome_Model_Require_Cache(new Chrome_Model_Require_DB($modelContext))));
-
-        // todo: fix the configuation problem: config should be accessible from everywhere...
-        // configuration
-        {
-            $config = Chrome_Config::getInstance();
-            $config->setModel(new Chrome_Model_Config_Cache(new Chrome_Model_Config_DB($modelContext)));
-            $this->_applicationContext->setConfig($config);
-        }
-
-
->>>>>>> Stashed changes
         // distinct which request is sent
 		$requestFactory = new Chrome_Request_Factory();
 		// set up the available request handler
@@ -304,16 +260,11 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $pluginFacade = new Chrome_View_Plugin_Facade();
         $viewContext->setPluginFacade($pluginFacade);
 
-<<<<<<< Updated upstream
-        /**
-=======
 		/**
->>>>>>> Stashed changes
 		 * @todo remove them from here
 		 */
 		$pluginFacade->registerPlugin(new Chrome_View_Plugin_HTML($this->_applicationContext));
 		$pluginFacade->registerPlugin(new Chrome_View_Plugin_Decorator($this->_applicationContext));
-<<<<<<< Updated upstream
 
 
         $converter = new Chrome_Converter();
@@ -327,8 +278,6 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         }
 
         $this->_applicationContext->setConverter($converter);
-=======
->>>>>>> Stashed changes
 	}
 
 	/**

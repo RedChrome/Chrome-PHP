@@ -17,11 +17,7 @@
  * @subpackage Chrome.Converter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
-<<<<<<< Updated upstream
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 16:28:19] --> $
-=======
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.06.2013 23:48:22] --> $
->>>>>>> Stashed changes
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 18:56:58] --> $
  * @author     Alexander Book
  */
 
@@ -181,11 +177,7 @@ abstract class Chrome_Converter_Delegate_Abstract implements Chrome_Converter_De
 
     public function __call($methodName, $parameters)
     {
-<<<<<<< Updated upstream
         throw new Chrome_Exception('No such method');
-=======
-        throw new Chrome_Exception('No suchs method');
->>>>>>> Stashed changes
     }
 
     public function getConversions()
@@ -199,11 +191,7 @@ abstract class Chrome_Converter_Delegate_Abstract implements Chrome_Converter_De
  * @package CHROME-PHP
  * @subpackage Chrome.Converter
  */
-<<<<<<< Updated upstream
 class Chrome_Converter_Delegate_String extends Chrome_Converter_Delegate_Abstract
-=======
-class Chrome_Converter_String extends Chrome_Converter_Delegate_Abstract
->>>>>>> Stashed changes
 {
 	protected $_conversions = array(
 		'strToLower',
@@ -212,47 +200,27 @@ class Chrome_Converter_String extends Chrome_Converter_Delegate_Abstract
 		'strUcWords',
 		'strLcFirst' );
 
-<<<<<<< Updated upstream
 	public function strToLower( $var, $option )
-=======
-	protected function strToLower( $var, $option )
->>>>>>> Stashed changes
 	{
 		return strtolower( $var );
 	}
 
-<<<<<<< Updated upstream
 	public function strToUpper( $var, $option )
-=======
-	protected function strToUpper( $var, $option )
->>>>>>> Stashed changes
 	{
 		return strtoupper( $var );
 	}
 
-<<<<<<< Updated upstream
 	public function strUcFirst($var, $option )
-=======
-	protected function strUcFirst($var, $option )
->>>>>>> Stashed changes
 	{
 		return ucfirst( $var );
 	}
 
-<<<<<<< Updated upstream
 	public function strUcWords( $var, $option )
-=======
-	protected function strUcWords( $var, $option )
->>>>>>> Stashed changes
 	{
 		return ucwords( $var );
 	}
 
-<<<<<<< Updated upstream
 	public function strLcFirst( $var, $option )
-=======
-	protected function strLcFirst( $var, $option )
->>>>>>> Stashed changes
 	{
 		return lcfirst( $var );
 	}

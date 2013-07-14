@@ -163,11 +163,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 	 */
 	protected function _addUser( $id, $email, $username )
 	{
-<<<<<<< Updated upstream
 		$model = new Chrome_Model_User_Database($this->_applicationContext->getModelContext());
-=======
-		$model = new Chrome_Model_User_Database($this->_modelContext);
->>>>>>> Stashed changes
         return $model->addUser( $id, $email, $username );
 	}
 

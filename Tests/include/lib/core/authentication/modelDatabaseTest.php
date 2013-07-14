@@ -1,9 +1,5 @@
 <?php
 
-<<<<<<< Updated upstream
-=======
-require_once 'Tests/testsetupdb.php';
->>>>>>> Stashed changes
 require_once LIB.'core/authentication/chain/database.php';
 
 class ModelDatabaseTest extends Chrome_TestCase

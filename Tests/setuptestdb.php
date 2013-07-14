@@ -3,14 +3,8 @@ error_reporting(E_ALL);
 
 require_once 'phpUnit/testsetup.php';
 
-<<<<<<< Updated upstream
 $testsetup = new Chrome_TestSetup();
 $testsetup->testDb();
-=======
-    echo 'executing queries...'."\n";
-
-    global $modelContext;
->>>>>>> Stashed changes
 
 function applySQLQueries($query, Chrome_Database_Factory_Abstract $databaseFactory)
 {
@@ -19,11 +13,7 @@ function applySQLQueries($query, Chrome_Database_Factory_Abstract $databaseFacto
     }
 
     $queries = explode(";\r\n", $query); // use \n on windows systems
-<<<<<<< Updated upstream
     $db = $databaseFactory->buildInterface('simple', 'assoc');
-=======
-    $db = $modelContext->getDatabaseFactory()->buildInterface('simple', 'assoc');
->>>>>>> Stashed changes
 
     foreach($queries as $_query) {
 
