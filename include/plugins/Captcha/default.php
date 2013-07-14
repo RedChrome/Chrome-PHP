@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 13:31:59] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:57:47] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -37,10 +37,10 @@ class Chrome_Captcha_Engine_Default implements Chrome_Captcha_Engine_Interface
 
     protected $_key = null;
 
-    public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Request_Data_Interface $reqData, array $backendOptions) {
+    public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Context_Application_Interface $appContext, array $backendOptions) {
         $backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME] = $name;
         $this->_captchaObj = $obj;
-        $this->_session = $reqData->getSession();
+        $this->_session = $appContext->getRequestHandler()->getRequestData()->getSession();
         $this->_backendOptions = array_merge($this->_backendOptions, $backendOptions);
     }
 

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 15:41:57] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 13:05:39] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -42,15 +42,16 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
                                         self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS => array(),
                                         self::CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS => array());
 
-    public function isCreated() {
+    public function isCreated()
+    {
         return true;
     }
 
-    protected function _isValid() {
-
+    protected function _isValid()
+    {
         $data = $this->_form->getSentData($this->_id);
 
-        $captcha = new Chrome_Captcha($this->_form->getID(), $this->_form->getRequestData(), $this->_getFrontendOptions(), $this->_getBackendOptions());
+        $captcha = new Chrome_Captcha($this->_form->getID(), $this->_form->getApplicationContext(), $this->_getFrontendOptions(), $this->_getBackendOptions());
 
         $valid = $captcha->isValid($data);
 
@@ -68,8 +69,8 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
         return $valid;
     }
 
-    protected function _isSent() {
-
+    protected function _isSent()
+    {
         if($this->_options[self::IS_REQUIRED] === true) {
             if($this->_form->getSentData($this->_id) === null) {
                 $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
@@ -80,29 +81,30 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
         return true;
     }
 
-    public function create() {
-
-        $captcha = new Chrome_Captcha($this->_form->getID(), $this->_form->getRequestData(), $this->_getFrontendOptions(), $this->_getBackendOptions());
+    public function create()
+    {
+        $captcha = new Chrome_Captcha($this->_form->getID(), $this->_form->getApplicationContext(), $this->_getFrontendOptions(), $this->_getBackendOptions());
 
         $captcha->create();
 
         return true;
     }
 
-    public function getData() {
+    public function getData()
+    {
         return $this->_form->getSentData($this->_id);
     }
 
-    public function save() {
-
+    public function save()
+    {
     }
 
-    public function getSavedData() {
-
+    public function getSavedData()
+    {
     }
 
-    protected function _getFrontendOptions() {
-
+    protected function _getFrontendOptions()
+    {
         if(isset($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS]) && is_array($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS])) {
             return $this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS];
         }
@@ -110,8 +112,8 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
         return array();
     }
 
-    protected function _getBackendOptions() {
-
+    protected function _getBackendOptions()
+    {
         if(isset($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS]) && is_array($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS])) {
             return $this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS];
         }
@@ -119,8 +121,8 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
         return array();
     }
 
-    public function getDecorator() {
-
+    public function getDecorator()
+    {
         if($this->_decorator !== null) {
             return $this->_decorator;
         }

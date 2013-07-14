@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 12:49:55] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 13:04:44] --> $
  * @link       http://chrome-php.de
  */
 
@@ -97,10 +97,10 @@ interface Chrome_Form_Interface
     /**
      * Creates a new form
      *
-     * @param Chrome_Request_Handler_Interface $reqHandler
+     * @param Chrome_Context_Application_Interface $appContext
      * @return Chrome_Form_Interface
      */
-    public function __construct(Chrome_Request_Handler_Interface $reqHandler);
+    public function __construct(Chrome_Context_Application_Interface $appContext);
 
     /**
      * isCreated()
@@ -411,6 +411,13 @@ interface Chrome_Form_Interface
      * @return Chrome_Request_Data_Interface
      */
     public function getRequestData();
+
+    /**
+     * Returns the current application context
+     *
+     * @return Chrome_Context_Application_Interface
+     */
+    public function getApplicationContext();
 }
 
 /**
@@ -522,6 +529,13 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     protected $_requestDataObject = null;
 
     /**
+     * Contains the current application context
+     *
+     * @var Chrome_Context_Application_Interface
+     */
+    protected $_applicationContext = null;
+
+    /**
      * Session instance
      *
      * @var Chrome_Session_Interface
@@ -535,8 +549,9 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * @return Chrome_Form_Abstract
      */
-    public function __construct(Chrome_Request_Handler_Interface $reqHandler) {
-        $this->_requestDataObject = $reqHandler->getRequestData();
+    public function __construct(Chrome_Context_Application_Interface $appContext) {
+        $this->_applicationContext = $appContext;
+        $this->_requestDataObject  = $appContext->getRequestHandler()->getRequestData();
         $this->_init();
     }
 
@@ -1234,5 +1249,15 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function getRequestData()
     {
         return $this->_requestDataObject;
+    }
+
+    /**
+     * Chrome_Form_Abstract::getApplicationContext
+     *
+     * @return Chrome_Context_Application_Interface
+     */
+    public function getApplicationContext()
+    {
+        return $this->_applicationContext;
     }
 }

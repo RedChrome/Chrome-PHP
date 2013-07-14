@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 16:55:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:56:59] --> $
  */
 
 if(!isset($_GET['name'])) {
@@ -55,8 +55,11 @@ if($key === null) {
     die();
 }
 
+$applicationContext = new Chrome_Application_Context();
+$applicationContext->setRequestHandler($reqHandler);
+
 if(isset($_GET['renew'])) {
-    $captcha = new Chrome_Captcha($_GET['name'],$reqHandler->getRequestData(), array(), array());
+    $captcha = new Chrome_Captcha($_GET['name'], $applicationContext, array(), array());
     $captcha->renew();
     $key = $session['CAPTCHA_'.$_GET['name']];
 

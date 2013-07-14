@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 13:57:33] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:52:28] --> $
  */
 
 if(CHROME_PHP !== true) die();
@@ -39,9 +39,12 @@ class Chrome_Captcha_Engine_Recaptcha implements Chrome_Captcha_Engine_Interface
 
     protected $_error = '';
 
-	public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Request_Data_Interface $reqData, array $backendOptions)
+    protected $_appContext = null;
+
+	public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Context_Application_Interface $appContext, array $backendOptions)
 	{
-        $this->_reqData = $reqData;
+	    $this->_appContext = $appContext;
+        $this->_reqData = $appContext->getRequestHandler()->getRequestData();
 
 		$backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME] = $name;
 		$this->_backendOptions = array_merge($this->_backendOptions, $backendOptions);
@@ -61,7 +64,8 @@ class Chrome_Captcha_Engine_Recaptcha implements Chrome_Captcha_Engine_Interface
             return false;
         }
 
-        $privatekey = Chrome_Config::getConfig('Captcha', 'private_key');
+        $config = $this->_appContext->getConfig();
+        $privatekey = $config->getConfig('Captcha', 'private_key');
         $resp = recaptcha_check_answer($privatekey,
                                 $this->_reqData->getSERVERData('REMOTE_ADDR'),
                                 $recaptcha_challenge_field, // todo: can we save this in session?

@@ -17,7 +17,11 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+<<<<<<< Updated upstream
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:59:51] --> $
+=======
  * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [31.05.2013 20:09:30] --> $
+>>>>>>> Stashed changes
  * @author     Alexander Book
  */
 
@@ -62,7 +66,7 @@ class Chrome_Controller_Box_Login extends Chrome_Controller_Module_Abstract
 
         // else create the form and display it
         } else {
-            $this->_form = Chrome_Form_Login::getInstance($this->_requestHandler);
+            $this->_form = Chrome_Form_Login::getInstance($this->_applicationContext);
 
             // form was sent
             if($this->_form->isSent()) {

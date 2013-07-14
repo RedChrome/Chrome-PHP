@@ -1,6 +1,6 @@
 Hallo <?php echo $name; ?>,<br />
 <br />
-Sie haben sich erfolgreich auf <?php echo Chrome_Config::getConfig('Site', 'name'); ?> registriert.<br />
+Sie haben sich erfolgreich auf <?php echo $config->getConfig('Site', 'name'); ?> registriert.<br />
 Um die Registrierung abzuschlieﬂen m&uuml;ssen sie folgende Seite besuchen:<br /><br />
 
 <a href="/registrierung_bestaetigen.html?activationKey=<?php echo $activationKey; ?>">Link</a><br /><br />
@@ -10,7 +10,7 @@ Falls sie nicht weitergeleitet werden, besuchen Sie die Seite manuell und geben 
 <?php echo $activationKey; ?><br /><br />
 
 Viele Gr&uuml;ﬂe,<br />
-Ihr <?php echo Chrome_Config::getConfig('Site', 'name'); ?> Team
+Ihr <?php echo $config->getConfig('Site', 'name'); ?> Team
 
 Falls Sie sich nicht registriert haben, ignorieren Sie bitte diese E-Mail!
 If you have not registered yourself to this site then please ignore this e-mail!

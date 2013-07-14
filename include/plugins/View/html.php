@@ -16,7 +16,11 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://chrome-php.de/license/new-bsd        New BSD License
+<<<<<<< Updated upstream
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.06.2013 21:28:09] --> $
+=======
  * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.06.2013 16:34:09] --> $
+>>>>>>> Stashed changes
  */
 
 if(CHROME_PHP !== true) die();
@@ -148,17 +152,17 @@ class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
 
     private function _getDefaultTitleBeginning()
     {
-        return Chrome_Config::getConfig('Site', 'Title_Beginning');
+        return $this->_applicationContext->getConfig()->getConfig('Site', 'Title_Beginning');
     }
 
     private function _getDefaultTitleEnding()
     {
-        return Chrome_Config::getConfig('Site', 'Title_Ending');
+        return $this->_applicationContext->getConfig()->getConfig('Site', 'Title_Ending');
     }
 
     private function _getDefaultTitleSeparator()
     {
-        return Chrome_Config::getConfig('Site', 'Title_Separator');
+        return $this->_applicationContext->getConfig()->getConfig('Site', 'Title_Separator');
     }
 
     public function getMethods()

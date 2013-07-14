@@ -9,6 +9,7 @@ require_once 'Tests/dummies/database/connection/dummy.php';
 
 class DatabaseAdapterMysqlTest extends Chrome_TestCase
 {
+<<<<<<< Updated upstream
 	protected $_db;
 
 	public function setUp()
@@ -31,6 +32,30 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
 	public function testIsEmptyOnEmptyResultSet()
 	{
 		$this->doSkipTestsIfNeeded();
+=======
+    protected $_db;
+
+    public function setUp()
+    {
+        try {
+            $this->_db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('simple', 'assoc', 'mysql_test');
+        }
+        catch (Chrome_Exception $e) {
+            $this->_db = null;
+        }
+    }
+
+    public function doSkipTestsIfNeeded()
+    {
+        if($this->_db === null) {
+            $this->markTestSkipped();
+        }
+    }
+
+    public function testIsEmptyOnEmptyResultSet()
+    {
+        $this->doSkipTestsIfNeeded();
+>>>>>>> Stashed changes
 
 		$this->_db->query('SELECT * FROM cpp_require WHERE true = false');
 

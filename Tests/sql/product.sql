@@ -523,6 +523,7 @@ INSERT INTO `cp1_require` (`id`, `name`, `path`, `activated`, `priority`, `class
 (NULL, 'Chrome_Require_Loader_Validator', 'plugins/Require/validator.php', 1, 4, 1),
 (NULL, 'Chrome_Require_Loader_Design', 'plugins/Require/design.php', 1, 4, 1),
 (NULL, 'Chrome_Require_Loader_Form', 'plugins/Require/form.php', 1, 4, 1),
+(NULL, 'Chrome_Require_Loader_Converter', 'plugins/Require/converter.php', 1, 4, 1),
 (NULL, 'Chrome_View_Plugin_HTML', 'plugins/View/html.php', 1, 6, 0),
 (NULL, 'Chrome_View_Plugin_Decorator', 'plugins/View/decorator.php', 1, 6, 0),
 (NULL, 'Chrome_View_Plugin_Error', 'plugins/View/error.php', 1, 6, 0),
@@ -631,7 +632,11 @@ CREATE TABLE IF NOT EXISTS `cp1_user` (
   `name` varchar(50) NOT NULL,
   `email` varchar(200) NOT NULL,
   `group` int(2) NOT NULL DEFAULT '0',
+<<<<<<< Updated upstream
   `time` int(15) NOT  NULL,
+=======
+  `time` int(15) NOT NULL,
+>>>>>>> Stashed changes
   `avatar` varchar(50) NULL,
   `address` varchar(300) NULL,
   `design` varchar(20) NOT NULL DEFAULT 'default',

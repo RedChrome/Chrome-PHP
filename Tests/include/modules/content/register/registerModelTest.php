@@ -1,6 +1,5 @@
 <?php
 
-;
 require_once CONTENT . 'register/model.php';
 
 class RegisterModelTest extends Chrome_TestCase
@@ -119,7 +118,6 @@ class RegisterModelTest extends Chrome_TestCase
         $testFinishRegistrationPass = 'testfinishRegistrationPass_' . $rand;
         $testfinishRegistrationPassSalt = 'testfinishRegistrationPass_' .$rand;
         $testfinishRegistrationEmail = 'testFinishRegistrationEmail_'.$rand;
-
 
         /**
          * setting up test place

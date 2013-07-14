@@ -16,7 +16,7 @@ class Chrome_View_Html_Head_CssIncluder extends Chrome_View
 
                 .'<script type="text/javascript">'."\n    "
                 .'  var RecaptchaOptions = {'."\n    "
-                .'      theme : \''.Chrome_Config::getConfig('Captcha', 'recaptcha_theme').'\''."\n    "
+                .'      theme : \''.$this->_viewContext->getConfig()->getConfig('Captcha', 'recaptcha_theme').'\''."\n    "
                 .'  };'."\n    "
                 .'</script>'."\n";
 

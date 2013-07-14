@@ -38,12 +38,13 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
             $template->assign('activationKey', $activationKey);
             $template->assign('email', $email);
             $template->assign('name', $name);
+            $template->assign('config', $this->_applicationContext->getConfig());
 
             $mail = new Zend_Mail();
             $mail->setBodyHtml($template->render())
-                    ->setFrom(Chrome_Config::getConfig('Registration', 'email_sender'), Chrome_Config::getConfig('Registration', 'email_sender_name'))
+                    ->setFrom($this->_applicationContext->getConfig()->getConfig('Registration', 'email_sender'), $this->_applicationContext->getConfig()->getConfig('Registration', 'email_sender_name'))
                     ->addTo($email)
-                    ->setSubject(Chrome_Config::getConfig('Registration', 'email_subject'))
+                    ->setSubject($this->_applicationContext->getConfig()->getConfig('Registration', 'email_subject'))
                     ->send();
         } catch(Exception $e) {
             return false;
@@ -162,7 +163,11 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 	 */
 	protected function _addUser( $id, $email, $username )
 	{
+<<<<<<< Updated upstream
+		$model = new Chrome_Model_User_Database($this->_applicationContext->getModelContext());
+=======
 		$model = new Chrome_Model_User_Database($this->_modelContext);
+>>>>>>> Stashed changes
         return $model->addUser( $id, $email, $username );
 	}
 
@@ -184,7 +189,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 			return false;
 		}
 
-		if( CHROME_TIME - $result['time'] > Chrome_Config::getConfig( 'Registration', 'expiration' ) ) {
+		if( CHROME_TIME - $result['time'] > $this->_applicationContext->getConfig()->getConfig( 'Registration', 'expiration' ) ) {
 
 			$this->_deleteActivationKey( $activationKey );
 			return false;

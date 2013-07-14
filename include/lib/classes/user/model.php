@@ -17,7 +17,11 @@
  * @subpackage Chrome.Model
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+<<<<<<< Updated upstream
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 11:49:36] --> $
+=======
  * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.06.2013 16:17:43] --> $
+>>>>>>> Stashed changes
  * @author     Alexander Book
  */
 
@@ -33,7 +37,7 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
     public function addUser($id, $email, $username, $group = null)
     {
         if($group === null) {
-            $group = Chrome_Config::getConfig('Registration', 'default_user_group');
+            $group = $this->_modelContext->getConfig()->getConfig('Registration', 'default_user_group');
         }
 
         try {

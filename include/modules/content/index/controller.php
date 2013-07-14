@@ -16,7 +16,7 @@ class Chrome_Controller_Index extends Chrome_Controller_Module_Abstract
 
 	protected function _execute()
 	{
-		$this->_form = new Chrome_Form_Index($this->_requestHandler);
+		$this->_form = new Chrome_Form_Index($this->_applicationContext);
 
         $obj = new Chrome_Controller_User_Login_Page($this->_applicationContext);
         $obj->execute();

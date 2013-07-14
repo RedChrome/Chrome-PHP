@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.03.2013 14:34:18] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 13:06:19] --> $
  */
 if(CHROME_PHP !== true) die();
 
@@ -34,7 +34,9 @@ class Chrome_Form_Decorator_Captcha_Recaptcha extends Chrome_Form_Decorator_Abst
 
 		// add an empty hidden input text to make the captcha element valid, cause
 
-		$publickey = Chrome_Config::getConfig('Captcha', 'public_key');
+        $config = $this->_formElement->getForm()->getApplicationContext()->getConfig();
+
+		$publickey = $config->getConfig('Captcha', 'public_key');
 
 		/*if($use_ssl) {
 		$server = RECAPTCHA_API_SECURE_SERVER;

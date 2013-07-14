@@ -17,7 +17,11 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+<<<<<<< Updated upstream
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 13:02:39] --> $
+=======
  * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [31.05.2013 19:59:32] --> $
+>>>>>>> Stashed changes
  * @author     Alexander Book
  */
 
@@ -36,7 +40,7 @@ class Chrome_Controller_User_Login_Page extends Chrome_Controller_Module_Abstrac
 
     protected function _execute() {
 
-        $this->_form = Chrome_Form_Login::getInstance($this->_requestHandler);
+        $this->_form = Chrome_Form_Login::getInstance($this->_applicationContext);
 
         // the login form, will be the first one in Content
         $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_User_Default_ShowForm', $this);

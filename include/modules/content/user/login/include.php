@@ -17,7 +17,11 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+<<<<<<< Updated upstream
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:59:30] --> $
+=======
  * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.06.2013 11:48:30] --> $
+>>>>>>> Stashed changes
  * @author     Alexander Book
  */
 
@@ -41,9 +45,9 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
      *
      * @return Chrome_Form_Login
      */
-    public static function getInstance(Chrome_Request_Handler_Interface $reqHandler) {
+    public static function getInstance(Chrome_Context_Application_Interface $appContext) {
         if(self::$_instance === null) {
-            self::$_instance = new self($reqHandler);
+            self::$_instance = new self($appContext);
         }
 
         return self::$_instance;

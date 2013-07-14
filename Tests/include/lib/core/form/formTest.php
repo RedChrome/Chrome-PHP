@@ -1,6 +1,4 @@
 <?php
-
-;
 require_once LIB.'core/language.php';
 require_once LIB.'core/form/form.php';
 
@@ -35,14 +33,13 @@ class Chrome_Request_Data_Test extends Chrome_Request_Data_Abstract
     }
 }
 
-class FormTest extends PHPUnit_Framework_TestCase
+class FormTest extends Chrome_TestCase
 {
     protected $_form;
 
-    public function setUp() {
-
-        $handler = new Chrome_Request_Handler_Dummy();
-        $this->_form = new Chrome_Form_Test_No_Elements($handler);
+    public function setUp()
+    {
+        $this->_form = new Chrome_Form_Test_No_Elements($this->_appContext);
     }
 
     public function testIfNoElementsAreAdded() {

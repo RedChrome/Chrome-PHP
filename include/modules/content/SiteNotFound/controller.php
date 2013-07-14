@@ -10,7 +10,7 @@ class Chrome_Controller_SiteNotFound extends Chrome_Controller_Module_Abstract
 
 class Chrome_View_Content_SiteNotFound extends Chrome_View
 {
-    public function __construct()
+    public function _setUp()
     {
         $this->_view = $this->_viewContext->getFactory()->build('Chrome_View_SiteNotFound');
         $lang = new Chrome_Language('modules/content/SiteNotFound.ini');

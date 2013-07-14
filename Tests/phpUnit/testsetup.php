@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.06.2013 22:59:45] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:21:14] --> $
  * @author     Alexander Book
  */
 
@@ -34,7 +34,6 @@ class Chrome_TestSetup
 
 	public function __construct()
 	{
-
         require_once 'bootstrap.php';
 
 	    require_once 'include/chrome.php';

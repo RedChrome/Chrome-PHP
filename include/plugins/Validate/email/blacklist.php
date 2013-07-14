@@ -17,7 +17,7 @@
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.10.2012 00:20:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 13:16:20] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -67,8 +67,9 @@ class Chrome_Validator_Email_Blacklist extends Chrome_Validator
 
         $host = substr($email, $posOfAt+1, $posOfDot - $posOfAt -1 );
 
+        //TODO: add blacklist support
         // if $result === false, then it was not found
-        $result = stristr($this->_getBlacklist(), $host);
+        //$result = stristr($this->_getBlacklist(), $host);
 
 
         // everthing is fine
@@ -81,10 +82,13 @@ class Chrome_Validator_Email_Blacklist extends Chrome_Validator
 
     protected function _getBlacklist() {
 
+        //TODO: use config to get blacklist
+
         if($this->_options[self::CHROME_VALIDATOR_EMAIL_BLACKLIST_BLACKLIST_HOST] !== null) {
             return $this->_options[self::CHROME_VALIDATOR_EMAIL_BLACKLIST_BLACKLIST_HOST];
         } else {
-            return Chrome_Config::getConfig('Registration', 'blacklist_host');
+            return array();
+            //return $config->getConfig('Registration', 'blacklist_host');
         }
 
     }

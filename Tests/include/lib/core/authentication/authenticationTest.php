@@ -1,5 +1,11 @@
 <?php
 
+require_once 'Tests/testsetup.php';
+
+require_once 'Tests/dummies/authentication/resource.php';
+require_once 'Tests/dummies/authentication/chain.php';
+require_once 'Tests/dummies/cookie.php';
+
 class AuthenticationTest extends PHPUnit_Framework_TestCase
 {
     protected $_auth = null;
@@ -24,6 +30,7 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($chain, $this->_auth->getChain());
     }
+
 
     public function testAddChain() {
 
@@ -78,6 +85,7 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $resource = new Chrome_Authentication_Create_Resource_Dummy();
 
 
+        $this->_auth->setExceptionHandler(new Chrome_Exception_Handler_Dummy());
         $exceptionHandler = new Chrome_Exception_Handler_Dummy();
         $this->_auth->setExceptionHandler($exceptionHandler);
         $this->assertSame($exceptionHandler, $this->_auth->getExceptionHandler());

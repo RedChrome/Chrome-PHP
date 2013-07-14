@@ -17,13 +17,11 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 21:19:23] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 17:33:11] --> $
  * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true) die();
-
-require_once 'autoloader.php';
 
 /**
  * Interface for loading required files and loading classes

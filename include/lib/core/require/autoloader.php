@@ -17,7 +17,11 @@
  * @subpackage Chrome.Require
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+<<<<<<< Updated upstream
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 17:35:44] --> $
+=======
  * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.05.2013 17:23:50] --> $
+>>>>>>> Stashed changes
  * @author     Alexander Book
  */
 
@@ -54,7 +58,7 @@ interface Chrome_Require_Loader_Interface
 	 * Tries to load a file containing the class $className
 	 *
 	 * Returns false, if loader could not detect the file.
-	 * Returns string (file name), if laoder could detect the file
+	 * Returns string (file name), if loader could detect the file
 	 *
 	 * @return mixed
 	 */

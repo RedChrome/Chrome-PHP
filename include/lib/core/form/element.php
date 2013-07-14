@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.03.2013 17:36:03] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 16:21:01] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -755,14 +755,10 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      *
      * @return boolean
      */
-    protected function _convert($data) {
-
-        if(self::$_converterInstance === null) {
-            self::$_converterInstance = Chrome_Converter::getInstance();
-        }
-
+    protected function _convert($data)
+    {
         foreach( $this->_converters as $converter ) {
-			$data = self::$_converterInstance->convert( $converter, $data );
+			$data = $this->_applicationContext->getConverter()->convert( $converter, $data );
 		}
 
         return $data;

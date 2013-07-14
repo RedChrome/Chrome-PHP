@@ -6,18 +6,17 @@ if(CHROME_PHP !== true)
 class Chrome_View_Captcha extends Chrome_View_Strategy_Abstract
 {
 
-    public function __construct(Chrome_Controller_Abstract $controller)
+    public function _setUp()
     {
-        parent::__construct($controller);
         $this->addTitle('Captcha Test');
     }
 
     public function test() {
-        $this->_views[] = new Chrome_View_Captcha_Template($this->_controller);
+        $this->_views[] = new Chrome_View_Captcha_Template($this->_viewContext, $this->_controller);
     }
 
     public function formValid() {
-        $this->_views[] = new Chrome_View_Captcha_Template_Success($this->_controller);
+        $this->_views[] = new Chrome_View_Captcha_Template_Success($this->_viewContext, $this->_controller);
     }
 
 

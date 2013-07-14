@@ -43,7 +43,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
 
                     case 2:
                         {
-                            $this->_form = new Chrome_Form_Register_StepOne($this->_requestHandler);
+                            $this->_form = new Chrome_Form_Register_StepOne($this->_applicationContext);
 
                             if(!$this->_form->isCreated() or !$this->_form->isSent() or !$this->_form->isValid()) {
 
@@ -62,13 +62,13 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
                     case 3:
                         {
 
-                            $this->_form = new Chrome_Form_Register_StepTwo($this->_requestHandler);
+                            $this->_form = new Chrome_Form_Register_StepTwo($this->_applicationContext);
 
                             $data = $this->_form->getData();
 
                             // go one step back
                             if($this->_form->isSent('buttons') and isset($data['buttons']['backward'])) {
-                                $this->_form = new Chrome_Form_Register_StepOne($this->_requestHandler);
+                                $this->_form = new Chrome_Form_Register_StepOne($this->_applicationContext);
                                 $this->_form->create();
                                 $this->_stepOne();
                                 break;
@@ -144,7 +144,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
     private function _stepOne()
     {
         if($this->_form == null) {
-            $this->_form = new Chrome_Form_Register_StepOne($this->_requestHandler);
+            $this->_form = new Chrome_Form_Register_StepOne($this->_applicationContext);
         }
 
         if(!$this->_form->isCreated()) {
@@ -159,7 +159,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
     private function _stepTwo()
     {
         if(!($this->_form instanceof Chrome_Form_Register_StepTwo)) {
-            $this->_form = new Chrome_Form_Register_StepTwo($this->_requestHandler);
+            $this->_form = new Chrome_Form_Register_StepTwo($this->_applicationContext);
         }
 
         $this->_form->create();

@@ -12,7 +12,7 @@ class Chrome_Controller_Captcha extends Chrome_Controller_Module_Abstract
 
 	protected function _execute()
 	{
-	    $this->_form = new Chrome_Form_Captcha($this->_requestHandler);
+	    $this->_form = new Chrome_Form_Captcha($this->_applicationContext);
 
 	    if(!$this->_form->isCreated()) {
 	       $this->_form->create();
