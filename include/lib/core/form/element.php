@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 16:21:01] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.07.2013 22:39:56] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -31,27 +31,6 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Form_Element_Interface
 {
-    /**
-     * Option to determine whether the form element is required or not.
-     * If the element is not sent and isrequired set to true then the
-     * element will raise ERROR_NOT_SENT.
-     *
-     * Structure: boolean
-     *
-     * @var string
-     */
-    const IS_REQUIRED = 'ISREQUIRED',
-
-    /**
-     * If the user clicks on the submit button, then e.g. the user sends 'login'
-     * This option says which submit values are accepted
-     *
-     * Structure: array('submit1', 'login', 'logout')
-     *
-     * @var string
-     */
-    CHROME_FORM_ELEMENT_SUBMIT_VALUES = 'SUBMITVALUES';
-
     /**
      * isCreated()
      *
@@ -81,11 +60,18 @@ interface Chrome_Form_Element_Interface
     public function create();
 
     /**
-     * delete()
+     * destroy()
      *
      * @return boolean
      */
-    public function delete();
+    public function destroy();
+
+    /**
+     * renew
+     *
+     * Renews the form element
+     */
+    public function renew();
 
     /**
      * getData()
@@ -97,10 +83,9 @@ interface Chrome_Form_Element_Interface
     /**
      * getOptions()
      *
-     * @param mixed $key
-     * @return mixed
+     * @return Chrome_Form_Option_Element_Interface
      */
-    public function getOptions($key = null);
+    public function getOption();
 
     /**
      * getID()
@@ -117,102 +102,21 @@ interface Chrome_Form_Element_Interface
     public function getErrors();
 
     /**
-     * addValidator()
-     *
-     * @param mixed $validator
-     * @return void
-     */
-    public function addValidator(Chrome_Validator_Interface $validator);
-
-    /**
-     * addConverter()
-     *
-     * @param mixed $converter
-     * @return void
-     */
-    public function addConverter(Chrome_Converter_Value_Interface $converter);
-
-    /**
-     * setAttribute()
-     *
-     * @param string $key
-     * @param mixed $value
-     * @return void
-     */
-    public function setAttribute($key, $value);
-
-    /**
-     * getAttribute()
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public function getAttribute($key);
-
-    /**
-     * Sets the decorator which renderes this element
-     *
-     * @param Chrome_Form_Decorator_Interface $obj
-     * @return void
-     */
-    public function setDecorator(Chrome_Form_Decorator_Interface $obj);
-
-    /**
-     * Returns an instance of a decorator which renders this element
-     *
-     * @return Chrome_Form_Decorator_Interface
-     */
-    public function getDecorator();
-
-    /**
-     * Sets the default decorator, used to render the form
-     *
-     * @param string $formElementClass the class name of the form element, which should get rendered with $decoratorClass
-     * @param string $decoratorClass the class name of the decorator
-     * @return void
-     */
-    public static function setDefaultDecorator($formElementClass, $decoratorClass);
-
-    /**
-     * resetDecorator
-     *
-     * Sets the current decorator to null
-     *
-     * @return void
-     */
-    public function resetDecorator();
-
-    /**
      * getForm()
      *
      * @return Chrome_Form_Abstract
      */
     public function getForm();
+}
 
-    /**
-     * save()
-     *
-     * Saves the sent data into session
-     *
-     * @return void
-     */
-    public function save();
-
-    /**
-     * renew
-     *
-     * Renews the form element
-     */
-    public function renew();
-
-    /**
-     * getSavedData()
-     *
-     * retuns the saved data, which is stored in session
-     *
-     * @return mixed
-     */
-    public function getSavedData();
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Form.Storage
+ */
+interface Chrome_Form_Element_Storable extends Chrome_Form_Element_Interface
+{
+    // new method
+    public function getStorableData();
 }
 
 /**
@@ -222,22 +126,9 @@ interface Chrome_Form_Element_Interface
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Element
- * @author Alexander Book
- * @copyright Alexander Book
  */
 abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Interface
 {
-    /**
-     * Session namespace for form, validator and converter
-     *
-     * @todo remove validator... this should be done in model, same goes to converter
-     * @var string
-     */
-    const SESSION_NAMESPACE = 'FORMS',
-        CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE = 'VALIDATOR',
-        CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE = 'CONVERTER';
-
-
     /**
      * This error will be raised if the element is marked as required and the user
      * did not sent data.
@@ -273,124 +164,11 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     CHROME_FORM_ELEMENT_ERROR_WRONG_SUBMIT = 'ERRORWRONGSUBMIT';
 
     /**
-     * This determines whether the user cannot change the form element
-     * Note: If this is set to true, then the return value of this element is null, not
-     *       the default value set in decorator!!
-     *
-     * Structure: Use boolean if the user can only send one input (e.g. textarea)
-     *            Use array('selectionOption1', ...) if the user can send more inputs (e.g. selection),
-     *              then the values inside the array tells the element which selectionOptions are readonly
-     *
-     * @var string
-     */
-    const CHROME_FORM_ELEMENT_READONLY = 'READONLY',
-
-    /**
-     * Will be raised if user tried to sent a readonly input. Normally the browser will not
-     * send the data if it's marked as readonly
-     *
-     * @var string
-     */
-    CHROME_FORM_ELEMENT_ERROR_READONLY = 'ERRORREADONLY';
-
-    /**
-     * Options for the decorator. They can influence the behavior of the decorator
-     *
-     * Structure: array('DECORATOR_OPT_1' => 'anyValueYouWant', ...)
-     *
-     * @var string
-     */
-    const CHROME_FORM_ELEMENT_DECORATOR_OPTIONS = 'DECORATOROPTIONS';
-
-    /**
-     * Attributes for the decorator. These attributes cannot influence the behavior.
-     * All attributes are parsed in html. E.g. if your submit button shall has an onclick
-     * event then use this.
-     *
-     * Structure: array('onclick' => 'javascript:alert()', ...)
-     *
-     * @var string
-     */
-    const CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES = 'DECORATORATTRIBUTES';
-
-    /**
-     * If set to true, then every user input (which is converter using the given converters) is
-     * saved into session. So on the next page reload every input is displayed.
-     *
-     * Structure: boolean
-     *
-     * @var string
-     */
-    const CHROME_FORM_ELEMENT_SAVE_DATA = 'SAVEDATA';
-
-    /**
-     * If this is set to true, then if the user has not sent no input, then it is not
-     * saved into session. This is usefull to display the default values.
-     * It is recommended to set this always to true (this is default in every element)
-     *
-     * Structure: boolean
-     *
-     * @var string
-     */
-    const CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA = 'NOTSAVENULLDATA';
-
-    /**
-     * This is raised if a form element was not created, but the user sent the form
-     *
-     * @var string
-     */
-    const CHROME_FORM_ELEMENT_ERROR_NOT_CREATED = 'ERRORNOTCREATED';
-
-    /**
-     *
-     * default options for all child elements
+     * current option
      *
      * @var array
      */
-    protected $_defaultOption  = array(self::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array(),
-                                       self::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array(),
-                                       self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS   => array(),
-                                       self::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES   => array(),
-                                       self::CHROME_FORM_ELEMENT_SAVE_DATA => true,
-                                       self::CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA => false,
-                                       self::CHROME_FORM_ELEMENT_READONLY => false);
-
-    /**
-     * default options for all child elements, but the child elements override these options
-     *
-     * @var array
-     */
-    protected $_defaultOptions = array();
-
-    /**
-     * Contains the definition for default decorators
-     * Structure:
-     *  array($formElementClassName => $defaultFormDecoratorClassName, ...)
-     *
-     */
-    protected static $_defaultDecorator = array();
-
-    /**
-     * current options
-     *
-     * @var array
-     */
-    protected $_options = array();
-
-    /**
-     * all validators for an element
-     * if one validator returns false, then the whole element is NOT valid
-     *
-     * @var array
-     */
-    protected $_validators = array();
-
-    /**
-     * all converters for an element, converts the data from an element
-     *
-     * @var array
-     */
-    protected $_converters = array();
+    protected $_option = null;
 
     /**
      * instance of the corresponding Chrome_Form_Interface, which uses this element
@@ -414,21 +192,6 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     protected $_id = null;
 
     /**
-     * all attributes of this element, used for decorator {@see Chrome_Form_Decorator_Interface}
-     *
-     * @var array
-     */
-    protected $_attribts = array();
-
-    /**
-     * instance of a Chrome_Form_Decorator_Interface class
-     * is automatic set if you use render() {@see Chrome_Form_Interface::render()}
-     *
-     * @var Chrome_Form_Decorator_Interface
-     */
-    protected $_decorator = null;
-
-    /**
      * Cache for isValid method
      *
      * @var boolean
@@ -450,49 +213,21 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     protected $_isSent  = null;
 
     /**
-     * @todo: why is this private?
-     * @var Chrome_Converter
-     */
-    private static $_converterInstance = null;
-
-    /**
-     * Instance of Chrome_Session_Interface
+     * @param Chrome_Form_Interface $form
+     * @param string $id
+     * @param Chrome_Form_Option_Element_Interface $options
      *
-     * @var Chrome_Session_Interface
-     */
-    protected $_session = null;
-
-    /**
-     * Chrome_Form_Element_Abstract::__construct()
-     *
-     * @param mixed $form
-     * @param mixed $id
-     * @param mixed $options
      * @return Chrome_Form_Element_Abstract
      */
-    public function __construct(Chrome_Form_Interface $form, $id, array $options)
+    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Interface $option)
     {
         $this->_id = $id;
         $this->_form = $form;
-        $this->_session = $this->_form->getRequestData()->getSession();
 
-        $this->_options = array_merge($this->_defaultOption, $this->_defaultOptions, $form->getOptions($this), (array)$options);
-
-        if(isset($this->_options[self::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE]) AND is_array($this->_options[self::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE])) {
-            $this->_setValidators($this->_options[self::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE]);
-        }
-
-        $this->_options[self::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE] = null;
-
-        if(isset($this->_options[self::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE]) AND is_array($this->_options[self::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE])) {
-            $this->_setConverters($this->_options[self::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE]);
-        }
-
-        $this->_options[self::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE] = null;
+        $this->_option = $option;
     }
 
     /**
-     * Chrome_Form_Element_Abstract::isValid()
      *
      * Determines whether this element is valid. This method is a default implementation
      * of a cache using _isValid() for validation
@@ -501,18 +236,35 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      */
     public function isValid()
     {
+        if($this->isSent() !== true) {
+            return false;
+        }
+
         // cache
         if($this->_isValid !== null) {
             return $this->_isValid;
         }
 
-        // either _isValid() exists or this method is overwritten..
-        $this->_isValid = $this->_isValid();
+        $validator = $this->_getValidator();
+        $validator->setData($this->_form->getSentData($this->_id));
+        $validator->validate();
+
+        $this->_isValid = $validator->isValid();
+        $this->_errors = $validator->getAllErrors();
         return $this->_isValid;
     }
 
     /**
-     * Chrome_Form_Element_Abstract::isCreated()
+     * Gets the validator from $_options and may append/prepend additional validators to it
+     *
+     * @return Chrome_Validator_Interface
+     */
+    protected function _getValidator()
+    {
+        return $this->_option->getValidator();
+    }
+
+    /**
      *
      * Determines whether this element is created. This method is a default implementation
      * of a cache using _isCreated() for validation
@@ -532,7 +284,6 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
-     * Chrome_Form_Element_Abstract::isSent()
      *
      * Determines whether this element is sent. This method is a default implementation
      * of a cache using _isSent() for validation
@@ -541,6 +292,10 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      */
     public function isSent()
     {
+        if($this->isCreated() !== true) {
+            return false;
+        }
+
         // cache
         if($this->_isSent !== null) {
             return $this->_isSent;
@@ -551,28 +306,29 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
         return $this->_isSent;
     }
 
-    /**
-     * Chrome_Form_Element_Abstract::getOptions()
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public function getOptions($key = null)
+    protected function _isSent()
     {
+		if($this->_option->getIsRequired() === false OR $this->_option->getIsReadonly() === true ) {
+            return true;
+		}
 
-        if($key !== null) {
-            if(isset($this->_options[$key])) {
-                return $this->_options[$key];
-            }
-            return null;
-        }
+		if($this->_form->getSentData( $this->_id ) === null ) {
+			$this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
+			return false;
+		}
 
-        return $this->_options;
+        return true;
     }
 
     /**
-     * Chrome_Form_Element_Abstract::getID()
-     *
+     * @return Chrome_Form_Option_Element_Interface
+     */
+    public function getOption()
+    {
+        return $this->_option;
+    }
+
+    /**
      * @return string
      */
     public function getID()
@@ -581,8 +337,6 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
-     * Chrome_Form_Element_Abstract::getErrors()
-     *
      * @return array
      */
     public function getErrors()
@@ -591,216 +345,48 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
-     * Chrome_Form_Element_Abstract::delete()
-     *
      * @return void
      */
-    public function delete() {
+    public function destroy()
+    {
         return;
     }
 
     /**
-     * Chrome_Form_Element_Abstract::renew()
-     *
      * @return void
      */
-    public function renew() {
+    public function renew()
+    {
         return;
     }
 
     /**
-     * Chrome_Form_Element_Abstract::_setValidators()
-     *
-     * @param mixed $validators
-     * @return void
-     */
-    protected function _setValidators(array $validators)
-    {
-        foreach($validators AS $validator) {
-            $this->_validators[] = $validator;
-        }
-    }
-
-    /**
-     * Chrome_Form_Element_Abstract::_setConverters()
-     *
-     * @param mixed $converters
-     * @return void
-     */
-    protected function _setConverters(array $converters)
-    {
-        foreach($converters AS $converter) {
-            $this->_converters[] = $converter;
-        }
-    }
-
-    /**
-     * Chrome_Form_Element_Abstract::addValidator()
-     *
-     * @param mixed $validator
-     * @return void
-     */
-    public function addValidator(Chrome_Validator_Interface $validator)
-    {
-        $this->_validators[] = $validator;
-    }
-
-    /**
-     * Chrome_Form_Element_Abstract::addConverter()
-     *
-     * @param mixed $converter
-     * @return void
-     */
-    public function addConverter(Chrome_Converter_Value_Interface $converter)
-    {
-        $this->_converters[] = $converter;
-    }
-
-    /**
-     * Chrome_Form_Element_Abstract::setAttribute()
-     *
-     * Sets an form attribute
-     *
-     * @param string $key
-     * @param mixed $value
-     * @return void
-     */
-    public function setAttribute($key, $value) {
-
-        $this->_attribts[$key] = $value;
-    }
-
-    /**
-     * Chrome_Form_Element_Abstract::getAttribute()
-     *
-     * Returns an attribute
-     * if the key does not exist, return null
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public function getAttribute($key) {
-        return (isset($this->_attribts[$key])) ? $this->_attribts[$key] : $this->_form->getAttribute($key);
-    }
-
-    /**
-     * Chrome_Form_Element_Abstract::getForm()
-     *
      * Returns the corresponding form obj
      *
-     * @return Chrome_Form__Interface
+     * @return Chrome_Form_Interface
      */
-    public function getForm() {
+    public function getForm()
+    {
         return $this->_form;
     }
 
-    public function resetDecorator() {
-        $this->_decorator = null;
-    }
-
-    /**
-     * Chrome_Form_Element_Abstract::setDecorator()
-     *
-     * Sets a decorator, if you want to render the form
-     *
-     * @return void
-     */
-    public function setDecorator(Chrome_Form_Decorator_Interface $obj) {
-        $obj->setOptions($this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS]);
-        $this->_decorator = $obj;
-        $this->_decorator->setFormElement($this);
-    }
-
-    /**
-     * Chrome_Form_Element_Abstract::getSavedData()
-     *
-     * returns the data, stored in session
-     *
-     * @return mixed
-     */
-    public function getSavedData() {
-        return null;
-    }
-
-    /**
-     * Chrome_Form_Element_Abstract::_validate()
-     *
-     * validates the data, given as parameter, and returns the result of the validators
-     * Returns false if any validator got an error, true else
-     *
-     * @return boolean
-     */
-    protected function _validate($data) {
-
-        $isValid = true;
-
-        foreach($this->_validators AS $validator) {
-
-            $validator->setData($data);
-            $validator->validate();
-
-            if(!$validator->isValid()) {
-                $this->_errors += $validator->getAllErrors();
-                $isValid = false;
-            }
-        }
-
-        return $isValid;
-    }
-
-    /**
-     * Chrome_Form_Element_Abstract::_convert()
-     *
-     * Converts the data using the converters, set in options
-     *
-     * @return boolean
-     */
-    protected function _convert($data)
+    public function getData()
     {
-        foreach( $this->_converters as $converter ) {
-			$data = $this->_applicationContext->getConverter()->convert( $converter, $data );
-		}
-
-        return $data;
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see Chrome_Form_Element_Interface::setDefaultDecorator()
-     */
-    public static function setDefaultDecorator($formElementClass, $decoratorClass) {
-        self::$_defaultDecorator[$formElementClass] = $decoratorClass;
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see Chrome_Form_Element_Interface::getDecorator()
-     */
-    public function getDecorator() {
-
-        if($this->_decorator !== null) {
-            return $this->_decorator;
+        // cache
+        if($this->_data !== null) {
+            return $this->_data;
         }
 
-        if(isset(self::$_defaultDecorator[get_class($this)])) {
-            $class = self::$_defaultDecorator[get_class($this)];
-
-        } else {
-
-            $class = str_replace('Element', 'Decorator',get_class($this)).'_'.$this->_form->getAttribute(Chrome_Form_Interface::ATTRIBUTE_DECORATOR);
-
-            if(!class_exists($class, true)) {
-                throw new Chrome_Exception('Could not load form decorator '.$class.'!');
-            }
+        if($this->_option->getIsReadonly() === true) {
+            $this->_data = null;
+            return null;
         }
 
-        $this->_decorator = new $class($this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS], $this->_options[self::
-                CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES]);
-        $this->_decorator->setFormElement($this);
+        $this->_data = $this->_convert($this->_form->getSentData($this->_id));
 
-        return $this->_decorator;
+        return $this->_data;
     }
 }
 
-require_once 'element/hidden.php';
+require_once 'element/form.php';
 require_once 'element/submit.php';

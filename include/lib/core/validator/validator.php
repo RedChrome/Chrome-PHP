@@ -17,7 +17,7 @@
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.04.2013 18:42:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.07.2013 22:14:42] --> $
  * @author     Alexander Book
  */
 
@@ -347,7 +347,6 @@ abstract class Chrome_Validator_Composition_Abstract extends Chrome_Validator im
 
 	public function validate()
 	{
-
 		$this->_validate();
 
 		foreach($this->_validators as $validator) {

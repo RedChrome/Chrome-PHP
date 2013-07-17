@@ -17,26 +17,31 @@
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.07.2013 18:08:20] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.07.2013 18:16:46] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
 
 /**
- * Chrome_Validator_Form_Empty
+ * Chrome_Validator_Form_Element_Contains
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */
-class Chrome_Validator_Form_Empty extends Chrome_Validator
+class Chrome_Validator_Form_Element_Contains extends Chrome_Validator
 {
+    protected $_allowedValues = null;
+
+    public function __construct(array $allowedValues)
+    {
+        $this->_allowedValues = $allowedValues;
+    }
+
     protected function _validate()
     {
-        if(empty($this->_data) OR $this->_data == null OR $this->_data == '') {
-            $this->_setError('Input is empty');
+        if(!in_array($this->_data, $this->_allowedValues)) {
+            $this->_setError('Input did not matched allowed values');
         }
-
-        return;
     }
 }

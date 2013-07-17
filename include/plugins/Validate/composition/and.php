@@ -17,7 +17,7 @@
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.04.2013 14:10:39] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.07.2013 22:15:39] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -34,7 +34,7 @@ class Chrome_Validator_Composition_And extends Chrome_Validator_Composition_Abst
 	{
 	}
 
-	protected function validate()
+	public function validate()
 	{
 		foreach($this->_validators as $validator) {
             $validator->validate();
@@ -48,4 +48,9 @@ class Chrome_Validator_Composition_And extends Chrome_Validator_Composition_Abst
 
         return true;
 	}
+
+    protected function _validate()
+    {
+
+    }
 }

@@ -11,7 +11,6 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 		$this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST );
         // this sets $this->_id to 'Index'
 		$this->setAttribute( self::ATTRIBUTE_ID, 'Index' );
-        $this->setAttribute( self::ATTRIBUTE_DECORATOR, 'Yaml');
 
 		$lengthValidator = new Chrome_Validator_Form_Length();
 		$lengthValidator->setOptions( array(
@@ -20,14 +19,22 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
                                             ) );
 
 		$emptyValidator = new Chrome_Validator_Form_Empty();
-		$textValidators = array( $emptyValidator, $lengthValidator );
+		//$textValidators = array( $emptyValidator, $lengthValidator );
 
-		$this->_elements[$this->_id] = new Chrome_Form_Element_Form( $this, $this->_id, array(
-            Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME => 30,
-            Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_MIN_ALLOWED_TIME => 1 )
-                                                                                        );
+        $textValidators = new Chrome_Validator_Composition_And();
+        $textValidators->addValidators(array($emptyValidator, $lengthValidator ));
+
+        $formElementOption = new Chrome_Form_Option_Element_Form(
+            new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id) );
+        $formElementOption->setMaxAllowedTime(30)->setMinAllowedTime(1);
+
+        $formElement = new Chrome_Form_Element_Form($this, $this->_id, $formElementOption);
+        $this->_addElement($formElement);
 
 
+
+
+        /*
 		$this->_elements['radio'] = new Chrome_Form_Element_Radio( $this, 'radio', array(
 			Chrome_Form_Element_Radio::IS_REQUIRED => true,
             Chrome_Form_Element_Radio::CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA => true,
@@ -80,6 +87,6 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 
         $this->_elements['birthday'] = new Chrome_Form_Element_Birthday($this, 'birthday', array());
 
-        //$this->addReceivingHandler(new Chrome_Form_Handler_Delete());
+        //$this->addReceivingHandler(new Chrome_Form_Handler_Delete());*/
 	}
 }

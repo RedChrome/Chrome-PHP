@@ -17,23 +17,44 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.07.2013 18:18:40] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.07.2013 22:16:25] --> $
+ * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true)
     die();
+//TODO: add doc
 
 /**
  * @package CHROME-PHP
- * @subpackage Chrome.Form
+ * @subpackage Chrome.Form.Storage
  */
-class Chrome_Form_Element_Hidden extends Chrome_Form_Element_Abstract
+interface Chrome_Form_Storage_Interface
 {
-    public function isCreated() {
-        return true;
-    }
+    public function get($elementName);
 
-    public function create() {
-        return;
-    }
+    public function set($elementName, $data);
+
+    public function remove($elementName);
+
+    public function has($elementName);
+}
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Form.Storage
+ */
+interface Chrome_Form_Option_Storable_Interface
+{
+    public function getStorageEnabled();
+
+    public function getStoreNullData();
+
+    public function getStoreInvalidData();
+
+    public function setStorageEnabled($bool);
+
+    public function setStoreNullData($bool);
+
+    public function setStoreInvalidData($bool);
 }

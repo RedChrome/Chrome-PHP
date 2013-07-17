@@ -8,12 +8,15 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
 		$this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
 		$this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST );
 		$this->setAttribute( self::ATTRIBUTE_ID, $this->_id );
-        $this->setAttribute( self::ATTRIBUTE_DECORATOR, 'Yaml');
 
 		$lang = new Chrome_Language( 'modules/content/user/registration' );
 
-		$this->_elements[$this->_id] = new Chrome_Form_Element_Form( $this, $this->_id, array( Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME =>
-				300, Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_MIN_ALLOWED_TIME => 1 ) );
+
+
+        $formElementOption = new Chrome_Form_Option_Element_Form();
+        $formElementOption->setMaxAllowedTime(300)->setMinAllowedTime(1);
+        $this->_addElement(new Chrome_Form_Element_Form( $this, $this->_id, $formElementOption));
+
 
 		$this->_elements['error'] = new Chrome_Form_Element_Error( $this, 'error', array( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS =>
 				array( Chrome_Form_Decorator_Error_Default::CHROME_FORM_DECORATOR_ERROR_EXCLUDE_ELEMENTS =>

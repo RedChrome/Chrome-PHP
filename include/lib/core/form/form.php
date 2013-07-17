@@ -21,21 +21,23 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 13:04:44] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.07.2013 22:12:42] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true) die();
 
+
+/**
+ * loads interface for storage to save form data
+ */
+require_once 'storage.php';
+
+
 /**
  * Load Chrome_Form_Element_Abstract
  */
 require_once 'element.php';
-
-/**
- * Load Chrome_Form_Decorator_Abstract
- */
-require_once 'decorator.php';
 
 /**
  * Chrome_Form_Handler_Interface
@@ -74,8 +76,6 @@ interface Chrome_Form_Interface
 {
     /**
      * ATTRIBUTE_METHOD: tells where the data comes from, post or get?
-     * ATTRIBUTE_DECORATOR: sets the extension for decorators, default is Default, so
-     *                      all decorators come from Chrome_Form_Decorator_XYZ_Default
      * ATTRIBUTE_ACTION: sets the form action
      * ATTRIBUTE_NAME: sets the form name
      * ATTRIBUTE_ID: sets the form id
@@ -83,9 +83,9 @@ interface Chrome_Form_Interface
      * @var string
      */
     const ATTRIBUTE_METHOD    = 'method',
-          ATTRIBUTE_DECORATOR = 'decorator',
           ATTRIBUTE_ACTION    = 'action',
           ATTRIBUTE_NAME      = 'name',
+          ATTRIBUTE_STORE     = 'store',
           ATTRIBUTE_ID        = 'id';
 
     /**
@@ -93,6 +93,13 @@ interface Chrome_Form_Interface
      */
     const CHROME_FORM_METHOD_POST = 'POST',
           CHROME_FORM_METHOD_GET  = 'GET';
+
+    /**
+     * @var string
+     */
+    const CHROME_FORM_ERRORS_CREATION = 'creation',
+          CHROME_FORM_ERRORS_VALIDATION = 'validation',
+          CHROME_FORM_ERRORS_RECEIVING  = 'receiving';
 
     /**
      * Creates a new form
@@ -314,22 +321,6 @@ interface Chrome_Form_Interface
     public function getAttribute($key);
 
     /**
-     * render()
-     *
-     * @param string $name name of the element that will be rendered
-     * @return mixed
-     */
-    public function render($name);
-
-    /**
-     * getDecorator()
-     *
-     * @param string $name name of the element
-     * @return mixed
-     */
-    public function getDecorator($name);
-
-    /**
      * Has the element receiving, validation or creation errors?
      * If $errorName is set, the method checks whether $errorName is set in all errors
      *
@@ -423,6 +414,12 @@ interface Chrome_Form_Interface
 /**
  * Chrome_Form_Abstract
  *
+ * The order of is*() methods is: isCreated, isSent, isValid:
+ * 1) isCreated checks whether the form was created (aka setting up vars and session)
+ * 2) isSent checks whether every form element was sent, which means, every form element has
+ *      received appropriate data.
+ * 3) isValid checks whether the data (from client) is valid for every form element.
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
@@ -443,30 +440,33 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     protected $_elements = array();
 
     /**
-     * is the form created
+     * is the form created?
      *
      * @var bool
      */
     protected $_isCreated = null;
+
     /**
-     * is the form valid
+     * is the form valid?
      *
      * @var bool
      */
     protected $_isValid = null;
+
     /**
-     * has the user sent the form
+     * has the user sent the form?
      *
      * @var bool
      */
     protected $_isSent = null;
 
     /**
-     * the data from the user, not validated
+     * the data from the form elements, not validated and not converted
      *
      * @var array
      */
     protected $_sentData = array();
+
     /**
      * the data from the form elements, validated and converted
      *
@@ -475,30 +475,22 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     protected $_data = array();
 
     /**
-     * the errors from the elements by creating them
+     * The errors from the form elements
+     *
+     * The three types (creation, receiving, validation) are getting set in isCreated
+     * isSent and isValid
      *
      * @var array
      */
-    protected $_creationErrors = array();
-    /**
-     * the errors from the elements by validating the data
-     *
-     * @var array
-     */
-    protected $_validationErrors = array();
-    /**
-     * the errors from receiving data from the user
-     *
-     * @var array
-     */
-    protected $_receivingErrors = array();
-
+    protected $_errors = array(self::CHROME_FORM_ERRORS_CREATION => array(),
+                               self::CHROME_FORM_ERRORS_RECEIVING => array(),
+                               self::CHROME_FORM_ERRORS_VALIDATION => array());
     /**
      * Attributes for the form
      *
      * @var array
      */
-    protected $_attribts = array('decorator' => 'Default');
+    protected $_attribts = array();
 
     /**
      * Receiving Handler, gets called after isSent()
@@ -536,11 +528,15 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     protected $_applicationContext = null;
 
     /**
-     * Session instance
+     * Storage instance. This var is used to save form data.
+     * E.g. if a user sends data and anything was not valid, then
+     * the other (valid) data is stored using this storage and can
+     * be displayed again. So the user must only fill the invalid data
+     * and not the whole form.
      *
      * @var Chrome_Session_Interface
      */
-    protected $_session           = null;
+    protected $_storage           = null;
 
     /**
      * Chrome_Form_Abstract::__construct()
@@ -549,13 +545,19 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * @return Chrome_Form_Abstract
      */
-    public function __construct(Chrome_Context_Application_Interface $appContext) {
+    public function __construct(Chrome_Context_Application_Interface $appContext)
+    {
         $this->_applicationContext = $appContext;
         $this->_requestDataObject  = $appContext->getRequestHandler()->getRequestData();
         $this->_init();
     }
 
     abstract protected function _init();
+
+    protected function _addElement(Chrome_Form_Element_Interface $element)
+    {
+        $this->_elements[$element->getID()] = $element;
+    }
 
     /**
      * Chrome_Form_Abstract::isCreated()
@@ -921,7 +923,9 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      * Chrome_Form_Abstract::getElement()
      *
      * wrapper for {@see Chrome_Form_Abstract::getElements()}
+     * @todo remove this method
      *
+     * @deprecated
      * @return Chrome_Fom_Abstract
      */
     public function getElement($id)
@@ -1007,10 +1011,9 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      * Chrome_Form_Abstract::setAttribute()
      *
      * Sets an form attribute
-     * Special attributes: 'method', 'action', 'decorator'
+     * Special attributes: 'method', 'action'
      * 'method': Sets the input data: available are CHROME_FORM_METHOD_POST, CHROME_FORM_METHOD_GET for input data from $_POST or $_GET
      * 'action': Sets the form action in <form action="">
-     * 'decorator': Sets the default extension for all decorators, default: Default
      *
      * @param string $key
      * @param mixed $value
@@ -1018,8 +1021,6 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function setAttribute($key, $value)
     {
-        $this->_attribts[$key] = $value;
-
         switch($key) {
             case self::ATTRIBUTE_METHOD:
                 {
@@ -1051,17 +1052,20 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
                             $value = ROOT_URL . '/' . $value;
                         }
 
-
                         $this->_attribts[$key] = $value;
                     }
-                    break;
+                    return;
                 }
-            case self::ATTRIBUTE_DECORATOR:
+            case self::ATTRIBUTE_STORE:
                 {
-                    foreach($this->_elements as $element) {
-                        $element->resetDecorator();
+                    if(!($value instanceof Chrome_Form_Handler_Interface) ){
+                        return;
                     }
-                    break;
+
+                    $this->_attribts[$key][] = $value;
+                    $this->addReceivingHandler($value);
+
+                    return;
                 }
             case self::ATTRIBUTE_ID:
                 {
@@ -1069,6 +1073,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
                     break;
                 }
         }
+
+        $this->_attribts[$key] = $value;
     }
 
     /**
@@ -1083,38 +1089,6 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function getAttribute($key)
     {
         return (isset($this->_attribts[$key])) ? $this->_attribts[$key] : null;
-    }
-
-    /**
-     * Chrome_Form_Abstract::render()
-     *
-     * Renderes the form element
-     *
-     * @param string $name name/id of a form element
-     * @return string
-     */
-    public function render($name)
-    {
-        $element = $this->getElements($name);
-
-        if($element == null) {
-            throw new Chrome_Exception('Could not find element "' . $name . '" in form "' . $this->getID() . '"!');
-        }
-
-        return $element->getDecorator()->render();
-    }
-
-    /**
-     * Chrome_Form_Abstract::getDecorator()
-     *
-     * Returns the specific decorator of a form element
-     *
-     * @param string $name name/id of a form element
-     * @return Chrome_Form_Decorator_Interface
-     */
-    public function getDecorator($name)
-    {
-        return $this->getElements($name)->getDecorator();
     }
 
     /**

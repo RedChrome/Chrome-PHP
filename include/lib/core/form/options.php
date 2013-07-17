@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.04.2013 13:39:12] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.07.2013 21:07:22] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -38,8 +38,6 @@ interface Chrome_Form_Attribute_Interface
     public function getAttributes();
 
     public function hasAttribute($key);
-
-    public function renderAttributes();
 }
 
 /**
@@ -52,6 +50,8 @@ interface Chrome_Form_Option_Interface
 
 /**
  * Interface for an element option class. This contains the settings for a form element
+ *
+ * TODO: add converter interface
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Option
@@ -76,29 +76,7 @@ interface Chrome_Form_Option_Element_Interface
 
     public function getAllowedValues();
 
-    public function setDecoratorOption(Chrome_Form_Options_Decorator_Interface $decOptions);
-
-    public function getDecoratorOption();
-
-    public function addValidator(Chrome_Validator_Interface $validator);
-
     public function setValidator(Chrome_Validator_Interface $validator);
 
     public function getValidator();
-
-    public function getValidators();
-}
-
-/**
- * This contains the settings for a form decorator
- *
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Form.Option
- */
-interface Chrome_Form_Option_Decorator_Interface
-{
-
-
-
 }
