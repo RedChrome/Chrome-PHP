@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.07.2013 22:39:56] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2013 16:45:53] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -261,7 +261,20 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      */
     protected function _getValidator()
     {
-        return $this->_option->getValidator();
+        $composition = new Chrome_Validator_Composition_Or();
+        $composition->addValidator(new Chrome_Validator_Form_Element_Readonly($this->_option));
+
+        $andComposition = new Chrome_Validator_Composition_And();
+        $andComposition->addValidator(new Chrome_Validator_Form_Element_Required($this->_option));
+
+        $composition->addValidator($andComposition);
+
+        if(($validator = $this->_option->getValidator) !== null) {
+            $andComposition->addValidator($validator);
+        }
+
+
+        return $composition;
     }
 
     /**

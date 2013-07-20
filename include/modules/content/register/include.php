@@ -13,7 +13,8 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
 
 
 
-        $formElementOption = new Chrome_Form_Option_Element_Form();
+        $formElementOption = new Chrome_Form_Option_Element_Form(
+            new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id));
         $formElementOption->setMaxAllowedTime(300)->setMinAllowedTime(1);
         $this->_addElement(new Chrome_Form_Element_Form( $this, $this->_id, $formElementOption));
 

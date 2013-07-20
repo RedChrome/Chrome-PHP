@@ -14,26 +14,36 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.Form
+ * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2013 16:59:41] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.07.2013 13:37:42] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
 
 /**
- * @package CHROME-PHP
- * @subpackage Chrome.Form
+ * Chrome_Validator_Form_Element_Readonly
+ *
+ * @package		CHROME-PHP
+ * @subpackage  Chrome.Validator
  */
-class Chrome_Form_Element_Password extends Chrome_Form_Element_Abstract
+class Chrome_Validator_Form_Element_Readonly extends Chrome_Validator
 {
-    public function isCreated() {
-        return true;
+    protected $_option = null;
+
+    public function __construct(Chrome_Form_Option_Element_Interface $option)
+    {
+        $this->_option = $option;
     }
 
-    public function create() {
-        return true;
+    protected function _validate()
+    {
+        if($this->_option->getIsReadonly() === true) {
+            return true;
+        }
+
+        return false;
     }
 }

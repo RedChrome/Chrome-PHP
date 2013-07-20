@@ -17,34 +17,43 @@
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2013 16:05:36] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2013 16:19:35] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
 
 /**
- * Chrome_Validator_Form_Element_Contains
+ * Chrome_Validator_Form_Element_SentReadonly
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */
-class Chrome_Validator_Form_Element_Contains extends Chrome_Validator
+class Chrome_Validator_Form_Element_SentReadonly extends Chrome_Validator
 {
-    protected $_allowedValues = null;
+    protected $_option = null;
 
-    public function __construct(array $allowedValues)
+    public function __construct(Chrome_Form_Option_Element_Interface $option)
     {
-        $this->_allowedValues = $allowedValues;
+        $this->_option = $option;
     }
 
     protected function _validate()
     {
-        if(is_array($this->_data)) {
+        if($this->_option->getIsReadonly() === true) {
+            if($this->_data !== null) {
+                $this->_setError('Inputfield which is marked as readonly was sent');
+                return false;
+            }
 
-            foreach($this->_data as $sentValue) {
-                if(!in_array($sentValue, $this->_allowedValues)) {
-                    $this->_setError('Found value which was not allowed');
+            return true;
+        }
+
+        if($this->_option instanceof Chrome_Form_Option_Element_Multiple) {
+
+            foreach($thi->_option->getReadonly() as $readonlyInput) {
+                if(in_array($readonlyInput, $this->_data)) {
+                    $this->_setError('Inputfield which is marked as readonly was sent');
                     return false;
                 }
             }
@@ -52,9 +61,6 @@ class Chrome_Validator_Form_Element_Contains extends Chrome_Validator
             return true;
         }
 
-        if(!in_array($this->_data, $this->_allowedValues)) {
-            $this->_setError('Input did not matched allowed values');
-            return false;
-        }
+        return true;
     }
 }

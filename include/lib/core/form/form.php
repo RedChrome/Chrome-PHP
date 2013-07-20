@@ -21,12 +21,16 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.07.2013 22:12:42] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.07.2013 13:45:16] --> $
  * @link       http://chrome-php.de
  */
 
 if(CHROME_PHP !== true) die();
 
+/**
+ * load interface and classes for form options
+ */
+require_once 'options.php';
 
 /**
  * loads interface for storage to save form data

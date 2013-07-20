@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.03.2013 14:04:47] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.07.2013 13:37:56] --> $
  * @author     Alexander Book
  */
 
@@ -29,50 +29,10 @@ if( CHROME_PHP !== true ) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Text extends Chrome_Form_Element_Abstract
+class Chrome_Form_Element_Text extends Chrome_Form_Element_Abstract implements Chrome_Form_Element_Storable
 {
-	const CHROME_FORM_ELEMENT_TEXT_SESSION_NAMESPACE = 'TEXT';
-
-	protected $_defaultOptions = array( self::IS_REQUIRED => true, self::CHROME_FORM_ELEMENT_READONLY => false );
-
-	protected $_data = null;
-
 	public function isCreated()
 	{
-		return true;
-	}
-
-	protected function _isValid()
-	{
-		$data = $this->_form->getSentData( $this->_id );
-
-		// if readonly is true, then data is null and the element is valid ;)
-		if( $this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true ) {
-			return true;
-		}
-
-        $isValid = $this->_validate($data);
-
-        if($isValid === false) {
-            $this->_unSave();
-        }
-
-		return $isValid;
-	}
-
-	protected function _isSent()
-	{
-		if( $this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true ) {
-			return true;
-		}
-
-		if( $this->_options[self::IS_REQUIRED] === true ) {
-			if( $this->_form->getSentData( $this->_id ) === null ) {
-				$this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
-				return false;
-			}
-		}
-
 		return true;
 	}
 
@@ -81,48 +41,8 @@ class Chrome_Form_Element_Text extends Chrome_Form_Element_Abstract
 		return true;
 	}
 
-	public function getData()
+	public function getStorableData()
 	{
-		if( $this->_data !== null ) {
-			return $this->_data;
-		}
-
-        // if textarea is read only, then the user can't send anything
-        if($this->_options[self::CHROME_FORM_ELEMENT_READONLY] === true) {
-            return null;
-        }
-
-		$this->_data = $this->_convert($this->_form->getSentData( $this->_id ));
-
-		return $this->_data;
-	}
-
-	public function save()
-	{
-		if( $this->_options[self::CHROME_FORM_ELEMENT_SAVE_DATA] === false ) {
-			return;
-		}
-
-		if( $this->_options[self::CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA] === true ) {
-			if( $this->getData() === null ) {
-				return;
-			}
-		}
-
-		$array = $this->_session[self::SESSION_NAMESPACE];
-		$array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXT_SESSION_NAMESPACE][$this->getID()] = $this->getData();
-		$this->_session[self::SESSION_NAMESPACE] = $array;
-	}
-
-    protected function _unSave()
-    {
-		$array = $this->_session[self::SESSION_NAMESPACE];
-		$array[$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXT_SESSION_NAMESPACE][$this->getID()] = null;
-    }
-
-	public function getSavedData()
-	{
-		return ( isset( $this->_session[self::SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXT_SESSION_NAMESPACE][$this->getID()] ) ) ?
-            $this->_session[self::SESSION_NAMESPACE][$this->_form->getID()][self::CHROME_FORM_ELEMENT_TEXT_SESSION_NAMESPACE][$this->getID()] : null;
+        return $this->getData();
 	}
 }
