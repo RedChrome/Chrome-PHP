@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.07.2013 22:16:25] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 17:23:52] --> $
  * @author     Alexander Book
  */
 
@@ -57,4 +57,43 @@ interface Chrome_Form_Option_Storable_Interface
     public function setStoreNullData($bool);
 
     public function setStoreInvalidData($bool);
+}
+
+class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interface
+{
+    protected $_storeNullData = false;
+
+    protected $_storageEnabled = false;
+
+    protected $_storeInvalidData = false;
+
+    public function getStorageEnabled()
+    {
+        return $this->_storageEnabled;
+    }
+
+    public function getStoreNullData()
+    {
+        return $this->_storeNullData;
+    }
+
+    public function getStoreInvalidData()
+    {
+        return $this->_storeInvalidData;
+    }
+
+    public function setStorageEnabled($bool)
+    {
+        $this->_storageEnabled = (bool) $bool;
+    }
+
+    public function setStoreNullData($bool)
+    {
+        $this->_storeNullData = (bool) $bool;
+    }
+
+    public function setStoreInvalidData($bool)
+    {
+        $this->_storeInvalidData = (bool) $bool;
+    }
 }

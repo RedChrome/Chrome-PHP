@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.07.2013 22:55:49] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 18:47:48] --> $
  * @author     Alexander Book
  */
 
@@ -27,7 +27,7 @@ if(CHROME_PHP !== true)
 /**
  *
  */
-class Chrome_Form_Option_Element_Form
+class Chrome_Form_Option_Element_Form extends Chrome_Form_Option_Element
 {
     protected $_token = null;
 
@@ -44,6 +44,8 @@ class Chrome_Form_Option_Element_Form
     public function __construct(Chrome_Form_Storage_Interface $storage)
     {
         $this->setStorage($storage);
+        $this->setIsReadonly(false);
+        $this->setIsRequired(true);
     }
 
     public function setToken($token) {
@@ -171,10 +173,8 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
     const
         CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME = 'ERRORMAXALLOWEDTIME',
         CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME = 'ERRORMINALLOWEDTIME',
-        CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN            = 'ERRORTOKEN';
-
-    protected $_defaultOptions = array(self::CHROME_FORM_ELEMENT_FORM_TIME => CHROME_TIME,
-                                       self::CHROME_FORM_ELEMENT_FORM_TOKEN_NAMESPACE => 'token');
+        CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN            = 'ERRORTOKEN',
+        CHROME_FORM_ELEMENT_ERROR_NOT_CREATED           = 'ERRORNOTCREATED';
 
     protected $_storage = null;
 
@@ -291,7 +291,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
 
         $token = $this->_createToken();
 
-        $formData = $this->_session[self::SESSION_NAMESPACE];
+        $formData = $this->_storage->get($this->_id);
 
         $data = array(self::CHROME_FORM_ELEMENT_FORM_TIME => CHROME_TIME,
                       self::CHROME_FORM_ELEMENT_FORM_TOKEN => $token);

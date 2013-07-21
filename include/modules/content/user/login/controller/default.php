@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 19:03:28] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 18:49:08] --> $
  * @author     Alexander Book
  */
 
@@ -41,6 +41,8 @@ class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Module_A
         $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_User_Login_Default', $this);
 
         $this->_model = new Chrome_Model_Login($this->_applicationContext, $this->_form);
+
+        $this->_form->create();
 
         if($this->_model->isLoggedIn() == true) {
             $this->_view->alreadyLoggedIn();
@@ -69,7 +71,9 @@ class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Module_A
                 } else {
                     $this->_view->showForm();
                 }
+
             } catch(Chrome_Exception $e) {
+
                 $this->_excpetionHandler->exception($e);
             }
         }

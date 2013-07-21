@@ -60,45 +60,45 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $passwordElement = new Chrome_Form_Element_Password($this, 'password', $passwordOption);
         $this->_addElement($passwordElement);
 
+        // checkbox
+        $checkboxOption = new Chrome_Form_Option_Element_Multiple();
+        $checkboxOption->setAllowedValues(array('Value1', 'Value2', 'vAlue3'));
+        $checkboxOption->setRequired(array('Value1', 'Value2'));
+
+        $checkboxElement = new Chrome_Form_Element_Checkbox($this, 'checkbox', $checkboxOption);
+        $this->_addElement($checkboxElement);
 
 
-        /*
-		$this->_elements['checkbox'] = new Chrome_Form_Element_Checkbox( $this, 'checkbox', array(
-            Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array(
-				'Value1',
-				'Value2',
-				'Value3'                                                                ),
-            Chrome_Form_Element_Abstract::IS_REQUIRED => array('Value1', 'Value2'),
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
-                Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array('Value1', 'Value2')
-                                                                                         )
-                                                                                                ) );
+        // select
+        $selectOption = new Chrome_Form_Option_Element_Multiple();
+        $selectOption->setAllowedValues(array('Value1', 'Value2', 'Value3'));
+        $selectOption->setSelectMultiple(true);
+        $selectOption->setIsRequired(false);
+
+        $selectElement = new Chrome_Form_Element_Select($this, 'select', $selectOption);
+        $this->_addElement($selectElement);
 
 
-		$this->_elements['select'] = new Chrome_Form_Element_Select( $this, 'select', array(
-			Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array(
-				'Value1',
-				'Value2',
-				'Value3'                                                              ),
-			Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_SELECT_MULTIPLE => true,
-            Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_READONLY => array('Value2'),
-			Chrome_Form_Element_Select::IS_REQUIRED => false,
-			Chrome_Form_Element_Select::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
-                Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array('Value1')
-                                                                                        )
-                                                                                            ) );
+        // submit
+        $submitOption = new Chrome_Form_Option_Element_Values();
+        $submitOption->setAllowedValues(array('Absenden'));
 
-        $this->_elements['submit'] = new Chrome_Form_Element_Submit($this, 'submit', array(
-            Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_SUBMIT_VALUES => array('Absenden')
-                                                                                            ) );
+        $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
+        $this->_addElement($submitElement);
 
-        $this->_elements['birthday'] = new Chrome_Form_Element_Birthday($this, 'birthday', array());
+
+        #$this->_elements['birthday'] = new Chrome_Form_Element_Birthday($this, 'birthday', array());
 
         //$this->addReceivingHandler(new Chrome_Form_Handler_Delete());*/
 
 
-        #$storage = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
-        #$storageOption = new Chrome_Form_Storage_Option();
-        #$this->setAttribute(ATTRIBUTE_STORE, new Chrome_Form_Handler_Store($storage, $storageOption, array('radio')));
+        $storage = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
+
+        $storageOption = new Chrome_Form_Option_Storage();
+        $storageOption->setStorageEnabled(true);
+        $storageOption->setStoreNullData(true);
+        $storageOption->setStoreInvalidData(false);
+
+        $this->setAttribute(self::ATTRIBUTE_STORE, new Chrome_Form_Handler_Store($storage, $storageOption, array('radio')));
 	}
 }

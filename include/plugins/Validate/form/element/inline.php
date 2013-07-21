@@ -17,39 +17,39 @@
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 18:45:05] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 17:12:10] --> $
  */
 
 if(CHROME_PHP !== true)
     die();
 
 /**
+ * Chrome_Validator_Form_Element_Inline
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */
-class Chrome_Validator_Composition_And extends Chrome_Validator_Composition_Abstract
+class Chrome_Validator_Form_Element_Inline extends Chrome_Validator
 {
-    public function __construct()
-    {
-    }
+    protected $_callback = null;
 
-    public function validate()
+    public function __construct($callable)
     {
-        foreach($this->_validators as $validator) {
-            $validator->validate();
-            if(!$validator->isValid()) {
-                $this->_errorMsg = $validator->getAllErrors();
-                return false;
-            }
+        if(!is_callable($callable)) {
+            throw new Chrome_Exception('Argument #1 must be a valid callback!');
         }
 
-        $this->_errorMsg = array();
-
-        return true;
+        $this->_callback = $callable;
     }
 
     protected function _validate()
     {
+        $returnValue = call_user_func($this->_callback, $this->_data);
+
+        if($returnValue === true) {
+            return true;
+        }
+
+        return false;
     }
 }

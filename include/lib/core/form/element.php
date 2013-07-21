@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2013 16:45:53] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 18:45:45] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -206,6 +206,13 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     protected $_isCreated = null;
 
     /**
+     * Cache for getData()
+     *
+     * @var mixed
+     */
+    protected $_data = null;
+
+    /**
      * Cache of isSent method
      *
      * @var boolean
@@ -267,9 +274,13 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
         $andComposition = new Chrome_Validator_Composition_And();
         $andComposition->addValidator(new Chrome_Validator_Form_Element_Required($this->_option));
 
+        if($this->_option instanceof Chrome_Form_Option_Element_Values) {
+            $andComposition->addValidator(new Chrome_Validator_Form_Element_Contains($this->_option->getAllowedValues()));
+        }
+
         $composition->addValidator($andComposition);
 
-        if(($validator = $this->_option->getValidator) !== null) {
+        if(($validator = $this->_option->getValidator()) !== null) {
             $andComposition->addValidator($validator);
         }
 
@@ -398,6 +409,81 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
         $this->_data = $this->_convert($this->_form->getSentData($this->_id));
 
         return $this->_data;
+    }
+
+    // @todo finish convert
+    protected function _convert($data) {
+        return $data;
+    }
+}
+
+abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element_Abstract
+{
+    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Multiple_Interface $option)
+    {
+        parent::__construct($form, $id, $option);
+    }
+
+    protected function _getValidator()
+    {
+        $or = new Chrome_Validator_Composition_Or();
+
+        $and = new Chrome_Validator_Composition_And();
+
+        $or->addValidator(new Chrome_Validator_Form_Element_Readonly($this->_option));
+        $or->addValidator($and);
+
+        $and->addValidator(new Chrome_Validator_Form_Element_Inline(array($this, 'inlineValidation')));
+        $and->addValidator(new Chrome_Validator_Form_Element_SentReadonly($this->_option));
+        $and->addValidator(new Chrome_Validator_Form_Element_Required($this->_option));
+        $and->addValidator(new Chrome_Validator_Form_Element_Contains($this->_option->getAllowedValues()));
+
+        if(($validator = $this->_option->getValidator()) !== null) {
+            $and->addValidator($validator);
+        }
+
+        return $or;
+    }
+
+    public function getData()
+    {
+        // cache
+        if($this->_data !== null) {
+            return $this->_data;
+        }
+
+        if($this->_option->getIsReadonly() === true) {
+            $this->_data = null;
+            return null;
+        }
+
+        $data = $this->_form->getSentData($this->_id);
+
+        if($data == null) {
+            $this->_data = null;
+            return null;
+        }
+
+        if(!is_array($data)) {
+            $data = array($data);
+        }
+
+        foreach($data AS $key => $value) {
+            $data[$key] = $this->_convert($data[$key]);
+        }
+
+        $this->_data = $data;
+
+        return $data;
+    }
+
+    public function inlineValidation($data)
+    {
+        if($this->_option->getSelectMultiple() === false AND is_array($data) AND sizeof($data) > 1) {
+            return false;
+        }
+
+        return true;
     }
 }
 

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.07.2013 22:32:13] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 18:30:09] --> $
  * @author     Alexander Book
  */
 
@@ -61,6 +61,8 @@ class Chrome_Form_Storage_Session implements Chrome_Form_Storage_Interface
 		$content = $this->_session->get(self::FORM_NAMESPACE);
 
 		$content[$this->_formId][$elementName] = $data;
+
+        $this->_session->set(self::FORM_NAMESPACE, $content);
 	}
 
 	public function remove($elementName)

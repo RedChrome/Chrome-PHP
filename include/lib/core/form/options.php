@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2013 15:32:26] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 17:57:00] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -164,9 +164,13 @@ class Chrome_Form_Option_Element_Multiple extends Chrome_Form_Option_Element_Val
 
     protected $_readonly = array();
 
+    protected $_selectMultiple = true;
+
     public function setRequired(array $multipleValues)
     {
         $this->_required = $multipleValues;
+
+        return $this;
     }
 
     public function getRequired()
@@ -177,10 +181,24 @@ class Chrome_Form_Option_Element_Multiple extends Chrome_Form_Option_Element_Val
     public function setReadonly(array $multipleValues)
     {
         $this->_readonly = $multipleValues;
+
+        return $this;
     }
 
     public function getReadonly()
     {
         return $this->_readonly;
+    }
+
+    public function setSelectMultiple($boolean)
+    {
+        $this->_selectMultiple = (boolean) $boolean;
+
+        return $this;
+    }
+
+    public function getSelectMultiple()
+    {
+        return $this->_selectMultiple;
     }
 }

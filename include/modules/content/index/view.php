@@ -72,20 +72,22 @@ class Chrome_View_Index_STHOTHER extends Chrome_View_Abstract
     public function render() {
 
         $form = $this->_controller->getForm();
+        // @todo
 
-        $formElement = $form->getElements();
-        $options = $formElement['Index']->getOptions();
+        $formElement = $form->getElements('Index');
+        $option = $formElement->getOption();
 
-        if(isset($options[Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_TOKEN])) {
+        if($option->getToken() !== null) {
             $template = new Chrome_Template();
             $template->assignTemplate('modules/content/index/form');
             $template->assign('FORM', $this->_controller->getForm());
-            $template->assign('TOKEN', $options[Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_TOKEN]);
+            $template->assign('TOKEN', $option->getToken());
             $template->assign('LANG', new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL));
             return $template->render();
         } else {
             return '<form action="" name="redirect" method="post"><input type="submit" name="submit" value="Weiter"/></form>';
         }
+
     }
 }
 

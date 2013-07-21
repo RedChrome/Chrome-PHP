@@ -17,7 +17,7 @@
  * @subpackage Chrome.User
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.06.2013 13:56:48] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 18:49:48] --> $
  * @author     Alexander Book
  */
 
@@ -47,7 +47,7 @@ class Chrome_View_User_Login_Default extends Chrome_View_Strategy_Abstract
     }
 
     public function errorWhileLoggingIn() {
-        $this->_views[] = $this->_viewContext->getFactory()->build(' hrome_View_User_Default_WrongPassword', $this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Default_WrongPassword', $this->_controller);
     }
 }
 
@@ -92,6 +92,8 @@ class Chrome_View_User_Default_ShowForm extends Chrome_View_Abstract {
 
 class Chrome_View_User_Default_WrongPassword extends Chrome_View_Abstract{
     public function render() {
+        echo 'todo content/user/login/view/default.php';
+
         $lang = new Chrome_Language('modules/content/user/login');
 
         $template = new Chrome_Template();

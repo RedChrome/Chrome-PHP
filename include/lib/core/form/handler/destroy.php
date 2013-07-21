@@ -21,15 +21,15 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 14:45:41] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 16:25:58] --> $
  * @link       http://chrome-php.de
  */
 if(CHROME_PHP !== true) die();
 
 /**
- * Chrome_Form_Handler_Delete
+ * Chrome_Form_Handler_Destroy
  *
- * Deletes the input and other data, if the form is getting destroyed
+ * destorys the input and other data, if the form is getting destroyed
  *
  * You can use this as Creation/Receiving/Validation Handler, but i think it's
  * most usefull as receiving handler ;)
@@ -37,14 +37,14 @@ if(CHROME_PHP !== true) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Handler_Delete implements Chrome_Form_Handler_Interface
+class Chrome_Form_Handler_Destroy implements Chrome_Form_Handler_Interface
 {
     protected $_form = null;
 
     public function __destruct()
     {
         if($this->_form !== null) {
-            $this->_form->delete();
+            $this->_form->destory();
         }
     }
 

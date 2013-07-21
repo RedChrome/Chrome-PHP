@@ -17,11 +17,11 @@
  * @subpackage Chrome.Validator
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.04.2013 14:09:49] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 18:45:01] --> $
  */
 
 if(CHROME_PHP !== true)
-	die();
+    die();
 
 /**
  *
@@ -30,22 +30,26 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Validator_Composition_Or extends Chrome_Validator_Composition_Abstract
 {
-	public function __construct()
-	{
-	}
+    public function __construct()
+    {
+    }
 
     public function validate()
     {
         foreach($this->_validators as $validator) {
             $validator->validate();
-            if($validator->isValid) {
+            if($validator->isValid()) {
                 $this->_errorMsg = array();
                 return true;
             } else {
                 $this->_errorMsg = array_merge($this->_errorMsg, $validator->getAllErrors());
             }
-		}
+        }
 
         return false;
+    }
+
+    protected function _validate()
+    {
     }
 }

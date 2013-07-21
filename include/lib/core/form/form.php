@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.07.2013 13:45:16] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 18:33:15] --> $
  * @link       http://chrome-php.de
  */
 
@@ -250,16 +250,6 @@ interface Chrome_Form_Interface
      * @return array
      */
     public function getElements($id = null);
-
-    /**
-     * getElement()
-     *
-     * Returns an element searched by its name
-     *
-     * @param string $name
-     * @return Chrome_Form_Element_Interface
-     */
-    public function getElement($name);
 
     /**
      * getCreationErrors
@@ -595,7 +585,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         // if all are created then the form is created
         foreach($this->_elements as $formElement) {
             if($formElement->isCreated() === false) {
-                $this->_creationErrors[$formElement->getID()] = $formElement->getErrors();
+                $this->_errors[self::CHROME_FORM_ERRORS_CREATION][$formElement->getID()] = $formElement->getErrors();
                 $this->_isCreated = false;
 
                 if(count($this->_creationHandler) !== 0) {
@@ -655,7 +645,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 
             if($formElement->isValid() === false) {
                 $this->_isValid = false;
-                $this->_validationErrors[$formElement->getID()] = $formElement->getErrors();
+                $this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$formElement->getID()] = $formElement->getErrors();
             }
         }
 
@@ -714,14 +704,9 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 
         foreach($this->_elements as $formElement) {
             if($formElement->isSent() === false) {
-                $this->_receivingErrors[$formElement->getID()] = $formElement->getErrors();
+                $this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$formElement->getID()] = $formElement->getErrors();
                 $this->_isSent = false;
             }
-        }
-
-        // saves the sent data (or the "not sent" data)
-        foreach($this->_elements as $formElement) {
-            $formElement->save();
         }
 
         if($this->_isSent === false) {
@@ -924,20 +909,6 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     }
 
     /**
-     * Chrome_Form_Abstract::getElement()
-     *
-     * wrapper for {@see Chrome_Form_Abstract::getElements()}
-     * @todo remove this method
-     *
-     * @deprecated
-     * @return Chrome_Fom_Abstract
-     */
-    public function getElement($id)
-    {
-        return $this->getElements($id);
-    }
-
-    /**
      * Chrome_Form_Abstract::getOptions()
      *
      * returns options for an element
@@ -960,9 +931,9 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function getCreationErrors($elementName = null)
     {
         if($elementName == null) {
-            return $this->_creationErrors;
+            return $this->_errors[self::CHROME_FORM_ERRORS_CREATION];
         } else {
-            return isset($this->_creationErrors[$elementName]) ? $this->_creationErrors[$elementName] : array();
+            return isset($this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName]) ? $this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName] : array();
         }
     }
 
@@ -976,9 +947,9 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function getValidationErrors($elementName = null)
     {
         if($elementName == null) {
-            return $this->_validationErrors;
+            return $this->_errors[self::CHROME_FORM_ERRORS_VALIDATION];
         } else {
-            return isset($this->_validationErrors[$elementName]) ? $this->_validationErrors[$elementName] : array();
+            return isset($this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName]) ? $this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName] : array();
         }
     }
 
@@ -992,9 +963,9 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function getReceivingErrors($elementName = null)
     {
         if($elementName == null) {
-            return $this->_receivingErrors;
+            return $this->_errors[self::CHROME_FORM_ERRORS_RECEIVING];
         } else {
-            return isset($this->_receivingErrors[$elementName]) ? $this->_receivingErrors[$elementName] : array();
+            return isset($this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName]) ? $this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName] : array();
         }
     }
 
