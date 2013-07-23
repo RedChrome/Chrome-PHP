@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 17:57:00] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.07.2013 14:13:37] --> $
  * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
@@ -41,17 +41,7 @@ interface Chrome_Form_Attribute_Interface
 }
 
 /**
- * @todo sollen wirklich im form default werte für alle elements hinterlegt werden?
- */
-interface Chrome_Form_Option_Interface
-{
-
-}
-
-/**
  * Interface for an element option class. This contains the settings for a form element
- *
- * @TODO add converter interface
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Option
@@ -69,6 +59,10 @@ interface Chrome_Form_Option_Element_Interface
     public function setValidator(Chrome_Validator_Interface $validator);
 
     public function getValidator();
+
+    public function setConversion(Chrome_Converter_List_Interface $conversion);
+
+    public function getConversion();
 }
 
 interface Chrome_Form_Option_Element_Values_Interface extends Chrome_Form_Option_Element_Interface
@@ -104,6 +98,8 @@ class Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Interface
 
     protected $_validator = null;
 
+    protected $_converter = null;
+
     public function setIsRequired($boolean)
     {
         $this->_isRequired = (bool) $boolean;
@@ -138,6 +134,16 @@ class Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Interface
     public function getValidator()
     {
         return $this->_validator;
+    }
+
+    public function setConversion(Chrome_Converter_List_Interface $conversion)
+    {
+        $this->_converter = $conversion;
+    }
+
+    public function getConversion()
+    {
+        return $this->_converter;
     }
 }
 

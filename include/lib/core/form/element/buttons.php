@@ -17,10 +17,47 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 16:27:41] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.07.2013 13:41:44] --> $
  */
 
-if( CHROME_PHP !== true ) die();
+if(CHROME_PHP !== true)
+    die();
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Form
+ */
+class Chrome_Form_Option_Element_Buttons extends Chrome_Form_Option_Element
+{
+    protected $_buttons = array();
+
+    public function addButton(Chrome_Form_Element_Interface $element)
+    {
+        $this->_buttons[] = $element;
+
+        return $this;
+    }
+
+    public function getButtons()
+    {
+        return $this->_buttons;
+    }
+
+    public function setButtons(array $elements)
+    {
+        $this->_buttons = array();
+
+        foreach($elements as $element) {
+            if(!($element instanceof Chrome_Form_Element_Interface)) {
+                throw new Chrome_Exception('All elements in array have to be instances of Chrome_Form_Element_Interface');
+            }
+
+            $this->_buttons[] = $element;
+        }
+
+        return $this;
+    }
+}
 
 /**
  * @package CHROME-PHP
@@ -28,86 +65,85 @@ if( CHROME_PHP !== true ) die();
  */
 class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract
 {
-	const CHROME_FORM_ELEMENT_BUTTONS = 'BUTTONS';
-
     const CHROME_FORM_ELEMENT_ERROR_NO_BUTTON_PRESSED = 'NOBUTTONPRESSED';
 
-	protected $_defaultOptions = array( self::IS_REQUIRED => true, self::CHROME_FORM_ELEMENT_BUTTONS =>
-			array() );
+    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Buttons $option)
+    {
+        parent::__construct($form, $id, $option);
+    }
 
-	protected $_data = null;
+    protected function _isCreated()
+    {
+        foreach($this->_option->getButtons() as $button) {
+            if($button->isCreated() === false) {
+                $this->_errors[] = $button->getErrors();
+                return false;
+            }
+        }
 
-	protected function _isCreated()
-	{
-		foreach( $this->_options[self::CHROME_FORM_ELEMENT_BUTTONS] as $button ) {
-			if( $button->isCreated() === false ) {
-			    $this->_errors[] = $button->getErrors();
-				return false;
-			}
-		}
+        return true;
+    }
 
-		return true;
-	}
+    protected function _getValidator()
+    {
+        $validator = parent::_getValidator();
 
-	protected function _isValid()
-	{
-		foreach( $this->_options[self::CHROME_FORM_ELEMENT_BUTTONS] as $button ) {
-			if( $button->isValid() === false ) {
-			    $this->_errors[] = $button->getErrors();
-				return false;
-			}
-		}
+        $validator->addValidator(new Chrome_Validator_Form_Element_Inline(array($this, 'inlineValidation')));
 
-		return true;
-	}
+        return $validator;
+    }
 
-	protected function _isSent()
-	{
-		if( $this->_options[self::IS_REQUIRED] === false ) {
-			foreach( $this->_options[self::CHROME_FORM_ELEMENT_BUTTONS] as $button ) {
+    public function inlineValidation($data)
+    {
+        foreach($this->_option->getButtons() as $button) {
+            if($button->isValid() === false) {
+                return $button->getErrors();
+            }
+        }
+
+        return true;
+    }
+
+    protected function _isSent()
+    {
+        if($this->_option->getIsRequired() === false OR $this->_option->getIsReadonly() === true) {
+            foreach($this->_option->getButtons() as $button) {
                 // call isSent, but we dont care about the result
-				$button->isSent();
-			}
+                $button->isSent();
+            }
             // if its not required, then it is always sent
             return true;
-		}
+        }
 
-		// only one buttons must have been sent!
-		foreach( $this->_options[self::CHROME_FORM_ELEMENT_BUTTONS] as $button ) {
-			if( $button->isSent() === true ) {
-				return true;
-			}
-		}
+        // only one buttons must have been sent!
+        foreach($this->_option->getButtons() as $button) {
+            if($button->isSent() === true) {
+                return true;
+            }
+        }
 
         $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NO_BUTTON_PRESSED;
 
-		return false;
-	}
+        return false;
+    }
 
-	public function create()
-	{
-		foreach( $this->_options[self::CHROME_FORM_ELEMENT_BUTTONS] as $button ) {
-			$button->create();
-		}
-	}
+    public function create()
+    {
+        foreach($this->_option->getButtons() as $button) {
+            $button->create();
+        }
+    }
 
-	public function getData()
-	{
-		// we're using here no converter, because the data is already converted in the particular buttons
+    public function getData()
+    {
+        // we're using here no converter, because the data is already converted in the particular buttons
 
-		$array = array();
+        $array = array();
 
-		foreach( $this->_options[self::CHROME_FORM_ELEMENT_BUTTONS] as $button ) {
-			$array[$button->getID()] = $button->getData();
-		}
+        foreach($this->_option->getButtons() as $button) {
+            $array[$button->getID()] = $button->getData();
+        }
 
-		return $array;
-	}
-
-	public function save()
-	{
-		foreach( $this->_options[self::CHROME_FORM_ELEMENT_BUTTONS] as $button ) {
-			$button->save();
-		}
-	}
+        return $array;
+    }
 }

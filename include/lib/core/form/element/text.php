@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [19.07.2013 13:37:56] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.07.2013 14:21:06] --> $
  * @author     Alexander Book
  */
 
@@ -32,11 +32,6 @@ if( CHROME_PHP !== true ) die();
 class Chrome_Form_Element_Text extends Chrome_Form_Element_Abstract implements Chrome_Form_Element_Storable
 {
 	public function isCreated()
-	{
-		return true;
-	}
-
-	public function create()
 	{
 		return true;
 	}

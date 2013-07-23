@@ -17,7 +17,7 @@
  * @subpackage Chrome.Converter
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 18:56:58] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.07.2013 14:22:47] --> $
  * @author     Alexander Book
  */
 
@@ -30,9 +30,17 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Converter_List_Interface extends Iterator
 {
+    /**
+     * @param $filters array contains either a string (identifier for a filter) or a Converter_List_Interface instance, numerically indexed.
+     * @oaram $params array [optional] contains parameters for filters (for Converter_List_Interface the parameters are ignored). Structure:
+     *          #1Filter => array(Options), #2Filter => array(Options2), #3Converter => array(), #4Filter => array(Options2), ...
+     * @return void
+     */
     public function setConversion(array $filters, array $params = null);
 
     public function addConversion($filter, array $params = null);
+
+    public function addConverterList(Chrome_Converter_List_Interface $list);
 
     public function getAllConversions();
 
@@ -96,6 +104,11 @@ class Chrome_Converter_List implements Chrome_Converter_List_Interface
         return $this;
     }
 
+    public function addConverterList(Chrome_Converter_List_Interface $list)
+    {
+        $this->addConversion($list, array());
+    }
+
     public function getAllConversions()
     {
         return $this->_array;
@@ -142,6 +155,11 @@ class Chrome_Converter implements Chrome_Converter_Delegator_Interface
 
         foreach($converterList as $key => $conversion) {
 
+            if($conversion instanceof Chrome_Converter_List_Interface) {
+                $converted = $this->convert($conversion, $converted);
+                continue;
+            }
+
             if(!isset($this->_conversions[$conversion])) {
                 throw new Chrome_Exception('Could not convert using conversion '.$conversion);
             }
@@ -184,44 +202,4 @@ abstract class Chrome_Converter_Delegate_Abstract implements Chrome_Converter_De
     {
         return $this->_conversions;
     }
-}
-
-
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.Converter
- */
-class Chrome_Converter_Delegate_String extends Chrome_Converter_Delegate_Abstract
-{
-	protected $_conversions = array(
-		'strToLower',
-		'strToUpper',
-		'strUcFirst',
-		'strUcWords',
-		'strLcFirst' );
-
-	public function strToLower( $var, $option )
-	{
-		return strtolower( $var );
-	}
-
-	public function strToUpper( $var, $option )
-	{
-		return strtoupper( $var );
-	}
-
-	public function strUcFirst($var, $option )
-	{
-		return ucfirst( $var );
-	}
-
-	public function strUcWords( $var, $option )
-	{
-		return ucwords( $var );
-	}
-
-	public function strLcFirst( $var, $option )
-	{
-		return lcfirst( $var );
-	}
 }

@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2013 16:31:42] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.07.2013 14:21:11] --> $
  */
 
 if(CHROME_PHP !== true)
@@ -57,11 +57,6 @@ class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract implements 
         }
 
         return $or;
-    }
-
-    public function create()
-    {
-        return true;
     }
 
     public function getStorableData()

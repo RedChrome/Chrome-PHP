@@ -18,20 +18,23 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
         $formElementOption->setMaxAllowedTime(300)->setMinAllowedTime(1);
         $this->_addElement(new Chrome_Form_Element_Form( $this, $this->_id, $formElementOption));
 
+        $errorOption = new Chrome_Form_Option_Element();
+        $errorElement = new Chrome_Form_Element_Error($this, 'error', $errorOption);
+        $this->_addElement($errorElement);
 
-		$this->_elements['error'] = new Chrome_Form_Element_Error( $this, 'error', array( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS =>
-				array( Chrome_Form_Decorator_Error_Default::CHROME_FORM_DECORATOR_ERROR_EXCLUDE_ELEMENTS =>
-					array( 'submit', $this->_id ) ) ) );
-        $this->_elements['error']->setDecorator(new Chrome_Form_Decorator_Error_Default(array(), array()));
 
-		$this->_elements['accept'] = new Chrome_Form_Element_Checkbox( $this, 'accept', array( Chrome_Form_Element_Checkbox::IS_REQUIRED => true,
-				Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array( 'accepted' ),
-                Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => array($lang->get('rules_agree')))
+        $acceptOption = new Chrome_Form_Option_Element_Multiple();
+        $acceptOption->setIsRequired(true)->setAllowedValues(array('accepted'));
 
-                 ) );
+        $acceptElement = new Chrome_Form_Element_Checkbox($this, 'accept', $acceptOption);
+        $this->_addElement($acceptElement);
 
-		$this->_elements['submit'] = new Chrome_Form_Element_Submit( $this, 'submit', array( Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_SUBMIT_VALUES =>
-				array( $lang->get( 'register' ) ) ) );
+
+        $submitOption = new Chrome_Form_Option_Element_Values();
+        $submitOption->setAllowedValues(array($lang->get( 'register' ) ));
+
+        $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
+        $this->_addElement($submitElement);
 	}
 }
 
@@ -43,48 +46,56 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 		$this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
 		$this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST );
 		$this->setAttribute( self::ATTRIBUTE_ID, $this->_id );
-        $this->setAttribute( self::ATTRIBUTE_DECORATOR, 'Yaml');
 
 		$lang = new Chrome_Language( 'modules/content/user/registration' );
 
-		$emailValidator = new Chrome_Validator_Email_Default();
+		$emailValidatorDefault = new Chrome_Validator_Email_Default();
         $emailExistsValidator = new Chrome_Validator_Email_Exists();
         $emailBlacklistValidator = new Chrome_Validator_Email_Blacklist();
         $emailExistsValidator->setOptions(array(Chrome_Validator_Email_Exists::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS => false));
+
+        $emailValidator = new Chrome_Validator_Composition_And();
+        $emailValidator->addValidators(array($emailValidatorDefault, $emailExistsValidator, $emailBlacklistValidator));
 
 		$passwordValidator = new Chrome_Validator_Form_Password();
 
 		$nicknameValidator = new Chrome_Validator_Form_NicknameRegister();
 
-		$emailConverter = new Chrome_Converter_Value();
-		//$emailConverter->addFilter( 'escape' );
-		$emailConverter->addFilter( 'convert_char_to_html' );
-		$emailConverter->addFilter( 'stripHTML' );
-        $emailConverter->addFilter( 'strToLower');
+        $emailConverter = new Chrome_Converter_List();
+        $emailConverter->setConversion(array('convertCharToHtml', 'stripHtml', 'strToLower'));
 
-        $nameConverter = new Chrome_Converter_Value();
-		//$nameConverter->addFilter( 'escape' );
-		$nameConverter->addFilter( 'convert_char_to_html' );
-		$nameConverter->addFilter( 'stripHTML' );
+        $nameConverter = new Chrome_Converter_List();
+        $nameConverter->setConversion(array('convertCharToHtml', 'stripHtml'));
 
 
-		$this->_elements[$this->_id] = new Chrome_Form_Element_Form( $this, $this->_id, array( Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME =>
-				300, Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_MIN_ALLOWED_TIME => 1 ) );
-        $this->_elements[$this->_id]->setDecorator(new Chrome_Form_Decorator_Form_Yaml(array(), array()));
+        $formOption = new Chrome_Form_Option_Element_Form(
+            new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id));
+        $formOption->setMinAllowedTime(1)->setMaxAllowedTime(300);
 
-		$this->_elements['error'] = new Chrome_Form_Element_Error( $this, 'error', array() );
-        $this->_elements['error']->setDecorator(new Chrome_Form_Decorator_Error_Default(array(), array()));
-
-         // with the comment you can enable/disable the auto deletion of password content, if the user clicks on backward
-        $backwardButton = new Chrome_Form_Element_Backward( $this, 'backward', //array( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS =>
-				//array( Chrome_Form_Decorator_Backward_Default::CHROME_FORM_DECORATOR_BACKWARD_DELETE_PASSWORDS => true ) )
-                array() );
-
-		$submitButton = new Chrome_Form_Element_Submit( $this, 'submit', array( Chrome_Form_Element_Submit::IS_REQUIRED => true,
-				Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_SUBMIT_VALUES => array( $lang->get( 'register' ) ) ) );
+        $formElement = new Chrome_Form_Element_Form($this, $this->_id, $formOption);
+        $this->_addElement($formElement);
 
 
-        $this->_elements['buttons'] = new Chrome_Form_Element_Buttons($this, 'buttons', array(Chrome_Form_Element_Buttons::CHROME_FORM_ELEMENT_BUTTONS => array($submitButton, $backwardButton)));
+        $errorOption = new Chrome_Form_Option_Element();
+        $errorElement = new Chrome_Form_Element_Error($this, 'error', $errorOption);
+        $this->_addElement($errorElement);
+
+
+        $backwardButton = new Chrome_Form_Element_Backward( $this, 'backward', new Chrome_Form_Option_Element());
+
+        $submitOption = new Chrome_Form_Option_Element_Values();
+        $submitButton->setIsRequired(true)->setAllowedValues(array( $lang->get( 'register' ) ));
+		$submitButton = new Chrome_Form_Element_Submit( $this, 'submit', $submitOption);
+
+        $buttonsOption = new Chrome_Form_Option_Element_Buttons();
+        $buttonsOption->setIsRequired(true)->setButtons(array($submitButton, $backwardButton));
+
+        $buttonsElement = new Chrome_Form_Element_Buttons($this, 'buttons', $buttonsOption);
+        $this->_addElement($buttonsElement);
+
+
+        /*
+        @todo: reimplement captcha and birthday
 
 		$this->_elements['captcha'] = new Chrome_Form_Element_Captcha( $this, 'captcha', array(
             Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ),
@@ -99,33 +110,29 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
                 Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('birthday')),
             )
           );
+        */
 
-		$this->_elements['email'] = new Chrome_Form_Element_Text( $this, 'email', array(
-			Chrome_Form_Element_Abstract::IS_REQUIRED => true,
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array( $emailValidator, $emailExistsValidator, $emailBlacklistValidator ),
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ),
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('email')),
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array( $emailConverter  ) ) );
+        $emailOption = new Chrome_Form_Option_Element();
+        $emailOption->setIsRequired(true)->setConversion($emailConverter)->setValidator($emailValidator);
 
-		$this->_elements['password'] = new Chrome_Form_Element_Password( $this, 'password', array(
-			Chrome_Form_Element_Abstract::IS_REQUIRED => true,
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array( $passwordValidator ),
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('password')),
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ) ) );
+        $emailElement = new Chrome_Form_Element_Text($this, 'email', $emailOption);
+        $this->_addElement($emailElement);
 
-		// add a validator, to check whether the pws are the same or not
-		$this->_elements['password2'] = new Chrome_Form_Element_Password( $this, 'password2', array(
-			Chrome_Form_Element_Abstract::IS_REQUIRED => true,
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array( $passwordValidator ),
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('password_confirm')),
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ) ) );
 
-		// add nickname validator
-		$this->_elements['nickname'] = new Chrome_Form_Element_Text( $this, 'nickname', array(
-			Chrome_Form_Element_Abstract::IS_REQUIRED => true,
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_VALIDATOR_NAMESPACE => array( $nicknameValidator ),
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ),
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('nickname')),
-			Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array( $nameConverter ) ) );
+        $passwordOption = new Chrome_Form_Option_Element();
+        $passwordOption->setIsRequired(true)->setValidator($passwordValidator);
+
+        $passwordElement = new Chrome_Form_Element_Password($this, 'password', $passwordOption);
+        $passwordElement2 = new Chrome_Form_Element_Password($this, 'password2', $passwordOption);
+
+        $this->_addElement($passwordElement);
+        $this->_addElement($passwordElement2);
+
+
+        $nicknameOption = new Chrome_Form_Option_Element();
+        $nicknameOption->setIsRequired(true)->setValidator($nicknameValidator)->setConversion($nameConverter);
+
+        $nicknameElement = new Chrome_Form_Element_Text($this, 'nickname', $nicknameOption);
+        $this->_addElement($nicknameElement);
 	}
 }
