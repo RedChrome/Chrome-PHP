@@ -106,7 +106,7 @@ interface Chrome_Design_Theme_Interface
     public function initDesign(Chrome_Design_Interface $design);
 }
 
-// todo remove those includes, place them anywhere else
+// @todo remove those includes, place them anywhere else
 require_once 'renderable/composition.php';
 require_once 'renderable/template.php';
 require_once 'design/default.php';
