@@ -42,7 +42,8 @@ class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Inter
 		die();
 	}
 
-    protected function _printExceptionTrace(Exception $e) {
+    protected function _printExceptionTrace(Exception $e)
+    {
 
         $trace = $e->getTrace();
 
@@ -50,8 +51,14 @@ class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Inter
 
         foreach($trace as $key => $value) {
 
+            $return .= sprintf('#%1$02d: ', $key+1);
+
 			if(isset($value['file'])) {
-				$return .= $value['file'].'('.@$value['line'].'): ';
+			    if(isset($value['line'])) {
+				    $return .= $value['file'].'('.$value['line'].'): ';
+			    } else {
+			        $return .= $value['file'].'(): ';
+			    }
 			}
 
 			if(!isset($value['class'])) {
@@ -63,7 +70,7 @@ class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Inter
 				$return .= $this->_getArgs($value['args']);
 			}
 			$return .= '<br>'."\n";
-		}
+        }
 
         if($e instanceof Chrome_Exception) {
 
@@ -75,7 +82,7 @@ class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Inter
 
     			$return .= $this->_printExceptionTrace($prev);
             }
-		}
+        }
 
         return $return;
     }
@@ -95,10 +102,9 @@ class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Inter
 					continue;
 				}
 				$return .= ', '.$this->_getValue($value);
-				;
+
 			} else {
 				$return .= ' '.$key.' => '.$this->_getValue($value);
-				;
 			}
 		}
 		$return .= ')';

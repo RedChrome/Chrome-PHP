@@ -34,7 +34,8 @@ class Chrome_Design_Theme_Chrome implements Chrome_Design_Theme_Interface
 		require_once LIB.'core/design/options/static.php';
 		require_once LIB.'core/design/loader/static.php';
 
-        $exceptionHandler = new Chrome_Exception_Handler_Dummy(true);
+		// @todo use another exception handler
+        $exceptionHandler = new Chrome_Exception_Handler_Default(true);
 
 		$template = new Chrome_Template();
 		$template->assignTemplate('design/chrome/design.tpl');

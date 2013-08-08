@@ -17,27 +17,29 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.10.2012 19:50:27] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 19:34:32] --> $
  */
-if(CHROME_PHP !== true)
-    die();
+if( CHROME_PHP !== true ) die();
 
 /**
+ * TODO: change attribute class if errors exists
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Submit_Default extends Chrome_Form_Decorator_Abstract
+class Chrome_View_Form_Element_Radio_Default extends Chrome_View_Form_Element_Multiple_Abstract
 {
-   private $_int = 0;
+	private $_int = 0;
 
-    public function render() {
+	protected function getNext()
+	{
+	    $next = $this->_availableSelections[$this->_int];
+	    $this->_int = ++$this->_int % count( $this->_availableSelections );
+	    return $next;
+	}
 
-        $array = $this->_formElement->getOptions(Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_SUBMIT_VALUES);
-
-        $value = $array[$this->_int];
-
-        $this->_int = (++$this->_int) % ($array);
-
-        return '<input type="submit" name="'.$this->_formElement->getID().'" value="'.$value.'" '.$this->_getPreparedAttrs().'/>';
-    }
+	protected function _render()
+	{
+	    return '<input type="radio" '.$this->_renderFlags().'/>';
+	}
 }

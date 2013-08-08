@@ -48,30 +48,36 @@ class Chrome_Form_Option_Element_Form extends Chrome_Form_Option_Element
         $this->setIsRequired(true);
     }
 
-    public function setToken($token) {
+    public function setToken($token)
+    {
         $this->_token = $token;
         return $this;
     }
 
-    public function getToken() {
+    public function getToken()
+    {
         return $this->_token;
     }
 
-    public function setMaxAllowedTime($time) {
+    public function setMaxAllowedTime($time)
+    {
         $this->_maxTime = (int) $time;
         return $this;
     }
 
-    public function getMaxAllowedTime() {
+    public function getMaxAllowedTime()
+    {
         return $this->_maxTime;
     }
 
-    public function setMinAllowedTime($time) {
+    public function setMinAllowedTime($time)
+    {
         $this->_minTime = (int) $time;
         return $this;
     }
 
-    public function getMinAllowedTime() {
+    public function getMinAllowedTime()
+    {
         return $this->_minTime;
     }
 

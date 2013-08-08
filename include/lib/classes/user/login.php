@@ -1,7 +1,7 @@
 <?php
-
 interface Chrome_User_Login_Interface
 {
+
     public function isLoggedIn();
 
     public function checkIsLoggedIn();
@@ -12,38 +12,39 @@ interface Chrome_User_Login_Interface
 
     public function getID();
 }
-
 class Chrome_User_Login implements Chrome_User_Login_Interface
 {
+
     /**
+     *
      * @return bool
      */
     public function login($id, $credential, $autoLogin = false)
     {
-
         $authenticate = Chrome_Authentication::getInstance();
 
-        try {
+        try
+        {
             $authenticate->authenticate(new Chrome_Authentication_Resource_Database($id, $credential, $autoLogin));
-        }
-        catch (Chrome_Exception $e) {
-
+        } catch(Chrome_Exception $e)
+        {
         }
     }
 
     public function isLoggedIn()
     {
-
         $authenticate = Chrome_Authentication::getInstance();
 
-        if($authenticate->isAuthenticated() == false) {
+        if($authenticate->isAuthenticated() == false)
+        {
             return false;
         }
 
         $id = $authenticate->getAuthenticationID();
 
         // guest
-        if($id != 0) {
+        if($id != 0)
+        {
             return true;
         }
 
@@ -61,7 +62,9 @@ class Chrome_User_Login implements Chrome_User_Login_Interface
     }
 
     /**
+     *
      * @deprecated
+     *
      */
     public function getID()
     {

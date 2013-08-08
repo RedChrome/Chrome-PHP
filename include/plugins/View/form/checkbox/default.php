@@ -26,13 +26,28 @@ if(CHROME_PHP !== true) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Checkbox_Default extends Chrome_Form_Decorator_Abstract
+class Chrome_View_Form_Element_Checkbox_Default extends Chrome_View_Form_Element_Multiple_Abstract
 {
+    private $_int = 0;
 
-	private $_int = 0;
-
-	public function render()
+	protected function getNext()
 	{
+	    $next = $this->_availableSelections[$this->_int];
+	    $this->_int = ++$this->_int % count( $this->_availableSelections );
+	    return $next;
+	}
+
+	protected function _render()
+	{
+
+	    $return = '<input type="checkbox" '.$this->_renderFlags().'/>';
+	    return $return;
+
+
+
+
+
+
 		$name = $this->_formElement->getID();
 
 		// get all selection options

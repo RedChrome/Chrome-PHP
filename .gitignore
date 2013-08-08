@@ -1,1 +1,4 @@
 include/tmp/
+.settings/
+.project
+.buildpath

@@ -13,32 +13,40 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.User
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 19:03:44] --> $
- * @author     Alexander Book
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 19:03:44] --> $
+ * @author Alexander Book
  */
-
 if(CHROME_PHP !== true)
     die();
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
 class Chrome_Controller_User_Login_Page extends Chrome_Controller_Module_Abstract
 {
-    protected function _initialize() {
-        $this->_require = array('file' => array(CONTENT.'user/login/include.php', CONTENT.'user/login/view/default.php'));
-	}
 
-    protected function _execute() {
+    protected function _initialize()
+    {
+        $this->_require = array('file' => array(CONTENT . 'user/login/include.php', CONTENT . 'user/login/view/default.php'));
+    }
 
+    protected function _execute()
+    {
         $this->_form = Chrome_Form_Login::getInstance($this->_applicationContext);
 
         // the login form, will be the first one in Content
-        $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_User_Default_ShowForm', $this);
+
+        $view = Chrome_View_Form_Login::getInstance($this->_form);
+        $view->setRenderer(new Chrome_View_Form_Renderer_Template_Login_Content());
+        $this->_view = $view;
+
+
+        #$this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_User_Default_ShowForm', $this);
     }
 }

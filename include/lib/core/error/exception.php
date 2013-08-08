@@ -173,7 +173,7 @@ class Chrome_Exception_Error_Handler_Default implements Chrome_Exception_Error_H
 	public function error($errorType, $message, $file = null, $line = null, $context = null)
 	{
 	    // this is desired behavior
-		throw new Chrome_Exception($message, $errorType);
+		throw new Chrome_Exception($message.' in file '.$file.'('.$line.')', $errorType);
 	}
 }
 

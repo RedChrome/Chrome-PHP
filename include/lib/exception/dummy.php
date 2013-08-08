@@ -52,7 +52,9 @@ class Chrome_Exception_Handler_Dummy implements Chrome_Exception_Handler_Interfa
 
     public function exception(Exception $e)
     {
-        if($this->_echoText === true)
+        if($this->_echoText === true) {
             echo 'There was an exception of type '.get_class($e).' with message '.$e->getMessage();
+            var_dump($e);
+        }
     }
 }

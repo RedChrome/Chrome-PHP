@@ -17,7 +17,7 @@
  * @subpackage Chrome.Session
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.04.2013 17:06:41] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.07.2013 22:11:30] --> $
  * @author     Alexander Book
  */
 
@@ -119,7 +119,8 @@ class Chrome_Session implements Chrome_Session_Interface
     const CHROME_SESSION_SESSION_SAVE_PATH             = CHROME_SESSION_SAVE_PATH;
 
     /**
-     * Probability for the garbace collector to scan
+     * Probability for the garbace collector to scan.
+     * 1/@var is the probability to scan, so if it is set to 100, then the prob. would be 1%
      *
      * @var int
      */
@@ -472,8 +473,9 @@ class Chrome_Session implements Chrome_Session_Interface
 
         $probability = mt_rand(1, $probability);
 
-        if($probability !== 1)
+        if($probability !== 1) {
             return;
+        }
 
         // get all files, remove ./ AND ../
         $files = scandir(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH);

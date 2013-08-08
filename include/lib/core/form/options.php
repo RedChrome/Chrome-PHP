@@ -88,6 +88,10 @@ interface Chrome_Form_Option_Element_Multiple_Interface extends Chrome_Form_Opti
     public function setReadonly(array $multipleValues);
 
     public function getReadonly();
+
+    public function setSelectMultiple($boolean);
+
+    public function getSelectMultiple();
 }
 
 class Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Interface
@@ -171,6 +175,11 @@ class Chrome_Form_Option_Element_Multiple extends Chrome_Form_Option_Element_Val
     protected $_readonly = array();
 
     protected $_selectMultiple = true;
+
+    public function __construct()
+    {
+        $this->_isRequired = false;
+    }
 
     public function setRequired(array $multipleValues)
     {

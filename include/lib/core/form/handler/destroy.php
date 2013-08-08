@@ -44,7 +44,7 @@ class Chrome_Form_Handler_Destroy implements Chrome_Form_Handler_Interface
     public function __destruct()
     {
         if($this->_form !== null) {
-            $this->_form->destory();
+            $this->_form->destroy();
         }
     }
 

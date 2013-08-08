@@ -15,28 +15,28 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category  CHROME-PHP
- * @package   CHROME-PHP
- * @author    Alexander Book <alexander.book@gmx.de>
+ * @category CHROME-PHP
+ * @package CHROME-PHP
+ * @author Alexander Book <alexander.book@gmx.de>
  * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
- * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:51:22] --> $
- * @link      http://chrome-php.de
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:51:22] --> $
+ * @link http://chrome-php.de
  */
-
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
 /**
- * @category   CHROME-PHP
- * @package    CHROME-PHP
+ *
+ * @category CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Captcha
- * @author     Alexander Book <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @author Alexander Book <alexander.book@gmx.de>
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
  */
 interface Chrome_Captcha_Interface
 {
     const CHROME_CAPTCHA_ENGINE = 'engine', CHROME_CAPTCHA_NAME = 'name';
-
     const CHROME_CAPTCHA_ENABLE_RENEW = 'enable_renew', CHROME_CAPTCHA_MAX_TIME = 'max_time';
 
     public function __construct($name, Chrome_Context_Application_Interface $appContext, array $frontendOptions, array $backendOptions);
@@ -62,13 +62,14 @@ interface Chrome_Captcha_Interface
     public function getError();
 }
 
-
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Captcha
  */
 interface Chrome_Captcha_Engine_Interface
 {
+
     public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Context_Application_Interface $appContext, array $backendOptions);
 
     public function getOption($name);
@@ -84,19 +85,17 @@ interface Chrome_Captcha_Engine_Interface
     public function getError();
 }
 
-
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Captcha
  */
 class Chrome_Captcha implements Chrome_Captcha_Interface
 {
-    protected $_frontendOptions = array(self::CHROME_CAPTCHA_ENGINE => 'default');
-
+    protected $_frontendOptions = array(
+                                        self::CHROME_CAPTCHA_ENGINE => 'default');
     protected $_backendOptions = array();
-
     protected $_engine = null;
-
     protected $_appContext = null;
 
     public function __construct($name, Chrome_Context_Application_Interface $appContext, array $frontendOptions, array $backendOptions)
@@ -160,7 +159,8 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
 
     protected function _setEngine()
     {
-        if($this->_engine !== null) {
+        if($this->_engine !== null)
+        {
             return;
         }
 
@@ -168,17 +168,17 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
         $_engine = ucfirst($engine);
 
         // if class is not loaded, then search in /include/plugins/captcha/
-        if(!class_exists('Chrome_Captcha_Engine_' . $_engine, false)) {
-            if(!_isFile(PLUGIN . 'Captcha/' . $engine . '.php')) {
-                throw new Chrome_Exception('Cannot include captcha engine file, because it does not exist in include/plugins/captcha for engine ' .
-                    $engine
-                        );
-            } else {
+        if(class_exists('Chrome_Captcha_Engine_' . $_engine, false) === false)
+        {
+            if(_isFile(PLUGIN . 'Captcha/' . $engine . '.php') === false)
+            {
+                throw new Chrome_Exception('Cannot include captcha engine file, because it does not exist in include/plugins/captcha for engine ' . $engine);
+            } else
+            {
                 require_once PLUGIN . 'Captcha/' . $engine . '.php';
-                if(!class_exists('Chrome_Captcha_Engine_' . $_engine, false)) {
-                    throw new Chrome_Exception('Loaded captcha engine file does not contain proper class Chrome_Captcha_Engine_' .
-                        $_engine
-                    );
+                if(class_exists('Chrome_Captcha_Engine_' . $_engine, false) === false)
+                {
+                    throw new Chrome_Exception('Loaded captcha engine file does not contain proper class Chrome_Captcha_Engine_' . $_engine);
                 }
             }
         }
@@ -188,12 +188,13 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
         $this->_engine = new $engine($this->_frontendOptions[self::CHROME_CAPTCHA_NAME], $this, $this->_appContext, $this->_backendOptions);
     }
 
-    public function getEngine() {
+    public function getEngine()
+    {
         return $this->_engine;
     }
 
-    public function getError() {
+    public function getError()
+    {
         return $this->_engine->getError();
     }
-
 }

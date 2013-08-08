@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 18:33:15] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.07.2013 23:47:24] --> $
  * @link       http://chrome-php.de
  */
 
@@ -158,13 +158,13 @@ interface Chrome_Form_Interface
     public function setSentData(array $data);
 
     /**
-     * delete()
+     * destroy()
      *
      * Deletes all current information about the form
      *
      * @return void
      */
-    public function delete();
+    public function destroy();
 
     /**
      * getSentData()
@@ -733,16 +733,16 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     }
 
     /**
-     * delete()
+     * destroy()
      *
      * Delete all current information about the form
      *
      * @return void
      */
-    public function delete()
+    public function destroy()
     {
         foreach($this->_elements as $formElement) {
-            $formElement->delete();
+            $formElement->destroy();
         }
     }
 

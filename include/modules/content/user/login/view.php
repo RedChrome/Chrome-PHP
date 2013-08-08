@@ -12,11 +12,8 @@ class Chrome_View_Content_User_Login extends Chrome_View_Abstract
 class Chrome_View_Content_User_Login_Successfully_Logged_In extends Chrome_View_Abstract
 {
     public function render() {
-
         $tpl = new Chrome_Template();
-
         $tpl->assignTemplate('modules/content/user/login/successfully_loged_in');
-        //echo $tpl->render();
         return $tpl->render();
     }
 }

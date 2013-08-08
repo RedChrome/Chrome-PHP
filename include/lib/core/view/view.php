@@ -24,6 +24,7 @@
 if(CHROME_PHP !== true) die();
 
 require_once 'factory.php';
+require_once 'form.php';
 
 /**
  * @package CHROME-PHP

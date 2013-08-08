@@ -13,83 +13,89 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Validator
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 13:16:20] --> $
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 13:16:20] --> $
  */
-
 if(CHROME_PHP !== true)
-	die();
+    die();
 
 /**
  * Chrome_Validator_Email_Blacklist
  *
  * Simple class to check whether an email host is on blacklist
  *
- * @package		CHROME-PHP
- * @subpackage  Chrome.Validator
+ * @package CHROME-PHP
+ * @subpackage Chrome.Validator
  */
 class Chrome_Validator_Email_Blacklist extends Chrome_Validator
 {
     /**
+     *
      * @var string
      */
     const CHROME_VALIDATOR_EMAIL_BLACKLIST_BLACKLIST_HOST = 'BLACKLISTHOST';
 
     /**
+     *
      * @var string
      */
     const CHROME_VALIDATOR_EMAIL_BLACKLIST_EMAIL_ON_BLACKLIST = 'EMAILONBLACKLIST';
+    protected $_options = array(
+                                self::CHROME_VALIDATOR_EMAIL_BLACKLIST_BLACKLIST_HOST => null);
 
-    protected $_options = array(self::CHROME_VALIDATOR_EMAIL_BLACKLIST_BLACKLIST_HOST => null);
+    public function __construct()
+    {
+    }
 
-	public function __construct() {}
-
-	protected function _validate() {
-
+    protected function _validate()
+    {
         $email = $this->_data;
 
         $posOfAt = strpos($email, '@');
 
         // email is not valid, but this is not the duty of this validator
-        if($posOfAt === false) {
+        if($posOfAt === false)
+        {
             return false;
         }
 
-        $posOfDot = strpos($email, '.', (int)$posOfAt+1);
+        $posOfDot = strpos($email, '.', (int) $posOfAt + 1);
 
         // email is invalid, another validator is handling that
-        if($posOfAt === false OR $posOfDot === false) {
+        if($posOfAt === false or $posOfDot === false)
+        {
             return;
         }
 
-        $host = substr($email, $posOfAt+1, $posOfDot - $posOfAt -1 );
+        $host = substr($email, $posOfAt + 1, $posOfDot - $posOfAt - 1);
 
-        //TODO: add blacklist support
+        // TODO: add blacklist support
         // if $result === false, then it was not found
-        //$result = stristr($this->_getBlacklist(), $host);
-
+        // $result = stristr($this->_getBlacklist(), $host);
 
         // everthing is fine
-        if($result === false) {
-
-        } else {
+        if($result === false)
+        {
+        } else
+        {
             $this->_setError(self::CHROME_VALIDATOR_EMAIL_BLACKLIST_EMAIL_ON_BLACKLIST);
         }
-	}
+    }
 
-    protected function _getBlacklist() {
+    protected function _getBlacklist()
+    {
 
-        //TODO: use config to get blacklist
-
-        if($this->_options[self::CHROME_VALIDATOR_EMAIL_BLACKLIST_BLACKLIST_HOST] !== null) {
+        // TODO: use config to get blacklist
+        if($this->_options[self::CHROME_VALIDATOR_EMAIL_BLACKLIST_BLACKLIST_HOST] !== null)
+        {
             return $this->_options[self::CHROME_VALIDATOR_EMAIL_BLACKLIST_BLACKLIST_HOST];
-        } else {
+        } else
+        {
             return array();
-            //return $config->getConfig('Registration', 'blacklist_host');
+            // return $config->getConfig('Registration', 'blacklist_host');
         }
-
     }
 }

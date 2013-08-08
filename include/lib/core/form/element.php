@@ -13,12 +13,12 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Form
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.07.2013 14:20:01] --> $
- * @author     Alexander Book
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.07.2013 21:02:12] --> $
+ * @author Alexander Book
  */
 if(CHROME_PHP !== true)
     die();
@@ -31,6 +31,7 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Form_Element_Interface
 {
+
     /**
      * isCreated()
      *
@@ -110,6 +111,7 @@ interface Chrome_Form_Element_Interface
 }
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Storage
  */
@@ -138,7 +140,8 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     const CHROME_FORM_ELEMENT_ERROR_NOT_SENT = 'ERRORNOTSENT';
 
     /**
-     * This is an option for multiple user input, e.g. radio, checkbox, selection
+     * This is an option for multiple user input, e.g.
+     * radio, checkbox, selection
      * This option says which selection can be sent by user
      *
      * Structure: array('option1', 'option2', ...)
@@ -148,15 +151,15 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     const CHROME_FORM_ELEMENT_SELECTION_OPTIONS = 'SELECTIONOPTIONS',
 
     /**
-     * This error will occure if the user sent data which didnt matched the
-     * SELECTION_OPTIONS
+     * This error will occure if the user sent data which didnt matched the SELECTION_OPTIONS
      *
      * @var string
      */
     CHROME_FORM_ELEMENT_ERROR_WRONG_SELECTION = 'ERRORWRONGSELECTION',
 
     /**
-     * If the user has sent a wrong submit type e.g. he has sent 'register', but only
+     * If the user has sent a wrong submit type e.g.
+     * he has sent 'register', but only
      * 'login', 'logout' are allowed, then this error is raised
      *
      * @var string
@@ -217,9 +220,10 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      *
      * @var boolean
      */
-    protected $_isSent  = null;
+    protected $_isSent = null;
 
     /**
+     *
      * @param Chrome_Form_Interface $form
      * @param string $id
      * @param Chrome_Form_Option_Element_Interface $options
@@ -236,6 +240,9 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 
     /**
      *
+     *
+     *
+     *
      * Determines whether this element is valid. This method is a default implementation
      * of a cache using _isValid() for validation
      *
@@ -243,18 +250,21 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      */
     public function isValid()
     {
-        if($this->isSent() !== true) {
+        if($this->isSent() !== true)
+        {
             return false;
         }
 
         // cache
-        if($this->_isValid !== null) {
+        if($this->_isValid !== null)
+        {
             return $this->_isValid;
         }
 
         $validator = $this->_getValidator();
 
-        if(($optionValidator = $this->_option->getValidator()) !== null) {
+        if(($optionValidator = $this->_option->getValidator()) !== null)
+        {
             $validator->addValidator($optionValidator);
         }
 
@@ -279,7 +289,8 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
         $andComposition = new Chrome_Validator_Composition_And();
         $andComposition->addValidator(new Chrome_Validator_Form_Element_Required($this->_option));
 
-        if($this->_option instanceof Chrome_Form_Option_Element_Values) {
+        if($this->_option instanceof Chrome_Form_Option_Element_Values)
+        {
             $andComposition->addValidator(new Chrome_Validator_Form_Element_Contains($this->_option->getAllowedValues()));
         }
 
@@ -290,6 +301,9 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 
     /**
      *
+     *
+     *
+     *
      * Determines whether this element is created. This method is a default implementation
      * of a cache using _isCreated() for validation
      *
@@ -298,7 +312,8 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     public function isCreated()
     {
         // cache
-        if($this->_isCreated !== null) {
+        if($this->_isCreated !== null)
+        {
             return $this->_isCreated;
         }
 
@@ -309,6 +324,9 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 
     /**
      *
+     *
+     *
+     *
      * Determines whether this element is sent. This method is a default implementation
      * of a cache using _isSent() for validation
      *
@@ -316,12 +334,14 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      */
     public function isSent()
     {
-        if($this->isCreated() !== true) {
+        if($this->isCreated() !== true)
+        {
             return false;
         }
 
         // cache
-        if($this->_isSent !== null) {
+        if($this->_isSent !== null)
+        {
             return $this->_isSent;
         }
 
@@ -332,19 +352,22 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 
     protected function _isSent()
     {
-		if($this->_option->getIsRequired() === false OR $this->_option->getIsReadonly() === true ) {
+        if($this->_option->getIsRequired() === false or $this->_option->getIsReadonly() === true)
+        {
             return true;
-		}
+        }
 
-		if($this->_form->getSentData( $this->_id ) === null ) {
-			$this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
-			return false;
-		}
+        if($this->_form->getSentData($this->_id) === null)
+        {
+            $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
+            return false;
+        }
 
         return true;
     }
 
     /**
+     *
      * @return Chrome_Form_Option_Element_Interface
      */
     public function getOption()
@@ -353,6 +376,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
+     *
      * @return string
      */
     public function getID()
@@ -361,6 +385,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
+     *
      * @return array
      */
     public function getErrors()
@@ -369,6 +394,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
+     *
      * @return void
      */
     public function destroy()
@@ -377,6 +403,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
+     *
      * @return void
      */
     public function renew()
@@ -397,11 +424,13 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     public function getData()
     {
         // cache
-        if($this->_data !== null) {
+        if($this->_data !== null)
+        {
             return $this->_data;
         }
 
-        if($this->_option->getIsReadonly() === true) {
+        if($this->_option->getIsReadonly() === true)
+        {
             $this->_data = null;
             return null;
         }
@@ -415,7 +444,8 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     {
         $conversion = $this->_option->getConversion();
 
-        if($conversion === null) {
+        if($conversion === null)
+        {
             return $data;
         }
 
@@ -426,12 +456,11 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 
     public function create()
     {
-        return;
     }
 }
-
 abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element_Abstract
 {
+
     public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Multiple_Interface $option)
     {
         parent::__construct($form, $id, $option);
@@ -451,7 +480,8 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
         $and->addValidator(new Chrome_Validator_Form_Element_Required($this->_option));
         $and->addValidator(new Chrome_Validator_Form_Element_Contains($this->_option->getAllowedValues()));
 
-        if(($validator = $this->_option->getValidator()) !== null) {
+        if(($validator = $this->_option->getValidator()) !== null)
+        {
             $and->addValidator($validator);
         }
 
@@ -461,27 +491,32 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
     public function getData()
     {
         // cache
-        if($this->_data !== null) {
+        if($this->_data !== null)
+        {
             return $this->_data;
         }
 
-        if($this->_option->getIsReadonly() === true) {
+        if($this->_option->getIsReadonly() === true)
+        {
             $this->_data = null;
             return null;
         }
 
         $data = $this->_form->getSentData($this->_id);
 
-        if($data == null) {
+        if($data == null)
+        {
             $this->_data = null;
             return null;
         }
 
-        if(!is_array($data)) {
+        if(!is_array($data))
+        {
             $data = array($data);
         }
 
-        foreach($data AS $key => $value) {
+        foreach($data as $key => $value)
+        {
             $data[$key] = $this->_convert($data[$key]);
         }
 
@@ -492,15 +527,17 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
 
     public function inlineValidation($data)
     {
-        // use can only select one item, but has sent more than one item
-        if($this->_option->getSelectMultiple() === false AND is_array($data) AND sizeof($data) > 1) {
+        // user can only select one item, but has sent more than one item
+        if($this->_option->getSelectMultiple() === false and is_array($data) and count($data) > 1)
+        {
             return 'Cannot select more than one item';
         }
 
         return true;
     }
 
-    public function create() {
+    public function create()
+    {
         return true;
     }
 
@@ -509,11 +546,10 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
         return $this->getData();
     }
 
-    public function isCreated() {
+    public function isCreated()
+    {
         return true;
     }
-
-
 }
 
 require_once 'element/form.php';

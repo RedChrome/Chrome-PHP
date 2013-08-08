@@ -17,31 +17,24 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 19:48:39] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.10.2012 19:50:27] --> $
  */
-if( CHROME_PHP !== true ) die();
+if(CHROME_PHP !== true)
+    die();
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Password_Default extends Chrome_Form_Decorator_Abstract
+class Chrome_View_Form_Element_Submit_Default extends Chrome_View_Form_Element_Abstract
 {
-	public function render()
-	{
-		$return = '';
+    public function render() {
 
-		if( $this->_formElement->getOptions( Chrome_Form_Element_Abstract::IS_REQUIRED )
-			=== true ) {
-			$this->setAttribute( 'required', 'required' );
-		}
+        $allowedValues = $this->_elementOption->getAllowedValues();
 
-		if( ( $label = $this->getOption( self::CHROME_FORM_DECORATOR_LABEL ) ) !== null ) {
-			$return .= '<label for="' . $this->_formElement->getID() . '">' . $label . '</label>';
-		}
+        $this->_flags['value'] = array_pop($allowedValues);
+        $this->_flags['required'] = null;
 
-		$return .= '<input type="password" name="' . $this->_formElement->getID() . '" ' . $this->_getPreparedAttrs() .
-			'/>';
-		return $return;
-	}
+        return '<input type="submit" '.$this->_renderFlags().'/>';
+    }
 }

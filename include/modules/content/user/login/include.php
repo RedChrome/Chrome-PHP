@@ -13,17 +13,15 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.User
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 17:59:18] --> $
- * @author     Alexander Book
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 17:59:18] --> $
+ * @author Alexander Book
  */
-
 if(CHROME_PHP !== true)
     die();
-
 
 /**
  * Form for an user login
@@ -33,6 +31,7 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Form_Login extends Chrome_Form_Abstract
 {
+
     private static $_instance = null;
 
     /**
@@ -41,13 +40,16 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
      *
      * @return Chrome_Form_Login
      */
-    public static function getInstance(Chrome_Context_Application_Interface $appContext) {
-        if(self::$_instance === null) {
+    public static function getInstance(Chrome_Context_Application_Interface $appContext)
+    {
+        if(self::$_instance === null)
+        {
             self::$_instance = new self($appContext);
         }
 
         return self::$_instance;
     }
+
     /**
      * Init the form
      *
@@ -68,17 +70,13 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $boolConverter = new Chrome_Converter_List();
         $boolConverter->addConversion('bool');
 
-
-
         // this element has to be set in every form!
         // max time, this form is valid is 300 sec
-        $formElementOption = new Chrome_Form_Option_Element_Form(
-            new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id) );
+        $formElementOption = new Chrome_Form_Option_Element_Form(new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id));
         $formElementOption->setMaxAllowedTime(300)->setMinAllowedTime(0);
 
         $formElement = new Chrome_Form_Element_Form($this, $this->_id, $formElementOption);
         $this->_addElement($formElement);
-
 
         // this is the 'username' input
         // it is required, of course, to login
@@ -88,36 +86,12 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $identityElement = new Chrome_Form_Element_Text($this, 'identity', $identityOption);
         $this->_addElement($identityElement);
 
-        /*
-        $this->_elements['identity'] = new Chrome_Form_Element_Text($this, 'identity', array(
-            Chrome_Form_Element_Abstract::IS_REQUIRED => true,
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
-                Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT => $LANG->get('email'),
-                Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $LANG->get('email')
-            ),
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array(
-                'onblur' => 'if(this.value==\'\')this.value=\''.$LANG->get('email').'\'',
-                'onfocus' => 'if(this.value==\''.$LANG->get('email').'\')this.value=\'\'')));
-        */
-
         // this is the password input
         $passwordOption = new Chrome_Form_Option_Element();
         $passwordOption->setIsRequired(true);
 
         $passwordElement = new Chrome_Form_Element_Password($this, 'password', $passwordOption);
         $this->_addElement($passwordElement);
-
-        /*
-        $this->_elements['password'] = new Chrome_Form_Element_Password($this, 'password', array(
-            Chrome_Form_Element_Abstract::IS_REQUIRED => true,
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
-                Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $LANG->get('password')
-            ),
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array(
-                'onblur' => 'if(this.value==\'\')this.value=\''.$LANG->get('password').'\'',
-                'onfocus' => 'if(this.value==\''.$LANG->get('password').'\')this.value=\'\'',
-                'value' => $LANG->get('password'))));
-        */
 
 
         // stay_loggedin input, default selection is false
@@ -129,14 +103,6 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $checkboxElement = new Chrome_Form_Element_Checkbox($this, 'stay_loggedin', $checkboxOption);
         $this->_addElement($checkboxElement);
 
-        /*
-        $this->_elements['stay_loggedin'] = new Chrome_Form_Element_Checkbox($this, 'stay_loggedin', array(
-            Chrome_Form_Element_Abstract::IS_REQUIRED => false,
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_SELECTION_OPTIONS => array(1),
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_CONVERTER_NAMESPACE => array($boolConverter),
-            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => array($LANG->get('stay_loggedin')))));
-        */
-
 
         // submit button, nothing special
         $submitOption = new Chrome_Form_Option_Element_Values();
@@ -144,15 +110,11 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
 
         $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
         $this->_addElement($submitElement);
-        /*
-        $this->_elements['submit'] = new Chrome_Form_Element_Submit($this, 'submit', array(
-            Chrome_Form_Element_Submit::IS_REQUIRED => true,
-            Chrome_Form_Element_Submit::CHROME_FORM_ELEMENT_SUBMIT_VALUES => array($LANG->get('login'))));
-        */
 
         // cause this form can get used everywhere, we need to be sure
         // that this form is once created
-        if(!$this->isCreated()) {
+        if(!$this->isCreated())
+        {
             $this->create();
         }
 
@@ -160,5 +122,61 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $this->addReceivingHandler(new Chrome_Form_Handler_Renew(10));
         // deletes the input when the form is destroyed
         $this->addReceivingHandler(new Chrome_Form_Handler_Destroy());
+    }
+}
+class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
+{
+
+    private static $_instance = null;
+
+    public static function getInstance(Chrome_Form_Interface $form)
+    {
+        if(self::$_instance === null)
+        {
+            self::$_instance = new self($form);
+        }
+
+        return self::$_instance;
+    }
+
+    protected function _init()
+    {
+        $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Default');
+        // $this->_renderer = new Chrome_View_Form_Index_Renderer();
+
+        parent::_init();
+    }
+
+    protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
+    {
+        switch($formElement->getID())
+        {
+            case 'identity':
+                {
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('identity' => 'E-Mail')))->setPlaceholder('E-Mail');
+
+                    // viewOption->setLabel(new Chrome_View_Form_Label_Default(array('test' => 'Value1_label', 'test2' => 'VaLUE2_label')));
+                    break;
+                }
+            case 'password':
+                {
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('password' => 'Passwort')))->setPlaceholder('Password');
+                    break;
+                }
+
+            case 'stay_loggedin':
+                {
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('1' => 'Eingeloggt bleiben?')))->setPlaceholder('text_placeholder');
+                    //$viewOption->setLabelPosition($viewOption::LABEL_POSITION_FRONT);
+                    break;
+                }
+
+            case 'submit':
+                {
+                    // viewOption->setLabelPosition($viewOption::LABEL_POSITION_BEHIND);
+                    //$viewOption->setLabel(new Chrome_View_Form_Label_Default(array('submit' => 'Anmelden')));
+                    break;
+                }
+        }
     }
 }

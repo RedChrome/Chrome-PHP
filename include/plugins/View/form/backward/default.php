@@ -34,11 +34,14 @@ class Chrome_Form_Decorator_Backward_Default extends Chrome_Form_Decorator_Abstr
 
     public function render() {
 
+
+
         if($this->_options[self::CHROME_FORM_DECORATOR_BACKWARD_DELETE_PASSWORDS] === true) {
             $addOnclick = 'onclick="javascript:truncate_form_input(\''.$this->_formElement->getForm()->getID().'\');return true"';
         } else {
             $addOnclick = '';
         }
+
 
 
         $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_DEFAULT_LANGUAGE);

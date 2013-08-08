@@ -8,9 +8,10 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 	{
 		$this->_id = 'Index';
 		$this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
-		$this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST );
+		$this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_GET );
         // this sets $this->_id to 'Index'
 		$this->setAttribute( self::ATTRIBUTE_ID, 'Index' );
+		$this->setAttribute(self::ATTRIBUTE_ACTION, '/');
 
 		$lengthValidator = new Chrome_Validator_Form_Length();
 		$lengthValidator->setOptions( array(
@@ -64,6 +65,7 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $checkboxOption = new Chrome_Form_Option_Element_Multiple();
         $checkboxOption->setAllowedValues(array('Value1', 'Value2', 'vAlue3'));
         $checkboxOption->setRequired(array('Value1', 'Value2'));
+        $checkboxOption->setReadonly(array('Value1'));
 
         $checkboxElement = new Chrome_Form_Element_Checkbox($this, 'checkbox', $checkboxOption);
         $this->_addElement($checkboxElement);
@@ -73,6 +75,8 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $selectOption = new Chrome_Form_Option_Element_Multiple();
         $selectOption->setAllowedValues(array('Value1', 'Value2', 'Value3'));
         $selectOption->setSelectMultiple(true);
+        $selectOption->setReadonly(array('Value2'));
+        $selectOption->setRequired(array('Value2'));
         $selectOption->setIsRequired(false);
 
         $selectElement = new Chrome_Form_Element_Select($this, 'select', $selectOption);

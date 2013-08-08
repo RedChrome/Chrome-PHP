@@ -13,60 +13,58 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Model
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 19:04:44] --> $
- * @author     Alexander Book
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 19:04:44] --> $
+ * @author Alexander Book
  */
-
-if(CHROME_PHP !== true) die();
-
+if(CHROME_PHP !== true)
+    die();
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
 class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
 {
+
     public function addUser($id, $email, $username, $group = null)
     {
-        if($group === null) {
+        if($group === null)
+        {
             $group = $this->_modelContext->getConfig()->getConfig('Registration', 'default_user_group');
         }
 
-        try {
+        try
+        {
             $exists = $this->userExists($id, $username, $email);
-        }
-        catch (Chrome_Exception $e) {
+        } catch(Chrome_Exception $e)
+        {
             return false;
         }
 
-        if($exists === true) {
+        if($exists === true)
+        {
             throw new Chrome_Exception('Cannot add user if he already exists!');
             return false;
         }
 
-        $group = (int)$group;
+        $group = (int) $group;
 
-        try {
+        try
+        {
             $db = $this->_getDBInterface();
 
-
-
-            $values = array(
-                'id' => $id,
-                'name' => $db->escape($username),
-                'email' => $db->escape($email),
-                'time' => CHROME_TIME,
-                'group' => $group);
+            $values = array('id' => $id,'name' => $db->escape($username),'email' => $db->escape($email),'time' => CHROME_TIME,'group' => $group);
 
             $db->query('INSERT INTO cpp_user(id, name, email, time, `group`) VALUES ("?", "?", "?", "?", "?")', $values);
-            //$db->insert()->into('user')->values($values)->execute();
+            // $db->insert()->into('user')->values($values)->execute();
             return true;
-        }
-        catch (Chrome_Exception $e) {
+        } catch(Chrome_Exception $e)
+        {
             Chrome_Log::logException($e);
             return false;
         }
@@ -74,20 +72,22 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
 
     public function userExists($id, $name, $email)
     {
-        try {
+        try
+        {
             $db = $this->_getDBInterface();
 
-            $id = (int)$id;
+            $id = (int) $id;
 
-            $db->query('SELECT id FROM cpp_user WHERE id = "?" OR name = "?" OR email = "?" LIMIT 0,1', array($id, $name, $email));
+            $db->query('SELECT id FROM cpp_user WHERE id = "?" OR name = "?" OR email = "?" LIMIT 0,1', array($id,$name,$email));
 
-            //$db->select(array('id'))->from('user')->where('id = ' . $id . ' OR name = "' . $name . '" OR email = "' . $email . '"')->limit(0, 1)->execute();
+            // $db->select(array('id'))->from('user')->where('id = ' . $id . ' OR name = "' . $name . '" OR email = "' . $email . '"')->limit(0, 1)->execute();
 
-            if($db->getResult()->isEmpty()) {
+            if($db->getResult()->isEmpty())
+            {
                 return false;
             }
-        }
-        catch (Chrome_Exception_Database $e) {
+        } catch(Chrome_Exception_Database $e)
+        {
             Chrome_Log::logException($e, E_ERROR);
             throw new Chrome_Exception('Error while checking whether user exists with name or email', 0, $e);
         }
@@ -95,8 +95,7 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
 
     public function getUserNameByID($id)
     {
-
-        $id = (int)$id;
+        $id = (int) $id;
 
         $dbObj = Chrome_DB_Interface_Factory::factory('interface')->select('name')->from('user')->where('id = "' . $id . '"')->limit(0, 1)->execute();
 
@@ -115,24 +114,22 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
     }
 }
 
-
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
 class Chrome_Model_User extends Chrome_Model_Decorator_Abstract
 {
     private static $_instance = null;
-
     private $_getUserNameByIDCache = array();
-
     private $_getUserNameByEmailCache = array();
-
     private $_languageObj = null;
 
     public static function getInstance()
     {
-        if(self::$_instance == null) {
+        if(self::$_instance == null)
+        {
             self::$_instance = new self(new Chrome_Model_User_Database());
         }
 
@@ -141,8 +138,8 @@ class Chrome_Model_User extends Chrome_Model_Decorator_Abstract
 
     public function getUserNameByID($id)
     {
-
-        if(!isset($this->_getUserNameByIDCache[$id])) {
+        if(! isset($this->_getUserNameByIDCache[$id]))
+        {
             $this->_getUserNameByIDCache[$id] = $this->_decorator->getUserNameByID($id);
         }
 
@@ -151,18 +148,18 @@ class Chrome_Model_User extends Chrome_Model_Decorator_Abstract
 
     public function getUserNameByEmail($email)
     {
-        if(!isset($this->_getUserNameByEmailCache[$email])) {
+        if(! isset($this->_getUserNameByEmailCache[$email]))
+        {
             $this->_getUserNameByEmailCache[$email] = $this->_decorator->_getUserNameByEmailCache($id);
         }
 
         return $this->_getUserNameByEmailCache[$email];
     }
 
-
     public function getLanguageObject()
     {
-
-        if($this->_languageObj === null) {
+        if($this->_languageObj === null)
+        {
             $this->_languageObj = new Chrome_Language('classes/user/user');
         }
 

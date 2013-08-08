@@ -1,8 +1,10 @@
 <?php
 
 require_once 'model.php';
+require_once LIB.'core/view/form.php';
 require_once 'view.php';
 require_once 'include.php';
+
 
 class Chrome_Controller_Index extends Chrome_Controller_Module_Abstract
 {
@@ -22,6 +24,10 @@ class Chrome_Controller_Index extends Chrome_Controller_Module_Abstract
         $obj->execute();
 
         $this->_view->addRenderable($obj->getView());
+
+        #$view = new Chrome_View_Form_Index($this->_form);
+
+        #$this->_view->addRenderable($view);
 
 		if( $this->_form->isCreated() ) {
 
