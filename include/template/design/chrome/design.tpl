@@ -1,6 +1,5 @@
-<!DOCTYPE html PUBLIC \'-//W3C//DTD XHTML 1.0 Transitional//EN\' \'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\'>
-<!-- Document created by chrome-php -->
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<!DOCTYPE html>
+<html>
 <head>
     <link rel="Shortcut Icon" href="public/design/chrome/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="public/design/chrome/style/style.css" type="text/css" />
@@ -79,14 +78,14 @@
             </div>
         </div>
     </footer>
-</body>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"></script>
-<script type="text/javascript" src="<?php echo _PUBLIC;?>javascript/dojo.js"></script>
-<script type="text/javascript" src="<?php echo _PUBLIC;?>javascript/ganalytics.js"></script>
-<script type="text/javascript" src="<?php echo _PUBLIC;?>javascript/form_utility.js"></script>
-<?php try { echo $VIEW->getRenderable(6)->render(); } catch(Chrome_Exception $e) {$exceptionHandler->exception($e); }?>
-<!--<script type="text/javascript" src="'._PUBLIC.'javascript/Framework/dojo.js" djConfig="parseOnLoad:true, isDebug: true"></script>-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"></script>
+    <script type="text/javascript" src="<?php echo _PUBLIC;?>javascript/dojo.js"></script>
+    <script type="text/javascript" src="<?php echo _PUBLIC;?>javascript/ganalytics.js"></script>
+    <script type="text/javascript" src="<?php echo _PUBLIC;?>javascript/form_utility.js"></script>
+    <?php try { echo $VIEW->getRenderable(6)->render(); } catch(Chrome_Exception $e) {$exceptionHandler->exception($e); }?>
+    <!--<script type="text/javascript" src="'._PUBLIC.'javascript/Framework/dojo.js" djConfig="parseOnLoad:true, isDebug: true"></script>-->
+</body>
 
 </html>

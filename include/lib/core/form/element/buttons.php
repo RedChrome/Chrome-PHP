@@ -27,23 +27,23 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Option_Element_Buttons extends Chrome_Form_Option_Element
+class Chrome_Form_Option_Element_Buttons extends Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Attachable_Interface
 {
     protected $_buttons = array();
 
-    public function addButton(Chrome_Form_Element_Interface $element)
+    public function attach(Chrome_Form_Element_Interface $element)
     {
         $this->_buttons[] = $element;
 
         return $this;
     }
 
-    public function getButtons()
+    public function getAttachments()
     {
         return $this->_buttons;
     }
 
-    public function setButtons(array $elements)
+    public function setAttachments(array $elements)
     {
         $this->_buttons = array();
 
@@ -74,7 +74,7 @@ class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract
 
     protected function _isCreated()
     {
-        foreach($this->_option->getButtons() as $button) {
+        foreach($this->_option->getAttachments() as $button) {
             if($button->isCreated() === false) {
                 $this->_errors[] = $button->getErrors();
                 return false;
@@ -95,7 +95,7 @@ class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract
 
     public function inlineValidation($data)
     {
-        foreach($this->_option->getButtons() as $button) {
+        foreach($this->_option->getAttachments() as $button) {
             if($button->isValid() === false) {
                 return $button->getErrors();
             }
@@ -107,7 +107,7 @@ class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract
     protected function _isSent()
     {
         if($this->_option->getIsRequired() === false OR $this->_option->getIsReadonly() === true) {
-            foreach($this->_option->getButtons() as $button) {
+            foreach($this->_option->getAttachments() as $button) {
                 // call isSent, but we dont care about the result
                 $button->isSent();
             }
@@ -116,7 +116,7 @@ class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract
         }
 
         // only one buttons must have been sent!
-        foreach($this->_option->getButtons() as $button) {
+        foreach($this->_option->getAttachments() as $button) {
             if($button->isSent() === true) {
                 return true;
             }
@@ -129,7 +129,7 @@ class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract
 
     public function create()
     {
-        foreach($this->_option->getButtons() as $button) {
+        foreach($this->_option->getAttachments() as $button) {
             $button->create();
         }
     }
@@ -140,7 +140,7 @@ class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract
 
         $array = array();
 
-        foreach($this->_option->getButtons() as $button) {
+        foreach($this->_option->getAttachments() as $button) {
             $array[$button->getID()] = $button->getData();
         }
 

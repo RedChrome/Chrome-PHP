@@ -25,7 +25,7 @@ if(CHROME_PHP !== true) die();
 
 class Chrome_Form_Storage_Session implements Chrome_Form_Storage_Interface
 {
-	const FORM_NAMESPACE = 'FROMS';
+	const FORM_NAMESPACE = 'FORMS';
 
 	protected $_session = null;
 

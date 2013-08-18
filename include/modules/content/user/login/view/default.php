@@ -48,11 +48,8 @@ class Chrome_View_User_Login_Default extends Chrome_View_Strategy_Abstract
 
     public function showForm()
     {
-        $view = Chrome_View_Form_Login::getInstance($this->_controller->getForm());
-        $this->_views[] = $view;
-        // this does not work, because we're using an singleton ($view). This is just an setUp, and we're not
-        // actually rendering the view NOW.
-        $view->setRenderer(new Chrome_View_Form_Renderer_Template_Login_Content());
+        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content(Chrome_View_Form_Login::getInstance($this->_controller->getForm()));
+
     }
 
     public function errorWhileLoggingIn()

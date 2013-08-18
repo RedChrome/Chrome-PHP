@@ -4,11 +4,11 @@ class Chrome_View_Html_Head_CssIncluder extends Chrome_View
 {
     public function render() {
        return '<title>'.$this->getTitle().'</title>'."\n    "
-                .'<meta http-equiv="Content-Type" content="text/html; charset=uft-8" />'."\n    "
+                .'<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">'."\n    "
                 .'<meta name="description" content="{DESCRIPTION}" />'."\n    "
                 .'<meta name="keywords" content="{KEYWORDS}" />'."\n    "
                 .'<meta name="robots" content="index, follow" />'."\n    "
-                .'<meta name="language" content="de" />'."\n\n    "
+                .'<meta name="generator" content="chrome-php" />'."\n\n    "
 
                 .'<!-- CSS -->'."\n    "
                 .'<link href="'._PUBLIC.'css/yaml/flexible-grids.css" rel="stylesheet" type="text/css"/>'."\n    "

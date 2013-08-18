@@ -44,6 +44,11 @@ class Chrome_Require_Loader_Form extends Chrome_Require_Loader_Abstract
             return LIB . 'core/form/element/' . strtolower($matches[1]) . '.php';
         }
 
+        if(preg_match('#Chrome_Form_Option_Element_(.{1,})#i', $class, $matches))
+        {
+            return LIB . 'core/form/element/' . strtolower($matches[1]) . '.php';
+        }
+
         if(preg_match('#Chrome_View_Form_Element_(.{1,})#i', $class, $matches))
         {
             return PLUGIN . 'View/form/' . strtolower(str_replace('_', '/', $matches[1])) . '.php';

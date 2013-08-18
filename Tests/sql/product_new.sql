@@ -173,24 +173,6 @@ CREATE TABLE IF NOT EXISTS `cp1_design_layout` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `cp1_design_mapper_static`;
-CREATE TABLE IF NOT EXISTS `cp1_design_mapper_static` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `view_id` varchar(256) NOT NULL,
-  `position` varchar(256) NOT NULL,
-  `priority` int(2) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-INSERT INTO `cp1_design_mapper_static` (`id`, `view_id`, `position`, `priority`) VALUES
-(NULL, 'Chrome_View_HTML_Bottom_JsIncluder', 'bottom', 0),
-(NULL, 'Chrome_View_HTML_Head_CssIncluder', 'head', 0),
-(NULL, 'Chrome_View_Header_Header', 'header', 0),
-(NULL, 'Chrome_View_Footer_Benchmark', 'footer', 0),
-(NULL, 'Chrome_View_Footer_VarDump', 'footer', 0),
-(NULL, 'Chrome_View_Box_Login', 'left_box', 0),
-(NULL, 'Chrome_View_Box_Test', 'right_box', 0);
-
 DROP TABLE IF EXISTS `cp1_design_static`;
 CREATE TABLE IF NOT EXISTS `cp1_design_static` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
@@ -214,7 +196,7 @@ INSERT INTO `cp1_design_static` (`id`, `name`, `file`, `class`, `position`, `typ
 (NULL, 'Login', 'modules/box/login/controller.php', 'Chrome_Controller_Box_Login', 'leftBox', 'controller', 'chrome', 0),
 (NULL, 'cssIncluder', 'modules/html/head/cssIncluder/view.php', 'Chrome_View_Html_Head_CssIncluder', 'head', 'view', 'chrome', 0),
 (NULL, 'VarDum', 'modules/footer/var_dump/var_dump.php', 'Chrome_Controller_Footer_VarDump', 'footer', 'controller', 'chrome', 2),
-(NULL, 'jsIncluder', 'modules/html/bottom/jsIncluder/view.php', 'Chrome_View_HTML_Bottom_JsIncluder', 'postBody', 'view', 'chrome', 0);
+(NULL, 'jsIncluder', 'modules/html/bottom/jsIncluder/view.php', 'Chrome_View_HTML_Bottom_JsIncluder', 'postBodyIn', 'view', 'chrome', 0);
 
 DROP TABLE IF EXISTS `cp1_rbac_group`;
 CREATE TABLE IF NOT EXISTS `cp1_rbac_group` (

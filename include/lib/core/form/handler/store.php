@@ -73,6 +73,7 @@ class Chrome_Form_Handler_Store implements Chrome_Form_Handler_Interface
             }
 
             if($this->_doStore($element) === true) {
+
                 $this->_storage->set($elementId, $element->getStorableData());
             }
         }

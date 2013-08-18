@@ -41,11 +41,7 @@ class Chrome_Controller_User_Login_Page extends Chrome_Controller_Module_Abstrac
         $this->_form = Chrome_Form_Login::getInstance($this->_applicationContext);
 
         // the login form, will be the first one in Content
-
-        $view = Chrome_View_Form_Login::getInstance($this->_form);
-        $view->setRenderer(new Chrome_View_Form_Renderer_Template_Login_Content());
-        $this->_view = $view;
-
+        $this->_view = new Chrome_View_Form_Renderer_Template_Login_Content(Chrome_View_Form_Login::getInstance($this->_form));
 
         #$this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_User_Default_ShowForm', $this);
     }

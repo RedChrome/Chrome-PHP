@@ -345,15 +345,6 @@ abstract class Chrome_Validator_Composition_Abstract extends Chrome_Validator im
 		return isset($this->_validators[$index]) ? $this->_validators[$index] : null;
 	}
 
-	public function validate()
-	{
-		$this->_validate();
-
-		foreach($this->_validators as $validator) {
-			$this->_errorMsg = array_merge($this->_errorMsg, $validator->getAllErrors());
-		}
-	}
-
 	public function setData($data)
 	{
 		foreach($this->_validators as $validator) {

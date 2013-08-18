@@ -31,7 +31,6 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Form_Element_Interface
 {
-
     /**
      * isCreated()
      *

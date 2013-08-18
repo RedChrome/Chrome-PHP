@@ -53,7 +53,7 @@ class Chrome_Design_Theme_Chrome implements Chrome_Design_Theme_Interface
 		$rightBox = new Chrome_Renderable_Composition_Impl();
 		$body = new Chrome_Renderable_Composition_Impl();
 		$footer = new Chrome_Renderable_Composition_Impl();
-		$postBody = new Chrome_Renderable_Composition_Impl();
+		$postBodyIn = new Chrome_Renderable_Composition_Impl();
 
         $view = $design->getController()->getView();
         if($view instanceof Chrome_Renderable) {
@@ -67,7 +67,7 @@ class Chrome_Design_Theme_Chrome implements Chrome_Design_Theme_Interface
 			'rightBox' => $rightBox,
 			'body' => $body,
 			'footer' => $footer,
-			'postBody' => $postBody);
+			'postBodyIn' => $postBodyIn);
 
 		$model = new Chrome_Model_Design_Loader_Static($design->getApplicationContext()->getModelContext());
 		$controllerFactory = new Chrome_Controller_Factory($design->getApplicationContext());

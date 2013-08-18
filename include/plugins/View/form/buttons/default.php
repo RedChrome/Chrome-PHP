@@ -25,8 +25,36 @@ if( CHROME_PHP !== true ) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Buttons_Default extends Chrome_Form_Decorator_Individual_Abstract
+class Chrome_View_Form_Element_Buttons_Default extends Chrome_View_Form_Element_Attachable_Abstract
 {
+    /*public function setOption(Chrome_View_Form_Element_Option_Interface $option)
+    {
+        $viewOptions = $option->getAttachments();
+
+        foreach($this->_elementOption->getAttachments() as $key => $viewElement)
+        {
+            // dem viewForm die option injezieren
+            #$viewElement->set
+
+
+        }
+
+
+
+    }*/
+
+    public function render()
+    {
+        $return = '';
+
+        foreach( $this->_option->getAttachments() as $button ) {
+            $return .= $button->render();
+        }
+
+        return $return;
+    }
+
+    /*
 	public function element( $name, array $options = array())
 	{
 		$buttons = $this->_formElement->getOptions( Chrome_Form_Element_Buttons::CHROME_FORM_ELEMENT_BUTTONS );
@@ -52,6 +80,6 @@ class Chrome_Form_Decorator_Buttons_Default extends Chrome_Form_Decorator_Indivi
 		}
 
 		return $return;
-	}
+	}*/
 
 }

@@ -192,7 +192,6 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
      */
     public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Form $option)
     {
-
         // cannot be set using parent::__construct(), because $option is not an instance of Chrome_Form_Option_Element_Interface
         $this->_form = $form;
         $this->_id = $id;
@@ -209,7 +208,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
                 $this->_option->setToken($storedData[self::CHROME_FORM_ELEMENT_FORM_TOKEN]);
 
                 // renew the timer
-                $storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] = CHROME_TIME;
+                #$storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] = CHROME_TIME;
 
                 $this->_storage->set($this->_id, $storedData);
             }
@@ -226,35 +225,49 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
         $storedData = $this->_storage->get($this->_id);
 
         // is it expired?
-        if(!isset($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME]) OR
+        /*if(!isset($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME]) OR
             ($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] +  $this->_option->getMinAllowedTime() > CHROME_TIME) )
         {
+            var_dump($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME], $this->_option->getMinAllowedTime(), CHROME_TIME);
+
             $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_CREATED;
             return false;
-        }
+        }*/
 
         return true;
     }
 
-    protected function _isValid()
+    public function isValid()
     {
+        if($this->_isValid !== null)
+        {
+            return $this->_isValid;
+        }
+
         $storedData = $storedData = $this->_storage->get($this->_id);
 
         if($storedData[self::CHROME_FORM_ELEMENT_FORM_TOKEN] !== $this->getData()) {
             $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN;
+            $this->_isValid = false;
             return false;
         }
 
         if($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_option->getMaxAllowedTime() < CHROME_TIME) {
             $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME;
+            $this->_isValid = false;
             return false;
         }
 
         if($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_option->getMinAllowedTime() > CHROME_TIME) {
+
+            var_dump($this->_option->getMinAllowedTime());
+
             $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME;
+            $this->_isValid = false;
             return false;
         }
 
+        $this->_isValid = true;
         return true;
     }
 
@@ -293,8 +306,8 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
         $this->_storage->set($this->_id, $data);
     }
 
-    public function renew() {
-
+    public function renew()
+    {
         $token = $this->_createToken();
 
         $formData = $this->_storage->get($this->_id);
@@ -318,7 +331,8 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
         return $this->_storage;
     }
 
-    protected function _createToken() {
+    protected function _createToken()
+    {
         return md5(uniqid(mt_rand(), true));
     }
 

@@ -53,6 +53,7 @@ class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Module_A
 
                     if($this->_form->isValid()) {
 
+
                         // try to log in
                         $this->_model->login();
 
@@ -63,7 +64,7 @@ class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Module_A
                         }
 
                     } else {
-                        $this->_form->delete();
+                        $this->_form->destroy();
                         $this->_form->create();
                         $this->_view->formNotValid();
                     }

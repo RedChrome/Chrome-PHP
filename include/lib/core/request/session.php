@@ -331,6 +331,12 @@ class Chrome_Session implements Chrome_Session_Interface
             return;
         }
 
+        if($value === null)
+        {
+            unset($this->_SESSION[$key]);
+            return;
+        }
+
         $this->_SESSION[$key] = $value;
     }
 

@@ -40,6 +40,10 @@ class Chrome_Validator_Form_Element_Contains extends Chrome_Validator
 
     protected function _validate()
     {
+        if($this->_data === null) {
+            return true;
+        }
+
         if(is_array($this->_data)) {
 
             foreach($this->_data as $sentValue) {
@@ -53,8 +57,13 @@ class Chrome_Validator_Form_Element_Contains extends Chrome_Validator
         }
 
         if(!in_array($this->_data, $this->_allowedValues)) {
+
+            var_dump($this->_data,$this->_allowedValues);
+
             $this->_setError('Input did not matched allowed values');
             return false;
         }
+
+        return true;
     }
 }

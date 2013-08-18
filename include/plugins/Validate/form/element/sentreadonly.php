@@ -52,12 +52,11 @@ class Chrome_Validator_Form_Element_SentReadonly extends Chrome_Validator
         if($this->_option instanceof Chrome_Form_Option_Element_Multiple) {
 
             foreach($this->_option->getReadonly() as $readonlyInput) {
-                if(in_array($readonlyInput, $this->_data)) {
+                if(in_array($readonlyInput, (array) $this->_data)) {
                     $this->_setError('Inputfield which is marked as readonly was sent');
                     return false;
                 }
             }
-
             return true;
         }
 

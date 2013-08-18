@@ -65,7 +65,7 @@ class Chrome_View_Footer_VarDump extends Chrome_View_Abstract
 
         $data = $this->_data;
 
-        return $return = '<table align="center" border="1">
+        return $return = '<table border="1">
             <tr><td>GET</td><td>'.$this->exportArray($data['GET']).'</td></tr>
             <tr><td>POST</td><td>'.$this->exportArray($data['POST']).'</td></tr>
 
@@ -84,7 +84,7 @@ class Chrome_View_Footer_VarDump extends Chrome_View_Abstract
 
     protected function exportArray(array $array) {
 
-        $return = '<table align="left" border="1" width="100%">';
+        $return = '<table border="1">';
 
         foreach($array as $key => $value) {
 

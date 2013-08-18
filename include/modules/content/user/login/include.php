@@ -93,7 +93,6 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $passwordElement = new Chrome_Form_Element_Password($this, 'password', $passwordOption);
         $this->_addElement($passwordElement);
 
-
         // stay_loggedin input, default selection is false
         // only true or false are allowed, to be sure the user has sent on of them, we add the boolConverter
         // this determines, whether the user stays logged in, even if he leaves the website
@@ -102,7 +101,6 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
 
         $checkboxElement = new Chrome_Form_Element_Checkbox($this, 'stay_loggedin', $checkboxOption);
         $this->_addElement($checkboxElement);
-
 
         // submit button, nothing special
         $submitOption = new Chrome_Form_Option_Element_Values();
@@ -124,6 +122,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $this->addReceivingHandler(new Chrome_Form_Handler_Destroy());
     }
 }
+
 class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
 {
 
@@ -139,12 +138,12 @@ class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
         return self::$_instance;
     }
 
-    protected function _init()
+    protected function _initFactories()
     {
         $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Default');
         // $this->_renderer = new Chrome_View_Form_Index_Renderer();
 
-        parent::_init();
+        parent::_initFactories();
     }
 
     protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
@@ -166,17 +165,19 @@ class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
 
             case 'stay_loggedin':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('1' => 'Eingeloggt bleiben?')))->setPlaceholder('text_placeholder');
-                    //$viewOption->setLabelPosition($viewOption::LABEL_POSITION_FRONT);
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('1' => 'Eingeloggt bleiben?')));
+                    // $viewOption->setLabelPosition($viewOption::LABEL_POSITION_FRONT);
                     break;
                 }
 
             case 'submit':
                 {
                     // viewOption->setLabelPosition($viewOption::LABEL_POSITION_BEHIND);
-                    //$viewOption->setLabel(new Chrome_View_Form_Label_Default(array('submit' => 'Anmelden')));
+                    // $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('submit' => 'Anmelden')));
                     break;
                 }
         }
+
+        return $viewOption;
     }
 }

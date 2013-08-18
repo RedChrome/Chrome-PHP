@@ -52,7 +52,7 @@ class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract implements 
         $and->addValidator(new Chrome_Validator_Form_Element_Required($this->_option));
         $and->addValidator(new Chrome_Validator_Form_Element_Contains($this->_option->getAllowedValues()));
 
-        if(($validator = $this->_option->getValidator) !== null) {
+        if(($validator = $this->_option->getValidator()) !== null) {
             $and->addValidator($validator);
         }
 

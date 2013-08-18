@@ -94,6 +94,15 @@ interface Chrome_Form_Option_Element_Multiple_Interface extends Chrome_Form_Opti
     public function getSelectMultiple();
 }
 
+interface Chrome_Form_Option_Element_Attachable_Interface
+{
+    public function attach(Chrome_Form_Element_Interface $element);
+
+    public function setAttachments(array $elements);
+
+    public function getAttachments();
+}
+
 class Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Interface
 {
     protected $_isRequired = true;
@@ -143,6 +152,8 @@ class Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Interface
     public function setConversion(Chrome_Converter_List_Interface $conversion)
     {
         $this->_converter = $conversion;
+
+        return $this;
     }
 
     public function getConversion()

@@ -26,25 +26,27 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Backward_Default extends Chrome_Form_Decorator_Abstract
+class Chrome_View_Form_Element_Backward_Default extends Chrome_View_Form_Element_Abstract
 {
-    const CHROME_FORM_DECORATOR_BACKWARD_DELETE_PASSWORDS = 'DELETEPASSWORDS';
-
-    protected $_defaultOptions = array(self::CHROME_FORM_DECORATOR_BACKWARD_DELETE_PASSWORDS => true);
-
     public function render() {
 
-
-
-        if($this->_options[self::CHROME_FORM_DECORATOR_BACKWARD_DELETE_PASSWORDS] === true) {
-            $addOnclick = 'onclick="javascript:truncate_form_input(\''.$this->_formElement->getForm()->getID().'\');return true"';
-        } else {
-            $addOnclick = '';
-        }
-
-
+        // @todo implement option: delte passwords via javascript on backward
 
         $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_DEFAULT_LANGUAGE);
-        return '<input type="submit" '.$addOnclick.' name="'.$this->_formElement->getID().'" value="'.$lang->get('backward').'" '.$this->_getPreparedAttrs().'/>';
+
+        $this->_flags['value'] = $lang->get('backward');
+        $this->_flags['required'] = null;
+
+        $formId = $this->_viewForm->getViewElements($this->_formElement->getForm()->getID())->getFlag('id');
+        $this->_flags['onClick'] = 'javascript:truncate_form_input(\''.$formId.'\');return true';
+
+
+        return '<input type="submit" '.$this->_renderFlags().'/>';
+
+        #if($this->_options[self::CHROME_FORM_DECORATOR_BACKWARD_DELETE_PASSWORDS] === true) {
+        #    $addOnclick = 'onclick="javascript:truncate_form_input(\''.$this->_formElement->getForm()->getID().'\');return true"';
+        #} else {
+        #    $addOnclick = '';
+        #}
     }
 }

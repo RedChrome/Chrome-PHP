@@ -56,9 +56,7 @@ class Chrome_View_Box_Login extends Chrome_View_Strategy_Abstract
     {
         $this->setViewTitle('Login');
 
-        $view = Chrome_View_Form_Login::getInstance($this->_controller->getForm());
-        $this->_views[] = $view;
-        $view->setRenderer(new Chrome_View_Form_Renderer_Template_Login_Box());
+        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Box(Chrome_View_Form_Login::getInstance($this->_controller->getForm()));
 
         // this->_views = $this->_viewContext->getFactory()->build('Chrome_View_Box_Form_Login', $this->_controller);
     }
@@ -105,7 +103,6 @@ class Chrome_View_Box_Form_Login extends Chrome_View_Abstract
 }
 class Chrome_View_Form_Renderer_Template_Login_Box extends Chrome_View_Form_Renderer_Template_Abstract
 {
-
     protected function _getTemplate()
     {
         $template = new Chrome_Template();

@@ -116,7 +116,7 @@ class Chrome_Converter_Delegate_TypeCastingAndStripping extends Chrome_Converter
 
 		$allowedHTML = implode('', $allowedHTML);
 
-		if($option['nl2br'] === true) {
+		if(isset($option['nl2br']) AND $option['nl2br'] === true) {
 
 			return strip_tags(nl2br($var), $allowedHTML);
 		} else {

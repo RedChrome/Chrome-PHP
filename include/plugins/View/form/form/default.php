@@ -39,6 +39,9 @@ class Chrome_View_Form_Element_Form_Default extends Chrome_View_Form_Element_Abs
             $this->_setFlag('method', $this->_formElement->getForm()->getAttribute(Chrome_Form_Interface::ATTRIBUTE_METHOD));
             $this->_setFlag('action', $this->_formElement->getForm()->getAttribute(Chrome_Form_Interface::ATTRIBUTE_ACTION));
             $this->_setFlag('required', '');
+            if(isset($this->_attribute['id'])) {
+                $this->_setFlag('id', '');
+            }
 
             $token = $this->_elementOption->getToken();
             $tokenNamespace = $this->_elementOption->getTokenNamespace();
@@ -46,7 +49,7 @@ class Chrome_View_Form_Element_Form_Default extends Chrome_View_Form_Element_Abs
             $this->_int = 1;
 
             return '<form '. $this->_renderFlags() . '>' . "\n" .
-                 '<input type="hidden" id="' . $tokenNamespace . '" name="' . $tokenNamespace . '" value="' . $token . '" />' . "\n";
+                 '<input type="hidden" id="' . $this->_getIdPrefix().$tokenNamespace . '" name="' . $tokenNamespace . '" value="' . $token . '" />' . "\n";
         } else
         {
             $this->_int = 0;

@@ -116,7 +116,7 @@ class Chrome_Converter_List implements Chrome_Converter_List_Interface
 
     public function getParam($key)
     {
-        return $this->_params[$key];
+        return (isset($this->_params[$key])) ? $this->_params[$key] : array();
     }
 }
 /**

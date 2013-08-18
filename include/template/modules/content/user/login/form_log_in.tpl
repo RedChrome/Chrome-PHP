@@ -18,8 +18,9 @@
 <div class="ym-fbox ym-fbox-button ym-fbox-footer">
 
 <?php
-	echo $FORM['submit']->render(); 
+	echo $FORM['submit']->render();
 ?>
+
 </div>
 <?php
 	echo $FORM['login']->render();

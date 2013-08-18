@@ -29,7 +29,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-interface Chrome_View_Form_Interface extends Chrome_Renderable
+interface Chrome_View_Form_Interface
 {
     public function __construct(Chrome_Form_Interface $form);
 
@@ -40,10 +40,6 @@ interface Chrome_View_Form_Interface extends Chrome_Renderable
     public function getElementFactory();
 
     public function getElementOptionFactory();
-
-    public function setRenderer(Chrome_View_Form_Renderer_Interface $renderer);
-
-    public function getRenderer();
 
     public function getViewElements($id = null);
 }
@@ -75,9 +71,9 @@ interface Chrome_View_Form_Element_Option_Factory_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-interface Chrome_View_Form_Renderer_Interface
+interface Chrome_View_Form_Renderer_Interface extends Chrome_Renderable
 {
-    public function render(Chrome_View_Form_Interface $formView);
+    public function setViewForm(Chrome_View_Form_Interface $viewForm);
 }
 
 
@@ -118,6 +114,15 @@ interface Chrome_View_Form_Element_Option_Multiple_Interface extends Chrome_View
     public function getLabelPosition();
 }
 
+interface Chrome_View_Form_Element_Option_Attachable_Interface extends Chrome_View_Form_Element_Option_Interface
+{
+    public function attach(Chrome_View_Form_Element_Interface $element);
+
+    public function getAttachments();
+
+    public function setAttachments(array $elements);
+}
+
 /**
  *
  * @package CHROME-PHP
@@ -126,6 +131,12 @@ interface Chrome_View_Form_Element_Option_Multiple_Interface extends Chrome_View
 interface Chrome_View_Form_Element_Interface extends Chrome_Renderable
 {
     public function setAttribute($key, $value);
+
+    public function getAttribute($key);
+
+    public function getFlag($key);
+
+    public function setViewForm(Chrome_View_Form_Interface $viewForm);
 
     public function reset();
     //public function __construct(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption);

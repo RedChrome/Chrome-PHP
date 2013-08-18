@@ -34,7 +34,7 @@ class Chrome_Validator_Composition_Or extends Chrome_Validator_Composition_Abstr
     {
     }
 
-    public function validate()
+    protected function _validate()
     {
         foreach($this->_validators as $validator) {
             $validator->validate();
@@ -47,9 +47,5 @@ class Chrome_Validator_Composition_Or extends Chrome_Validator_Composition_Abstr
         }
 
         return false;
-    }
-
-    protected function _validate()
-    {
     }
 }

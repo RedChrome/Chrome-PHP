@@ -34,11 +34,11 @@ class Chrome_Validator_Composition_And extends Chrome_Validator_Composition_Abst
     {
     }
 
-    public function validate()
+    protected function _validate()
     {
         foreach($this->_validators as $validator) {
             $validator->validate();
-            if(!$validator->isValid()) {
+            if($validator->isValid() === false) {
                 $this->_errorMsg = $validator->getAllErrors();
                 return false;
             }
@@ -47,9 +47,5 @@ class Chrome_Validator_Composition_And extends Chrome_Validator_Composition_Abst
         $this->_errorMsg = array();
 
         return true;
-    }
-
-    protected function _validate()
-    {
     }
 }

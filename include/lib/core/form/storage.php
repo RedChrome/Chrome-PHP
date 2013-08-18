@@ -26,7 +26,7 @@ if(CHROME_PHP !== true)
 
 /**
  * Interface to access a storage, for form elements
- * 
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Storage
  */
@@ -34,31 +34,31 @@ interface Chrome_Form_Storage_Interface
 {
     /**
      * Retrieves the data for $elementName
-     * 
+     *
      * @param string $elementName ID/Name of an element
      * @return mixed data set by {@see set()}
      */
     public function get($elementName);
-    
+
     /**
      * Sets data to store it
-     * 
+     *
      * @param string $elementName ID/Name of an element
      * @param mixed $data the data to store
      */
     public function set($elementName, $data);
-    
+
     /**
      * Removes/deletes the data stored for the element $elementName
-     * 
+     *
      * @param string $elementName ID/Name of an element
      */
     public function remove($elementName);
-    
+
     /**
      * Checks whether there is data for element $elementName
-     * Returns true if data exists  
-     * 
+     * Returns true if data exists
+     *
      * @param unknown $elementName
      * @return boolean
      */
@@ -66,8 +66,8 @@ interface Chrome_Form_Storage_Interface
 }
 
 /**
- * Interface to set storage options. 
- * 
+ * Interface to set storage options.
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Storage
  */
@@ -75,46 +75,46 @@ interface Chrome_Form_Option_Storable_Interface
 {
     /**
      * Whether the storage is enabled. If it is not enabled, no data will be stored.
-     * 
+     *
      * @return boolean
      */
     public function getStorageEnabled();
-    
+
     /**
      * Whether the form element should save the user input, even if it is empty (which means null)
      * This should be allowed if the form element is not required.
      * If this is enabled, then the user cannot delete any prior input.
-     *  
+     *
      * @return boolean
      */
     public function getStoreNullData();
-    
+
     /**
      * Whether the form element should save he user input, even if it is not valid (usign the isValid method)
-     * 
+     *
      * Enable this, if the user should be able to correct his invalid data.
-     * 
+     *
      * @return boolean
      */
     public function getStoreInvalidData();
-    
+
     /**
      * Enables/Disables the storage
-     * 
+     *
      * @param boolean $bool
      */
     public function setStorageEnabled($bool);
-    
+
     /**
      * Enables/Disables the "storeNullData" functionality
-     * 
+     *
      * @param boolean $bool
      */
     public function setStoreNullData($bool);
-    
+
     /**
      * Enables/Disables the "storeInvalidData" functionality
-     * 
+     *
      * @param unknown $bool
      */
     public function setStoreInvalidData($bool);
@@ -122,7 +122,7 @@ interface Chrome_Form_Option_Storable_Interface
 
 /**
  * Default implementation of Chrome_Form_Option_Storable_Interface
- * 
+ *
  * This is just an option container with validating the setters.
  *
  * @package CHROME-PHP
@@ -132,7 +132,7 @@ class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interfac
 {
     protected $_storeNullData = false;
 
-    protected $_storageEnabled = false;
+    protected $_storageEnabled = true;
 
     protected $_storeInvalidData = false;
 

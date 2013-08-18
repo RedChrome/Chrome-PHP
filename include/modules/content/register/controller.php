@@ -50,7 +50,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
                                 if(!$this->_form->isValid()) {
                                     $this->_form->create();
                                 }
-
+                                var_dump($this->_form->getErrors());
                                 $this->_stepOne();
                                 break;
                             }
@@ -61,7 +61,6 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
 
                     case 3:
                         {
-
                             $this->_form = new Chrome_Form_Register_StepTwo($this->_applicationContext);
 
                             $data = $this->_form->getData();
