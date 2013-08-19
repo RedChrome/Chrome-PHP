@@ -34,7 +34,7 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
         $this->_addElement($submitElement);
 
         $storeHandler = new Chrome_Form_Handler_Store($storageSession, new Chrome_Form_Option_Storage(), array('accept'));
-        $this->addReceivingHandler($storeHandler);
+        $this->setAttribute(self::ATTRIBUTE_STORE, $storeHandler);
     }
 }
 class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract

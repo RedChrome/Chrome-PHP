@@ -697,8 +697,6 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
  */
 class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_Form_Element_Option_Factory_Interface
 {
-    protected $_storeHandlers = null;
-
     public function getElementOption(Chrome_Form_Element_Interface $formElement)
     {
         if($formElement instanceof Chrome_Form_Element_Multiple_Abstract or stristr(get_class($formElement), 'Chrome_Form_Element_Radio') !== false)
@@ -721,7 +719,7 @@ class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_For
     {
         #$formElementOption = $formElement->getOption();
 
-        foreach($this->_getStoreHandlers($formElement) as $handler)
+        foreach(($formElement->getForm()->getAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE)) as $handler)
         {
             if($handler->hasStored($formElement)) {
                 $viewElementOption->setStoredData($handler->getStored($formElement));
@@ -732,17 +730,6 @@ class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_For
         // @todo
         // setting defaults..
         // $viewElementOption->setRequired($formElementOption->getIsRequired());
-    }
-
-    protected function _getStoreHandlers(Chrome_Form_Element_Interface $formElement)
-    {
-        if($this->_storeHandlers !== null) {
-            return $this->_storeHandlers;
-        }
-
-        $this->_storeHandlers = $formElement->getForm()->getReceivingHandlers('Chrome_Form_Handler_Store_Interface');
-
-        return $this->_storeHandlers;
     }
 }
 class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface

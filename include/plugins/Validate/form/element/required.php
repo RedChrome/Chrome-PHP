@@ -89,6 +89,9 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
 				$this->_setError('Too much values sent!');
 				return false;
 			}
+
+			$this->_setError('There are required values which were not sent!');
+			return false;
 		}
 
 		return true;

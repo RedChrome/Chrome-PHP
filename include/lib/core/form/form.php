@@ -21,7 +21,7 @@
  * @author     Alexander Book <alexander.book@gmx.de>
  * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.07.2013 23:47:24] --> $
+ * @version    Git: <git_id>
  * @link       http://chrome-php.de
  */
 
@@ -490,7 +490,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * @var array
      */
-    protected $_attribts = array();
+    protected $_attribts = array(self::ATTRIBUTE_STORE => array());
 
     /**
      * Receiving Handler, gets called after isSent()
@@ -569,11 +569,6 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function isCreated($elementName = null)
     {
-        // cache
-        if($this->_isCreated !== null) {
-            return $this->_isCreated;
-        }
-
         // only check whether this element is created!
         if($elementName !== null) {
             $elementObj = $this->getElements($elementName);
@@ -586,7 +581,12 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
             return $elementObj->isCreated();
         }
 
-        // loops through every element and checsk whether it's created or not
+        // cache
+        if($this->_isCreated !== null) {
+            return $this->_isCreated;
+        }
+
+        // loops through every element and checks whether it's created or not
         // if one of them is not created the whole form is not created -> break
         // if all are created then the form is created
         foreach($this->_elements as $formElement) {
@@ -594,10 +594,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
                 $this->_errors[self::CHROME_FORM_ERRORS_CREATION][$formElement->getID()] = $formElement->getErrors();
                 $this->_isCreated = false;
 
-                if(count($this->_creationHandler) !== 0) {
-                    foreach($this->_creationHandler as $handler) {
-                        $handler->isNot($this);
-                    }
+                foreach($this->_creationHandler as $handler) {
+                    $handler->isNot($this);
                 }
 
                 return false;
@@ -606,10 +604,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         // cache
         $this->_isCreated = true;
 
-        if(count($this->_creationHandler) !== 0) {
-            foreach($this->_creationHandler as $handler) {
-                $handler->is($this);
-            }
+        foreach($this->_creationHandler as $handler) {
+            $handler->is($this);
         }
 
         return true;
@@ -657,10 +653,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 
         //if one is not valid, then return false
         if($this->_isValid === false) {
-            if(count($this->_validationHandler) !== 0) {
-                foreach($this->_validationHandler as $handler) {
-                    $handler->isNot($this);
-                }
+            foreach($this->_validationHandler as $handler) {
+                $handler->isNot($this);
             }
 
             return false;
@@ -669,10 +663,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         // cache
         $this->_isValid = true;
 
-        if(count($this->_validationHandler) !== 0) {
-            foreach($this->_validationHandler as $handler) {
-                $handler->is($this);
-            }
+        foreach($this->_validationHandler as $handler) {
+            $handler->is($this);
         }
 
         return true;
@@ -716,11 +708,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         }
 
         if($this->_isSent === false) {
-
-            if(count($this->_receivingHandler) !== 0) {
-                foreach($this->_receivingHandler as $handler) {
-                    $handler->isNot($this);
-                }
+            foreach($this->_receivingHandler as $handler) {
+                $handler->isNot($this);
             }
 
             return false;
@@ -729,10 +718,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         // cache
         $this->_isSent = true;
 
-        if(count($this->_receivingHandler) !== 0) {
-            foreach($this->_receivingHandler as $handler) {
-                $handler->is($this);
-            }
+        foreach($this->_receivingHandler as $handler) {
+            $handler->is($this);
         }
 
         return true;

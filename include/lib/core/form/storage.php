@@ -13,21 +13,43 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Form
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 17:23:52] --> $
- * @author     Alexander Book
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version Git: <git_id>
+ * @author Alexander Book
  */
-
 if(CHROME_PHP !== true)
     die();
-
+/**
+ * Interface for all 'store handlers'.
+ *
+ * A "store handler" stores/saves the data sent by the user, using a Chrome_Form_Storage_Interface storage and
+ * a Chrome_Form_Option_Storable_Interface option. To retrieve the stored data, use getStored().
+ *
+ * These handlers must be set as receiving handlers!
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Form.Storage
+ */
 interface Chrome_Form_Handler_Store_Interface
 {
+    /**
+     * Returns true if this handler can/(or has) stored user input for $element
+     *
+     * @param Chrome_Form_Element_Interface $element a form element
+     *
+     * @return boolean
+     */
     public function hasStored(Chrome_Form_Element_Interface $element);
 
+    /**
+     * Returns the stored data for $element
+     *
+     * @param Chrome_Form_Element_Interface $element a form element
+     * @return mixed
+     */
     public function getStored(Chrome_Form_Element_Interface $element);
 }
 
@@ -39,10 +61,12 @@ interface Chrome_Form_Handler_Store_Interface
  */
 interface Chrome_Form_Storage_Interface
 {
+
     /**
      * Retrieves the data for $elementName
      *
-     * @param string $elementName ID/Name of an element
+     * @param string $elementName
+     *        ID/Name of an element
      * @return mixed data set by {@see set()}
      */
     public function get($elementName);
@@ -50,15 +74,18 @@ interface Chrome_Form_Storage_Interface
     /**
      * Sets data to store it
      *
-     * @param string $elementName ID/Name of an element
-     * @param mixed $data the data to store
+     * @param string $elementName
+     *        ID/Name of an element
+     * @param mixed $data
+     *        the data to store
      */
     public function set($elementName, $data);
 
     /**
      * Removes/deletes the data stored for the element $elementName
      *
-     * @param string $elementName ID/Name of an element
+     * @param string $elementName
+     *        ID/Name of an element
      */
     public function remove($elementName);
 
@@ -80,8 +107,10 @@ interface Chrome_Form_Storage_Interface
  */
 interface Chrome_Form_Option_Storable_Interface
 {
+
     /**
-     * Whether the storage is enabled. If it is not enabled, no data will be stored.
+     * Whether the storage is enabled.
+     * If it is not enabled, no data will be stored.
      *
      * @return boolean
      */
@@ -137,6 +166,7 @@ interface Chrome_Form_Option_Storable_Interface
  */
 class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interface
 {
+
     protected $_storeNullData = false;
 
     protected $_storageEnabled = true;
