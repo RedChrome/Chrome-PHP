@@ -85,6 +85,8 @@ abstract class Chrome_View_Form_Renderer_Template_Abstract extends Chrome_View_F
 class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option_Interface
 {
 
+    protected $_storedData = null;
+
     protected $_label = null;
 
     protected $_placeholder = '';
@@ -98,7 +100,12 @@ class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option
 
     public function getStoredData()
     {
-        return null;
+        return $this->_storedData;
+    }
+
+    public function setStoredData($storedData)
+    {
+        $this->_storedData = $storedData;
     }
 
     public function getLabel()
@@ -148,9 +155,9 @@ class Chrome_View_Form_Element_Option_Multiple extends Chrome_View_Form_Element_
         return $this->_position;
     }
 }
-
 class Chrome_View_Form_Element_Option_Attachable extends Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option_Attachable_Interface
 {
+
     protected $_attachments = array();
 
     public function attach(Chrome_View_Form_Element_Interface $element)
@@ -165,11 +172,11 @@ class Chrome_View_Form_Element_Option_Attachable extends Chrome_View_Form_Elemen
 
     public function setAttachments(array $elements)
     {
-        foreach($elements as $element) {
+        foreach($elements as $element)
+        {
             $this->attach($element);
         }
     }
-
 }
 
 /**
@@ -179,6 +186,7 @@ class Chrome_View_Form_Element_Option_Attachable extends Chrome_View_Form_Elemen
  */
 abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
 {
+
     protected $_form = null;
 
     protected $_formElements = array();
@@ -245,29 +253,17 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
 
             $formElementId = $formElement->getID();
 
-            #$formOption = $this->_formElementOptionFactory->getElementOption($formElement);
+            // formOption = $this->_formElementOptionFactory->getElementOption($formElement);
 
             $this->_formElements[$formElementId] = $this->_setUpElement($formElement);
 
-            #$this->_formElements[$formElementId] = $this->_formElementFactory->getElement($formElement, $formOption);
+            // this->_formElements[$formElementId] = $this->_formElementFactory->getElement($formElement, $formOption);
         }
     }
-
-
 
     protected function _setUpElement(Chrome_Form_Element_Interface $formElement)
     {
         $formOption = $this->_formElementOptionFactory->getElementOption($formElement);
-
-        /*if($viewOption instanceof Chrome_View_Form_Element_Option_Attachable_Interface) {
-
-            $formElements = $formElement->getOption()->getAttachments();
-
-            foreach($viewOption->getAttachments() as $key => $attachment)
-            {
-                $this->_setUpElementOption($formElements[$key], $attachment);
-            }
-        }*/
 
         $formOption = $this->_modifyElementOption($formElement, $formOption);
 
@@ -284,7 +280,6 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
 
         return $element;
     }
-
 
     protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
     {
@@ -533,7 +528,7 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
     {
         $this->_availableSelections = $this->_elementOption->getAllowedValues();
 
-        if(sizeof($this->_availableSelections) > 1)
+        if(count($this->_availableSelections) > 1)
         {
             $this->_flags['name'] = $this->_flags['name'] . '[]';
         }
@@ -646,9 +641,9 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
         return $flagsRendered;
     }
 }
-
 abstract class Chrome_View_Form_Element_Attachable_Abstract extends Chrome_View_Form_Element_Abstract
 {
+
     public function reset()
     {
         parent::reset();
@@ -702,6 +697,8 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
  */
 class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_Form_Element_Option_Factory_Interface
 {
+    protected $_storeHandlers = null;
+
     public function getElementOption(Chrome_Form_Element_Interface $formElement)
     {
         if($formElement instanceof Chrome_Form_Element_Multiple_Abstract or stristr(get_class($formElement), 'Chrome_Form_Element_Radio') !== false)
@@ -711,12 +708,6 @@ class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_For
         {
             // todo
             $viewElementOption = new Chrome_View_Form_Element_Option_Attachable();
-
-            #foreach($formElement->getOption()->getAttachments() as $attachment)
-            #{
-            #    $viewElementOption->attach($this->getElementOption($attachment));
-            #}
-
         } else
         {
             $viewElementOption = new Chrome_View_Form_Element_Option();
@@ -728,11 +719,30 @@ class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_For
 
     protected function _setDefaultOptions(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewElementOption)
     {
-        $formElementOption = $formElement->getOption();
+        #$formElementOption = $formElement->getOption();
+
+        foreach($this->_getStoreHandlers($formElement) as $handler)
+        {
+            if($handler->hasStored($formElement)) {
+                $viewElementOption->setStoredData($handler->getStored($formElement));
+            }
+        }
+
 
         // @todo
         // setting defaults..
         // $viewElementOption->setRequired($formElementOption->getIsRequired());
+    }
+
+    protected function _getStoreHandlers(Chrome_Form_Element_Interface $formElement)
+    {
+        if($this->_storeHandlers !== null) {
+            return $this->_storeHandlers;
+        }
+
+        $this->_storeHandlers = $formElement->getForm()->getReceivingHandlers('Chrome_Form_Handler_Store_Interface');
+
+        return $this->_storeHandlers;
     }
 }
 class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface

@@ -90,7 +90,7 @@ interface Chrome_View_Form_Element_Option_Interface
 
     public function setDefaultInput(array $defaultInput);
 
-    //public function setStoredData($storedData);
+    public function setStoredData($storedData);
 
     public function getLabel();
 

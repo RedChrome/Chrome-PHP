@@ -382,6 +382,12 @@ interface Chrome_Form_Interface
      */
     public function addCreationHandler(Chrome_Form_Handler_Interface $handler);
 
+    public function getReceivingHandlers($class = null);
+
+    public function getValidationHandlers($class = null);
+
+    public function getCreationHandlers($class = null);
+
     /**
      * Sets a request data object, to get sent data from it
      *
@@ -1178,6 +1184,57 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function addValidationHandler(Chrome_Form_Handler_Interface $handler)
     {
         $this->_validationHandler[] = $handler;
+    }
+
+    public function getReceivingHandlers($class = null)
+    {
+        if($class === null) {
+            return $this->_receivingHandler;
+        }
+
+        $return = array();
+
+        foreach($this->_receivingHandler as $handler) {
+            if($handler instanceof $class) {
+                $return[] = $handler;
+            }
+        }
+
+        return $return;
+    }
+
+    public function getValidationHandlers($class = null)
+    {
+        if($class === null) {
+            return $this->_validationHandler;
+        }
+
+        $return = array();
+
+        foreach($this->_validationHandler as $handler) {
+            if($handler instanceof $class) {
+                $return[] = $handler;
+            }
+        }
+
+        return $return;
+    }
+
+    public function getCreationHandlers($class = null)
+    {
+        if($class === null) {
+            return $this->_creationHandler;
+        }
+
+        $return = array();
+
+        foreach($this->_creationHandler as $handler) {
+            if($handler instanceof $class) {
+                $return[] = $handler;
+            }
+        }
+
+        return $return;
     }
 
     /**

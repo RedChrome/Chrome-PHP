@@ -24,6 +24,13 @@
 if(CHROME_PHP !== true)
     die();
 
+interface Chrome_Form_Handler_Store_Interface
+{
+    public function hasStored(Chrome_Form_Element_Interface $element);
+
+    public function getStored(Chrome_Form_Element_Interface $element);
+}
+
 /**
  * Interface to access a storage, for form elements
  *

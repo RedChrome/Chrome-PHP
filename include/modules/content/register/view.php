@@ -48,9 +48,6 @@ class Chrome_View_Register extends Chrome_View_Strategy_Abstract
     }
 }
 
-/*
- * class Chrome_View_Register_StepOne extends Chrome_View_Abstract { public function render() { $template = new Chrome_Template(); $template->assignTemplate('modules/content/register/stepOne'); $template->assign('LANG', new Chrome_Language('modules/content/user/registration')); $template->assign('FORM', $this->_controller->getForm()); return $template->render(); } }
- */
 class Chrome_View_Form_Renderer_Template_Register_StepOne extends Chrome_View_Form_Renderer_Template_Abstract
 {
 
@@ -62,19 +59,7 @@ class Chrome_View_Form_Renderer_Template_Register_StepOne extends Chrome_View_Fo
         return $template;
     }
 }
-/*
-class Chrome_View_Register_StepTwo extends Chrome_View_Abstract
-{
 
-    public function render()
-    {
-        $template = new Chrome_Template();
-        $template->assignTemplate('modules/content/register/stepTwo');
-        $template->assign('FORM', $this->_controller->getForm());
-        $template->assign('LANG', new Chrome_Language('modules/content/user/registration'));
-        return $template->render();
-    }
-}*/
 class Chrome_View_Form_Renderer_Template_Register_StepTwo extends Chrome_View_Form_Renderer_Template_Abstract
 {
 

@@ -11,7 +11,9 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
 
         $lang = new Chrome_Language('modules/content/user/registration');
 
-        $formElementOption = new Chrome_Form_Option_Element_Form(new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id));
+        $storageSession = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
+
+        $formElementOption = new Chrome_Form_Option_Element_Form($storageSession);
         $formElementOption->setMaxAllowedTime(300)->setMinAllowedTime(1);
         $this->_addElement(new Chrome_Form_Element_Form($this, $this->_id, $formElementOption));
 
@@ -31,12 +33,7 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
         $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
         $this->_addElement($submitElement);
 
-
-        $storage = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
-        $option  = new Chrome_Form_Option_Storage();
-        $option->setStoreInvalidData(true);
-        $whiteListForElements = array('accept');
-        $storeHandler = new Chrome_Form_Handler_Store($storage, $option, $whiteListForElements);
+        $storeHandler = new Chrome_Form_Handler_Store($storageSession, new Chrome_Form_Option_Storage(), array('accept'));
         $this->addReceivingHandler($storeHandler);
     }
 }
@@ -51,13 +48,13 @@ class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
 
     protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
     {
-        $LANG = new Chrome_Language('modules/content/user/registration');
+        $lang = new Chrome_Language('modules/content/user/registration');
 
         switch($formElement->getID())
         {
             case 'accept':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $LANG->get('rules_agree'))));
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $lang->get('rules_agree'))));
                     $viewOption->setLabelPosition($viewOption::LABEL_POSITION_BEHIND);
                 }
         }
@@ -154,18 +151,18 @@ class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
 
     protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
     {
-        $LANG = new Chrome_Language('modules/content/user/registration');
+        $lang = new Chrome_Language('modules/content/user/registration');
 
         switch($formElement->getID())
         {
             case 'submit':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $LANG->get('rules_agree'))));
+                    // viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $lang->get('rules_agree'))));
                     break;
                 }
             case 'backward':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $LANG->get('rules_agree'))));
+                    // viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $lang->get('rules_agree'))));
                     break;
                 }
         }

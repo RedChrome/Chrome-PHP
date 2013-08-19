@@ -13,17 +13,17 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Form
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.07.2013 22:01:31] --> $
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.07.2013 22:01:31] --> $
  */
-
 if(CHROME_PHP !== true)
     die();
 
 /**
+ *
  *
  * USE THIS ONLY AS RECEIVING HANDLER!!
  *
@@ -32,16 +32,19 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Handler_Store implements Chrome_Form_Handler_Interface
+class Chrome_Form_Handler_Store implements Chrome_Form_Handler_Interface, Chrome_Form_Handler_Store_Interface
 {
+
     protected $_storage = null;
 
-    protected $_option  = null;
+    protected $_option = null;
 
     protected $_whiteList = array();
 
     /**
-     * @param array $whiteListForElements contains form element id's which should get stored
+     *
+     * @param array $whiteListForElements
+     *        contains form element id's which should get stored
      */
     public function __construct(Chrome_Form_Storage_Interface $storage, Chrome_Form_Option_Storable_Interface $option, array $whiteListForElements)
     {
@@ -64,47 +67,66 @@ class Chrome_Form_Handler_Store implements Chrome_Form_Handler_Interface
 
     protected function _store(Chrome_Form_Interface $form)
     {
-        foreach($this->_whiteList as $elementId) {
+        foreach($this->_whiteList as $elementId)
+        {
 
             $element = $form->getElements($elementId);
 
-            if(!($element instanceof Chrome_Form_Element_Storable)) {
+            if(!($element instanceof Chrome_Form_Element_Storable))
+            {
                 continue;
             }
 
-            if($this->_doStore($element) === true) {
+            if($this->_doStore($element) === true)
+            {
 
                 $this->_storage->set($elementId, $element->getStorableData());
             }
         }
     }
 
+    public function hasStored(Chrome_Form_Element_Interface $element)
+    {
+        return in_array($element->getID(), $this->_whiteList);
+    }
+
+    public function getStored(Chrome_Form_Element_Interface $element)
+    {
+        return $this->_storage->get($element->getID());
+    }
+
     protected function _doStore(Chrome_Form_Element_Storable $element)
     {
-        if($this->_option->getStorageEnabled() === false) {
-			return false;
-		}
+        if($this->_option->getStorageEnabled() === false)
+        {
+            return false;
+        }
 
-		if($element->isCreated() === false) {
-			return false;
-		}
+        if($element->isCreated() === false)
+        {
+            return false;
+        }
 
-		if($element->isSent() === false) {
-			if($this->_option->getStoreNullData() === true) {
-				return true;
-			}
+        if($element->isSent() === false)
+        {
+            if($this->_option->getStoreNullData() === true)
+            {
+                return true;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		if($element->isValid() === true) {
-			return true;
-		}
+        if($element->isValid() === true)
+        {
+            return true;
+        }
 
-		if($this->_option->getStoreInvalidData() === true) {
-			return true;
-		}
+        if($this->_option->getStoreInvalidData() === true)
+        {
+            return true;
+        }
 
-		return false;
+        return false;
     }
 }
