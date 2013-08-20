@@ -232,16 +232,6 @@ interface Chrome_Form_Interface
     public function getData($key = null);
 
     /**
-     * getOptions()
-     *
-     * Here you could add default options to a specific or all form elements
-     *
-     * @param Chrome_Form_Element_Interface $obj Object of a form element
-     * @return array
-     */
-    public function getOptions(Chrome_Form_Element_Interface $obj);
-
-    /**
      * getElements()
      *
      * Returns all elements of this form
@@ -574,8 +564,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
             $elementObj = $this->getElements($elementName);
 
             if($elementObj === null) {
-                throw new Chrome_Exception('Cannot check whether the element "' . $elementName .
-                    '" is created, if it does not exist!');
+                throw new Chrome_Exception('Cannot check whether the element "' . $elementName . '" is created, if it does not exist!');
             }
 
             return $elementObj->isCreated();
@@ -620,18 +609,13 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function isValid($elementName = null)
     {
-        if($this->_isSent === false) {
-            return;
+        if($this->isSent($elementName) === false) {
+            return false;
         }
 
         // only check whether this element is valid!
         if($elementName !== null) {
             $elementObj = $this->getElements($elementName);
-
-            if($elementObj === null) {
-                throw new Chrome_Exception('Cannot check whether the element "' . $elementName .
-                    '" is valid, if it does not exist!');
-            }
 
             return $elementObj->isValid();
         }
@@ -679,18 +663,13 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function isSent($elementName = null)
     {
-        if($this->_isCreated === false) {
-            return;
+        if($this->isCreated($elementName) === false) {
+            return false;
         }
 
         // only check whether this element is sent!
         if($elementName !== null) {
             $elementObj = $this->getElements($elementName);
-
-            if($elementObj === null) {
-                throw new Chrome_Exception('Cannot check whether the element "' . $elementName .
-                    '" is sent, if it does not exist!');
-            }
 
             return $elementObj->isSent();
         }
@@ -842,23 +821,26 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function getData($key = null)
     {
         // cache
-        if(count($this->_data) !== 0) {
-            if($key != null) {
+        if(count($this->_data) !== 0)
+        {
+            if($key != null)
+            {
                 return (isset($this->_data[$key])) ? $this->_data[$key] : null;
-
             }
 
             return $this->_data;
         }
 
-        foreach($this->_elements as $formElement) {
-
-            if(($_data = $formElement->getData()) !== null) {
+        foreach($this->_elements as $formElement)
+        {
+            if(($_data = $formElement->getData()) !== null)
+            {
                 $this->_data[$formElement->getID()] = $_data;
             }
         }
 
-        if($key !== null) {
+        if($key !== null)
+        {
             return (isset($this->_data[$key])) ? $this->_data[$key] : null;
         }
 
@@ -891,27 +873,12 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function getElements($id = null)
     {
-        if($id !== null) {
-            if(isset($this->_elements[$id])) {
-                return $this->_elements[$id];
-            }
-            return null;
+        if($id !== null)
+        {
+            return (isset($this->_elements[$id])) ? $this->_elements[$id] : null;
         }
 
         return $this->_elements;
-    }
-
-    /**
-     * Chrome_Form_Abstract::getOptions()
-     *
-     * returns options for an element
-     *
-     * @param Chrome_Form_Element_Interface $obj
-     * @return array
-     */
-    public function getOptions(Chrome_Form_Element_Interface $obj)
-    {
-        return array();
     }
 
     /**
@@ -971,8 +938,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function getErrors($elementName = null)
     {
-        return array_merge($this->getCreationErrors($elementName), $this->getReceivingErrors($elementName), $this->
-            getValidationErrors($elementName));
+        return array_merge($this->getCreationErrors($elementName), $this->getReceivingErrors($elementName), $this->getValidationErrors($elementName));
     }
 
     /**
@@ -1020,14 +986,23 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
                             $value = ROOT_URL . '/' . $value;
                         }
 
+                        if($value{0} != '/') {
+                            $value = '/'. $value;
+                        }
+
                         $this->_attribts[$key] = $value;
+
                     }
                     return;
                 }
             case self::ATTRIBUTE_STORE:
                 {
                     if(!($value instanceof Chrome_Form_Handler_Interface) ){
-                        return;
+
+                        $exceptionString = 'Every store handler must be an instance of Chrome_Form_Handler_Interface, given ';
+                        $exceptionString .= (is_object($value)) ? get_class($value) : gettype($value);
+
+                        throw new Chrome_InvalidArgumentException($exceptionString);
                     }
 
                     $this->_attribts[$key][] = $value;
@@ -1086,10 +1061,10 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function hasValidationErrors($elementName, $errorName = null)
     {
         if($errorName === null) {
-            return isset($this->_validationErrors[$elementName]);
+            return isset($this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName]);
         } else {
-            if(isset($this->_validationErrors[$elementName])) {
-                return in_array($errorName, $this->_validationErrors[$elementName]);
+            if(isset($this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName])) {
+                return in_array($errorName, $this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName]);
             } else {
                 return false;
             }
@@ -1108,10 +1083,10 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function hasReceivingErrors($elementName, $errorName = null)
     {
         if($errorName === null) {
-            return isset($this->_receivingErrors[$elementName]);
+            return isset($this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName]);
         } else {
-            if(isset($this->_receivingErrors[$elementName])) {
-                return in_array($errorName, $this->_receivingErrors[$elementName]);
+            if(isset($this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName])) {
+                return in_array($errorName, $this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName]);
             } else {
                 return false;
             }
@@ -1130,10 +1105,10 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function hasCreationErrors($elementName, $errorName = null)
     {
         if($errorName === null) {
-            return isset($this->_creationErrors[$elementName]);
+            return isset($this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName]);
         } else {
-            if(isset($this->_creationErrors[$elementName])) {
-                return in_array($errorName, $this->_creationErrors[$elementName]);
+            if(isset($this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName])) {
+                return in_array($errorName, $this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName]);
             } else {
                 return false;
             }

@@ -249,11 +249,6 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      */
     public function isValid()
     {
-        if($this->isSent() !== true)
-        {
-            return false;
-        }
-
         // cache
         if($this->_isValid !== null)
         {
@@ -333,11 +328,6 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      */
     public function isSent()
     {
-        if($this->isCreated() !== true)
-        {
-            return false;
-        }
-
         // cache
         if($this->_isSent !== null)
         {

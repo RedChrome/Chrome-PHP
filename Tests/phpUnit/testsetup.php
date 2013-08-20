@@ -13,11 +13,12 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:21:14] --> $
- * @author     Alexander Book
+ * @package CHROME-PHP
+ * @subpackage Chrome.Test
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version Git: <git_id>
+ * @author Alexander Book
  */
 
 class Chrome_TestSetup
@@ -35,12 +36,6 @@ class Chrome_TestSetup
 	public function __construct()
 	{
         require_once 'bootstrap.php';
-
-	    require_once 'include/chrome.php';
-        require_once LIB.'core/error/exception.php';
-        require_once LIB.'core/mime.php';
-        require_once LIB.'core/file_system/file_system.php';
-        require_once LIB.'exception/console.php';
 
 		$this->_errorConfig = new Chrome_Exception_Configuration();
 		$this->_errorConfig->setErrorHandler(new Chrome_Exception_Error_Handler_Default());
@@ -69,33 +64,29 @@ class Chrome_TestSetup
 
 		require_once LIB.'core/database/database.php';
 
-		// configure default database connection
-		try {
-			$defaultConnectionClass = 'Chrome_Database_Connection_'.ucfirst(CHROME_DATABASE);
-			$defaultConnection = new $defaultConnectionClass();
-			$defaultConnection->setConnectionOptions('localhost', 'test', '', 'chrome_2_test');
-			$defaultConnection->connect();
-		}
-		catch (Exception $e) {
-			die(var_dump($e));
-		}
-
 		$dbRegistry = new Chrome_Database_Registry_Connection();
-		$dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
 
 		$databaseFactory = new Chrome_Database_Factory($dbRegistry, new Chrome_Database_Registry_Statement());
 		$databaseFactory->setLogger(new Chrome_Logger_Database());
 
         if(TEST_DATABASE_CONNECTIONS == true) {
 
+            // configure default database connection
+            // remove "#" in those lines, to connect to db at once. Now it will only connect if needed
+            $defaultConnectionClass = 'Chrome_Database_Connection_'.ucfirst(CHROME_DATABASE);
+            $defaultConnection = new $defaultConnectionClass();
+            $defaultConnection->setConnectionOptions('localhost', 'test', '', 'chrome_2_test');
+            #$defaultConnection->connect();
+            $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
+
 			$mysqlTestConnection = new Chrome_Database_Connection_Mysql();
 			$mysqlTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
-			$mysqlTestConnection->connect();
+			#$mysqlTestConnection->connect();
 			$dbRegistry->addConnection('mysql_test', $mysqlTestConnection, true);
 
 			$mysqliTestConnection = new Chrome_Database_Connection_Mysqli();
 			$mysqliTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
-			$mysqliTestConnection->connect();
+			#$mysqliTestConnection->connect();
 			$dbRegistry->addConnection('mysqli_test', $mysqliTestConnection, true);
 		}
 
@@ -115,8 +106,6 @@ class Chrome_TestSetup
 
 		require_once APPLICATION.'default.php';
 		require_once LIB.'exception/dummy.php';
-		// todo: remove?
-        // require_once LIB.'exception/frontcontroller.php';
 
 		$application = new Chrome_Application_Default(new Chrome_Exception_Handler_Console());
 		$application->init();

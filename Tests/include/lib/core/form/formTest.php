@@ -23,7 +23,7 @@ class Test_Chrome_Request_Data_Form extends Chrome_Request_Data_Abstract
     }
 }
 
-class FormWithNoElementsTest extends Chrome_TestCase
+class GeneralFormTest extends Chrome_TestCase
 {
     protected $_form;
 
@@ -35,6 +35,7 @@ class FormWithNoElementsTest extends Chrome_TestCase
     public function testIfNoElementsAreAdded()
     {
         $this->assertSame(0, count($this->_form->getElements()));
+        $this->assertSame($this->_appContext, $this->_form->getApplicationContext());
         $this->assertTrue($this->_form->isSent());
         $this->assertTrue($this->_form->isCreated());
         $this->assertTrue($this->_form->isValid());
@@ -45,13 +46,16 @@ class FormWithNoElementsTest extends Chrome_TestCase
         $this->assertEquals($this->_form->getCreationErrors(), array());
         $this->assertEquals($this->_form->getReceivingErrors(), array());
         $this->assertEquals($this->_form->getValidationErrors(), array());
+        $this->assertEquals($this->_form->getCreationErrors('notExisting'), array());
+        $this->assertEquals($this->_form->getReceivingErrors('notExisting'), array());
+        $this->assertEquals($this->_form->getValidationErrors('notExisting'), array());
         $this->assertEquals($this->_form->getErrors(), array());
         $this->assertEquals($this->_form->getAttribute('doesNotExist'), null);
         $this->assertInstanceOf('Chrome_Request_Data_Interface', $this->_form->getRequestData());
-        $this->assertFalse($this->_form->hasReceivingErrors(''));
-        $this->assertFalse($this->_form->hasCreationErrors(''));
-        $this->assertFalse($this->_form->hasValidationErrors(''));
-        $this->assertFalse($this->_form->hasErrors(''));
+        $this->assertFalse($this->_form->hasReceivingErrors('notExisting'));
+        $this->assertFalse($this->_form->hasCreationErrors('notExisting'));
+        $this->assertFalse($this->_form->hasValidationErrors('notExisting'));
+        $this->assertFalse($this->_form->hasErrors('notExisting'));
         $this->assertTrue(is_array($this->_form->getAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE)));
 
         // test action attribute
@@ -59,7 +63,10 @@ class FormWithNoElementsTest extends Chrome_TestCase
         $firstAction = $this->_form->getAttribute(Chrome_Form_Interface::ATTRIBUTE_ACTION);
         $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_ACTION, 'test.html');
         $this->assertSame($firstAction, $this->_form->getAttribute(Chrome_Form_Interface::ATTRIBUTE_ACTION), 'action attribute should trim /');
+    }
 
+    public function testSetAttributeStoreHandler()
+    {
         $storage = new Chrome_Form_Storage_Session($this->_appContext->getRequestHandler()->getRequestData()->getSession(), 'testForm');
         $option = new Chrome_Form_Option_Storage();
         $storeHandler = new Chrome_Form_Handler_Store($storage, $option, array());
@@ -68,9 +75,20 @@ class FormWithNoElementsTest extends Chrome_TestCase
         $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE, $storeHandler);
         $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE, $storeHandler);
         $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE, $storeHandler2);
-        $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE, $this);
 
         $this->assertSame(array($storeHandler, $storeHandler, $storeHandler2), $this->_form->getAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE), 'store handler should be injected correctly');
+    }
+
+    public function testSetAttributeStoreHandlerThrowsExcpetionOnWrongStoreHandler()
+    {
+        $this->setExpectedException('Chrome_InvalidArgumentException');
+        $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE, 'string');
+    }
+
+    public function testSetAttributeStoreHandlerThrowsExcpetionOnWrongStoreHandler2()
+    {
+        $this->setExpectedException('Chrome_InvalidArgumentException');
+        $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE, $this);
     }
 
     public function testExceptionIfElementDoesNotExistInisSent()

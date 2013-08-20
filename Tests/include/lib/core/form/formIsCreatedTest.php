@@ -14,7 +14,7 @@ class FormIsCreatedTest extends Chrome_TestCase
         $this->_option = new Chrome_Form_Option_Element_Multiple();
     }
 
-    protected function _addElementCheckbox()
+    protected function _addElement()
     {
         $element = new Test_Chrome_Form_Element_isCreated($this->_form, 'created', $this->_option);
         $element->isCreated = true;
@@ -23,7 +23,7 @@ class FormIsCreatedTest extends Chrome_TestCase
 
     public function testIsCreatedSpecificElement()
     {
-        $this->_addElementCheckbox();
+        $this->_addElement();
 
         $this->assertTrue($this->_form->isCreated('created'));
         $this->assertSame($this->_form->isCreated('created'),$this->_form->isCreated('created'));
@@ -31,7 +31,7 @@ class FormIsCreatedTest extends Chrome_TestCase
 
     public function testIsCreated()
     {
-        $this->_addElementCheckbox();
+        $this->_addElement();
 
         $this->assertTrue($this->_form->isCreated());
         $this->assertSame($this->_form->isCreated(),$this->_form->isCreated());
@@ -39,8 +39,8 @@ class FormIsCreatedTest extends Chrome_TestCase
 
     public function testFormElementGetsOverwrittenWithSameId()
     {
-        $this->_addElementCheckbox();
-        $this->_addElementCheckbox();
+        $this->_addElement();
+        $this->_addElement();
 
         $this->assertSame(1, count($this->_form->getElements()));
         $this->assertTrue($this->_form->isCreated());
@@ -55,7 +55,7 @@ class FormIsCreatedTest extends Chrome_TestCase
         $element->errors = $errors;
 
         $this->_form->addElement($element);
-        $this->_addElementCheckbox();
+        $this->_addElement();
         $this->assertFalse($this->_form->isCreated(), 'form must be not created');
         $this->assertTrue($this->_form->isCreated('created'), 'element "created" must be created');
         $this->assertFalse($this->_form->isCreated('notCreatedElement'), 'ekenebt "notCreatedElement" must not be created');
@@ -63,5 +63,11 @@ class FormIsCreatedTest extends Chrome_TestCase
         $this->assertSame(array('notCreatedElement' => $errors), $this->_form->getCreationErrors(), 'there must be only the errors from "notCreatedElement"');
         $this->assertSame(array(), $this->_form->getCreationErrors('created'), 'element "created" is created and thus has no errors');
         $this->assertSame($errors, $this->_form->getCreationErrors('notCreatedElement'), 'errors from "notCreatedElement" must be exactly the ones set previous..');
+
+        $this->assertTrue($this->_form->hasCreationErrors('notCreatedElement'), '"notCreatedElement" must have creation errors');
+        $this->assertFalse($this->_form->hasCreationErrors('created'), '"created" must not have creation errors');
+        $this->assertTrue($this->_form->hasCreationErrors('notCreatedElement', $errors[0]), '"notCreatedElement" must have this special error');
+        $this->assertFalse($this->_form->hasCreationErrors('notCreatedElement', 'msg not existing...test, not sent'), '"notCreatedElement" does not have this special error');
+        $this->assertFalse($this->_form->hasCreationErrors('created', $errors[0]), '"created" does not have any special error');
     }
 }
