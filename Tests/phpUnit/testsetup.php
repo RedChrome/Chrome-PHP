@@ -73,7 +73,7 @@ class Chrome_TestSetup
 		try {
 			$defaultConnectionClass = 'Chrome_Database_Connection_'.ucfirst(CHROME_DATABASE);
 			$defaultConnection = new $defaultConnectionClass();
-			$defaultConnection->setConnectionOptions('localhost', 'test', '', 'chrome_2_test');
+			$defaultConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
 			$defaultConnection->connect();
 		}
 		catch (Exception $e) {

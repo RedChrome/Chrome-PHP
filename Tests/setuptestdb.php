@@ -21,7 +21,6 @@ function applySQLQueries($query, Chrome_Database_Factory_Abstract $databaseFacto
             continue;
         }
 
-
        $db->query($_query);
        $db->clear();
        echo '.';
