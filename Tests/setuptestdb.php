@@ -12,7 +12,7 @@ function applySQLQueries($query, Chrome_Database_Factory_Abstract $databaseFacto
         die('Query string is empty');
     }
 
-    $queries = explode(";\r\n", $query); // use \n on windows systems
+    $queries = explode(';'.PHP_EOL, $query);
     $db = $databaseFactory->buildInterface('simple', 'assoc');
 
     foreach($queries as $_query) {
