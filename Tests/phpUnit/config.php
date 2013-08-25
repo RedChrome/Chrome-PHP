@@ -21,3 +21,5 @@ if(getenv('TRAVIS') !== false)
     define('MYSQL_DB', 'chrome_2_test');
     define('MYSQL_PORT', 3306);
 }
+
+var_dump(getenv('TRAVIS'), MYSQL_USER);
