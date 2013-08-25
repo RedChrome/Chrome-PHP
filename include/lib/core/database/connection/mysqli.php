@@ -52,9 +52,9 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
 		$this->_port = (int) $port;
 
 		// persistent connection
-		if(stripos($this->_host, 'p:') === false) {
-			$this->_host = 'p:'.$this->_host;
-		}
+		#if(stripos($this->_host, 'p:') === false) {
+		#	$this->_host = 'p:'.$this->_host;
+		#}
 
 		$this->_isSetConnectionOptions = true;
 	}
@@ -91,7 +91,7 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
 					}
 				default:
 					{
-						throw new Chrome_Exception_Database($e->getMessage(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
+						throw new Chrome_Exception_Database('Unknown error while connecting to "'.$this->_host.'". Got error: '.$e->getMessage(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
 					}
 			}
 
