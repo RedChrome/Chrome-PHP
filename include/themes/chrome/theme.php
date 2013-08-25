@@ -69,7 +69,8 @@ class Chrome_Design_Theme_Chrome implements Chrome_Design_Theme_Interface
 			'footer' => $footer,
 			'postBodyIn' => $postBodyIn);
 
-		$model = new Chrome_Model_Design_Loader_Static($design->getApplicationContext()->getModelContext());
+		$model = new Chrome_Model_Design_Loader_Static_Cache(new Chrome_Model_Design_Loader_Static($design->getApplicationContext()->getModelContext()));
+        #$model  = new Chrome_Model_Design_Loader_Static($design->getApplicationContext()->getModelContext());
 		$controllerFactory = new Chrome_Controller_Factory($design->getApplicationContext());
         $viewFactory = $design->getApplicationContext()->getViewContext()->getFactory();
 

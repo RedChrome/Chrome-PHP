@@ -22,6 +22,8 @@
 
 if(CHROME_PHP !== true) die();
 
+// @todo clean up this class to use it again
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Cache

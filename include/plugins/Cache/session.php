@@ -22,7 +22,7 @@
 
 interface Chrome_Cache_Option_Session_Interface extends Chrome_Cache_Option_Interface
 {
-    // todo finish this interface
+    // @todo finish this interface
 }
 
 /**

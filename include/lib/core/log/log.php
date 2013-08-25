@@ -80,8 +80,8 @@ class Chrome_Log implements Chrome_Log_Interface
 
     public static function logException(Exception $exception, $mode = E_WARNING, Chrome_Logger_Interface $logger = null)
     {
-        self::log('An Exception with message "'.$exception->getMessage().'" occured. Printing stack trace:', $mode, $logger);
-        self::log($exception->getTraceAsString(), $mode, $logger);
+        self::log('An Exception with message "'.$exception->getMessage().'" occured. Printing stack trace:'."\n".$exception->getTraceAsString(), $mode, $logger);
+        #self::log($exception->getTraceAsString(), $mode, $logger);
     }
 
     public static function log($string, $mode = E_WARNING, Chrome_Logger_Interface $logger = null)
@@ -116,7 +116,7 @@ class Chrome_Logger_File implements Chrome_Logger_Interface
     {
         require_once LIB.'core/file/file.php';
 
-        $this->_filePointer = Chrome_File::openFile($file.'.log', Chrome_File::FILE_MODE_TRUNCATE_WRITE, false);
+        $this->_filePointer = Chrome_File::openFile($file.'.log', Chrome_File::FILE_MODE_ENDING_WRITE, false);
         /*
         if( ($this->_filePointer = Chrome_File::existsUsingFilePointer($file.'.log', 'a')) === false) {
             $this->_filePointer = Chrome_File::mkFileUsingFilePointer($file.'.log', 0777, 'a', false);

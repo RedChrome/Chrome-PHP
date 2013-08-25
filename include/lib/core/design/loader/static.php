@@ -69,21 +69,19 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
                 continue;
             }
 
-            $this->_loadViewsByPosition($composition, $option->getPosition(), $this->_theme);
+            $this->_loadViewsByPosition($composition, $this->_model->getViewsByPosition($option->getPosition(), $this->_theme));
         }
     }
 
-    // todo: this should get moved to a model
-    protected function _loadViewsByPosition(Chrome_Renderable_Composition_Interface $composition, $position, $theme)
+    // @todo: this should get moved to a model
+    protected function _loadViewsByPosition(Chrome_Renderable_Composition_Interface $composition, Chrome_Database_Result_Iterator $resultViewsWithPosition)
     {
-        $result = $this->_model->getViewsByPosition($position, $theme);
-
-        if($result->isEmpty())
+        if($resultViewsWithPosition->isEmpty())
         {
             return;
         }
 
-        foreach($result as $row)
+        foreach($resultViewsWithPosition as $row)
         {
 
             if(!_isFile(BASEDIR . $row['file']))
@@ -131,9 +129,32 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
         }
     }
 }
-class Chrome_Model_Design_Loader_Static extends Chrome_Model_Database_Abstract
+class Chrome_Model_Design_Loader_Static_Cache extends Chrome_Model_Cache_Abstract
 {
 
+    protected function _setUpCache()
+    {
+        $this->_cacheInterface = 'Serialization';
+        $this->_cacheOption = new Chrome_Cache_Option_Serialization();
+        $this->_cacheOption->setCacheFile(CACHE.'_designLoaderStatic.cache');
+    }
+
+    public function getViewsByPosition($position, $theme)
+    {
+        $key = $theme . '/' . $position;
+
+        if($this->_cache->has($key))
+        {
+            return $this->_cache->get($key);
+        }
+
+        $data = $this->_decorable->getViewsByPosition($position, $theme);
+        $this->_cache->set($key, $data);
+        return $data;
+    }
+}
+class Chrome_Model_Design_Loader_Static extends Chrome_Model_Database_Abstract
+{
     protected function _setDatabaseOptions()
     {
         $this->_dbInterface = 'Simple';

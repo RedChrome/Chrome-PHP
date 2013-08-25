@@ -37,7 +37,7 @@ class Chrome_Cache_Option_Null implements Chrome_Cache_Option_Interface
  */
 class Chrome_Cache_Null implements Chrome_Cache_Interface
 {
-    public function __construct(Chrome_Cache_Option_Interface $options)
+    public function __construct()
     {
         // do nothing
     }

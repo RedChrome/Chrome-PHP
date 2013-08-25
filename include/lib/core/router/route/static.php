@@ -30,7 +30,6 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Route_Static implements Chrome_Router_Route_Interface
 {
-
     protected $_resource = null;
 
     protected $_model = null;
@@ -92,12 +91,10 @@ class Chrome_Route_Static implements Chrome_Router_Route_Interface
  */
 class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
 {
-    const CHROME_MODEL_ROUTE_STATIC_CACHE_CACHE_FILE = 'tmp/cache/router/_static.cache';
-
     protected function _setUpCache()
     {
         $this->_cacheOption = new Chrome_Cache_Option_Serialization();
-        $this->_cacheOption->setCacheFile(self::CHROME_MODEL_ROUTE_STATIC_CACHE_CACHE_FILE);
+        $this->_cacheOption->setCacheFile(CACHE.'router/_static.cache');
 
         $this->_cacheInterface = 'serialization';
     }

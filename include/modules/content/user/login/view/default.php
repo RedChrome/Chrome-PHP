@@ -54,7 +54,7 @@ class Chrome_View_User_Login_Default extends Chrome_View_Strategy_Abstract
 
     public function errorWhileLoggingIn()
     {
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Default_WrongPassword', $this->_controller);
+        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content(Chrome_View_Form_Login::getInstance($this->_controller->getForm()));
     }
 }
 class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract
@@ -89,22 +89,6 @@ class Chrome_View_User_Default_FormNotValid extends Chrome_View_Abstract
     }
 }
 
-class Chrome_View_User_Default_WrongPassword extends Chrome_View_Abstract
-{
-
-    public function render()
-    {
-        echo 'todo content/user/login/view/default.php';
-
-        $lang = new Chrome_Language('modules/content/user/login');
-
-        $template = new Chrome_Template();
-        $template->assignTemplate('modules/content/user/login/form_log_in');
-        $template->assign('LANG', $lang);
-        $template->assign('FORM', $this->_controller->getForm());
-        return $template->render();
-    }
-}
 class Chrome_View_Form_Renderer_Template_Login_Content extends Chrome_View_Form_Renderer_Template_Abstract
 {
 

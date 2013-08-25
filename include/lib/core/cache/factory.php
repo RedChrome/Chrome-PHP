@@ -30,14 +30,6 @@ if(CHROME_PHP !== true)
 interface Chrome_Cache_Interface
 {
     /**
-     * Creates a new cache object using given options
-     *
-     * @param Chrome_Cache_Option_Interface $options additional options for cache adapter
-     * @return Chrome_Cache_Interface
-     */
-    public function __construct(Chrome_Cache_Option_Interface $options);
-
-    /**
      * Sets a cache entry
      *
      * @param string $key

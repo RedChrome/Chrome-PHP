@@ -15,25 +15,26 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category   CHROME-PHP
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Database
- * @author     Alexander Book <alexander.book@gmx.de>
- * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 14:20:31] --> $
- * @link       http://chrome-php.de
  */
-
-if(CHROME_PHP !== true) die();
-
+if(CHROME_PHP !== true)
+    die();
 class Chrome_Database_Result_Iterator extends Chrome_Database_Result_Abstract implements Iterator
 {
     protected $_adapter = null;
 
     protected $_iteratorPointer = 0;
+
     protected $_iteratorArray = array();
-    protected $_iteratorLastPosition = 0;
+
+    protected $_iteratorMaxPosition = -1;
+
+    public function __sleep()
+    {
+        $this->_adapter = new Chrome_Database_Adapter_Cache($this);
+        return array('_adapter');
+    }
 
     public function isEmpty()
     {
@@ -42,7 +43,7 @@ class Chrome_Database_Result_Iterator extends Chrome_Database_Result_Abstract im
 
     public function hasNext()
     {
-        return $this->valid();
+        return isset($this->_iteratorArray[$this->_iteratorPointer+1]);
     }
 
     public function getAffectedRows()
@@ -52,7 +53,11 @@ class Chrome_Database_Result_Iterator extends Chrome_Database_Result_Abstract im
 
     public function getNext()
     {
-        return $this->next();
+         $this->next();
+         if($this->valid()) {
+            return $this->current();
+         }
+         return null;
     }
 
     public function current()
@@ -70,27 +75,36 @@ class Chrome_Database_Result_Iterator extends Chrome_Database_Result_Abstract im
         ++$this->_iteratorPointer;
 
         // if rewind was called, only add a next result if last position + 1 == current position
-        if($this->_iteratorLastPosition + 1 == $this->_iteratorPointer) {
+        if($this->_iteratorMaxPosition + 1 == $this->_iteratorPointer)
+        {
+            $data = $this->_adapter->getNext();
 
-            $this->_iteratorLastPosition                   = $this->_iteratorPointer;
+            if($data === false or $data === null)
+            {
+                return;
+            }
 
-            $this->_iteratorArray[$this->_iteratorPointer] = $this->_adapter->getNext();
+            $this->_iteratorArray[$this->_iteratorPointer] = $data;
+
+            $this->_iteratorMaxPosition = $this->_iteratorPointer;
         }
 
-        return $this->current();
+        #return $this->_iteratorArray[$this->_iteratorPointer];
     }
 
     public function rewind()
     {
-        $this->_iteratorPointer = 0;
+        $this->_iteratorPointer = -1;
         // on first time, we need to call next() to start iterating
-        if($this->_iteratorLastPosition == 0) {
+        if($this->_iteratorMaxPosition == -1)
+        {
+            $this->_iteratorPointer = -1;
             $this->next();
         }
     }
 
     public function valid()
     {
-        return (isset($this->_iteratorArray[$this->_iteratorPointer]) AND $this->_iteratorArray[$this->_iteratorPointer] !== false AND $this->_iteratorArray[$this->_iteratorPointer] !== null);
+        return isset($this->_iteratorArray[$this->_iteratorPointer]);
     }
 }

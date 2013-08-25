@@ -23,8 +23,8 @@
 if(CHROME_PHP !== true)
     die();
 
-    // TODO: Add a db scheme for Chrome_Model_Route_Dynamic_DB::getResourcesAsArray
-    // TODO: Add regex support for single path, e.g. news/show/id/regex:|(\d)*?|/action/remove or something like that, but in fact, thats some kind of input validation... dont know if needed
+// TODO: Add a db scheme for Chrome_Model_Route_Dynamic_DB::getResourcesAsArray
+// TODO: Add regex support for single path, e.g. news/show/id/regex:|(\d)*?|/action/remove or something like that, but in fact, thats some kind of input validation... dont know if needed
 /**
  *
  * @package CHROME-PHP
@@ -155,7 +155,7 @@ class Chrome_Model_Route_Dynamic_Cache extends Chrome_Model_Cache_Abstract
     protected function _setUpCache()
     {
         $this->_cacheOption = new Chrome_Cache_Option_Serialization();
-        $this->_cacheOption->setCacheFile(self::CHROME_MODEL_ROUTER_DYNAMIC_CACHE_CACHE_FILE);
+        $this->_cacheOption->setCacheFile(CACHE.'router/_dynamic.cache');
         $this->_cacheInterface = 'serialization';
     }
 
@@ -196,7 +196,7 @@ class Chrome_Model_Route_Dynamic_DB extends Chrome_Model_Database_Abstract
                     'site' => array(
                                     'news' => array(
                                                     'id' => array(
-                                                                '*' => array('' => 1, // '' is an alias for 'show'
+                                                                '*' => array('' => 1,                                                                 // '' is an alias for 'show'
                                                                 'show' => 1, 'update' => 2)))));
     }
 

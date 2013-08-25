@@ -13,25 +13,25 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Require
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 15:05:40] --> $
- * @author     Alexander Book
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 15:05:40] --> $
+ * @author Alexander Book
  */
-
 if(CHROME_PHP !== true)
     die();
 
 /**
  * Chrome_Model_Require_DB
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Require
  */
 class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
 {
+
     /**
      * Set database options
      */
@@ -53,11 +53,11 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
 
         $db = $this->_getDBInterface();
 
-        $result = $db->loadQuery('requireGetRequirements')
-            ->execute();
+        $result = $db->loadQuery('requireGetRequirements')->execute();
 
         // loop through every result
-        foreach($result AS $value) {
+        foreach($result as $value)
+        {
             $require[] = $value;
         }
 
@@ -75,11 +75,11 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
 
         $db = $this->_getDBInterface();
 
-        $result = $db->loadQuery('requireGetClasses')
-            ->execute();
+        $result = $db->loadQuery('requireGetClasses')->execute();
 
         // loop through
-        foreach($result AS $value) {
+        foreach($result as $value)
+        {
             $_class[$value['name']] = $value['file'];
         }
 
@@ -99,29 +99,27 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
         $db = $this->_getDBInterface();
 
         // delete old entry
-        if($override === true) {
+        if($override === true)
+        {
             // make sql query AND clean up DB interface
 
-            $db->loadQuery('requireDeleteEntryByName')
-                ->execute(array($name));
-
-        } else {
+            $db->loadQuery('requireDeleteEntryByName')->execute(array($name));
+        } else
+        {
 
             // check whether there is already the same class defined
-            $resultObj = $db->loadQuery('requireDoesNameExist')
-                ->execute(array($name));
+            $resultObj = $db->loadQuery('requireDoesNameExist')->execute(array($name));
 
-            if(!$resultObj->isEmpty()) {
+            if(!$resultObj->isEmpty())
+            {
                 throw new Chrome_Exception('There is already a class ' . $name . ' defined in database! Override set to false in Chrome_Require::addClass()!');
             }
-
         }
 
         $db = $this->_getDBInterface();
 
-         // insert the class to db
-        $db->loadQuery('requireSetClass')
-            ->execute(array($name, $file));
+        // insert the class to db
+        $db->loadQuery('requireSetClass')->execute(array($name, $file));
     }
 
     /**
@@ -129,10 +127,12 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
      *
      * Does nothing
      *
-     * @param string $name name of the class
+     * @param string $name
+     *        name of the class
      * @return string
      */
-    public function getClass($name) {
+    public function getClass($name)
+    {
         return false;
     }
 
@@ -141,11 +141,14 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
      *
      * Does nothing
      *
-     * @param string $name name of the class
-     * @param string $file file to the corresponding class
+     * @param string $name
+     *        name of the class
+     * @param string $file
+     *        file to the corresponding class
      *
      */
-    public function setClass($name, $file) {
+    public function setClass($name, $file)
+    {
         return false;
     }
 }
@@ -153,24 +156,17 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
 /**
  * Chrome_Model_Require_Cache
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Require
  */
 class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
 {
     /**
-     * File where you want to save the cache file
-     *
-     * @var string
-     */
-    const CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE = 'tmp/cache/_require.cache';
-
-    /**
      * Namespace
      *
      * @var string
      */
-     const CHROME_MODEL_REQUIRE_CACHE_CLASS_NAMESPACE = '_';
+    const CHROME_MODEL_REQUIRE_CACHE_CLASS_NAMESPACE = '_';
 
     /**
      * Chrome_Model_Require_Cache::_cache()
@@ -181,9 +177,9 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      */
     protected function _setUpCache()
     {
-        require_once PLUGIN.'Cache/serialization.php';
+        require_once PLUGIN . 'Cache/serialization.php';
         $this->_cacheOption = new Chrome_Cache_Option_Serialization();
-        $this->_cacheOption->setCacheFile(self::CHROME_MODEL_REQUIRE_CACHE_CACHE_FILE);
+        $this->_cacheOption->setCacheFile(CACHE.'_require.cache');
         $this->_cacheInterface = 'serialization';
     }
 
@@ -196,7 +192,8 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      */
     public function getRequirements()
     {
-        if(($return = $this->_cache->get('getRequirements')) === null) {
+        if(($return = $this->_cache->get('getRequirements')) === null)
+        {
 
             $return = $this->_decorable->getRequirements();
             $this->_cache->set('getRequirements', $return);
@@ -214,7 +211,8 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      */
     public function getClasses()
     {
-        if(($return = $this->_cache->get('getClasses')) === null OR count($return) == 0) {
+        if(($return = $this->_cache->get('getClasses')) === null or count($return) == 0)
+        {
 
             $return = $this->_decorable->getClasses();
 
@@ -229,11 +227,14 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      *
      * Gets the file of a saved class
      *
-     * @param string $name name of the class
+     * @param string $name
+     *        name of the class
      * @return string
      */
-    public function getClass($name) {
-        if(($return = $this->_cache->get(self::CHROME_MODEL_REQUIRE_CACHE_CLASS_NAMESPACE.$name)) !== null) {
+    public function getClass($name)
+    {
+        if(($return = $this->_cache->get(self::CHROME_MODEL_REQUIRE_CACHE_CLASS_NAMESPACE . $name)) !== null)
+        {
 
             return $return;
         }
@@ -246,11 +247,14 @@ class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
      *
      * Saves the file for the class
      *
-     * @param string $name name of the class
-     * @param string $file file to the corresponding class
+     * @param string $name
+     *        name of the class
+     * @param string $file
+     *        file to the corresponding class
      *
      */
-    public function setClass($name, $file) {
-        $this->_cache->set(self::CHROME_MODEL_REQUIRE_CACHE_CLASS_NAMESPACE.$name, $file);
+    public function setClass($name, $file)
+    {
+        $this->_cache->set(self::CHROME_MODEL_REQUIRE_CACHE_CLASS_NAMESPACE . $name, $file);
     }
 }

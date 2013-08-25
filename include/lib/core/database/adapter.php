@@ -79,12 +79,6 @@ interface Chrome_Database_Adapter_Result_Interface
 interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Result_Interface
 {
     /**
-     * @param Chrome_Database_Connection_Interface $connection
-     * @return Chrome_Database_Adapter_Interface
-     */
-    public function __construct(Chrome_Database_Connection_Interface $connection);
-
-    /**
      * Sends a query to database
      *
      * @param string $query query string
@@ -137,7 +131,22 @@ interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Resu
     public function getErrorCode();
 }
 
-abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapter_Interface
+/**
+ * Additional interface for adapters which need a database connection to work with
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
+interface Chrome_Database_Adapter_Constructor_Interface
+{
+    /**
+     * @param Chrome_Database_Connection_Interface $connection
+     * @return Chrome_Database_Adapter_Interface
+     */
+    public function __construct(Chrome_Database_Connection_Interface $connection);
+}
+
+abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapter_Interface, Chrome_Database_Adapter_Constructor_Interface
 {
     protected $_connectionObject = null;
 
