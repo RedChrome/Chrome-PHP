@@ -6,3 +6,5 @@ php:
 script: 'php Tests/phpUnit.php --configuration Tests/phpUnit/config.xml Tests/'
 before_script:
   - mysql -e 'create database chrome_2_test;'
+  - php Tests/setuptestdb.php
+  
