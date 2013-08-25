@@ -4,8 +4,6 @@ TRUNCATE `cp1_authenticate`;
 TRUNCATE `cp1_authorisation_rbac`;
 TRUNCATE `cp1_authorisation_resource_default`;
 TRUNCATE `cp1_authorisation_user_default`;
-TRUNCATE `cp1_design_controller`;
-TRUNCATE `cp1_design_layout`;
 TRUNCATE `cp1_news`;
 TRUNCATE `cp1_news_comments`;
 TRUNCATE `cp1_rbac_group`;
@@ -21,7 +19,6 @@ TRUNCATE `cp1_route_dynamic`;
 TRUNCATE `cp1_route_static`;
 TRUNCATE `cp1_user`;
 TRUNCATE `cp1_user_regist`;
-TRUNCATE `testing`;
 
 INSERT INTO `cp1_authorisation_user_default` (`user_id`, `group_id`) VALUES
 (0, 1),
