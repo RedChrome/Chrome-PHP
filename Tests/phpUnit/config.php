@@ -7,7 +7,7 @@ $_SERVER['SERVER_NAME'] = "localhost";
 
 define('TEST_DATABASE_CONNECTIONS', true);
 
-if(isset($_ENV['TRAVIS']))
+if(getenv('TRAVIS') !== false)
 {
     define('MYSQL_HOST', '127.0.0.1');
     define('MYSQL_USER', 'travis');
