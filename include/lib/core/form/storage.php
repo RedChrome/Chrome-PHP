@@ -16,7 +16,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-if (CHROME_PHP !== true)
+if(CHROME_PHP !== true)
     die();
 
 /**
@@ -41,7 +41,6 @@ interface Chrome_Form_Handler_Store_Interface
      *
      * @return boolean
      */
-
     public function hasStored(Chrome_Form_Element_Interface $element);
 
     /**
@@ -51,7 +50,6 @@ interface Chrome_Form_Handler_Store_Interface
      *        a form element
      * @return mixed
      */
-
     public function getStored(Chrome_Form_Element_Interface $element);
 }
 
@@ -71,7 +69,6 @@ interface Chrome_Form_Storage_Interface
      *        ID/Name of an element
      * @return mixed data set by {@see set()}
      */
-
     public function get($elementName);
 
     /**
@@ -82,7 +79,6 @@ interface Chrome_Form_Storage_Interface
      * @param mixed $data
      *        the data to store
      */
-
     public function set($elementName, $data);
 
     /**
@@ -91,7 +87,6 @@ interface Chrome_Form_Storage_Interface
      * @param string $elementName
      *        ID/Name of an element
      */
-
     public function remove($elementName);
 
     /**
@@ -101,7 +96,6 @@ interface Chrome_Form_Storage_Interface
      * @param unknown $elementName
      * @return boolean
      */
-
     public function has($elementName);
 }
 
@@ -120,7 +114,6 @@ interface Chrome_Form_Option_Storable_Interface
      *
      * @return boolean
      */
-
     public function getStorageEnabled();
 
     /**
@@ -130,7 +123,6 @@ interface Chrome_Form_Option_Storable_Interface
      *
      * @return boolean
      */
-
     public function getStoreNullData();
 
     /**
@@ -140,7 +132,6 @@ interface Chrome_Form_Option_Storable_Interface
      *
      * @return boolean
      */
-
     public function getStoreInvalidData();
 
     /**
@@ -148,7 +139,6 @@ interface Chrome_Form_Option_Storable_Interface
      *
      * @param boolean $bool
      */
-
     public function setStorageEnabled($bool);
 
     /**
@@ -156,7 +146,6 @@ interface Chrome_Form_Option_Storable_Interface
      *
      * @param boolean $bool
      */
-
     public function setStoreNullData($bool);
 
     /**
@@ -164,7 +153,6 @@ interface Chrome_Form_Option_Storable_Interface
      *
      * @param unknown $bool
      */
-
     public function setStoreInvalidData($bool);
 }
 
@@ -179,19 +167,32 @@ interface Chrome_Form_Option_Storable_Interface
 class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interface
 {
     /**
-     * @var unknown
+     * Store data even if data===null
+     *
+     * @var boolean
      */
     protected $_storeNullData = false;
+
+    /**
+     * Is the storage engine enabled or not?
+     *
+     * @var boolean
+     */
     protected $_storageEnabled = true;
+
+    /**
+     * Stores data even is the data is invalid
+     *
+     * @var boolean
+     */
     protected $_storeInvalidData = false;
 
-    /* (non-PHPdoc)
+    /**
+     * (non-PHPdoc)
      * @see Chrome_Form_Option_Storable_Interface::getStorageEnabled()
      */
-
     public function getStorageEnabled()
     {
-
         return $this->_storageEnabled;
     }
 
@@ -199,27 +200,42 @@ class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interfac
      * (non-PHPdoc)
      * @see Chrome_Form_Option_Storable_Interface::getStoreNullData()
      */
-
     public function getStoreNullData()
     {
         return $this->_storeNullData;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see Chrome_Form_Option_Storable_Interface::getStoreInvalidData()
+     */
     public function getStoreInvalidData()
     {
         return $this->_storeInvalidData;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see Chrome_Form_Option_Storable_Interface::setStorageEnabled()
+     */
     public function setStorageEnabled($bool)
     {
         $this->_storageEnabled = (bool) $bool;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see Chrome_Form_Option_Storable_Interface::setStoreNullData()
+     */
     public function setStoreNullData($bool)
     {
         $this->_storeNullData = (bool) $bool;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see Chrome_Form_Option_Storable_Interface::setStoreInvalidData()
+     */
     public function setStoreInvalidData($bool)
     {
         $this->_storeInvalidData = (bool) $bool;
