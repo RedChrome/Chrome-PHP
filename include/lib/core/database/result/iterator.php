@@ -18,6 +18,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
+
 if(CHROME_PHP !== true)
     die();
 class Chrome_Database_Result_Iterator extends Chrome_Database_Result_Abstract implements Iterator

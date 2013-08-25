@@ -32,14 +32,14 @@ class Chrome_Form_Decorator_Password_Yaml extends Chrome_Form_Decorator_Password
 {
     protected $_labelModified = false;
 
-	public function render()
-	{
-		if($this->_formElement->getOptions(Chrome_Form_Element_Abstract::IS_REQUIRED) === true AND
+    public function render()
+    {
+        if($this->_formElement->getOptions(Chrome_Form_Element_Abstract::IS_REQUIRED) === true AND
             ($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null AND $this->_labelModified !== true) {
-			$this->setOption(self::CHROME_FORM_DECORATOR_LABEL, $label.'<sup class="ym-required">*</sup>');
+            $this->setOption(self::CHROME_FORM_DECORATOR_LABEL, $label.'<sup class="ym-required">*</sup>');
             $this->_labelModified = true;
-		}
+        }
 
-		return '<div class="ym-fbox-text">'.parent::render().'</div>';
-	}
+        return '<div class="ym-fbox-text">'.parent::render().'</div>';
+    }
 }

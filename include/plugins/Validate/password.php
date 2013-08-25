@@ -23,7 +23,7 @@ die('Not uppdated Chrome_Validator_Password');
  */
 
 if(CHROME_PHP !== true)
-	die();
+    die();
 
 /**
  * Chrome_Validator_Password
@@ -37,33 +37,33 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Validator_Password extends Chrome_Validator
 {
-	const CHROME_VALIDATOR_PASSWORD_MIN_LENGTH = 5;
+    const CHROME_VALIDATOR_PASSWORD_MIN_LENGTH = 5;
 
-	const CHROME_VALIDATOR_PASSWORD_MAX_LENGTH = 30;
+    const CHROME_VALIDATOR_PASSWORD_MAX_LENGTH = 30;
 
-	private $_password;
-	private $_password_2;
+    private $_password;
+    private $_password_2;
 
-	public function __construct($password, $password_2 = null)
-	{
-		$this->_password 	= $password;
-		$this->_password_2  = ($password_2 === null) ? $password : $password_2;
+    public function __construct($password, $password_2 = null)
+    {
+        $this->_password 	= $password;
+        $this->_password_2  = ($password_2 === null) ? $password : $password_2;
 
-	}
+    }
 
-	protected function _validate()
-	{
-		if(strlen($this->_password) < self::CHROME_VALIDATOR_PASSWORD_MIN_LENGTH) {
-			$this->_setError('Password is too short!');
-		}
-		if(strlen($this->_password) > self::CHROME_VALIDATOR_PASSWORD_MAX_LENGTH) {
-			$this->_setError('Password is too long!');
-		}
-		if($this->_password !== $this->_password_2) {
-			$this->_setError('The Passwords aren\'t equal!');
-		}
+    protected function _validate()
+    {
+        if(strlen($this->_password) < self::CHROME_VALIDATOR_PASSWORD_MIN_LENGTH) {
+            $this->_setError('Password is too short!');
+        }
+        if(strlen($this->_password) > self::CHROME_VALIDATOR_PASSWORD_MAX_LENGTH) {
+            $this->_setError('Password is too long!');
+        }
+        if($this->_password !== $this->_password_2) {
+            $this->_setError('The Passwords aren\'t equal!');
+        }
 
-		// TODO: maybe add blacklist AND check pw with crack ext?
-		return;
-	}
+        // TODO: maybe add blacklist AND check pw with crack ext?
+        return;
+    }
 }

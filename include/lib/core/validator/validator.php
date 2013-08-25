@@ -33,49 +33,49 @@ if(CHROME_PHP !== true) die();
  */
 interface Chrome_Validator_Interface
 {
-	/**
-	 * Sets the data to validate
-	 *
-	 * @param mixed $data
-	 * @return void
-	 */
-	public function setData($data);
+    /**
+     * Sets the data to validate
+     *
+     * @param mixed $data
+     * @return void
+     */
+    public function setData($data);
 
-	/**
-	 * Sets additional options for validator
-	 *
-	 * @param array $options array containing options, see impl. for concrete options
-	 * @return void
-	 */
-	public function setOptions(array $options);
+    /**
+     * Sets additional options for validator
+     *
+     * @param array $options array containing options, see impl. for concrete options
+     * @return void
+     */
+    public function setOptions(array $options);
 
-	/**
-	 * Validates the data
-	 *
-	 * @return void
-	 */
-	public function validate();
+    /**
+     * Validates the data
+     *
+     * @return void
+     */
+    public function validate();
 
-	/**
-	 * Returns true if data is valid
-	 *
-	 * @return bool true if data is valid, false else
-	 */
-	public function isValid();
+    /**
+     * Returns true if data is valid
+     *
+     * @return bool true if data is valid, false else
+     */
+    public function isValid();
 
-	/**
-	 * Returns one error while validating or an error with the data
-	 *
-	 * @return string
-	 */
-	public function getError();
+    /**
+     * Returns one error while validating or an error with the data
+     *
+     * @return string
+     */
+    public function getError();
 
-	/**
-	 * Returns all errors
-	 *
-	 * @return array numerically indexed
-	 */
-	public function getAllErrors();
+    /**
+     * Returns all errors
+     *
+     * @return array numerically indexed
+     */
+    public function getAllErrors();
 }
 
 /**
@@ -86,51 +86,51 @@ interface Chrome_Validator_Interface
  */
 interface Chrome_Validator_Composition_Interface extends Chrome_Validator_Interface
 {
-	/**
-	 * Adds a validator
-	 *
-	 * @param Chrome_Validator_Interface $validator validator to add
-	 * @return void
-	 */
-	public function addValidator(Chrome_Validator_Interface $validator);
+    /**
+     * Adds a validator
+     *
+     * @param Chrome_Validator_Interface $validator validator to add
+     * @return void
+     */
+    public function addValidator(Chrome_Validator_Interface $validator);
 
-	/**
-	 * adds validators given in array (as values, key gets ignored) in the given order
-	 *
-	 * Throws an Chrome_InvalidArgumentException if a value of the array does not contain a appropriate class
-	 *
-	 * @param array $validators an array containing as values classes which implements Chrome_Validator_Interface
-	 * @return void
-	 */
-	public function addValidators(array $validators);
+    /**
+     * adds validators given in array (as values, key gets ignored) in the given order
+     *
+     * Throws an Chrome_InvalidArgumentException if a value of the array does not contain a appropriate class
+     *
+     * @param array $validators an array containing as values classes which implements Chrome_Validator_Interface
+     * @return void
+     */
+    public function addValidators(array $validators);
 
-	/**
-	 * Unsets the current validators and adds validators given in array (as values, key gets ignored) in the given order
-	 *
-	 * Throws an Chrome_InvalidArgumentException if a value of the array does not contain a appropriate class
-	 *
-	 * @param array $validators an array containing as values classes which implements Chrome_Validator_Interface
-	 * @return void
-	 */
-	public function setValidators(array $validators);
+    /**
+     * Unsets the current validators and adds validators given in array (as values, key gets ignored) in the given order
+     *
+     * Throws an Chrome_InvalidArgumentException if a value of the array does not contain a appropriate class
+     *
+     * @param array $validators an array containing as values classes which implements Chrome_Validator_Interface
+     * @return void
+     */
+    public function setValidators(array $validators);
 
-	/**
-	 * Returns the validators set via add/setValidator.
-	 *
-	 * The return value is a array (numerically indexed), which values are the validators
-	 *
-	 * @return array
-	 */
-	public function getValidators();
+    /**
+     * Returns the validators set via add/setValidator.
+     *
+     * The return value is a array (numerically indexed), which values are the validators
+     *
+     * @return array
+     */
+    public function getValidators();
 
-	/**
-	 * Returns the validator at the $index position
-	 *
-	 * If $index is not set, then it returns null, otherwise the requested validator
-	 *
-	 * @return Chrome_Validator_Interface or null
-	 */
-	public function getValidator($index);
+    /**
+     * Returns the validator at the $index position
+     *
+     * If $index is not set, then it returns null, otherwise the requested validator
+     *
+     * @return Chrome_Validator_Interface or null
+     */
+    public function getValidator($index);
 }
 
 /**
@@ -175,19 +175,19 @@ interface Chrome_Validator_Composition_Interface extends Chrome_Validator_Interf
  */
 abstract class Chrome_Validator implements Chrome_Validator_Interface
 {
-	/**
-	 * Stores options
-	 *
-	 * @var array
-	 */
-	protected $_options = array();
+    /**
+     * Stores options
+     *
+     * @var array
+     */
+    protected $_options = array();
 
-	/**
-	 * stores all error messages
-	 *
-	 * @var array
-	 */
-	protected $_errorMsg = array();
+    /**
+     * stores all error messages
+     *
+     * @var array
+     */
+    protected $_errorMsg = array();
 
     /**
      * Says whether the last validate() call was valid or not
@@ -203,7 +203,7 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      *
      * @var mixed
      */
-	protected $_data = null;
+    protected $_data = null;
 
     /**
      * Sets additional options
@@ -212,144 +212,144 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      *
      * @return void
      */
-	public function setOptions(array $options)
-	{
-		$this->_options = $options;
-	}
+    public function setOptions(array $options)
+    {
+        $this->_options = $options;
+    }
 
     /**
      * Validates the data
      */
-	public function validate()
-	{
-		$this->_isValid = $this->_validate();
-	}
+    public function validate()
+    {
+        $this->_isValid = $this->_validate();
+    }
 
-	/**
-	 * Sets the data to validate
+    /**
+     * Sets the data to validate
      *
-	 * @param mixed $data
-	 */
-	public function setData($data)
-	{
-		$this->_data = $data;
-	}
+     * @param mixed $data
+     */
+    public function setData($data)
+    {
+        $this->_data = $data;
+    }
 
-	/**
+    /**
      * Concrete implementation of validation logic
-	 *
-	 * @return boolean
-	 */
-	abstract protected function _validate();
+     *
+     * @return boolean
+     */
+    abstract protected function _validate();
 
-	/**
-	 * Adds a error message
-	 *
-	 * @param string $msg error message
-	 */
-	protected function _setError($msg)
-	{
-		$this->_errorMsg[] = $msg;
-	}
+    /**
+     * Adds a error message
+     *
+     * @param string $msg error message
+     */
+    protected function _setError($msg)
+    {
+        $this->_errorMsg[] = $msg;
+    }
 
-	/**
-	 * Determines whether $data was valid/invalid using this validator
-	 *
-	 * @return boolean
-	 */
-	public function isValid()
-	{
-	    return $this->_isValid;
-	}
+    /**
+     * Determines whether $data was valid/invalid using this validator
+     *
+     * @return boolean
+     */
+    public function isValid()
+    {
+        return $this->_isValid;
+    }
 
-	/**
-	 * pops an error off
-	 *
-	 * @return string error message
-	 */
-	public function getError()
-	{
-		return array_pop($this->_errorMsg);
-	}
+    /**
+     * pops an error off
+     *
+     * @return string error message
+     */
+    public function getError()
+    {
+        return array_pop($this->_errorMsg);
+    }
 
-	/**
-	 * Gets all error messages
-	 *
-	 * @return array
-	 */
-	public function getAllErrors()
-	{
-		$return = $this->_errorMsg;
-		$this->_errorMsg = array();
-		return $return;
-	}
+    /**
+     * Gets all error messages
+     *
+     * @return array
+     */
+    public function getAllErrors()
+    {
+        $return = $this->_errorMsg;
+        $this->_errorMsg = array();
+        return $return;
+    }
 
-	/**
-	 * Translates all error messages with the Language object
-	 *
-	 * @var Chrome_Language_Interface $obj language object
-	 * @return void
-	 *
-	public function setLanguage(Chrome_Language_Interface $obj)
-	{
-		$newMessage = array();
-		foreach($this->_errorMsg as $message) {
+    /**
+     * Translates all error messages with the Language object
+     *
+     * @var Chrome_Language_Interface $obj language object
+     * @return void
+     *
+    public function setLanguage(Chrome_Language_Interface $obj)
+    {
+        $newMessage = array();
+        foreach($this->_errorMsg as $message) {
 
-			$translated = $obj->get($message);
-			if($translated === null) {
-				$translated = $message;
-			}
+            $translated = $obj->get($message);
+            if($translated === null) {
+                $translated = $message;
+            }
 
-			$newMessage[] = $translated;
-		}
+            $newMessage[] = $translated;
+        }
 
-		$this->_errorMsg = $newMessage;
-	}
+        $this->_errorMsg = $newMessage;
+    }
     */
 }
 
 abstract class Chrome_Validator_Composition_Abstract extends Chrome_Validator implements Chrome_Validator_Composition_Interface
 {
-	protected $_validators = array();
+    protected $_validators = array();
 
-	public function addValidator(Chrome_Validator_Interface $validator)
-	{
-		$this->_validators[] = $validator;
-	}
+    public function addValidator(Chrome_Validator_Interface $validator)
+    {
+        $this->_validators[] = $validator;
+    }
 
-	public function addValidators(array $validators)
-	{
-		foreach($validators as $validator) {
-			if($validator instanceof Chrome_Validator_Interface) {
-				$this->_validators[] = $validator;
-			} else {
-				throw new Chrome_InvalidArgumentException('An element of the array was not a subclass of Chrome_Validator_Interface!');
-			}
-		}
-	}
+    public function addValidators(array $validators)
+    {
+        foreach($validators as $validator) {
+            if($validator instanceof Chrome_Validator_Interface) {
+                $this->_validators[] = $validator;
+            } else {
+                throw new Chrome_InvalidArgumentException('An element of the array was not a subclass of Chrome_Validator_Interface!');
+            }
+        }
+    }
 
-	public function setValidators(array $validators)
-	{
-		$this->_validators = array();
+    public function setValidators(array $validators)
+    {
+        $this->_validators = array();
 
-		$this->addValidators($validators);
-	}
+        $this->addValidators($validators);
+    }
 
-	public function getValidators()
-	{
-		return $this->_validators;
-	}
+    public function getValidators()
+    {
+        return $this->_validators;
+    }
 
-	public function getValidator($index)
-	{
-		return isset($this->_validators[$index]) ? $this->_validators[$index] : null;
-	}
+    public function getValidator($index)
+    {
+        return isset($this->_validators[$index]) ? $this->_validators[$index] : null;
+    }
 
-	public function setData($data)
-	{
-		foreach($this->_validators as $validator) {
-			$validator->setData($data);
+    public function setData($data)
+    {
+        foreach($this->_validators as $validator) {
+            $validator->setData($data);
 
-		}
-	}
+        }
+    }
 }

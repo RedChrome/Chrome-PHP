@@ -28,44 +28,44 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Design implements Chrome_Design_Interface
 {
-	protected $_applicationContext = null;
+    protected $_applicationContext = null;
 
-	protected $_renderable = null;
+    protected $_renderable = null;
 
     protected $_controller = null;
 
-	public function __construct(Chrome_Context_Application_Interface $appContext, Chrome_Controller_Interface $controller)
-	{
-	    $this->_controller = $controller;
-		$this->_applicationContext = $appContext;
-	}
+    public function __construct(Chrome_Context_Application_Interface $appContext, Chrome_Controller_Interface $controller)
+    {
+        $this->_controller = $controller;
+        $this->_applicationContext = $appContext;
+    }
 
-	public function getApplicationContext()
-	{
-		return $this->_applicationContext;
-	}
+    public function getApplicationContext()
+    {
+        return $this->_applicationContext;
+    }
 
-	public function setRenderable(Chrome_Renderable $renderable)
-	{
-		$this->_renderable = $renderable;
-	}
+    public function setRenderable(Chrome_Renderable $renderable)
+    {
+        $this->_renderable = $renderable;
+    }
 
-	public function getRenderable()
-	{
-		return $this->_renderable;
-	}
+    public function getRenderable()
+    {
+        return $this->_renderable;
+    }
 
     public function getController()
     {
         return $this->_controller;
     }
 
-	public function render()
-	{
-		if($this->_renderable !== null) {
-			$this->_applicationContext->getResponse()->write($this->_renderable->render());
-		}
+    public function render()
+    {
+        if($this->_renderable !== null) {
+            $this->_applicationContext->getResponse()->write($this->_renderable->render());
+        }
 
         return null;
-	}
+    }
 }

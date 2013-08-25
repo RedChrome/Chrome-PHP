@@ -30,51 +30,51 @@ if(CHROME_PHP !== true)
  */
 abstract class Chrome_Filter_Chain_Abstract
 {
-	protected $_filters = array();
+    protected $_filters = array();
 
-	/**
-	 * Chrome_Filter_Chain_Abstract::__construct()
-	 *
-	 * @param string $filterName Name of the filter, e.g. Chrome_Filter_Chain_Main ($filterName must always be unique)
-	 * @return Chrome_Filter_Chain_Abstract
-	 */
-	public function __construct($filterName = null)
-	{
-		// if no $filterName given, use the class name
-  		if($filterName === null) {
-  			$filterName = get_class($this);
-  		}
-	}
+    /**
+     * Chrome_Filter_Chain_Abstract::__construct()
+     *
+     * @param string $filterName Name of the filter, e.g. Chrome_Filter_Chain_Main ($filterName must always be unique)
+     * @return Chrome_Filter_Chain_Abstract
+     */
+    public function __construct($filterName = null)
+    {
+        // if no $filterName given, use the class name
+          if($filterName === null) {
+              $filterName = get_class($this);
+          }
+    }
 
-	/**
-	 * Chrome_Filter_Chain_Abstract::addFilter()
-	 *
-	 * Adds a filter to filter chain
-	 *
-	 * @param Chrome_Filter_Abstract $filter
-	 * @return void
-	 */
-	public function addFilter(Chrome_Filter_Interface $filter)
-	{
-		$this->_filters[] = $filter;
-	}
+    /**
+     * Chrome_Filter_Chain_Abstract::addFilter()
+     *
+     * Adds a filter to filter chain
+     *
+     * @param Chrome_Filter_Abstract $filter
+     * @return void
+     */
+    public function addFilter(Chrome_Filter_Interface $filter)
+    {
+        $this->_filters[] = $filter;
+    }
 
-	/**
-	 * Chrome_Filter_Chain_Abstract::processFilters()
-	 *
-	 * run through all filters
-	 *
-	 * @param Chrome_Request_Data_Interface $req
-	 * @param Chrome_Response_Interface $res
-	 * @return void
-	 */
-	public function processFilters(Chrome_Request_Data_Interface $req, Chrome_Response_Interface $res)
-	{
-	    // loop through every filter
-		foreach($this->_filters AS $filter) {
-			$filter->execute($req, $res);
-		}
-	}
+    /**
+     * Chrome_Filter_Chain_Abstract::processFilters()
+     *
+     * run through all filters
+     *
+     * @param Chrome_Request_Data_Interface $req
+     * @param Chrome_Response_Interface $res
+     * @return void
+     */
+    public function processFilters(Chrome_Request_Data_Interface $req, Chrome_Response_Interface $res)
+    {
+        // loop through every filter
+        foreach($this->_filters AS $filter) {
+            $filter->execute($req, $res);
+        }
+    }
 }
 
 /**
@@ -83,12 +83,12 @@ abstract class Chrome_Filter_Chain_Abstract
  */
 interface Chrome_Filter_Interface
 {
-	/**
-	 * execute()
-	 *
-	 * @param Chrome_Request_Abstract $req
-	 * @param Chrome_Response_Abstract $res
-	 * @return void
-	 */
-	public function execute(Chrome_Request_Data_Interface $req, Chrome_Response_Interface $res);
+    /**
+     * execute()
+     *
+     * @param Chrome_Request_Abstract $req
+     * @param Chrome_Response_Abstract $res
+     * @return void
+     */
+    public function execute(Chrome_Request_Data_Interface $req, Chrome_Response_Interface $res);
 }

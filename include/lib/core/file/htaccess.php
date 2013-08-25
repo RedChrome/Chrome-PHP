@@ -20,7 +20,7 @@
  */
 
 if(CHROME_PHP !== true)
-	die();
+    die();
 
 /**
  * Chrome_Htaccess
@@ -33,59 +33,59 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Htaccess
 {
-	private $file = null;
-	private $content = null;
-	private $fp = null;
+    private $file = null;
+    private $content = null;
+    private $fp = null;
 
-	// vars
+    // vars
 
-	private $rewriteRule = array();
-	private $errorDocument = array();
+    private $rewriteRule = array();
+    private $errorDocument = array();
 
-	public function read($path)
-	{
-		if(!is_file($path))
-			throw new Chrome_Exception('Cannot read file('.$path.')! Maybe file doesn\'t exist OR path is wrong!');
+    public function read($path)
+    {
+        if(!is_file($path))
+            throw new Chrome_Exception('Cannot read file('.$path.')! Maybe file doesn\'t exist OR path is wrong!');
 
-		$this->file = $path;
+        $this->file = $path;
 
-		$this->fp = @fopen($path, 'r', true);
+        $this->fp = @fopen($path, 'r', true);
 
-		if(!$this->fp)
-			throw new Chrome_Exception('Cannot read file('.$path.')! Unknown error!');
+        if(!$this->fp)
+            throw new Chrome_Exception('Cannot read file('.$path.')! Unknown error!');
 
-		$this->content = fread($this->fp, filesize($this->path));
+        $this->content = fread($this->fp, filesize($this->path));
 
-		$this->_parse($this->content);
-	}
+        $this->_parse($this->content);
+    }
 
-	public function addRewriteRule($rule, $path, $modifier = '[L]')
-	{
-		$this->rewriteRule[] = array($rule, $path, $modifier);
-	}
+    public function addRewriteRule($rule, $path, $modifier = '[L]')
+    {
+        $this->rewriteRule[] = array($rule, $path, $modifier);
+    }
 
-	public function addErrorDocument($errorNR, $path)
-	{
-		$this->errorDocument[] = array($errorNR, $path);
-	}
+    public function addErrorDocument($errorNR, $path)
+    {
+        $this->errorDocument[] = array($errorNR, $path);
+    }
 
-	private function _parse($content)
-	{
-		throw new Chrome_Exception('Method NOT Finished & Tested!');
+    private function _parse($content)
+    {
+        throw new Chrome_Exception('Method NOT Finished & Tested!');
 
-		// remove comments
-		$content = preg_replace('"(.*)#(.*)\n(.*)"', '\1\3', $content);
-
-
-		$rewriteRules = preg_replace('#<IfModule mod_rewrite.c>(.*)</IfModule mod_rewrite.c>#s', '\1', $content);
-		$rewriteRules = str_replace('RewriteEngine On', '', $rewriteRules);
-		if(!empty($rewriteRule)) {
-			$rewriteRule = explode('RewriteRule', $rewriteRules);
-
-		}
+        // remove comments
+        $content = preg_replace('"(.*)#(.*)\n(.*)"', '\1\3', $content);
 
 
-	}
+        $rewriteRules = preg_replace('#<IfModule mod_rewrite.c>(.*)</IfModule mod_rewrite.c>#s', '\1', $content);
+        $rewriteRules = str_replace('RewriteEngine On', '', $rewriteRules);
+        if(!empty($rewriteRule)) {
+            $rewriteRule = explode('RewriteRule', $rewriteRules);
+
+        }
+
+
+    }
 
 
 }

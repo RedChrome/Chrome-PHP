@@ -29,27 +29,27 @@ if(CHROME_PHP !== true) die();
  */
 abstract class Chrome_Model_Decorator_Abstract extends Chrome_Model_Abstract
 {
-	protected $_decorable = null;
+    protected $_decorable = null;
 
-	public function __construct(Chrome_Model_Interface $instance = null)
-	{
-		if($instance !== null) {
-			$this->setDecorable($instance);
-		}
-	}
+    public function __construct(Chrome_Model_Interface $instance = null)
+    {
+        if($instance !== null) {
+            $this->setDecorable($instance);
+        }
+    }
 
-	public function __call($func, $args)
-	{
-		return call_user_func_array(array($this->_decorable, $func), $args);
-	}
+    public function __call($func, $args)
+    {
+        return call_user_func_array(array($this->_decorable, $func), $args);
+    }
 
-	public function setDecorable(Chrome_Model_Abstract $instance)
-	{
-		$this->_decorable = $instance;
-	}
+    public function setDecorable(Chrome_Model_Abstract $instance)
+    {
+        $this->_decorable = $instance;
+    }
 
-	public function getDecorable()
-	{
-		return $this->_decorable;
-	}
+    public function getDecorable()
+    {
+        return $this->_decorable;
+    }
 }

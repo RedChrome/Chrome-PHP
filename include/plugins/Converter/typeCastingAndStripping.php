@@ -29,115 +29,115 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Converter_Delegate_TypeCastingAndStripping extends Chrome_Converter_Delegate_Abstract
 {
-	/**
-	 * Contains allowed HTML - Tags
-	 *
-	 * @var array
-	 */
-	private static $_allowedHTML = array('<br>', '<hr>');
+    /**
+     * Contains allowed HTML - Tags
+     *
+     * @var array
+     */
+    private static $_allowedHTML = array('<br>', '<hr>');
 
-	protected $_conversions = array(
-		'toInt',
-		'toString',
-		'toBool',
-		'decodeUrl',
-		'encodeUrl',
-		'charToHtml',
-		'stripRepeat',
-		'stripHtml',
-		'stripNull');
+    protected $_conversions = array(
+        'toInt',
+        'toString',
+        'toBool',
+        'decodeUrl',
+        'encodeUrl',
+        'charToHtml',
+        'stripRepeat',
+        'stripHtml',
+        'stripNull');
 
-	public function toInt($var, $option)
-	{
-		return (int)$var;
-	}
+    public function toInt($var, $option)
+    {
+        return (int)$var;
+    }
 
-	public function toString($var, $option)
-	{
-		return (string )$var;
-	}
+    public function toString($var, $option)
+    {
+        return (string )$var;
+    }
 
-	public function toBool($var, $option)
-	{
-		return boolval($var);
-	}
+    public function toBool($var, $option)
+    {
+        return boolval($var);
+    }
 
-	public function decodeUrl($var, $option)
-	{
-		return urldecode($var);
-	}
+    public function decodeUrl($var, $option)
+    {
+        return urldecode($var);
+    }
 
-	public function encodeUrl($var, $option)
-	{
-		return urlencode($var);
-	}
+    public function encodeUrl($var, $option)
+    {
+        return urlencode($var);
+    }
 
-	/**
-	 * @param mixed $var
-	 * @param array $option: no options available
-	 */
-	public function charToHtml($var, $option)
-	{
-		$array = get_html_translation_table(HTML_ENTITIES);
-		unset($array['&'], $array['>'], $array['<'], $array[' '], $array['']);
-		foreach($array as $key => $value) {
-			$var = str_replace($key, $value, $var);
-		}
+    /**
+     * @param mixed $var
+     * @param array $option: no options available
+     */
+    public function charToHtml($var, $option)
+    {
+        $array = get_html_translation_table(HTML_ENTITIES);
+        unset($array['&'], $array['>'], $array['<'], $array[' '], $array['']);
+        foreach($array as $key => $value) {
+            $var = str_replace($key, $value, $var);
+        }
 
-		return $var;
-	}
+        return $var;
+    }
 
-	/**
-	 * @param mixed $var
-	 * @param array $option: (int) 'repeat': Do not allow more than x identical characters, default: 4
-	 */
-	public function stripRepeat($var, $option)
-	{
-		if(isset($option['repeat']) and is_numeric($option['repeat'])) {
-			$repeat = str_repeat('$1', $option['repeat']);
-		} else  $repeat = '$1$1$1$1';
+    /**
+     * @param mixed $var
+     * @param array $option: (int) 'repeat': Do not allow more than x identical characters, default: 4
+     */
+    public function stripRepeat($var, $option)
+    {
+        if(isset($option['repeat']) and is_numeric($option['repeat'])) {
+            $repeat = str_repeat('$1', $option['repeat']);
+        } else  $repeat = '$1$1$1$1';
 
-		$var = preg_replace("/(\s){2,}/", '$1', $var);
-		return preg_replace('{( ?.)\1{4,}}', $repeat, $var);
-	}
+        $var = preg_replace("/(\s){2,}/", '$1', $var);
+        return preg_replace('{( ?.)\1{4,}}', $repeat, $var);
+    }
 
-	/**
-	 * @param mixed $var
-	 * @param array $option: (bool) 'nl2br': replace "newline" to <br />
-	 *			 (array) 'allowedHTML': HTML-Tags which dont get replaced
-	 */
-	public function stripHtml($var, $option)
-	{
-		if(isset($option['allowedHTML'])) {
-			$allowedHTML = array_merge(self::$_allowedHTML, $option['allowedHTML']);
-		} else {
-			$allowedHTML = self::$_allowedHTML;
-		}
+    /**
+     * @param mixed $var
+     * @param array $option: (bool) 'nl2br': replace "newline" to <br />
+     *			 (array) 'allowedHTML': HTML-Tags which dont get replaced
+     */
+    public function stripHtml($var, $option)
+    {
+        if(isset($option['allowedHTML'])) {
+            $allowedHTML = array_merge(self::$_allowedHTML, $option['allowedHTML']);
+        } else {
+            $allowedHTML = self::$_allowedHTML;
+        }
 
-		$allowedHTML = implode('', $allowedHTML);
+        $allowedHTML = implode('', $allowedHTML);
 
-		if(isset($option['nl2br']) AND $option['nl2br'] === true) {
+        if(isset($option['nl2br']) AND $option['nl2br'] === true) {
 
-			return strip_tags(nl2br($var), $allowedHTML);
-		} else {
+            return strip_tags(nl2br($var), $allowedHTML);
+        } else {
 
-			return strip_tags($var, $allowedHTML);
-		}
-	}
+            return strip_tags($var, $allowedHTML);
+        }
+    }
 
-	/**
-	 * Removes all null bytes from a string
-	 *
-	 * @param string $var
-	 * @param array $options: string 'replacement': replaces all \0 with replacement
-	 *
-	 */
-	public function stripNull($var, $option)
-	{
-		if(!isset($option['replacement'])) {
-			$option['replacement'] = '';
-		}
+    /**
+     * Removes all null bytes from a string
+     *
+     * @param string $var
+     * @param array $options: string 'replacement': replaces all \0 with replacement
+     *
+     */
+    public function stripNull($var, $option)
+    {
+        if(!isset($option['replacement'])) {
+            $option['replacement'] = '';
+        }
 
-		return str_replace(chr(0), $option['replacement'], $var);
-	}
+        return str_replace(chr(0), $option['replacement'], $var);
+    }
 }

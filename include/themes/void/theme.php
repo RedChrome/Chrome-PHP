@@ -28,8 +28,8 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Design_Theme_Void implements Chrome_Design_Theme_Interface
 {
-	public function initDesign(Chrome_Design_Interface $design)
-	{
+    public function initDesign(Chrome_Design_Interface $design)
+    {
         // do nothing
-	}
+    }
 }

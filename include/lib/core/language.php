@@ -33,20 +33,20 @@ interface Chrome_Language_Interface
 
     CHROME_LANGUAGE_DEFAULT_LANGUAGE = CHROME_DEFAULT_LANGUAGE;
 
-	public function __construct( $file, $language = null );
+    public function __construct( $file, $language = null );
 
-	public function get( $key );
+    public function get( $key );
 
-	public function getAll();
+    public function getAll();
 
-	public function getAllGeneral();
+    public function getAllGeneral();
 }
 
 interface Chrome_Language_L12y
 {
-	public function setLanguage( Chrome_Language_Interface $lang );
+    public function setLanguage( Chrome_Language_Interface $lang );
 
-	public function getLanguage();
+    public function getLanguage();
 }
 
 /**
@@ -55,88 +55,88 @@ interface Chrome_Language_L12y
  */
 class Chrome_Language implements Chrome_Language_Interface
 {
-	const CHROME_LANGUAGE_INCLUDE_DIR = 'plugins/Language/';
+    const CHROME_LANGUAGE_INCLUDE_DIR = 'plugins/Language/';
 
-	const CHROME_LANUGAGE_FILE_EXTENSION = '.ini';
+    const CHROME_LANUGAGE_FILE_EXTENSION = '.ini';
 
-	const CHROME_LANGUAGE_GENERAL_NAMESPACE = '_general';
+    const CHROME_LANGUAGE_GENERAL_NAMESPACE = '_general';
 
-	protected $_language = null;
+    protected $_language = null;
 
-	protected $_file = null;
+    protected $_file = null;
 
-	protected static $_array = array();
+    protected static $_array = array();
 
-	public function __construct( $file, $language = null )
-	{
+    public function __construct( $file, $language = null )
+    {
 
-		if( $language === null ) {
-			$this->_language = self::CHROME_LANGUAGE_DEFAULT_LANGUAGE;
-		} else {
-			$this->_language = $language;
-		}
+        if( $language === null ) {
+            $this->_language = self::CHROME_LANGUAGE_DEFAULT_LANGUAGE;
+        } else {
+            $this->_language = $language;
+        }
 
-		// just want to access data from lang_general.ini
-		if( $file == self::CHROME_LANGUAGE_GENERAL ) {
-			return;
-		}
+        // just want to access data from lang_general.ini
+        if( $file == self::CHROME_LANGUAGE_GENERAL ) {
+            return;
+        }
 
-		if( ( $pos = strpos( $file, '.' ) ) !== false ) {
-			$file = substr( $file, 0, $pos );
-		}
+        if( ( $pos = strpos( $file, '.' ) ) !== false ) {
+            $file = substr( $file, 0, $pos );
+        }
 
-		$this->_file = $file;
+        $this->_file = $file;
 
-		$this->_loadFile();
-	}
+        $this->_loadFile();
+    }
 
-	private function _loadFile()
-	{
-		// language file already loaded
-		if( isset( self::$_array[$this->_language] ) ) {
-			return true;
-		}
+    private function _loadFile()
+    {
+        // language file already loaded
+        if( isset( self::$_array[$this->_language] ) ) {
+            return true;
+        }
 
-		if( !_isFile( BASEDIR . self::CHROME_LANGUAGE_INCLUDE_DIR . $this->_language . self::CHROME_LANUGAGE_FILE_EXTENSION ) ) {
-			throw new Chrome_Exception( 'Cannot load file ' . BASEDIR . self::CHROME_LANGUAGE_INCLUDE_DIR . $file .
-				'! File does not exist in Chrome_Language::_loadFile()!' );
-		}
+        if( !_isFile( BASEDIR . self::CHROME_LANGUAGE_INCLUDE_DIR . $this->_language . self::CHROME_LANUGAGE_FILE_EXTENSION ) ) {
+            throw new Chrome_Exception( 'Cannot load file ' . BASEDIR . self::CHROME_LANGUAGE_INCLUDE_DIR . $file .
+                '! File does not exist in Chrome_Language::_loadFile()!' );
+        }
 
-		if( !_isFile( BASEDIR . self::CHROME_LANGUAGE_INCLUDE_DIR . $this->_language . self::CHROME_LANGUAGE_GENERAL_NAMESPACE .
-			self::CHROME_LANUGAGE_FILE_EXTENSION ) ) {
-			throw new Chrome_Exception( 'Cannot load file ' . BASEDIR . self::CHROME_LANGUAGE_INCLUDE_DIR . $this->_language .
-				self::CHROME_LANGUAGE_GENERAL_NAMESPACE . self::CHROME_LANUGAGE_FILE_EXTENSION .
-				'! File does not exist in Chrome_Language::_loadFile()!' );
-		}
+        if( !_isFile( BASEDIR . self::CHROME_LANGUAGE_INCLUDE_DIR . $this->_language . self::CHROME_LANGUAGE_GENERAL_NAMESPACE .
+            self::CHROME_LANUGAGE_FILE_EXTENSION ) ) {
+            throw new Chrome_Exception( 'Cannot load file ' . BASEDIR . self::CHROME_LANGUAGE_INCLUDE_DIR . $this->_language .
+                self::CHROME_LANGUAGE_GENERAL_NAMESPACE . self::CHROME_LANUGAGE_FILE_EXTENSION .
+                '! File does not exist in Chrome_Language::_loadFile()!' );
+        }
 
-		self::$_array[$this->_language] = parse_ini_file( BASEDIR . self::CHROME_LANGUAGE_INCLUDE_DIR . $this->_language .
-			self::CHROME_LANUGAGE_FILE_EXTENSION, true );
+        self::$_array[$this->_language] = parse_ini_file( BASEDIR . self::CHROME_LANGUAGE_INCLUDE_DIR . $this->_language .
+            self::CHROME_LANUGAGE_FILE_EXTENSION, true );
 
-		if( !isset( self::$_array[$this->_language][self::CHROME_LANGUAGE_GENERAL_NAMESPACE] ) ) {
-			self::$_array[$this->_language][self::CHROME_LANGUAGE_GENERAL_NAMESPACE] = parse_ini_file( BASEDIR .
-				self::CHROME_LANGUAGE_INCLUDE_DIR . $this->_language . '_general' . self::CHROME_LANUGAGE_FILE_EXTENSION, false );
-		}
-	}
+        if( !isset( self::$_array[$this->_language][self::CHROME_LANGUAGE_GENERAL_NAMESPACE] ) ) {
+            self::$_array[$this->_language][self::CHROME_LANGUAGE_GENERAL_NAMESPACE] = parse_ini_file( BASEDIR .
+                self::CHROME_LANGUAGE_INCLUDE_DIR . $this->_language . '_general' . self::CHROME_LANUGAGE_FILE_EXTENSION, false );
+        }
+    }
 
-	public function get( $key )
-	{
-		if( isset( self::$_array[$this->_language][$this->_file][$key] ) ) {
-			return self::$_array[$this->_language][$this->_file][$key];
-		} else
-			if( isset( self::$_array[$this->_language][self::CHROME_LANGUAGE_GENERAL_NAMESPACE][$key] ) ) {
-				return self::$_array[$this->_language][self::CHROME_LANGUAGE_GENERAL_NAMESPACE][$key];
-			} else {
-				return $key;
-			}
-	}
+    public function get( $key )
+    {
+        if( isset( self::$_array[$this->_language][$this->_file][$key] ) ) {
+            return self::$_array[$this->_language][$this->_file][$key];
+        } else
+            if( isset( self::$_array[$this->_language][self::CHROME_LANGUAGE_GENERAL_NAMESPACE][$key] ) ) {
+                return self::$_array[$this->_language][self::CHROME_LANGUAGE_GENERAL_NAMESPACE][$key];
+            } else {
+                return $key;
+            }
+    }
 
-	public function getAll()
-	{
-		return self::$_array[$this->_language][$this->_file];
-	}
+    public function getAll()
+    {
+        return self::$_array[$this->_language][$this->_file];
+    }
 
-	public function getAllGeneral()
-	{
-		return self::$_array[$this->_language][self::CHROME_LANGUAGE_GENERAL_NAMESPACE];
-	}
+    public function getAllGeneral()
+    {
+        return self::$_array[$this->_language][self::CHROME_LANGUAGE_GENERAL_NAMESPACE];
+    }
 }

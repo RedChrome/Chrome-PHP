@@ -15,10 +15,6 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Session
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.07.2013 22:11:30] --> $
- * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true)
@@ -159,7 +155,7 @@ class Chrome_Session implements Chrome_Session_Interface
      *
      * @var array
      */
-    protected $_SESSION = null;
+    protected $_session = null;
 
     /**
      * Is the session input closed?
@@ -192,7 +188,6 @@ class Chrome_Session implements Chrome_Session_Interface
         $this->_cookie = $cookie;
         $this->_hash   = $hash;
 
-
         // garbace collector should never run... we have an own implementation
         @ini_set('session.gc_probability', 0);
         // do not add sessionID to url
@@ -220,7 +215,7 @@ class Chrome_Session implements Chrome_Session_Interface
      */
     public function __destruct()
     {
-        $_SESSION = $this->_SESSION;
+        $_SESSION = $this->_session;
     }
 
     /**
@@ -242,7 +237,7 @@ class Chrome_Session implements Chrome_Session_Interface
 
             session_start();
 
-            $this->_SESSION = $_SESSION;
+            $this->_session = $_SESSION;
             $_SESSION = array();
 
             // AND now check whether the session is valid for the user
@@ -268,17 +263,17 @@ class Chrome_Session implements Chrome_Session_Interface
     private function _isValid()
     {
         // is session expired?
-        if(empty($this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SESSION_TIME]) OR $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SESSION_TIME] + self::CHROME_SESSION_SESSION_LIFETIME < CHROME_TIME) {
+        if(empty($this->_session[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SESSION_TIME]) OR $this->_session[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SESSION_TIME] + self::CHROME_SESSION_SESSION_LIFETIME < CHROME_TIME) {
             return false;
         }
 
         // has the user a different browser?
-        if(empty($this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_USER_AGENT_NAMESPACE]) OR $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_USER_AGENT_NAMESPACE] !== $this->_hash->hash($_SERVER['HTTP_USER_AGENT'], $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SALT_NAMESPACE])) {
+        if(empty($this->_session[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_USER_AGENT_NAMESPACE]) OR $this->_session[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_USER_AGENT_NAMESPACE] !== $this->_hash->hash($_SERVER['HTTP_USER_AGENT'], $this->_session[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SALT_NAMESPACE])) {
             return false;
         }
 
         // is the ip-address different?
-        if(empty($this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_REMOTE_ADDR_NAMESPACE]) OR $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_REMOTE_ADDR_NAMESPACE] !== $this->_hash->hash($_SERVER['REMOTE_ADDR'], $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SALT_NAMESPACE])) {
+        if(empty($this->_session[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_REMOTE_ADDR_NAMESPACE]) OR $this->_session[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_REMOTE_ADDR_NAMESPACE] !== $this->_hash->hash($_SERVER['REMOTE_ADDR'], $this->_session[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SALT_NAMESPACE])) {
             return false;
         }
 
@@ -294,7 +289,7 @@ class Chrome_Session implements Chrome_Session_Interface
      */
     private function _renewIDIfNeeded()
     {
-        if($this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SESSION_TIME]+self::CHROME_SESSION_RENEW_TIME < CHROME_TIME) {
+        if($this->_session[self::CHROME_SESSION_SESSION_NAMESPACE][self::CHROME_SESSION_SESSION_TIME]+self::CHROME_SESSION_RENEW_TIME < CHROME_TIME) {
             $this->regenerateId();
         }
     }
@@ -310,10 +305,10 @@ class Chrome_Session implements Chrome_Session_Interface
     public function get($key)
     {
         if($key === null) {
-            return $this->_SESSION;
+            return $this->_session;
         }
 
-        return (isset($this->_SESSION[$key])) ? $this->_SESSION[$key] : null;
+        return (isset($this->_session[$key])) ? $this->_session[$key] : null;
     }
 
     /**
@@ -333,11 +328,11 @@ class Chrome_Session implements Chrome_Session_Interface
 
         if($value === null)
         {
-            unset($this->_SESSION[$key]);
+            unset($this->_session[$key]);
             return;
         }
 
-        $this->_SESSION[$key] = $value;
+        $this->_session[$key] = $value;
     }
 
     /**
@@ -350,7 +345,7 @@ class Chrome_Session implements Chrome_Session_Interface
     public function regenerateId()
     {
         // get old session data
-        $oldSession = $this->_SESSION;
+        $oldSession = $this->_session;
 
         $this->destroy(false);
 
@@ -360,7 +355,6 @@ class Chrome_Session implements Chrome_Session_Interface
         $userAgent = $this->_hash->hash($_SERVER['HTTP_USER_AGENT'], $salt);
         $remoteAddr = $this->_hash->hash($_SERVER['REMOTE_ADDR'], $salt);
 
-
         // start session AND set cookie
         session_id($uniqid);
         // httponly = true, so javascript can't manipulate the cookie
@@ -368,11 +362,11 @@ class Chrome_Session implements Chrome_Session_Interface
         session_start();
 
         // set old session
-        $this->_SESSION = $oldSession;
+        $this->_session = $oldSession;
 
         // set the new ID AND salt
-        $this->_SESSION[self::CHROME_SESSION_COOKIE_NAMESPACE] = $uniqid;
-        $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE] = array(self::CHROME_SESSION_COOKIE_NAMESPACE => $uniqid,
+        $this->_session[self::CHROME_SESSION_COOKIE_NAMESPACE] = $uniqid;
+        $this->_session[self::CHROME_SESSION_SESSION_NAMESPACE] = array(self::CHROME_SESSION_COOKIE_NAMESPACE => $uniqid,
                                                                         self::CHROME_SESSION_SALT_NAMESPACE => $salt,
                                                                         self::CHROME_SESSION_USER_AGENT_NAMESPACE => $userAgent,
                                                                         self::CHROME_SESSION_REMOTE_ADDR_NAMESPACE => $remoteAddr,
@@ -400,8 +394,8 @@ class Chrome_Session implements Chrome_Session_Interface
         session_start();
 
         // set the new ID AND salt
-        $this->_SESSION[self::CHROME_SESSION_COOKIE_NAMESPACE] = $uniqid;
-        $this->_SESSION[self::CHROME_SESSION_SESSION_NAMESPACE] = array(self::CHROME_SESSION_COOKIE_NAMESPACE => $uniqid,
+        $this->_session[self::CHROME_SESSION_COOKIE_NAMESPACE] = $uniqid;
+        $this->_session[self::CHROME_SESSION_SESSION_NAMESPACE] = array(self::CHROME_SESSION_COOKIE_NAMESPACE => $uniqid,
                                                                         self::CHROME_SESSION_SALT_NAMESPACE => $salt,
                                                                         self::CHROME_SESSION_USER_AGENT_NAMESPACE => $userAgent,
                                                                         self::CHROME_SESSION_REMOTE_ADDR_NAMESPACE => $remoteAddr,
@@ -418,7 +412,7 @@ class Chrome_Session implements Chrome_Session_Interface
      */
     public function destroy($renew = true)
     {
-        $this->_SESSION = array();
+        $this->_session = array();
         $_SESSION = array();
         $this->_cookie->unsetCookie(self::CHROME_SESSION_COOKIE_NAMESPACE);
         session_destroy();
@@ -492,29 +486,31 @@ class Chrome_Session implements Chrome_Session_Interface
 
         clearstatcache();
 
-        foreach($files AS $file) {
-
+        foreach($files as $file)
+        {
             if(fileatime(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH.'/'.$file) < $time) {
                 unlink(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH.'/'.$file);
             }
         }
-
-        return;
     }
 
     /**
      * Methods of ArrayAccess interface
      */
-    public function offsetExists($offset) {
-        return isset($this->_SESSION[$offset]);
+    public function offsetExists($offset)
+    {
+        return isset($this->_session[$offset]);
     }
-    public function offsetGet($offset) {
+    public function offsetGet($offset)
+    {
         return $this->get($offset);
     }
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value)
+    {
         $this->set($offset, $value);
     }
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset)
+    {
         $this->set($offset, null);
     }
 }

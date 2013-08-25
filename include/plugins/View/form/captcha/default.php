@@ -34,8 +34,8 @@ class Chrome_Form_Decorator_Captcha_Default extends Chrome_Form_Decorator_Abstra
 
         $label = '';
         if(($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null) {
-			$label = '<label for="'.$this->_formElement->getID().'">'.$label.'</label>';
-		}
+            $label = '<label for="'.$this->_formElement->getID().'">'.$label.'</label>';
+        }
 
         $img = '<img src="'._PUBLIC.'captcha/default.php?name='.$this->_formElement->getForm()->getID().'" id="captcha_'.$this->_formElement->getForm()->getID().'" />';
         $input = '<input type="text" name="'.$this->_formElement->getID().'" value="" '.$this->_getPreparedAttrs().'"><br><br>

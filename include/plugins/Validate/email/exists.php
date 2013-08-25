@@ -21,7 +21,7 @@
  */
 
 if(CHROME_PHP !== true)
-	die();
+    die();
 
 /**
  * Chrome_Validator_Email_Exists
@@ -52,9 +52,9 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
      */
     protected $_options = array(self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS => true);
 
-	public function __construct(Chrome_DB_Interface_Abstract $interface = null) {
-	   $this->_dbInterface = $interface;
-	}
+    public function __construct(Chrome_DB_Interface_Abstract $interface = null) {
+       $this->_dbInterface = $interface;
+    }
 
     protected function _getDBInterface() {
         if($this->_dbInterface === null) {
@@ -64,7 +64,7 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
         }
     }
 
-	protected function _validate() {
+    protected function _validate() {
 
         $email = $this->_data;
 

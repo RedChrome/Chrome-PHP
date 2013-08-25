@@ -20,7 +20,7 @@
  */
 
 if(CHROME_PHP !== true)
-	die();
+    die();
 
 /**
  * Chrome_Template_Extension_Core
@@ -34,60 +34,60 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Template_Extension_Core extends Chrome_Template_Extension_Abstract
 {
-	public function includeLanguage($params)
-	{
-		if(isset($params['file']))
-			$file = $params['file'];
-		elseif(isset($params['langFile'])) {
-			$file = $params['langFile'];
-		} else
-			throw new Chrome_Exception('No Lang-file set to include into Template!');
+    public function includeLanguage($params)
+    {
+        if(isset($params['file']))
+            $file = $params['file'];
+        elseif(isset($params['langFile'])) {
+            $file = $params['langFile'];
+        } else
+            throw new Chrome_Exception('No Lang-file set to include into Template!');
 
-		if(isset($params['lang']))
-			$lang = $params['lang'];
-		elseif(isset($param['language']))
-			$lang = $param['language'];
-		else
-			$lang = '';
+        if(isset($params['lang']))
+            $lang = $params['lang'];
+        elseif(isset($param['language']))
+            $lang = $param['language'];
+        else
+            $lang = '';
 
-		if(isset($params['prefix'])) {
-			$prefix = $params['prefix'];
-			if($prefix{strlen($prefix)-1} !== '_')
-				$prefix .= '_';
-		} else $prefix = '';
+        if(isset($params['prefix'])) {
+            $prefix = $params['prefix'];
+            if($prefix{strlen($prefix)-1} !== '_')
+                $prefix .= '_';
+        } else $prefix = '';
 
-		if(isset($params['defaultPrefix'])) {
-			$prefix = $params['defaultPrefix'].$prefix;
-		} else
-			$prefix = 'LANG_'.$prefix;
+        if(isset($params['defaultPrefix'])) {
+            $prefix = $params['defaultPrefix'].$prefix;
+        } else
+            $prefix = 'LANG_'.$prefix;
 
-		Chrome_View::addVar(Chrome_Template::_addLang(new Chrome_Lang($file, $lang), $prefix));
+        Chrome_View::addVar(Chrome_Template::_addLang(new Chrome_Lang($file, $lang), $prefix));
 
-		return '{EVAL}Chrome_Template::assignDynamic(Chrome_Template::_addLang(new Chrome_Lang(\''.$file.'\', \''.$lang.'\'), \''.$prefix.'\'));{ENDEVAL}';
-	}
+        return '{EVAL}Chrome_Template::assignDynamic(Chrome_Template::_addLang(new Chrome_Lang(\''.$file.'\', \''.$lang.'\'), \''.$prefix.'\'));{ENDEVAL}';
+    }
 
-	public function includeCSS($params) {
+    public function includeCSS($params) {
 
-		if(!isset($params['file']))
- 			throw new Chrome_Exception('No file set to include into template!');
+        if(!isset($params['file']))
+             throw new Chrome_Exception('No file set to include into template!');
 
-		if(!_isFile(BASEDIR.$params['file']))
-			throw new Chrome_Exception('File ("'.BASEDIR.$params['file'].'") was not found in Chrome_Template_Extension_Core::includeCSS()!');
-		return '<link href="'.BASEDIR.$params['file'].'" rel="stylesheet" type="text/css">';
-	}
+        if(!_isFile(BASEDIR.$params['file']))
+            throw new Chrome_Exception('File ("'.BASEDIR.$params['file'].'") was not found in Chrome_Template_Extension_Core::includeCSS()!');
+        return '<link href="'.BASEDIR.$params['file'].'" rel="stylesheet" type="text/css">';
+    }
 
-	public function includeJS($params) {
+    public function includeJS($params) {
 
-		if(!isset($params['file']))
-			throw new Chrome_Exception('No .js file set to include into template!');
+        if(!isset($params['file']))
+            throw new Chrome_Exception('No .js file set to include into template!');
 
-		if(!_isFile(BASEDIR.$params['file']))
-			throw new Chrome_Exception('Could not find .js file '.BASEDIR.$params['file'].' in Chrome_Template_Extension_Core::includeJS()!');
+        if(!_isFile(BASEDIR.$params['file']))
+            throw new Chrome_Exception('Could not find .js file '.BASEDIR.$params['file'].' in Chrome_Template_Extension_Core::includeJS()!');
 
-		return '<script type="text/javascript">'."\n".file_get_contents(BASEDIR.$params['file'])."\n".'</script>';
-	}
+        return '<script type="text/javascript">'."\n".file_get_contents(BASEDIR.$params['file'])."\n".'</script>';
+    }
 
-	public static function _extension() {
-		return array('author' => 'RedChrome', 'version' => '1.0');
-	}
+    public static function _extension() {
+        return array('author' => 'RedChrome', 'version' => '1.0');
+    }
 }

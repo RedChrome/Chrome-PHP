@@ -10,7 +10,6 @@ class Chrome_View_Register extends Chrome_View_Strategy_Abstract
     public function setStepOne()
     {
         $this->_views[] = new Chrome_View_Form_Renderer_Template_Register_StepOne(new Chrome_View_Form_Register_StepOne($this->_controller->getForm()));
-
         // this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_StepOne', $this->_controller);
     }
 

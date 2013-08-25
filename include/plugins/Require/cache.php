@@ -29,20 +29,20 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Require_Loader_Cache extends Chrome_Require_Loader_Abstract
 {
-	/**
-	 * Loads a class, if $class beginns with 'Chrome_Cache_'
-	 *
-	 * @param string $class
-	 * @return bool true if class was found
-	 */
-	public function loadClass($class)
-	{
-	    if(preg_match('#Chrome_Cache_Option_(.{1,})_Interface#i', $class, $matches)) {
-			return PLUGIN.'Cache/'.strtolower($matches[1]).'.php';
-		} else if(preg_match('#Chrome_Cache_Option_(.{1,})#i', $class, $matches)) {
-			return PLUGIN.'Cache/'.strtolower($matches[1]).'.php';
-		}
+    /**
+     * Loads a class, if $class beginns with 'Chrome_Cache_'
+     *
+     * @param string $class
+     * @return bool true if class was found
+     */
+    public function loadClass($class)
+    {
+        if(preg_match('#Chrome_Cache_Option_(.{1,})_Interface#i', $class, $matches)) {
+            return PLUGIN.'Cache/'.strtolower($matches[1]).'.php';
+        } else if(preg_match('#Chrome_Cache_Option_(.{1,})#i', $class, $matches)) {
+            return PLUGIN.'Cache/'.strtolower($matches[1]).'.php';
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

@@ -29,17 +29,17 @@ if( CHROME_PHP !== true ) die();
  */
 class Chrome_View_Form_Element_Radio_Default extends Chrome_View_Form_Element_Multiple_Abstract
 {
-	private $_int = 0;
+    private $_int = 0;
 
-	protected function getNext()
-	{
-	    $next = $this->_availableSelections[$this->_int];
-	    $this->_int = ++$this->_int % count( $this->_availableSelections );
-	    return $next;
-	}
+    protected function getNext()
+    {
+        $next = $this->_availableSelections[$this->_int];
+        $this->_int = ++$this->_int % count( $this->_availableSelections );
+        return $next;
+    }
 
-	protected function _render()
-	{
-	    return '<input type="radio" '.$this->_renderFlags().'/>';
-	}
+    protected function _render()
+    {
+        return '<input type="radio" '.$this->_renderFlags().'/>';
+    }
 }

@@ -29,8 +29,8 @@ require_once 'default.php';
  */
 class Chrome_Form_Decorator_Birthday_Yaml extends Chrome_Form_Decorator_Birthday_Default
 {
-	public function renderAll()
-	{
+    public function renderAll()
+    {
         return '<div class="ym-fbox-birthday">'. parent::renderAll().'</div>';
-	}
+    }
 }

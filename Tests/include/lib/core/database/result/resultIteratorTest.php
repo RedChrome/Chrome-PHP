@@ -1,12 +1,6 @@
 <?php
 
-;
-
-require_once LIB.'core/database/database.php';
-require_once 'Tests/dummies/database/connection/dummy.php';
-require_once 'Tests/dummies/database/adapter.php';
-
-class DatabaseResultInteratorTest extends Chrome_TestCase
+class DatabaseResultIteratorTest extends Chrome_TestCase
 {
     public $_dataArray = array();
 
@@ -38,13 +32,15 @@ class DatabaseResultInteratorTest extends Chrome_TestCase
         $db->getAdapter()->setDataResource($this);
 
         $i = 1;
+        $this->assertSame($db->getResult()->isEmpty(), $db->getAdapter()->isEmpty());
+        $this->assertFalse($db->getResult()->isEmpty());
         foreach($db->getResult() as $key => $value) {
             $this->assertEquals($i, $value);
-            $this->assertEquals($db->getResult()->valid(), $db->getResult()->hasNext());
             ++$i;
         }
+        $this->assertSame(7, $i);
         $this->assertFalse($db->getResult()->isEmpty());
-        $this->assertEquals(array(),$this->_dataArray);
+        $this->assertEquals(array(), $this->_dataArray);
     }
 
     public function testIteratorWithEmptyResult() {

@@ -15,13 +15,10 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version Git: <git_id>
- * @author Alexander Book
  */
-if(CHROME_PHP !== true)
+if (CHROME_PHP !== true)
     die();
+
 /**
  * Interface for all 'store handlers'.
  *
@@ -35,21 +32,26 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Form_Handler_Store_Interface
 {
+
     /**
      * Returns true if this handler can/(or has) stored user input for $element
      *
-     * @param Chrome_Form_Element_Interface $element a form element
+     * @param Chrome_Form_Element_Interface $element
+     *        a form element
      *
      * @return boolean
      */
+
     public function hasStored(Chrome_Form_Element_Interface $element);
 
     /**
      * Returns the stored data for $element
      *
-     * @param Chrome_Form_Element_Interface $element a form element
+     * @param Chrome_Form_Element_Interface $element
+     *        a form element
      * @return mixed
      */
+
     public function getStored(Chrome_Form_Element_Interface $element);
 }
 
@@ -69,6 +71,7 @@ interface Chrome_Form_Storage_Interface
      *        ID/Name of an element
      * @return mixed data set by {@see set()}
      */
+
     public function get($elementName);
 
     /**
@@ -79,6 +82,7 @@ interface Chrome_Form_Storage_Interface
      * @param mixed $data
      *        the data to store
      */
+
     public function set($elementName, $data);
 
     /**
@@ -87,6 +91,7 @@ interface Chrome_Form_Storage_Interface
      * @param string $elementName
      *        ID/Name of an element
      */
+
     public function remove($elementName);
 
     /**
@@ -96,6 +101,7 @@ interface Chrome_Form_Storage_Interface
      * @param unknown $elementName
      * @return boolean
      */
+
     public function has($elementName);
 }
 
@@ -114,6 +120,7 @@ interface Chrome_Form_Option_Storable_Interface
      *
      * @return boolean
      */
+
     public function getStorageEnabled();
 
     /**
@@ -123,6 +130,7 @@ interface Chrome_Form_Option_Storable_Interface
      *
      * @return boolean
      */
+
     public function getStoreNullData();
 
     /**
@@ -132,6 +140,7 @@ interface Chrome_Form_Option_Storable_Interface
      *
      * @return boolean
      */
+
     public function getStoreInvalidData();
 
     /**
@@ -139,6 +148,7 @@ interface Chrome_Form_Option_Storable_Interface
      *
      * @param boolean $bool
      */
+
     public function setStorageEnabled($bool);
 
     /**
@@ -146,6 +156,7 @@ interface Chrome_Form_Option_Storable_Interface
      *
      * @param boolean $bool
      */
+
     public function setStoreNullData($bool);
 
     /**
@@ -153,6 +164,7 @@ interface Chrome_Form_Option_Storable_Interface
      *
      * @param unknown $bool
      */
+
     public function setStoreInvalidData($bool);
 }
 
@@ -166,17 +178,27 @@ interface Chrome_Form_Option_Storable_Interface
  */
 class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interface
 {
-
+    /**
+     * @var unknown
+     */
     protected $_storeNullData = false;
-
     protected $_storageEnabled = true;
-
     protected $_storeInvalidData = false;
+
+    /* (non-PHPdoc)
+     * @see Chrome_Form_Option_Storable_Interface::getStorageEnabled()
+     */
 
     public function getStorageEnabled()
     {
+
         return $this->_storageEnabled;
     }
+
+    /**
+     * (non-PHPdoc)
+     * @see Chrome_Form_Option_Storable_Interface::getStoreNullData()
+     */
 
     public function getStoreNullData()
     {

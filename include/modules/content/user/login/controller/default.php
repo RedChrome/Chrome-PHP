@@ -30,9 +30,9 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Module_Abstract
 {
-	protected function _initialize() {
-	    $this->_require = array('file' => array(CONTENT.'user/login/include.php', CONTENT.'user/login/view/default.php', CONTENT.'user/login/model.php'));
-	}
+    protected function _initialize() {
+        $this->_require = array('file' => array(CONTENT.'user/login/include.php', CONTENT.'user/login/view/default.php', CONTENT.'user/login/model.php'));
+    }
 
     protected function _execute()
     {

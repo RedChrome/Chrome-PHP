@@ -32,20 +32,20 @@ require_once 'form.php';
  */
 interface Chrome_View_Interface extends Chrome_Renderable
 {
-	/**
-	 * Sets a var
-	 *
-	 * @param string $key
-	 * @param mixed $value
-	 */
-	public function setVar($key, $value);
+    /**
+     * Sets a var
+     *
+     * @param string $key
+     * @param mixed $value
+     */
+    public function setVar($key, $value);
 
-	/**
-	 * Gets a set var
-	 *
-	 * @return mixed $value
-	 */
-	public function getVar($key);
+    /**
+     * Gets a set var
+     *
+     * @return mixed $value
+     */
+    public function getVar($key);
 }
 
 abstract class Chrome_View implements Chrome_View_Interface
@@ -74,52 +74,52 @@ abstract class Chrome_View implements Chrome_View_Interface
         // does nothing. you can put here your view logic (e.g. to set title or add .js files to include)
     }
 
-	/**
-	 * Contains data for plugin methods
-	 *
-	 * @var array
-	 */
-	protected $_vars = array();
+    /**
+     * Contains data for plugin methods
+     *
+     * @var array
+     */
+    protected $_vars = array();
 
-	/**
-	 * magic method
-	 *
-	 * Calls a method from view helper if it exists
-	 *
-	 * @return mixed
-	 */
-	public function __call($func, $args)
-	{
-	   return $this->_callPluginMethod($func, $args);
-	}
+    /**
+     * magic method
+     *
+     * Calls a method from view helper if it exists
+     *
+     * @return mixed
+     */
+    public function __call($func, $args)
+    {
+       return $this->_callPluginMethod($func, $args);
+    }
 
-	/**
-	 * Calls the method $func with arguments $args
-	 *
-	 * @return mixed
-	 */
-	protected function _callPluginMethod($func, $args)
-	{
-	    if($this->_pluginFacade === null) {
-	       $this->_pluginFacade = $this->_viewContext->getPluginFacade();
+    /**
+     * Calls the method $func with arguments $args
+     *
+     * @return mixed
+     */
+    protected function _callPluginMethod($func, $args)
+    {
+        if($this->_pluginFacade === null) {
+           $this->_pluginFacade = $this->_viewContext->getPluginFacade();
 
            if($this->_pluginFacade === null) {
                return;
            }
-	    }
+        }
 
-		return $this->_pluginFacade->call($func, array_merge(array($this), $args));
-	}
+        return $this->_pluginFacade->call($func, array_merge(array($this), $args));
+    }
 
-	public function setVar($key, $value)
-	{
-		$this->_vars[$key] = $value;
-	}
+    public function setVar($key, $value)
+    {
+        $this->_vars[$key] = $value;
+    }
 
-	public function getVar($key)
-	{
-		return (isset($this->_vars[$key])) ? $this->_vars[$key] : null;
-	}
+    public function getVar($key)
+    {
+        return (isset($this->_vars[$key])) ? $this->_vars[$key] : null;
+    }
 }
 
 /**
@@ -128,46 +128,46 @@ abstract class Chrome_View implements Chrome_View_Interface
  */
 abstract class Chrome_View_Abstract extends Chrome_View
 {
-	/**
-	 * Contains the controller
-	 *
-	 * @var Chrome_Controller_Abstract
-	 */
-	protected $_controller = null;
+    /**
+     * Contains the controller
+     *
+     * @var Chrome_Controller_Abstract
+     */
+    protected $_controller = null;
 
-	/**
-	 * Constructor
-	 *
-	 * @return Chrome_Controller_Interface
-	 */
-	public function __construct(Chrome_Context_View_Interface $viewContext, Chrome_Controller_Interface $controller)
-	{
-	    parent::__construct($viewContext);
-		$this->_controller = $controller;
-	}
+    /**
+     * Constructor
+     *
+     * @return Chrome_Controller_Interface
+     */
+    public function __construct(Chrome_Context_View_Interface $viewContext, Chrome_Controller_Interface $controller)
+    {
+        parent::__construct($viewContext);
+        $this->_controller = $controller;
+    }
 }
 
 abstract class Chrome_View_Strategy_Abstract extends Chrome_View_Abstract
 {
-	protected $_views = array();
+    protected $_views = array();
 
-	public function render()
-	{
-		$return = '';
+    public function render()
+    {
+        $return = '';
 
-		if(!is_array($this->_views)) {
-			$this->_views = array($this->_views);
-		}
+        if(!is_array($this->_views)) {
+            $this->_views = array($this->_views);
+        }
 
-		foreach($this->_views as $view) {
-			$return .= $view->render();
-		}
+        foreach($this->_views as $view) {
+            $return .= $view->render();
+        }
 
-		return $return;
-	}
+        return $return;
+    }
 
-	public function addRenderable(Chrome_Renderable $renderable)
-	{
-		$this->_views[] = $renderable;
-	}
+    public function addRenderable(Chrome_Renderable $renderable)
+    {
+        $this->_views[] = $renderable;
+    }
 }

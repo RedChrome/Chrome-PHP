@@ -29,11 +29,11 @@ require_once 'default.php';
  */
 class Chrome_Form_Decorator_Select_Yaml extends Chrome_Form_Decorator_Select_Default
 {
-	public function render()
-	{
-		$return = '<div class="ym-fbox-select">';
+    public function render()
+    {
+        $return = '<div class="ym-fbox-select">';
 
-		$return .= parent::render() . '</div>';
-		return $return;
-	}
+        $return .= parent::render() . '</div>';
+        return $return;
+    }
 }

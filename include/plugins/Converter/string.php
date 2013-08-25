@@ -30,35 +30,35 @@ if( CHROME_PHP !== true )
  */
 class Chrome_Converter_Delegate_String extends Chrome_Converter_Delegate_Abstract
 {
-	protected $_conversions = array(
-		'strToLower',
-		'strToUpper',
-		'strUcFirst',
-		'strUcWords',
-		'strLcFirst' );
+    protected $_conversions = array(
+        'strToLower',
+        'strToUpper',
+        'strUcFirst',
+        'strUcWords',
+        'strLcFirst' );
 
-	public function strToLower( $var, $option )
-	{
-		return strtolower( $var );
-	}
+    public function strToLower( $var, $option )
+    {
+        return strtolower( $var );
+    }
 
-	public function strToUpper( $var, $option )
-	{
-		return strtoupper( $var );
-	}
+    public function strToUpper( $var, $option )
+    {
+        return strtoupper( $var );
+    }
 
-	public function strUcFirst($var, $option )
-	{
-		return ucfirst( $var );
-	}
+    public function strUcFirst($var, $option )
+    {
+        return ucfirst( $var );
+    }
 
-	public function strUcWords( $var, $option )
-	{
-		return ucwords( $var );
-	}
+    public function strUcWords( $var, $option )
+    {
+        return ucwords( $var );
+    }
 
-	public function strLcFirst( $var, $option )
-	{
-		return lcfirst( $var );
-	}
+    public function strLcFirst( $var, $option )
+    {
+        return lcfirst( $var );
+    }
 }

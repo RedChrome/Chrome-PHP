@@ -29,26 +29,26 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Require_Loader_Filter extends Chrome_Require_Loader_Abstract
 {
-	/**
-	 * Checks whether this class knows where the other class is located
-	 * AND loads it, then return true
-	 *
-	 * @param stinrg $class name of the class
-	 * @return boolean
-	 * @throws Chrome_Exception
-	 */
-	public function loadClass($class)
-	{
-		// beginn with 'Chrome_Filter_Chain_'
-		if(preg_match('#Chrome_Filter_Chain_(.{1,})#i', $class, $matches)) {
-			return BASEDIR.'plugins/Filter/chain/'.strtolower($matches[1]).'.php';
+    /**
+     * Checks whether this class knows where the other class is located
+     * AND loads it, then return true
+     *
+     * @param stinrg $class name of the class
+     * @return boolean
+     * @throws Chrome_Exception
+     */
+    public function loadClass($class)
+    {
+        // beginn with 'Chrome_Filter_Chain_'
+        if(preg_match('#Chrome_Filter_Chain_(.{1,})#i', $class, $matches)) {
+            return BASEDIR.'plugins/Filter/chain/'.strtolower($matches[1]).'.php';
 
-			// beginn with 'Chrome_Filter_'
-		} else
-			if(preg_match('#Chrome_Filter_(.{1,})#i', $class, $matches)) {
-				return BASEDIR.'plugins/Filter/'.strtolower($matches[1]).'.php';
-			}
+            // beginn with 'Chrome_Filter_'
+        } else
+            if(preg_match('#Chrome_Filter_(.{1,})#i', $class, $matches)) {
+                return BASEDIR.'plugins/Filter/'.strtolower($matches[1]).'.php';
+            }
 
-		return false;
-	}
+        return false;
+    }
 }

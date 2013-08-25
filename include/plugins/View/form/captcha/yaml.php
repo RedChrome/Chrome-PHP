@@ -29,9 +29,9 @@ require_once 'default.php';
  */
 class Chrome_Form_Decorator_Captcha_Yaml extends Chrome_Form_Decorator_Captcha_Default
 {
-	public function render()
-	{
-		$this->setAttribute( 'class', 'ym-button' );
-		return '<div class="ym-fbox-text">'.parent::render().'</div>';
-	}
+    public function render()
+    {
+        $this->setAttribute( 'class', 'ym-button' );
+        return '<div class="ym-fbox-text">'.parent::render().'</div>';
+    }
 }

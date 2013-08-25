@@ -30,22 +30,22 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Response_Handler_Console implements Chrome_Response_Handler_Interface
 {
-	protected $_request = null;
+    protected $_request = null;
 
-	public function __construct(Chrome_Request_Handler_Interface $requestHandler)
-	{
-		$this->_request = $requestHandler;
-	}
+    public function __construct(Chrome_Request_Handler_Interface $requestHandler)
+    {
+        $this->_request = $requestHandler;
+    }
 
-	public function canHandle()
-	{
+    public function canHandle()
+    {
         return ($this->_request instanceof Chrome_Request_Handler_Console);
-	}
+    }
 
-	public function getResponse()
-	{
-		return new Chrome_Response_Console();
-	}
+    public function getResponse()
+    {
+        return new Chrome_Response_Console();
+    }
 }
 
 /**
@@ -60,20 +60,20 @@ class Chrome_Response_Console implements Chrome_Response_Interface
         $this->_body = $mixed;
     }
 
-	public function flush() {
-	   echo $this->_body;
+    public function flush() {
+       echo $this->_body;
        $this->clear();
-	}
+    }
 
-	public function clear() {
-	   $this->_body = '';
-	}
+    public function clear() {
+       $this->_body = '';
+    }
 
-	public function setBody($mixed) {
-	   $this->_body = $mixed;
-	}
+    public function setBody($mixed) {
+       $this->_body = $mixed;
+    }
 
-	public function getBody() {
-	   return $this->_body;
-	}
+    public function getBody() {
+       return $this->_body;
+    }
 }

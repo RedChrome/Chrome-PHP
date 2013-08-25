@@ -43,9 +43,4 @@ $application = new Chrome_Application_Default();
 $application->init();
 $application->execute();
 //TODO: set up Zend_Mail properly
-//TODO: remove constants from form_elements, just use the ids... -> code reduction
-//TODO: remove converters from form. they have to get moved to model..
-//TODO: remove all forms from controller, replace them by models (Chrome_Model_Form_Abstract)
-//TODO: remove default decorator and set default decorator to yaml
-//TODO: render errors in forms correct with ym-error and ym-message
 //TODO: decide whether view or controller can change the theme...

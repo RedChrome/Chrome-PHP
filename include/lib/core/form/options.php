@@ -13,12 +13,8 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Form
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    Git: <git_id>
- * @author     Alexander Book
  */
 if(CHROME_PHP !== true)
     die();
@@ -41,7 +37,8 @@ interface Chrome_Form_Attribute_Interface
 }
 
 /**
- * Interface for an element option class. This contains the settings for a form element
+ * Interface for an element option class.
+ * This contains the settings for a form element
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Option
@@ -64,16 +61,17 @@ interface Chrome_Form_Option_Element_Interface
 
     public function getConversion();
 }
-
 interface Chrome_Form_Option_Element_Values_Interface extends Chrome_Form_Option_Element_Interface
 {
+
     public function setAllowedValues(array $allowedValues);
 
     public function getAllowedValues();
 }
 
 /**
- * This interface is for input fields with more than one value (e.g. radio, checkbox)
+ * This interface is for input fields with more than one value (e.g.
+ * radio, checkbox)
  * In setRequired/Readonly you can specify witch input value is required/readonly
  * If you use setIsRequired/Readonly, then it is assumed, that every possible input value is expected to
  * bei required/readonly. So you could also use setRequired/Readonly(array(..all possible values)) to
@@ -81,6 +79,7 @@ interface Chrome_Form_Option_Element_Values_Interface extends Chrome_Form_Option
  */
 interface Chrome_Form_Option_Element_Multiple_Interface extends Chrome_Form_Option_Element_Values_Interface
 {
+
     public function setRequired(array $multipleValues);
 
     public function getRequired();
@@ -93,19 +92,19 @@ interface Chrome_Form_Option_Element_Multiple_Interface extends Chrome_Form_Opti
 
     public function getSelectMultiple();
 }
-
 interface Chrome_Form_Option_Element_Attachable_Interface
 {
+
     public function attach(Chrome_Form_Element_Interface $element);
 
     public function setAttachments(array $elements);
 
     public function getAttachments();
 }
-
 class Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Interface
 {
-    protected $_isRequired = true;
+
+    protected $_isRequired = false;
 
     protected $_isReadonly = false;
 
@@ -161,9 +160,9 @@ class Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Interface
         return $this->_converter;
     }
 }
-
 class Chrome_Form_Option_Element_Values extends Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Values_Interface
 {
+
     protected $_allowedValues = array();
 
     public function setAllowedValues(array $allowedValues)
@@ -178,9 +177,9 @@ class Chrome_Form_Option_Element_Values extends Chrome_Form_Option_Element imple
         return $this->_allowedValues;
     }
 }
-
 class Chrome_Form_Option_Element_Multiple extends Chrome_Form_Option_Element_Values implements Chrome_Form_Option_Element_Multiple_Interface
 {
+
     protected $_required = array();
 
     protected $_readonly = array();

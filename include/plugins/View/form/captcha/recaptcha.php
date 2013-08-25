@@ -29,41 +29,41 @@ require_once LIB.'ReCaptcha/recaptchalib.php';
  */
 class Chrome_Form_Decorator_Captcha_Recaptcha extends Chrome_Form_Decorator_Abstract
 {
-	public function render()
-	{
+    public function render()
+    {
 
-		// add an empty hidden input text to make the captcha element valid, cause
+        // add an empty hidden input text to make the captcha element valid, cause
 
         $config = $this->_formElement->getForm()->getApplicationContext()->getConfig();
 
-		$publickey = $config->getConfig('Captcha', 'public_key');
+        $publickey = $config->getConfig('Captcha', 'public_key');
 
-		/*if($use_ssl) {
-		$server = RECAPTCHA_API_SECURE_SERVER;
-		} else {*/
-		$server = RECAPTCHA_API_SERVER;
-		//}
+        /*if($use_ssl) {
+        $server = RECAPTCHA_API_SECURE_SERVER;
+        } else {*/
+        $server = RECAPTCHA_API_SERVER;
+        //}
 
         // TODO: localize this
-		$errorpart = "";
-		if($this->_formElement->getForm()->hasErrors($this->_formElement->getID())) {
+        $errorpart = "";
+        if($this->_formElement->getForm()->hasErrors($this->_formElement->getID())) {
             $errors = $this->_formElement->getErrors();
             $error = $errors[0];
-			$errorpart = "&amp;error=".$error;
-		}
+            $errorpart = "&amp;error=".$error;
+        }
 
         // add a hidden input text. This is needed for the captcha element to return isSent() = true
 
-		return '
+        return '
         <label for="recaptcha_response_field">Captcha: </label>
 
         <script type="text/javascript" src="'.$server.'/challenge?k='.$publickey.$errorpart.'"></script>
 
-            	<noscript>
-              		<iframe src="'.$server.'/noscript?k='.$publickey.$errorpart.'" height="300" width="500" frameborder="0"></iframe><br/>
-              		<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-              		<input type="hidden" name="recaptcha_response_field" value="manual_challenge"/>
-            	</noscript>
+                <noscript>
+                      <iframe src="'.$server.'/noscript?k='.$publickey.$errorpart.'" height="300" width="500" frameborder="0"></iframe><br/>
+                      <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+                      <input type="hidden" name="recaptcha_response_field" value="manual_challenge"/>
+                </noscript>
                 <input type="hidden" value="" name="'.$this->_formElement->getID().'" />';
-	}
+    }
 }

@@ -29,15 +29,15 @@ if(CHROME_PHP !== true) die();
  */
 interface Chrome_Response_Interface
 {
-	public function write($mixed);
+    public function write($mixed);
 
-	public function flush();
+    public function flush();
 
-	public function clear();
+    public function clear();
 
-	public function setBody($mixed);
+    public function setBody($mixed);
 
-	public function getBody();
+    public function getBody();
 }
 
 /**
@@ -46,9 +46,9 @@ interface Chrome_Response_Interface
  */
 interface Chrome_Response_Handler_Interface
 {
-	public function canHandle();
+    public function canHandle();
 
-	public function getResponse();
+    public function getResponse();
 }
 
 /**
@@ -57,9 +57,9 @@ interface Chrome_Response_Handler_Interface
  */
 interface Chrome_Response_Factory_Interface
 {
-	public function getResponse();
+    public function getResponse();
 
-	public function addResponseHandler(Chrome_Response_Handler_Interface $responseHandler);
+    public function addResponseHandler(Chrome_Response_Handler_Interface $responseHandler);
 }
 
 /**
@@ -68,21 +68,21 @@ interface Chrome_Response_Factory_Interface
  */
 class Chrome_Response_Factory implements Chrome_Response_Factory_Interface
 {
-	protected $_responseHanlders = array();
+    protected $_responseHanlders = array();
 
-	public function addResponseHandler(Chrome_Response_Handler_Interface $responseHandler)
-	{
-		$this->_responseHanlders[] = $responseHandler;
-	}
+    public function addResponseHandler(Chrome_Response_Handler_Interface $responseHandler)
+    {
+        $this->_responseHanlders[] = $responseHandler;
+    }
 
-	public function getResponse()
-	{
-		foreach($this->_responseHanlders as $responseHandler) {
+    public function getResponse()
+    {
+        foreach($this->_responseHanlders as $responseHandler) {
 
-			if($responseHandler->canHandle() === true) {
-				return $responseHandler->getResponse();
-			}
+            if($responseHandler->canHandle() === true) {
+                return $responseHandler->getResponse();
+            }
 
-		}
-	}
+        }
+    }
 }

@@ -30,12 +30,12 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Controller_Content_Logout extends Chrome_Controller_Module_Abstract
 {
-	protected function _execute() {
+    protected function _execute() {
 
         $this->_applicationContext->getAuthentication()->deAuthenticate();
 
         // redirect
         $redirect = new Chrome_Redirection($this->_applicationContext);
        # $redirect->redirectToPreviousPage();
-	}
+    }
 }

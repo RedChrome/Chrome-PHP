@@ -30,72 +30,72 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Validator_Form_Element_Required extends Chrome_Validator
 {
-	protected $_option = null;
+    protected $_option = null;
 
-	public function __construct(Chrome_Form_Option_Element_Interface $option)
-	{
-		$this->_option = $option;
-	}
+    public function __construct(Chrome_Form_Option_Element_Interface $option)
+    {
+        $this->_option = $option;
+    }
 
-	protected function _validate()
-	{
-		if($this->_option instanceof Chrome_Form_Option_Element_Multiple) {
+    protected function _validate()
+    {
+        if($this->_option instanceof Chrome_Form_Option_Element_Multiple) {
 
-			if(!is_array($this->_data)) {
-				$this->_data = array($this->_data);
-			}
+            if(!is_array($this->_data)) {
+                $this->_data = array($this->_data);
+            }
 
-			// every available input must have been sent, but nothing more, nothing less!
-			if($this->_option->getIsRequired() === true) {
+            // every available input must have been sent, but nothing more, nothing less!
+            if($this->_option->getIsRequired() === true) {
 
-				if($this->_compareArraysToEquality($this->_option->getAllowedValues(), $this->_data) === false) {
-					return false;
-				}
-
-				return true;
-
-			} else {
-				if($this->_compareArraysToSubset($this->_option->getRequired(), $this->_data) === false) {
-					return false;
-				}
+                if($this->_compareArraysToEquality($this->_option->getAllowedValues(), $this->_data) === false) {
+                    return false;
+                }
 
                 return true;
-			}
 
-		} else {
+            } else {
+                if($this->_compareArraysToSubset($this->_option->getRequired(), $this->_data) === false) {
+                    return false;
+                }
 
-			if($this->_option->getIsRequired() === true and $this->_data === null) {
-				return false;
-			}
+                return true;
+            }
 
-			return true;
-		}
-	}
+        } else {
 
-	protected function _compareArraysToEquality($expectedArray, $sentArray)
-	{
-		if(($expectedArray == $sentArray) === false) {
+            if($this->_option->getIsRequired() === true and $this->_data === null) {
+                return false;
+            }
 
-			// compare the size of both arrays, to test they are equal
-			$expectedSize = sizeof($expectedArray);
-			$acutalSize = sizeof($sentArray);
+            return true;
+        }
+    }
 
-			if($expectedSize > $acutalSize) {
-				$this->_setError('Too few values sent!');
-				return false;
-			}
+    protected function _compareArraysToEquality($expectedArray, $sentArray)
+    {
+        if(($expectedArray == $sentArray) === false) {
 
-			if($acutalSize > $expectedSize) {
-				$this->_setError('Too much values sent!');
-				return false;
-			}
+            // compare the size of both arrays, to test they are equal
+            $expectedSize = sizeof($expectedArray);
+            $acutalSize = sizeof($sentArray);
 
-			$this->_setError('There are required values which were not sent!');
-			return false;
-		}
+            if($expectedSize > $acutalSize) {
+                $this->_setError('Too few values sent!');
+                return false;
+            }
 
-		return true;
-	}
+            if($acutalSize > $expectedSize) {
+                $this->_setError('Too much values sent!');
+                return false;
+            }
+
+            $this->_setError('There are required values which were not sent!');
+            return false;
+        }
+
+        return true;
+    }
 
     protected function _compareArraysToSubset($expectedArray, $sentArray)
     {

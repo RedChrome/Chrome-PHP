@@ -53,18 +53,18 @@ class Chrome_Controller_Factory implements Chrome_Controller_Factory_Interface
 
     public function loadControllerClass($file)
     {
-    	if( _isFile( BASEDIR . $file ) ) {
-		  require_once BASEDIR . $file;
-		} else {
+        if( _isFile( BASEDIR . $file ) ) {
+          require_once BASEDIR . $file;
+        } else {
 
-			try {
-				loadClass( $this->_class );
-			}
-			catch ( Chrome_Exception $e ) {
-				throw new Chrome_Exception( 'No file found and could no find the corresponding file!', 2003 );
-			}
-			Chrome_Log::log( 'Class "' . $this->_class .
-				'" were found by autoloader! But it should inserted into db to speed up website!', E_NOTICE );
-		}
+            try {
+                loadClass( $this->_class );
+            }
+            catch ( Chrome_Exception $e ) {
+                throw new Chrome_Exception( 'No file found and could no find the corresponding file!', 2003 );
+            }
+            Chrome_Log::log( 'Class "' . $this->_class .
+                '" were found by autoloader! But it should inserted into db to speed up website!', E_NOTICE );
+        }
     }
 }

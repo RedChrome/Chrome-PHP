@@ -28,27 +28,27 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Renderable_Template extends Chrome_Renderable_Composition
 {
-	protected $_template = null;
+    protected $_template = null;
 
     protected $_exceptionHandler = null;
 
-	public function __construct(Chrome_Template_Interface $template, Chrome_Exception_Handler_Interface $exceptionHandler)
-	{
-		$this->_template = $template;
+    public function __construct(Chrome_Template_Interface $template, Chrome_Exception_Handler_Interface $exceptionHandler)
+    {
+        $this->_template = $template;
         $this->_exceptionHandler = $exceptionHandler;
         // todo: set default exception handler
-		parent::__construct();
-	}
+        parent::__construct();
+    }
 
-	public function render()
-	{
-		$this->_template->assign('VIEW', $this->_renderables);
+    public function render()
+    {
+        $this->_template->assign('VIEW', $this->_renderables);
         $this->_template->assign('exceptionHandler', $this->_exceptionHandler);
-		return $this->_template->render();
-	}
+        return $this->_template->render();
+    }
 
-	public function getRequiredRenderables()
-	{
-		return null;
-	}
+    public function getRequiredRenderables()
+    {
+        return null;
+    }
 }

@@ -29,18 +29,18 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Require_Loader_Converter extends Chrome_Require_Loader_Abstract
 {
-	/**
-	 * Loads a class, if $class beginns with 'Chrome_Converter_Delegate_'
-	 *
-	 * @param string $class
-	 * @return bool true if class was found
-	 */
-	public function loadClass($class)
-	{
-	    if(preg_match('#Chrome_Converter_Delegate_(.{1,})#i', $class, $matches)) {
-			return PLUGIN.'Converter/'.lcfirst($matches[1]).'.php';
-		}
+    /**
+     * Loads a class, if $class beginns with 'Chrome_Converter_Delegate_'
+     *
+     * @param string $class
+     * @return bool true if class was found
+     */
+    public function loadClass($class)
+    {
+        if(preg_match('#Chrome_Converter_Delegate_(.{1,})#i', $class, $matches)) {
+            return PLUGIN.'Converter/'.lcfirst($matches[1]).'.php';
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

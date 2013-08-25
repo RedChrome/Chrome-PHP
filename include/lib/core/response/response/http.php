@@ -29,22 +29,22 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Response_Handler_HTTP implements Chrome_Response_Handler_Interface
 {
-	protected $_request = null;
+    protected $_request = null;
 
-	public function __construct(Chrome_Request_Handler_Interface $requestHandler)
-	{
-		$this->_request = $requestHandler;
-	}
+    public function __construct(Chrome_Request_Handler_Interface $requestHandler)
+    {
+        $this->_request = $requestHandler;
+    }
 
-	public function canHandle()
-	{
-	    return ($this->_request instanceof Chrome_Request_Handler_HTTP);
-	}
+    public function canHandle()
+    {
+        return ($this->_request instanceof Chrome_Request_Handler_HTTP);
+    }
 
-	public function getResponse()
-	{
-		return new Chrome_Response_HTTP($this->_request->getRequestData()->getSERVERData('HTTP_PROTOCOL'));
-	}
+    public function getResponse()
+    {
+        return new Chrome_Response_HTTP($this->_request->getRequestData()->getSERVERData('HTTP_PROTOCOL'));
+    }
 }
 
 /**
@@ -53,13 +53,13 @@ class Chrome_Response_Handler_HTTP implements Chrome_Response_Handler_Interface
  */
 interface Chrome_Response_HTTP_Interface extends Chrome_Response_Interface
 {
-	public function setStatus($status);
+    public function setStatus($status);
 
-	public function getStatus();
+    public function getStatus();
 
-	public function addHeader($name, $value);
+    public function addHeader($name, $value);
 
-	public function getHeader($name);
+    public function getHeader($name);
 }
 
 /**
@@ -68,86 +68,86 @@ interface Chrome_Response_HTTP_Interface extends Chrome_Response_Interface
  */
 class Chrome_Response_HTTP implements Chrome_Response_Interface
 {
-	protected $_status = '200 OK';
-	protected $_headers = array('Content-Type' => 'text/html');
-	protected $_body = '';
-	protected $_serverProtocol = '';
+    protected $_status = '200 OK';
+    protected $_headers = array('Content-Type' => 'text/html');
+    protected $_body = '';
+    protected $_serverProtocol = '';
 
-	public function __construct($serverProtocol)
-	{
-		$this->_serverProtocol = $serverProtocol;
-	}
+    public function __construct($serverProtocol)
+    {
+        $this->_serverProtocol = $serverProtocol;
+    }
 
-	public function __destruct()
-	{
-		$this->flush();
-	}
+    public function __destruct()
+    {
+        $this->flush();
+    }
 
-	public function write($string)
-	{
-		$this->_body .= $string;
-	}
+    public function write($string)
+    {
+        $this->_body .= $string;
+    }
 
-	public function flush()
-	{
-		$this->_printHeaders();
+    public function flush()
+    {
+        $this->_printHeaders();
 
-		echo $this->_body;
-		$this->_headers = null;
-		$this->_body = null;
-	}
+        echo $this->_body;
+        $this->_headers = null;
+        $this->_body = null;
+    }
 
-	public function clear()
-	{
-		$this->_body = null;
-	}
+    public function clear()
+    {
+        $this->_body = null;
+    }
 
-	protected function _printHeaders()
-	{
-		if(!headers_sent()) {
-			header($this->_serverProtocol.' '.$this->_status);
+    protected function _printHeaders()
+    {
+        if(!headers_sent()) {
+            header($this->_serverProtocol.' '.$this->_status);
 
-			if(empty($this->_headers)) {
-				return;
-			}
+            if(empty($this->_headers)) {
+                return;
+            }
 
-			foreach($this->_headers as $key => $value) {
-				header($key.': '.$value);
-			}
-		}
-	}
+            foreach($this->_headers as $key => $value) {
+                header($key.': '.$value);
+            }
+        }
+    }
 
-	public function addHeader($name, $value)
-	{
-		$this->_headers[$name] = $value;
-	}
+    public function addHeader($name, $value)
+    {
+        $this->_headers[$name] = $value;
+    }
 
-	public function setStatus($status)
-	{
-		$this->_status = $status;
-	}
+    public function setStatus($status)
+    {
+        $this->_status = $status;
+    }
 
-	public function getStatus()
-	{
-		return $this->_status;
-	}
+    public function getStatus()
+    {
+        return $this->_status;
+    }
 
-	public function getHeader($name)
-	{
-		if(isset($this->_headers[$name])) {
-			return $this->_headers[$name];
-		}
+    public function getHeader($name)
+    {
+        if(isset($this->_headers[$name])) {
+            return $this->_headers[$name];
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public function getBody()
-	{
-		return $this->_body;
-	}
+    public function getBody()
+    {
+        return $this->_body;
+    }
 
-	public function setBody($string)
-	{
-		$this->_body = $string;
-	}
+    public function setBody($string)
+    {
+        $this->_body = $string;
+    }
 }

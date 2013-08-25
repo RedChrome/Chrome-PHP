@@ -29,27 +29,27 @@ require_once 'default.php';
  */
 class Chrome_Form_Decorator_Checkbox_Yaml extends Chrome_Form_Decorator_Checkbox_Default
 {
-	private $_index = 0;
+    private $_index = 0;
 
-	public function render()
-	{
-		$return = '';
+    public function render()
+    {
+        $return = '';
 
-		$values = $this->_formElement->getOptions( Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_SELECTION_OPTIONS );
-		if( $this->_index === 0 ) {
-			$return .= '<div class="ym-fbox-check">';
-		}
+        $values = $this->_formElement->getOptions( Chrome_Form_Element_Checkbox::CHROME_FORM_ELEMENT_SELECTION_OPTIONS );
+        if( $this->_index === 0 ) {
+            $return .= '<div class="ym-fbox-check">';
+        }
 
-		$return .= '' . parent::render() . '';
+        $return .= '' . parent::render() . '';
 
-		++$this->_index;
+        ++$this->_index;
 
-		if( $this->_index === count( $values ) ) {
+        if( $this->_index === count( $values ) ) {
 
-			$return .= '</div>';
-			$this->_index = 0;
-		}
+            $return .= '</div>';
+            $this->_index = 0;
+        }
 
-		return $return;
-	}
+        return $return;
+    }
 }

@@ -28,13 +28,13 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Design_Theme_Json implements Chrome_Design_Theme_Interface
 {
-	public function initDesign(Chrome_Design_Interface $design)
-	{
-	    $html = new Chrome_Renderable_Composition_Array_Impl();
+    public function initDesign(Chrome_Design_Interface $design)
+    {
+        $html = new Chrome_Renderable_Composition_Array_Impl();
         $design->setRenderable($html);
 
-		$htmlList = new Chrome_Renderable_List();
-		$html->setRenderableList($htmlList);
-		$html->getRenderableList()->addRenderable($design->getController()->getView());
-	}
+        $htmlList = new Chrome_Renderable_List();
+        $html->setRenderableList($htmlList);
+        $html->getRenderableList()->addRenderable($design->getController()->getView());
+    }
 }

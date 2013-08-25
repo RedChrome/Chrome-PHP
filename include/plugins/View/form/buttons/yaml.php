@@ -32,14 +32,14 @@ class Chrome_Form_Decorator_Buttons_Yaml extends Chrome_Form_Decorator_Buttons_D
     protected $_int = 0;
 
     public function element( $name, array $options = array())
-	{
-	    $return = '';
+    {
+        $return = '';
 
-	    if($this->_int === 0) {
-	       $return .= '<div class="ym-fbox-button">';
-	    }
+        if($this->_int === 0) {
+           $return .= '<div class="ym-fbox-button">';
+        }
 
-		$return .= parent::element($name, $options);
+        $return .= parent::element($name, $options);
 
         $this->_int ++;
 
@@ -48,6 +48,6 @@ class Chrome_Form_Decorator_Buttons_Yaml extends Chrome_Form_Decorator_Buttons_D
         }
 
         return $return;
-	}
+    }
 
 }

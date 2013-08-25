@@ -9,8 +9,8 @@ class Chrome_View_Box_Test extends Chrome_View
         $this->setViewTitle( 'Right Box' );
     }
 
-	public function render()
-	{
+    public function render()
+    {
        return 'box....';
-	}
+    }
 }

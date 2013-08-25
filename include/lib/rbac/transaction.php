@@ -21,7 +21,7 @@
  */
 
 if(CHROME_PHP !== true)
-	die();
+    die();
 
 /**
  * @package    CHROME-PHP

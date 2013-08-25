@@ -43,21 +43,21 @@ class Chrome_Authentication_Chain_Wrapper extends Chrome_Authentication_Chain_Ab
 
     }
 
-	public function addChain(Chrome_Authentication_Chain_Interface $chain)
-	{
+    public function addChain(Chrome_Authentication_Chain_Interface $chain)
+    {
         if($this->_chain !== null) {
-		  $this->_chain = $this->_chain->addChain($chain);
+          $this->_chain = $this->_chain->addChain($chain);
         } else {
             $this->setChain($chain);
         }
-		return $this;
-	}
+        return $this;
+    }
 
     public function createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)
-	{
-		$this->_createAuthentication($resource);
+    {
+        $this->_createAuthentication($resource);
 
         if($this->_chain !== null)
-		  $this->_chain->createAuthentication($resource);
-	}
+          $this->_chain->createAuthentication($resource);
+    }
 }

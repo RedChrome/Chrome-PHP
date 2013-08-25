@@ -21,7 +21,7 @@
  */
 
 if(CHROME_PHP !== true)
-	die();
+    die();
 
 /**
  * Chrome_Validator_Nickname
@@ -41,20 +41,20 @@ class Chrome_Validator_Form_NicknameRegister extends Chrome_Validator
     protected $_options = array(self::CHROME_VALIDATOR_NICKNAME_MAX_CHARS => 50,
                                 self::CHROME_VALIDATOR_NICKNAME_MIN_CHARS => 3);
 
-	protected function _validate()
-	{
-		// nickname contains only a-z, 0-9 AND "-", "_"
-		if(preg_match('#[^a-z_\-0-9]#i', $this->_data)) {
-			$this->_setError(self::CHROME_VALIDATOR_NICKNAME_FORBIDDEN_CHARS);
-		}
+    protected function _validate()
+    {
+        // nickname contains only a-z, 0-9 AND "-", "_"
+        if(preg_match('#[^a-z_\-0-9]#i', $this->_data)) {
+            $this->_setError(self::CHROME_VALIDATOR_NICKNAME_FORBIDDEN_CHARS);
+        }
 
         $length = strlen($this->_data);
 
-		if($length < $this->_options[self::CHROME_VALIDATOR_NICKNAME_MIN_CHARS]) {
-			$this->_setError(self::CHROME_VALIDATOR_NICKNAME_TOO_SHORT);
-		}
-		if($length > $this->_options[self::CHROME_VALIDATOR_NICKNAME_MAX_CHARS]) {
-			$this->_setError(self::CHROME_VALIDATOR_NICKNAME_TOO_LONG);
-		}
-	}
+        if($length < $this->_options[self::CHROME_VALIDATOR_NICKNAME_MIN_CHARS]) {
+            $this->_setError(self::CHROME_VALIDATOR_NICKNAME_TOO_SHORT);
+        }
+        if($length > $this->_options[self::CHROME_VALIDATOR_NICKNAME_MAX_CHARS]) {
+            $this->_setError(self::CHROME_VALIDATOR_NICKNAME_TOO_LONG);
+        }
+    }
 }

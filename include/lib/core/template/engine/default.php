@@ -141,10 +141,10 @@ class Chrome_Template_Engine_Default extends Chrome_Template_Engine_Abstract
                     $args['1'] = preg_replace('#{:(.*?):}#u', '\'; $_TEMPLATE_RETURN .= $_TEMPLATE_VALUE[\'\\1\']; $_TEMPLATE_RETURN .= \'', $args['1']);
 
                     $return .= 'foreach($_TEMPLATE[\''.$args['0'].'\'] AS $_TEMPLATE_KEY => $_TEMPLATE_VALUE)
-				{
-							$_TEMPLATE_RETURN .= \''.$args['1'].'\';
+                {
+                            $_TEMPLATE_RETURN .= \''.$args['1'].'\';
 
-				}';
+                }';
                     break;
                 }
 
@@ -153,9 +153,9 @@ class Chrome_Template_Engine_Default extends Chrome_Template_Engine_Abstract
                 {
 
                     $return .= 'while('.$args['0'].')
-				{
-					'.$args['1'].'
-				}';
+                {
+                    '.$args['1'].'
+                }';
                     break;
                 }
 
@@ -164,8 +164,8 @@ class Chrome_Template_Engine_Default extends Chrome_Template_Engine_Abstract
                 {
 
                     $return .= 'for('.$args['0'].';'.$args['1'].';'.$args['2'].') {
-					'.$args['3'].'
-				}';
+                    '.$args['3'].'
+                }';
                     break;
                 }
 

@@ -29,14 +29,14 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Require_Loader_Validator extends Chrome_Require_Loader_Abstract
 {
-	public function loadClass($class)
-	{
-		// does the class contain 'Chrome_Validator_'?
-		if(preg_match('#Chrome_Validator_(.{1,})#i', $class, $matches))
-		{
-			return BASEDIR . 'plugins/Validate/' . strtolower(str_replace('_', '/', $matches[1])) . '.php';
-		}
+    public function loadClass($class)
+    {
+        // does the class contain 'Chrome_Validator_'?
+        if(preg_match('#Chrome_Validator_(.{1,})#i', $class, $matches))
+        {
+            return BASEDIR . 'plugins/Validate/' . strtolower(str_replace('_', '/', $matches[1])) . '.php';
+        }
 
-		return false;
-	}
+        return false;
+    }
 }

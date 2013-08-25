@@ -42,33 +42,33 @@ class Chrome_Cache_Null implements Chrome_Cache_Interface
         // do nothing
     }
 
-	public function set($key, $data)
-	{
+    public function set($key, $data)
+    {
         // do nothing
-	}
+    }
 
-	public function get($key)
-	{
+    public function get($key)
+    {
         // do nothing
-	}
+    }
 
-	public function has($key)
-	{
+    public function has($key)
+    {
         // do nothing
-	}
+    }
 
-	public function remove($key)
-	{
+    public function remove($key)
+    {
         // do nothing
-	}
+    }
 
-	public function flush()
-	{
+    public function flush()
+    {
         // do nothing
-	}
+    }
 
-	public function clear()
-	{
+    public function clear()
+    {
         // do nothing
-	}
+    }
 }

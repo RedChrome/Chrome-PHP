@@ -13,27 +13,26 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Form
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2013 16:59:41] --> $
  */
-
 if(CHROME_PHP !== true)
     die();
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
 class Chrome_Form_Element_Password extends Chrome_Form_Element_Abstract
 {
-    public function isCreated() {
+    public function isCreated()
+    {
         return true;
     }
 
-    public function create() {
+    public function create()
+    {
         return true;
     }
 }

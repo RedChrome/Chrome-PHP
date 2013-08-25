@@ -27,20 +27,20 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Interface
 {
-	public function exception(Exception $e)
-	{
-		if($e->handleException() === false) {
-			die();
-		}
+    public function exception(Exception $e)
+    {
+        if($e->handleException() === false) {
+            die();
+        }
 
-		echo '<h1>Uncaught Exception of type '.get_class($e).' </h1>';
-		echo '<h3>'.$e->getMessage().'</h3>';
-		echo '<h4>Caused by '.$e->getFile().'('.$e->getLine().')<br></h4>Call Stack<br>';
+        echo '<h1>Uncaught Exception of type '.get_class($e).' </h1>';
+        echo '<h3>'.$e->getMessage().'</h3>';
+        echo '<h4>Caused by '.$e->getFile().'('.$e->getLine().')<br></h4>Call Stack<br>';
 
         echo $this->_printExceptionTrace($e);
 
-		die();
-	}
+        die();
+    }
 
     protected function _printExceptionTrace(Exception $e)
     {
@@ -53,23 +53,23 @@ class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Inter
 
             $return .= sprintf('#%1$02d: ', $key+1);
 
-			if(isset($value['file'])) {
-			    if(isset($value['line'])) {
-				    $return .= $value['file'].'('.$value['line'].'): ';
-			    } else {
-			        $return .= $value['file'].'(): ';
-			    }
-			}
+            if(isset($value['file'])) {
+                if(isset($value['line'])) {
+                    $return .= $value['file'].'('.$value['line'].'): ';
+                } else {
+                    $return .= $value['file'].'(): ';
+                }
+            }
 
-			if(!isset($value['class'])) {
-				$return .= $value['function'].$this->_getArgs($value['args']);
+            if(!isset($value['class'])) {
+                $return .= $value['function'].$this->_getArgs($value['args']);
 
-			} else {
-				$return .= $value['class'].$value['type'].$value['function'];
+            } else {
+                $return .= $value['class'].$value['type'].$value['function'];
 
-				$return .= $this->_getArgs($value['args']);
-			}
-			$return .= '<br>'."\n";
+                $return .= $this->_getArgs($value['args']);
+            }
+            $return .= '<br>'."\n";
         }
 
         if($e instanceof Chrome_Exception) {
@@ -80,71 +80,71 @@ class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Inter
 
                 $return .= '<h4>...caused by '.$prev->getFile().'('.$prev->getLine().')</h4>';
 
-    			$return .= $this->_printExceptionTrace($prev);
+                $return .= $this->_printExceptionTrace($prev);
             }
         }
 
         return $return;
     }
 
-	protected function _getArgs($args)
-	{
-		if($args === null or $args === array()) {
-			return '(<i>void</i>)';
-		}
+    protected function _getArgs($args)
+    {
+        if($args === null or $args === array()) {
+            return '(<i>void</i>)';
+        }
 
-		$return = '(';
+        $return = '(';
 
-		foreach($args as $key => $value) {
-			if(is_int($key)) {
-				if($key == 0) {
-					$return .= ''.$this->_getValue($value);
-					continue;
-				}
-				$return .= ', '.$this->_getValue($value);
+        foreach($args as $key => $value) {
+            if(is_int($key)) {
+                if($key == 0) {
+                    $return .= ''.$this->_getValue($value);
+                    continue;
+                }
+                $return .= ', '.$this->_getValue($value);
 
-			} else {
-				$return .= ' '.$key.' => '.$this->_getValue($value);
-			}
-		}
-		$return .= ')';
-		return $return;
-	}
+            } else {
+                $return .= ' '.$key.' => '.$this->_getValue($value);
+            }
+        }
+        $return .= ')';
+        return $return;
+    }
 
-	protected function _getValue($value)
-	{
-		if(is_string($value)) {
-			if(strlen($value) > 117) {
-				return '"'.substr($value, 0, 117).'..."';
-			}
-			return '"'.$value.'"';
+    protected function _getValue($value)
+    {
+        if(is_string($value)) {
+            if(strlen($value) > 117) {
+                return '"'.substr($value, 0, 117).'..."';
+            }
+            return '"'.$value.'"';
 
-		} else
-			if(is_object($value)) {
-				return 'Object(<i>'.get_class($value).'</i>)';
-			} else
-				if(is_array($value)) {
+        } else
+            if(is_object($value)) {
+                return 'Object(<i>'.get_class($value).'</i>)';
+            } else
+                if(is_array($value)) {
 
-					$return = '<i>Array</i>( ';
+                    $return = '<i>Array</i>( ';
 
-					if(count($value) !== 0) {
-						foreach($value as $key => $value) {
-							$return .= $key.' => '.$this->_getValue($value).', ';
-						}
-					} else {
-						$return .= '<i>void</i>  ';
-					}
+                    if(count($value) !== 0) {
+                        foreach($value as $key => $value) {
+                            $return .= $key.' => '.$this->_getValue($value).', ';
+                        }
+                    } else {
+                        $return .= '<i>void</i>  ';
+                    }
 
-					return substr($return, 0, strlen($return) - 2).' )';
+                    return substr($return, 0, strlen($return) - 2).' )';
 
-				} else
-					if($value !== null) {
-					    if(is_bool($value)) {
-					       return ($value === true) ? 'true' : 'false';
-					    }
-						return gettype($value).'('.$value.')';
-					}
+                } else
+                    if($value !== null) {
+                        if(is_bool($value)) {
+                           return ($value === true) ? 'true' : 'false';
+                        }
+                        return gettype($value).'('.$value.')';
+                    }
 
-		return '<i>null</i>';
-	}
+        return '<i>null</i>';
+    }
 }

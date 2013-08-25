@@ -55,31 +55,31 @@ class Chrome_View_Form_Element_Buttons_Default extends Chrome_View_Form_Element_
     }
 
     /*
-	public function element( $name, array $options = array())
-	{
-		$buttons = $this->_formElement->getOptions( Chrome_Form_Element_Buttons::CHROME_FORM_ELEMENT_BUTTONS );
+    public function element( $name, array $options = array())
+    {
+        $buttons = $this->_formElement->getOptions( Chrome_Form_Element_Buttons::CHROME_FORM_ELEMENT_BUTTONS );
 
-		foreach( $buttons as $key => $button ) {
-			if( $key === $name or $button->getID() === $name ) {
-				return $button->getDecorator()->render();
-			}
-		}
+        foreach( $buttons as $key => $button ) {
+            if( $key === $name or $button->getID() === $name ) {
+                return $button->getDecorator()->render();
+            }
+        }
 
-	}
+    }
 
-	public function renderAll()
-	{
-		$return = '';
+    public function renderAll()
+    {
+        $return = '';
 
-		$buttons = $this->_formElement->getOptions( Chrome_Form_Element_Buttons::CHROME_FORM_ELEMENT_BUTTONS );
+        $buttons = $this->_formElement->getOptions( Chrome_Form_Element_Buttons::CHROME_FORM_ELEMENT_BUTTONS );
 
-		foreach( $buttons as $key => $button ) {
+        foreach( $buttons as $key => $button ) {
 
-			$return .= $button->getDecorator()->render();
+            $return .= $button->getDecorator()->render();
 
-		}
+        }
 
-		return $return;
-	}*/
+        return $return;
+    }*/
 
 }

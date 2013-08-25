@@ -21,7 +21,7 @@
  */
 
 if(CHROME_PHP !== true)
-	die();
+    die();
 
 require_once LIB.'core/authorisation/authorisation.php';
 

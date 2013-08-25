@@ -24,9 +24,9 @@ if(CHROME_PHP !== true)
     die();
 
 require_once 'form/interfaces.php';
+
 abstract class Chrome_View_Form_Renderer_Abstract implements Chrome_View_Form_Renderer_Interface
 {
-
     protected $_viewForm = null;
 
     public function setViewForm(Chrome_View_Form_Interface $viewForm)
@@ -61,7 +61,6 @@ abstract class Chrome_View_Form_Renderer_Abstract implements Chrome_View_Form_Re
 }
 abstract class Chrome_View_Form_Renderer_Template_Abstract extends Chrome_View_Form_Renderer_Abstract
 {
-
     protected $_formNamespace = 'FORM';
 
     protected $_template = null;
@@ -84,7 +83,6 @@ abstract class Chrome_View_Form_Renderer_Template_Abstract extends Chrome_View_F
 }
 class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option_Interface
 {
-
     protected $_storedData = null;
 
     protected $_label = null;
@@ -142,7 +140,6 @@ class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option
 }
 class Chrome_View_Form_Element_Option_Multiple extends Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option_Multiple_Interface
 {
-
     protected $_position = self::LABEL_POSITION_BEHIND;
 
     public function setLabelPosition($labelPosition)
@@ -157,7 +154,6 @@ class Chrome_View_Form_Element_Option_Multiple extends Chrome_View_Form_Element_
 }
 class Chrome_View_Form_Element_Option_Attachable extends Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option_Attachable_Interface
 {
-
     protected $_attachments = array();
 
     public function attach(Chrome_View_Form_Element_Interface $element)
@@ -186,7 +182,6 @@ class Chrome_View_Form_Element_Option_Attachable extends Chrome_View_Form_Elemen
  */
 abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
 {
-
     protected $_form = null;
 
     protected $_formElements = array();
@@ -492,9 +487,9 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
         return '';
     }
 }
+
 abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Form_Element_Abstract
 {
-
     protected $_current = null;
 
     protected $_count = 0;
@@ -560,27 +555,46 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
         {
             case Chrome_View_Form_Element_Option_Multiple_Interface::LABEL_POSITION_FRONT:
                 {
-                    return $this->_renderLabel() . ' ' . $this->_render() . "\n";
+                    $return = $this->_renderLabel() . ' ' . $this->_render() . PHP_EOL;
+                    break;
                 }
 
             case Chrome_View_Form_Element_Option_Multiple_Interface::LABEL_POSITION_BEHIND:
                 {
-                    return $this->_render() . ' ' . $this->_renderLabel() . "\n";
+                    $return = $this->_render() . ' ' . $this->_renderLabel() . PHP_EOL;
+                    break;
                 }
 
             case Chrome_View_Form_Element_Option_Multiple_Interface::LABEL_POSITION_NONE:
                 {
-                    return $this->_render();
+                    $return = $this->_render();
+                    break;
                 }
+            default: {
+                // maybe add this label position in this switch?
+                throw new Chrome_Exception('Unsupported label position');
+            }
         }
 
-        if($this->_option->getLabelPosition() === Chrome_View_Form_Element_Option_Multiple_Interface::LABEL_POSITION_FRONT)
-        {
-            return $this->_renderLabel() . ' ' . $this->_render() . "\n";
-        } else
-        {
-            return $this->_render() . ' ' . $this->_renderLabel() . "\n";
+        $return = $this->_renderErrors($return);
+
+        return $return;
+    }
+
+    protected function _renderErrors($returnString)
+    {
+        if($this->_formElement->getForm()->hasValidationErrors($this->_formElement->getID())) {
+
+            $errors = '<ul>';
+
+            foreach($this->_formElement->getForm()->getValidationErrors($this->_formElement->getID()) as $error) {
+                $errors .=  '<li>'.$error.'</li>';
+            }
+
+            $returnString = $errors.$returnString.'</ul>';
         }
+
+        return $returnString;
     }
 
     protected function _setTempFlag($key, $value)
@@ -697,6 +711,7 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
  */
 class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_Form_Element_Option_Factory_Interface
 {
+
     public function getElementOption(Chrome_Form_Element_Interface $formElement)
     {
         if($formElement instanceof Chrome_Form_Element_Multiple_Abstract or stristr(get_class($formElement), 'Chrome_Form_Element_Radio') !== false)
@@ -717,15 +732,14 @@ class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_For
 
     protected function _setDefaultOptions(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewElementOption)
     {
-        #$formElementOption = $formElement->getOption();
-
+        // formElementOption = $formElement->getOption();
         foreach(($formElement->getForm()->getAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE)) as $handler)
         {
-            if($handler->hasStored($formElement)) {
+            if($handler->hasStored($formElement))
+            {
                 $viewElementOption->setStoredData($handler->getStored($formElement));
             }
         }
-
 
         // @todo
         // setting defaults..

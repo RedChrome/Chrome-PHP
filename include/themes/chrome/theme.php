@@ -28,65 +28,65 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Design_Theme_Chrome implements Chrome_Design_Theme_Interface
 {
-	public function initDesign(Chrome_Design_Interface $design)
-	{
+    public function initDesign(Chrome_Design_Interface $design)
+    {
 
-		require_once LIB.'core/design/options/static.php';
-		require_once LIB.'core/design/loader/static.php';
+        require_once LIB.'core/design/options/static.php';
+        require_once LIB.'core/design/loader/static.php';
 
-		// @todo use another exception handler
+        // @todo use another exception handler
         $exceptionHandler = new Chrome_Exception_Handler_Default(true);
 
-		$template = new Chrome_Template();
-		$template->assignTemplate('design/chrome/design.tpl');
+        $template = new Chrome_Template();
+        $template->assignTemplate('design/chrome/design.tpl');
 
-		// this list need 7 renderables
-		$htmlList = new Chrome_Renderable_List();
-		$html = new Chrome_Renderable_Template($template, $exceptionHandler);
-		$html->setRenderableList($htmlList);
+        // this list need 7 renderables
+        $htmlList = new Chrome_Renderable_List();
+        $html = new Chrome_Renderable_Template($template, $exceptionHandler);
+        $html->setRenderableList($htmlList);
 
-		$design->setRenderable($html);
+        $design->setRenderable($html);
 
-		$head = new Chrome_Renderable_Composition_Impl();
-		$preBodyIn = new Chrome_Renderable_Composition_Impl();
-		$leftBox = new Chrome_Renderable_Composition_Impl();
-		$rightBox = new Chrome_Renderable_Composition_Impl();
-		$body = new Chrome_Renderable_Composition_Impl();
-		$footer = new Chrome_Renderable_Composition_Impl();
-		$postBodyIn = new Chrome_Renderable_Composition_Impl();
+        $head = new Chrome_Renderable_Composition_Impl();
+        $preBodyIn = new Chrome_Renderable_Composition_Impl();
+        $leftBox = new Chrome_Renderable_Composition_Impl();
+        $rightBox = new Chrome_Renderable_Composition_Impl();
+        $body = new Chrome_Renderable_Composition_Impl();
+        $footer = new Chrome_Renderable_Composition_Impl();
+        $postBodyIn = new Chrome_Renderable_Composition_Impl();
 
         $view = $design->getController()->getView();
         if($view instanceof Chrome_Renderable) {
-		  $body->getRenderableList()->addRenderable($view);
+          $body->getRenderableList()->addRenderable($view);
         }
 
-		$compositions = array(
-			'head' => $head,
-			'preBodyIn' => $preBodyIn,
-			'leftBox' => $leftBox,
-			'rightBox' => $rightBox,
-			'body' => $body,
-			'footer' => $footer,
-			'postBodyIn' => $postBodyIn);
+        $compositions = array(
+            'head' => $head,
+            'preBodyIn' => $preBodyIn,
+            'leftBox' => $leftBox,
+            'rightBox' => $rightBox,
+            'body' => $body,
+            'footer' => $footer,
+            'postBodyIn' => $postBodyIn);
 
-		$model = new Chrome_Model_Design_Loader_Static_Cache(new Chrome_Model_Design_Loader_Static($design->getApplicationContext()->getModelContext()));
+        $model = new Chrome_Model_Design_Loader_Static_Cache(new Chrome_Model_Design_Loader_Static($design->getApplicationContext()->getModelContext()));
         #$model  = new Chrome_Model_Design_Loader_Static($design->getApplicationContext()->getModelContext());
-		$controllerFactory = new Chrome_Controller_Factory($design->getApplicationContext());
+        $controllerFactory = new Chrome_Controller_Factory($design->getApplicationContext());
         $viewFactory = $design->getApplicationContext()->getViewContext()->getFactory();
 
-		$option = new Chrome_Renderable_Options_Static();
+        $option = new Chrome_Renderable_Options_Static();
 
-		// apply loaders
-		foreach($compositions as $key => $composition) {
+        // apply loaders
+        foreach($compositions as $key => $composition) {
 
-			$option->setPosition($key);
-			$composition->setOption($option);
+            $option->setPosition($key);
+            $composition->setOption($option);
 
-			$loader = new Chrome_Design_Loader_Static($controllerFactory, $viewFactory, $model, 'chrome');
-			$loader->addComposition($composition);
-			$loader->load();
+            $loader = new Chrome_Design_Loader_Static($controllerFactory, $viewFactory, $model, 'chrome');
+            $loader->addComposition($composition);
+            $loader->load();
 
-			$htmlList->addRenderable($composition);
-		}
-	}
+            $htmlList->addRenderable($composition);
+        }
+    }
 }

@@ -29,10 +29,10 @@ require_once 'default.php';
  */
 class Chrome_Form_Decorator_Backward_Yaml extends Chrome_Form_Decorator_Backward_Default
 {
-	public function render()
-	{
-		$this->setAttribute( 'class', 'ym-button' );
+    public function render()
+    {
+        $this->setAttribute( 'class', 'ym-button' );
 
-		return parent::render();
-	}
+        return parent::render();
+    }
 }

@@ -30,10 +30,10 @@ require_once 'default.php';
  */
 class Chrome_Form_Decorator_Radio_Yaml extends Chrome_Form_Decorator_Radio_Default
 {
-	public function render()
-	{
-		$return = '<div class="ym-fbox-check">' . parent::render().'</div>' . "\n";
+    public function render()
+    {
+        $return = '<div class="ym-fbox-check">' . parent::render().'</div>' . "\n";
 
-		return $return;
-	}
+        return $return;
+    }
 }

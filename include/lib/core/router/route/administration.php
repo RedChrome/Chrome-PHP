@@ -30,48 +30,48 @@ if( CHROME_PHP !== true ) die();
  */
 class Chrome_Route_Administration implements Chrome_Router_Route_Interface
 {
-	protected $_GET = array();
+    protected $_GET = array();
 
-	protected $_resource = null;
+    protected $_resource = null;
 
-	protected $_model = null;
+    protected $_model = null;
 
-	public function __construct( Chrome_Model_Abstract $model )
-	{
-		$this->_model = $model;
-	}
+    public function __construct( Chrome_Model_Abstract $model )
+    {
+        $this->_model = $model;
+    }
 
 
     // TODO: check whether user is allowed to access...
-	public function match( Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data )
-	{
-		$path = $url->getPath();
+    public function match( Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data )
+    {
+        $path = $url->getPath();
 
-		$dirs = explode( '/', $path, 3 );
+        $dirs = explode( '/', $path, 3 );
 
-		if( strtolower( $dirs[0] ) != 'admin' ) {
-			return false;
-		}
+        if( strtolower( $dirs[0] ) != 'admin' ) {
+            return false;
+        }
 
-		// go to admin overview
-		if( count( $dirs ) == 1 or ( $dirs[1] ) == '' and count( $dirs ) == 2 ) {
+        // go to admin overview
+        if( count( $dirs ) == 1 or ( $dirs[1] ) == '' and count( $dirs ) == 2 ) {
 
             if(!_isAllowed(new Chrome_Authorisation_Resource($this->_model->getDefaultResourceID(), ''))) {
                 return false;
             }
 
-			$this->_resource = new Chrome_Router_Resource_Administration();
-			$this->_resource->setFile( $this->_model->getDefaultResourceFile() );
-			$this->_resource->setClass( $this->_model->getDefaultResourceClass() );
+            $this->_resource = new Chrome_Router_Resource_Administration();
+            $this->_resource->setFile( $this->_model->getDefaultResourceFile() );
+            $this->_resource->setClass( $this->_model->getDefaultResourceClass() );
 
-			return true;
-		}
+            return true;
+        }
 
         if(!isset($dirs[2]) OR empty($dirs[2])) {
             $dirs[2] = '';
         }
 
-		// lookup whether the request resource exists
+        // lookup whether the request resource exists
         $result = $this->_model->getClassAndFile($dirs[1].'_'.$dirs[2]);
 
         if(!_isAllowed(new Chrome_Authorisation_Resource($result['resource_id'], $result['resource_transformation']))) {
@@ -95,32 +95,32 @@ class Chrome_Route_Administration implements Chrome_Router_Route_Interface
 
 
         return true;
-	}
+    }
 
 
-	public function getResource()
-	{
-		return $this->_resource;
-	}
+    public function getResource()
+    {
+        return $this->_resource;
+    }
 
-	public function url( Chrome_Router_Resource_Interface $resource )
-	{
-		die( 'Not implemented yet' );
-	}
+    public function url( Chrome_Router_Resource_Interface $resource )
+    {
+        die( 'Not implemented yet' );
+    }
 }
 
 class Chrome_Router_Resource_Administration extends Chrome_Router_Resource
 {
 
-	public function initClass( Chrome_Request_Handler_Interface $requestHandler )
-	{
+    public function initClass( Chrome_Request_Handler_Interface $requestHandler )
+    {
 
-		if( empty( $this->_class ) ) {
-			throw new Chrome_Exception( 'Cannot instantiate a class with an empty class name!' );
-		}
+        if( empty( $this->_class ) ) {
+            throw new Chrome_Exception( 'Cannot instantiate a class with an empty class name!' );
+        }
 
         throw new Chrome_Exception('Administration access is not finished');
-	}
+    }
 
 }
 
@@ -142,16 +142,16 @@ class Chrome_Model_Route_Administration extends Chrome_Model_Abstract
 
 class Chrome_Model_Route_Administration_DB extends Chrome_Model_Database_Abstract
 {
-	public function getClassAndFile( $name )
-	{
-		$dbInstance = $this->getDBInterface();
+    public function getClassAndFile( $name )
+    {
+        $dbInstance = $this->getDBInterface();
 
-		$dbInstance->select( array( 'class', 'file', 'access' ) )->from( 'route_adminstration' )->where( 'name = "' .
-			$dbInstance->escape( $name ) . '"' )->limit( 0, 1 )->execute();
+        $dbInstance->select( array( 'class', 'file', 'access' ) )->from( 'route_adminstration' )->where( 'name = "' .
+            $dbInstance->escape( $name ) . '"' )->limit( 0, 1 )->execute();
 
-		$result = $dbInstance->next();
+        $result = $dbInstance->next();
 
 
         return $result;
-	}
+    }
 }

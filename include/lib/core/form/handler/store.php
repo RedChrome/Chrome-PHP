@@ -15,20 +15,14 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version Git: <git_id>
  */
 if(CHROME_PHP !== true)
     die();
 
 /**
  *
- *
- *
  * USE THIS ONLY AS RECEIVING HANDLER!!
  *
- * @todo add methods to retrieve storage, storage option and whitelist!
  * @todo add a way to remove old data from storage! Currently all data is saved as long as the session exists and the data will never be deleted
  *
  * @package CHROME-PHP

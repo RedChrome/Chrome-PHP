@@ -20,7 +20,7 @@
  */
 
 if(CHROME_PHP !== true)
-	die();
+    die();
 
 /**
  * Chrome_Template_Extension_Abstract
@@ -34,9 +34,9 @@ if(CHROME_PHP !== true)
  */
 abstract class Chrome_Template_Extension_Abstract
 {
-	public static function _extension() {
+    public static function _extension() {
 
-	}
+    }
 }
 
 /**
@@ -51,63 +51,63 @@ abstract class Chrome_Template_Extension_Abstract
  */
 class Chrome_Template_Extension
 {
-	private static $_loadedExtensions = array();
-	private static $_extensionInstance = array();
+    private static $_loadedExtensions = array();
+    private static $_extensionInstance = array();
 
-	private static $_instance;
+    private static $_instance;
 
-	public function __construct() {
-		$this->_pluginName = 'Template';
-		$this->registerPlugin();
-		self::$_instance = $this;
-	}
+    public function __construct() {
+        $this->_pluginName = 'Template';
+        $this->registerPlugin();
+        self::$_instance = $this;
+    }
 
-	public static function getInstance() {
-		if(isset(self::$_instance))
-			return self::$_instance;
-	}
+    public static function getInstance() {
+        if(isset(self::$_instance))
+            return self::$_instance;
+    }
 
-	public function loadExtension($extension) {
+    public function loadExtension($extension) {
 
-		$extensionClass = ucfirst($extension);
+        $extensionClass = ucfirst($extension);
 
-		if(isset(self::$_loadedExtensions[$extensionClass]))
-			return;
+        if(isset(self::$_loadedExtensions[$extensionClass]))
+            return;
 
-		$this->_loadExtension($extension);
+        $this->_loadExtension($extension);
 
-		self::$_loadedExtensions[$extension] = true;
+        self::$_loadedExtensions[$extension] = true;
 
-		if(class_exists('Chrome_Template_Extension_'.$extensionClass, false))
-			$class = 'Chrome_Template_Extension_'.$extensionClass;
-		elseif(class_exists('Template_Extension_'.$extensionClass, false))
-			$class = 'Template_Extension_'.$extensionClass;
-		else
-			throw new Chrome_Exception('Could not find class (Chrome_)Template_Extension_'.$extensionClass.' in file plugins/Template/extensions/'.$extension.'.php in Chrome_Template_Extension::loadExtension()!');
+        if(class_exists('Chrome_Template_Extension_'.$extensionClass, false))
+            $class = 'Chrome_Template_Extension_'.$extensionClass;
+        elseif(class_exists('Template_Extension_'.$extensionClass, false))
+            $class = 'Template_Extension_'.$extensionClass;
+        else
+            throw new Chrome_Exception('Could not find class (Chrome_)Template_Extension_'.$extensionClass.' in file plugins/Template/extensions/'.$extension.'.php in Chrome_Template_Extension::loadExtension()!');
 
-		self::$_extensionInstance[$extension] = new $class();
+        self::$_extensionInstance[$extension] = new $class();
 
-		if(!is_subclass_of(self::$_extensionInstance[$extension], 'Chrome_Template_Extension_Abstract'))
-			throw new Chrome_Exception('Extension (Chrome_)Template_Extension_'.$extensionClass.' is not a child class of Chrome_Template_Engine_Abstract!');
-	}
+        if(!is_subclass_of(self::$_extensionInstance[$extension], 'Chrome_Template_Extension_Abstract'))
+            throw new Chrome_Exception('Extension (Chrome_)Template_Extension_'.$extensionClass.' is not a child class of Chrome_Template_Engine_Abstract!');
+    }
 
-	private function _loadExtension($extension) {
+    private function _loadExtension($extension) {
 
-		if(_isFile(Chrome_Plugin::PLUGIN_INCLUDE_PATH.$this->_pluginName.'/extensions/'.$extension.'.php')) {
-			require_once Chrome_Plugin::PLUGIN_INCLUDE_PATH.$this->_pluginName.'/extensions/'.$extension.'.php';
-		} else {
-			throw new Chrome_Exception('Cannot include extension("'.Chrome_Plugin::PLUGIN_INCLUDE_PATH.$this->_pluginName.'/extensions/'.$extension.'.php'.'"), file does not exist!');
-		}
-	}
+        if(_isFile(Chrome_Plugin::PLUGIN_INCLUDE_PATH.$this->_pluginName.'/extensions/'.$extension.'.php')) {
+            require_once Chrome_Plugin::PLUGIN_INCLUDE_PATH.$this->_pluginName.'/extensions/'.$extension.'.php';
+        } else {
+            throw new Chrome_Exception('Cannot include extension("'.Chrome_Plugin::PLUGIN_INCLUDE_PATH.$this->_pluginName.'/extensions/'.$extension.'.php'.'"), file does not exist!');
+        }
+    }
 
-	public function callMethod($extension, $method, $params)
-	{
-		if(!isset(self::$_loadedExtensions[$extension]))
-			self::loadExtension($extension);
+    public function callMethod($extension, $method, $params)
+    {
+        if(!isset(self::$_loadedExtensions[$extension]))
+            self::loadExtension($extension);
 
-		if(method_exists(self::$_extensionInstance[$extension], $method))
-			return call_user_func(array(self::$_extensionInstance[$extension],$method),$params);
-		else
-			throw new Chrome_Exception('Method("'.$method.'") in Class("(Chrome_)Template_Extension_'.ucfirst($extension).'") does not exist in Chrome_Template_Extension::callMethod()!');
-	}
+        if(method_exists(self::$_extensionInstance[$extension], $method))
+            return call_user_func(array(self::$_extensionInstance[$extension],$method),$params);
+        else
+            throw new Chrome_Exception('Method("'.$method.'") in Class("(Chrome_)Template_Extension_'.ucfirst($extension).'") does not exist in Chrome_Template_Extension::callMethod()!');
+    }
 }

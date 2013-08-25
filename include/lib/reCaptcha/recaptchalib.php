@@ -111,13 +111,13 @@ class ReCaptchaResponse {
   */
 function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $extra_params = array())
 {
-	if ($privkey == null || $privkey == '') {
-		return "To use reCAPTCHA you must get an API key from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>";
-	}
+    if ($privkey == null || $privkey == '') {
+        return "To use reCAPTCHA you must get an API key from <a href='https://www.google.com/recaptcha/admin/create'>https://www.google.com/recaptcha/admin/create</a>";
+    }
 
-	if ($remoteip == null || $remoteip == '') {
-		return "For security reasons, you must pass the remote ip to reCAPTCHA";
-	}
+    if ($remoteip == null || $remoteip == '') {
+        return "For security reasons, you must pass the remote ip to reCAPTCHA";
+    }
 
 
 
@@ -160,5 +160,5 @@ function recaptcha_check_answer ($privkey, $remoteip, $challenge, $response, $ex
  * @param string $appname The name of your application
  */
 function recaptcha_get_signup_url ($domain = null, $appname = null) {
-	return "https://www.google.com/recaptcha/admin/create?" .  _recaptcha_qsencode (array ('domains' => $domain, 'app' => $appname));
+    return "https://www.google.com/recaptcha/admin/create?" .  _recaptcha_qsencode (array ('domains' => $domain, 'app' => $appname));
 }

@@ -40,12 +40,12 @@ class Chrome_Require_Loader_Database extends Chrome_Require_Loader_Abstract
      * @param string $className
      * @return boolean true if file could get loaded
      */
-	public function loadClass($className)
-	{
-		if(preg_match('#Chrome_Database_([a-z1-9]{1,})_(.{1,})#i', $className, $matches)) {
+    public function loadClass($className)
+    {
+        if(preg_match('#Chrome_Database_([a-z1-9]{1,})_(.{1,})#i', $className, $matches)) {
 
             return LIB.'core/database/'.strtolower($matches[1]).'/'.strtolower($matches[2]).'.php';
-		}
-		return false;
-	}
+        }
+        return false;
+    }
 }

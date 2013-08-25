@@ -32,21 +32,21 @@ require_once 'http.php';
  */
 class Chrome_Response_Handler_JSON extends Chrome_Response_Handler_HTTP
 {
-	public function canHandle()
-	{
-	    if(parent::canHandle() === false) {
-	       return false;
-	    }
+    public function canHandle()
+    {
+        if(parent::canHandle() === false) {
+           return false;
+        }
 
         $requestData = $this->_request->getRequestData();
 
-		return (strtolower($requestData->getSERVERData('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest');
-	}
+        return (strtolower($requestData->getSERVERData('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest');
+    }
 
-	public function getResponse()
-	{
-		return new Chrome_Response_JSON($this->_request->getRequestData()->getSERVERData('HTTP_PROTOCOL'));
-	}
+    public function getResponse()
+    {
+        return new Chrome_Response_JSON($this->_request->getRequestData()->getSERVERData('HTTP_PROTOCOL'));
+    }
 }
 
 /**
@@ -59,25 +59,25 @@ class Chrome_Response_JSON extends Chrome_Response_HTTP
 
     protected $_headers = array('Content-Type' => 'application/json');
 
-	public function __destruct()
-	{
+    public function __destruct()
+    {
         if(count($this->_body) > 0) {
-		  $this->flush();
+          $this->flush();
         }
-	}
+    }
 
-	public function write($array)
-	{
-	    if(!is_array($array)) {
-	       $array = array($array);
-	    }
+    public function write($array)
+    {
+        if(!is_array($array)) {
+           $array = array($array);
+        }
 
-		$this->_body = array_merge($array, $this->_body);
-	}
+        $this->_body = array_merge($array, $this->_body);
+    }
 
-	public function flush()
-	{
-		$this->_printHeaders();
+    public function flush()
+    {
+        $this->_printHeaders();
 
         if(is_array($this->_body)) {
             echo json_encode($this->_body);
@@ -85,12 +85,12 @@ class Chrome_Response_JSON extends Chrome_Response_HTTP
             echo $this->_body;
         }
 
-		$this->_headers = array();
-		$this->_body = array();
-	}
+        $this->_headers = array();
+        $this->_body = array();
+    }
 
-	public function clear()
+    public function clear()
     {
-		$this->_body = array();
-	}
+        $this->_body = array();
+    }
 }

@@ -8,17 +8,17 @@ require_once 'include.php';
 
 class Chrome_Controller_Index extends Chrome_Controller_Module_Abstract
 {
-	protected function _initialize()
-	{
-	    $factory = $this->_applicationContext->getViewContext()->getFactory();
-		$this->_view = $factory->build('Chrome_View_Index', $this);
+    protected function _initialize()
+    {
+        $factory = $this->_applicationContext->getViewContext()->getFactory();
+        $this->_view = $factory->build('Chrome_View_Index', $this);
 
-		$this->_model = new Chrome_Model_HTTP_Index();
-	}
+        $this->_model = new Chrome_Model_HTTP_Index();
+    }
 
-	protected function _execute()
-	{
-		$this->_form = new Chrome_Form_Index($this->_applicationContext);
+    protected function _execute()
+    {
+        $this->_form = new Chrome_Form_Index($this->_applicationContext);
 
         $obj = new Chrome_Controller_User_Login_Page($this->_applicationContext);
         $obj->execute();
@@ -29,25 +29,25 @@ class Chrome_Controller_Index extends Chrome_Controller_Module_Abstract
 
         #$this->_view->addRenderable($view);
 
-		if( $this->_form->isCreated() ) {
+        if( $this->_form->isCreated() ) {
 
-			if( $this->_form->isSent() ) {
+            if( $this->_form->isSent() ) {
 
-				if( $this->_form->isValid() ) {
-					$this->_view->formIsValid();
-				} else {
-				    $this->_form->create();
-					$this->_view->formIsInvalid();
-				}
-			} else {
-				$this->_view->formNotSent();
-				$this->_form->create();
-			}
-		} else {
-			$this->_view->formNotCreated();
-			$this->_form->create();
-		}
+                if( $this->_form->isValid() ) {
+                    $this->_view->formIsValid();
+                } else {
+                    $this->_form->create();
+                    $this->_view->formIsInvalid();
+                }
+            } else {
+                $this->_view->formNotSent();
+                $this->_form->create();
+            }
+        } else {
+            $this->_view->formNotCreated();
+            $this->_form->create();
+        }
 
-		$this->_view->doSTH();
-	}
+        $this->_view->doSTH();
+    }
 }

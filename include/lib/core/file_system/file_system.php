@@ -41,59 +41,59 @@ require_once 'functions.php';
  */
 class Chrome_File_System
 {
-	/**
-	 * Instance of Chrome_File_System
-	 *
-	 * @var Chrome_File_System
-	 */
-	private static $_instance = null;
+    /**
+     * Instance of Chrome_File_System
+     *
+     * @var Chrome_File_System
+     */
+    private static $_instance = null;
 
-	/**
-	 *
-	 */
-	private $_instanceRead = null;
+    /**
+     *
+     */
+    private $_instanceRead = null;
 
-	/**
-	 * Chrome_File_System::__construct()
-	 *
-	 * @return void
-	 */
-	private function __construct()
-	{
-		Chrome_Model::setHandler('Chrome_File_System', $this);
-		$this->_instanceRead = Chrome_File_System_Read::getInstance();
-	}
+    /**
+     * Chrome_File_System::__construct()
+     *
+     * @return void
+     */
+    private function __construct()
+    {
+        Chrome_Model::setHandler('Chrome_File_System', $this);
+        $this->_instanceRead = Chrome_File_System_Read::getInstance();
+    }
 
-	/**
-	 * Chrome_File_System::getInstanceOf()
-	 *
-	 * @param mixed $class
-	 * @return object
-	 */
-	public function getInstanceOf($class)
-	{
-		switch(strtoupper($class)) {
+    /**
+     * Chrome_File_System::getInstanceOf()
+     *
+     * @param mixed $class
+     * @return object
+     */
+    public function getInstanceOf($class)
+    {
+        switch(strtoupper($class)) {
 
-			case 'READ':
-				return $this->_instanceRead;
+            case 'READ':
+                return $this->_instanceRead;
 
-			default:
-				throw new Chrome_Exception('Cannot find object of class("'.$class.'") in Chrome_File_System::getInstanceOf()!');
-		}
-	}
+            default:
+                throw new Chrome_Exception('Cannot find object of class("'.$class.'") in Chrome_File_System::getInstanceOf()!');
+        }
+    }
 
-	/**
-	 * Chrome_File_System::getInstance()
-	 *
-	 * @return Chrome_File_System instance
-	 */
-	public static function getInstance()
-	{
+    /**
+     * Chrome_File_System::getInstance()
+     *
+     * @return Chrome_File_System instance
+     */
+    public static function getInstance()
+    {
 
-		if(self::$_instance === null) {
-			self::$_instance = new self();
-		}
+        if(self::$_instance === null) {
+            self::$_instance = new self();
+        }
 
-		return self::$_instance;
-	}
+        return self::$_instance;
+    }
 }

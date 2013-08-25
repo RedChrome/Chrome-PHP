@@ -41,23 +41,23 @@ class Chrome_Captcha_Engine_Recaptcha implements Chrome_Captcha_Engine_Interface
 
     protected $_appContext = null;
 
-	public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Context_Application_Interface $appContext, array $backendOptions)
-	{
-	    $this->_appContext = $appContext;
+    public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Context_Application_Interface $appContext, array $backendOptions)
+    {
+        $this->_appContext = $appContext;
         $this->_reqData = $appContext->getRequestHandler()->getRequestData();
 
-		$backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME] = $name;
-		$this->_backendOptions = array_merge($this->_backendOptions, $backendOptions);
-	}
+        $backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME] = $name;
+        $this->_backendOptions = array_merge($this->_backendOptions, $backendOptions);
+    }
 
-	public function getOption($name)
-	{
-		return (isset($this->_backendOptions[$name])) ? $this->_backendOptions[$name] : null;
-	}
+    public function getOption($name)
+    {
+        return (isset($this->_backendOptions[$name])) ? $this->_backendOptions[$name] : null;
+    }
 
-	public function isValid($key)
-	{
-	    $recaptcha_challenge_field = $this->_reqData->getPOSTData('recaptcha_challenge_field');
+    public function isValid($key)
+    {
+        $recaptcha_challenge_field = $this->_reqData->getPOSTData('recaptcha_challenge_field');
         $recaptcha_response_field  = $this->_reqData->getPOSTData('recaptcha_response_field');
 
         if(empty($recaptcha_response_field) OR empty($recaptcha_challenge_field)) {
@@ -75,22 +75,22 @@ class Chrome_Captcha_Engine_Recaptcha implements Chrome_Captcha_Engine_Interface
         $this->_error = $resp->error;
 
         return $resp->is_valid;
-	}
+    }
 
-	public function create()
-	{
-	   // do nothing
-	}
+    public function create()
+    {
+       // do nothing
+    }
 
-	public function renew()
-	{
-		// do nothing
-	}
+    public function renew()
+    {
+        // do nothing
+    }
 
-	public function destroy()
-	{
-		// do nothing
-	}
+    public function destroy()
+    {
+        // do nothing
+    }
 
     public function getError() {
         return $this->_error;

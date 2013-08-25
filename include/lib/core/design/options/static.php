@@ -28,15 +28,15 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Renderable_Options_Static implements Chrome_Renderable_Options_Interface
 {
-	protected $_position = null;
+    protected $_position = null;
 
-	public function setPosition($pos)
-	{
-		$this->_position = $pos;
-	}
+    public function setPosition($pos)
+    {
+        $this->_position = $pos;
+    }
 
-	public function getPosition()
-	{
-		return $this->_position;
-	}
+    public function getPosition()
+    {
+        return $this->_position;
+    }
 }

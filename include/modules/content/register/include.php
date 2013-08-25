@@ -165,6 +165,12 @@ class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
                     // viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $lang->get('rules_agree'))));
                     break;
                 }
+
+            case 'email':
+                {
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('email' => $lang->get('email'))));
+                    break;
+                }
         }
 
         return $viewOption;

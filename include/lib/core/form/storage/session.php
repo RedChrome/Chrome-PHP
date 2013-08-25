@@ -15,78 +15,74 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Form
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    Git: <git_id>
- * @author     Alexander Book
  */
 
 if(CHROME_PHP !== true) die();
 
 class Chrome_Form_Storage_Session implements Chrome_Form_Storage_Interface
 {
-	const FORM_NAMESPACE = 'FORMS';
+    const FORM_NAMESPACE = 'FORMS';
 
-	protected $_session = null;
+    protected $_session = null;
 
-	protected $_formId = null;
+    protected $_formId = null;
 
-	public function __construct(Chrome_Session_Interface $session, $formId)
-	{
-		$this->_session = $session;
-		$this->_formId = $formId;
+    public function __construct(Chrome_Session_Interface $session, $formId)
+    {
+        $this->_session = $session;
+        $this->_formId = $formId;
 
-		if(!is_array($this->_session->get(self::FORM_NAMESPACE))) {
-			$this->_session->set(self::FORM_NAMESPACE, array());
-		}
-	}
+        if(!is_array($this->_session->get(self::FORM_NAMESPACE))) {
+            $this->_session->set(self::FORM_NAMESPACE, array());
+        }
+    }
 
-	public function get($elementName)
-	{
-		$content = $this->_session->get(self::FORM_NAMESPACE);
+    public function get($elementName)
+    {
+        $content = $this->_session->get(self::FORM_NAMESPACE);
 
-		if(!isset($content[$this->_formId])) {
-			return null;
-		}
+        if(!isset($content[$this->_formId])) {
+            return null;
+        }
 
-		if(!isset($content[$this->_formId][$elementName])) {
-			return null;
-		}
+        if(!isset($content[$this->_formId][$elementName])) {
+            return null;
+        }
 
-		return $content[$this->_formId][$elementName];
-	}
+        return $content[$this->_formId][$elementName];
+    }
 
-	public function set($elementName, $data)
-	{
-		$content = $this->_session->get(self::FORM_NAMESPACE);
+    public function set($elementName, $data)
+    {
+        $content = $this->_session->get(self::FORM_NAMESPACE);
 
-		$content[$this->_formId][$elementName] = $data;
+        $content[$this->_formId][$elementName] = $data;
 
         $this->_session->set(self::FORM_NAMESPACE, $content);
-	}
+    }
 
-	public function remove($elementName)
-	{
-		$content = $this->_session->get(self::FORM_NAMESPACE);
+    public function remove($elementName)
+    {
+        $content = $this->_session->get(self::FORM_NAMESPACE);
 
-		unset($content[$this->_formId][$elementName]);
+        unset($content[$this->_formId][$elementName]);
 
-		$this->_session->set(self::FORM_NAMESPACE, $content);
+        $this->_session->set(self::FORM_NAMESPACE, $content);
 
-	}
+    }
 
-	public function has($elementName)
-	{
-		$content = $this->_session->get(self::FORM_NAMESPACE);
+    public function has($elementName)
+    {
+        $content = $this->_session->get(self::FORM_NAMESPACE);
 
-		if(!isset($content[$this->_formId])) {
-			return false;
-		}
+        if(!isset($content[$this->_formId])) {
+            return false;
+        }
 
-		if(!isset($content[$this->_formId][$elementName])) {
-			return false;
-		}
+        if(!isset($content[$this->_formId][$elementName])) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

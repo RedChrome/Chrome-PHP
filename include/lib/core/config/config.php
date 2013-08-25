@@ -34,14 +34,14 @@ require_once 'model.php';
  */
 interface Chrome_Config_Interface
 {
-	/**
-	 * Returns the configuration for the subclass $subclass
-	 *
-	 * @param string $subclass similar to a namespace
-	 * @param string $name [optional] if not set, then the whole subclass will be returned (as array)
-	 * @return mixed
-	 */
-	public function getConfig($subclass, $name = '');
+    /**
+     * Returns the configuration for the subclass $subclass
+     *
+     * @param string $subclass similar to a namespace
+     * @param string $name [optional] if not set, then the whole subclass will be returned (as array)
+     * @return mixed
+     */
+    public function getConfig($subclass, $name = '');
 }
 
 
@@ -51,70 +51,70 @@ interface Chrome_Config_Interface
  */
 class Chrome_Config implements Chrome_Config_Interface
 {
-	/**
-	 * Contains all configurations
-	 * Structure:
-	 * 		array('subclass' => array('name1' => value1, 'name2' => value2));
-	 *
-	 *
-	 * @var array
-	 */
-	private $_config = null;
+    /**
+     * Contains all configurations
+     * Structure:
+     * 		array('subclass' => array('name1' => value1, 'name2' => value2));
+     *
+     *
+     * @var array
+     */
+    private $_config = null;
 
-	/**
-	 * Contains instance of model class
-	 *
-	 * @var Chrome_Model_Abstract
-	 */
-	private $_model = null;
+    /**
+     * Contains instance of model class
+     *
+     * @var Chrome_Model_Abstract
+     */
+    private $_model = null;
 
-	/**
-	 * Chrome_Config::__construct()
-	 *
-	 * loads config
-	 *
-	 */
-	public function __construct(Chrome_Model_Interface $model)
-	{
-		$this->_model = $model;
+    /**
+     * Chrome_Config::__construct()
+     *
+     * loads config
+     *
+     */
+    public function __construct(Chrome_Model_Interface $model)
+    {
+        $this->_model = $model;
 
-		$this->_loadConfig();
-	}
+        $this->_loadConfig();
+    }
 
-	private function _loadConfig()
-	{
-		$this->_config = $this->_model->loadConfig();
-	}
+    private function _loadConfig()
+    {
+        $this->_config = $this->_model->loadConfig();
+    }
 
-	/**
-	 * Chrome_Config::getModel
-	 *
-	 * Retuns a model
-	 *
-	 * @returns Chrome_Model_Abstract
-	 */
-	public function getModel()
-	{
-		return $this->_model;
-	}
+    /**
+     * Chrome_Config::getModel
+     *
+     * Retuns a model
+     *
+     * @returns Chrome_Model_Abstract
+     */
+    public function getModel()
+    {
+        return $this->_model;
+    }
 
-	/**
-	 * Chrome_Config::_getConfig()
-	 *
-	 * @param string $subclass subclass
-	 * @param string $name name
-	 * @return mixed array if $name = '', string else
-	 */
-	public function getConfig($subclass, $name = '')
-	{
-		if(!isset($this->_config[$subclass]) or ($name != '' and !isset($this->_config[$subclass][$name]))) {
-			throw new Chrome_Exception('Wrong input given in getConfig("'.$subclass.'", "'.$name.'")! Config-Data doesn\'t exist!');
-		}
+    /**
+     * Chrome_Config::_getConfig()
+     *
+     * @param string $subclass subclass
+     * @param string $name name
+     * @return mixed array if $name = '', string else
+     */
+    public function getConfig($subclass, $name = '')
+    {
+        if(!isset($this->_config[$subclass]) or ($name != '' and !isset($this->_config[$subclass][$name]))) {
+            throw new Chrome_Exception('Wrong input given in getConfig("'.$subclass.'", "'.$name.'")! Config-Data doesn\'t exist!');
+        }
 
-		if($name != '') {
-			return $this->_config[$subclass][$name];
-		} else {
-			return $this->_config[$subclass];
-		}
-	}
+        if($name != '') {
+            return $this->_config[$subclass][$name];
+        } else {
+            return $this->_config[$subclass];
+        }
+    }
 }

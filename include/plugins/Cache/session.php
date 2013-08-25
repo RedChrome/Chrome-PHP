@@ -13,66 +13,133 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Cache
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 01:49:18] --> $
  */
 
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Cache
+ */
 interface Chrome_Cache_Option_Session_Interface extends Chrome_Cache_Option_Interface
 {
-    // @todo finish this interface
+    /**
+     * Sets the namespace for session. must be non-empty
+     *
+     * @param string $namespace
+     */
+    public function setNamespace($namespace);
+
+    /**
+     * @return string
+     */
+    public function getNamespace();
+
+    /**
+     * Sets the session instance
+     *
+     * @param Chrome_Session_Interface $session
+     */
+    public function setSession(Chrome_Session_Interface $session);
+
+    /**
+     * Returns the session instance
+     *
+     * @return Chrome_Session_Interface
+     */
+    public function getSession();
 }
 
 /**
- *
  * @package CHROME-PHP
- * @subpackag Chrome.Cache
+ * @subpackage Chrome.Cache
+ */
+class Chrome_Cache_Option_Session implements Chrome_Cache_Option_Session_Interface
+{
+    protected $_namespace = '';
+
+    protected $_session = null;
+
+    public function __construct(Chrome_Session_Interface $session, $namespace)
+    {
+        $this->setSession($session);
+        $this->setNamespace($namespace);
+    }
+
+    public function setNamespace($namespace)
+    {
+        if(!is_string($namespace) and !empty($namespace))
+        {
+            throw new Chrome_InvalidArgumentException('Argument $namespace must be a non-empty string');
+        }
+
+        $this->_namespace = $namespace;
+    }
+
+    public function getNamespace()
+    {
+        return $this->_namespace;
+    }
+
+    public function setSession(Chrome_Session_Interface $session)
+    {
+        $this->_session = $session;
+    }
+
+    public function getSession()
+    {
+        return $this->_session;
+    }
+}
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Cache
  */
 class Chrome_Cache_Session implements Chrome_Cache_Interface
 {
-	protected $_session;
+    protected $_session;
 
-	protected $_namespace = null;
+    protected $_namespace = null;
 
-	public function __construct(Chrome_Session_Interface $session, $namespace)
-	{
-		$this->_namespace = $namespace;
-		$this->_session = $session;
-		$this->_session[$namespace] = array();
-	}
+    public function __construct(Chrome_Cache_Option_Session_Interface $option)
+    {
+        $this->_namespace = $option->getNamespace();
+        $this->_session = $option->getSession();
+        $this->_session[$namespace] = array();
+    }
 
-	public function clear()
-	{
-		unset($this->_session[$this->_namespace]);
-	}
+    public function clear()
+    {
+        unset($this->_session[$this->_namespace]);
+    }
 
-	public function set($key, $data)
-	{
-		$this->_session[$this->_namespace] = array_merge($this->_session[$this->_namespace], array($key => $data));
-	}
+    public function set($key, $data)
+    {
+        $this->_session[$this->_namespace] = array_merge($this->_session[$this->_namespace], array($key => $data));
+    }
 
-	public function get($key)
-	{
-		$cache = $this->_session[$this->_namespace];
+    public function get($key)
+    {
+        $cache = $this->_session[$this->_namespace];
 
-		return (isset($cache[$key])) ? $cache[$key] : null;
-	}
+        return (isset($cache[$key])) ? $cache[$key] : null;
+    }
 
-	public function flush()
-	{
-		// do nothing
-	}
+    public function flush()
+    {
+        // do nothing, every cache entry is saved instantly
+    }
 
-	public function has($name)
-	{
-		$cache =  $this->_session[$this->_namespace];
+    public function has($key)
+    {
+        $cache = $this->_session[$this->_namespace];
 
-		return (isset($cache[$key]));
-	}
+        return (isset($cache[$key]));
+    }
 
-    public function remove($name) {
+    public function remove($name)
+    {
         $cache = $this->_session[$this->_namespace];
 
         unset($cache[$name]);

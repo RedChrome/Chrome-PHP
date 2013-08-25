@@ -4,23 +4,23 @@ if( CHROME_PHP !== true ) die();
 
 class Chrome_Form_Index extends Chrome_Form_Abstract
 {
-	protected function _init()
-	{
-		$this->_id = 'Index';
-		$this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
-		$this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_GET );
+    protected function _init()
+    {
+        $this->_id = 'Index';
+        $this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
+        $this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_GET );
         // this sets $this->_id to 'Index'
-		$this->setAttribute( self::ATTRIBUTE_ID, 'Index' );
-		$this->setAttribute(self::ATTRIBUTE_ACTION, '/');
+        $this->setAttribute( self::ATTRIBUTE_ID, 'Index' );
+        $this->setAttribute(self::ATTRIBUTE_ACTION, '/');
 
-		$lengthValidator = new Chrome_Validator_Form_Length();
-		$lengthValidator->setOptions( array(
+        $lengthValidator = new Chrome_Validator_Form_Length();
+        $lengthValidator->setOptions( array(
             Chrome_Validator_Form_Length::CHROME_VALIDATOR_FORM_LENGTH_MAX => 35,
             Chrome_Validator_Form_Length::CHROME_VALIDATOR_FORM_LENGTH_MIN => 1
                                             ) );
 
-		$emptyValidator = new Chrome_Validator_Form_Empty();
-		//$textValidators = array( $emptyValidator, $lengthValidator );
+        $emptyValidator = new Chrome_Validator_Form_Empty();
+        //$textValidators = array( $emptyValidator, $lengthValidator );
 
         $textValidators = new Chrome_Validator_Composition_And();
         $textValidators->addValidators(array($emptyValidator, $lengthValidator ));
@@ -104,5 +104,5 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $storageOption->setStoreInvalidData(false);
 
         $this->setAttribute(self::ATTRIBUTE_STORE, new Chrome_Form_Handler_Store($storage, $storageOption, array('radio')));
-	}
+    }
 }

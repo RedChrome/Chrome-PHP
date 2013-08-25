@@ -23,7 +23,7 @@ die('Not updated Chrome_Validator_Email!');
  */
 
 if(CHROME_PHP !== true)
-	die();
+    die();
 
 /**
  * Chrome_Validator_Email
@@ -33,41 +33,41 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Validator_Email extends Chrome_Validator
 {
-	private $_email;
-	private $_email_2;
-	private $_inUse;
+    private $_email;
+    private $_email_2;
+    private $_inUse;
 
-	public function __construct($email, $email_2 = null, $inUse = true) {
-		$this->_email = $email;
-		$this->_email_2 = ($email_2 === null) ? $email : $email_2;
-		$this->_inUse = ($inUse === true) ? true : false;
-		
-	}
+    public function __construct($email, $email_2 = null, $inUse = true) {
+        $this->_email = $email;
+        $this->_email_2 = ($email_2 === null) ? $email : $email_2;
+        $this->_inUse = ($inUse === true) ? true : false;
+        
+    }
 
-	protected function _validate() {
+    protected function _validate() {
 
-		$len = strlen($this->_email);
+        $len = strlen($this->_email);
 
-		if($len < 10) {
-			$this->_setError('E-Mail too short');
-		}
+        if($len < 10) {
+            $this->_setError('E-Mail too short');
+        }
 
-		if($len > 100) {
-			$this->_setError('E-Mail too long');
-		}
+        if($len > 100) {
+            $this->_setError('E-Mail too long');
+        }
 
-		$regex = '/^([a-z0-9])(([-a-z0-9._])*([a-z0-9]))*\@([a-z0-9])(([a-z0-9-])*([a-z0-9]))+(\.([a-z0-9])([-a-z0-9_-])?([a-z0-9])+)+$/i';
-		if(!preg_match($regex, $this->_email)) {
-			$this->_setError('No valid E-Mail');
-		}
-		if($this->_inUse === true) {
-			if(Chrome_User_EMail::isEmail($this->_email) === true) {
-				$this->_setError('E-Mail already in use!');
-			}
-		}
+        $regex = '/^([a-z0-9])(([-a-z0-9._])*([a-z0-9]))*\@([a-z0-9])(([a-z0-9-])*([a-z0-9]))+(\.([a-z0-9])([-a-z0-9_-])?([a-z0-9])+)+$/i';
+        if(!preg_match($regex, $this->_email)) {
+            $this->_setError('No valid E-Mail');
+        }
+        if($this->_inUse === true) {
+            if(Chrome_User_EMail::isEmail($this->_email) === true) {
+                $this->_setError('E-Mail already in use!');
+            }
+        }
 
-		if($this->_email !== $this->_email_2) {
-			$this->_setError('The E-Mails aren\'t equal!');
-		}
-	}
+        if($this->_email !== $this->_email_2) {
+            $this->_setError('The E-Mails aren\'t equal!');
+        }
+    }
 }

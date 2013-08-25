@@ -21,7 +21,7 @@
  */
 
 if(CHROME_PHP !== true)
-	die();
+    die();
 
 /**
  * Chrome_Validator_Password
@@ -38,7 +38,7 @@ class Chrome_Validator_Form_Password extends Chrome_Validator
           CHROME_VALIDATOR_PASSWORD_TOO_LONG  = 'PASSWORDTOOLONG',
           CHROME_VALIDATOR_PASSWORDS_NOT_EQUAL = 'PASSWORDSNOTEQUAL';
 
-	protected $_password1 = null;
+    protected $_password1 = null;
     protected $_password2 = null;
 
     protected $_options = array(self::CHROME_VALIDATOR_PASSWORD_MAX_LENGTH => 32, self::CHROME_VALIDATOR_PASSWORD_MIN_LENGTH => 5);
@@ -51,8 +51,8 @@ class Chrome_Validator_Form_Password extends Chrome_Validator
         }
     }
 
-	protected function _validate()
-	{
+    protected function _validate()
+    {
         if($this->_password2 === null) {
             return;
         }
@@ -60,21 +60,21 @@ class Chrome_Validator_Form_Password extends Chrome_Validator
         $strlenPw1 = strlen($this->_password1);
 
         // pw too short
-		if($strlenPw1 < $this->_options[self::CHROME_VALIDATOR_PASSWORD_MIN_LENGTH]) {
-			$this->_setError(self::CHROME_VALIDATOR_PASSWORD_TOO_SHORT);
-		}
+        if($strlenPw1 < $this->_options[self::CHROME_VALIDATOR_PASSWORD_MIN_LENGTH]) {
+            $this->_setError(self::CHROME_VALIDATOR_PASSWORD_TOO_SHORT);
+        }
 
         // pw too long
-		if($strlenPw1 > $this->_options[self::CHROME_VALIDATOR_PASSWORD_MAX_LENGTH]) {
-			$this->_setError(self::CHROME_VALIDATOR_PASSWORD_TOO_LONG);
-		}
+        if($strlenPw1 > $this->_options[self::CHROME_VALIDATOR_PASSWORD_MAX_LENGTH]) {
+            $this->_setError(self::CHROME_VALIDATOR_PASSWORD_TOO_LONG);
+        }
 
         // pws not equal
-		if($this->_password1 !== $this->_password2) {
-			$this->_setError(self::CHROME_VALIDATOR_PASSWORDS_NOT_EQUAL);
-		}
+        if($this->_password1 !== $this->_password2) {
+            $this->_setError(self::CHROME_VALIDATOR_PASSWORDS_NOT_EQUAL);
+        }
 
-		// TODO: maybe add blacklist AND check pw with crack ext?
-		return;
-	}
+        // TODO: maybe add blacklist AND check pw with crack ext?
+        return;
+    }
 }

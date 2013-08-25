@@ -30,60 +30,60 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Cache_Files implements Chrome_Cache_Interface
 {
-	protected $_dir = null;
+    protected $_dir = null;
 
-	protected $_extension = null;
+    protected $_extension = null;
 
-	public function __construct($dir, $extension = '.cache')
-	{
-		$this->_dir = CACHE.$dir;
+    public function __construct($dir, $extension = '.cache')
+    {
+        $this->_dir = CACHE.$dir;
 
-		if($dir{strlen($dir) - 1} !== '/') {
-			$this->_dir .= '/';
-		}
+        if($dir{strlen($dir) - 1} !== '/') {
+            $this->_dir .= '/';
+        }
 
-		if(!_isDir($this->_dir)) {
-			Chrome_Dir::createDir($this->_dir);
-		}
+        if(!_isDir($this->_dir)) {
+            Chrome_Dir::createDir($this->_dir);
+        }
 
-		if(strstr($extension, '.') === false) {
-			$extension = '.'.$extension;
-		}
+        if(strstr($extension, '.') === false) {
+            $extension = '.'.$extension;
+        }
 
-		$this->_extension = $extension;
-	}
+        $this->_extension = $extension;
+    }
 
-	public function has($file)
-	{
-		return _isFile($this->_dir.$file.$this->_extension);
-	}
+    public function has($file)
+    {
+        return _isFile($this->_dir.$file.$this->_extension);
+    }
 
-	public function get($file)
-	{
-		if($this->isCached($file)) {
-			return file_get_contents($this->_dir.$file.$this->_extension);
-		} else {
-			return null;
-		}
-	}
+    public function get($file)
+    {
+        if($this->isCached($file)) {
+            return file_get_contents($this->_dir.$file.$this->_extension);
+        } else {
+            return null;
+        }
+    }
 
-	public function remove($file)
-	{
-		return _rmFile($this->_dir.$file.$this->_extension);
-	}
+    public function remove($file)
+    {
+        return _rmFile($this->_dir.$file.$this->_extension);
+    }
 
-	public function clear()
-	{
-		return _rmDir($this->_dir);
-	}
+    public function clear()
+    {
+        return _rmDir($this->_dir);
+    }
 
-	public function set($file, $content)
-	{
-		return file_put_contents($this->_dir.$file.$this->_extension, $content);
-	}
+    public function set($file, $content)
+    {
+        return file_put_contents($this->_dir.$file.$this->_extension, $content);
+    }
 
-	public function flush()
-	{
-		// do nothing
-	}
+    public function flush()
+    {
+        // do nothing
+    }
 }

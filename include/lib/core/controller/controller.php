@@ -13,24 +13,26 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Controller
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:55:42] --> $
- * @author     Alexander Book
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:55:42] --> $
+ * @author Alexander Book
  */
-
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
 require_once 'factory.php';
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
 interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Interface
 {
+
     /**
      * execute()
      *
@@ -39,6 +41,7 @@ interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Inter
     public function execute();
 
     /**
+     *
      * @param Chrome_Context_Application_Interface $appContext
      * @return Chrome_Controller_Interface
      */
@@ -61,11 +64,13 @@ interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Inter
 }
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
 abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
 {
+
     /**
      * Contains the context to the current application
      *
@@ -78,7 +83,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      * <code>
      * ...
      * catch(Chrome_Exception $e) {
-     *      $this->_exceptionHandler->exception($e);
+     * $this->_exceptionHandler->exception($e);
      * }
      * </code>
      *
@@ -126,6 +131,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
     protected $_form = null;
 
     /**
+     *
      * @var Chrome_Request_Handler_Interface
      */
     protected $_requestHandler = null;
@@ -171,18 +177,24 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      */
     protected function _require()
     {
-        if(isset($this->_require['file'])) {
-            foreach($this->_require['file'] as $file) {
-                if(_isFile($file)) {
+        if(isset($this->_require['file']))
+        {
+            foreach($this->_require['file'] as $file)
+            {
+                if(_isFile($file))
+                {
                     require_once $file;
-                } else {
+                } else
+                {
                     throw new Chrome_Exception('Could not require file ' . $file . '! The file does not exist in Chrome_Controller_Abstract::_require()!');
                 }
             }
         }
 
-        if(isset($this->_require['class'])) {
-            foreach($this->_require['class'] as $class) {
+        if(isset($this->_require['class']))
+        {
+            foreach($this->_require['class'] as $class)
+            {
                 loadClass($class);
             }
         }
@@ -195,24 +207,30 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      */
     protected function _setFilter()
     {
-        if(!is_array($this->_filter)) {
+        if(!is_array($this->_filter))
+        {
             return;
         }
 
         $registry = Chrome_Registry::getInstance();
 
-        foreach($this->_filter as $filterChain => $filters) {
-            if(is_string($filterChain)) {
+        foreach($this->_filter as $filterChain => $filters)
+        {
+            if(is_string($filterChain))
+            {
                 $_filterChain = $registry->get('Chrome_Filter_Chain', 'Chrome_Filter_Chain_' . ucfirst($filterChain));
-            } elseif($filterChain instanceof Chrome_Filter_Chain_Abstract) {
+            } elseif($filterChain instanceof Chrome_Filter_Chain_Abstract)
+            {
                 $_filterChain = $filterChain;
             }
 
-            if(!($_filterChain instanceof Chrome_Filter_Chain_Abstract)) {
+            if(!($_filterChain instanceof Chrome_Filter_Chain_Abstract))
+            {
                 throw new Chrome_Exception('Cannot add a filter to a non-existing filter chain in Chrome_Controller_Abstract::_filter()!');
             }
 
-            foreach($filters as $filter) {
+            foreach($filters as $filter)
+            {
                 $_filterChain->addFilter($filter);
             }
         }
@@ -228,14 +246,15 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         return $this->_form;
     }
 
-    public function getView() {
+    public function getView()
+    {
         return $this->_view;
     }
 
     protected function _setRequestHandler(Chrome_Request_Handler_Interface $obj)
     {
         $this->_requestHandler = $obj;
-        $this->_requestData    = $obj->getRequestData();
+        $this->_requestData = $obj->getRequestData();
     }
 
     public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)
@@ -248,16 +267,13 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         return $this->_exceptionHandler;
     }
 
-    // todo remove this method
-    final public function addViews(Chrome_Design_Renderable_Container_List_Interface $list) {
-        // do nothing
-    }
-
-    public function setApplicationContext(Chrome_Context_Application_Interface $appContext) {
+    public function setApplicationContext(Chrome_Context_Application_Interface $appContext)
+    {
         $this->_applicationContext = $appContext;
     }
 
-    public function getApplicationContext() {
+    public function getApplicationContext()
+    {
         return $this->_applicationContext;
     }
 }
