@@ -1,11 +1,6 @@
 <?php
 
-;
-
-require_once 'Tests/include/lib/core/database/connection/connectionMysqlTest.php';
-
-require_once LIB.'core/database/database.php';
-require_once LIB.'core/database/connection/db2.php';
+require_once 'connectionMysqlTest.php';
 
 class DatabaseConnectionDB2Test extends DatabaseConnectionMysqlTest
 {

@@ -64,7 +64,19 @@ class Chrome_TestSetup
 
         require_once LIB.'core/database/database.php';
 
-        $dbRegistry = new Chrome_Database_Registry_Connection();
+		// configure default database connection
+		try {
+			$defaultConnectionClass = 'Chrome_Database_Connection_'.ucfirst(CHROME_DATABASE);
+			$defaultConnection = new $defaultConnectionClass();
+			$defaultConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
+			$defaultConnection->connect();
+		}
+		catch (Exception $e) {
+			die(var_dump($e));
+		}
+
+		$dbRegistry = new Chrome_Database_Registry_Connection();
+		$dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
 
         $databaseFactory = new Chrome_Database_Factory($dbRegistry, new Chrome_Database_Registry_Statement());
         $databaseFactory->setLogger(new Chrome_Logger_Database());
@@ -73,12 +85,6 @@ class Chrome_TestSetup
 
             // configure default database connection
             // remove "#" in those lines, to connect to db at once. Now it will only connect if needed
-            $defaultConnectionClass = 'Chrome_Database_Connection_'.ucfirst(CHROME_DATABASE);
-            $defaultConnection = new $defaultConnectionClass();
-            $defaultConnection->setConnectionOptions('localhost', 'test', '', 'chrome_2_test');
-            #$defaultConnection->connect();
-            $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
-
             $mysqlTestConnection = new Chrome_Database_Connection_Mysql();
             $mysqlTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
             #$mysqlTestConnection->connect();
@@ -104,11 +110,11 @@ class Chrome_TestSetup
         $_tempGlobals = $GLOBALS;
         $_tempCookie = $_COOKIE;
 
-        require_once APPLICATION.'default.php';
-        require_once LIB.'exception/dummy.php';
+		require_once 'Tests/include/application/test.php';
 
-        $application = new Chrome_Application_Default(new Chrome_Exception_Handler_Console());
-        $application->init();
+		$application = new Chrome_Application_Test(new Chrome_Exception_Handler_Console());
+		$application->setModelContext($this->_applicationContext->getModelContext());
+		$application->init();
 
         $modelContext = $this->_applicationContext->getModelContext();
         $context = $application->getApplicationContext();
@@ -119,5 +125,4 @@ class Chrome_TestSetup
         $GLOBALS = $_tempGlobals;
         $_COOKIE = $_tempCookie;
     }
-
 }

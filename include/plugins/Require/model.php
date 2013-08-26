@@ -13,15 +13,15 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Require
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 17:33:11] --> $
- * @author     Alexander Book
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 17:33:11] --> $
+ * @author Alexander Book
  */
-
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
 /**
  * Interface for loading required files and loading classes
@@ -31,6 +31,7 @@ if(CHROME_PHP !== true) die();
  */
 interface Chrome_Require_Loader_Model_Interface extends Chrome_Require_Loader_Interface
 {
+
     public function getClasses();
 
     public function getRequiredFiles();
@@ -72,7 +73,7 @@ class Chrome_Require_Loader_Model implements Chrome_Require_Loader_Model_Interfa
      */
     protected $_requiredFilesLoaded = false;
 
-    public function __construct( Chrome_Model_Interface $model)
+    public function __construct(Chrome_Model_Interface $model)
     {
         $this->_model = $model;
 
@@ -87,16 +88,19 @@ class Chrome_Require_Loader_Model implements Chrome_Require_Loader_Model_Interfa
     public function init(Chrome_Require_Autoloader_Interface $autoloader)
     {
         // already loaded required files
-        if($this->_requiredFilesLoaded === true) {
+        if($this->_requiredFilesLoaded === true)
+        {
             return;
         }
 
         $this->_require = $this->_model->getRequirements();
 
-        foreach($this->_require as $value) {
-            $autoloader->loadClassByFile($value['name'], BASEDIR.$value['path']);
+        foreach($this->_require as $value)
+        {
+            $autoloader->loadClassByFile($value['name'], BASEDIR . $value['path']);
 
-            if($value['class_loader'] == true) {
+            if($value['class_loader'] == true)
+            {
                 $autoloader->appendAutoloader(new $value['name']());
             }
         }
@@ -117,7 +121,7 @@ class Chrome_Require_Loader_Model implements Chrome_Require_Loader_Model_Interfa
     /**
      * Get all classes saved in model
      * Structure:
-     *  array(array($class => $file), array(etc...), )
+     * array(array($class => $file), array(etc...), )
      *
      * @return array
      */
@@ -128,14 +132,16 @@ class Chrome_Require_Loader_Model implements Chrome_Require_Loader_Model_Interfa
 
     public function loadClass($className)
     {
-        if(isset($this->_class[$className])) {
-            return BASEDIR.$this->_class[$className];
+        if(isset($this->_class[$className]))
+        {
+            return BASEDIR . $this->_class[$className];
         }
 
         return false;
     }
 
-    public function getRequiredFiles() {
+    public function getRequiredFiles()
+    {
         return $this->_require;
     }
 }
