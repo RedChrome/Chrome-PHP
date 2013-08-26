@@ -1,10 +1,5 @@
 <?php
 
-;
-
-require_once LIB . 'core/database/database.php';
-require_once LIB . 'core/database/connection/mysqli.php';
-
 class DatabaseConnectionMysqliTest extends DatabaseConnectionMysqlTest
 {
     public function setUp()

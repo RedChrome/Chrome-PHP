@@ -1,7 +1,5 @@
 <?php
-
-require_once LIB.'core/authentication/chain/database.php';
-
+require_once LIB . 'core/authentication/chain/database.php';
 class ModelDatabaseTest extends Chrome_TestCase
 {
     protected $_model;
@@ -18,18 +16,13 @@ class ModelDatabaseTest extends Chrome_TestCase
      */
     public function testModelHashesUserPassword($pw, $salt, $expected)
     {
-        $this->assertEquals($expected, $this->_model->hashUserPassword($pw, $salt), 'password was wrong hashed');
+        $this->assertEquals($expected, $this->_model->hashUserPassword($pw, $salt), 'password was hashed wrong');
     }
 
     public function modelHashesUserPasswordProvider()
     {
-        return array(array(
-                'test',
-                'ahFB319VKaD',
-                '4c85bf07d5d7c1ee8a6edba0f7646a58b6cb6ce9ea88b08d'), array(
-                'Ophiqu6c',
-                'Aeviwae6',
-                '26d0e045c2d385a1ad4a455d09700919c7779d0a3760d06d'));
+        return array(array('test', 'ahFB319VKaD', 'eec1d7d507bf854c586a64f7a0db6e8a8db088eae96ccbb6'),
+                    array('Ophiqu6c', 'Aeviwae6', 'a185d3c245e0d026190970095d454aad6dd060370a9d77c7'));
     }
 
     /**
@@ -37,21 +30,17 @@ class ModelDatabaseTest extends Chrome_TestCase
      */
     public function testGetPasswordAndSaltByIdentity($id, $pw, $salt)
     {
-        if($pw === false) {
+        if($pw === false)
+        {
             $this->assertEquals(false, $this->_model->getPasswordAndSaltByIdentity($id));
-        } else {
-            $this->assertEquals(array('password' => $pw, 'password_salt' => $salt), $this->_model->getPasswordAndSaltByIdentity($id), 'got wrong array with id '.$id);
+        } else
+        {
+            $this->assertEquals(array('password' => $pw, 'password_salt' => $salt), $this->_model->getPasswordAndSaltByIdentity($id), 'got wrong array with id ' . $id);
         }
     }
 
     public function getPasswordAndSaltByIdentityProvider()
     {
-        return array(array(
-                '2',
-                '4c85bf07d5d7c1ee8a6edba0f7646a58b6cb6ce9ea88b08d',
-                'ahFB319VKaD'), array(
-                '1234567890123',
-                false,
-                false));
+        return array(array('2', 'eec1d7d507bf854c586a64f7a0db6e8a8db088eae96ccbb6', 'ahFB319VKaD'), array('1234567890123', false, false));
     }
 }

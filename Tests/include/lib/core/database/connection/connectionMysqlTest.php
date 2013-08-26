@@ -1,10 +1,5 @@
 <?php
 
-;
-
-require_once LIB . 'core/database/database.php';
-require_once LIB . 'core/database/connection/mysql.php';
-
 class DatabaseConnectionMysqlTest extends PHPUnit_Framework_TestCase
 {
     protected $_connection;
@@ -24,6 +19,10 @@ class DatabaseConnectionMysqlTest extends PHPUnit_Framework_TestCase
     {
         if(TEST_DATABASE_CONNECTIONS === false) {
             $this->markTestSkipped();
+        }
+
+        if(get_class($this) === 'DatabaseConnectionMysqlTest' AND version_compare(PHP_VERSION, '5.5.0') >= 0) {
+            $this->markTestSkipped('Cannot execute mysql test with php version 5.5.0.');
         }
     }
 
