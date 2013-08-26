@@ -88,10 +88,12 @@ class Chrome_TestSetup
 
         if(TEST_DATABASE_CONNECTIONS == true) {
 
-			$mysqlTestConnection = new Chrome_Database_Connection_Mysql();
-			$mysqlTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
-			$mysqlTestConnection->connect();
-			$dbRegistry->addConnection('mysql_test', $mysqlTestConnection, true);
+            if(version_compare(PHP_VERSION, '5.5.0') < 0) {
+    			$mysqlTestConnection = new Chrome_Database_Connection_Mysql();
+    			$mysqlTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
+    			$mysqlTestConnection->connect();
+    			$dbRegistry->addConnection('mysql_test', $mysqlTestConnection, true);
+            }
 
 			$mysqliTestConnection = new Chrome_Database_Connection_Mysqli();
 			$mysqliTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
@@ -113,12 +115,10 @@ class Chrome_TestSetup
 		$_tempGlobals = $GLOBALS;
 		$_tempCookie = $_COOKIE;
 
-		require_once APPLICATION.'default.php';
-		require_once LIB.'exception/dummy.php';
-		// todo: remove?
-        // require_once LIB.'exception/frontcontroller.php';
+		require_once 'Tests/include/application/test.php';
 
-		$application = new Chrome_Application_Default(new Chrome_Exception_Handler_Console());
+		$application = new Chrome_Application_Test(new Chrome_Exception_Handler_Console());
+		$application->setModelContext($this->_applicationContext->getModelContext());
 		$application->init();
 
         $modelContext = $this->_applicationContext->getModelContext();
@@ -130,5 +130,4 @@ class Chrome_TestSetup
 		$GLOBALS = $_tempGlobals;
 		$_COOKIE = $_tempCookie;
 	}
-
 }

@@ -114,6 +114,13 @@ interface Chrome_Database_Registry_Connection_Interface
     public function getConnection($name);
 
     /**
+     * Returns all available connections
+     *
+     * @return array containing connection names (as string)
+     */
+    public function getConnections();
+
+    /**
      * Returns the connection object (set by addConnection) with the given name
      *
      * @param string $name name of the connection
@@ -200,6 +207,11 @@ class Chrome_Database_Registry_Connection implements Chrome_Database_Registry_Co
     public function isExisting($name)
     {
         return isset($this->_connections[$name]);
+    }
+
+    public function getConnections()
+    {
+        return array_keys($this->_connections);
     }
 }
 

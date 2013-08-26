@@ -31,10 +31,10 @@ class Chrome_Exception_Handler_Console implements Chrome_Exception_Handler_Inter
 {
 	public function exception(Exception $e)
 	{
-		echo 'Uncaught exception of type '.get_class($e).' with message:'."\n\n";
-		echo $e->getMessage();
-		echo "\n\n";
-		echo 'Printing stack trace:'."\n";
+		echo 'Uncaught exception of type '.get_class($e).' with message:'.PHP_EOL.PHP_EOL;
+		echo '"'.$e->getMessage().'"';
+		echo PHP_EOL.PHP_EOL;
+		echo 'Printing stack trace:'.PHP_EOL;
 
 		$trace = $e->getTrace();
 
@@ -48,7 +48,7 @@ class Chrome_Exception_Handler_Console implements Chrome_Exception_Handler_Inter
 				$call['file'] = $this->_fileWrap($call['file'], 65, DIRECTORY_SEPARATOR);
 			}
 
-			$toEcho = sprintf('#%-2s %-69s :%-4s', $key, $call['file'], $call['line'])."\n|--> ";
+			$toEcho = sprintf('#%-2s %-69s :%-4s', $key, $call['file'], $call['line']).PHP_EOL.'|--> ';
 
 			if(isset($call['class'])) {
 				$toEcho .= $call['class'].'::';
@@ -59,8 +59,10 @@ class Chrome_Exception_Handler_Console implements Chrome_Exception_Handler_Inter
 			}
 
 			echo $toEcho;
-			echo "\n\n";
+			echo PHP_EOL.PHP_EOL;
 		}
+
+		exit(1);
 	}
 
 	/**

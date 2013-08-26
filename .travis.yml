@@ -3,6 +3,8 @@ php:
   - '5.5'
   - '5.4'
   - '5.3'
-script: 'php Tests/phpUnit.php --configuration Tests/phpUnit/config.xml Tests/'
 before_script:
   - mysql -e 'create database chrome_2_test;'
+  - php Tests/setuptestdb.php default
+script: 'php Tests/phpUnit.php --configuration Tests/phpUnit/config.xml Tests/'
+  
