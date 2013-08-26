@@ -166,7 +166,7 @@ class Chrome_Require_Autoloader implements Chrome_Require_Autoloader_Interface
 		if(_isFile($file)) {
 			require_once $file;
 		} else {
-			throw new Chrome_Exception('Could not load file "'.$file.'".');
+			throw new Chrome_Exception('Could not load file "'.$file.'"');
 		}
 	}
 
