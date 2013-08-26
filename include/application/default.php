@@ -151,16 +151,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 			$autoloader->appendAutoloader(new Chrome_Require_Loader_Cache());
 		}
 
-		// database
-		{
-			$datbaseInitializer = new Chrome_Database_Initializer();
-			$datbaseInitializer->initialize();
-
-			$factory = $datbaseInitializer->getFactory();
-			$factory->setLogger(new Chrome_Logger_Database());
-
-			$modelContext->setDatabaseFactory($factory);
-		}
+		$this->_initDatabase($modelContext);
 
         require_once LIB.'core/require/model.php';
 		// init require-class, can be skipped if every class is defined
@@ -317,6 +308,17 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 		} catch (Chrome_Exception $e) {
 			$this->_exceptionHandler->exception($e);
 		}
+	}
+
+	protected function _initDatabase(Chrome_Context_Model_Interface $modelContext)
+    {
+        $datbaseInitializer = new Chrome_Database_Initializer();
+        $datbaseInitializer->initialize();
+
+        $factory = $datbaseInitializer->getFactory();
+        $factory->setLogger(new Chrome_Logger_Database());
+
+        $modelContext->setDatabaseFactory($factory);
 	}
 
 	/**

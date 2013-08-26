@@ -49,12 +49,12 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
 		$this->_password = $password;
 		$this->_socket = $socket;
 		$this->_database = $database;
-		$this->_port = (int) $port;
+		$this->_port = (int)$port;
 
 		// persistent connection
-		#if(stripos($this->_host, 'p:') === false) {
-		#	$this->_host = 'p:'.$this->_host;
-		#}
+		if(stripos($this->_host, 'p:') === false) {
+			$this->_host = 'p:'.$this->_host;
+		}
 
 		$this->_isSetConnectionOptions = true;
 	}
@@ -87,11 +87,11 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
 
 				case 1045: // wrong password
 					{
-						throw new Chrome_Exception_Database('Could not connect to MySQL on "'.$this->_host.'" Server. Wrong Username and/or password', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD);
+						throw new Chrome_Exception_Database('Could not connect to MySQL Server. Wrong Username and/or password', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD);
 					}
 				default:
 					{
-						throw new Chrome_Exception_Database('Unknown error while connecting to "'.$this->_host.'". Got error: '.$e->getMessage(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
+						throw new Chrome_Exception_Database($e->getMessage(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
 					}
 			}
 

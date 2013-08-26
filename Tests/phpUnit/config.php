@@ -7,7 +7,7 @@ $_SERVER['SERVER_NAME'] = "localhost";
 
 define('TEST_DATABASE_CONNECTIONS', true);
 
-if(getenv('TRAVIS') !== false)
+if(getenv('TRAVIS') == true)
 {
     define('MYSQL_HOST', '127.0.0.1');
     define('MYSQL_USER', 'travis');
@@ -21,5 +21,3 @@ if(getenv('TRAVIS') !== false)
     define('MYSQL_DB', 'chrome_2_test');
     define('MYSQL_PORT', 3306);
 }
-
-var_dump(getenv('TRAVIS'), MYSQL_USER);

@@ -33,7 +33,7 @@ class Chrome_Request_Handler_Console implements Chrome_Request_Handler_Interface
 
     public function canHandleRequest()
 	{
-	   return isset($_SERVER['argc']);
+	   return PHP_SAPI === 'cli';
 	}
 
 	public function getRequestData()
