@@ -116,6 +116,7 @@ class Chrome_TestSetup
 		require_once 'Tests/include/application/test.php';
 
 		$application = new Chrome_Application_Test(new Chrome_Exception_Handler_Console());
+		$application->setModelContext($this->_applicationContext->getModelContext());
 		$application->init();
 
         $modelContext = $this->_applicationContext->getModelContext();

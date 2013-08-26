@@ -39,6 +39,11 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 	protected $_applicationContext = null;
 
 	/**
+	 * @var Chrome_Context_Model_Interface
+	 */
+	protected $_modelContext = null;
+
+	/**
 	 * @var Chrome_Filter_Chain_Preprocessor
 	 */
 	private $_preprocessor = null;
@@ -116,11 +121,11 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 		$this->_exceptionConfiguration->setErrorHandler(new Chrome_Exception_Error_Handler_Default());
 
         $viewContext               = new Chrome_Context_View();
-        $modelContext              = new Chrome_Context_Model();
+        $this->_modelContext       = new Chrome_Context_Model();
         $this->_applicationContext = new Chrome_Context_Application();
 
         $this->_applicationContext->setViewContext($viewContext);
-        $this->_applicationContext->setModelContext($modelContext);
+        $this->_applicationContext->setModelContext($this->_modelContext);
 
         $viewFactory = new Chrome_View_Factory($viewContext);
         $viewContext->setFactory($viewFactory);
@@ -151,15 +156,15 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 			$autoloader->appendAutoloader(new Chrome_Require_Loader_Cache());
 		}
 
-		$this->_initDatabase($modelContext);
+		$this->_initDatabase($this->_modelContext);
 
         require_once LIB.'core/require/model.php';
 		// init require-class, can be skipped if every class is defined
-		$autoloader->prependAutoloader(new Chrome_Require_Loader_Model(new Chrome_Model_Require_Cache(new Chrome_Model_Require_DB($modelContext))));
+		$autoloader->prependAutoloader(new Chrome_Require_Loader_Model(new Chrome_Model_Require_Cache(new Chrome_Model_Require_DB($this->_modelContext))));
 
         // configuration
         {
-            $config = new Chrome_Config(new Chrome_Model_Config_Cache(new Chrome_Model_Config_DB($modelContext)));
+            $config = new Chrome_Config(new Chrome_Model_Config_Cache(new Chrome_Model_Config_DB($this->_modelContext)));
             $this->_applicationContext->setConfig($config);
         }
 
@@ -206,8 +211,8 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 			$authentication = new Chrome_Authentication();
 			$authentication->setExceptionHandler($handler);
 
-			$dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($modelContext));
-			$cookieAuth = new Chrome_Authentication_Chain_Cookie(new Chrome_Model_Authentication_Cookie($modelContext), $cookie);
+			$dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($this->_modelContext));
+			$cookieAuth = new Chrome_Authentication_Chain_Cookie(new Chrome_Model_Authentication_Cookie($this->_modelContext), $cookie);
 			$sessionAuth = new Chrome_Authentication_Chain_Session($session);
 
 			// set authentication chains in the right order
@@ -218,7 +223,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 			// set authorisation service
 			//Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB())); // better one, but not finished ;)
 			$adapter = new Chrome_Authorisation_Adapter_Default($authentication);
-			$adapter->setModel(new Chrome_Model_Authorisation_Default_DB($modelContext));
+			$adapter->setModel(new Chrome_Model_Authorisation_Default_DB($this->_modelContext));
 
 			$authorisation = new Chrome_Authorisation($adapter);
 
@@ -241,11 +246,11 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 		{
 			//import(array('Chrome_Route_Static', 'Chrome_Route_Dynamic') );
 			// matches static routes
-			$this->_router->addRoute(new Chrome_Route_Static(new Chrome_Model_Route_Static_Cache(new Chrome_Model_Route_Static_DB($modelContext))));
+			$this->_router->addRoute(new Chrome_Route_Static(new Chrome_Model_Route_Static_Cache(new Chrome_Model_Route_Static_DB($this->_modelContext))));
 			// matches dynamic created routes
-			$this->_router->addRoute(new Chrome_Route_Dynamic(new Chrome_Model_Route_Dynamic_Cache(new Chrome_Model_Route_Dynamic_DB($modelContext))));
+			$this->_router->addRoute(new Chrome_Route_Dynamic(new Chrome_Model_Route_Dynamic_Cache(new Chrome_Model_Route_Dynamic_DB($this->_modelContext))));
 			// matches routes to administration site
-			$this->_router->addRoute(new Chrome_Route_Administration(new Chrome_Model_Route_Administration($modelContext)));
+			$this->_router->addRoute(new Chrome_Route_Administration(new Chrome_Model_Route_Administration($this->_modelContext)));
 		}
 
         $pluginFacade = new Chrome_View_Plugin_Facade();
@@ -310,7 +315,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 		}
 	}
 
-	protected function _initDatabase(Chrome_Context_Model_Interface $modelContext)
+	protected function _initDatabase()
     {
         $datbaseInitializer = new Chrome_Database_Initializer();
         $datbaseInitializer->initialize();
@@ -318,7 +323,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $factory = $datbaseInitializer->getFactory();
         $factory->setLogger(new Chrome_Logger_Database());
 
-        $modelContext->setDatabaseFactory($factory);
+        $this->_modelContext->setDatabaseFactory($factory);
 	}
 
 	/**

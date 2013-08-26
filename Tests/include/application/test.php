@@ -22,8 +22,17 @@ require_once APPLICATION . 'default.php';
 
 class Chrome_Application_Test extends Chrome_Application_Default
 {
-    protected function _initDatabase(Chrome_Context_Model_Interface $modelContext)
+    protected $_model = null;
+
+    protected function _initDatabase()
     {
+        $this->_applicationContext->setModelContext($this->_model);
+        $this->_modelContext = $this->_model;
         // overwrite this method, thus there is no database connection to product database created
+    }
+
+    public function setModelContext(Chrome_Context_Model_Interface $modelContext)
+    {
+        $this->_model = $modelContext;
     }
 }
