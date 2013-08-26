@@ -162,7 +162,6 @@ class Chrome_Hash implements Chrome_Hash_Interface
         return $hash;
     }
 
-
     protected function _hash_algo($string, $algorithm, $salt = '')
     {
         if($this->_hashFunction === 'hash') {
@@ -183,9 +182,14 @@ class Chrome_Hash implements Chrome_Hash_Interface
         }
     }
 
-    protected function _correctOldTigerHash($wrongHash) {
-        return $wrongHash;
-        #return implode('', array_map('bin2hex', array_map('strrev', array_map('hex2bin',str_split($wrongHash,16)))));
+    protected function _correctOldTigerHash($wrongHash)
+    {
+        return implode('', array_map('bin2hex', array_map('strrev', array_map(array($this, '_helperCorrectOldTigerHash'),str_split($wrongHash,16)))));
+    }
+
+    protected function _helperCorrectOldTigerHash($data)
+    {
+        return pack('H*', $data);
     }
 
     /**

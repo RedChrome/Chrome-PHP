@@ -87,12 +87,13 @@ class Chrome_TestSetup
 		$databaseFactory->setLogger(new Chrome_Logger_Database());
 
         if(TEST_DATABASE_CONNECTIONS == true) {
-            /*
-			$mysqlTestConnection = new Chrome_Database_Connection_Mysql();
-			$mysqlTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
-			$mysqlTestConnection->connect();
-			$dbRegistry->addConnection('mysql_test', $mysqlTestConnection, true);
-            */
+
+            if(version_compare(PHP_VERSION, '5.5.0') < 0) {
+    			$mysqlTestConnection = new Chrome_Database_Connection_Mysql();
+    			$mysqlTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
+    			$mysqlTestConnection->connect();
+    			$dbRegistry->addConnection('mysql_test', $mysqlTestConnection, true);
+            }
 
 			$mysqliTestConnection = new Chrome_Database_Connection_Mysqli();
 			$mysqliTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
