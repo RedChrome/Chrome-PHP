@@ -29,7 +29,7 @@ INSERT INTO `cp1_authorisation_user_default` (`user_id`, `group_id`) VALUES
 
 INSERT INTO `cp1_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
 (NULL, 'testAuthenticate', 'testAuthenticateSalt', NULL, 12345678),
-(NULL, '4c85bf07d5d7c1ee8a6edba0f7646a58b6cb6ce9ea88b08d', 'ahFB319VKaD', NULL, 12345678);
+(NULL, 'eec1d7d507bf854c586a64f7a0db6e8a8db088eae96ccbb6', 'ahFB319VKaD', NULL, 12345678);
 -- password is test
 
 INSERT INTO `cp1_authorisation_resource_default` (`_resource_id`, `_transformation`, `_access`) VALUES

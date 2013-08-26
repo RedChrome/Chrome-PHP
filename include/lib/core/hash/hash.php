@@ -13,27 +13,28 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Hash
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.06.2013 15:43:25] --> $
- * @author     Alexander Book
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.06.2013 15:43:25] --> $
+ * @author Alexander Book
  */
-
 if(CHROME_PHP !== true)
     die();
 
 /**
- *
  */
 interface Chrome_Hash_Interface
 {
+
     /**
      * Hashes $string appending $salt with the default hash algorithm
      *
-     * @param string $string string to hash
-     * @param string $salt salt to append
+     * @param string $string
+     *        string to hash
+     * @param string $salt
+     *        salt to append
      * @return string the hashed string with salt
      */
     public function hash($string, $salt = '');
@@ -41,8 +42,10 @@ interface Chrome_Hash_Interface
     /**
      * Hashes a string
      *
-     * @param string $string string you want to hash
-     * @param string $algorithm hash const. e.g. MHASH_CRC32 OR 'crc32'
+     * @param string $string
+     *        string you want to hash
+     * @param string $algorithm
+     *        hash const. e.g. MHASH_CRC32 OR 'crc32'
      * @return string hashed string
      */
     public function hash_algo($string, $algorithm, $salt = '');
@@ -50,27 +53,29 @@ interface Chrome_Hash_Interface
     /**
      * Get random chars, only chars of the american keyboard
      *
-     * @param int $numbers how many chars?
+     * @param int $numbers
+     *        how many chars?
      * @return string
      */
     public static function randomChars($numbers = 5);
 }
 
 /**
- * Warning: Do not use Tiger160! With php versions < 5.4 there was a bug computing this hash. This
+ * Warning: Do not use Tiger160! With php versions < 5.4 there was a bug computing this hash.
+ * This
  * can get fixed with tiger128 or tiger192, BUT NOT with tiger160. See:
  *
  * Hashing empty string '':
  * Tiger using PHP >= 5.4:
  *
- * 3293ac630c13f0245f92bbb1766e1616                    128
- * 3293ac630c13f0245f92bbb1766e16167a4e5849            160
- * 3293ac630c13f0245f92bbb1766e16167a4e58492dde73f3    192
+ * 3293ac630c13f0245f92bbb1766e1616 128
+ * 3293ac630c13f0245f92bbb1766e16167a4e5849 160
+ * 3293ac630c13f0245f92bbb1766e16167a4e58492dde73f3 192
  *
  * Tiger using PHP < 5.4:
- * 24f0130c63ac933216166e76b1bb925f                    128
- * 24f0130c63ac933216166e76b1bb925ff373de2d            160
- * 24f0130c63ac933216166e76b1bb925ff373de2d49584e7a    192
+ * 24f0130c63ac933216166e76b1bb925f 128
+ * 24f0130c63ac933216166e76b1bb925ff373de2d 160
+ * 24f0130c63ac933216166e76b1bb925ff373de2d49584e7a 192
  *
  * In Tiger160(<5.4) you're loosing the information "7a4e5849". So there is no chance to fix this.
  * Tiger160 cuts the wrong information.
@@ -84,10 +89,41 @@ class Chrome_Hash implements Chrome_Hash_Interface
     public static $instance = false;
     private $_hashAlgo = 'md5';
     private $_hashFunction = 'none';
-
-    private static $_MHASH_ALGO = array('MHASH_ADLER32', 'MHASH_CRC32', 'MHASH_CRC32B', 'MHASH_GOST', 'MHASH_HAVAL128', 'MHASH_HAVAL160', 'MHASH_HAVAL192', 'MHASH_MD4', 'MHASH_MD5', 'MHASH_RIPEMD160', 'MHASH_SHA1', 'MHASH_SHA256', 'MHASH_TIGER', 'MHASH_TIGER128', 'MHASH_TIGER160');
-
-    private static $_HASH_ALGO = array('md4', 'md5', 'sha1', 'sha256', 'sha512', 'ripemd160', 'whirlpool', 'tiger128,4', 'tiger160,4', 'tiger192,4', 'snefru', 'gost', 'adler32', 'crc32', 'crc32b', 'haval128,3', 'haval160,3', 'haval192,3', 'haval224,3', 'haval256,3');
+    private static $_MHASH_ALGO = array('MHASH_ADLER32',
+                                        'MHASH_CRC32',
+                                        'MHASH_CRC32B',
+                                        'MHASH_GOST',
+                                        'MHASH_HAVAL128',
+                                        'MHASH_HAVAL160',
+                                        'MHASH_HAVAL192',
+                                        'MHASH_MD4',
+                                        'MHASH_MD5',
+                                        'MHASH_RIPEMD160',
+                                        'MHASH_SHA1',
+                                        'MHASH_SHA256',
+                                        'MHASH_TIGER',
+                                        'MHASH_TIGER128',
+                                        'MHASH_TIGER160');
+    private static $_HASH_ALGO = array('md4',
+                                    'md5',
+                                    'sha1',
+                                    'sha256',
+                                    'sha512',
+                                    'ripemd160',
+                                    'whirlpool',
+                                    'tiger128,4',
+                                    'tiger160,4',
+                                    'tiger192,4',
+                                    'snefru',
+                                    'gost',
+                                    'adler32',
+                                    'crc32',
+                                    'crc32b',
+                                    'haval128,3',
+                                    'haval160,3',
+                                    'haval192,3',
+                                    'haval224,3',
+                                    'haval256,3');
 
     private function __construct()
     {
@@ -96,7 +132,8 @@ class Chrome_Hash implements Chrome_Hash_Interface
 
     public static function getInstance()
     {
-        if(self::$instance == false) {
+        if(self::$instance == false)
+        {
             self::$instance = new Chrome_Hash();
         }
         return self::$instance;
@@ -109,15 +146,16 @@ class Chrome_Hash implements Chrome_Hash_Interface
      */
     private function hash_algorithm()
     {
-        if(extension_loaded('hash')) {
+        if(extension_loaded('hash'))
+        {
             $this->_hashFunction = 'hash';
             $this->_hashAlgo = CHROME_HASH_ALGORITHM;
-
-        } elseif(extension_loaded('mhash')) {
+        } elseif(extension_loaded('mhash'))
+        {
             $this->_hashFunction = 'mhash';
             $this->_hashAlgo = CHROME_HASH_ALGORITHM;
-
-        } else {
+        } else
+        {
             $this->_hashFunction = 'none';
         }
     }
@@ -125,27 +163,32 @@ class Chrome_Hash implements Chrome_Hash_Interface
     /**
      * Hashes a string with default hash algorithm
      *
-     * @param string $string what you want to hash
+     * @param string $string
+     *        what you want to hash
      * @return string hashed string
      *
      */
     public function hash($string, $salt = '')
     {
-        if($this->_hashFunction === 'hash') {
-            return hash($this->_hashAlgo, $salt.$string);
-        } elseif($this->_hashFunction === 'mhash') {
-            return mhash($this->_hashAlgo, $salt.$string);
-        } else {
-            return $this->_defaultHash($salt.$string);
+        if($this->_hashFunction === 'hash')
+        {
+            return hash($this->_hashAlgo, $salt . $string);
+        } elseif($this->_hashFunction === 'mhash')
+        {
+            return mhash($this->_hashAlgo, $salt . $string);
+        } else
+        {
+            return $this->_defaultHash($salt . $string);
         }
-
     }
 
     /**
      * Hashes a string
      *
-     * @param string $string string you want to hash
-     * @param const,string $algorithm hash const. e.g. MHASH_CRC32 OR 'crc32'
+     * @param string $string
+     *        string you want to hash
+     * @param const,string $algorithm
+     *        hash const. e.g. MHASH_CRC32 OR 'crc32'
      * @return hashed string
      */
     public function hash_algo($string, $algorithm, $salt = '')
@@ -153,8 +196,10 @@ class Chrome_Hash implements Chrome_Hash_Interface
         $hash = $this->_hash_algo($string, $algorithm, $salt);
 
         // phpversions <= 5.4.0 have flipped the tiger hash. now we correct the bug...
-        if(version_compare(PHP_VERSION, '5.4.0') == -1 AND stripos($algorithm, 'tiger') !== false) {
-            if(strlen($hash) === 40) {
+        if(version_compare(PHP_VERSION, '5.4.0') == -1 and stripos($algorithm, 'tiger') !== false)
+        {
+            if(strlen($hash) === 40)
+            {
                 throw new Chrome_Exception('Do not use Tiger160 with php<5.4! You might not be able to migrate to php>=5.4!');
             }
             $hash = $this->_correctOldTigerHash($hash);
@@ -162,30 +207,33 @@ class Chrome_Hash implements Chrome_Hash_Interface
         return $hash;
     }
 
-
     protected function _hash_algo($string, $algorithm, $salt = '')
     {
-        if($this->_hashFunction === 'hash') {
+        if($this->_hashFunction === 'hash')
+        {
             if($this->_hasHashAlgo($algorithm, 'hash'))
-                return hash($algorithm, $salt.$string);
-            else
-                return $this->_defaultHash($salt.$string);
-
-        } elseif($this->_hashFunction === 'mhash') {
+                return hash($algorithm, $salt . $string);
+            else return $this->_defaultHash($salt . $string);
+        } elseif($this->_hashFunction === 'mhash')
+        {
 
             if($this->_hasHashAlgo($algorithm, 'mhash'))
-                return mhash($algorithm, $salt.$string);
-            else
-                return $this->_defaultHash($salt.$string);
-
-        } else {
-            return $this->_defaultHash($salt.$string);
+                return mhash($algorithm, $salt . $string);
+            else return $this->_defaultHash($salt . $string);
+        } else
+        {
+            return $this->_defaultHash($salt . $string);
         }
     }
 
-    protected function _correctOldTigerHash($wrongHash) {
-        return $wrongHash;
-        #return implode('', array_map('bin2hex', array_map('strrev', array_map('hex2bin',str_split($wrongHash,16)))));
+    protected function _correctOldTigerHash($wrongHash)
+    {
+        return implode('', array_map('bin2hex', array_map('strrev', array_map(array($this, '_helperCorrectOldTigerHash'), str_split($wrongHash, 16)))));
+    }
+
+    protected function _helperCorrectOldTigerHash($data)
+    {
+        return pack('H*', $data);
     }
 
     /**
@@ -193,7 +241,8 @@ class Chrome_Hash implements Chrome_Hash_Interface
      */
     private function _defaultHash($string)
     {
-        switch($this->_hashAlgo) {
+        switch($this->_hashAlgo)
+        {
             case 'md5':
                 return md5($string);
             case 'sha1':
@@ -211,7 +260,8 @@ class Chrome_Hash implements Chrome_Hash_Interface
      */
     private function _hasHashAlgo($algorithm, $function = 'hash')
     {
-        if($function === 'hash' AND $this->_hashFunction === 'hash') {
+        if($function === 'hash' and $this->_hashFunction === 'hash')
+        {
 
             if(is_string($algorithm))
                 $algorithm = strtolower($algorithm);
@@ -220,20 +270,21 @@ class Chrome_Hash implements Chrome_Hash_Interface
                 return false;
 
             return true;
-
-        } elseif($function === 'mhash' AND $this->_hashFunction === 'mhash') {
+        } elseif($function === 'mhash' and $this->_hashFunction === 'mhash')
+        {
 
             if(mhash_get_hash_name($algorithm) === false)
                 return false;
 
             return true;
-
-        } else {
+        } else
+        {
 
             if(is_string($algorithm))
                 $algorithm = strtolower($algorithm);
 
-            switch($algorithm) {
+            switch($algorithm)
+            {
                 case 'md5':
                     return true;
                 case 'sha1':
@@ -247,17 +298,20 @@ class Chrome_Hash implements Chrome_Hash_Interface
 
     public static function _availableHashAlgorithms()
     {
-        if(extension_loaded('hash')) {
+        if(extension_loaded('hash'))
+        {
 
             if(function_exists('hash_algos'))
                 $array['hash'] = hash_algos();
         }
 
-        if(extension_loaded('mhash')) {
+        if(extension_loaded('mhash'))
+        {
 
             $max_hash_int = mhash_count();
 
-            for($i = 0; $i <= $mag_hash_int; ++$i) {
+            for($i = 0; $i <= $mag_hash_int; ++$i)
+            {
                 $array['mhash'][] = mhash_get_hash_name($i);
             }
         }
@@ -269,14 +323,16 @@ class Chrome_Hash implements Chrome_Hash_Interface
     /**
      * Get random chars, only chars of the american keyboard
      *
-     * @param int $numbers how many chars?
+     * @param int $numbers
+     *        how many chars?
      * @return string
      */
     public static function randomChars($numbers = 5)
     {
         $return = '';
         srand(time());
-        for($i = 0; $i < $numbers; ++$i) {
+        for($i = 0; $i < $numbers; ++$i)
+        {
             $return .= chr(rand(32, 127)); // 32 - 127 are the chars of the american keyboard
         }
 
@@ -289,21 +345,28 @@ class Chrome_Hash implements Chrome_Hash_Interface
      * A good algorithm is f.e. BLOWFISH, its fast AND secure
      * for maximal security use TRIPLEDES, but its slow
      *
-     * @param string $string Text to encrypt
-     * @param string $key Key for encryption
-     * @param string $algorithm Algorithm to encrypt
-     * @param string $cipher Cipher for algorithm
-     * @param string $iv IV to encrypt
+     * @param string $string
+     *        Text to encrypt
+     * @param string $key
+     *        Key for encryption
+     * @param string $algorithm
+     *        Algorithm to encrypt
+     * @param string $cipher
+     *        Cipher for algorithm
+     * @param string $iv
+     *        IV to encrypt
      * @return array($string,$key,$algorithm,$cipher,$iv,$encrypted_data)
      */
     public function crypt($string, $key, $algorithm = 'BLOWFISH', $cipher = 'CBC', $iv = '')
     {
-        if(!extension_loaded('mcrypt')) {// MCRYPT isn't available so we use xtea OR blowfish
+        if(!extension_loaded('mcrypt'))
+        { // MCRYPT isn't available so we use xtea OR blowfish
             return $this->defaultCrypt($string, $key);
         }
 
         $td = mcrypt_module_open($algorithm, '', $cipher, '');
-        if(empty($iv)) {
+        if(empty($iv))
+        {
             $iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_RAND);
         }
 
@@ -314,6 +377,7 @@ class Chrome_Hash implements Chrome_Hash_Interface
 
         return array('string' => $string, 'key' => $key, 'algorithm' => $algorithm, 'cipher' => $cipher, 'IV' => $iv, 'encrypted' => $encrypted_data);
     }
+
     /**
      * Decrypts a string
      *
@@ -322,27 +386,34 @@ class Chrome_Hash implements Chrome_Hash_Interface
      * Decrypts a string with its key AND algorithm
      * you can also decrypt it with a special cipher OR IV
      *
-     * @param string $string Text to encrypt
-     * @param string $key Key for encryption
-     * @param string $algorithm Algorithm to encrypt
-     * @param string $cipher Cipher for algorithm
-     * @param string $iv IV for decrypt
+     * @param string $string
+     *        Text to encrypt
+     * @param string $key
+     *        Key for encryption
+     * @param string $algorithm
+     *        Algorithm to encrypt
+     * @param string $cipher
+     *        Cipher for algorithm
+     * @param string $iv
+     *        IV for decrypt
      * @return array($string,$key,$algorithm,$cipher,$iv,$decrypted_data)
      */
     public function decrypt($string, $key, $algorithm = 'BLOWFISH', $cipher = 'CBC', $iv = '')
     {
-        if(!extension_loaded('mcrypt')) { // MCRYPT isn't available so we use xtea OR blowfish
+        if(!extension_loaded('mcrypt'))
+        { // MCRYPT isn't available so we use xtea OR blowfish
             return $this->defaultDecrypt($string, $key, $algorithm);
         }
 
         $decrypted_data = mcrypt_decrypt($algorithm, $key, $string, $cipher, $iv);
-        return array('string' => $string, 'key' => $key, 'algorithm' => $algorithm, 'cipher' => $cipher, 'IV' => $iv, 'decrypted' => rtrim($decrypted_data, "\0\4") // trim ONLY the nulls AND EOTs at the END
-            );
+        return array('string' => $string, 'key' => $key, 'algorithm' => $algorithm, 'cipher' => $cipher, 'IV' => $iv, 'decrypted' => rtrim($decrypted_data, "\0\4"))        // trim ONLY the nulls AND EOTs at the END
+            )// trim ONLY the nulls AND EOTs at the END
+        null;
     }
 
     private function defaultCrypt($string, $key)
     {
-        require_once 'algorithm/'.strtolower(CRHOME_CRYPT_ALGORITHM);
+        require_once 'algorithm/' . strtolower(CRHOME_CRYPT_ALGORITHM);
 
         $algorithm = ucfirst(strtolower(CRHOME_CRYPT_ALGORITHM));
         $algo_handler = new $algorithm($key);
@@ -351,30 +422,29 @@ class Chrome_Hash implements Chrome_Hash_Interface
 
     private function defaultDecrypt($string, $key, $algorithm)
     {
-        if($algorithm != CRHOME_CRYPT_ALGORITHM AND (strtolower($algorithm) == 'blowfish' OR strtolower($algorithm) == 'xtea'))
-            require_once 'algorithm/'.strtolower($algorithm);
-        else
-            require_once 'algorithm/'.strtolower(CRHOME_CRYPT_ALGORITHM);
+        if($algorithm != CRHOME_CRYPT_ALGORITHM and (strtolower($algorithm) == 'blowfish' or strtolower($algorithm) == 'xtea'))
+            require_once 'algorithm/' . strtolower($algorithm);
+        else require_once 'algorithm/' . strtolower(CRHOME_CRYPT_ALGORITHM);
 
         $algorithm = ucfirst(strtolower(CRHOME_CRYPT_ALGORITHM));
         $algo_handler = new $algorithm($key);
 
         return array('string' => $string, 'key' => $key, 'algorithm' => CRHOME_CRYPT_ALGORITHM, 'cipher' => 'CBC', 'IV' => false, 'decrypted' => $algo_handler->decrypt($string));
-
     }
 
     /**
      * Replaces 0 with 1 AND 1 with 0
      *
-     * @param string $str_input string you want to shift
+     * @param string $str_input
+     *        string you want to shift
      * @return bitshifted string
      */
     public static function BitShifting($str_Input)
     {
-
         $int_Lenght = strlen($str_Input);
         $str_Output = '';
-        for($i = 0; $i < $int_Lenght; $i++) {
+        for($i = 0; $i < $int_Lenght; $i++)
+        {
             $int_Char = ord($str_Input{$i});
             $str_CharBin = decbin($int_Char);
             $str_CharBinary = str_pad($str_CharBin, 8, 0, STR_PAD_LEFT);
@@ -395,9 +465,11 @@ class Chrome_Hash implements Chrome_Hash_Interface
     /**
      * calculate the checksumm for a file
      *
-     * @param string $file file you want to hash
-     * @param string $algo which algorithm do you want to use?
-     * 					   available: md5, sha1, crc32
+     * @param string $file
+     *        file you want to hash
+     * @param string $algo
+     *        which algorithm do you want to use?
+     *        available: md5, sha1, crc32
      * @return string
      */
     public static function checksumm($file, $algo = 'md5')
@@ -405,7 +477,8 @@ class Chrome_Hash implements Chrome_Hash_Interface
         if(!_isFile($file))
             return false;
 
-        switch($algo) {
+        switch($algo)
+        {
             case 'md5':
                 return md5_file($file);
             case 'sha1':
