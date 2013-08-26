@@ -202,7 +202,8 @@ class Chrome_Hash implements Chrome_Hash_Interface
             {
                 throw new Chrome_Exception('Do not use Tiger160 with php<5.4! You might not be able to migrate to php>=5.4!');
             }
-            $hash = $this->_correctOldTigerHash($hash);
+            if(strlen($hash) === 48)
+                $hash = $this->_correctOldTigerHash($hash);
         }
         return $hash;
     }
