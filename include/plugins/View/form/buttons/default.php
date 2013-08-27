@@ -27,23 +27,7 @@ if( CHROME_PHP !== true ) die();
  */
 class Chrome_View_Form_Element_Buttons_Default extends Chrome_View_Form_Element_Attachable_Abstract
 {
-    /*public function setOption(Chrome_View_Form_Element_Option_Interface $option)
-    {
-        $viewOptions = $option->getAttachments();
-
-        foreach($this->_elementOption->getAttachments() as $key => $viewElement)
-        {
-            // dem viewForm die option injezieren
-            #$viewElement->set
-
-
-        }
-
-
-
-    }*/
-
-    public function render()
+    protected function _render()
     {
         $return = '';
 
@@ -53,33 +37,4 @@ class Chrome_View_Form_Element_Buttons_Default extends Chrome_View_Form_Element_
 
         return $return;
     }
-
-    /*
-    public function element( $name, array $options = array())
-    {
-        $buttons = $this->_formElement->getOptions( Chrome_Form_Element_Buttons::CHROME_FORM_ELEMENT_BUTTONS );
-
-        foreach( $buttons as $key => $button ) {
-            if( $key === $name or $button->getID() === $name ) {
-                return $button->getDecorator()->render();
-            }
-        }
-
-    }
-
-    public function renderAll()
-    {
-        $return = '';
-
-        $buttons = $this->_formElement->getOptions( Chrome_Form_Element_Buttons::CHROME_FORM_ELEMENT_BUTTONS );
-
-        foreach( $buttons as $key => $button ) {
-
-            $return .= $button->getDecorator()->render();
-
-        }
-
-        return $return;
-    }*/
-
 }

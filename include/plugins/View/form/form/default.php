@@ -31,7 +31,7 @@ class Chrome_View_Form_Element_Form_Default extends Chrome_View_Form_Element_Abs
 {
     private $_int = 0;
 
-    public function render()
+    protected function _render()
     {
         if($this->_int == 0)
         {

@@ -28,7 +28,8 @@ if(CHROME_PHP !== true)
  */
 class Chrome_View_Form_Element_Submit_Default extends Chrome_View_Form_Element_Abstract
 {
-    public function render() {
+    protected function _render()
+    {
 
         $allowedValues = $this->_elementOption->getAllowedValues();
 

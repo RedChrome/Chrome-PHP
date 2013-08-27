@@ -283,29 +283,6 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
         $this->_errorMsg = array();
         return $return;
     }
-
-    /**
-     * Translates all error messages with the Language object
-     *
-     * @var Chrome_Language_Interface $obj language object
-     * @return void
-     *
-    public function setLanguage(Chrome_Language_Interface $obj)
-    {
-        $newMessage = array();
-        foreach($this->_errorMsg as $message) {
-
-            $translated = $obj->get($message);
-            if($translated === null) {
-                $translated = $message;
-            }
-
-            $newMessage[] = $translated;
-        }
-
-        $this->_errorMsg = $newMessage;
-    }
-    */
 }
 
 abstract class Chrome_Validator_Composition_Abstract extends Chrome_Validator implements Chrome_Validator_Composition_Interface
@@ -347,7 +324,8 @@ abstract class Chrome_Validator_Composition_Abstract extends Chrome_Validator im
 
     public function setData($data)
     {
-        foreach($this->_validators as $validator) {
+        foreach($this->_validators as $validator)
+        {
             $validator->setData($data);
 
         }

@@ -28,7 +28,7 @@ if(CHROME_PHP !== true)
  */
 class Chrome_View_Form_Element_Backward_Default extends Chrome_View_Form_Element_Abstract
 {
-    public function render() {
+    protected function _render() {
 
         // @todo implement option: delte passwords via javascript on backward
 

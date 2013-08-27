@@ -27,7 +27,7 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Template
- */ 
+ */
 class Chrome_Template_Engine_Factory
 {
     private static $_instance = null;

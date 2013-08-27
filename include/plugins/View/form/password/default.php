@@ -29,10 +29,8 @@ if(CHROME_PHP !== true)
  */
 class Chrome_View_Form_Element_Password_Default extends Chrome_View_Form_Element_Abstract
 {
-
-    public function render()
+    protected function _render()
     {
-        return $this->_renderLabel().'<input type="password" ' . $this->_renderFlags() . '/>'."\n";
-
+        return '<input type="password" ' . $this->_renderFlags() . '/>'.PHP_EOL;
     }
 }

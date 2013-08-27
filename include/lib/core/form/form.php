@@ -15,11 +15,11 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
 /**
  * load interface and classes for form options
@@ -30,7 +30,6 @@ require_once 'options.php';
  * loads interface for storage to save form data
  */
 require_once 'storage.php';
-
 
 /**
  * Load Chrome_Form_Element_Abstract
@@ -45,12 +44,14 @@ require_once 'element.php';
  */
 interface Chrome_Form_Handler_Interface
 {
+
     /**
      * is()
      *
      * Gets called if isSent, isCreated, isValid return true
      *
-     * @param Chrome_Form_Interface $form the form which is associated with this handler
+     * @param Chrome_Form_Interface $form
+     *        the form which is associated with this handler
      */
     public function is(Chrome_Form_Interface $form);
 
@@ -59,7 +60,8 @@ interface Chrome_Form_Handler_Interface
      *
      * Gets called if isSent, isCreated, isValid returns false
      *
-     * @param Chrome_Form_Interface $form the form which is associated with this handler
+     * @param Chrome_Form_Interface $form
+     *        the form which is associated with this handler
      */
     public function isNot(Chrome_Form_Interface $form);
 }
@@ -76,28 +78,20 @@ interface Chrome_Form_Interface
      * ATTRIBUTE_METHOD: tells where the data comes from, post or get?
      * ATTRIBUTE_ACTION: sets the form action
      * ATTRIBUTE_NAME: sets the form name
+     * ATTRIBUTE_STORE: adds a store handler to save input data {@see Chrome_Form_Handler_Store}
      * ATTRIBUTE_ID: sets the form id
      *
      * @var string
      */
-    const ATTRIBUTE_METHOD    = 'method',
-          ATTRIBUTE_ACTION    = 'action',
-          ATTRIBUTE_NAME      = 'name',
-          ATTRIBUTE_STORE     = 'store',
-          ATTRIBUTE_ID        = 'id';
+    const ATTRIBUTE_METHOD = 'method', ATTRIBUTE_ACTION = 'action', ATTRIBUTE_NAME = 'name', ATTRIBUTE_STORE = 'store', ATTRIBUTE_ID = 'id';
 
     /**
+     * Types of method.
+     * Either POST or GET.
+     *
      * @var string
      */
-    const CHROME_FORM_METHOD_POST = 'POST',
-          CHROME_FORM_METHOD_GET  = 'GET';
-
-    /**
-     * @var string
-     */
-    const CHROME_FORM_ERRORS_CREATION = 'creation',
-          CHROME_FORM_ERRORS_VALIDATION = 'validation',
-          CHROME_FORM_ERRORS_RECEIVING  = 'receiving';
+    const CHROME_FORM_METHOD_POST = 'POST', CHROME_FORM_METHOD_GET = 'GET';
 
     /**
      * Creates a new form
@@ -139,14 +133,15 @@ interface Chrome_Form_Interface
      *
      * Sets the data from the user, e.g. POST or GET.
      * the effect from this function can also be achived by
-     * setting the attribute 'method' to POST or GET
+     * setting the attribute ATTRIBUTE_METHOD to POST or GET via {@see setAttbribute()}
      *
      * <code>
      * $this->setSentData(Chrome_Request::getInstance()->getPostParameter());
      * $this->setSentData($_POST);
      * </code>
      *
-     * @param array $data the data from any source
+     * @param array $data
+     *        the data from any source
      * @return void
      */
     public function setSentData(array $data);
@@ -165,7 +160,8 @@ interface Chrome_Form_Interface
      *
      * Returns the data with the specific key
      *
-     * @param mixed $key key for the data
+     * @param mixed $key
+     *        key for the data
      * @return mixed
      */
     public function getSentData($key);
@@ -177,7 +173,8 @@ interface Chrome_Form_Interface
      * returns the same as 'getSentData', but if key
      * is not set, then we throw an exception
      *
-     * @param mixed $key key for the data
+     * @param mixed $key
+     *        key for the data
      * @throws Chrome_Exception
      * @return mixed
      */
@@ -216,7 +213,6 @@ interface Chrome_Form_Interface
      *
      * Use this method to get data from form, not getSentData!!
      *
-     *
      * Returns the valid and convertered data from the elements, if $key == null
      * Data structure:
      * array($elementID => $data, ...)
@@ -230,7 +226,8 @@ interface Chrome_Form_Interface
      *
      * Returns all elements of this form
      * or if $id is given, the element belonging to this id
-     * @param int $id id of an element
+     * @param int $id
+     *        id of an element
      * @return array
      */
     public function getElements($id = null);
@@ -242,7 +239,8 @@ interface Chrome_Form_Interface
      * Data structure:
      * array($elementID => array($error1, $error2,...), ...)
      *
-     * @param string $elementName ID/name of an element of the form
+     * @param string $elementName
+     *        ID/name of an element of the form
      * @return array
      */
     public function getCreationErrors($elementName = null);
@@ -254,7 +252,8 @@ interface Chrome_Form_Interface
      * Data structure:
      * array($elementID => array($error, $error, $error...), ...)
      *
-     * @param string $elementName ID/name of an element of the form
+     * @param string $elementName
+     *        ID/name of an element of the form
      * @return array
      */
     public function getReceivingErrors($elementName = null);
@@ -266,7 +265,8 @@ interface Chrome_Form_Interface
      * Data structure:
      * array($elementID => array($error, $error, $error...), ...)
      *
-     * @param string $elementName ID/name of an element of the form
+     * @param string $elementName
+     *        ID/name of an element of the form
      * @return array
      */
     public function getValidationErrors($elementName = null);
@@ -276,13 +276,15 @@ interface Chrome_Form_Interface
      *
      * Returns all errors of the elements/element
      *
-     * @param string $elementName ID/name of an element of the form
+     * @param string $elementName
+     *        ID/name of an element of the form
      * @return array
      */
     public function getErrors($elementName = null);
 
     /**
-     * setAttribute()
+     * Sets a form attribute.
+     * For special attributes see constants: ATTRIBUTE_*
      *
      * @param string $key
      * @param mixed $value
@@ -302,7 +304,8 @@ interface Chrome_Form_Interface
      * Has the element receiving, validation or creation errors?
      * If $errorName is set, the method checks whether $errorName is set in all errors
      *
-     * @param mixed $errorName Name of an error
+     * @param mixed $errorName
+     *        Name of an error
      * @return boolean
      */
     public function hasErrors($elementName, $errorName = null);
@@ -311,7 +314,8 @@ interface Chrome_Form_Interface
      * Has the element validation errors?
      * If $errorName is set, the method checks whether $errorName is set in all validation errors
      *
-     * @param mixed $errorName Name of an error
+     * @param mixed $errorName
+     *        Name of an error
      * @return boolean
      */
     public function hasValidationErrors($elementName, $errorName = null);
@@ -320,7 +324,8 @@ interface Chrome_Form_Interface
      * Has the element receiving errors?
      * If $errorName is set, the method checks whether $errorName is set in all receiving errors
      *
-     * @param mixed $errorName Name of an error
+     * @param mixed $errorName
+     *        Name of an error
      * @return boolean
      */
     public function hasReceivingErrors($elementName, $errorName = null);
@@ -329,7 +334,8 @@ interface Chrome_Form_Interface
      * Has the element creation errors?
      * If $errorName is set, the method checks whether $errorName is set in all creation errors
      *
-     * @param mixed $errorName Name of an error
+     * @param mixed $errorName
+     *        Name of an error
      * @return boolean
      */
     public function hasCreationErrors($elementName, $errorName = null);
@@ -337,13 +343,14 @@ interface Chrome_Form_Interface
     /**
      * Renews the form
      *
-     * @param mixed $elementName [optional] Name of an element which should get renewed
+     * @param mixed $elementName
+     *        [optional] Name of an element which should get renewed
      * @return void
      */
     public function renew($elementName = null);
 
     /**
-     * Adds an receiving handler, gets called after isSent()
+     * Adds a receiving handler, gets called after isSent()
      *
      * @param Chrome_Form_Handler_Interface $handler
      * @return void
@@ -351,7 +358,7 @@ interface Chrome_Form_Interface
     public function addReceivingHandler(Chrome_Form_Handler_Interface $handler);
 
     /**
-     * Adds an validation handler, gets called after isValid()
+     * Adds a validation handler, gets called after isValid()
      *
      * @param Chrome_Form_Handler_Interface $handler
      * @return void
@@ -359,17 +366,44 @@ interface Chrome_Form_Interface
     public function addValidationHandler(Chrome_Form_Handler_Interface $handler);
 
     /**
-     * Adds an creation handler, gets called after isCreated()
+     * Adds a creation handler, gets called after isCreated()
      *
      * @param Chrome_Form_Handler_Interface $handler
      * @return void
      */
     public function addCreationHandler(Chrome_Form_Handler_Interface $handler);
 
+    /**
+     * Retrieves a receiving handler set by {@see addReceivingHandler()}.
+     * If $class is not null
+     * then only those receiving handlers are returned, which are instances of $class
+     *
+     * @param string $class
+     *        if not null, only those handlers get returned which are instances of $class
+     * @return Chrome_Form_Handler_Interface
+     */
     public function getReceivingHandlers($class = null);
 
+    /**
+     * Retrieves a validation handler set by {@see addValidationHandler()}.
+     * If $class is not null
+     * then only those validation handlers are returned, which are instances of $class
+     *
+     * @param string $class
+     *        if not null, only those handlers get returned which are instances of $class
+     * @return Chrome_Form_Handler_Interface
+     */
     public function getValidationHandlers($class = null);
 
+    /**
+     * Retrieves a creation handler set by {@see addCreationHandler()}.
+     * If $class is not null
+     * then only those creation handlers are returned, which are instances of $class
+     *
+     * @param string $class
+     *        if not null, only those handlers get returned which are instances of $class
+     * @return Chrome_Form_Handler_Interface
+     */
     public function getCreationHandlers($class = null);
 
     /**
@@ -401,7 +435,7 @@ interface Chrome_Form_Interface
  * The order of is*() methods is: isCreated, isSent, isValid:
  * 1) isCreated checks whether the form was created (aka setting up vars and session)
  * 2) isSent checks whether every form element was sent, which means, every form element has
- *      received appropriate data.
+ * received appropriate data.
  * 3) isValid checks whether the data (from client) is valid for every form element.
  *
  * @package CHROME-PHP
@@ -459,6 +493,14 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     protected $_data = array();
 
     /**
+     * Used only internally.
+     * They are used in $_errors. Do not mention them ;)
+     *
+     * @var string
+     */
+    const CHROME_FORM_ERRORS_CREATION = 'creation', CHROME_FORM_ERRORS_VALIDATION = 'validation', CHROME_FORM_ERRORS_RECEIVING = 'receiving';
+
+    /**
      * The errors from the form elements
      *
      * The three types (creation, receiving, validation) are getting set in isCreated
@@ -466,9 +508,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * @var array
      */
-    protected $_errors = array(self::CHROME_FORM_ERRORS_CREATION => array(),
-                               self::CHROME_FORM_ERRORS_RECEIVING => array(),
-                               self::CHROME_FORM_ERRORS_VALIDATION => array());
+    protected $_errors = array(self::CHROME_FORM_ERRORS_CREATION => array(), self::CHROME_FORM_ERRORS_RECEIVING => array(), self::CHROME_FORM_ERRORS_VALIDATION => array());
     /**
      * Attributes for the form
      *
@@ -512,7 +552,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     protected $_applicationContext = null;
 
     /**
-     * Storage instance. This var is used to save form data.
+     * Storage instance.
+     * This var is used to save form data.
      * E.g. if a user sends data and anything was not valid, then
      * the other (valid) data is stored using this storage and can
      * be displayed again. So the user must only fill the invalid data
@@ -520,24 +561,38 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * @var Chrome_Session_Interface
      */
-    protected $_storage           = null;
+    protected $_storage = null;
 
     /**
-     * Chrome_Form_Abstract::__construct()
+     * Creates a new form, using the current application context.
      *
-     * Constructor
+     * The application context is needed because the form needs some request data.
      *
-     * @return Chrome_Form_Abstract
+     * @param Chrome_Context_Application_Interface $appContext
      */
     public function __construct(Chrome_Context_Application_Interface $appContext)
     {
         $this->_applicationContext = $appContext;
-        $this->_requestDataObject  = $appContext->getRequestHandler()->getRequestData();
+        $this->_requestDataObject = $appContext->getRequestHandler()->getRequestData();
         $this->_init();
     }
 
+    /**
+     * Hook to initialize the form with form elements
+     *
+     * Place here your form configuration. E.g. form elements and form element options.
+     *
+     * @return void
+     */
     abstract protected function _init();
 
+    /**
+     * Adds a form element to the form
+     *
+     * @param Chrome_Form_Element_Interface $element
+     *        element to add
+     * @return void
+     */
     protected function _addElement(Chrome_Form_Element_Interface $element)
     {
         $this->_elements[$element->getID()] = $element;
@@ -554,10 +609,12 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function isCreated($elementName = null)
     {
         // only check whether this element is created!
-        if($elementName !== null) {
+        if($elementName !== null)
+        {
             $elementObj = $this->getElements($elementName);
 
-            if($elementObj === null) {
+            if($elementObj === null)
+            {
                 throw new Chrome_Exception('Cannot check whether the element "' . $elementName . '" is created, if it does not exist!');
             }
 
@@ -565,19 +622,23 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         }
 
         // cache
-        if($this->_isCreated !== null) {
+        if($this->_isCreated !== null)
+        {
             return $this->_isCreated;
         }
 
         // loops through every element and checks whether it's created or not
         // if one of them is not created the whole form is not created -> break
         // if all are created then the form is created
-        foreach($this->_elements as $formElement) {
-            if($formElement->isCreated() === false) {
+        foreach($this->_elements as $formElement)
+        {
+            if($formElement->isCreated() === false)
+            {
                 $this->_errors[self::CHROME_FORM_ERRORS_CREATION][$formElement->getID()] = $formElement->getErrors();
                 $this->_isCreated = false;
 
-                foreach($this->_creationHandler as $handler) {
+                foreach($this->_creationHandler as $handler)
+                {
                     $handler->isNot($this);
                 }
 
@@ -587,7 +648,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         // cache
         $this->_isCreated = true;
 
-        foreach($this->_creationHandler as $handler) {
+        foreach($this->_creationHandler as $handler)
+        {
             $handler->is($this);
         }
 
@@ -603,35 +665,42 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function isValid($elementName = null)
     {
-        if($this->isSent($elementName) === false) {
+        if($this->isSent($elementName) === false)
+        {
             return false;
         }
 
         // only check whether this element is valid!
-        if($elementName !== null) {
+        if($elementName !== null)
+        {
             $elementObj = $this->getElements($elementName);
 
             return $elementObj->isValid();
         }
 
         // cache
-        if($this->_isValid !== null) {
+        if($this->_isValid !== null)
+        {
             return $this->_isValid;
         }
 
         // goes through every element and checks whether it's valid
         // saves all errors in $_errors[$elementId] = $elementError;
-        foreach($this->_elements as $formElement) {
+        foreach($this->_elements as $formElement)
+        {
 
-            if($formElement->isValid() === false) {
+            if($formElement->isValid() === false)
+            {
                 $this->_isValid = false;
                 $this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$formElement->getID()] = $formElement->getErrors();
             }
         }
 
-        //if one is not valid, then return false
-        if($this->_isValid === false) {
-            foreach($this->_validationHandler as $handler) {
+        // if one is not valid, then return false
+        if($this->_isValid === false)
+        {
+            foreach($this->_validationHandler as $handler)
+            {
                 $handler->isNot($this);
             }
 
@@ -641,7 +710,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         // cache
         $this->_isValid = true;
 
-        foreach($this->_validationHandler as $handler) {
+        foreach($this->_validationHandler as $handler)
+        {
             $handler->is($this);
         }
 
@@ -657,31 +727,38 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function isSent($elementName = null)
     {
-        if($this->isCreated($elementName) === false) {
+        if($this->isCreated($elementName) === false)
+        {
             return false;
         }
 
         // only check whether this element is sent!
-        if($elementName !== null) {
+        if($elementName !== null)
+        {
             $elementObj = $this->getElements($elementName);
 
             return $elementObj->isSent();
         }
 
         // cache
-        if($this->_isSent !== null) {
+        if($this->_isSent !== null)
+        {
             return $this->_isSent;
         }
 
-        foreach($this->_elements as $formElement) {
-            if($formElement->isSent() === false) {
+        foreach($this->_elements as $formElement)
+        {
+            if($formElement->isSent() === false)
+            {
                 $this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$formElement->getID()] = $formElement->getErrors();
                 $this->_isSent = false;
             }
         }
 
-        if($this->_isSent === false) {
-            foreach($this->_receivingHandler as $handler) {
+        if($this->_isSent === false)
+        {
+            foreach($this->_receivingHandler as $handler)
+            {
                 $handler->isNot($this);
             }
 
@@ -691,7 +768,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         // cache
         $this->_isSent = true;
 
-        foreach($this->_receivingHandler as $handler) {
+        foreach($this->_receivingHandler as $handler)
+        {
             $handler->is($this);
         }
 
@@ -707,7 +785,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function destroy()
     {
-        foreach($this->_elements as $formElement) {
+        foreach($this->_elements as $formElement)
+        {
             $formElement->destroy();
         }
     }
@@ -721,7 +800,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function create()
     {
-        foreach($this->_elements as $formElement) {
+        foreach($this->_elements as $formElement)
+        {
             $formElement->create();
         }
     }
@@ -731,21 +811,25 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * Renews the form by renewing every single element, or by the element given as parameter
      *
-     * @param String $elementName [optional] ID/Name of an element which should get renewed
+     * @param String $elementName
+     *        [optional] ID/Name of an element which should get renewed
      * @return void
      */
     public function renew($elementName = null)
     {
-        if($elementName !== null) {
+        if($elementName !== null)
+        {
 
-            if(($element = $this->getElements($elementName)) !== null) {
+            if(($element = $this->getElements($elementName)) !== null)
+            {
                 $element->renew();
             }
 
             return;
         }
 
-        foreach($this->_elements as $formElement) {
+        foreach($this->_elements as $formElement)
+        {
             $formElement->renew();
         }
     }
@@ -779,16 +863,18 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      * returns the same as 'getSentData', but if key
      * is not set, then we throw an exception
      *
-     * @param mixed $key key for the data
+     * @param mixed $key
+     *        key for the data
      * @throws Chrome_Exception
      * @return mixed
      */
     public function get($key)
     {
-
-        if(isset($this->_sentData[$key])) {
+        if(isset($this->_sentData[$key]))
+        {
             return $this->_sentData[$key];
-        } else {
+        } else
+        {
             throw new Chrome_Exception('Trying to access not set data in Chrome_Form_Abstract::get()!');
         }
     }
@@ -809,7 +895,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * Returns the validated and convertered data of all elements
      *
-     * @param string $key a key to get only specific data, the key is an id of a form elements
+     * @param string $key
+     *        a key to get only specific data, the key is an id of a form elements
      * @return array
      */
     public function getData($key = null)
@@ -850,7 +937,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function getID()
     {
-        if($this->_id === null) {
+        if($this->_id === null)
+        {
             throw new Chrome_Exception('No ID set in Chrome_Form_Abstract::getID()!');
         }
 
@@ -862,7 +950,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * returns all elements
      *
-     * @param mixed $id ID of the form element
+     * @param mixed $id
+     *        ID of the form element
      * @return array
      */
     public function getElements($id = null)
@@ -884,11 +973,12 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function getCreationErrors($elementName = null)
     {
-        if($elementName == null) {
+        if($elementName == null)
+        {
             return $this->_errors[self::CHROME_FORM_ERRORS_CREATION];
-        } else {
-            return isset($this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName]) ? $this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName] : array();
         }
+
+        return isset($this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName]) ? $this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName] : array();
     }
 
     /**
@@ -900,11 +990,12 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function getValidationErrors($elementName = null)
     {
-        if($elementName == null) {
+        if($elementName == null)
+        {
             return $this->_errors[self::CHROME_FORM_ERRORS_VALIDATION];
-        } else {
-            return isset($this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName]) ? $this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName] : array();
         }
+
+        return isset($this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName]) ? $this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName] : array();
     }
 
     /**
@@ -916,11 +1007,12 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function getReceivingErrors($elementName = null)
     {
-        if($elementName == null) {
+        if($elementName == null)
+        {
             return $this->_errors[self::CHROME_FORM_ERRORS_RECEIVING];
-        } else {
-            return isset($this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName]) ? $this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName] : array();
         }
+
+        return isset($this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName]) ? $this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName] : array();
     }
 
     /**
@@ -942,6 +1034,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      * Special attributes: 'method', 'action'
      * 'method': Sets the input data: available are CHROME_FORM_METHOD_POST, CHROME_FORM_METHOD_GET for input data from $_POST or $_GET
      * 'action': Sets the form action in <form action="">
+     * 'store: adds a store handler. This will store the user input. $value must be an instance of Chrome_Form_Handler_Store_Interface
      *
      * @param string $key
      * @param mixed $value
@@ -949,10 +1042,12 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      */
     public function setAttribute($key, $value)
     {
-        switch($key) {
+        switch($key)
+        {
             case self::ATTRIBUTE_METHOD:
                 {
-                    switch($value) {
+                    switch($value)
+                    {
                         case self::CHROME_FORM_METHOD_POST:
                             {
                                 $this->setSentData($this->getRequestData()->getPOSTData());
@@ -972,28 +1067,32 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
                 }
             case self::ATTRIBUTE_ACTION:
                 {
-                    if(strpos($value, ROOT_URL) === false) {
+                    if(strpos($value, ROOT_URL) === false)
+                    {
 
-                        if($value{0} == '/') {
+                        if($value{0} == '/')
+                        {
                             $value = ROOT_URL . $value;
-                        } else {
+                        } else
+                        {
                             $value = ROOT_URL . '/' . $value;
                         }
 
-                        if($value{0} != '/') {
-                            $value = '/'. $value;
+                        if($value{0} != '/')
+                        {
+                            $value = '/' . $value;
                         }
 
                         $this->_attribts[$key] = $value;
-
                     }
                     return;
                 }
             case self::ATTRIBUTE_STORE:
                 {
-                    if(!($value instanceof Chrome_Form_Handler_Interface) ){
 
-                        $exceptionString = 'Every store handler must be an instance of Chrome_Form_Handler_Interface, given ';
+                    if(!($value instanceof Chrome_Form_Handler_Store_Interface))
+                    {
+                        $exceptionString = 'Every store handler must be an instance of Chrome_Form_Handler_Store_Interface, given ';
                         $exceptionString .= (is_object($value)) ? get_class($value) : gettype($value);
 
                         throw new Chrome_InvalidArgumentException($exceptionString);
@@ -1033,14 +1132,15 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * Determines whether the form element has produced errors (or has produced the error $errorName) or has no errors
      *
-     * @param string $elementName name/id of a form element
-     * @param string $errorName a specific error
+     * @param string $elementName
+     *        name/id of a form element
+     * @param string $errorName
+     *        a specific error
      * @return boolean
      */
     public function hasErrors($elementName, $errorName = null)
     {
-        return ($this->hasCreationErrors($elementName, $errorName) or $this->hasReceivingErrors($elementName, $errorName) or
-            $this->hasValidationErrors($elementName, $errorName));
+        return ($this->hasCreationErrors($elementName, $errorName) or $this->hasReceivingErrors($elementName, $errorName) or $this->hasValidationErrors($elementName, $errorName));
     }
 
     /**
@@ -1048,20 +1148,23 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * Determins whether the form element $elementName has errors or has the error $errorName produced by validation
      *
-     * @param string $elementName name/id of a form element
-     * @param string $errorName if set, then it checks whether the specific
+     * @param string $elementName
+     *        name/id of a form element
+     * @param string $errorName
+     *        if set, then it checks whether the specific
      * @return boolean
      */
     public function hasValidationErrors($elementName, $errorName = null)
     {
-        if($errorName === null) {
+        if($errorName === null)
+        {
             return isset($this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName]);
-        } else {
-            if(isset($this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName])) {
-                return in_array($errorName, $this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName]);
-            } else {
-                return false;
-            }
+        } elseif(isset($this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName]))
+        {
+            return in_array($errorName, $this->_errors[self::CHROME_FORM_ERRORS_VALIDATION][$elementName]);
+        } else
+        {
+            return false;
         }
     }
 
@@ -1070,20 +1173,23 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * Determins whether the form element $elementName has errors or has the error $errorName produced by receiving
      *
-     * @param string $elementName name/id of a form element
-     * @param string $errorName if set, then it checks whether the specific
+     * @param string $elementName
+     *        name/id of a form element
+     * @param string $errorName
+     *        if set, then it checks whether the specific
      * @return boolean
      */
     public function hasReceivingErrors($elementName, $errorName = null)
     {
-        if($errorName === null) {
+        if($errorName === null)
+        {
             return isset($this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName]);
-        } else {
-            if(isset($this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName])) {
-                return in_array($errorName, $this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName]);
-            } else {
-                return false;
-            }
+        } elseif(isset($this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName]))
+        {
+            return in_array($errorName, $this->_errors[self::CHROME_FORM_ERRORS_RECEIVING][$elementName]);
+        } else
+        {
+            return false;
         }
     }
 
@@ -1092,20 +1198,23 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * Determins whether the form element $elementName has errors or has the error $errorName produced by creation
      *
-     * @param string $elementName name/id of a form element
-     * @param string $errorName if set, then it checks whether the specific
+     * @param string $elementName
+     *        name/id of a form element
+     * @param string $errorName
+     *        if set, then it checks whether the specific
      * @return boolean
      */
     public function hasCreationErrors($elementName, $errorName = null)
     {
-        if($errorName === null) {
+        if($errorName === null)
+        {
             return isset($this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName]);
-        } else {
-            if(isset($this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName])) {
-                return in_array($errorName, $this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName]);
-            } else {
-                return false;
-            }
+        } elseif(isset($this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName]))
+        {
+            return in_array($errorName, $this->_errors[self::CHROME_FORM_ERRORS_CREATION][$elementName]);
+        } else
+        {
+            return false;
         }
     }
 
@@ -1142,16 +1251,23 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         $this->_validationHandler[] = $handler;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see Chrome_Form_Interface::getReceivingHandlers()
+     */
     public function getReceivingHandlers($class = null)
     {
-        if($class === null) {
+        if($class === null)
+        {
             return $this->_receivingHandler;
         }
 
         $return = array();
 
-        foreach($this->_receivingHandler as $handler) {
-            if($handler instanceof $class) {
+        foreach($this->_receivingHandler as $handler)
+        {
+            if($handler instanceof $class)
+            {
                 $return[] = $handler;
             }
         }
@@ -1159,16 +1275,23 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         return $return;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see Chrome_Form_Interface::getValidationHandlers()
+     */
     public function getValidationHandlers($class = null)
     {
-        if($class === null) {
+        if($class === null)
+        {
             return $this->_validationHandler;
         }
 
         $return = array();
 
-        foreach($this->_validationHandler as $handler) {
-            if($handler instanceof $class) {
+        foreach($this->_validationHandler as $handler)
+        {
+            if($handler instanceof $class)
+            {
                 $return[] = $handler;
             }
         }
@@ -1176,16 +1299,23 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         return $return;
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see Chrome_Form_Interface::getCreationHandlers()
+     */
     public function getCreationHandlers($class = null)
     {
-        if($class === null) {
+        if($class === null)
+        {
             return $this->_creationHandler;
         }
 
         $return = array();
 
-        foreach($this->_creationHandler as $handler) {
-            if($handler instanceof $class) {
+        foreach($this->_creationHandler as $handler)
+        {
+            if($handler instanceof $class)
+            {
                 $return[] = $handler;
             }
         }
@@ -1196,7 +1326,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     /**
      * Chrome_Form_Abstract::setRequestData
      *
-     * @param Chrome_Request_Data_Interface
+     * @param
+     *        Chrome_Request_Data_Interface
      */
     public function setRequestData(Chrome_Request_Data_Interface $obj)
     {
@@ -1204,9 +1335,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     }
 
     /**
-     * Chrome_Form_Abstract::getRequestData
-     *
-     * @return Chrome_Request_Data_Interface
+     * (non-PHPdoc)
+     * @see Chrome_Form_Interface::getRequestData()
      */
     public function getRequestData()
     {
@@ -1214,9 +1344,8 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     }
 
     /**
-     * Chrome_Form_Abstract::getApplicationContext
-     *
-     * @return Chrome_Context_Application_Interface
+     * (non-PHPdoc)
+     * @see Chrome_Form_Interface::getApplicationContext()
      */
     public function getApplicationContext()
     {

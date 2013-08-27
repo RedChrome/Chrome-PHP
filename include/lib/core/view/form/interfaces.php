@@ -14,11 +14,7 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.View
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version Git: <git_id>
- * @author Alexander Book
+ * @subpackage Chrome.View.Form
  */
 if(CHROME_PHP !== true)
     die();
@@ -34,10 +30,8 @@ if(CHROME_PHP !== true)
  * It can be used to create those $viewElement's using $form. To do that, you can use a $elementFactory and a $elementOptionFactory, which
  * create $viewElement's and $viewElementOption's.
  *
- *
- *
  * @package CHROME-PHP
- * @subpackage Chrome.View
+ * @subpackage Chrome.View.Form
  */
 interface Chrome_View_Form_Interface
 {
@@ -89,7 +83,7 @@ interface Chrome_View_Form_Interface
  * A factory to create Chrome_View_Form_Element_Interface objects
  *
  * @package CHROME-PHP
- * @subpackage Chrome.View
+ * @subpackage Chrome.View.Form
  */
 interface Chrome_View_Form_Element_Factory_Interface
 {
@@ -110,7 +104,7 @@ interface Chrome_View_Form_Element_Factory_Interface
  * A factory to create Chrome_View_Form_Element_Option_Interface objects
  *
  * @package CHROME-PHP
- * @subpackage Chrome.View
+ * @subpackage Chrome.View.Form
  */
 interface Chrome_View_Form_Element_Option_Factory_Interface
 {
@@ -129,7 +123,7 @@ interface Chrome_View_Form_Element_Option_Factory_Interface
  * A renderer to render a whole form object. This should be used to render a form. It can be appended in any other view (it extends Chrome_Renderable!)
  *
  * @package CHROME-PHP
- * @subpackage Chrome.View
+ * @subpackage Chrome.View.Form
  */
 interface Chrome_View_Form_Renderer_Interface extends Chrome_Renderable
 {
@@ -148,7 +142,7 @@ interface Chrome_View_Form_Renderer_Interface extends Chrome_Renderable
  * This contains all necessary options for rendering a form element.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.View
+ * @subpackage Chrome.View.Form
  */
 interface Chrome_View_Form_Element_Option_Interface
 {
@@ -193,19 +187,23 @@ interface Chrome_View_Form_Element_Option_Interface
     public function getStoredData();
 }
 
+/**
+ * @todo add doc
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
 interface Chrome_View_Form_Element_Option_Multiple_Interface extends Chrome_View_Form_Element_Option_Interface
 {
-    const LABEL_POSITION_FRONT = 'FRONT';
 
-    const LABEL_POSITION_BEHIND = 'BEHIND';
-
-    const LABEL_POSITION_NONE = 'NONE';
-
-    public function setLabelPosition($labelPosition);
-
-    public function getLabelPosition();
 }
 
+/**
+ * @todo add doc
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
 interface Chrome_View_Form_Element_Option_Attachable_Interface extends Chrome_View_Form_Element_Option_Interface
 {
     public function attach(Chrome_View_Form_Element_Interface $element);
@@ -216,12 +214,19 @@ interface Chrome_View_Form_Element_Option_Attachable_Interface extends Chrome_Vi
 }
 
 /**
+ * @todo add doc
  *
  * @package CHROME-PHP
- * @subpackage Chrome.View
+ * @subpackage Chrome.View.Form
  */
 interface Chrome_View_Form_Element_Interface extends Chrome_Renderable
 {
+    public function getFormElement();
+
+    public function setOption(Chrome_View_Form_Element_Option_Interface $option);
+
+    public function getOption();
+
     public function setAttribute($key, $value);
 
     public function getAttribute($key);
@@ -230,12 +235,57 @@ interface Chrome_View_Form_Element_Interface extends Chrome_Renderable
 
     public function setViewForm(Chrome_View_Form_Interface $viewForm);
 
+    public function getViewForm();
+
+    public function addAppender(Chrome_View_Form_Element_Appendable_Interface $decorator);
+
+    public function getAppenders();
+
     public function reset();
-    //public function __construct(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption);
 }
 
+/**
+ * @todo add doc
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
+interface Chrome_View_Form_Element_Appendable_Interface extends Chrome_Renderable
+{
+    public function setResult($result);
+}
+
+/**
+ * @todo add doc and finish interface.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
+interface Chrome_View_Form_Element_Decorator_Interface extends Chrome_Renderable
+{
+
+}
+
+/**
+ * @todo add doc
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
 interface Chrome_View_Form_Label_Interface
 {
+    const LABEL_POSITION_FRONT = 'FRONT';
+
+    const LABEL_POSITION_BEHIND = 'BEHIND';
+
+    const LABEL_POSITION_DEFAULT = 'DEFAULT';
+
+    const LABEL_POSITION_NONE = 'NONE';
+
+    public function setPosition($labelPosition);
+
+    public function getPosition();
+
     public function setLabel($labelForValue, $label);
 
     public function getLabel($labelForValue);

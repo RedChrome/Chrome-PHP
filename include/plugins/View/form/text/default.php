@@ -25,12 +25,8 @@ if(CHROME_PHP !== true)
 
 class Chrome_View_Form_Element_Text_Default extends Chrome_View_Form_Element_Abstract
 {
-    public function render()
+    protected function _render()
     {
-        $return = $this->_renderLabel();
-
-        $return .= '<input type="text" '.$this->_renderFlags().'/>'."\n";
-
-        return $return;
+        return'<input type="text" '.$this->_renderFlags().'/>'."\n";
     }
 }

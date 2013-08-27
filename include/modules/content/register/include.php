@@ -55,7 +55,7 @@ class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
             case 'accept':
                 {
                     $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $lang->get('rules_agree'))));
-                    $viewOption->setLabelPosition($viewOption::LABEL_POSITION_BEHIND);
+                    #$viewOption->setLabelPosition($viewOption::LABEL_POSITION_BEHIND);
                 }
         }
 

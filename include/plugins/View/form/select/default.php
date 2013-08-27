@@ -32,7 +32,7 @@ class Chrome_View_Form_Element_Select_Default extends Chrome_View_Form_Element_M
 
     private $_int = 0;
 
-    protected function getNext()
+    protected function _getNext()
     {
         $next = $this->_availableSelections[$this->_int];
         $this->_int = ++$this->_int % count($this->_availableSelections);
