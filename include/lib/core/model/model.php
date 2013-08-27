@@ -26,6 +26,8 @@ if(CHROME_PHP !== true) die();
 interface Chrome_Model_Interface
 {
     public function setModelContext(Chrome_Context_Model_Interface $modelContext);
+
+    public function getModelContext();
 }
 
 /**
@@ -42,6 +44,11 @@ abstract class Chrome_Model_Abstract implements Chrome_Model_Interface
     public function setModelContext(Chrome_Context_Model_Interface $modelContext)
     {
         $this->_modelContext = $modelContext;
+    }
+
+    public function getModelContext()
+    {
+        return $this->_modelContext;
     }
 }
 

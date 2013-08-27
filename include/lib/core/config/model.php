@@ -30,6 +30,7 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
 {
+    const TYPE_INT = 'integer', TYPE_STRING = 'string', TYPE_DOUBLE = 'double', TYPE_BOOL = 'boolean';
 
     protected function _setDatabaseOptions()
     {
@@ -46,19 +47,40 @@ class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
         $config = array();
         foreach($result as $item)
         {
-
             // sets $config[subclass][name] = value
-            $config[$item['subclass']][$item['name']] = $item['value'];
+            $config[$item['subclass']][$item['name']] = $this->_convertTypes($item['type'], $item['value']);
         }
 
         return $config;
     }
 
-    public function setConfig($name, $subclass, $value, $type, $modul = '')
+    protected function _convertTypes($type, $value)
     {
+        switch($type)
+        {
+            case self::TYPE_INT:
+                return (integer) $value;
+            case self::TYPE_STRING:
+                return (string) $value;
+            case self::TYPE_DOUBLE:
+                return (double) $value;
+            case self::TYPE_BOOL:
+                return (boolean) $value;
+            default:
+                return $value;
+        }
+    }
+
+    public function setConfig($name, $subclass, $value, $type = null, $modul = '', $hidden = false)
+    {
+        if($type === null)
+        {
+            $type = gettype($value);
+        }
+
         $db = $this->_getDBInterface();
 
-        $db->loadQuery('configSetConfiguration')->execute(array($name, $subclass, $value, $type, $modul));
+        $db->loadQuery('configSetConfiguration')->execute(array($name, $subclass, $value, $type, $modul, $hidden));
     }
 }
 
@@ -69,29 +91,32 @@ class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
  */
 class Chrome_Model_Config_Cache extends Chrome_Model_Cache_Abstract
 {
+
     protected function _setUpCache()
     {
         $this->_cacheOption = new Chrome_Cache_Option_Serialization();
-        $this->_cacheOption->setCacheFile(CACHE.'_config.cache');
+        $this->_cacheOption->setCacheFile(CACHE . '_config.cache');
         $this->_cacheInterface = 'serialization';
     }
 
     public function loadConfig()
     {
-        if(($cache = $this->_cache->get('config')) === null)
+        if(!$this->_cache->has('config'))
         {
             // cache miss
 
             $cache = $this->_decorable->loadConfig();
             $this->_cache->set('config', $cache);
+        } else {
+            $cache = $this->_cache->get('config');
         }
 
         return $cache;
     }
 
-    public function setConfig($name, $subclass, $value, $type, $modul = '')
+    public function setConfig($name, $subclass, $value, $type = null, $modul = '', $hidden = false)
     {
         $this->_cache->remove('config');
-        $this->_decorator->setConfig($name, $subclass, $value, $type, $modul);
+        $this->_decorable->setConfig($name, $subclass, $value, $type, $modul);
     }
 }

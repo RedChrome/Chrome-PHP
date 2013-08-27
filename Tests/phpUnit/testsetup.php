@@ -72,7 +72,7 @@ class Chrome_TestSetup
 			$defaultConnection->connect();
 		}
 		catch (Exception $e) {
-			die(var_dump($e));
+			$this->_errorConfig->getExceptionHandler()->exception($e);
 		}
 
 		$dbRegistry = new Chrome_Database_Registry_Connection();

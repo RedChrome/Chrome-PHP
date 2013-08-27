@@ -258,7 +258,6 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
             foreach($array as $key => $value) {
                 $this->_params[$key] = $this->escape($value);
             }
-
         } else {
             $this->_params = array_merge($this->_params, $array);
         }
@@ -305,7 +304,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
     public function clear()
     {
         $this->_query     = null;
-        $this->_params    = null;
+        $this->_params    = array();
         $this->_sentQuery = null;
         $this->_adapter   = $this->_adapter->clear();
         $this->_result    = $this->_result->clear();

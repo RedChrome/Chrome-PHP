@@ -117,7 +117,16 @@ class Chrome_View_Index_TODO extends Chrome_View_Abstract
 
     public function render()
     {
-        return '<div align="left">TODO LIST:<br>
+        return '<br><br>
+                <h4>Working modules so far:</h4>
+                <ul>
+                    <li><a href="">Index</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="logout.html">Logout</a></li>
+                    <li><a href="registrieren.html">Register</a></li>
+                </ul>
+                <br>
+                <div align="left">TODO LIST:<br>
             1. User Bereich<br>
             2. Modul (News)<br>
             3. Admin Bereich<br>

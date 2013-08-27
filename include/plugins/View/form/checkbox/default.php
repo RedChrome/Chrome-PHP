@@ -40,8 +40,6 @@ class Chrome_View_Form_Element_Checkbox_Default extends Chrome_View_Form_Element
 
     protected function _render()
     {
-        $this->_tempFlag['value'] = 'anything';
-
         $return = '<input type="checkbox" ' . $this->_renderFlags() . '/>';
         return $return;
     }

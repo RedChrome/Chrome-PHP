@@ -20,3 +20,7 @@ require_once 'database/result.php';
 
 require_once 'request/data.php';
 require_once 'request/handler.php';
+
+require_once 'model/dummy.php';
+
+require_once 'cache/dummy.php';

@@ -101,6 +101,16 @@ abstract class Chrome_Model_Cache_Abstract extends Chrome_Model_Decorator_Abstra
     abstract protected function _setUpCache();
 
     /**
+     * Sets a cache object
+     *
+     * @param Chrome_Cache_Interface $cache
+     */
+    public function setCache(Chrome_Cache_Interface $cache)
+    {
+        $this->_cache = $cache;
+    }
+
+    /**
      * Actually creates the cache
      *
      * @return void
