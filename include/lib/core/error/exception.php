@@ -217,7 +217,7 @@ class Chrome_Exception extends Exception
         $this->_handleException = $handleException;
         $this->_prevException = $prevException;
 
-        parent::__construct((string )$msg, (double)$code, $prevException);
+        parent::__construct((string) $msg, (double) $code, $prevException);
     }
 
     /**

@@ -38,18 +38,20 @@ class Chrome_Form_Decorator_Captcha_Recaptcha extends Chrome_Form_Decorator_Abst
 
         $publickey = $config->getConfig('Captcha', 'public_key');
 
-        /*if($use_ssl) {
-        $server = RECAPTCHA_API_SECURE_SERVER;
-        } else {*/
+        /*
+            if($use_ssl) {
+            $server = RECAPTCHA_API_SECURE_SERVER;
+            } else {
+        */
         $server = RECAPTCHA_API_SERVER;
         //}
 
         // TODO: localize this
-        $errorpart = "";
+        $errorpart = '';
         if($this->_formElement->getForm()->hasErrors($this->_formElement->getID())) {
             $errors = $this->_formElement->getErrors();
             $error = $errors[0];
-            $errorpart = "&amp;error=".$error;
+            $errorpart = '&amp;error='.$error;
         }
 
         // add a hidden input text. This is needed for the captcha element to return isSent() = true

@@ -1,5 +1,3 @@
-
-
 <?php echo $FORM['Register_StepTwo']->render(); ?>
 <?php //echo $FORM->render('error'); ?>
 <h6 class="ym-fbox-heading">Registrieren:</h6>

@@ -190,7 +190,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
      */
     private function __construct()
     {
-        clearstatcache();
+        clearstatcache(true);
 
         $cache = $this->readCache();
 

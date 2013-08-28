@@ -25,4 +25,3 @@
 <?php
 	echo $FORM['login']->render();
 ?>
-

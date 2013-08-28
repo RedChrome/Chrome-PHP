@@ -15,18 +15,17 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category   CHROME-PHP
- * @package    CHROME-PHP
+ * @category CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Database
- * @author     Alexander Book <alexander.book@gmx.de>
- * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 12:58:27] --> $
- * @link       http://chrome-php.de
+ * @author Alexander Book <alexander.book@gmx.de>
+ * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 12:58:27] --> $
+ * @link http://chrome-php.de
  */
-
-if(CHROME_PHP !== true) die();
-
+if(CHROME_PHP !== true)
+    die();
 class Chrome_Database_Adapter_DB2 extends Chrome_Database_Adapter_Abstract
 {
     public function isEmpty()
@@ -39,24 +38,28 @@ class Chrome_Database_Adapter_DB2 extends Chrome_Database_Adapter_Abstract
         // TODO: add COUNT(*) to the query
         $this->_result = db2_query($this->_connection, $query);
 
-        if($this->_result === false) {
-            throw new Chrome_Exception_Database('Error while sending "'.$query.'" to database! MySQL Error:'.mysql_error($this->_connection));
+        if($this->_result === false)
+        {
+            throw new Chrome_Exception_Database('Error while sending "' . $query . '" to database! MySQL Error:' . mysql_error($this->_connection));
         }
 
-        if(is_resource($this->_result) === true) {
-
-           //TODO: is it empty?
-           $this->_isEmpty = false;
-        } else {
+        if(is_resource($this->_result) === true)
+        {
+            // TODO: is it empty?
+            $this->_isEmpty = false;
+        } else
+        {
             $this->_isEmpty = true;
         }
     }
 
     public function getNext()
     {
-       if($this->_result !== false) {
+        if($this->_result !== false)
+        {
             return db2_fetch_assoc($this->_result);
-        } else {
+        } else
+        {
             return false;
         }
     }
@@ -68,7 +71,8 @@ class Chrome_Database_Adapter_DB2 extends Chrome_Database_Adapter_Abstract
 
     public function getAffectedRows()
     {
-        if($this->_result !== false) {
+        if($this->_result !== false)
+        {
             return db2_num_rows($this->_result);
         }
 
@@ -77,7 +81,8 @@ class Chrome_Database_Adapter_DB2 extends Chrome_Database_Adapter_Abstract
 
     public function getErrorCode()
     {
-        if($this->_result === false) {
+        if($this->_result === false)
+        {
             return db2_stm_errormsg();
         }
 
@@ -86,14 +91,16 @@ class Chrome_Database_Adapter_DB2 extends Chrome_Database_Adapter_Abstract
 
     public function getErrorMessage()
     {
-        if($this->_result === false) {
+        if($this->_result === false)
+        {
             return db2_stm_error();
         }
 
         return db2_stmt_error($this->_result);
     }
 
-    public function getLastInsertId() {
+    public function getLastInsertId()
+    {
         $id = db2_last_insert_id($this->_connection);
         return ($id == 0) ? null : 0;
     }

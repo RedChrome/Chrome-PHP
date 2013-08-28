@@ -55,7 +55,7 @@ class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
             case 'accept':
                 {
                     $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $lang->get('rules_agree'))));
-                    #$viewOption->setLabelPosition($viewOption::LABEL_POSITION_BEHIND);
+                    // viewOption->setLabelPosition($viewOption::LABEL_POSITION_BEHIND);
                 }
         }
 
@@ -169,6 +169,23 @@ class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
             case 'email':
                 {
                     $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('email' => $lang->get('email'))));
+                    break;
+                }
+
+            case 'password':
+                {
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('password' => $lang->get('password'))));
+                    break;
+                }
+
+            case 'password2':
+                {
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('password2' => $lang->get('password_confirm'))));
+                    break;
+                }
+            case 'nickname':
+                {
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('nickname' => $lang->get('nickname'))));
                     break;
                 }
         }

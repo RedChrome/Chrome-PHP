@@ -13,39 +13,37 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Mime
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.11.2009 21:02:59] --> $
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.11.2009 21:02:59] --> $
  */
-
 if(CHROME_PHP !== true)
     die();
 
 /**
  * Chrome_Mime
  *
- * @author		Alexander Book
- * @package		CHROME-PHP
- * @subpackage  Chrome.Mime
- * @copyright   Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license     http://chrome-php.de/license/new-bsd		New BSD License
+ * @author Alexander Book
+ * @package CHROME-PHP
+ * @subpackage Chrome.Mime
+ * @copyright Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://chrome-php.de/license/new-bsd		New BSD License
  */
 class Chrome_Mime
 {
     private static $_instance = null;
-
     private $_mimeFunction = null;
     private $_finfoHandler = null;
 
     /**
      * Chrome_Mime::__construct()
-     *
      */
     private function __construct()
     {
-        if(class_exists('finfo', false)) {
+        if(class_exists('finfo', false))
+        {
             $this->_finfoHandler = new finfo(FILEINFO_MIME_TYPE);
         }
     }
@@ -59,7 +57,8 @@ class Chrome_Mime
      */
     public static function getInstance()
     {
-        if(self::$_instance === null) {
+        if(self::$_instance === null)
+        {
             self::$_instance = new self();
         }
 
@@ -76,9 +75,10 @@ class Chrome_Mime
      */
     public function getMIME($file)
     {
-        $file = ROOT.'/'.$file;
+        $file = ROOT . '/' . $file;
         $this->_searchFunction();
-        switch($this->_mimeFunction) {
+        switch($this->_mimeFunction)
+        {
 
             case 'finfo':
                 {
@@ -94,14 +94,14 @@ class Chrome_Mime
                 {
                     return mime_content_type($file);
                 }
-            
+
             case '':
                 {
                     return false;
                 }
-            
+
             default:
-                throw new Chrome_Exception('Unknown mimeFunction("'.$this->_mimeFunction.'") given in switch statement in Chrome_Mime::getMIME()!');
+                throw new Chrome_Exception('Unknown mimeFunction("' . $this->_mimeFunction . '") given in switch statement in Chrome_Mime::getMIME()!');
         }
     }
 
@@ -114,19 +114,21 @@ class Chrome_Mime
      */
     private function _searchFunction()
     {
-
         if($this->_mimeFunction !== null)
             return;
 
-        if($this->_finfoHandler !== null) {
+        if($this->_finfoHandler !== null)
+        {
             $this->_mimeFunction = 'finfo';
-        } elseif(!function_exists('mime_content_type')) { 
+        } elseif(!function_exists('mime_content_type'))
+        {
             $this->_mimeFunction = '';
-        
-        } elseif (version_compare(PHP_VERSION, '5.3.0', '>')) {
+        } elseif(version_compare(PHP_VERSION, '5.3.0', '>'))
+        {
             // PHP_VERSION is greater than 5.3.0, so mime_content_type is deprecated, but finfo does not exist
             $this->_mimeFunction = '@mime_content_type';
-        } else {
+        } else
+        {
             $this->_mimeFunction = 'mime_content_type';
         }
     }

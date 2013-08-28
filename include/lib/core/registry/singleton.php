@@ -13,21 +13,21 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Registry
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.01beta <!-- phpDesigner :: Timestamp [15.09.2011 23:28:18] --> $
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.01beta <!-- phpDesigner :: Timestamp [15.09.2011 23:28:18] --> $
  */
 if(CHROME_PHP !== true)
     die();
 
 /**
  * Interface for Chrome_Registr_Singleton
- * 
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Registry
- */ 
+ */
 interface Chrome_Registry_Singleton_Interface extends Chrome_Registry_Abstract_Interface
 {
     /**
@@ -43,43 +43,48 @@ interface Chrome_Registry_Singleton_Interface extends Chrome_Registry_Abstract_I
      * Sets an instance to Chrome_Registry
      * Returns boolean true on success
      *
-     * @param string $class Name of the class
-     * @param object $instance Instance of the class
+     * @param string $class
+     *        Name of the class
+     * @param object $instance
+     *        Instance of the class
      * @throws Chrome_Exception if $instance is not an object, OR $class is already set
      * @return bool
      */
     public function set($class, $instance);
-    
+
     /**
      * Chrome_Registry_Singleton::get()
      *
      * Gets an instance of Chrome_Registry
      * Returns an instance of a class, saved before by Chrome_Registry_Singleton::set()
      *
-     * @param string $class Name of the class
+     * @param string $class
+     *        Name of the class
      * @return object OR null
      */
     public function get($class);
-    
+
     /**
      * Chrome_Registry_Singleton::_isset()
      *
      * Checks whether the $class is already set
      * Returns boolean true if set, false else
      *
-     * @param string $class Name of the class
+     * @param string $class
+     *        Name of the class
      * @return boolean
      */
     public function _isset($class);
-    
+
     /**
      * Chrome_Registry_Singleton::_unset()
      *
      * Cannot unset a singleton class!
      * Always throws Chrome_Exception
-     * 
+     *
      * @throws Chrome_Exception
-     * @param string $class [ignored]
+     * @param string $class
+     *        [ignored]
      * @return void
      */
     public function _unset($class);
@@ -90,12 +95,12 @@ interface Chrome_Registry_Singleton_Interface extends Chrome_Registry_Abstract_I
  *
  * Registry class to access singletons saved in registry
  *
- * @package		CHROME-PHP
- * @subpackage  Chrome.Registry
- * @author		Alexander Book
- * @copyright	2009 by Alexander Book
- * @version		2009
- * @access		public
+ * @package CHROME-PHP
+ * @subpackage Chrome.Registry
+ * @author Alexander Book
+ * @copyright 2009 by Alexander Book
+ * @version 2009
+ * @access public
  */
 class Chrome_Registry_Singleton extends Chrome_Registry_Abstract implements Chrome_Registry_Singleton_Interface
 {
@@ -115,7 +120,8 @@ class Chrome_Registry_Singleton extends Chrome_Registry_Abstract implements Chro
      */
     public static function getInstance()
     {
-        if(self::$_instance === null) {
+        if(self::$_instance === null)
+        {
             self::$_instance = new self();
         }
         return self::$_instance;
@@ -127,19 +133,23 @@ class Chrome_Registry_Singleton extends Chrome_Registry_Abstract implements Chro
      * Sets an instance to Chrome_Registry
      * Returns boolean true on success
      *
-     * @param string $class Name of the class
-     * @param object $instance Instance of the class
+     * @param string $class
+     *        Name of the class
+     * @param object $instance
+     *        Instance of the class
      * @throws Chrome_Exception if $instance is not an object, OR $class is already set
      * @return bool
      */
     public function set($class, $instance)
     {
-        if(!is_object($instance)) {
+        if(!is_object($instance))
+        {
             throw new Chrome_Exception('Cannot set class! $instance is not an object in Chrome_Registry_Singleton::set()!');
         }
 
-        if($this->_isset($class)) {
-            throw new Chrome_Exception('Cannot reset class '.$class.'! Use reset() instead!');
+        if($this->_isset($class))
+        {
+            throw new Chrome_Exception('Cannot reset class ' . $class . '! Use reset() instead!');
         }
 
         $this->_registry[self::CHROME_REGISTRY_SINGLETON_NAMESPACE][$class] = array('value' => $instance, 'readOnly' => true);
@@ -153,15 +163,15 @@ class Chrome_Registry_Singleton extends Chrome_Registry_Abstract implements Chro
      * Gets an instance of Chrome_Registry
      * Returns an instance of a class, saved before by Chrome_Registry_Singleton::set()
      *
-     * @param string $class Name of the class
+     * @param string $class
+     *        Name of the class
      * @return object OR null
      */
     public function get($class)
     {
-        if(isset($this->_registry[$namespace][$key]))
-            return $this->_registry[$namespace][$key]['value'];
-        else
-            return null;
+        if(isset($this->_registry[self::CHROME_REGISTRY_SINGLETON_NAMESPACE][$class]))
+            return $this->_registry[self::CHROME_REGISTRY_SINGLETON_NAMESPACE][$class]['value'];
+        else return null;
     }
 
     /**
@@ -170,12 +180,13 @@ class Chrome_Registry_Singleton extends Chrome_Registry_Abstract implements Chro
      * Checks whether the $class is already set
      * Returns boolean true if set, false else
      *
-     * @param string $class Name of the class
+     * @param string $class
+     *        Name of the class
      * @return boolean
      */
     public function _isset($class)
     {
-        return (isset($this->_registry[$namespace][$key]));
+        return (isset($this->_registry[self::CHROME_REGISTRY_SINGLETON_NAMESPACE][$class]));
     }
 
     /**
@@ -184,7 +195,8 @@ class Chrome_Registry_Singleton extends Chrome_Registry_Abstract implements Chro
      * Cannot unset a singleton class!
      * Always throws Chrome_Exception
      *
-     * @param string $class [ignored]
+     * @param string $class
+     *        [ignored]
      * @return void
      */
     public function _unset($class)

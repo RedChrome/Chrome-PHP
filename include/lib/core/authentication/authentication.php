@@ -419,7 +419,6 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
             // $return is an instance of Chrome_Authentication_Data_Container_Interface
             $this->_container = $this->_chain->authenticate($resource);
 
-
             // user could not authenticate or he should not authenticate
             if(!($this->_container instanceof Chrome_Authentication_Data_Container_Interface) or !is_int(($id = $this->_container->getID())) or $id < 0) {
                 throw new Chrome_Exception_Authentication('Could not authenticate, authentication refused', 201);

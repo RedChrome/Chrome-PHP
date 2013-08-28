@@ -293,7 +293,8 @@ class Chrome_Authorisation implements Chrome_Authorisation_Interface
      * @param Chrome_Authorisation_Resource_Interface $obj
      * @return boolean true if allowed to access resource, false else
      */
-    public function isAllowed(Chrome_Authorisation_Resource_Interface $resource) {
+    public function isAllowed(Chrome_Authorisation_Resource_Interface $resource)
+    {
         return $this->_adapter->isAllowed($resource);
     }
 }

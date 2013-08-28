@@ -66,10 +66,12 @@ interface Chrome_Session_Interface extends ArrayAccess
      *
      * Collects old sessions AND deletes them
      *
+     * If $probability is set to false, then use a default probability
+     *
      * @param int $probability
      * @return void
      */
-    public function garbageCollector($probability);
+    public function garbageCollector($probability = false);
 
     /**
      * renew()

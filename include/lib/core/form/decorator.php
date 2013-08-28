@@ -13,12 +13,13 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-if( CHROME_PHP !== true ) die();
+if(CHROME_PHP !== true)
+    die();
 
-//TODO: if field is mandatory, then use a language obj. to get the right phrase
+    // TODO: if field is mandatory, then use a language obj. to get the right phrase
 
 /**
  * Chrome_Form_Decorator_Interface
@@ -37,17 +38,18 @@ interface Chrome_Form_Decorator_Interface
      * @param $value mixed
      * @return void
      */
-    public function setOption( $key, $value );
+    public function setOption($key, $value);
 
     /**
      * setOptions
      *
      * Does the same as setOption, except you can set more than one pair at once
      *
-     * @param $array array array containing key-value pairs
+     * @param $array array
+     *        array containing key-value pairs
      * @return void
      */
-    public function setOptions( array $array );
+    public function setOptions(array $array);
 
     /**
      * getOption
@@ -57,7 +59,7 @@ interface Chrome_Form_Decorator_Interface
      * @param $key string
      * @return mixed
      */
-    public function getOption( $key );
+    public function getOption($key);
 
     /**
      * getOptions
@@ -73,23 +75,27 @@ interface Chrome_Form_Decorator_Interface
      *
      * Sets an attribute
      *
-     * @param $key string key
-     * @param $value mixed value
-     * @param $oberwrite boolean if set to true, then the current value gets overwritten, if false and the key-value pair
-     *                           already exists, then nothing is done
+     * @param $key string
+     *        key
+     * @param $value mixed
+     *        value
+     * @param $oberwrite boolean
+     *        if set to true, then the current value gets overwritten, if false and the key-value pair
+     *        already exists, then nothing is done
      * @return void
      */
-    public function setAttribute( $key, $value, $overwrite = false );
+    public function setAttribute($key, $value, $overwrite = false);
 
     /**
      * setAttributes
      *
      * Same as setAttribute, all pairs with the same key get overwritten
      *
-     * @param $array array key-value pairs
+     * @param $array array
+     *        key-value pairs
      * @return void
      */
-    public function setAttributes( array $attr );
+    public function setAttributes(array $attr);
 
     /**
      * getAttributes
@@ -110,7 +116,7 @@ interface Chrome_Form_Decorator_Interface
      * @param $obj Chrome_Form_Element_Interface
      * @return void
      */
-    public function setFormElement( Chrome_Form_Element_Interface $obj );
+    public function setFormElement(Chrome_Form_Element_Interface $obj);
 
     /**
      * render
@@ -129,15 +135,15 @@ interface Chrome_Form_Decorator_Interface
  * some cases in which the developer wants to render the elements separated. To enable this, please
  * inherit this interface.
  * Usage:
- *  the render() method from Chrome_Form_Decorator_Interface returns an reference to the called decorator
- *  then you can call on this the element() or renderAll method. (renderAll should return the same as __toString())
+ * the render() method from Chrome_Form_Decorator_Interface returns an reference to the called decorator
+ * then you can call on this the element() or renderAll method. (renderAll should return the same as __toString())
  * [code]
- *  // this will render the element anyElement
- *  echo $FORM->render('anyFormWithAnDecoratorInheritedWithThisInterface')->element('anyElement');
- *  // this will render all elements
- *  echo $FORM->render();
- *  // the same as the line above
- *  echo $FORM->render()->renderAll();
+ * // this will render the element anyElement
+ * echo $FORM->render('anyFormWithAnDecoratorInheritedWithThisInterface')->element('anyElement');
+ * // this will render all elements
+ * echo $FORM->render();
+ * // the same as the line above
+ * echo $FORM->render()->renderAll();
  *
  * [/code]
  *
@@ -147,17 +153,20 @@ interface Chrome_Form_Decorator_Interface
  */
 interface Chrome_Form_Decorator_Individual_Interface
 {
+
     /**
      * element
      *
      * renders only the given element.
      * Notice: See the docu from the decorator to get the proper element name
      *
-     * @param $name string name
-     * @param $options array [optional] addition options to render, see decorator for more info
+     * @param $name string
+     *        name
+     * @param $options array
+     *        [optional] addition options to render, see decorator for more info
      * @return mixed
      */
-    public function element( $name, array $options = array() );
+    public function element($name, array $options = array());
 
     /**
      * renderAll
@@ -191,7 +200,7 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
      * This will force the decorator to display the selectable values as defined by the option
      *
      * Structure:
-     *  array(self::CHROME_FORM_DECORATOR_SELECTION_DISPLAY => array('Value1', 'ThisItemCanGetSelected'))
+     * array(self::CHROME_FORM_DECORATOR_SELECTION_DISPLAY => array('Value1', 'ThisItemCanGetSelected'))
      *
      * @var string
      */
@@ -205,9 +214,9 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
      * prefered!
      *
      * Structure:
-     *  - for single input:
+     * - for single input:
      * array(self::CHROME_FORM_DECORATOR_DEFAULT_INPUT => 'myDefaultInput')
-     *  - for multiple input (e.g. select, checkbox):
+     * - for multiple input (e.g. select, checkbox):
      * array(self::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array('firstSelectedItem', 'secondOne', 'andAThird'))
      *
      * @var string
@@ -243,7 +252,7 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
      *
      * @var array
      */
-    protected $_defaultOptions = array( self::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array(), self::CHROME_FORM_DECORATOR_LABEL => null );
+    protected $_defaultOptions = array(self::CHROME_FORM_DECORATOR_DEFAULT_INPUT => array(), self::CHROME_FORM_DECORATOR_LABEL => null);
 
     /**
      * contains the form element
@@ -266,7 +275,7 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
      *
      * @var Chrome_Language_Interface
      */
-    protected $_lang  = null;
+    protected $_lang = null;
 
     /**
      * contains the default langauge, and its namespace
@@ -280,13 +289,15 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
      *
      * Constructor, sets options and attributes
      *
-     * @param $options array same as {@see setOptions}
-     * @param $attributes array same as {@see setAttributes}
+     * @param $options array
+     *        same as {@see setOptions}
+     * @param $attributes array
+     *        same as {@see setAttributes}
      * @return Chrome_Form_Decorator_Abstract
      */
-    public function __construct( array $options, array $attributes )
+    public function __construct(array $options, array $attributes)
     {
-        $this->_options = array_merge( $this->_defaultOptions, $options );
+        $this->_options = array_merge($this->_defaultOptions, $options);
         $this->_attribute = $attributes;
     }
 
@@ -297,7 +308,7 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
      * @param $value mixed
      * @return void
      */
-    public function setOption( $key, $value )
+    public function setOption($key, $value)
     {
         $this->_options[$key] = $value;
         return $this;
@@ -306,12 +317,13 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
     /**
      * setOptions
      *
-     * @param $array array array containing key-value pairs
+     * @param $array array
+     *        array containing key-value pairs
      * @return void
      */
-    public function setOptions( array $array )
+    public function setOptions(array $array)
     {
-        $this->_options = array_merge( $this->_options, $array );
+        $this->_options = array_merge($this->_options, $array);
         return $this;
     }
 
@@ -321,9 +333,9 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
      * @param $key string
      * @return mixed
      */
-    public function getOption( $key )
+    public function getOption($key)
     {
-        return ( isset( $this->_options[$key] ) ) ? $this->_options[$key] : null;
+        return (isset($this->_options[$key])) ? $this->_options[$key] : null;
     }
 
     /**
@@ -336,21 +348,20 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
         return $this->_options;
     }
 
-
     /**
      * setFormElement
      *
      * @param $obj Chrome_Form_Element_Interface
      * @return void
      */
-    public function setFormElement( Chrome_Form_Element_Interface $obj )
+    public function setFormElement(Chrome_Form_Element_Interface $obj)
     {
         $this->_formElement = $obj;
 
-        if(!isset($this->_attribute['id'])) {
+        if(!isset($this->_attribute['id']))
+        {
             $this->_attribute['id'] = $obj->getID();
         }
-
 
         return $this;
     }
@@ -368,20 +379,25 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
     /**
      * setAttribute
      *
-     * @param $key string key
-     * @param $value mixed value
-     * @param $oberwrite boolean if set to true, then the current value gets overwritten, if false and the key-value pair
-     *                           already exists, then nothing is done
+     * @param $key string
+     *        key
+     * @param $value mixed
+     *        value
+     * @param $oberwrite boolean
+     *        if set to true, then the current value gets overwritten, if false and the key-value pair
+     *        already exists, then nothing is done
      * @return void
      */
-    public function setAttribute( $key, $value, $overwrite = false )
+    public function setAttribute($key, $value, $overwrite = false)
     {
-        if( $overwrite === false and isset( $this->_attribute[$key] ) ) {
+        if($overwrite === false and isset($this->_attribute[$key]))
+        {
             return $this;
         }
 
-        if( $value === null ) {
-            unset( $this->_attribute[$key] );
+        if($value === null)
+        {
+            unset($this->_attribute[$key]);
             return $this;
         }
 
@@ -392,22 +408,25 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
     /**
      * setAttributes
      *
-     * @param $array array key-value pairs
+     * @param $array array
+     *        key-value pairs
      * @return void
      */
-    public function setAttributes( array $attr )
+    public function setAttributes(array $attr)
     {
-        $this->_attribute = array_merge( $this->_attribute, $attr );
+        $this->_attribute = array_merge($this->_attribute, $attr);
         return $this;
     }
 
     /**
      * setLanguage
      *
-     * @param $lang Chrome_Language_Interface language object to set
+     * @param $lang Chrome_Language_Interface
+     *        language object to set
      * @return void
      */
-    public function setLanguage(Chrome_Language_Interface $lang) {
+    public function setLanguage(Chrome_Language_Interface $lang)
+    {
         $this->_lang = $lang;
     }
 
@@ -418,7 +437,8 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
      *
      * @return Chrome_Language_Interface
      */
-    public function getLanguage() {
+    public function getLanguage()
+    {
         ($this->_lang !== null) ? $this->_lang : ($this->_lang = new Chrome_Language($this->_langDefaultNamespace));
         return $this->_lang;
     }
@@ -434,8 +454,10 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
     {
         $return = '';
 
-        foreach( $this->_attribute as $key => $value ) {
-            if($value !== null) {
+        foreach($this->_attribute as $key => $value)
+        {
+            if($value !== null)
+            {
                 $return .= ' ' . $key . '="' . $value . '"';
             }
         }
@@ -449,9 +471,9 @@ abstract class Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_I
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Decorator
  */
-abstract class Chrome_Form_Decorator_Individual_Abstract extends Chrome_Form_Decorator_Abstract implements
-    Chrome_Form_Decorator_Individual_Interface
+abstract class Chrome_Form_Decorator_Individual_Abstract extends Chrome_Form_Decorator_Abstract implements Chrome_Form_Decorator_Individual_Interface
 {
+
     /**
      * render
      *

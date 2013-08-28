@@ -71,7 +71,7 @@ abstract class Chrome_Filter_Chain_Abstract
     public function processFilters(Chrome_Request_Data_Interface $req, Chrome_Response_Interface $res)
     {
         // loop through every filter
-        foreach($this->_filters AS $filter) {
+        foreach($this->_filters as $filter) {
             $filter->execute($req, $res);
         }
     }

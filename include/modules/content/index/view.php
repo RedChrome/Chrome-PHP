@@ -176,10 +176,12 @@ class Chrome_View_Form_Index extends Chrome_View_Form_Abstract
                     break;
                 }
 
-            case 'select': {
-                $viewOption->setDefaultInput(array('Value1'));
-                $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('Value1' => 'VALUE1_Label', 'Value2' => 'Value2_Label', 'Value3' => 'v3_Label')));
-            }
+            case 'select':
+                {
+                    $viewOption->setDefaultInput(array('Value1'));
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('Value1' => 'VALUE1_Label', 'Value2' => 'Value2_Label', 'Value3' => 'v3_Label')));
+                    break;
+                }
         }
     }
 }

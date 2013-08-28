@@ -47,7 +47,8 @@ class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
             // TODO: what happens if affected_rows = false?
             $this->_isEmpty = !(mysql_affected_rows($this->_connection) > 0);
 
-            /*$this->_cache = $this->getNext();
+            /*
+             $this->_cache = $this->getNext();
 
             if($this->_cache === false) {
                 $this->_isEmpty = true;

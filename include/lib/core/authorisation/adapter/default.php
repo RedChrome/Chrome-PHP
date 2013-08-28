@@ -171,8 +171,6 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
             return $this->_cache[$id][$transformation];
         }
 
-
-
         // int has to be between 0 and 2^(self::CHROME_AUTHORISATION_DEFAULT_MAX_GROUPS+1) - 1
         $int    = $this->_model->getAccessById($id, $transformation);
         $access = ($int & $this->_int);
@@ -227,7 +225,8 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
  */
 class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_Database_Abstract
 {
-    protected function _setDatabaseOptions() {
+    protected function _setDatabaseOptions()
+    {
         $this->_dbInterface = 'model';
     }
 
@@ -256,14 +255,12 @@ class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_Database_Abstra
     }
 }
 
-/**
- * Chrome_Database_Right_Handler_Default
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Authorisation
- *
-class Chrome_Database_Right_Handler_Default implements Chrome_Database_Right_Handler_Interface
-{
+/*
+    Chrome_Database_Right_Handler_Default
+    @package CHROME-PHP
+    @subpackage Chrome.Authorisation
+    class Chrome_Database_Right_Handler_Default implements Chrome_Database_Right_Handler_Interface
+    {
     public function addHasRight($sqlStatement, Chrome_Authorisation_Resource_Interface $resource, $dbColumn)
     {
         // do nothing, everything is done in _addHasRight

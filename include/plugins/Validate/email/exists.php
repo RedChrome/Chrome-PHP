@@ -34,7 +34,7 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
     protected $_dbInterface = null;
 
     /**
-     * This option is needed to determine, whether the validator return true or fale on valid
+     * This option is needed to determine, whether the validator returns true or fale on valid
      * E.g. if you want to check whether there exists no other email with the same name, then we
      * want to return true on not valid. Or if you want to check that the email exists, then we want to
      * return true on valid...
@@ -52,11 +52,13 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
      */
     protected $_options = array(self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS => true);
 
-    public function __construct(Chrome_DB_Interface_Abstract $interface = null) {
+    public function __construct(Chrome_DB_Interface_Abstract $interface = null)
+    {
        $this->_dbInterface = $interface;
     }
 
-    protected function _getDBInterface() {
+    protected function _getDBInterface()
+    {
         if($this->_dbInterface === null) {
             return Chrome_Database_Facade::getInterface(null, null);
         } else {
@@ -64,7 +66,8 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
         }
     }
 
-    protected function _validate() {
+    protected function _validate()
+    {
 
         $email = $this->_data;
 
@@ -73,15 +76,15 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
         // checking users, trying to register
         //$dbInterface->select('email')->from('user_regist')->where('email = "'.$dbInterface->escape($email).'"')->execute();
 
-        $resultSet = $dbInterface->query('SELECT email FROM cpp_user_regist WHERE email = "?"', array($email) );
+        $resultSet = $dbInterface->query('SELECT email FROM cpp_user_regist WHERE email = "?"', array($email));
 
         $result = $resultSet->getNext();
 
         // the email does not exist
         if($result === false) {
-            $return = !(bool)$this->_options[self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS];
+            $return = !(bool) $this->_options[self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS];
         } else {
-            $return = (bool)$this->_options[self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS];
+            $return = (bool) $this->_options[self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS];
         }
 
         if($return === false) {
@@ -100,9 +103,9 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
 
         // the email does not exist
         if($result === false) {
-            $return = !(bool)$this->_options[self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS];
+            $return = !(bool) $this->_options[self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS];
         } else {
-            $return = (bool)$this->_options[self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS];
+            $return = (bool) $this->_options[self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS];
         }
 
         if($return === false) {

@@ -49,7 +49,7 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
         $this->_password = $password;
         $this->_socket = $socket;
         $this->_database = $database;
-        $this->_port = (int)$port;
+        $this->_port = (int) $port;
 
         // persistent connection
         if(ini_get('mysqli.allow_persistent') == 1 AND stripos($this->_host, 'p:') === false) {

@@ -62,19 +62,23 @@ class Chrome_Database_Result_Assoc extends Chrome_Database_Result_Abstract imple
     /*
         ArrayAccess methods
     */
-    public function offsetExists($offset) {
+    public function offsetExists($offset)
+    {
         return isset($this->_currentResult[$offset]);
     }
 
-    public function offsetGet($offset) {
+    public function offsetGet($offset)
+    {
         return $this->_currentResult[$offset];
     }
 
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value)
+    {
         $this->_currentResult[$offset] = $value;
     }
 
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset)
+    {
         $this->_currentResult[$offset] = null;
     }
 }

@@ -455,7 +455,7 @@ class Chrome_File
     {
         if(!self::exists($file)) return false;
 
-        $line = (int)$line - 1;
+        $line = (int) $line - 1;
 
         $file = file($srcFile);
 
@@ -540,7 +540,7 @@ class Chrome_File
     {
         if(self::exists($srcFile)) return false;
 
-        $lineNr = (int)$lineNr;
+        $lineNr = (int) $lineNr;
         $file = file($srcFile);
 
         if($comment != '//' and $comment != '#' and $commecnt != ';') //php AND ini comments
@@ -577,7 +577,7 @@ class Chrome_File
     {
         if(!self::exists($srcFile)) return false;
 
-        $lineNr = (int)$lineNr;
+        $lineNr = (int) $lineNr;
         $file = file($srcFile);
 
         if(preg_match('$\A\s(//|#|;)$', $file[$lineNr])) //checks wheter a ' ' OR a \t OR a \n is at the front of the string
@@ -603,8 +603,7 @@ class Chrome_File
 
     public static function unCommentLines($lineNr, $srcFile)
     {
-
-
+        throw new Chrome_Exception('not implemented jet');
     }
 
     /**
@@ -627,12 +626,12 @@ class Chrome_File
         if(CHROME_MEMORY_LIMIT * 1000000 <= ($size = self::size($file))) // not a good method, but it works
                  throw new Chrome_Exception('Cannot get content of file: '.$file.'! Not enough memory available! File: '.$size.', Available: '.CHROME_MEMORY_LIMIT);
 
-        $file_array = file($file);
+        $fileArray = file($file);
 
-        if($type === 'array' and $mode === 'start') return $file_array;
-        elseif($type === 'array' and $mode === 'end') return array_reverse($file_array, true);
-        elseif($type === 'string' and $mode === 'start') return implode("\n", $file_array);
-        elseif($type === 'string' and $mode === 'end') return implode("\n", array_reverse($file_array));
+        if($type === 'array' and $mode === 'start') return $fileArray;
+        elseif($type === 'array' and $mode === 'end') return array_reverse($fileArray, true);
+        elseif($type === 'string' and $mode === 'start') return implode("\n", $fileArray);
+        elseif($type === 'string' and $mode === 'end') return implode("\n", array_reverse($fileArray));
         else  throw new Chrome_Exception('Unknown Error with file: '.$file.', type: '.$type.', mode: '.$mode.'!');
     }
 
@@ -662,12 +661,12 @@ class Chrome_File
      *
      * @param string $file file you want to create, with path!
      * @param array $array values you want to write into the file
-     * @param boolean $process_sections if you got a second-level array, set it true:
+     * @param boolean $processSections if you got a second-level array, set it true:
      * 					this will create a .ini file with [section] @see parse_ini_file
      * @throws Chrome_Exception if file already exists
      * @return boolean true on success
      */
-    public static function write_ini_file($file, $array, $process_sections = false)
+    public static function write_ini_file($file, $array, $processSections = false)
     {
         if(self::hasExt($file) === false) $file .= '.ini';
 
@@ -676,12 +675,12 @@ class Chrome_File
         $write = '';
 
         foreach($array as $key => $value) {
-            if($process_sections === true and is_array($value)) {
-                $write .= "[$key]\n";
+            if($processSections === true and is_array($value)) {
+                $write .= '['.$key.']'.PHP_EOL;
                 foreach($value as $_key => $_value) {
-                    $write .= "$_key\t\t\t\t=\t\t$_value\n";
+                    $write .= $_key."\t\t\t\t=\t\t".$_value.PHP_EOL;
                 }
-            } else  $write .= "$key\t\t\t\t=\t\t$value\n";
+            } else  $write .= $key."\t\t\t\t=\t\t".$value.PHP_EOL;
         }
 
         if(empty($write)) return false;

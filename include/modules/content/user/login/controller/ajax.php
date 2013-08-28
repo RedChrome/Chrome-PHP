@@ -13,29 +13,28 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.User
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 19:03:21] --> $
- * @author     Alexander Book
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 19:03:21] --> $
+ * @author Alexander Book
  */
-
 if(CHROME_PHP !== true)
     die();
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
 class Chrome_Controller_Content_Login_AJAX extends Chrome_Controller_Module_Abstract
 {
-    protected function _initialize() {
-
+    protected function _initialize()
+    {
         // this is important!! This encodes the rendered data from the views with json
-        //$this->_filter['postprocessor'][] = new Chrome_Filter_JSON();
-
-        $this->_require = array('file' => array(CONTENT.'user/login/include.php', CONTENT.'user/login/view/ajax.php', CONTENT.'user/login/model.php'));
+        // $this->_filter['postprocessor'][] = new Chrome_Filter_JSON();
+        $this->_require = array('file' => array(CONTENT . 'user/login/include.php', CONTENT . 'user/login/view/ajax.php', CONTENT . 'user/login/model.php'));
     }
 
     protected function _execute()
@@ -48,33 +47,39 @@ class Chrome_Controller_Content_Login_AJAX extends Chrome_Controller_Module_Abst
 
         $this->_model = new Chrome_Model_Login($this->_applicationContext, $this->_form);
 
-        if($this->_model->isLoggedIn() == true) {
+        if($this->_model->isLoggedIn() == true)
+        {
             $this->_view->alreadyLoggedIn();
-        } else {
-            try {
-                if($this->_form->isSent()) {
-
-                    if($this->_form->isValid()) {
-
+        } else
+        {
+            try
+            {
+                if($this->_form->isSent())
+                {
+                    if($this->_form->isValid())
+                    {
                         // try to log in
                         $this->_model->login();
 
-                        if($this->_model->successfullyLoggedIn() === true) {
+                        if($this->_model->successfullyLoggedIn() === true)
+                        {
                             $this->_view->successfullyLoggedIn();
-                        } else {
+                        } else
+                        {
                             $this->_view->errorWhileLoggingIn();
                         }
-
-                    } else {
+                    } else
+                    {
                         $this->_form->delete();
                         $this->_form->create();
                         $this->_view->formNotValid();
                     }
-
-                } else {
+                } else
+                {
                     $this->_view->showForm();
                 }
-            } catch(Chrome_Exception $e) {
+            } catch(Chrome_Exception $e)
+            {
                 $this->_exceptionHandler->exception($e);
             }
         }

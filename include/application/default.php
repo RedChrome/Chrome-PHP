@@ -262,7 +262,6 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 		$pluginFacade->registerPlugin(new Chrome_View_Plugin_HTML($this->_applicationContext));
 		$pluginFacade->registerPlugin(new Chrome_View_Plugin_Decorator($this->_applicationContext));
 
-
         $converter = new Chrome_Converter();
         {
             /**

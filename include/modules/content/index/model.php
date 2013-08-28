@@ -7,7 +7,8 @@ class Chrome_Model_HTTP_Index extends Chrome_Model_Abstract
 {
     public function __construct() {
 
-        /*$textareaFilter = new Chrome_Converter_Value();
+        /*
+         $textareaFilter = new Chrome_Converter_Value();
         $textareaFilter->addFilter('string')->addFilter('bool');
 
         $testFilter = new Chrome_Converter_Value();

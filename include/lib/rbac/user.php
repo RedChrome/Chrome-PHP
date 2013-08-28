@@ -13,67 +13,73 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.RBAC
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.08.2011 22:55:07] --> $
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.08.2011 22:55:07] --> $
  */
-
 if(CHROME_PHP !== true)
     die();
 
 /**
- * @package    CHROME-PHP
+ *
+ * @package CHROME-PHP
  * @subpackage Chrome.RBAC
- */ 
+ */
 interface Chrome_RBAC_User_Interface
 {
+
     public function addGroup($groupID);
-    
+
     public function addRole($roleID);
-    
+
     public function getGroups();
-    
+
     public function getRoles();
-    
+
     public function getRolesReversed();
-    
+
     public function getGroupsReversed();
 }
 
 /**
- * @package    CHROME-PHP
+ *
+ * @package CHROME-PHP
  * @subpackage Chrome.RBAC
- */ 
+ */
 class Chrome_RBAC_User implements Chrome_RBAC_User_Interface
 {
     protected $_roles = array();
-    
     protected $_groups = array();
-    
-    public function getGroups() {
+
+    public function getGroups()
+    {
         return $this->_groups;
     }
-    
-    public function getRoles() {
+
+    public function getRoles()
+    {
         return $this->_roles;
     }
-    
+
     public function getRolesReversed()
     {
         return array_reverse($this->_roles);
     }
-    
-    public function getGroupsReversed() {
+
+    public function getGroupsReversed()
+    {
         return array_reverse($this->_groups);
     }
-    
-    public function addGroup($groupID) {
+
+    public function addGroup($groupID)
+    {
         $this->_groups[] = $groupID;
     }
-    
-    public function addRole($roleID) {
+
+    public function addRole($roleID)
+    {
         $this->_roles[] = $roleID;
     }
 }

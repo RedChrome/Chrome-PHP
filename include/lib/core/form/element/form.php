@@ -222,7 +222,8 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
         $storedData = $this->_storage->get($this->_id);
 
         // is it expired?
-        /*if(!isset($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME]) OR
+        /*
+         if(!isset($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME]) OR
             ($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] +  $this->_option->getMinAllowedTime() > CHROME_TIME) )
         {
             var_dump($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME], $this->_option->getMinAllowedTime(), CHROME_TIME);

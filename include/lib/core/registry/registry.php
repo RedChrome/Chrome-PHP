@@ -13,104 +13,119 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Registry
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.01beta <!-- phpDesigner :: Timestamp [11.08.2011 10:59:04] --> $
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.01beta <!-- phpDesigner :: Timestamp [11.08.2011 10:59:04] --> $
  */
 if(CHROME_PHP !== true)
     die();
-    
+
 /**
  * Interface for Chrome_Registry_Abstract
- * 
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Registry
- */     
+ */
 interface Chrome_Registry_Abstract_Interface
-{   
+{
+
     /**
      * Singleton-pattern
-     * 
+     *
      * @return Chrome_Registry_Abstract
-     */ 
+     */
     public static function getInstance();
 }
 
 /**
  * Interface for Chrome_Registry
- * 
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Registry
- */  
+ */
 interface Chrome_Registry_Interface extends Chrome_Registry_Abstract_Interface
 {
+
     /**
      * Chrome_Registry::set()
      *
      * Adds a value to the registry
      *
-     * @param string $namespace namespace of the entry
-     * @param string $key key of the entry
-     * @param mixed $value value of the entry
-     * @param bool $readOnly true: value is read only | false: value can get modified
+     * @param string $namespace
+     *        namespace of the entry
+     * @param string $key
+     *        key of the entry
+     * @param mixed $value
+     *        value of the entry
+     * @param bool $readOnly
+     *        true: value is read only | false: value can get modified
      * @throws Chrome_Exception if trying to modifie a protected entry
      * @return bool true on success
      */
     public function set($namespace, $key, $value, $readOnly = false);
-    
+
     /**
      * Chrome_Registry::get()
      *
      * Retrieves a value from the registry.
      *
-     * @param mixed $namespace namespace of the entry
-     * @param mixed $key key of the entry
+     * @param mixed $namespace
+     *        namespace of the entry
+     * @param mixed $key
+     *        key of the entry
      * @return mixed value OR null
      */
     public function get($namespace, $key);
-    
+
     /**
      * Chrome_Registry::isProtected()
      *
      * Returns the protection for an entry
      *
-     * @param mixed $namespace namespace of the entry
-     * @param mixed $key key of the entry
+     * @param mixed $namespace
+     *        namespace of the entry
+     * @param mixed $key
+     *        key of the entry
      * @return bool true: entry is protected false else
      */
     public function isProtected($namespace, $key);
-    
+
     /**
      * Chrome_Registry::_isset()
-     * 
+     *
      * Determines whether the registry entry is set
-     * 
-     * @param mixed $namespace namespace of the entry
-     * @param mixed $key key of the entry
+     *
+     * @param mixed $namespace
+     *        namespace of the entry
+     * @param mixed $key
+     *        key of the entry
      * @return bool true: entry isset
-     */ 
+     */
     public function _isset($namespace, $key);
-    
+
     /**
      * Chrome_Registry::_unset()
-     * 
+     *
      * Unsets a registry entry
      * if entry is protected, then it throws a Chrome_Exception
-     * 
+     *
      * @throws Chrome_Exception
-     * @param mixed $namespace namespace of the entry
-     * @param mixed $key key of the entry
+     * @param mixed $namespace
+     *        namespace of the entry
+     * @param mixed $key
+     *        key of the entry
      * @return void
-     */ 
+     */
     public function _unset($namespace, $key);
 }
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Registry
- */ 
+ */
 abstract class Chrome_Registry_Abstract implements Chrome_Registry_Abstract_Interface
 {
     /**
@@ -119,22 +134,26 @@ abstract class Chrome_Registry_Abstract implements Chrome_Registry_Abstract_Inte
      * @var array
      */
     protected $_registry = array();
-    
+
     /**
      * Chrome_Registry_Abstract::__construct()
-     * 
+     *
      * Singleton pattern
-     * 
-     * @returns Chrome_Registry_Abstract
-     */ 
-    protected function __construct() {}
-    
+     *
+     * @return s Chrome_Registry_Abstract
+     */
+    protected function __construct()
+    {
+    }
+
     /**
      * Chrome_Registry_Abstract::__clone()
-     * 
+     *
      * Does nothing, for singleton pattern
-     */ 
-    final private function __clone() {}
+     */
+    final private function __clone()
+    {
+    }
 }
 
 /**
@@ -147,12 +166,12 @@ require_once 'singleton.php';
  *
  * Registry class to pass global variables between classes.
  *
- * @package		CHROME-PHP
- * @subpackage  Chrome.Registry
- * @author		Alexander Book
- * @copyright	2009 by Alexander Book
- * @version		2009
- * @access		public
+ * @package CHROME-PHP
+ * @subpackage Chrome.Registry
+ * @author Alexander Book
+ * @copyright 2009 by Alexander Book
+ * @version 2009
+ * @access public
  */
 class Chrome_Registry extends Chrome_Registry_Abstract implements Chrome_Registry_Interface
 {
@@ -170,7 +189,8 @@ class Chrome_Registry extends Chrome_Registry_Abstract implements Chrome_Registr
      */
     public static function getInstance()
     {
-        if(self::$_instance === null) {
+        if(self::$_instance === null)
+        {
             self::$_instance = new self();
         }
         return self::$_instance;
@@ -181,29 +201,33 @@ class Chrome_Registry extends Chrome_Registry_Abstract implements Chrome_Registr
      *
      * Adds a value to the registry
      *
-     * @param string $namespace namespace of the entry
-     * @param string $key key of the entry
-     * @param mixed $value value of the entry
-     * @param bool $readOnly true: value is read only | false: value can get modified
+     * @param string $namespace
+     *        namespace of the entry
+     * @param string $key
+     *        key of the entry
+     * @param mixed $value
+     *        value of the entry
+     * @param bool $readOnly
+     *        true: value is read only | false: value can get modified
      * @throws Chrome_Exception if trying to modifie a protected entry
      * @return bool true on success
      */
     public function set($namespace, $key, $value, $readOnly = false)
     {
-        if(isset($this->_registry[$namespace][$key])) {
-
-            if($this->_registry[$namespace][$key]['readOnly'] === true) {
-                throw new Chrome_Exception('The entry with name "'.$name.'" already exists in namespace "'.$namespace.'" AND is read only! Cannot modify it!');
+        if(isset($this->_registry[$namespace][$key]))
+        {
+            if($this->_registry[$namespace][$key]['readOnly'] === true)
+            {
+                throw new Chrome_Exception('The entry with name "' . $name . '" already exists in namespace "' . $namespace . '" AND is read only! Cannot modify it!');
             }
-            
-            $this->_registry[$namespace][$key]['value'] = $value;
-            $this->_registry[$namespace][$key]['readOnly'] = $readOnly;
-
-        } else {
 
             $this->_registry[$namespace][$key]['value'] = $value;
             $this->_registry[$namespace][$key]['readOnly'] = $readOnly;
+        } else
+        {
 
+            $this->_registry[$namespace][$key]['value'] = $value;
+            $this->_registry[$namespace][$key]['readOnly'] = $readOnly;
         }
 
         return true;
@@ -214,16 +238,17 @@ class Chrome_Registry extends Chrome_Registry_Abstract implements Chrome_Registr
      *
      * Retrieves a value from the registry.
      *
-     * @param mixed $namespace namespace of the entry
-     * @param mixed $key key of the entry
+     * @param mixed $namespace
+     *        namespace of the entry
+     * @param mixed $key
+     *        key of the entry
      * @return mixed value OR null
      */
     public function get($namespace, $key)
     {
         if(isset($this->_registry[$namespace][$key]))
             return $this->_registry[$namespace][$key]['value'];
-        else
-            return null;
+        else return null;
     }
 
     /**
@@ -231,50 +256,59 @@ class Chrome_Registry extends Chrome_Registry_Abstract implements Chrome_Registr
      *
      * Returns the protection for an entry
      *
-     * @param mixed $namespace namespace of the entry
-     * @param mixed $key key of the entry
+     * @param mixed $namespace
+     *        namespace of the entry
+     * @param mixed $key
+     *        key of the entry
      * @return bool true: entry is protected false else
      */
     public function isProtected($namespace, $key)
     {
-        if(isset($this->_registry[$namespace][$key])) {
+        if(isset($this->_registry[$namespace][$key]))
+        {
             if($this->_registry[$namespace][$key]['readOnly'] === true)
                 return true;
         }
 
         return false;
     }
-    
+
     /**
      * Chrome_Registry::_isset()
-     * 
+     *
      * Determines whether the registry entry is set
-     * 
-     * @param mixed $namespace namespace of the entry
-     * @param mixed $key key of the entry
+     *
+     * @param mixed $namespace
+     *        namespace of the entry
+     * @param mixed $key
+     *        key of the entry
      * @return bool true: entry isset
-     */ 
+     */
     public function _isset($namespace, $key)
     {
         return (isset($this->_registry[$namespace][$key]));
     }
-    
+
     /**
      * Chrome_Registry::_unset()
-     * 
+     *
      * Unsets a registry entry
      * if entry is protected, then it throws a Chrome_Exception
-     * 
+     *
      * @throws Chrome_Exception
-     * @param mixed $namespace namespace of the entry
-     * @param mixed $key key of the entry
+     * @param mixed $namespace
+     *        namespace of the entry
+     * @param mixed $key
+     *        key of the entry
      * @return void
-     */ 
+     */
     public function _unset($namespace, $key)
     {
-        if($this->_isset($namespace, $key) AND $this->getProtected($namespace, $key) !== true) {
+        if($this->_isset($namespace, $key) and $this->getProtected($namespace, $key) !== true)
+        {
             unset($this->_registry[$namespace][$key]);
-        } elseif($this->getProtected($namespace, $key) === true) {
+        } elseif($this->getProtected($namespace, $key) === true)
+        {
             throw new Chrome_Exception('Cannot unset a protected value in Chrome_Registry::_unset()!');
         }
     }

@@ -21,6 +21,10 @@
 
 if(CHROME_PHP !== true) die();
 
+/**
+ * @todo remove dependency to property JS in view class
+ *
+ */
 class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
 {
     private $_title = '';

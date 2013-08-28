@@ -49,12 +49,12 @@ class Chrome_Converter_Delegate_TypeCastingAndStripping extends Chrome_Converter
 
     public function toInt($var, $option)
     {
-        return (int)$var;
+        return (int) $var;
     }
 
     public function toString($var, $option)
     {
-        return (string )$var;
+        return (string) $var;
     }
 
     public function toBool($var, $option)

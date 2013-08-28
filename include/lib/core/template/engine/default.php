@@ -27,7 +27,7 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Template.Engine
- */ 
+ */
 class Chrome_Template_Engine_Default extends Chrome_Template_Engine_Abstract
 {
     private $_templateInstance = null;
@@ -183,13 +183,13 @@ class Chrome_Template_Engine_Default extends Chrome_Template_Engine_Abstract
                     $return .= '$_TEMPLATE_RETURN .= $'.$args['0'].';';
                     break;
                 }
-            
+
             case 8:
                 {
                     $return .= '$_TEMPLATE_RETURN .= '.$args['0'].';';
                     break;
                 }
-            
+
             default:
                 throw new Chrome_Exception('Unknown template function('.$type.')!');
         }
@@ -212,7 +212,7 @@ class Chrome_Template_Engine_Default extends Chrome_Template_Engine_Abstract
         // unset html enties...
         unset($array['&'], $array['>'], $array['<'], $array[' '], $array['"'], $array['\'']);
         // replace all html tags
-        foreach($array AS $key => $value) {
+        foreach($array as $key => $value) {
             $string = str_replace($key, $value, $string);
         }
 
@@ -273,7 +273,7 @@ class Chrome_Template_Engine_Default extends Chrome_Template_Engine_Abstract
         self::_replaceTemplateFunctions($content);
 
         // simple replacement
-        foreach($var AS $key => $value) {
+        foreach($var as $key => $value) {
             // faster than preg_replace
             $content = str_replace('{'.$key.'}', '\'.$_TEMPLATE[\''.$key.'\'].\'', $content);
         }
@@ -284,7 +284,7 @@ class Chrome_Template_Engine_Default extends Chrome_Template_Engine_Abstract
     private function _assignVars()
     {
         $var = array_merge(self::$_globalVar, $this->_var);
-        foreach($var AS $key => $value) {
+        foreach($var as $key => $value) {
             $this->_TEMPLATE[$key] = $value;
         }
     }

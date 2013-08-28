@@ -13,12 +13,11 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 21:32:05] --> $
+ * @package CHROME-PHP
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [04.03.2013 21:32:05] --> $
  */
-
 if(CHROME_PHP !== true)
     die();
 
@@ -43,20 +42,18 @@ require_once 'file.php';
  * </code>
  *
  * @todo 1. add bzip2 support AND test it
- * 		 2. add zlib support
- * 		 3. add normal file support (no archive)
- * 		 4. add recover function
- * @author		Alexander Book
- * @package		CHROME-PHP
- * @copyright   Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ *       2. add zlib support
+ *       3. add normal file support (no archive)
+ *       4. add recover function
+ * @author Alexander Book
+ * @package CHROME-PHP
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  */
 class Chrome_File_Backup
 {
     private static $_instance = false;
-
     private static $_archive = false;
-
-    public $_neededFileExtension = array('php', 'js', 'css', 'gif', 'jpg', 'png', 'jpeg', 'sql', 'htaccess');
+    protected $_neededFileExtension = array('php', 'js', 'css', 'gif', 'jpg', 'png', 'jpeg', 'sql', 'htaccess');
 
     /**
      * Chrome_File_Backup::__construct()
@@ -87,27 +84,30 @@ class Chrome_File_Backup
      *
      * Creates a new Backup
      *
-     * @param string $file filename of a new backup
-     * @param string $dir dir (and all subdirs) which get saved. default= ../../../../, the whole Chrome-PHP folder get saved
+     * @param string $file
+     *        filename of a new backup
+     * @param string $dir
+     *        dir (and all subdirs) which get saved. default= ../../../../, the whole Chrome-PHP folder get saved
      * @throws Chrome_Exception
      * @return bool true on success
      */
     public function _new($file, $dir = '../../../../', $compression = 'zip')
     {
-        switch($compression) {
+        switch($compression)
+        {
             case 'zip':
-                $this->_newZipArchive($file.'.zip');
+                $this->_newZipArchive($file . '.zip');
                 $this->_addFolderToZip($dir);
                 return $this->_closeZipArchive();
-                #break;
+            // reak;
 
             case 'bzip2':
-                $this->_newBzip2Archive($file.'.bz2');
+                $this->_newBzip2Archive($file . '.bz2');
                 $this->_addFolderToBzip2($dir);
                 return $this->_closeBzip2Archive();
 
             default:
-                throw new Chrome_Exception('Unknown compression: '.$compression);
+                throw new Chrome_Exception('Unknown compression: ' . $compression);
         }
         return true;
     }
@@ -118,18 +118,20 @@ class Chrome_File_Backup
      * Creats a new file AND sets archive handler
      *
      * @access private
-     * @param mixed $file filename
+     * @param mixed $file
+     *        filename
      * @return bool true on success
      */
     private function _newZipArchive($file)
     {
-        $zip = new ZipArchive;
+        $zip = new ZipArchive();
         $res = $zip->open($file, ZipArchive::CREATE);
-        if($res === TRUE) {
+        if($res === true)
+        {
             self::$_archive = $zip;
             return true;
-        }
-        else {
+        } else
+        {
             return false;
         }
     }
@@ -170,20 +172,23 @@ class Chrome_File_Backup
         if(!($dh = opendir($dir)))
             return false;
 
-        // Loop through all the files
-        while(($file = readdir($dh)) !== false) {
+            // Loop through all the files
+        while(($file = readdir($dh)) !== false)
+        {
 
-            //If it's a folder, run the function again!
-            if(!is_file($dir.$file)) {
+            // If it's a folder, run the function again!
+            if(!is_file($dir . $file))
+            {
                 // Skip parent AND root directories
-                if(($file !== ".") AND ($file !== "..")) {
-                    $this->_addFolderToZip($dir.$file."/", $zipdir.$file."/");
+                if(($file !== '.') and ($file !== '..'))
+                {
+                    $this->_addFolderToZip($dir . $file . '/', $zipdir . $file . '/');
                 }
-            }
-            else {
-                 if($this->_isNeededFile($file) === true)
-                // Add the files
-                self::$_archive->addFile($dir.$file, $zipdir.$file);
+            } else
+            {
+                if($this->_isNeededFile($file) === true)
+                    // Add the files
+                    self::$_archive->addFile($dir . $file, $zipdir . $file);
             }
         }
 
@@ -192,14 +197,14 @@ class Chrome_File_Backup
 
     private function _isNeededFile($file)
     {
-        if(Chrome_File::hasExt($file)) {
+        if(Chrome_File::hasExt($file))
+        {
 
             if(in_array(Chrome_File::getExt($file), $this->_neededFileExtensions))
                 return true;
-            else
-                return false;
-
-        } else {
+            else return false;
+        } else
+        {
             return false;
         }
     }
@@ -207,11 +212,12 @@ class Chrome_File_Backup
     private function _newBzip2Archive($file)
     {
         $bzip = bzopen($file, 'w');
-        if($bzip !== false) {
+        if($bzip !== false)
+        {
             self::$_archive = $bzip;
             return true;
-        }
-        else {
+        } else
+        {
             self::$_archive = false;
             return false;
         }
@@ -232,14 +238,16 @@ class Chrome_File_Backup
 
         $_dir = dir($dir);
 
-        while($file = $_dir->read()) {
-            if($file == '.' OR $file == '..')
+        while($file = $_dir->read())
+        {
+            if($file == '.' or $file == '..')
                 continue;
-            if(is_file($dir.$file)) {
-                $this->_fillContentIntoBzip2($dir.$file);
+            if(is_file($dir . $file))
+            {
+                $this->_fillContentIntoBzip2($dir . $file);
                 continue;
-            } elseif(is_dir($dir.$file))
-                $this->_getFilesForBzip2($dir.$file);
+            } elseif(is_dir($dir . $file))
+                $this->_getFilesForBzip2($dir . $file);
         }
         return true;
     }
@@ -252,10 +260,9 @@ class Chrome_File_Backup
 
             return false;
 
-        $write_start = ';START OF FILE '.$file.";\n";
-        $write_end = ';END OF FILE '.$file.";\n";
+        $writeStart = ';START OF FILE ' . $file . ';' . PHP_EOL;
+        $writeEnd = ';END OF FILE ' . $file . ';' . PHP_EOL;
 
-        return bzwrite(self::$_archive, $write_start.$content.$write_end);
+        return bzwrite(self::$_archive, $writeStart . $content . $writeEnd);
     }
-
 }

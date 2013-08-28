@@ -150,37 +150,6 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
         return $this->_option;
     }
 
-
-    /*protected function _renderLabelExplicit($for, $label, $required)
-    {
-        return '<label for="' . $for . '">' . $label . $required . '</label>';
-    }
-
-    protected function _renderLabelRequiredExplicit()
-    {
-        return '<sup class="ym-required">*</sup>';
-    }
-
-    protected function _renderLabel(Chrome_View_Form_Label_Interface $label = null)
-    {
-        if($label === null)
-        {
-            $label = $this->_option->getLabel();
-        }
-
-        return $this->_renderLabelExplicit($this->_id, $label->getLabel($this->_name), $this->_renderLabelRequired());
-    }
-
-    protected function _renderLabelRequired()
-    {
-        if($this->_elementOption->getIsRequired() === true)
-        {
-            return $this->_renderLabelRequiredExplicit();
-        }
-
-        return '';
-    }*/
-
     protected function _renderFlags()
     {
         $return = '';
@@ -316,32 +285,6 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
 
         $this->_setTempFlags();
 
-        /*switch($this->_option->getLabelPosition())
-        {
-            case Chrome_View_Form_Element_Option_Multiple_Interface::LABEL_POSITION_FRONT:
-                {
-                    $return = $this->_renderLabel() . ' ' . $this->_render() . PHP_EOL;
-                    break;
-                }
-
-            case Chrome_View_Form_Element_Option_Multiple_Interface::LABEL_POSITION_BEHIND:
-                {
-                    $return = $this->_render() . ' ' . $this->_renderLabel() . PHP_EOL;
-                    break;
-                }
-
-            case Chrome_View_Form_Element_Option_Multiple_Interface::LABEL_POSITION_NONE:
-                {
-                    $return = $this->_render();
-                    break;
-                }
-            default:
-                {
-                    // maybe add this label position in this switch?
-                    throw new Chrome_Exception('Unsupported label position');
-                }
-        }*/
-
         return $this->_renderAppenders($this->_render());
     }
 
@@ -386,24 +329,6 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
 
         $this->_setTempFlag('id', $this->_id . self::SEPARATOR . $this->_count);
     }
-
-    /*protected function _getLabel()
-    {
-        return $this->_option->getLabel()->getLabel($this->_current);
-    }
-
-    protected function _renderLabel(Chrome_View_Form_Label_Interface $label = null)
-    {
-        return $this->_renderLabelExplicit($this->_tempFlag['id'], $this->_getLabel(), $this->_renderLabelRequired());
-    }
-
-    protected function _renderLabelRequired()
-    {
-        if(isset($this->_tempFlag['required']))
-        {
-            return $this->_renderLabelRequiredExplicit();
-        }
-    }*/
 
     protected function _renderFlags()
     {
