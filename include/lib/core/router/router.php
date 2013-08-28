@@ -30,7 +30,6 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Router_Interface extends Chrome_Router_Route_Interface, Chrome_Exception_Processable_Interface
 {
-
     public function route(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data);
 
     public function addRoute(Chrome_Router_Route_Interface $obj);
@@ -43,7 +42,6 @@ interface Chrome_Router_Interface extends Chrome_Router_Route_Interface, Chrome_
  */
 interface Chrome_Router_Route_Interface
 {
-
     public function match(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data);
 
     public function getResource();
@@ -58,7 +56,6 @@ interface Chrome_Router_Route_Interface
  */
 interface Chrome_Router_Result_Interface
 {
-
     public function setFile($file);
 
     public function getFile();
@@ -73,7 +70,6 @@ interface Chrome_Router_Result_Interface
 }
 interface Chrome_Router_Resource_Interface
 {
-
     public function getName();
     // TODO: finish interface with better names
     // public function getRequestOptions();
@@ -87,7 +83,6 @@ interface Chrome_Router_Resource_Interface
  */
 class Chrome_Router_Resource implements Chrome_Router_Result_Interface
 {
-
     protected $_file = null;
 
     protected $_class = null;
@@ -185,7 +180,7 @@ class Chrome_Router implements Chrome_Router_Interface
     public function route(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data)
     {
         // replace ROOT,
-        $path = ltrim(preg_replace('#\A' . ROOT_URL . '#', '', $url->getPath()), '/');
+        $path = ltrim(preg_replace('#\A' . ROOT_URL . '#', '', '/'.$url->getPath()), '/');
         $url->setPath($path);
 
         try

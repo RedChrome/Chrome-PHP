@@ -114,9 +114,22 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
         $buttonsElement = new Chrome_Form_Element_Buttons($this, 'buttons', $buttonsOption);
         $this->_addElement($buttonsElement);
 
+        $captchaOption  = new Chrome_Form_Option_Element_Captcha($this);
+        $captchaElement = new Chrome_Form_Element_Captcha($this, 'captcha', $captchaOption);
+        $this->_addElement($captchaElement);
+
         /*
-         * @todo: reimplement captcha and birthday $this->_elements['captcha'] = new Chrome_Form_Element_Captcha( $this, 'captcha', array( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array( 'size' => 30 ), //Chrome_Form_Element_Captcha::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS => array( // Chrome_Captcha_Interface::CHROME_CAPTCHA_ENGINE => 'default'), Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('captcha')), ) ); $this->_elements['birthday'] = new Chrome_Form_Element_Birthday( $this, 'birthday', array( Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA => true, Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array( Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('birthday')), ) );
-         */
+        $this->_elements['captcha'] = new Chrome_Form_Element_Captcha($this, 'captcha', array(
+                                                                                            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES => array(
+                                                                                                                                                                            'size' => 30),
+                                                                                            Chrome_Form_Element_Captcha::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS => array(
+                                                                                                                                                                            Chrome_Captcha_Interface::CHROME_CAPTCHA_ENGINE => 'default'),
+                                                                                            Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
+                                                                                                                                                                        Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('captcha'))));
+        $this->_elements['birthday'] = new Chrome_Form_Element_Birthday($this, 'birthday', array(Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_NOT_SAVE_NULL_DATA => true,
+                                                                                                Chrome_Form_Element_Abstract::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(
+                                                                                                                                                                   Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_LABEL => $lang->get('birthday'))));
+        */
 
         $emailOption = new Chrome_Form_Option_Element();
         $emailOption->setIsRequired(true)->setConversion($emailConverter)->setValidator($emailValidator);
@@ -186,6 +199,11 @@ class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
             case 'nickname':
                 {
                     $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('nickname' => $lang->get('nickname'))));
+                    break;
+                }
+
+            case 'captcha':
+                {
                     break;
                 }
         }

@@ -18,50 +18,35 @@
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
  * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:56:59] --> $
  */
-
 if(!isset($_GET['name'])) {
     die();
 }
 
 define('CHROME_PHP', true);
 
-/**
- *  require all that to use session...
- */
 require_once '../../include/config.php';
 
-require_once LIB.'core/file/file.php';
-
-require_once LIB.'core/file_system/file_system.php';
-
-require_once LIB.'core/hash/hash.php';
-
-require_once LIB.'core/request/request.php';
-
-require_once LIB.'core/request/request/http.php';
+require_once APPLICATION.'resource.php';
 
 require_once LIB.'captcha/captcha.php';
 
-// need Chrome_Captcha_Engine_Default
-require_once PLUGIN.'Captcha/default.php';
+$application = new Chrome_Application_Resource();
+$application->init();
 
-$reqHandler = new Chrome_Request_Handler_HTTP();
+$applicationContext = $application->getApplicationContext();
+$requestData =  $applicationContext->getRequestHandler()->getRequestData();
+$session = $requestData->getSession();
 
-$session = $reqHandler->getRequestData()->getSession();
-
-$key = $session['CAPTCHA_'.$_GET['name']];
+$key = $session['CAPTCHA_'.$requestData->getGETData('name')];
 
 if($key === null) {
     die();
 }
 
-$applicationContext = new Chrome_Application_Context();
-$applicationContext->setRequestHandler($reqHandler);
-
-if(isset($_GET['renew'])) {
-    $captcha = new Chrome_Captcha($_GET['name'], $applicationContext, array(), array());
+if($requestData->getGETData('renew') !== null) {
+    $captcha = new Chrome_Captcha($requestData->getGETData('name'), $applicationContext, array(), array());
     $captcha->renew();
-    $key = $session['CAPTCHA_'.$_GET['name']];
+    $key = $session['CAPTCHA_'.$requestData->getGETData('name')];
 
     if($key === null) {
         die();
@@ -87,5 +72,3 @@ for($i=0;$i<$length;++$i) {
 
 imagepng($img);
 imagedestroy($img);
-
-

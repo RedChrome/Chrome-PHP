@@ -127,7 +127,7 @@ if($found == false) {
     die('Could not locate config.php file!');
 }
 
-define('ROOT_URL', substr(dirname($rooturl), 1));
+define('ROOT_URL', dirname($rooturl));
 define('ROOT', dirname(dirname(__file__)));
 define('_PUBLIC', str_repeat('../', substr_count(substr($_SERVER['REQUEST_URI'], (strlen(ROOT_URL))+2), '/')) .'public/');
 define('IMAGE', $fileLevel . 'public/image/');

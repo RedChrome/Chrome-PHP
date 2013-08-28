@@ -1069,7 +1069,6 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
                 {
                     if(strpos($value, ROOT_URL) === false)
                     {
-
                         if($value{0} == '/')
                         {
                             $value = ROOT_URL . $value;
@@ -1077,14 +1076,14 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
                         {
                             $value = ROOT_URL . '/' . $value;
                         }
-
-                        if($value{0} != '/')
-                        {
-                            $value = '/' . $value;
-                        }
-
-                        $this->_attribts[$key] = $value;
                     }
+
+                    if($value{0} !== '/') {
+                        $value = '/'.$value;
+                    }
+
+                    $this->_attribts[$key] = $value;
+
                     return;
                 }
             case self::ATTRIBUTE_STORE:

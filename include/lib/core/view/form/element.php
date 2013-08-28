@@ -55,6 +55,8 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
         $this->_init();
     }
 
+    abstract protected function _render();
+
     public function setViewForm(Chrome_View_Form_Interface $viewForm)
     {
         $this->_viewForm = $viewForm;
@@ -179,8 +181,6 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
         return substr($return, 1);
     }
 
-    abstract protected function _render();
-
     public function render()
     {
         return $this->_renderAppenders($this->_render());
@@ -211,17 +211,6 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     public function getAppenders()
     {
         return $this->_appenders;
-    }
-
-    protected function _renderClass()
-    {
-        $this->_flags['class'] = '';
-        // @todo:
-        // if($this->_formElement->getForm()->hasValidationErrors($this->_formElement->getID())) {
-        // $class = ' class="wrongInput"';
-        // }
-
-        return '';
     }
 }
 

@@ -187,7 +187,6 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
  */
 class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_Form_Element_Option_Factory_Interface
 {
-
     public function getElementOption(Chrome_Form_Element_Interface $formElement)
     {
         if($formElement instanceof Chrome_Form_Element_Multiple_Abstract or stristr(get_class($formElement), 'Chrome_Form_Element_Radio') !== false)
@@ -195,7 +194,6 @@ class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_For
             $viewElementOption = new Chrome_View_Form_Element_Option_Multiple();
         } else if($formElement->getOption() instanceof Chrome_Form_Option_Element_Attachable_Interface)
         {
-            // todo
             $viewElementOption = new Chrome_View_Form_Element_Option_Attachable();
         } else
         {
@@ -208,7 +206,6 @@ class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_For
 
     protected function _setDefaultOptions(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewElementOption)
     {
-        // formElementOption = $formElement->getOption();
         foreach(($formElement->getForm()->getAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE)) as $handler)
         {
             if($handler->hasStored($formElement))
@@ -216,10 +213,6 @@ class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_For
                 $viewElementOption->setStoredData($handler->getStored($formElement));
             }
         }
-
-        // @todo
-        // setting defaults..
-        // $viewElementOption->setRequired($formElementOption->getIsRequired());
     }
 }
 class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface
@@ -227,7 +220,6 @@ class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface
     protected $_currentInt = 0;
     protected $_values = array();
     protected $_labels = array();
-
     protected $_position = null;
 
     public function __construct(array $labels = null, $labelPosition = self::LABEL_POSITION_DEFAULT)
@@ -299,42 +291,46 @@ class Chrome_View_Form_Element_Appendable_Label extends Chrome_View_Form_Element
 {
     protected function _renderLabel(Chrome_View_Form_Label_Interface $label)
     {
+        $isRequired = false;
         $required = '';
         $for = '';
-        $labelRendered = '';
 
         if($this->_viewFormElement instanceof Chrome_View_Form_Element_Multiple_Abstract)
         {
             $for = $this->_viewFormElement->getTempFlag('id');
 
-            $labelRendered = $this->_viewFormElement->getOption()->getLabel()->getLabel($this->_viewFormElement->getCurrent());
+            $name = $this->_viewFormElement->getCurrent();
 
-            if($this->_viewFormElement->getTempFlag('required') !== null) {
-                $required = '<sup class="ym-required">*</sup>';
+            if($this->_viewFormElement->getTempFlag('required') !== null)
+            {
+                $isRequired = true;
             }
 
         } else
         {
             $for = $this->_viewFormElement->getFlag('id');
 
-            $required = '';
-
-            if($this->_viewFormElement->getFormElement()->getOption()->getIsRequired())
-            {
-                $required = '<sup class="ym-required">*</sup>';
-            }
-
-            $labelRendered = $label->getLabel($this->_viewFormElement->getFlag('name'));
+            $name = $this->_viewFormElement->getFlag('name');
         }
+
+        if($isRequired === false AND $this->_viewFormElement->getFormElement()->getOption()->getIsRequired())
+        {
+            $isRequired = true;
+        }
+
+        if($isRequired === true)
+        {
+            $required = '<sup class="ym-required">*</sup>';
+        }
+
+        $labelRendered = $label->getLabel($name);
 
         return '<label for="' . $for . '">' . $labelRendered . $required . '</label>';
     }
 
     public function render()
     {
-        $option = $this->_viewFormElement->getOption();
-
-        $label = $option->getLabel();
+        $label = $this->_viewFormElement->getOption()->getLabel();
 
         if($label === null)
         {
@@ -374,6 +370,5 @@ class Chrome_View_Form_Element_Appendable_Label extends Chrome_View_Form_Element
                     throw new Chrome_Exception('Unsupported label position');
                 }
         }
-
     }
 }

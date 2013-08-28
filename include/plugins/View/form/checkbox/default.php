@@ -23,7 +23,6 @@ if(CHROME_PHP !== true)
     die();
 
 /**
- * TODO: change attribute class if errors exists
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */

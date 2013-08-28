@@ -69,7 +69,6 @@ interface Chrome_Captcha_Interface
  */
 interface Chrome_Captcha_Engine_Interface
 {
-
     public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Context_Application_Interface $appContext, array $backendOptions);
 
     public function getOption($name);

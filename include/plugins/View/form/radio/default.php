@@ -13,16 +13,16 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Form
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 19:34:32] --> $
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.10.2012 19:34:32] --> $
  */
-if( CHROME_PHP !== true ) die();
+if(CHROME_PHP !== true)
+    die();
 
 /**
- * TODO: change attribute class if errors exists
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
@@ -34,12 +34,12 @@ class Chrome_View_Form_Element_Radio_Default extends Chrome_View_Form_Element_Mu
     protected function _getNext()
     {
         $next = $this->_availableSelections[$this->_int];
-        $this->_int = ++$this->_int % count( $this->_availableSelections );
+        $this->_int = ++$this->_int % count($this->_availableSelections);
         return $next;
     }
 
     protected function _render()
     {
-        return '<input type="radio" '.$this->_renderFlags().'/>';
+        return '<input type="radio" ' . $this->_renderFlags() . '/>';
     }
 }

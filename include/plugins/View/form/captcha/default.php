@@ -26,20 +26,30 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Captcha_Default extends Chrome_Form_Decorator_Abstract
+class Chrome_View_Form_Element_Captcha_Default extends Chrome_View_Form_Element_Abstract
 {
-    public function render() {
-
+    protected function _render()
+    {
+        #return 'captcha...';
         $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL);
+        /*
+
 
         $label = '';
         if(($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null) {
             $label = '<label for="'.$this->_formElement->getID().'">'.$label.'</label>';
         }
+        */
 
-        $img = '<img src="'._PUBLIC.'captcha/default.php?name='.$this->_formElement->getForm()->getID().'" id="captcha_'.$this->_formElement->getForm()->getID().'" />';
-        $input = '<input type="text" name="'.$this->_formElement->getID().'" value="" '.$this->_getPreparedAttrs().'"><br><br>
-                <a onclick="javascript:document.getElementById(\'captcha_'.$this->_formElement->getForm()->getID().'\').src=\''._PUBLIC.'captcha/default.php?name='.$this->_formElement->getForm()->getID().'&renew=\'+getToken()">'.$lang->get('captcha_renew').'</a>';
-        return $label.$img.$input;
+        $captchaName = $this->_formElement->getOption()->getCaptcha()->getFrontendOption(Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME);
+
+         $img = '<img src="'._PUBLIC.'captcha/default.php?name='.$captchaName.'" id="captcha_'.$this->_formElement->getForm()->getID().'" />';
+         #return $img;
+
+
+
+        $input = '<input type="text" name="'.$this->_formElement->getID().'" value="" '.$this->_renderFlags().'"><br><br>
+                <a onclick="javascript:document.getElementById(\'captcha_'.$this->_formElement->getForm()->getID().'\').src=\''._PUBLIC.'captcha/default.php?name='.$captchaName.'&renew=\'+getToken()">'.$lang->get('captcha_renew').'</a>';
+        return $img.$input;
     }
 }

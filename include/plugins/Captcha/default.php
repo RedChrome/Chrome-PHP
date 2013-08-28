@@ -69,7 +69,6 @@ class Chrome_Captcha_Engine_Default implements Chrome_Captcha_Engine_Interface
     {
         if($this->_session['CAPTCHA_' . $this->_backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME]] == null)
         {
-
             $this->_createKey();
 
             $this->_saveKey();
@@ -99,7 +98,6 @@ class Chrome_Captcha_Engine_Default implements Chrome_Captcha_Engine_Interface
     {
         if($this->_key == null)
         {
-
             $this->_session['CAPTCHA_' . $this->_backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME]] = null;
             return;
         }

@@ -244,6 +244,7 @@ class Chrome_Session implements Chrome_Session_Interface
 
             // AND now check whether the session is valid for the user
             if(!$this->_isValid()) {
+
                 $this->destroy();
             }
 

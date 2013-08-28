@@ -19,6 +19,52 @@
 if(CHROME_PHP !== true)
     die();
 
+interface Chrome_Form_Option_Element_Captcha_Interface extends Chrome_Form_Option_Element_Interface
+{
+    public function getCaptcha();
+}
+
+class Chrome_Form_Option_Element_Captcha extends Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Captcha_Interface
+{
+    protected $_form = null;
+
+    protected $_captcha = null;
+
+    protected $_frontendOptions = array();
+
+    protected $_backendOptions = array();
+
+    public function __construct(Chrome_Form_Interface $form)
+    {
+        $this->_form = $form;
+    }
+
+    public function setFrontendOptions(array $options)
+    {
+        $this->_frontendOptions = $options;
+    }
+
+    public function setBackendOptions(array $options)
+    {
+        $this->_backendOptions = $options;
+    }
+
+    public function setCaptcha(Chrome_Captcha_Interface $captcha)
+    {
+        $this->_captcha = $captcha;
+    }
+
+    public function getCaptcha()
+    {
+        if($this->_captcha === null)
+        {
+            $this->_captcha = new Chrome_Captcha($this->_form->getID(), $this->_form->getApplicationContext(), $this->_frontendOptions, $this->_backendOptions);
+        }
+
+        return $this->_captcha;
+    }
+}
+
 /**
  *
  * @package CHROME-PHP
@@ -26,124 +72,28 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
 {
-    const CHROME_FORM_ELEMENT_CAPTCHA_SESSION_NAMESPACE = 'CAPTCHA';
-    const CHROME_FORM_ELEMENT_CAPTCHA_TOKEN = 'TOKEN';
-    const CHROME_FORM_ELEMENT_CAPTCHA_ERROR_NOT_VALID = 'CAPTCHANOTVALID';
-    const CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS = 'CAPTCHAFRONTEND';
-    const CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS = 'CAPTCHA_BACKEND';
-    protected $_defaultOptions = array(self::IS_REQUIRED => true,
-                                    self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS => array(),
-                                    self::CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS => array());
+    protected $_captcha = null;
+
+    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Captcha_Interface $option)
+    {
+        parent::__construct($form, $id, $option);
+        $this->_captcha = $option->getCaptcha();
+    }
 
     public function isCreated()
     {
-        return true;
+        return $this->_captcha instanceof Chrome_Captcha_Interface;
     }
 
-    protected function _isValid()
+    protected function _getValidator()
     {
-        $data = $this->_form->getSentData($this->_id);
-
-        $captcha = new Chrome_Captcha($this->_form->getID(), $this->_form->getApplicationContext(), $this->_getFrontendOptions(), $this->_getBackendOptions());
-
-        $valid = $captcha->isValid($data);
-
-        if($valid == false)
-        {
-
-            $error = $captcha->getError();
-
-            if($error != null)
-            {
-                $this->_errors[] = $error;
-            }
-            $this->_errors[] = self::CHROME_FORM_ELEMENT_CAPTCHA_ERROR_NOT_VALID;
-        }
-
-        return $valid;
-    }
-
-    protected function _isSent()
-    {
-        if($this->_options[self::IS_REQUIRED] === true)
-        {
-            if($this->_form->getSentData($this->_id) === null)
-            {
-                $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
-                return false;
-            }
-        }
-
-        return true;
+        return new Chrome_Validator_Form_Element_Captcha($this->_captcha);
     }
 
     public function create()
     {
-        $captcha = new Chrome_Captcha($this->_form->getID(), $this->_form->getApplicationContext(), $this->_getFrontendOptions(), $this->_getBackendOptions());
-
-        $captcha->create();
+        $this->_captcha->create();
 
         return true;
-    }
-
-    public function getData()
-    {
-        return $this->_form->getSentData($this->_id);
-    }
-
-    public function save()
-    {
-    }
-
-    public function getSavedData()
-    {
-    }
-
-    protected function _getFrontendOptions()
-    {
-        if(isset($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS]) && is_array($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS]))
-        {
-            return $this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS];
-        }
-
-        return array();
-    }
-
-    protected function _getBackendOptions()
-    {
-        if(isset($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS]) && is_array($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS]))
-        {
-            return $this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_BACKEND_OPTIONS];
-        }
-
-        return array();
-    }
-
-    public function getDecorator()
-    {
-        if($this->_decorator !== null)
-        {
-            return $this->_decorator;
-        }
-
-        if(!isset($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS][Chrome_Captcha_Interface::CHROME_CAPTCHA_ENGINE]))
-        {
-            if(isset(self::$_defaultDecorator[get_class($this)]))
-            {
-                $class = self::$_defaultDecorator[get_class($this)];
-            } else
-            {
-                $class = str_replace('Element', 'Decorator', get_class($this)) . '_' . $this->_form->getAttribute(Chrome_Form_Interface::ATTRIBUTE_DECORATOR);
-            }
-        } else
-        {
-            $class = 'Chrome_Form_Decorator_Captcha_' .
-                 ucfirst(strtolower($this->_options[self::CHROME_FORM_ELEMENT_CAPTCHA_FRONTEND_OPTIONS][Chrome_Captcha_Interface::CHROME_CAPTCHA_ENGINE]));
-        }
-
-        $this->_decorator = new $class($this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS], $this->_options[self::CHROME_FORM_ELEMENT_DECORATOR_ATTRIBUTES]);
-        $this->_decorator->setFormElement($this);
-
-        return $this->_decorator;
     }
 }

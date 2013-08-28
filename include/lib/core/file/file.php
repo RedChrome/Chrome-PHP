@@ -57,7 +57,6 @@ if(CHROME_PHP !== true) die();
  * @package		CHROME-PHP
  * @copyright   Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  */
-
 class Chrome_File
 {
 

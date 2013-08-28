@@ -30,3 +30,8 @@ function truncate_form_input( formID ) {
 	    selectParentNode.replaceChild(newSelectObj, elements[i]);
     }
 }
+
+function getToken()
+{
+	return Math.random();
+}

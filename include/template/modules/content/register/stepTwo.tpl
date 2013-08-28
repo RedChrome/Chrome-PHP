@@ -24,7 +24,7 @@
 
 
 
-        <?php //echo $FORM->render('captcha'); ?>
+        <?php echo $FORM['captcha']->render(); ?>
 
 
     <?php echo $FORM['buttons']->render(); ?>

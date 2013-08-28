@@ -120,7 +120,7 @@ interface Chrome_Form_Element_Storable extends Chrome_Form_Element_Interface
  * Chrome_Form_Element_Abstract
  *
  * Abstract class of all form element classes.
- *
+ * @todo finish docs
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Element
  */
@@ -143,14 +143,14 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      *
      * @var string
      */
-    const CHROME_FORM_ELEMENT_SELECTION_OPTIONS = 'SELECTIONOPTIONS',
+    const CHROME_FORM_ELEMENT_SELECTION_OPTIONS = 'SELECTIONOPTIONS';
 
     /**
      * This error will occure if the user sent data which didnt matched the SELECTION_OPTIONS
      *
      * @var string
      */
-    CHROME_FORM_ELEMENT_ERROR_WRONG_SELECTION = 'ERRORWRONGSELECTION',
+    const CHROME_FORM_ELEMENT_ERROR_WRONG_SELECTION = 'ERRORWRONGSELECTION';
 
     /**
      * If the user has sent a wrong submit type e.g.
@@ -159,7 +159,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      *
      * @var string
      */
-    CHROME_FORM_ELEMENT_ERROR_WRONG_SUBMIT = 'ERRORWRONGSUBMIT';
+    const CHROME_FORM_ELEMENT_ERROR_WRONG_SUBMIT = 'ERRORWRONGSUBMIT';
 
     /**
      * current option
@@ -290,10 +290,6 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
-     *
-     *
-     *
-     *
      * Determines whether this element is created. This method is a default implementation
      * of a cache using _isCreated() for validation
      *
@@ -313,10 +309,6 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
-     *
-     *
-     *
-     *
      * Determines whether this element is sent. This method is a default implementation
      * of a cache using _isSent() for validation
      *
@@ -445,7 +437,6 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 }
 abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element_Abstract
 {
-
     public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Multiple_Interface $option)
     {
         parent::__construct($form, $id, $option);

@@ -10,7 +10,7 @@ class Chrome_Cookie_Dummy extends Chrome_Cookie
 
     }
 
-    public function setCookie($name, $value = 0, $expire = 0, $path = self::CHROME_COOKIE_DEFAULT_PATH, $domain = '', $secure = false, $httponly = false)
+    public function setCookie($name, $value = 0, $expire = 0, $path = self::DEFAULT_PATH, $domain = '', $secure = false, $httponly = false)
     {
         $this->_cookie[$name] = $value;
     }

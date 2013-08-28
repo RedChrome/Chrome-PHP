@@ -51,6 +51,13 @@ interface Chrome_Cookie_Interface extends ArrayAccess
     public function unsetAllCookies();
 
     /**
+     * The default path on the server in which the cookie will be available on
+     *
+     * @var string
+     */
+    const DEFAULT_PATH = ROOT_URL;
+
+    /**
      * Sets the cookie and sends the instruction to create the cookie to the client
      *
      * Returns true if client received the instruction, false if not
@@ -64,7 +71,7 @@ interface Chrome_Cookie_Interface extends ArrayAccess
      * @param bool    $httponly When true the cookie will be made accessible only through the HTTP protocol
      * @return bool   true on success
      */
-    public function setCookie($name, $value = 0, $expire = 0, $path = self::CHROME_COOKIE_DEFAULT_PATH, $domain = '', $secure = false, $httponly = false);
+    public function setCookie($name, $value = 0, $expire = 0, $path = self::DEFAULT_PATH, $domain = '', $secure = false, $httponly = false);
 
     /**
      * Unsets a cookie and sends the instruction to delete the cookie to the client
@@ -82,7 +89,7 @@ interface Chrome_Cookie_Interface extends ArrayAccess
      * @param bool    $httponly When true the cookie will be made accessible only through the HTTP protocol
      * @return bool   true on success
      */
-    public function unsetCookie($name, $path = self::CHROME_COOKIE_DEFAULT_PATH, $domain = '', $secure = false, $httponly = false);
+    public function unsetCookie($name, $path = self::DEFAULT_PATH, $domain = '', $secure = false, $httponly = false);
 }
 
 
@@ -106,13 +113,6 @@ class Chrome_Cookie implements Chrome_Cookie_Interface
      * @var string
      */
     const CHROME_COOKIE_COOKIE_VALIDATION_KEY = 'CHROME_PHP';
-
-    /**
-     * The default path on the server in which the cookie will be available on
-     *
-     * @var string
-     */
-    const CHROME_COOKIE_DEFAULT_PATH = ROOT_URL;
 
     /**
      * Save validation code here, to improve performance
@@ -172,10 +172,10 @@ class Chrome_Cookie implements Chrome_Cookie_Interface
      * @param bool    $httponly When true the cookie will be made accessible only through the HTTP protocol
      * @return bool true on success, false on error
      */
-    public function setCookie($name, $value = 0, $expire = 0, $path = self::CHROME_COOKIE_DEFAULT_PATH, $domain = '', $secure = false, $httponly = false)
+    public function setCookie($name, $value = 0, $expire = 0, $path = self::DEFAULT_PATH, $domain = '', $secure = false, $httponly = false)
     {
         if($path === null or $path === false) {
-            $path = self::CHROME_COOKIE_DEFAULT_PATH;
+            $path = self::DEFAULT_PATH;
         }
 
         $this->_cookie[$name] = $value;
@@ -206,10 +206,10 @@ class Chrome_Cookie implements Chrome_Cookie_Interface
      * @param bool    $httponly When true the cookie will be made accessible only through the HTTP protocol
      * @return bool   true on success
      */
-    public function unsetCookie($name, $path = self::CHROME_COOKIE_DEFAULT_PATH, $domain = '', $secure = false, $httponly = false)
+    public function unsetCookie($name, $path = self::DEFAULT_PATH, $domain = '', $secure = false, $httponly = false)
     {
         if($path === null or $path === false) {
-            $path = self::CHROME_COOKIE_DEFAULT_PATH;
+            $path = self::DEFAULT_PATH;
         }
 
         unset($this->_cookie[$name]);
@@ -250,7 +250,7 @@ class Chrome_Cookie implements Chrome_Cookie_Interface
         }
 
         $this->unsetAllCookies();
-        $this->setCookie(self::CHROME_COOKIE_COOKIE_VALIDATION_KEY, $this->_getValidationCode(), -1, self::CHROME_COOKIE_DEFAULT_PATH, '', false, true);
+        $this->setCookie(self::CHROME_COOKIE_COOKIE_VALIDATION_KEY, $this->_getValidationCode(), -1, self::DEFAULT_PATH, '', false, true);
     }
 
     /**

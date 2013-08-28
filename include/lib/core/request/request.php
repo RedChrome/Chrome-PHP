@@ -176,6 +176,7 @@ abstract class Chrome_Request_Data_Abstract implements Chrome_Request_Data_Inter
             if(isset($this->_vars[$varName][$key])) {
                 return $this->_vars[$varName][$key];
             }
+        return null;
     }
 
     public function getGETData($key = null)
