@@ -20,6 +20,7 @@ if(CHROME_PHP !== true)
     die();
 
 /**
+ * @todo add a method to set id prefix.
  * @todo add doc
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
@@ -51,8 +52,6 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
         $this->_name = $formElement->getID();
 
         $this->setOption($option);
-
-        $this->_init();
     }
 
     abstract protected function _render();
@@ -97,6 +96,7 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
         $this->_id = $this->_getIdPrefix() . $this->_name;
         $this->_flags['id'] = $this->_id;
         $this->_attribute = array();
+        $this->_init();
     }
 
     public function getFlag($key)

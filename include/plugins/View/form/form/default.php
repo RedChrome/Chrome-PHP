@@ -49,11 +49,11 @@ class Chrome_View_Form_Element_Form_Default extends Chrome_View_Form_Element_Abs
             $this->_int = 1;
 
             return '<form '. $this->_renderFlags() . '>' . "\n" .
-                 '<input type="hidden" id="' . $this->_getIdPrefix().$tokenNamespace . '" name="' . $tokenNamespace . '" value="' . $token . '" />' . "\n";
+                 '<input type="hidden" id="' . $this->_getIdPrefix().$tokenNamespace . '" name="' . $tokenNamespace . '" value="' . $token . '" />';
         } else
         {
             $this->_int = 0;
-            return '</form>' . "\n";
+            return '</form>';
         }
     }
 }

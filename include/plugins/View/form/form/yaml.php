@@ -17,19 +17,20 @@
  * @subpackage Chrome.Form
  * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 16:08:16] --> $
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.03.2013 17:12:17] --> $
  */
 if(CHROME_PHP !== true)
     die();
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_View_Form_Element_Checkbox_Yaml extends Chrome_View_Form_Element_Checkbox_Default
+class Chrome_View_Form_Element_Form_Yaml extends Chrome_View_Form_Element_Form_Default
 {
-    public function render()
+    protected function _init()
     {
-        return '<div class="ym-fbox ym-fbox-check">'.parent::render().'</div>';
+        $this->_attribute['class'] = 'ym-form linearize-form ym-columnar';
     }
 }

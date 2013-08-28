@@ -27,6 +27,6 @@ class Chrome_View_Form_Element_Text_Default extends Chrome_View_Form_Element_Abs
 {
     protected function _render()
     {
-        return'<input type="text" '.$this->_renderFlags().'/>'."\n";
+        return'<input type="text" '.$this->_renderFlags().'/>';
     }
 }

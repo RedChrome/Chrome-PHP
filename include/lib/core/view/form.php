@@ -47,6 +47,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     public function setElementFactory(Chrome_View_Form_Element_Factory_Interface $elementFactory)
     {
         $this->_formElementFactory = $elementFactory;
+        $this->_formElements = array();
     }
 
     public function setElementOptionFactory(Chrome_View_Form_Element_Option_Factory_Interface $elementOptionFactory)
@@ -352,12 +353,12 @@ class Chrome_View_Form_Element_Appendable_Label extends Chrome_View_Form_Element
             case Chrome_View_Form_Label_Interface::LABEL_POSITION_DEFAULT:
             case Chrome_View_Form_Label_Interface::LABEL_POSITION_FRONT:
                 {
-                    return $this->_renderLabel($label) . ' ' . $this->_result . PHP_EOL;
+                    return $this->_renderLabel($label) . ' ' . $this->_result;
                 }
 
             case Chrome_View_Form_Label_Interface::LABEL_POSITION_BEHIND:
                 {
-                    return $this->_result . ' ' . $this->_renderLabel($label) . PHP_EOL;
+                    return $this->_result . ' ' . $this->_renderLabel($label);
                 }
 
             case Chrome_View_Form_Label_Interface::LABEL_POSITION_NONE:

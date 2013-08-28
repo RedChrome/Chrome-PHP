@@ -14,22 +14,18 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Form
+ * @subpackage Chrome.View
  * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 16:08:16] --> $
+ * @version Git: <git_id>
+ * @author Alexander Book
  */
 if(CHROME_PHP !== true)
     die();
-
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.Form
- */
-class Chrome_View_Form_Element_Checkbox_Yaml extends Chrome_View_Form_Element_Checkbox_Default
+class Chrome_View_Form_Element_Text_Yaml extends Chrome_View_Form_Element_Text_Default
 {
     public function render()
     {
-        return '<div class="ym-fbox ym-fbox-check">'.parent::render().'</div>';
+        return '<div class="ym-fbox ym-fbox-text">'.parent::render().'</div>';
     }
 }

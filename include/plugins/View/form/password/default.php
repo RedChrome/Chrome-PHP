@@ -31,6 +31,6 @@ class Chrome_View_Form_Element_Password_Default extends Chrome_View_Form_Element
 {
     protected function _render()
     {
-        return '<input type="password" ' . $this->_renderFlags() . '/>'.PHP_EOL;
+        return '<input type="password" ' . $this->_renderFlags() . '/>';
     }
 }

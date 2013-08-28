@@ -17,22 +17,19 @@
  * @subpackage Chrome.Form
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 15:46:44] --> $
+ * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [17.10.2012 19:50:27] --> $
  */
-if( CHROME_PHP !== true ) die();
-
-require_once 'default.php';
+if(CHROME_PHP !== true)
+    die();
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Submit_Yaml extends Chrome_Form_Decorator_Submit_Default
+class Chrome_View_Form_Element_Submit_Yaml extends Chrome_View_Form_Element_Submit_Default
 {
     public function render()
     {
-        $this->setAttribute( 'class', 'ym-button' );
-
-        return parent::render();
+        return '<div class="ym-fbox ym-fbox-button ym-fbox-footer">'.parent::render().'</div>';
     }
 }

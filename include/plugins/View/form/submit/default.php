@@ -30,7 +30,6 @@ class Chrome_View_Form_Element_Submit_Default extends Chrome_View_Form_Element_A
 {
     protected function _render()
     {
-
         $allowedValues = $this->_elementOption->getAllowedValues();
 
         $this->_flags['value'] = array_pop($allowedValues);

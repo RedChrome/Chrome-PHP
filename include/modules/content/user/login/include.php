@@ -125,7 +125,6 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
 
 class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
 {
-
     private static $_instance = null;
 
     public static function getInstance(Chrome_Form_Interface $form)
@@ -140,7 +139,9 @@ class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
 
     protected function _initFactories()
     {
-        $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Default');
+        if($this->_formElementFactory === null) {
+            $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Default');
+        }
         // $this->_renderer = new Chrome_View_Form_Index_Renderer();
 
         parent::_initFactories();
