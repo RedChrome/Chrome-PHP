@@ -81,26 +81,6 @@ class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract
         return true;
     }
 
-    protected function _getValidator()
-    {
-        $validator = parent::_getValidator();
-
-        $validator->addValidator(new Chrome_Validator_Form_Element_Inline(array($this, 'inlineValidation')));
-
-        return $validator;
-    }
-
-    public function inlineValidation($data)
-    {
-        foreach($this->_option->getAttachments() as $button) {
-            if($button->isValid() === false) {
-                return $button->getErrors();
-            }
-        }
-
-        return true;
-    }
-
     protected function _isSent()
     {
         if($this->_option->getIsRequired() === false OR $this->_option->getIsReadonly() === true) {

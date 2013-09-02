@@ -48,15 +48,12 @@ class Chrome_View_User_Login_Default extends Chrome_View_Strategy_Abstract
 
     public function showForm()
     {
-        $viewForm = new Chrome_View_Form_Login($this->_controller->getForm());
-        $viewForm->setElementFactory(new Chrome_View_Form_Element_Factory_Suffix('Yaml'));
-        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content($viewForm);
+        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content(Chrome_View_Form_Login::getInstance($this->_controller->getForm()));
     }
+
     public function errorWhileLoggingIn()
     {
-        $viewForm = new Chrome_View_Form_Login($this->_controller->getForm());
-        $viewForm->setElementFactory(new Chrome_View_Form_Element_Factory_Suffix('Yaml'));
-        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content($viewForm);
+        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content(Chrome_View_Form_Login::getInstance($this->_controller->getForm()));
     }
 }
 class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract
@@ -93,6 +90,11 @@ class Chrome_View_User_Default_FormNotValid extends Chrome_View_Abstract
 
 class Chrome_View_Form_Renderer_Template_Login_Content extends Chrome_View_Form_Renderer_Template_Abstract
 {
+    protected function _setUp()
+    {
+        $this->_viewForm->setElementFactory(new Chrome_View_Form_Element_Factory_Suffix('Yaml'));
+    }
+
     protected function _getTemplate()
     {
         $template = new Chrome_Template();

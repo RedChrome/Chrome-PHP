@@ -52,6 +52,7 @@ class Chrome_View_Form_Element_Form_Default extends Chrome_View_Form_Element_Abs
                  '<input type="hidden" id="' . $this->_getIdPrefix().$tokenNamespace . '" name="' . $tokenNamespace . '" value="' . $token . '" />';
         } else
         {
+            --$this->_renderCount;
             $this->_int = 0;
             return '</form>';
         }

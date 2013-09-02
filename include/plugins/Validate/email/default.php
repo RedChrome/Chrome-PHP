@@ -46,12 +46,14 @@ class Chrome_Validator_Email_Default extends Chrome_Validator
         if($len < $this->_options[self::CHROME_VALIDATOR_EMAIL_DEFAULT_MIN_LENGTH])
         {
             $this->_setError(self::CHROME_VALIDATOR_EMAIL_DEFAULT_TOO_SHORT);
+            return false;
         }
 
         // email too long
         if($len > $this->_options[self::CHROME_VALIDATOR_EMAIL_DEFAULT_MAX_LENGTH])
         {
             $this->_setError(self::CHROME_VALIDATOR_EMAIL_DEFAULT_TOO_LONG);
+            return false;
         }
 
         // email not valid
@@ -59,6 +61,9 @@ class Chrome_Validator_Email_Default extends Chrome_Validator
         if(!preg_match($regex, $this->_data))
         {
             $this->_setError(self::CHROME_VALIDATOR_EMAIL_DEFAULT_NOT_VALID);
+            return false;
         }
+
+        return true;
     }
 }

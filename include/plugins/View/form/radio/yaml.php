@@ -21,19 +21,15 @@
  */
 if( CHROME_PHP !== true ) die();
 
-require_once 'default.php';
-
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Radio_Yaml extends Chrome_Form_Decorator_Radio_Default
+class Chrome_View_Form_Element_Radio_Yaml extends Chrome_View_Form_Element_Radio_Default
 {
     public function render()
     {
-        $return = '<div class="ym-fbox-check">' . parent::render().'</div>' . "\n";
-
-        return $return;
+        return '<div class="ym-fbox-check">' . parent::render().'</div>'
     }
 }

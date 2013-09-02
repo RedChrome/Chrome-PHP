@@ -38,6 +38,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     protected $_formElementOptionFactory = null;
     protected $_formElementFactoryDefault = 'Default';
     protected $_formElementOptionFactoryDefault = 'Default';
+    protected $_currentRenderCount = null;
 
     public function __construct(Chrome_Form_Interface $form)
     {
@@ -47,6 +48,13 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     public function setElementFactory(Chrome_View_Form_Element_Factory_Interface $elementFactory)
     {
         $this->_formElementFactory = $elementFactory;
+
+        $any = current($this->_formElements);
+
+        if($any !== false) {
+            $this->_currentRenderCount = $any->getOption()->getRenderCount();
+        }
+
         $this->_formElements = array();
     }
 
@@ -91,15 +99,12 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
 
         foreach($this->_form->getElements() as $formElement)
         {
-
             $formElementId = $formElement->getID();
 
-            // formOption = $this->_formElementOptionFactory->getElementOption($formElement);
-
             $this->_formElements[$formElementId] = $this->_setUpElement($formElement);
-
-            // this->_formElements[$formElementId] = $this->_formElementFactory->getElement($formElement, $formOption);
         }
+
+        $this->_currentRenderCount = null;
     }
 
     protected function _setUpElement(Chrome_Form_Element_Interface $formElement)
@@ -107,6 +112,11 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         $formOption = $this->_formElementOptionFactory->getElementOption($formElement);
 
         $formOption = $this->_modifyElementOption($formElement, $formOption);
+
+        if($this->_currentRenderCount !== null)
+        {
+            $formOption->setRenderCount($this->_currentRenderCount);
+        }
 
         if($formElement->getOption() instanceof Chrome_Form_Option_Element_Attachable_Interface)
         {
@@ -188,6 +198,7 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
  */
 class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_Form_Element_Option_Factory_Interface
 {
+
     public function getElementOption(Chrome_Form_Element_Interface $formElement)
     {
         if($formElement instanceof Chrome_Form_Element_Multiple_Abstract or stristr(get_class($formElement), 'Chrome_Form_Element_Radio') !== false)
@@ -290,6 +301,7 @@ class Chrome_View_Form_Element_Appendable_Error extends Chrome_View_Form_Element
 }
 class Chrome_View_Form_Element_Appendable_Label extends Chrome_View_Form_Element_Appendable_Abstract
 {
+
     protected function _renderLabel(Chrome_View_Form_Label_Interface $label)
     {
         $isRequired = false;
@@ -306,15 +318,14 @@ class Chrome_View_Form_Element_Appendable_Label extends Chrome_View_Form_Element
             {
                 $isRequired = true;
             }
-
         } else
         {
-            $for = $this->_viewFormElement->getFlag('id');
+            $for = $this->_viewFormElement->getId();#$this->_viewFormElement->getFlag('id');
 
             $name = $this->_viewFormElement->getFlag('name');
         }
 
-        if($isRequired === false AND $this->_viewFormElement->getFormElement()->getOption()->getIsRequired())
+        if($isRequired === false and $this->_viewFormElement->getFormElement()->getOption()->getIsRequired())
         {
             $isRequired = true;
         }

@@ -13,39 +13,29 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Converter
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 16:39:40] --> $
- * @author     Alexander Book
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 16:39:40] --> $
+ * @author Alexander Book
  */
-
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Converter
  */
 class Chrome_Converter_Delegate_TypeCastingAndStripping extends Chrome_Converter_Delegate_Abstract
 {
-    /**
-     * Contains allowed HTML - Tags
-     *
-     * @var array
-     */
-    private static $_allowedHTML = array('<br>', '<hr>');
+    protected $_conversions = array('toInt', 'toString', 'toBool', 'decodeUrl', 'encodeUrl', 'charToHtml', 'stripRepeat', 'stripHtml', 'stripNull', 'trim');
 
-    protected $_conversions = array(
-        'toInt',
-        'toString',
-        'toBool',
-        'decodeUrl',
-        'encodeUrl',
-        'charToHtml',
-        'stripRepeat',
-        'stripHtml',
-        'stripNull');
+    public function trim($var, $option)
+    {
+        return trim($var);
+    }
 
     public function toInt($var, $option)
     {
@@ -73,14 +63,17 @@ class Chrome_Converter_Delegate_TypeCastingAndStripping extends Chrome_Converter
     }
 
     /**
+     *
      * @param mixed $var
-     * @param array $option: no options available
+     * @param array $option:
+     *        no options available
      */
     public function charToHtml($var, $option)
     {
         $array = get_html_translation_table(HTML_ENTITIES);
         unset($array['&'], $array['>'], $array['<'], $array[' '], $array['']);
-        foreach($array as $key => $value) {
+        foreach($array as $key => $value)
+        {
             $var = str_replace($key, $value, $var);
         }
 
@@ -88,39 +81,45 @@ class Chrome_Converter_Delegate_TypeCastingAndStripping extends Chrome_Converter
     }
 
     /**
+     *
      * @param mixed $var
-     * @param array $option: (int) 'repeat': Do not allow more than x identical characters, default: 4
+     * @param array $option:
+     *        (int) 'repeat': Do not allow more than x identical characters, default: 4
      */
     public function stripRepeat($var, $option)
     {
-        if(isset($option['repeat']) and is_numeric($option['repeat'])) {
+        if(isset($option['repeat']) and is_numeric($option['repeat']))
+        {
             $repeat = str_repeat('$1', $option['repeat']);
-        } else  $repeat = '$1$1$1$1';
+        } else
+            $repeat = '$1$1$1$1';
 
-        $var = preg_replace("/(\s){2,}/", '$1', $var);
+        $var = preg_replace('/(\s){2,}/', '$1', $var);
         return preg_replace('{( ?.)\1{4,}}', $repeat, $var);
     }
 
     /**
+     *
      * @param mixed $var
-     * @param array $option: (bool) 'nl2br': replace "newline" to <br />
-     *			 (array) 'allowedHTML': HTML-Tags which dont get replaced
+     * @param array $option:
+     *        (bool) 'nl2br': replace "newline" to <br />
+     *        (array) 'allowedHTML': HTML-Tags which dont get replaced
      */
     public function stripHtml($var, $option)
     {
         if(isset($option['allowedHTML'])) {
-            $allowedHTML = array_merge(self::$_allowedHTML, $option['allowedHTML']);
+            $allowedHTML = $option['allowedHTML'];
         } else {
-            $allowedHTML = self::$_allowedHTML;
+            $allowedHTML = array();
         }
 
         $allowedHTML = implode('', $allowedHTML);
 
-        if(isset($option['nl2br']) AND $option['nl2br'] === true) {
-
+        if(isset($option['nl2br']) and $option['nl2br'] === true)
+        {
             return strip_tags(nl2br($var), $allowedHTML);
-        } else {
-
+        } else
+        {
             return strip_tags($var, $allowedHTML);
         }
     }
@@ -129,12 +128,14 @@ class Chrome_Converter_Delegate_TypeCastingAndStripping extends Chrome_Converter
      * Removes all null bytes from a string
      *
      * @param string $var
-     * @param array $options: string 'replacement': replaces all \0 with replacement
+     * @param array $options:
+     *        string 'replacement': replaces all \0 with replacement
      *
      */
     public function stripNull($var, $option)
     {
-        if(!isset($option['replacement'])) {
+        if(!isset($option['replacement']))
+        {
             $option['replacement'] = '';
         }
 

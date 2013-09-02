@@ -164,9 +164,9 @@ interface Chrome_View_Form_Element_Option_Interface
      * Sets a default input. This will render a "selected", "checked",... attribute for all values which
      * are a subset of $defaultInput
      *
-     * @param array $defaultInput
+     * @param mixed $defaultInput
      */
-    public function setDefaultInput(array $defaultInput);
+    public function setDefaultInput($defaultInput);
 
     /**
      * Sets a storedData. This will be called automatically if you append a store handler.
@@ -185,6 +185,10 @@ interface Chrome_View_Form_Element_Option_Interface
     public function getDefaultInput();
 
     public function getStoredData();
+
+    public function getRenderCount();
+
+    public function setRenderCount($int);
 }
 
 /**
@@ -221,6 +225,8 @@ interface Chrome_View_Form_Element_Option_Attachable_Interface extends Chrome_Vi
  */
 interface Chrome_View_Form_Element_Interface extends Chrome_Renderable
 {
+    public function getId();
+
     public function getFormElement();
 
     public function setOption(Chrome_View_Form_Element_Option_Interface $option);

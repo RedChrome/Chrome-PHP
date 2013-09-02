@@ -13,20 +13,20 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Validator
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2013 16:02:57] --> $
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2013 16:02:57] --> $
  */
-
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
 /**
  * Chrome_Validator_Form_Element_Required
  *
- * @package		CHROME-PHP
- * @subpackage  Chrome.Validator
+ * @package CHROME-PHP
+ * @subpackage Chrome.Validator
  */
 class Chrome_Validator_Form_Element_Required extends Chrome_Validator
 {
@@ -39,32 +39,49 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
 
     protected function _validate()
     {
-        if($this->_option instanceof Chrome_Form_Option_Element_Multiple) {
+        if($this->_option instanceof Chrome_Form_Option_Element_Multiple)
+        {
 
-            if(!is_array($this->_data)) {
+            if(!is_array($this->_data))
+            {
                 $this->_data = array($this->_data);
             }
 
             // every available input must have been sent, but nothing more, nothing less!
-            if($this->_option->getIsRequired() === true) {
+            if($this->_option->getIsRequired() === true)
+            {
 
-                if($this->_compareArraysToEquality($this->_option->getAllowedValues(), $this->_data) === false) {
+                if($this->_compareArraysToEquality($this->_option->getAllowedValues(), $this->_data) === false)
+                {
                     return false;
                 }
 
                 return true;
-
-            } else {
-                if($this->_compareArraysToSubset($this->_option->getRequired(), $this->_data) === false) {
+            } else
+            {
+                if($this->_compareArraysToSubset($this->_option->getRequired(), $this->_data) === false)
+                {
                     return false;
                 }
 
                 return true;
             }
+        } elseif($this->_option instanceof Chrome_Form_Option_Element_Attachable_Interface)
+        {
+            foreach($this->_option->getAttachments() as $attachment)
+            {
+                if($attachment->isValid())
+                {
+                    return true;
+                }
+            }
 
-        } else {
+            return false;
+        } else
+        {
 
-            if($this->_option->getIsRequired() === true and $this->_data === null) {
+            if($this->_option->getIsRequired() === true and $this->_data === null)
+            {
                 return false;
             }
 
@@ -74,18 +91,21 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
 
     protected function _compareArraysToEquality($expectedArray, $sentArray)
     {
-        if(($expectedArray == $sentArray) === false) {
+        if(($expectedArray == $sentArray) === false)
+        {
 
             // compare the size of both arrays, to test they are equal
             $expectedSize = sizeof($expectedArray);
             $acutalSize = sizeof($sentArray);
 
-            if($expectedSize > $acutalSize) {
+            if($expectedSize > $acutalSize)
+            {
                 $this->_setError('Too few values sent!');
                 return false;
             }
 
-            if($acutalSize > $expectedSize) {
+            if($acutalSize > $expectedSize)
+            {
                 $this->_setError('Too much values sent!');
                 return false;
             }
@@ -99,17 +119,21 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
 
     protected function _compareArraysToSubset($expectedArray, $sentArray)
     {
-        if(sizeof($expectedArray) === 0) {
+        if(sizeof($expectedArray) === 0)
+        {
             return true;
         }
 
-        if(sizeof($expectedArray) > sizeof($sentArray)) {
+        if(sizeof($expectedArray) > sizeof($sentArray))
+        {
             $this->_setError('Required value was not sent!');
             return false;
         }
 
-        foreach($expectedArray as $value) {
-            if(!in_array($value, $sentArray)) {
+        foreach($expectedArray as $value)
+        {
+            if(!in_array($value, $sentArray))
+            {
                 $this->_setError('Required value was not sent!');
                 return false;
             }

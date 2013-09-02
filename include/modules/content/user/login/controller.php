@@ -44,6 +44,7 @@ class Chrome_Controller_Content_Login extends Chrome_Controller_Module_Abstract
         } else {
             require_once 'controller/default.php';
             $this->_controller = new Chrome_Controller_Content_Login_Default($this->_applicationContext);
+            $this->_controller->setExceptionHandler($this->_exceptionHandler);
         }
 
         $this->_controller->execute();

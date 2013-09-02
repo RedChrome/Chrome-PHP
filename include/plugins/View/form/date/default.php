@@ -14,24 +14,35 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Form
+ * @subpackage Chrome.View
  * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.03.2013 15:39:26] --> $
+ * @version Git: <git_id>
+ * @author Alexander Book
  */
 if(CHROME_PHP !== true)
     die();
-
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Form
- */
-class Chrome_View_Form_Element_Captcha_Yaml extends Chrome_View_Form_Element_Captcha_Default
+class Chrome_View_Form_Element_Date_Default extends Chrome_View_Form_Element_Abstract
 {
-    public function render()
+    protected function _setFlags()
     {
-        $this->setAttribute('class', 'ym-button');
-        return '<div class="ym-fbox-text">' . parent::render() . '</div>';
+        parent::_setFlags();
+
+        if(!isset($this->_flags['value']))
+        {
+            return;
+        }
+
+        $inputValue = $this->_flags['value'];
+
+        if($inputValue instanceof DateTime)
+        {
+            $this->_flags['value'] = $inputValue->format('Y-m-d');
+        }
+    }
+
+    protected function _render()
+    {
+        return '<input type="date" ' . $this->_renderFlags() . '/>';
     }
 }

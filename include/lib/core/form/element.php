@@ -27,6 +27,7 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Form_Element_Interface
 {
+
     /**
      * isCreated()
      *
@@ -120,6 +121,7 @@ interface Chrome_Form_Element_Storable extends Chrome_Form_Element_Interface
  * Chrome_Form_Element_Abstract
  *
  * Abstract class of all form element classes.
+ *
  * @todo finish docs
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Element
@@ -234,11 +236,8 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
-     *
-     *
-     *
-     *
-     * Determines whether this element is valid. This method is a default implementation
+     * Determines whether this element is valid.
+     * This method is a default implementation
      * of a cache using _isValid() for validation
      *
      * @return boolean
@@ -253,17 +252,17 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 
         $validator = $this->_getValidator();
 
-        if(($optionValidator = $this->_option->getValidator()) !== null)
-        {
-            $validator->addValidator($optionValidator);
-        }
-
-        $validator->setData($this->_form->getSentData($this->_id));
+        $validator->setData($this->_getDataToValidate());
         $validator->validate();
 
         $this->_isValid = $validator->isValid();
         $this->_errors = $validator->getAllErrors();
         return $this->_isValid;
+    }
+
+    protected function _getDataToValidate()
+    {
+        return $this->_form->getSentData($this->_id);
     }
 
     /**
@@ -284,13 +283,27 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
             $andComposition->addValidator(new Chrome_Validator_Form_Element_Contains($this->_option->getAllowedValues()));
         }
 
+        $this->_addUserValidator($andComposition);
+
         $composition->addValidator($andComposition);
 
         return $composition;
     }
 
+    protected function _addUserValidator(Chrome_Validator_Composition_Interface $validator)
+    {
+        $userValidator = $this->_option->getValidator();
+
+        if($userValidator === null) {
+            return;
+        }
+
+        $validator->addValidator($userValidator);
+    }
+
     /**
-     * Determines whether this element is created. This method is a default implementation
+     * Determines whether this element is created.
+     * This method is a default implementation
      * of a cache using _isCreated() for validation
      *
      * @return boolean
@@ -309,7 +322,8 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
-     * Determines whether this element is sent. This method is a default implementation
+     * Determines whether this element is sent.
+     * This method is a default implementation
      * of a cache using _isSent() for validation
      *
      * @return boolean
@@ -437,6 +451,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
 }
 abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element_Abstract
 {
+
     public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Multiple_Interface $option)
     {
         parent::__construct($form, $id, $option);
@@ -460,6 +475,8 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
         {
             $and->addValidator($validator);
         }
+
+        $this->_addUserValidator($and);
 
         return $or;
     }

@@ -37,7 +37,7 @@ class Chrome_View_Form_Element_Backward_Default extends Chrome_View_Form_Element
         $this->_flags['value'] = $lang->get('backward');
         $this->_flags['required'] = null;
 
-        $formId = $this->_viewForm->getViewElements($this->_formElement->getForm()->getID())->getFlag('id');
+        $formId = $this->_viewForm->getViewElements($this->_formElement->getForm()->getID())->getId();#->getFlag('id');
         $this->_flags['onClick'] = 'javascript:truncate_form_input(\'' . $formId . '\');return true';
 
         return '<input type="submit" ' . $this->_renderFlags() . '/>';

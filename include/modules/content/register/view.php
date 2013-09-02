@@ -15,7 +15,8 @@ class Chrome_View_Register extends Chrome_View_Strategy_Abstract
 
     public function setStepTwo()
     {
-        $this->_views[] = new Chrome_View_Form_Renderer_Template_Register_StepTwo(new Chrome_View_Form_Register_StepTwo($this->_controller->getForm()));
+        $formView = new Chrome_View_Form_Register_StepTwo($this->_controller->getForm());
+        $this->_views[] = new Chrome_View_Form_Renderer_Template_Register_StepTwo($formView);
         #$this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_StepTwo', $this->_controller);
     }
 

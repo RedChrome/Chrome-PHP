@@ -21,15 +21,18 @@
  */
 if( CHROME_PHP !== true ) die();
 
-require_once 'default.php';
-
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Buttons_Yaml extends Chrome_Form_Decorator_Buttons_Default
+class Chrome_View_Form_Element_Buttons_Yaml extends Chrome_View_Form_Element_Buttons_Default
 {
     protected $_int = 0;
+
+    public function render()
+    {
+        return '<div class="ym-fbox-button">'.parent::render().'</div>';
+    }
 
     public function element( $name, array $options = array())
     {

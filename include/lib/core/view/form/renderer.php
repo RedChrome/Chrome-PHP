@@ -16,7 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-
 if(CHROME_PHP !== true)
     die();
 
@@ -34,12 +33,13 @@ abstract class Chrome_View_Form_Renderer_Abstract implements Chrome_View_Form_Re
         $this->_viewForm = $viewForm;
     }
 
-    public function __construct(Chrome_View_Form_Interface $viewForm = null)
+    protected function _setUp()
     {
-        if($viewForm !== null)
-        {
-            $this->setViewForm($viewForm);
-        }
+    }
+
+    public function __construct(Chrome_View_Form_Interface $viewForm)
+    {
+        $this->setViewForm($viewForm);
     }
 
     public function render()
@@ -49,10 +49,7 @@ abstract class Chrome_View_Form_Renderer_Abstract implements Chrome_View_Form_Re
             throw new Chrome_Exception('No View Form set!');
         }
 
-        foreach($this->_viewForm->getViewElements() as $viewElement)
-        {
-            $viewElement->reset();
-        }
+        $this->_setUp();
 
         return $this->_render();
     }

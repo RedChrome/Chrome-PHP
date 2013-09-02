@@ -28,8 +28,9 @@ if(CHROME_PHP !== true)
  */
 class Chrome_View_Form_Element_Submit_Yaml extends Chrome_View_Form_Element_Submit_Default
 {
+    /*
     public function render()
     {
         return '<div class="ym-fbox ym-fbox-button ym-fbox-footer">'.parent::render().'</div>';
-    }
+    }*/
 }

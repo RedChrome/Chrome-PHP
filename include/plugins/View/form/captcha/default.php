@@ -48,8 +48,8 @@ class Chrome_View_Form_Element_Captcha_Default extends Chrome_View_Form_Element_
 
 
 
-        $input = '<input type="text" name="'.$this->_formElement->getID().'" value="" '.$this->_renderFlags().'"><br><br>
-                <a onclick="javascript:document.getElementById(\'captcha_'.$this->_formElement->getForm()->getID().'\').src=\''._PUBLIC.'captcha/default.php?name='.$captchaName.'&renew=\'+getToken()">'.$lang->get('captcha_renew').'</a>';
+        $input = '<input type="text" name="'.$this->_formElement->getID().'" value="" '.$this->_renderFlags().'">.'
+                .'<a onclick="javascript:document.getElementById(\'captcha_'.$this->_formElement->getForm()->getID().'\').src=\''._PUBLIC.'captcha/default.php?name='.$captchaName.'&renew=\'+getToken()">'.$lang->get('captcha_renew').'</a>';
         return $img.$input;
     }
 }

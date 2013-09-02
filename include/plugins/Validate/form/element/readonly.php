@@ -31,16 +31,14 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Validator_Form_Element_Readonly extends Chrome_Validator
 {
-    protected $_option = null;
-
     public function __construct(Chrome_Form_Option_Element_Interface $option)
     {
-        $this->_option = $option;
+        $this->_options = $option;
     }
 
     protected function _validate()
     {
-        if($this->_option->getIsReadonly() === true) {
+        if($this->_options->getIsReadonly() === true) {
             return true;
         }
 

@@ -21,6 +21,7 @@ if(CHROME_PHP !== true)
     die();
 
 /**
+ * @todo use superclass checkbox and allow only one input value
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
@@ -52,6 +53,8 @@ class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract implements 
         if(($validator = $this->_option->getValidator()) !== null) {
             $and->addValidator($validator);
         }
+
+        $this->_addUserValidator($and);
 
         return $or;
     }

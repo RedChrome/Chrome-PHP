@@ -24,6 +24,8 @@ if(CHROME_PHP !== true)
     die();
 
 /**
+ * TODO: adapt thsi class to current database interface
+ *
  * Chrome_Validator_Email_Exists
  *
  * @package		CHROME-PHP

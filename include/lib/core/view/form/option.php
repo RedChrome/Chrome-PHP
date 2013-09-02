@@ -30,6 +30,7 @@ class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option
     protected $_label = null;
     protected $_placeholder = '';
     protected $_defaultInput = array();
+    protected $_renderCount = 0;
 
     public function getPlaceholder()
     {
@@ -68,9 +69,22 @@ class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option
         return $this->_defaultInput;
     }
 
-    public function setDefaultInput(array $input)
+    public function setDefaultInput($input)
     {
         $this->_defaultInput = $input;
+    }
+
+    public function getRenderCount()
+    {
+        return $this->_renderCount;
+    }
+
+    /**
+     * (non-PHPdoc) @see Chrome_View_Form_Element_Option_Interface::setRenderCount()
+     */
+    public function setRenderCount($int)
+    {
+        $this->_renderCount = (int) $int;
     }
 }
 
@@ -81,7 +95,6 @@ class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option
  */
 class Chrome_View_Form_Element_Option_Multiple extends Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option_Multiple_Interface
 {
-
 }
 
 /**

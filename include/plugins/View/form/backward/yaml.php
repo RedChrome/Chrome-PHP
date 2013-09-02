@@ -13,26 +13,28 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Form
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:47:11] --> $
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:47:11] --> $
  */
-if( CHROME_PHP !== true ) die();
+if(CHROME_PHP !== true)
+    die();
 
 require_once 'default.php';
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Decorator_Backward_Yaml extends Chrome_Form_Decorator_Backward_Default
+class Chrome_View_Form_Element_Backward_Yaml extends Chrome_View_Form_Element_Backward_Default
 {
-    public function render()
+    /*public function render()
     {
-        $this->setAttribute( 'class', 'ym-button' );
+        $this->setAttribute('class', 'ym-button');
 
-        return parent::render();
-    }
+        return '<div class="ym-fbox ym-fbox-button ym-fbox-footer">'.parent::render().'</div>';
+    }*/
 }

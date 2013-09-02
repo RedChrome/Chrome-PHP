@@ -13,22 +13,20 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
- * @subpackage Chrome.Form
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:48:22] --> $
- */
-if( CHROME_PHP !== true ) die();
-
-/**
  * @package CHROME-PHP
- * @subpackage Chrome.Form
+ * @subpackage Chrome.View
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version Git: <git_id>
+ * @author Alexander Book
  */
-class Chrome_View_Form_Element_Select_Yaml extends Chrome_View_Form_Element_Select_Default
+if(CHROME_PHP !== true)
+    die();
+
+class Chrome_View_Form_Element_Date_Yaml extends Chrome_View_Form_Element_Date_Default
 {
     public function render()
     {
-        return '<div class="ym-fbox-select">'.parent::render() . '</div>';
+        return '<div class="ym-fbox ym-fbox-text">'.parent::render().'</div>';
     }
 }

@@ -34,8 +34,8 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     protected $_name = null;
     protected $_option = null;
     protected $_elementOption = null;
-    protected $_flags = array();
     protected $_renderCount = 0;
+    protected $_flags = array();
     protected $_attribute = array();
     protected $_viewForm = null;
     protected $_appenders = array();
@@ -48,13 +48,20 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     {
         $this->_formElement = $formElement;
         $this->_elementOption = $formElement->getOption();
-        $this->_id = $this->_getIdPrefix() . $formElement->getID();
+        $this->_id = $this->_getIdPrefix($option) . $formElement->getID();
         $this->_name = $formElement->getID();
 
         $this->setOption($option);
+
+        #$this->_init();
     }
 
     abstract protected function _render();
+
+    public function getId()
+    {
+        return $this->_id;
+    }
 
     public function setViewForm(Chrome_View_Form_Interface $viewForm)
     {
@@ -71,9 +78,13 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
         return $this->_formElement;
     }
 
-    protected function _getIdPrefix()
+    protected function _getIdPrefix(Chrome_View_Form_Element_Option_Interface $option = null)
     {
-        return $this->_formElement->getForm()->getID() . self::SEPARATOR . $this->_renderCount . self::SEPARATOR;
+        if($option === null) {
+            $option = $this->_option;
+        }
+
+        return $this->_formElement->getForm()->getID() . self::SEPARATOR . $option->getRenderCount() . self::SEPARATOR;
     }
 
     protected function _init()
@@ -93,9 +104,11 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     public function reset()
     {
         ++$this->_renderCount;
+        $this->_option->setRenderCount($this->_renderCount);
+        #var_dump($this->_renderCount);
         $this->_id = $this->_getIdPrefix() . $this->_name;
         $this->_flags['id'] = $this->_id;
-        $this->_attribute = array();
+        #$this->_attribute = array();
         $this->_init();
     }
 
@@ -111,13 +124,18 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
             $this->_flags['placeholder'] = $placeholder;
         }
 
+        if($this->_elementOption->getIsRequired() === false)
+        {
+            $this->_flags['value'] = $this->_option->getDefaultInput();
+        }
+
         if(($storedData = $this->_option->getStoredData()) !== null)
         {
             $this->_flags['value'] = $storedData;
         }
 
         $this->_flags['name'] = $this->_name;
-        $this->_flags['id'] = $this->_id;
+        $this->_flags['id'] = $this->getId();
 
         $this->_flags['readonly'] = $this->_elementOption->getIsReadonly();
         $this->_flags['required'] = ($this->_elementOption->getIsRequired() === true) ? 'required' : null;
@@ -144,6 +162,7 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     public function setOption(Chrome_View_Form_Element_Option_Interface $option)
     {
         $this->_option = $option;
+        $this->_renderCount = $option->getRenderCount();
         $this->_setFlags();
     }
 
@@ -183,6 +202,7 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
 
     public function render()
     {
+        $this->reset();
         return $this->_renderAppenders($this->_render());
     }
 
@@ -190,7 +210,7 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     {
         $appendersCopy = $this->_appenders;
 
-        while(count($appendersCopy) >= 1)
+        while(count($appendersCopy) > 0)
         {
             $currentAppender = array_pop($appendersCopy);
 
@@ -268,13 +288,15 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
 
     public function render()
     {
+        $this->_init();
         $this->_tempFlag = array();
         ++$this->_count;
         $this->_current = $this->_getNext();
 
         $this->_setTempFlags();
-
-        return $this->_renderAppenders($this->_render());
+        $return = $this->_renderAppenders($this->_render());
+        $this->reset();
+        return $return;
     }
 
     protected function _setTempFlag($key, $value)
