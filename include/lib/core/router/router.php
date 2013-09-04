@@ -23,17 +23,6 @@
 if(CHROME_PHP !== true)
     die();
 
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Router
- */
-interface Chrome_Router_Interface extends Chrome_Router_Route_Interface, Chrome_Exception_Processable_Interface
-{
-    public function route(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data);
-
-    public function addRoute(Chrome_Router_Route_Interface $obj);
-}
 
 /**
  *
@@ -48,6 +37,19 @@ interface Chrome_Router_Route_Interface
 
     public function url(Chrome_Router_Resource_Interface $resource);
 }
+
+/**
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Router
+ */
+interface Chrome_Router_Interface extends Chrome_Router_Route_Interface, Chrome_Exception_Processable_Interface
+{
+    public function route(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data);
+
+    public function addRoute(Chrome_Router_Route_Interface $obj);
+}
+
 
 /**
  *
@@ -70,10 +72,38 @@ interface Chrome_Router_Result_Interface
 }
 interface Chrome_Router_Resource_Interface
 {
+
     public function getName();
     // TODO: finish interface with better names
     // public function getRequestOptions();
     public function setReturnAsAbsolutPath($boolean);
+}
+abstract class Chrome_Router_Route_Abstract implements Chrome_Router_Route_Interface, \Chrome\Logger\Loggable_Interface
+{
+    protected $_logger = null;
+    protected $_model = null;
+    protected $_resource = null;
+
+    public function __construct(Chrome_Model_Abstract $model, \Psr\Log\LoggerInterface $logger)
+    {
+        $this->_model = $model;
+        $this->setLogger($logger);
+    }
+
+    public function setLogger(\Psr\Log\LoggerInterface $logger)
+    {
+        $this->_logger = $logger;
+    }
+
+    public function getLogger()
+    {
+        return $this->_logger;
+    }
+
+    public function getResource()
+    {
+        return $this->_resource;
+    }
 }
 
 /**
@@ -84,9 +114,7 @@ interface Chrome_Router_Resource_Interface
 class Chrome_Router_Resource implements Chrome_Router_Result_Interface
 {
     protected $_file = null;
-
     protected $_class = null;
-
     protected $_name = null;
 
     public function __construct()
@@ -131,13 +159,9 @@ class Chrome_Router_Resource implements Chrome_Router_Result_Interface
  */
 class Chrome_Router implements Chrome_Router_Interface
 {
-
     protected $_routeInstance = null;
-
     protected $_routerClasses = array();
-
     protected $_resource = null;
-
     protected $_exceptionHandler = null;
 
     public function __construct()
@@ -180,7 +204,7 @@ class Chrome_Router implements Chrome_Router_Interface
     public function route(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data)
     {
         // replace ROOT,
-        $path = ltrim(preg_replace('#\A' . ROOT_URL . '#', '', '/'.$url->getPath()), '/');
+        $path = ltrim(preg_replace('#\A' . ROOT_URL . '#', '', '/' . $url->getPath()), '/');
         $url->setPath($path);
 
         try

@@ -65,7 +65,7 @@ define('CHROME_LOG_SQL_ERRORS', true);
 // log path
 define('CHROME_LOG_DIR', 'logs/');
 // log file, default, do not add an extension. this will be generated automatically
-define('CHROME_LOG_FILE', 'log');
+define('CHROME_LOG_FILE', 'log.log');
 //E_ALL | E_STRICT | E_DEPRECATED | E_USER_DEPRECATED); # Display Errors, set to 0 to supress errors
 define('CHROME_DISPLAY_ERRORS', (E_ALL | E_STRICT));
 

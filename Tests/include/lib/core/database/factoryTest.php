@@ -52,7 +52,7 @@ class DatabaseFactoryTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($factory->getLogger() instanceof Chrome_Logger_Interface or $factory->getLogger() === null);
 
-        $logger = new Chrome_Logger_Database();
+        $logger = new \Psr\Log\NullLogger();
 
         $factory->setLogger($logger);
 

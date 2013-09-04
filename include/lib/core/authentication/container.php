@@ -28,13 +28,28 @@
 if(CHROME_PHP !== true) die();
 
 /**
+ * This interface is used to set authentication data.
+ *
+ * The data is set inside a Chrome_Authentication_Chain_Abstract object.
+ * So DO NOT use the set methods outside these objects. Only use the getters!
+ *
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
 interface Chrome_Authentication_Data_Container_Interface
 {
+    /**
+     * There are two states. One for a guest and one for a user (well it should be named client).
+     * A guest is a non-registered client
+     *
+     * @var int
+     */
     const STATUS_GUEST = 0;
 
+    /**
+     *
+     * @var int
+     */
     const STATUS_USER = 1;
 
     /**
@@ -98,7 +113,7 @@ interface Chrome_Authentication_Data_Container_Interface
      *
      * Returns true if the person has the status given as $status
      *
-     * @param int $status
+     * @param int $status, see constants for status
      * @return boolean
      */
     public function hasStatus($status);
@@ -114,6 +129,8 @@ interface Chrome_Authentication_Data_Container_Interface
 }
 
 /**
+ * Canonical implementation of Chrome_Authentication_Data_Container_Interface
+ *
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
@@ -245,6 +262,11 @@ class Chrome_Authentication_Data_Container implements Chrome_Authentication_Data
         return ($this->_status === $status);
     }
 
+    /**
+     * Returns the class which has actually authenticated the user
+     *
+     * @return string
+     */
     public function getAuthenticatedBy()
     {
         return $this->_authenticatedBy;

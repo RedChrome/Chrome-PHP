@@ -15,16 +15,15 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category   CHROME-PHP
- * @package    CHROME-PHP
+ * @category CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Database
- * @author     Alexander Book <alexander.book@gmx.de>
- * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 13:00:05] --> $
- * @link       http://chrome-php.de
+ * @author Alexander Book <alexander.book@gmx.de>
+ * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 13:00:05] --> $
+ * @link http://chrome-php.de
  */
-
 if(CHROME_PHP !== true)
     die();
 /**
@@ -35,6 +34,7 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Database_Initializer_Interface
 {
+
     /**
      * Initializes the database
      *
@@ -59,18 +59,18 @@ interface Chrome_Database_Initializer_Interface
 class Chrome_Database_Initializer implements Chrome_Database_Initializer_Interface
 {
     /**
+     *
      * @var Chrome_Database_Factory_Interface
      */
     protected $_databaseFactory = null;
 
     /**
-     * Initializes the database
      *
-     * @return void
+     * @see Chrome_Database_Initializer_Interface::initialize()
      */
     public function initialize()
     {
-        $connectionClass = 'Chrome_Database_Connection_'.ucfirst(CHROME_DATABASE);
+        $connectionClass = 'Chrome_Database_Connection_' . ucfirst(CHROME_DATABASE);
         $defaultConnection = new $connectionClass();
         // configure default database connection
         $defaultConnection->setConnectionOptions(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -85,9 +85,8 @@ class Chrome_Database_Initializer implements Chrome_Database_Initializer_Interfa
     }
 
     /**
-     * Returns a database factory
      *
-     * @return Chrome_Database_Factory_Interface
+     * @see Chrome_Database_Initializer_Interface::getFactory()
      */
     public function getFactory()
     {

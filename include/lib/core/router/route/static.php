@@ -28,17 +28,8 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Route_Static implements Chrome_Router_Route_Interface
+class Chrome_Route_Static extends Chrome_Router_Route_Abstract
 {
-    protected $_resource = null;
-
-    protected $_model = null;
-
-    public function __construct(Chrome_Model_Abstract $model)
-    {
-        $this->_model = $model;
-    }
-
     public function match(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data)
     {
         $path = trim($url->getPath());
@@ -72,11 +63,6 @@ class Chrome_Route_Static implements Chrome_Router_Route_Interface
         }
 
         return true;
-    }
-
-    public function getResource()
-    {
-        return $this->_resource;
     }
 
     public function url(Chrome_Router_Resource_Interface $resource)

@@ -2,3 +2,8 @@ include/tmp/
 .settings/
 .project
 .buildpath
+composer.lock
+include/lib/composer
+include/lib/psr
+include/lib/monolog
+include/lib/autoload.php

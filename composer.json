@@ -1,0 +1,11 @@
+{
+    "require": {
+        "monolog/monolog": "1.6.*"
+    },
+        
+    "config": {
+    	"vendor-dir": "include/lib"
+    }
+    
+    
+}

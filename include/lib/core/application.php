@@ -74,6 +74,8 @@ interface Chrome_Context_View_Interface
 
     public function getFactory();
 
+    public function getLoggerRegistry();
+
     /**
      * There is no setConfig(), because this object contains only a reference of config from application_context
      * So to change $_config, you need to be in application_context scope and use setConfig there.
@@ -95,11 +97,18 @@ interface Chrome_Context_Model_Interface
 
     public function getConfig();
 
+    public function getLoggerRegistry();
+
     public function linkApplicationContext(Chrome_Context_Application_Interface $app);
 }
 
 interface Chrome_Context_Application_Interface
 {
+    const VARIABLE_CONFIG = 'config',
+          VARIABLE_LOGGER_REGISTRY = 'loggerRegistry';
+
+    public function &getReference($variable);
+
     public function setRequestHandler(Chrome_Request_Handler_Interface $reqHandler);
 
     public function getRequestHandler();
@@ -128,7 +137,9 @@ interface Chrome_Context_Application_Interface
 
     public function getConfig();
 
-    public function &getConfigReference();
+    public function setLoggerRegistry(\Chrome\Logger\Registry_Interface $registry);
+
+    public function getLoggerRegistry();
 
     public function setConverter(Chrome_Converter_Delegator_Interface $converter);
 
@@ -153,17 +164,37 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
 
     protected $_converter       = null;
 
+    protected $_loggerRegistry  = null;
+
+    public function &getReference($variable)
+    {
+        switch($variable)
+        {
+            case self::VARIABLE_CONFIG:
+                {
+                    return $this->_config;
+                }
+
+            case self::VARIABLE_LOGGER_REGISTRY:
+                {
+                    return $this->_loggerRegistry;
+                }
+        }
+        /*
+         * This works:
+            $var = $this->getConfig();
+            return $var;
+            but this not:
+            return $this->getConfig();
+        */
+    }
+
     public function setConfig(Chrome_Config_Interface $config)
     {
         $this->_config = $config;
     }
 
     public function getConfig()
-    {
-        return $this->_config;
-    }
-
-    public function &getConfigReference()
     {
         return $this->_config;
     }
@@ -239,6 +270,16 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
     {
         return $this->_converter;
     }
+
+    public function setLoggerRegistry(\Chrome\Logger\Registry_Interface $registry)
+    {
+        $this->_loggerRegistry = $registry;
+    }
+
+    public function getLoggerRegistry()
+    {
+        return $this->_loggerRegistry;
+    }
 }
 
 class Chrome_Context_Model implements Chrome_Context_Model_Interface
@@ -247,9 +288,12 @@ class Chrome_Context_Model implements Chrome_Context_Model_Interface
 
     protected $_config          = null;
 
+    protected $_loggerRegistry  = null;
+
     public function linkApplicationContext(Chrome_Context_Application_Interface $app)
     {
-        $this->_config = &$app->getConfigReference();
+        $this->_config = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_CONFIG);
+        $this->_loggerRegistry = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_LOGGER_REGISTRY);
     }
 
     public function setDatabaseFactory(Chrome_Database_Factory_Interface $factory)
@@ -266,6 +310,11 @@ class Chrome_Context_Model implements Chrome_Context_Model_Interface
     {
         return $this->_config;
     }
+
+    public function getLoggerRegistry()
+    {
+        return $this->_loggerRegistry;
+    }
 }
 
 class Chrome_Context_View implements Chrome_Context_View_Interface
@@ -274,11 +323,12 @@ class Chrome_Context_View implements Chrome_Context_View_Interface
 
     protected $_factory      = null;
 
-    protected $_config       = null;
+    protected $_loggerRegistry  = null;
 
     public function linkApplicationContext(Chrome_Context_Application_Interface $app)
     {
-        $this->_config = &$app->getConfigReference();
+        $this->_config = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_CONFIG);
+        $this->_loggerRegistry = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_LOGGER_REGISTRY);
     }
 
     public function getConfig()
@@ -304,5 +354,10 @@ class Chrome_Context_View implements Chrome_Context_View_Interface
     public function getFactory()
     {
         return $this->_factory;
+    }
+
+    public function getLoggerRegistry()
+    {
+        return $this->_loggerRegistry;
     }
 }

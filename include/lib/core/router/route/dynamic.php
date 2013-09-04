@@ -30,7 +30,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Route_Dynamic implements Chrome_Router_Route_Interface
+class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
 {
     /**
      * How much slashes "/" are allowed in a url?
@@ -46,15 +46,6 @@ class Chrome_Route_Dynamic implements Chrome_Router_Route_Interface
     private $_previousKey = null;
 
     private $_resourceID = null;
-
-    protected $_model = null;
-
-    protected $_resource = null;
-
-    public function __construct(Chrome_Model_Abstract $model)
-    {
-        $this->_model = $model;
-    }
 
     public function match(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data)
     {
@@ -130,11 +121,6 @@ class Chrome_Route_Dynamic implements Chrome_Router_Route_Interface
             }
         }
         return false;
-    }
-
-    public function getResource()
-    {
-        return $this->_resource;
     }
 
     public function url(Chrome_Router_Resource_Interface $resource)

@@ -27,7 +27,7 @@ if(CHROME_PHP !== true) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Require.Autoloader
  */
-interface Chrome_Require_Autoloader_Interface extends Chrome_Exception_Processable_Interface, Chrome_Logable_Interface
+interface Chrome_Require_Autoloader_Interface extends Chrome_Exception_Processable_Interface, \Chrome\Logger\Loggable_Interface
 {
 	public function appendAutoloader(Chrome_Require_Loader_Interface $autoloader);
 
@@ -95,7 +95,7 @@ class Chrome_Require_Autoloader implements Chrome_Require_Autoloader_Interface
 	protected $_exceptionHandler = null;
 
 	/**
-	 * @var Chrome_Logger_Interface
+	 * @var \Psr\Log\LoggerInterface
 	 */
 	protected $_logger = null;
 
@@ -202,7 +202,7 @@ class Chrome_Require_Autoloader implements Chrome_Require_Autoloader_Interface
 			if($this->_loadClass($className) === true) {
 				$this->_addClass($className);
 			} else {
-				Chrome_Log::logException(new Chrome_Exception('Could not load class "'.$className.'"'), E_ERROR, $this->_logger);
+			    $this->_logger->error('Could not load class {classname}', array('classname' => $className, 'bla' => 'blub'));
 			}
 		}
 		catch (Chrome_Exception $e) {
@@ -230,7 +230,7 @@ class Chrome_Require_Autoloader implements Chrome_Require_Autoloader_Interface
 		return $this->_exceptionHandler;
 	}
 
-	public function setLogger(Chrome_Logger_Interface $logger = null)
+	public function setLogger(\Psr\Log\LoggerInterface $logger)
 	{
 		$this->_logger = $logger;
 	}

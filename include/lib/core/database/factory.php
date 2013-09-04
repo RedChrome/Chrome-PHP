@@ -33,7 +33,7 @@ if(CHROME_PHP !== true) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Factory_Interface extends Chrome_Logable_Interface
+interface Chrome_Database_Factory_Interface extends \Chrome\Logger\Loggable_Interface
 {
     /**
      * Use this if you want to build an interface with any default adapter/result/interface
@@ -196,7 +196,7 @@ abstract class Chrome_Database_Factory_Abstract implements Chrome_Database_Facto
         return $this->_statementRegistry;
     }
 
-    public function setLogger(Chrome_Logger_Interface $logger = null)
+    public function setLogger(\Psr\Log\LoggerInterface $logger)
     {
         $this->_logger = $logger;
     }
@@ -227,11 +227,15 @@ class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
             // create interface with adapter and result
             $interface = $this->_createInterface($interfaceName, $result, $adapter);
 
-            $interface->setLogger($this->_logger);
+            if($this->_logger !== null) {
+                $interface->setLogger($this->_logger);
+            }
 
             return $interface;
         } catch(Chrome_Exception $e) {
-            Chrome_Log::logException($e, E_ERROR);
+            if($this->_logger !== null) {
+                $this->_logger->error($e);
+            }
             throw $e;
         }
     }

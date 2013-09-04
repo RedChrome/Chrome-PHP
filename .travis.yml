@@ -5,6 +5,8 @@ php:
   - '5.3'
 before_script:
   - mysql -e 'create database chrome_2_test;'
+  - composer install
   - php Tests/setuptestdb.php default
+  - rm -rf include/tmp 
 script: 'php Tests/phpUnit.php --configuration Tests/phpUnit/config.xml Tests/'
   

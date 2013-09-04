@@ -41,7 +41,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Interface_Interface extends Chrome_Logable_Interface
+interface Chrome_Database_Interface_Interface extends \Chrome\Logger\Loggable_Interface
 {
     /**
      * Constructor
@@ -247,7 +247,11 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
             return $this->_result;
         } catch(Chrome_Exception_Database $e) {
-            Chrome_Log::logException($e, E_ERROR, $this->_logger);
+
+            if($this->_logger !== null) {
+                $this->_logger->error($e);
+            }
+
             throw $e;
         }
     }
@@ -342,7 +346,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
         return vsprintf($statement, $this->_params);
     }
 
-    public function setLogger(Chrome_Logger_Interface $logger = null)
+    public function setLogger(\Psr\Log\LoggerInterface $logger)
     {
         $this->_logger = $logger;
     }

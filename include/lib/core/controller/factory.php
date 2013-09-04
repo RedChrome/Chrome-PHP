@@ -13,19 +13,20 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Controller
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 19:06:42] --> $
- * @author     Alexander Book
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 19:06:42] --> $
+ * @author Alexander Book
  */
-
-if(CHROME_PHP !== true) die();
-
+if(CHROME_PHP !== true)
+    die();
 interface Chrome_Controller_Factory_Interface
 {
+
     /**
+     *
      * @return Chrome_Controller_Interface
      */
     public function build($controllerClass);
@@ -42,8 +43,9 @@ class Chrome_Controller_Factory implements Chrome_Controller_Factory_Interface
 
     public function build($controllerClass)
     {
-        if(!class_exists($controllerClass, false)) {
-            throw new Chrome_Exception('Cannot initialize controller "'.$controllerClass.'" if class is not loaded!');
+        if(!class_exists($controllerClass, false))
+        {
+            throw new Chrome_Exception('Cannot initialize controller "' . $controllerClass . '" if class is not loaded!');
         }
 
         $controller = new $controllerClass($this->_appContext);
@@ -53,18 +55,20 @@ class Chrome_Controller_Factory implements Chrome_Controller_Factory_Interface
 
     public function loadControllerClass($file)
     {
-        if( _isFile( BASEDIR . $file ) ) {
-          require_once BASEDIR . $file;
-        } else {
+        if(_isFile(BASEDIR . $file))
+        {
+            require_once BASEDIR . $file;
+        } else
+        {
 
-            try {
-                loadClass( $this->_class );
+            try
+            {
+                loadClass($this->_class);
+            } catch(Chrome_Exception $e)
+            {
+                throw new Chrome_Exception('No file found and could no find the corresponding file!', 2003);
             }
-            catch ( Chrome_Exception $e ) {
-                throw new Chrome_Exception( 'No file found and could no find the corresponding file!', 2003 );
-            }
-            Chrome_Log::log( 'Class "' . $this->_class .
-                '" were found by autoloader! But it should inserted into db to speed up website!', E_NOTICE );
+            Chrome_Log::log('Class "' . $this->_class . '" were found by autoloader! But it should inserted into db to speed up website!', E_NOTICE);
         }
     }
 }

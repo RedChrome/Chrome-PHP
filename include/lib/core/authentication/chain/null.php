@@ -28,6 +28,10 @@
 if(CHROME_PHP !== true) die();
 
 /**
+ * The last chain element in every chain
+ *
+ * Authenticates every client as guest.
+ *
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */

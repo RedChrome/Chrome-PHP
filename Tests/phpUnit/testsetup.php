@@ -41,8 +41,6 @@ class Chrome_TestSetup
         $this->_errorConfig->setErrorHandler(new Chrome_Exception_Error_Handler_Default());
         $this->_errorConfig->setExceptionHandler(new Chrome_Exception_Handler_Console());
 
-        Chrome_Log::setLogger(new Chrome_Logger_File(TMP.CHROME_LOG_DIR.CHROME_LOG_FILE));
-
         $this->_applicationContext = new Chrome_Context_Application();
     }
 
@@ -54,12 +52,11 @@ class Chrome_TestSetup
 
         $this->_databaseInitialized = true;
 
-        require_once PLUGIN.'Log/null.php';
         require_once PLUGIN.'Log/database.php';
         require_once PLUGIN.'Require/database.php';
         $autoloader = new Chrome_Require_Autoloader();
         $autoloader->setExceptionHandler($this->_errorConfig->getExceptionHandler());
-        $autoloader->setLogger(new Chrome_Logger_Null());
+        $autoloader->setLogger(new \Psr\Log\NullLogger());
         $autoloader->appendAutoloader(new Chrome_Require_Loader_Database());
 
         require_once LIB.'core/database/database.php';
@@ -79,7 +76,8 @@ class Chrome_TestSetup
 		$dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
 
         $databaseFactory = new Chrome_Database_Factory($dbRegistry, new Chrome_Database_Registry_Statement());
-        $databaseFactory->setLogger(new Chrome_Logger_Database());
+        $databaseFactory->setLogger(new \Psr\Log\NullLogger());
+        //$databaseFactory->setLogger(new Chrome_Logger_Database());
 
         if(TEST_DATABASE_CONNECTIONS == true) {
 
@@ -120,6 +118,8 @@ class Chrome_TestSetup
         $context = $application->getApplicationContext();
         $this->_applicationContext = clone $context;
         $this->_applicationContext->setModelContext($modelContext);
+
+        $this->_applicationContext->getModelContext()->getDatabaseFactory()->setLogger($this->_applicationContext->getLoggerRegistry()->getLogger('database'));
 
         $_SERVER = $_tempServer;
         $GLOBALS = $_tempGlobals;

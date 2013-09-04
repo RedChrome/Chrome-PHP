@@ -30,16 +30,9 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Route_Administration implements Chrome_Router_Route_Interface
+class Chrome_Route_Administration extends Chrome_Router_Route_Abstract
 {
     protected $_GET = array();
-    protected $_resource = null;
-    protected $_model = null;
-
-    public function __construct(Chrome_Model_Abstract $model)
-    {
-        $this->_model = $model;
-    }
 
     // TODO: check whether user is allowed to access...
     public function match(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data)
@@ -89,7 +82,7 @@ class Chrome_Route_Administration implements Chrome_Router_Route_Interface
 
         if(empty($result['file']) or empty($result['class']))
         {
-            Chrome_Log::log('Error in Route_Administration. The db returned obviosly wrong values: ' . var_export($result, true), E_ERROR);
+            $this->_logger->error('Error in Route_Administration. The db returned obviosly wrong values: {result}', array('result' => var_export($result, true)));
             throw new Chrome_Exception('Could not route to administration! Either the requested file or class is empty');
         }
 
@@ -98,11 +91,6 @@ class Chrome_Route_Administration implements Chrome_Router_Route_Interface
         $this->_resource->setClass($result['class']);
 
         return true;
-    }
-
-    public function getResource()
-    {
-        return $this->_resource;
     }
 
     public function url(Chrome_Router_Resource_Interface $resource)

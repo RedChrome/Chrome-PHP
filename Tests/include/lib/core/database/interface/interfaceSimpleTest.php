@@ -1,18 +1,15 @@
 <?php
-
 ;
 
 require_once LIB . 'core/database/database.php';
 require_once 'Tests/dummies/database/connection/dummy.php';
 require_once 'Tests/dummies/database/adapter.php';
 require_once 'Tests/dummies/database/result.php';
-
-class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
+class DatabaseInterfaceSimpleTest extends Chrome_TestCase
 {
     protected $_connection;
     protected $_adapter;
     protected $_result;
-
     protected $_interface;
 
     public function setUp()
@@ -24,7 +21,8 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         $this->_result->setAdapter($this->_adapter);
 
         $this->_interface = new Chrome_Database_Interface_Simple($this->_adapter, $this->_result, new Chrome_Database_Registry_Statement());
-        $this->_interface->setLogger(new Chrome_Logger_Database());
+
+        $this->_interface->setLogger($this->_appContext->getLoggerRegistry()->getLogger('database'));
     }
 
     public function testInterfaceReturnsAdapterAndResultCorrectly()
@@ -90,7 +88,6 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
 
     public function testSetParameterWithEscaping()
     {
-
         $table = 'requ\'ire';
         $tableEsc = 'requ\\\'ire';
         $limitEnde = 1;
@@ -107,7 +104,6 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
 
     public function testSetParameterWithoutEscaping()
     {
-
         $table = 'requ\'ire';
         $tableEsc = 'requ\'ire';
         $limitEnde = 1;
@@ -122,26 +118,28 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($statement, $this->_interface->getStatement());
     }
 
-    public function testEscapeingSpecialChars() {
+    public function testEscapeingSpecialChars()
+    {
 
         // $statement, $expected_statement, [array $params]
-        $array = array(
-            array('cpp_', DB_PREFIX.'_'),
-            array('\?', '?'),
-            array('?', 'parameter', array('parameter')),
-            array('? ?', 'param1 param2', array('param1', 'param2')),
-            array('?{1} ?{1}', 'param1 param1', array('param1', 'param2')),
-            array('?{1} \\?{1} ?{2}', 'param1 ?{1} param2', array('param1', 'param2')),
-            array('?{1} \\? ?{2}', 'param1 ? param2', array('param1', 'param2')),
-            array('?{1} \\\\? ?{2}', 'param1 \\? param2', array('param1', 'param2')),
-            array('?{1} ? ?{2}', '?{1} ? ?{2}') // should work, cause we given no parameters
-        );
+        $array = array(array('cpp_', DB_PREFIX . '_'),
+                    array('\?', '?'),
+                    array('?', 'parameter', array('parameter')),
+                    array('? ?', 'param1 param2', array('param1', 'param2')),
+                    array('?{1} ?{1}', 'param1 param1', array('param1', 'param2')),
+                    array('?{1} \\?{1} ?{2}', 'param1 ?{1} param2', array('param1', 'param2')),
+                    array('?{1} \\? ?{2}', 'param1 ? param2', array('param1', 'param2')),
+                    array('?{1} \\\\? ?{2}', 'param1 \\? param2', array('param1', 'param2')),
+                    array('?{1} ? ?{2}', '?{1} ? ?{2}'))        // should work, cause we given no parameters
+        ;
 
-        foreach($array as $test) {
+        foreach($array as $test)
+        {
 
             $params = array();
 
-            if(isset($test[2]) AND is_array($test[2])) {
+            if(isset($test[2]) and is_array($test[2]))
+            {
                 $params = $test[2];
             }
 
@@ -151,7 +149,6 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
 
             $this->_interface->clear();
         }
-
     }
 
     public function testEscapingThrowsExceptionWhenUsingBothTypesOfParameterReplacement()
@@ -189,21 +186,20 @@ class DatabaseInterfaceSimpleTest extends PHPUnit_Framework_TestCase
         $this->_interface->query('');
     }
 
-    public function setExpectedException($string, $exceptionMessage = '', $exceptionCode = 0) {
+    public function setExpectedException($string, $exceptionMessage = '', $exceptionCode = 0)
+    {
         // do not log the exception, we're expecting it
-        $this->_interface->setLogger(new Chrome_Logger_Null());
+        $this->_interface->setLogger(new \Psr\Log\NullLogger());
         parent::setExpectedException($string, $exceptionMessage, $exceptionCode);
     }
 
-    public function testGetStatementRegistry() {
-
+    public function testGetStatementRegistry()
+    {
         $this->assertTrue($this->_interface->getStatementRegistry() instanceof Chrome_Database_Registry_Statement, 'getStatementRegistry has to return a subclass of Registry_Statement');
-
     }
 
-    public function testGetLogger() {
-
-        $this->assertTrue($this->_interface->getLogger() instanceof Chrome_Logger_Interface OR $this->_interface->getLogger() === null, 'getLogger has to return a subclass of Chrome_Logger_Interface or null');
+    public function testGetLogger()
+    {
+        $this->assertTrue($this->_interface->getLogger() instanceof \Psr\Log\LoggerInterface or $this->_interface->getLogger() === null, 'getLogger has to return a subclass of Chrome_Logger_Interface or null');
     }
-
 }
