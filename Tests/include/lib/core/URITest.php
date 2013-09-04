@@ -5,7 +5,7 @@ class URITest extends PHPUnit_Framework_TestCase
     protected $uri = null;
 
     public static function setUpBeforeClass() {
-        require_once LIB.'core/URI.php';
+        require_once LIB.'core/uri.php';
     }
 
     public function setUp() {

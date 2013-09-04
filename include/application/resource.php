@@ -48,7 +48,7 @@ require_once LIB.'core/response/response.php';
 /**
  * load URI class
  */
-require_once LIB.'core/URI.php';
+require_once LIB.'core/uri.php';
 
 /**
  * load application interfaces
