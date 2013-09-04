@@ -106,7 +106,6 @@ INSERT INTO `cp1_class` (`id`, `name`, `file`) VALUES
 (NULL, 'Chrome_Captcha_Interface', 'lib/captcha/captcha.php'),
 (NULL, 'Chrome_Captcha', 'lib/captcha/captcha.php'),
 (NULL, 'Chrome_RBAC', 'lib/rbac/rbac.php'),
-(NULL, 'Chrome_Logger_Null', 'plugins/Log/null.php'),
 (NULL, 'Chrome_Model_Authentication_Database', 'lib/core/authentication/chain/database.php'),
 (NULL, 'Chrome_Authentication_Chain_Database', 'lib/core/authentication/chain/database.php'),
 (NULL, 'Chrome_Authentication_Chain_Session', 'lib/core/authentication/chain/session.php'),

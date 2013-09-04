@@ -35,14 +35,16 @@ class Chrome_Exception_Authentication extends Chrome_Exception
  */
 class Chrome_Exception_Handler_Authentication implements Chrome_Exception_Handler_Interface
 {
+
+
     public function exception(Exception $e)
     {
         if(!($e instanceof Chrome_Exception_Authentication)) {
             $e->show($e);
         }
 
-        Chrome_Log::log('Exception in Chrome_Authentication! Error code: '.$e->getCode() .'. Message: '.$e->getMessage(), E_ERROR);
-        Chrome_Log::log($e->getTraceAsString(), E_ERROR);
+        $this->_logger->error('Exception in Chrome_Authentication! Error code: {code}. Message: "{msg}"', array('code' => $e->getCode(), 'msg' => $e->getMessage()));
+        $this->_logger->error($e->getTraceAsString());
 
         die('Error in authentication! See log files for more information');
     }

@@ -65,7 +65,7 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
             return true;
         } catch(Chrome_Exception $e)
         {
-            Chrome_Log::logException($e);
+            $this->getLogger()->error($e);
             return false;
         }
     }
@@ -88,7 +88,7 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
             }
         } catch(Chrome_Exception_Database $e)
         {
-            Chrome_Log::logException($e, E_ERROR);
+            $this->getLogger()->error($e);
             throw new Chrome_Exception('Error while checking whether user exists with name or email', 0, $e);
         }
     }

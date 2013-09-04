@@ -22,6 +22,8 @@
 if(CHROME_PHP !== true)
     die();
 
+use Psr\Log\LoggerInterface;
+
 /**
  * Interface for classes which are able to handle exceptions
  *
@@ -327,5 +329,15 @@ class Chrome_Exception_Configuration implements Chrome_Exception_Configuration_I
     public function handleError($errorType, $message, $file = null, $line = null, $context = null)
     {
         $this->_errorHandler->error($errorType, $message, $file, $line, $context);
+    }
+}
+
+abstract class Chrome_Exception_Handler_Loggable_Abstract implements Chrome_Exception_Handler_Interface
+{
+    protected $_logger = null;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->_logger = $logger;
     }
 }

@@ -52,7 +52,6 @@ class Chrome_TestSetup
 
         $this->_databaseInitialized = true;
 
-        require_once PLUGIN.'Log/database.php';
         require_once PLUGIN.'Require/database.php';
         $autoloader = new Chrome_Require_Autoloader();
         $autoloader->setExceptionHandler($this->_errorConfig->getExceptionHandler());

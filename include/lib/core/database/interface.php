@@ -30,6 +30,9 @@
 if(CHROME_PHP !== true)
     die();
 
+use \Chrome\Logger\Loggable_Interface;
+use \Psr\Log\LoggerInterface;
+
 /**
  * Interface for all database interfaces
  *
@@ -41,7 +44,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Interface_Interface extends \Chrome\Logger\Loggable_Interface
+interface Chrome_Database_Interface_Interface extends Loggable_Interface
 {
     /**
      * Constructor
@@ -346,7 +349,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
         return vsprintf($statement, $this->_params);
     }
 
-    public function setLogger(\Psr\Log\LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->_logger = $logger;
     }

@@ -3,6 +3,8 @@
 /**
  * CHROME-PHP CMS
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * This source file is subject to the Creative Commons license that is bundled
@@ -15,159 +17,172 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Log
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [09.07.2013 20:32:26] --> $
- * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
+namespace Chrome\Logger;
+
+use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
 
 /**
+ * Interface for all classes which are able to log
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Log
  */
-interface Chrome_Log_Interface
+interface Loggable_Interface extends LoggerAwareInterface
 {
-
-    public static function log($string, $mode = E_WARNING, Chrome_Logger_Interface $logger = null);
-
-    public static function logException(Exception $exception, $mode = E_WARNING, Chrome_Logger_Interface $logger = null);
-
-    public static function setLogger(Chrome_Logger_Interface $logger);
-
-    public static function getLogger();
-}
-
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Log
- */
-interface Chrome_Logger_Interface
-{
-
-    public function log($string, $mode);
-}
-
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Log
- */
-interface Chrome_Logable_Interface
-{
-
     /**
-     * Sets a logger
+     * Returns the logger set via {@see setLogger()}
      *
-     * @param Chrome_Logger_Interface $logger
-     * @return void
-     */
-    public function setLogger(Chrome_Logger_Interface $logger = null);
-
-    /**
-     * Returns the set logger
-     *
-     * @return Chrome_Logger_Interface
+     * @return \Psr\Log\LoggerInterface
      */
     public function getLogger();
 }
 
 /**
+ * A trait for a default implementation of Loggable_Interface
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Log
+ *
+trait Loggable_Trait
+{
+    protected $_logger = null;
+
+    public function setLogger(\Psr\Log\LoggerInterface $logger)
+    {
+        $this->_logger = $logger;
+    }
+
+    public function getLogger()
+    {
+        return $this->_logger;
+    }
+}*/
+
+/**
+ * Interface for a logger registry
+ *
+ * It stores all loggers for easy access.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Log
  */
-class Chrome_Log implements Chrome_Log_Interface
+interface Registry_Interface
 {
-    protected static $_logger = null;
+    /**
+     * Name of the default logger
+     *
+     * @var string
+     */
+    const DEFAULT_LOGGER = 'default';
 
-    public static function logException(Exception $exception, $mode = E_WARNING, Chrome_Logger_Interface $logger = null)
-    {
-        self::log('An Exception with message "' . $exception->getMessage() . '" occured. Printing stack trace:' . "\n" . $exception->getTraceAsString(), $mode, $logger);
-        // elf::log($exception->getTraceAsString(), $mode, $logger);
-    }
+    /**
+     * Adds a logger to registry
+     *
+     * @param string $name
+     *        name of the logger
+     * @param LoggerInterface $logger
+     *        logger to add
+     * @return void
+     */
+    public function addLogger($name, LoggerInterface $logger);
 
-    public static function log($string, $mode = E_WARNING, Chrome_Logger_Interface $logger = null)
-    {
-        if($logger !== null)
-        {
-            $logger->log($string, $mode);
-        } else
-        {
-            self::$_logger->log($string, $mode);
-        }
-    }
+    /**
+     * Checks whether there is a logger registered with name $name.
+     *
+     * @param string $name
+     * @return boolean returns true if a logger with name $name exists
+     */
+    public function hasLogger($name);
 
-    public static function setLogger(Chrome_Logger_Interface $logger)
-    {
-        self::$_logger = $logger;
-    }
+    /**
+     * Returns a logger with name $name
+     *
+     * @param string $name
+     *        name of a logger, set by {@see addLogger()}
+     * @return LoggerInterface the corressponding logger
+     */
+    public function getLogger($name);
 
-    public static function getLogger()
-    {
-        return self::$_logger;
-    }
+    /**
+     * Returns all loggers, set by {@see addLogger()}
+     *
+     * @return array, containing all loggers, index of the array is the name of the logger.
+     */
+    public function getAllLoggers();
 }
 
 /**
+ * Canonical implementation of Registry_Interface
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Log
  */
-class Chrome_Logger_File implements Chrome_Logger_Interface
+class Registry implements Registry_Interface
 {
-    private $_filePointer = null;
+    protected $_loggers = array();
 
-    public function __construct($file)
+    public function addLogger($name, LoggerInterface $logger)
     {
-        require_once LIB . 'core/file/file.php';
-
-        $this->_filePointer = Chrome_File::openFile($file . '.log', Chrome_File::FILE_MODE_ENDING_WRITE, false);
-        /*
-              if( ($this->_filePointer = Chrome_File::existsUsingFilePointer($file.'.log', 'a')) === false)
-              { $this->_filePointer = Chrome_File::mkFileUsingFilePointer($file.'.log', 0777, 'a', false); }
-              if($this->_filePointer === false) { throw new Chrome_Exception('Could not create file "'.$file.'.log" in Chrome_Logger_File!'); }
-         */
+        $this->_loggers[$name] = $logger;
     }
 
-    public function __destruct()
+    public function hasLogger($name)
     {
-        fclose($this->_filePointer);
+        return isset($this->_loggers[$name]);
     }
 
-    public function log($string, $mode)
+    public function getLogger($name)
     {
-        switch($mode)
+        if($this->hasLogger($name))
         {
-            case E_NOTICE:
-                {
-                    $_mode = 'NOTICE';
-                    break;
-                }
-
-            case E_WARNING:
-                {
-                    $_mode = 'WARNING';
-                    break;
-                }
-
-            case E_ERROR:
-                {
-                    $_mode = 'ERROR';
-                    break;
-                }
-
-            default:
-                {
-                    $_mode = 'INFO';
-                }
+            return $this->_loggers[$name];
         }
 
-        $string = @date('Y/m/d H:i:s', CHROME_TIME) . "\t" . $_mode . ":\t" . $string . "\n";
+        throw new \Chrome_Exception('Logger with name "' . $name . '" not set!');
+    }
 
-        fwrite($this->_filePointer, $string);
+    public function getAllLoggers()
+    {
+        return $this->_loggers;
     }
 }
+
+namespace Chrome\Logger\Processor;
+
+/**
+ * Processes a record's message according to PSR-3 rules
+ *
+ * It replaces {foo} with the value from $context['foo'] and removes
+ * $context['foo']
+ */
+class Psr
+{
+    /**
+     * @param  array $record
+     * @return array
+     */
+    public function __invoke(array $record)
+    {
+        if (false === strpos($record['message'], '{'))
+        {
+            return $record;
+        }
+
+        $count = 0;
+
+        foreach($record['context'] as $key => $value)
+        {
+            $record['message'] = str_replace('{'.$key.'}', $value, $record['message'], $count);
+            if($count > 0)
+            {
+                unset($record['context'][$key]);
+                $count = 0;
+            }
+        }
+
+        return $record;
+    }
+}
+

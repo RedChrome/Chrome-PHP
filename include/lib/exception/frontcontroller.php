@@ -28,12 +28,11 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.FrontController
  */
-class Chrome_Exception_Handler_FrontController implements Chrome_Exception_Handler_Interface
+class Chrome_Exception_Handler_FrontController extends Chrome_Exception_Handler_Loggable_Abstract
 {
-
     public function exception(Exception $e)
     {
-        Chrome_Log::logException($e, E_ERROR);
+        $this->_logger->error($e);
 
         switch(get_class($e))
         {

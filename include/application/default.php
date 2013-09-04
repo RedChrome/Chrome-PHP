@@ -96,10 +96,12 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      */
     public function __construct(Chrome_Exception_Handler_Interface $exceptionHandler = null)
     {
+        $this->_initLoggers();
+
         if($exceptionHandler === null)
         {
             require_once LIB . 'exception/frontcontroller.php';
-            $exceptionHandler = new Chrome_Exception_Handler_FrontController();
+            $exceptionHandler = new Chrome_Exception_Handler_FrontController($this->_loggerRegistry->getLogger('application'));
         }
 
         $this->_exceptionHandler = $exceptionHandler;
@@ -127,7 +129,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      */
     protected function _init()
     {
-        $this->_initLoggers();
+
 
         $this->_exceptionConfiguration = new Chrome_Exception_Configuration();
         $this->_exceptionConfiguration->setExceptionHandler($this->_exceptionHandler);
@@ -146,6 +148,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         // logging
         {
+            /*
             // only log sth. if we're in developer mode
             if(CHROME_DEVELOPER_STATUS === true)
             {
@@ -156,7 +159,8 @@ class Chrome_Application_Default implements Chrome_Application_Interface
                 Chrome_Log::setLogger(new \Psr\Log\NullLogger());
             }
 
-            require_once PLUGIN . 'Log/database.php';
+            require_once PLUGIN . 'Log/database.php';*/
+
         }
 
         // autoloader
@@ -369,6 +373,8 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
             $this->_loggerRegistry->addLogger($loggerName, $logger);
         }
+
+        $this->_loggerRegistry->addLogger(\Chrome\Logger\Registry::DEFAULT_LOGGER, $this->_loggerRegistry->getLogger('application'));
     }
 
     /**

@@ -52,7 +52,7 @@ class Chrome_Exception_Database extends Chrome_Exception
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Exception_Database_Handler implements Chrome_Exception_Handler_Interface
+class Chrome_Exception_Database_Handler extends Chrome_Exception_Handler_Loggable_Abstract
 {
     public function exception(Exception $e)
     {
@@ -62,7 +62,7 @@ class Chrome_Exception_Database_Handler implements Chrome_Exception_Handler_Inte
                 {
                     $trace = $e->getTrace();
 
-                    Chrome_Log::log('Could not connect to DB server "' . $trace[0]['args'][0] . '" using user "' . $trace[0]['args'][2] . '"!', E_ERROR);
+                    $this->_logger->error('Could not connect to DB server "' . $trace[0]['args'][0] . '" using user "' . $trace[0]['args'][2] . '"!');
 
                     die('Could not connect to database-server! See log files for more information.');
                 }
@@ -71,7 +71,7 @@ class Chrome_Exception_Database_Handler implements Chrome_Exception_Handler_Inte
                 {
                     $trace = $e->getTrace();
 
-                    Chrome_Log::log('Could not access to DB server "' . $trace[0]['args'][0] . '" using user "' . $trace[0]['args'][2] . '"! Wrong user OR password!', E_ERROR);
+                    $this->_logger->error('Could not access to DB server "' . $trace[0]['args'][0] . '" using user "' . $trace[0]['args'][2] . '"! Wrong user OR password!');
 
                     die('Could not access database-server! See log files for more information.');
                 }
@@ -80,7 +80,7 @@ class Chrome_Exception_Database_Handler implements Chrome_Exception_Handler_Inte
                 {
                     $trace = $e->getTrace();
 
-                    Chrome_Log::log('Could not select database "' . $trace[0]['args'][1] . '" using user "' . $trace[0]['args'][2] . '"!', E_ERROR);
+                    $this->_logger->error('Could not select database "' . $trace[0]['args'][1] . '" using user "' . $trace[0]['args'][2] . '"!');
 
                     die('Could not select database! See log files for more information.');
                 }
@@ -89,7 +89,7 @@ class Chrome_Exception_Database_Handler implements Chrome_Exception_Handler_Inte
                 {
                     $trace = $e->getTrace();
                     $query = $trace[0]['args'][1];
-                    Chrome_Log::log('There is an error in your query: "' . $query . '"' . "\n" . $e->_getTraceAsString() . "\n", E_ERROR);
+                    $this->_logger->error('There is an error in your query: "' . $query . '"' . "\n" . $e->_getTraceAsString() . "\n");
 
                     die('There is an error in a query! See log files for more information.');
                 }
@@ -97,7 +97,7 @@ class Chrome_Exception_Database_Handler implements Chrome_Exception_Handler_Inte
             case Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN:
             default:
                 {
-                    Chrome_Log::log('There was an error in the database: ' . $e->getMessage() . "\n" . $e->_getTraceAsString() . "\n", E_ERROR);
+                    $this->_logger->error('There was an error in the database: ' . $e->getMessage() . "\n" . $e->_getTraceAsString() . "\n");
                     die('There was an unknown error in the database! See log files for more information');
                 }
         }

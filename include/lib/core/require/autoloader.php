@@ -23,11 +23,14 @@
 
 if(CHROME_PHP !== true) die();
 
+use \Chrome\Logger\Loggable_Interface;
+use \Psr\Log\LoggerInterface;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Require.Autoloader
  */
-interface Chrome_Require_Autoloader_Interface extends Chrome_Exception_Processable_Interface, \Chrome\Logger\Loggable_Interface
+interface Chrome_Require_Autoloader_Interface extends Chrome_Exception_Processable_Interface, Loggable_Interface
 {
 	public function appendAutoloader(Chrome_Require_Loader_Interface $autoloader);
 
@@ -230,7 +233,7 @@ class Chrome_Require_Autoloader implements Chrome_Require_Autoloader_Interface
 		return $this->_exceptionHandler;
 	}
 
-	public function setLogger(\Psr\Log\LoggerInterface $logger)
+	public function setLogger(LoggerInterface $logger)
 	{
 		$this->_logger = $logger;
 	}

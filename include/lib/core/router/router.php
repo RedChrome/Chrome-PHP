@@ -23,6 +23,8 @@
 if(CHROME_PHP !== true)
     die();
 
+use \Chrome\Logger\Loggable_Interface;
+use \Psr\Log\LoggerInterface;
 
 /**
  *
@@ -78,19 +80,19 @@ interface Chrome_Router_Resource_Interface
     // public function getRequestOptions();
     public function setReturnAsAbsolutPath($boolean);
 }
-abstract class Chrome_Router_Route_Abstract implements Chrome_Router_Route_Interface, \Chrome\Logger\Loggable_Interface
+abstract class Chrome_Router_Route_Abstract implements Chrome_Router_Route_Interface, Loggable_Interface
 {
     protected $_logger = null;
     protected $_model = null;
     protected $_resource = null;
 
-    public function __construct(Chrome_Model_Abstract $model, \Psr\Log\LoggerInterface $logger)
+    public function __construct(Chrome_Model_Abstract $model, LoggerInterface $logger)
     {
         $this->_model = $model;
         $this->setLogger($logger);
     }
 
-    public function setLogger(\Psr\Log\LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->_logger = $logger;
     }

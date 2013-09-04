@@ -22,6 +22,9 @@
  */
 if(CHROME_PHP !== true)
     die();
+
+use \Chrome\Logger\Registry_Interface;
+
 interface Chrome_Controller_Factory_Interface
 {
 
@@ -68,7 +71,9 @@ class Chrome_Controller_Factory implements Chrome_Controller_Factory_Interface
             {
                 throw new Chrome_Exception('No file found and could no find the corresponding file!', 2003);
             }
-            Chrome_Log::log('Class "' . $this->_class . '" were found by autoloader! But it should inserted into db to speed up website!', E_NOTICE);
+
+            $logger = $this->_appContext->getLoggerRegistry()->getLogger(Registry_Interface::DEFAULT_LOGGER);
+            $logger->info('The Class "{classname}" were found by autoloader! But it should inserted into db to speed up website!', array('classname' => $this->_class));
         }
     }
 }

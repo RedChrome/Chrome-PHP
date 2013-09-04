@@ -1,5 +1,4 @@
 <?php
-
 /**
  * CHROME-PHP CMS
  *
@@ -13,33 +12,42 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Model
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.06.2013 15:09:44] --> $
- * @author     Alexander Book
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.06.2013 15:09:44] --> $
+ * @author Alexander Book
  */
+if(CHROME_PHP !== true)
+    die();
 
-if(CHROME_PHP !== true) die();
+use \Chrome\Logger\Loggable_Interface;
+use \Chrome\Logger\Registry_Interface;
+use \Psr\Log\LoggerInterface;
 
-interface Chrome_Model_Interface
+
+interface Chrome_Model_Interface extends Loggable_Interface
 {
+
     public function setModelContext(Chrome_Context_Model_Interface $modelContext);
 
     public function getModelContext();
 }
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Model
  */
 abstract class Chrome_Model_Abstract implements Chrome_Model_Interface
 {
     /**
+     *
      * @var Chrome_Context_Model_Interface
      */
     protected $_modelContext = null;
+    protected $_logger = null;
 
     public function setModelContext(Chrome_Context_Model_Interface $modelContext)
     {
@@ -50,9 +58,25 @@ abstract class Chrome_Model_Abstract implements Chrome_Model_Interface
     {
         return $this->_modelContext;
     }
+
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->_logger = $logger;
+    }
+
+    public function getLogger()
+    {
+        if($this->_logger !== null)
+        {
+            return $this->_logger;
+        }
+
+        return $this->_modelContext->getLoggerRegistry()->getLogger(Registry_Interface::DEFAULT_LOGGER);
+    }
 }
 
-/**#@!
+/**
+ * #@!
  * load some specific model classes
  */
 require_once 'decorator.php';

@@ -84,7 +84,9 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
                 ->execute(array($name,$password, $passwordSalt, $email, CHROME_TIME, $activationKey));
         }
         catch ( Chrome_Exception_Database $e ) {
-            Chrome_Log::logException( $e );
+
+            $this->getLogger()->error($e);
+
             return false;
         }
 
@@ -107,7 +109,8 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
             $result = $resultObj->getNext();
 
         } catch ( Chrome_Exception_DB $e ) {
-            Chrome_Log::logException( $e );
+            $this->getLogger()->error($e);
+            return false;
         }
 
         if( !$this->_isValidActivationKey( $result, $activationKey ) ) {
@@ -135,8 +138,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
             $this->_addUser( $id, $email, $name );
         }
         catch ( Chrome_Exception_Database $exception ) {
-
-            Chrome_Log::logException( $exception );
+            $this->getLogger()->error($e);
             return false;
         }
 
@@ -146,9 +148,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
         }
         catch ( Chrome_Exception_Database $exception ) {
 
-            Chrome_Log::log( 'Could not delete activation key "' . $activationKey .
-                '". Please delete it from user_regist manually.', E_INFO );
-            Chrome_Log::logException( $exception );
+            $this->getLogger()->info('Could not delete activation key "{activationKey}". Please delete it from user_regist manually', array('activationKey' => $activationKey));
             return false;
         }
 

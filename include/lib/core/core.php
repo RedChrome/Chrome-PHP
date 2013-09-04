@@ -23,16 +23,16 @@
 
 if(CHROME_PHP !== true) die();
 
-/**
- * load error & exception classes
- */
-require_once 'error/error.php';
 
 /**
  * load Logger
  */
 require_once 'log/log.php';
-require_once LIB.'core/log.php';
+
+/**
+ * load error & exception classes
+ */
+require_once 'error/error.php';
 
 /**
  * load mime class to get mime info of a file

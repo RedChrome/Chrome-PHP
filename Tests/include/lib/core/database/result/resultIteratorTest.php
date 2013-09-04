@@ -1,25 +1,23 @@
 <?php
-
 class DatabaseResultIteratorTest extends Chrome_TestCase
 {
     public $_dataArray = array();
-
     public $_connection = null;
 
-    protected function _getDatabaseFactory() {
+    protected function _getDatabaseFactory()
+    {
         return $this->_appContext->getModelContext()->getDatabaseFactory();
     }
 
-
-    public function testInitResultIterator() {
-
+    public function testInitResultIterator()
+    {
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
         $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
         $this->assertTrue(is_subclass_of($db->getResult(), 'Iterator'));
     }
 
-    public function testFetchData() {
-
+    public function testFetchData()
+    {
         $this->_dataArray = array(1, 2, 3, 4, 5, 6);
 
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
@@ -34,7 +32,8 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
         $i = 1;
         $this->assertSame($db->getResult()->isEmpty(), $db->getAdapter()->isEmpty());
         $this->assertFalse($db->getResult()->isEmpty());
-        foreach($db->getResult() as $key => $value) {
+        foreach($db->getResult() as $key => $value)
+        {
             $this->assertEquals($i, $value);
             ++$i;
         }
@@ -43,8 +42,8 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
         $this->assertEquals(array(), $this->_dataArray);
     }
 
-    public function testIteratorWithEmptyResult() {
-
+    public function testIteratorWithEmptyResult()
+    {
         $this->_dataArray = array();
 
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
@@ -53,20 +52,23 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
 
         $db->getAdapter()->setDataResource($this);
 
-        foreach($db->getResult() as $key => $value) {
+        foreach($db->getResult() as $key => $value)
+        {
             $this->assertTrue(false, 'this assertion should not get executed');
         }
 
         $this->assertEquals(null, $db->getResult()->getNext());
     }
 
-    public function testAffectedRows() {
+    public function testAffectedRows()
+    {
         $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', null, 'Dummy');
         $db->getAdapter()->_affectedRows = 6;
         $this->assertEquals(6, $db->getResult()->getAffectedRows());
     }
 
-    public function getNext() {
+    public function getNext()
+    {
         return array_shift($this->_dataArray);
     }
 }
