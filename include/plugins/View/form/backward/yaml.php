@@ -31,10 +31,5 @@ require_once 'default.php';
  */
 class Chrome_View_Form_Element_Backward_Yaml extends Chrome_View_Form_Element_Backward_Default
 {
-    /*public function render()
-    {
-        $this->setAttribute('class', 'ym-button');
 
-        return '<div class="ym-fbox ym-fbox-button ym-fbox-footer">'.parent::render().'</div>';
-    }*/
 }

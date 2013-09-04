@@ -101,7 +101,7 @@ interface Registry_Interface
      *
      * @param string $name
      *        name of a logger, set by {@see addLogger()}
-     * @return LoggerInterface the corressponding logger
+     * @return LoggerInterface the corresponding logger
      */
     public function getLogger($name);
 

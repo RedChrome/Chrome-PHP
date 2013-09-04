@@ -113,7 +113,7 @@ require_once 'response/response.php';
 /**
  * load URI class
  */
-require_once 'URI.php';
+require_once 'uri.php';
 
 /**
  * load filter class
