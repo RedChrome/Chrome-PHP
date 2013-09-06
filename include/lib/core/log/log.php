@@ -20,8 +20,9 @@
  */
 namespace Chrome\Logger;
 
-use Psr\Log\LoggerInterface;
-use Psr\Log\LoggerAwareInterface;
+
+use \Psr\Log\LoggerInterface;
+use \Psr\Log\LoggerAwareInterface;
 
 /**
  * Interface for all classes which are able to log
@@ -39,27 +40,8 @@ interface Loggable_Interface extends LoggerAwareInterface
     public function getLogger();
 }
 
-/**
- * A trait for a default implementation of Loggable_Interface
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Log
- *
-trait Loggable_Trait
-{
-    protected $_logger = null;
-
-    public function setLogger(\Psr\Log\LoggerInterface $logger)
-    {
-        $this->_logger = $logger;
-    }
-
-    public function getLogger()
-    {
-        return $this->_logger;
-    }
-}*/
-
+namespace Chrome\Registry\Logger;
+use \Psr\Log\LoggerInterface;
 /**
  * Interface for a logger registry
  *
@@ -68,49 +50,25 @@ trait Loggable_Trait
  * @package CHROME-PHP
  * @subpackage Chrome.Log
  */
-interface Registry_Interface
+interface Registry_Interface extends \Chrome\Registry\Object
 {
     /**
      * Name of the default logger
      *
      * @var string
      */
-    const DEFAULT_LOGGER = 'default';
+    const DEFAULT_LOGGER = \Chrome\Registry\Object::DEFAULT_OBJECT;
 
     /**
-     * Adds a logger to registry
+     * Sets a logger to registry
      *
-     * @param string $name
+     * @param string $key
      *        name of the logger
      * @param LoggerInterface $logger
      *        logger to add
      * @return void
      */
-    public function addLogger($name, LoggerInterface $logger);
-
-    /**
-     * Checks whether there is a logger registered with name $name.
-     *
-     * @param string $name
-     * @return boolean returns true if a logger with name $name exists
-     */
-    public function hasLogger($name);
-
-    /**
-     * Returns a logger with name $name
-     *
-     * @param string $name
-     *        name of a logger, set by {@see addLogger()}
-     * @return LoggerInterface the corresponding logger
-     */
-    public function getLogger($name);
-
-    /**
-     * Returns all loggers, set by {@see addLogger()}
-     *
-     * @return array, containing all loggers, index of the array is the name of the logger.
-     */
-    public function getAllLoggers();
+    public function set($key, LoggerInterface $logger);
 }
 
 /**
@@ -119,33 +77,35 @@ interface Registry_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Log
  */
-class Registry implements Registry_Interface
+class Registry extends \Chrome\Registry\Object_Abstract implements Registry_Interface
 {
-    protected $_loggers = array();
-
-    public function addLogger($name, LoggerInterface $logger)
+    public function set($key, LoggerInterface $logger)
     {
-        $this->_loggers[$name] = $logger;
+        $this->_set($key, $logger);
     }
 
-    public function hasLogger($name)
+    protected function _objectNotFound($key)
     {
-        return isset($this->_loggers[$name]);
+        throw new \Chrome_Exception('Logger with name "' . $key . '" not set!');
+    }
+}
+
+/**
+ * Logger registry with only one single logger
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Log
+ */
+class Registry_Single extends \Chrome\Registry\Object_Single_Abstract implements Registry_Interface
+{
+    public function set($key, LoggerInterface $logger)
+    {
+        $this->_set($logger);
     }
 
-    public function getLogger($name)
+    protected function _objectNotFound($key)
     {
-        if($this->hasLogger($name))
-        {
-            return $this->_loggers[$name];
-        }
-
-        throw new \Chrome_Exception('Logger with name "' . $name . '" not set!');
-    }
-
-    public function getAllLoggers()
-    {
-        return $this->_loggers;
+        throw new \Chrome_Exception('No Logger set!');
     }
 }
 

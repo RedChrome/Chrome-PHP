@@ -22,7 +22,7 @@ class DatabaseInterfaceSimpleTest extends Chrome_TestCase
 
         $this->_interface = new Chrome_Database_Interface_Simple($this->_adapter, $this->_result, new Chrome_Database_Registry_Statement());
 
-        $this->_interface->setLogger($this->_appContext->getLoggerRegistry()->getLogger('database'));
+        $this->_interface->setLogger($this->_appContext->getLoggerRegistry()->get('database'));
     }
 
     public function testInterfaceReturnsAdapterAndResultCorrectly()

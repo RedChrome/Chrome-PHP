@@ -129,8 +129,6 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      */
     protected function _init()
     {
-
-
         $this->_exceptionConfiguration = new Chrome_Exception_Configuration();
         $this->_exceptionConfiguration->setExceptionHandler($this->_exceptionHandler);
         $this->_exceptionConfiguration->setErrorHandler(new Chrome_Exception_Error_Handler_Default());
@@ -163,9 +161,12 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         }
 
+        $cacheFactoryRegistry = new \Chrome\Registry\Cache\Factory\Registry();
+        $cacheFactoryRegistry->set(\Chrome\Registry\Cache\Factory\Registry::DEFAULT_FACTORY, new Chrome_Cache_Factory());
+
         // autoloader
         $autoloader = new Chrome_Require_Autoloader();
-        $autoloader->setLogger($this->_loggerRegistry->getLogger('autoloader'));
+        $autoloader->setLogger($this->_loggerRegistry->get('autoloader'));
         {
             $autoloader->setExceptionHandler(new Chrome_Exception_Handler_Default());
 
@@ -265,7 +266,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_router->setExceptionHandler(new Chrome_Exception_Handler_Default());
         // enable route matching
         {
-            $routerLogger = $this->_loggerRegistry->getLogger('router');
+            $routerLogger = $this->_loggerRegistry->get('router');
             // import(array('Chrome_Route_Static', 'Chrome_Route_Dynamic') );
             // matches static routes
             $this->_router->addRoute(new Chrome_Route_Static(new Chrome_Model_Route_Static_Cache(new Chrome_Model_Route_Static_DB($this->_modelContext)), $routerLogger));
@@ -362,7 +363,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $stream->setFormatter($formatter);
         $stream->pushProcessor(new Chrome\Logger\Processor\Psr());
 
-        $this->_loggerRegistry = new \Chrome\Logger\Registry();
+        $this->_loggerRegistry = new \Chrome\Registry\Logger\Registry();
 
         $loggers = array('application', 'router', 'autoloader', 'database');
 
@@ -371,10 +372,10 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $logger = new \Monolog\Logger($loggerName);
             $logger->pushHandler($stream);
 
-            $this->_loggerRegistry->addLogger($loggerName, $logger);
+            $this->_loggerRegistry->set($loggerName, $logger);
         }
 
-        $this->_loggerRegistry->addLogger(\Chrome\Logger\Registry::DEFAULT_LOGGER, $this->_loggerRegistry->getLogger('application'));
+        $this->_loggerRegistry->set(\Chrome\Registry\Logger\Registry::DEFAULT_LOGGER, $this->_loggerRegistry->get('application'));
     }
 
     /**

@@ -19,6 +19,11 @@
 
 if(CHROME_PHP !== true) die();
 
+/**
+ * Implementation of {@link Chrome_Form_Storage_Interface}
+ *
+ * This uses the session to store client data
+ */
 class Chrome_Form_Storage_Session implements Chrome_Form_Storage_Interface
 {
     const FORM_NAMESPACE = 'FORMS';

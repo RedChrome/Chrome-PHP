@@ -25,6 +25,11 @@ if(CHROME_PHP !== true) die();
 
 
 /**
+ * load registry for objects
+ */
+require_once 'registry/object.php';
+
+/**
  * load Logger
  */
 require_once 'log/log.php';
@@ -68,7 +73,7 @@ require_once 'database/database.php';
 /**
  * load cache classes
  */
-require_once 'cache/factory.php';
+require_once 'cache/cache.php';
 
 /**
  * load model classes

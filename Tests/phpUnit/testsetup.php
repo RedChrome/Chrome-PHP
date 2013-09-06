@@ -118,7 +118,7 @@ class Chrome_TestSetup
         $this->_applicationContext = clone $context;
         $this->_applicationContext->setModelContext($modelContext);
 
-        $this->_applicationContext->getModelContext()->getDatabaseFactory()->setLogger($this->_applicationContext->getLoggerRegistry()->getLogger('database'));
+        $this->_applicationContext->getModelContext()->getDatabaseFactory()->setLogger($this->_applicationContext->getLoggerRegistry()->get('database'));
 
         $_SERVER = $_tempServer;
         $GLOBALS = $_tempGlobals;

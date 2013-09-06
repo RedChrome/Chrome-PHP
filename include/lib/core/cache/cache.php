@@ -20,9 +20,7 @@
  * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 20:22:24] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
-
+require_once 'registry.php';
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
@@ -129,3 +127,4 @@ class Chrome_Cache_Factory implements Chrome_Cache_Factory_Interface
         return new $class($options);
     }
 }
+

@@ -212,6 +212,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
             return;
         }
 
+        // @todo: NO singleton access!
         $registry = Chrome_Registry::getInstance();
 
         foreach($this->_filter as $filterChain => $filters)
