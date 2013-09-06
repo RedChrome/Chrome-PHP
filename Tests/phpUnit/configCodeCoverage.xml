@@ -5,6 +5,9 @@
     <filter>
         <blacklist>
             <directory suffix=".php">../../Tests</directory>
+            <directory suffix=".php">../../include/lib/composer</directory>
+            <directory suffix=".php">../../include/lib/psr</directory>
+            <directory suffix=".php">../../include/lib/monolog</directory>
         </blacklist>
     </filter>
 

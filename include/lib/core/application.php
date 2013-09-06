@@ -107,6 +107,12 @@ interface Chrome_Context_Application_Interface
     const VARIABLE_CONFIG = 'config',
           VARIABLE_LOGGER_REGISTRY = 'loggerRegistry';
 
+    /**
+     * Returns the request variable as a reference.
+     *
+     * @param string $variable see VARIABLE_* as arguments
+     * @return mixed
+     */
     public function &getReference($variable);
 
     public function setRequestHandler(Chrome_Request_Handler_Interface $reqHandler);

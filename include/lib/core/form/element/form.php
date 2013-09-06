@@ -266,7 +266,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
         } else
         {
             $this->_renewTimer();
-            $this->_errors[] = self::CHROME_FORM_ELEMENT_ERROR_NOT_SENT;
+            $this->_errors[] = self::ERROR_NOT_SENT;
 
             return false;
         }
