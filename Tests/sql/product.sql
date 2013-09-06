@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `cp1_config` (
   `value` varchar(256) NOT NULL,
   `type` varchar(10) NOT NULL,
   `modul` varchar(35) NOT NULL,
-  `hidden` int(1) NOT NULL,
+  `hidden` boolean NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -384,7 +384,7 @@ CREATE TABLE IF NOT EXISTS `cp1_user` (
   `group` int(2) NOT NULL DEFAULT '0',
   `time` int(15) NOT NULL,
   `avatar` varchar(50) NULL,
-  `address` varchar(300) NOT NULL,
+  `address` varchar(300) NULL,
   `design` varchar(20) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)

@@ -71,7 +71,7 @@ class Chrome_Model_Config_DB extends Chrome_Model_Database_Abstract
         }
     }
 
-    public function setConfig($name, $subclass, $value, $type = null, $modul = '', $hidden = false)
+    public function setConfig($name, $subclass, $value, $type = null, $modul = '', $hidden = 0)
     {
         if($type === null)
         {
@@ -114,7 +114,7 @@ class Chrome_Model_Config_Cache extends Chrome_Model_Cache_Abstract
         return $cache;
     }
 
-    public function setConfig($name, $subclass, $value, $type = null, $modul = '', $hidden = false)
+    public function setConfig($name, $subclass, $value, $type = null, $modul = '', $hidden = 0)
     {
         $this->_cache->remove('config');
         $this->_decorable->setConfig($name, $subclass, $value, $type, $modul);
