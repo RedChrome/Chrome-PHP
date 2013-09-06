@@ -12,7 +12,7 @@
     "authorisationGetUserGroupById": "SELECT `group_id` FROM cpp_authorisation_user_default WHERE `user_id`= \"?\" ",
 
     "configLoadConfiguration": "SELECT `name`, `subclass`, `value`, `type` FROM cpp_config",
-    "configSetConfiguration": "INSERT INTO cpp_config VALUES(\"?\", \"?\", \"?\", \"?\", \"?\", \"?\")",
+    "configSetConfiguration": "INSERT INTO cpp_config VALUES(\"?\", \"?\", \"?\", \"?\", \"?\", ?)",
 
     "requireGetRequirements": "SELECT `name`, `path`, `class_loader` FROM cpp_require AS `r` WHERE `activated` = 1 ORDER BY r.priority ASC",
     "requireGetClasses": "SELECT `name`, `file` FROM cpp_class",
