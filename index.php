@@ -23,15 +23,6 @@
  * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.06.2013 23:59:34] --> $
  * @link http://chrome-php.de
  */
-// debugin...
-if(! isset($_SERVER['REMOTE_ADDR']))
-{
-    $_SERVER['REMOTE_ADDR']     = '127.0.0.1';
-    $_SERVER['HTTP_USER_AGENT'] = 'Mozilla Firefox 5.0';
-    $_SERVER['REQUEST_URI']     = '';
-    $_SERVER['SCRIPT_NAME']     = 'index.php';
-    $_SERVER['SERVER_NAME']     = 'localhost';
-}
 
 /**
  * load chrome-php framework
@@ -43,4 +34,3 @@ $application = new Chrome_Application_Default();
 $application->init();
 $application->execute();
 //TODO: set up Zend_Mail properly
-//TODO: decide whether view or controller can change the theme...

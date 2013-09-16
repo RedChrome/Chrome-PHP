@@ -25,7 +25,7 @@ interface Object
 {
     const DEFAULT_OBJECT = 'default';
 
-    public function get($key);
+    public function get($key = self::DEFAULT_OBJECT);
 
     public function getAll();
 
@@ -38,7 +38,7 @@ abstract class Object_Abstract implements Object
 {
     protected $_registry = array();
 
-    public function get($key)
+    public function get($key = self::DEFAULT_OBJECT)
     {
         if($this->has($key))
         {
@@ -88,7 +88,7 @@ abstract class Object_Single_Abstract implements Object
 {
     protected $_registry = array();
 
-    public function get($key)
+    public function get($key = self::DEFAULT_OBJECT)
     {
         $key = self::DEFAULT_OBJECT;
 

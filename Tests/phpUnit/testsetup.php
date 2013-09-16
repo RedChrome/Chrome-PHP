@@ -21,6 +21,17 @@
  * @author Alexander Book
  */
 
+/**
+ * load additional testing config
+ *
+ */
+require_once 'config.php';
+
+/**
+ * load chrome-php initializing file
+ */
+require_once 'include/chrome.php';
+
 class Chrome_TestSetup
 {
     protected $_errorConfig = null;

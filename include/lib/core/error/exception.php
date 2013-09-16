@@ -193,12 +193,6 @@ class Chrome_Exception_Error_Handler_Default implements Chrome_Exception_Error_H
 class Chrome_Exception extends Exception
 {
     /**
-     * @todo remove this?
-     * @var boolean
-     */
-    protected $_handleException = null;
-
-    /**
      * previous exception, used for php version < 5.3.0
      *
      * @var Exception
@@ -214,28 +208,20 @@ class Chrome_Exception extends Exception
      * @param bool $handleException ...
      * @return Chrome_Exception
      */
-    public function __construct($msg = '', $code = 0, Exception $prevException = null, $handleException = true)
+    public function __construct($msg = '', $code = 0, Exception $prevException = null)
     {
-        $this->_handleException = $handleException;
+
         $this->_prevException = $prevException;
 
         parent::__construct((string) $msg, (double) $code, $prevException);
     }
 
     /**
-     * Chrome_Exception::handleException()
-     *
-     * @return boolean
-     */
-    public function handleException()
-    {
-        return $this->_handleException;
-    }
-
-    /**
      * Chrome_Exception::_getPrevious()
      *
      * @return Chrome_Exception
+     * @deprecated due to moving to php 5.3
+     * @todo remove
      */
     public function _getPrevious()
     {
@@ -248,6 +234,8 @@ class Chrome_Exception extends Exception
      * Returns the trace AS a string, but replaces the DB password
      *
      * @return string
+     * @deprecated due to moving to php 5.3
+     * @todo remove
      */
     public function _getTraceAsString()
     {

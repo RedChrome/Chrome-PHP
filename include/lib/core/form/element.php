@@ -647,7 +647,7 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
     }
 
     /**
-     * Default implementation of {@link Chrome_Form_Element_Abstract::create()}
+     * Default implementation of {@link Chrome_Form_Element_Interface::create()}
      *
      * @return void
      */
@@ -657,13 +657,23 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
     }
 
     /**
-     * Default implementation of {@link Chrome_Form_Element_Abstract::isCreated()}
+     * Default implementation of {@link Chrome_Form_Element_Interface::isCreated()}
      *
      * @return boolean
      */
     public function isCreated()
     {
         return true;
+    }
+
+    /**
+     * Default implementation of {@link Chrome_Form_Element_Storable::getStorableData()}
+     *
+     * @return mixed
+     */
+    public function getStorableData()
+    {
+        return $this->getData();
     }
 }
 

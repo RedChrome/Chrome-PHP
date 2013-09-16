@@ -35,13 +35,3 @@ if(!defined('CHROME_PHP')) {
  * load config
  */
 require_once 'config.php';
-
-/**
- * loads dependencies from composer
- */
-require_once 'lib/autoload.php';
-
-/**
- * load chrome-php core
- */
-require_once 'lib/core/core.php';

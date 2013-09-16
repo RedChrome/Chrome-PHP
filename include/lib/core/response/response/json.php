@@ -40,7 +40,7 @@ class Chrome_Response_Handler_JSON extends Chrome_Response_Handler_HTTP
 
         $requestData = $this->_request->getRequestData();
 
-        return (strtolower($requestData->getSERVERData('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest');
+        return (strtolower($requestData->getSERVERData('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest' OR strtolower($requestData->getREQUESTData('ajax')) === 'true' );
     }
 
     public function getResponse()

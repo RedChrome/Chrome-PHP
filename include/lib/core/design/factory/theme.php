@@ -52,6 +52,9 @@ class Chrome_Design_Factory_Theme extends Chrome_Design_Factory_Abstract
 
         $themeClass = 'Chrome_Design_Theme_'.ucfirst($theme);
 
-        return new $themeClass($this->_applicationContext);
+        $theme = new $themeClass();
+        $theme->setApplicationContext($this->_applicationContext);
+
+        return $theme;
     }
 }

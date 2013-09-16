@@ -178,21 +178,53 @@ interface Chrome_View_Form_Element_Option_Interface
      */
     public function setStoredData($storedData);
 
+    /**
+     * Returns the label set via setLabel
+     *
+     * @return Chrome_View_Form_Label_Interface
+     */
     public function getLabel();
 
+    /**
+     * Returns the placeholder set via setPlaceholder
+     *
+     * @return string
+     */
     public function getPlaceholder();
 
+    /**
+     * Returns the default input set via setDefaultInput
+     *
+     * @return mixed
+     */
     public function getDefaultInput();
 
+    /**
+     * Returns the stored data set via getStoredData
+     *
+     * @return mixed
+     */
     public function getStoredData();
 
+    /**
+     * Return the render count set via setRenderCount
+     *
+     * @return int
+     */
     public function getRenderCount();
 
+    /**
+     * Sets the render count
+     *
+     * Only use this method, if you understood why this method was introduced.
+     *
+     * @param int $int
+     */
     public function setRenderCount($int);
 }
 
 /**
- * @todo add doc
+ * An option interface for elements which support to receive multiple input values
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
@@ -203,17 +235,42 @@ interface Chrome_View_Form_Element_Option_Multiple_Interface extends Chrome_View
 }
 
 /**
- * @todo add doc
+ * An option interface for elements which support to attach other form elements.
+ *
+ * Sometimes a form element can have multiple sub-elements. In this case, use this option interface and attach
+ * the additional form elements to the option instance, NOT to the actual main element.
+ *
+ * For example, the element "buttons" can attach multiple button's.(Why? Because the form is sent if at least one button was sent, but
+ * this could not be designed with the current api).
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
 interface Chrome_View_Form_Element_Option_Attachable_Interface extends Chrome_View_Form_Element_Option_Interface
 {
+    /**
+     * Attaches a form element
+     *
+     * This makes a form element a sub-element for the form element, which belongs to this option
+     *
+     * @param Chrome_View_Form_Element_Interface $element form element to attach
+     */
     public function attach(Chrome_View_Form_Element_Interface $element);
 
+    /**
+     * Returns all attachments (added by {@link Chrome_View_Form_Element_Option_Attachable_Interface::attach()})
+     *
+     * @return array, containing all attachments, numerically indexed. (index corresponds to the order of attaching)
+     */
     public function getAttachments();
 
+    /**
+     * Discards all previous set attachments and sets the new attachments
+     *
+     * Note that the values of $elements must be instances of Chrome_View_Form_Element_Interface
+     *
+     * @param array $elements containg the new attachments, all instances of Chrome_View_Form_Element_Interface
+     */
     public function setAttachments(array $elements);
 }
 

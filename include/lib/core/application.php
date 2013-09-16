@@ -91,7 +91,7 @@ interface Chrome_Context_View_Interface
 
 interface Chrome_Context_Model_Interface
 {
-    public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry $cachFactoryRegistry);
+    public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry $cacheFactoryRegistry);
 
     public function getCacheFactoryRegistry();
 
@@ -147,9 +147,17 @@ interface Chrome_Context_Application_Interface
 
     public function getConfig();
 
-    public function setLoggerRegistry(\Chrome\Registry\Logger\Registry $registry);
+    public function setLoggerRegistry(\Chrome\Registry\Logger\Registry_Interface $registry);
 
     public function getLoggerRegistry();
+
+    public function setControllerFactoryRegistry(\Chrome\Registry\Controller\Factory\Registry_Interface $registry);
+
+    public function getControllerFactoryRegistry();
+
+    public function setDesign(Chrome_Design_Interface $design);
+
+    public function getDesign();
 
     public function setConverter(Chrome_Converter_Delegator_Interface $converter);
 
@@ -176,6 +184,10 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
 
     protected $_loggerRegistry  = null;
 
+    protected $_design          = null;
+
+    protected $_controllerFactroyRegistry = null;
+
     public function &getReference($variable)
     {
         switch($variable)
@@ -197,6 +209,16 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
             but this not:
             return $this->getConfig();
         */
+    }
+
+    public function setControllerFactoryRegistry(\Chrome\Registry\Controller\Factory\Registry_Interface $registry)
+    {
+        $this->_controllerFactroyRegistry = $registry;
+    }
+
+    public function getControllerFactoryRegistry()
+    {
+        return $this->_controllerFactroyRegistry;
     }
 
     public function setConfig(Chrome_Config_Interface $config)
@@ -281,7 +303,7 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
         return $this->_converter;
     }
 
-    public function setLoggerRegistry(\Chrome\Registry\Logger\Registry $registry)
+    public function setLoggerRegistry(\Chrome\Registry\Logger\Registry_Interface $registry)
     {
         $this->_loggerRegistry = $registry;
     }
@@ -289,6 +311,16 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
     public function getLoggerRegistry()
     {
         return $this->_loggerRegistry;
+    }
+
+    public function setDesign(Chrome_Design_Interface $design)
+    {
+        $this->_design = $design;
+    }
+
+    public function getDesign()
+    {
+        return $this->_design;
     }
 }
 

@@ -24,6 +24,7 @@ if(CHROME_PHP !== true)
     die();
 
 require_once 'factory.php';
+require_once 'registry.php';
 
 /**
  *
@@ -204,7 +205,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      * _setFilter()
      *
      * @return void
-     */
+     *
     protected function _setFilter()
     {
         if(!is_array($this->_filter))
@@ -235,7 +236,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
                 $_filterChain->addFilter($filter);
             }
         }
-    }
+    }*/
 
     public function getModel()
     {

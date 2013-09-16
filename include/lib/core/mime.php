@@ -15,9 +15,6 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Mime
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.11.2009 21:02:59] --> $
  */
 if(CHROME_PHP !== true)
     die();
@@ -25,11 +22,8 @@ if(CHROME_PHP !== true)
 /**
  * Chrome_Mime
  *
- * @author Alexander Book
  * @package CHROME-PHP
  * @subpackage Chrome.Mime
- * @copyright Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license http://chrome-php.de/license/new-bsd		New BSD License
  */
 class Chrome_Mime
 {
@@ -97,7 +91,7 @@ class Chrome_Mime
 
             case '':
                 {
-                    return false;
+                    return null;
                 }
 
             default:

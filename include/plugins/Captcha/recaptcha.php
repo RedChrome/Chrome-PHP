@@ -13,32 +13,29 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:52:28] --> $
+ * @package CHROME-PHP
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:52:28] --> $
  */
-
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
 /**
  * load ReCaptcha lib
  */
-require_once LIB.'reCaptcha/recaptchalib.php';
-
+require_once LIB . 'reCaptcha/recaptchalib.php';
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Captcha
  */
 class Chrome_Captcha_Engine_Recaptcha implements Chrome_Captcha_Engine_Interface
 {
     protected $_reqData = null;
-
     protected $_backendOptions = array();
-
     protected $_error = '';
-
     protected $_appContext = null;
 
     public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Context_Application_Interface $appContext, array $backendOptions)
@@ -57,29 +54,27 @@ class Chrome_Captcha_Engine_Recaptcha implements Chrome_Captcha_Engine_Interface
 
     public function isValid($key)
     {
-        $recaptcha_challenge_field = $this->_reqData->getPOSTData('recaptcha_challenge_field');
-        $recaptcha_response_field  = $this->_reqData->getPOSTData('recaptcha_response_field');
+        $recaptchaChallengeField = $this->_reqData->getPOSTData('recaptcha_challenge_field');
+        $recaptchaResponseField = $this->_reqData->getPOSTData('recaptcha_response_field');
 
-        if(empty($recaptcha_response_field) OR empty($recaptcha_challenge_field)) {
+        if(empty($recaptchaResponseField) or empty($recaptchaChallengeField))
+        {
             return false;
         }
 
         $config = $this->_appContext->getConfig();
         $privatekey = $config->getConfig('Captcha', 'private_key');
-        $resp = recaptcha_check_answer($privatekey,
-                                $this->_reqData->getSERVERData('REMOTE_ADDR'),
-                                $recaptcha_challenge_field, // todo: can we save this in session?
-                                $recaptcha_response_field
-                                );
+        // todo: can we save this in session?
+        $resp = recaptcha_check_answer($privatekey, $this->_reqData->getSERVERData('REMOTE_ADDR'), $recaptchaChallengeField, $recaptchaResponseField);
 
         $this->_error = $resp->error;
 
-        return $resp->is_valid;
+        return $resp->isValid;
     }
 
     public function create()
     {
-       // do nothing
+        // do nothing
     }
 
     public function renew()
@@ -92,7 +87,8 @@ class Chrome_Captcha_Engine_Recaptcha implements Chrome_Captcha_Engine_Interface
         // do nothing
     }
 
-    public function getError() {
+    public function getError()
+    {
         return $this->_error;
     }
 }

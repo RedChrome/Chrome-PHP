@@ -35,7 +35,7 @@ abstract class Chrome_Controller_Module_Abstract extends Chrome_Controller_Abstr
 
         $this->_initialize();
 
-        $this->_setFilter();
+        //$this->_setFilter();
 
         $this->_require();
     }

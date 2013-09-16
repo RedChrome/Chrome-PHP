@@ -29,10 +29,6 @@ class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Inter
 {
     public function exception(Exception $e)
     {
-        if($e->handleException() === false) {
-            die();
-        }
-
         echo '<h1>Uncaught Exception of type '.get_class($e).' </h1>';
         echo '<h3>'.$e->getMessage().'</h3>';
         echo '<h4>Caused by '.$e->getFile().'('.$e->getLine().')<br></h4>Call Stack<br>';

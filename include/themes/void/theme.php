@@ -26,9 +26,9 @@ if(CHROME_PHP !== true) die();
  * @package    CHROME-PHP
  * @subpackage Chrome.Design.Theme
  */
-class Chrome_Design_Theme_Void implements Chrome_Design_Theme_Interface
+class Chrome_Design_Theme_Void extends Chrome_Design_Theme_Abstract
 {
-    public function initDesign(Chrome_Design_Interface $design)
+    public function initDesign(Chrome_Design_Interface $design, Chrome_Controller_Interface $controller)
     {
         // do nothing
     }

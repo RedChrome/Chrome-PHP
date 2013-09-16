@@ -26,16 +26,16 @@ if(CHROME_PHP !== true) die();
  * @package    CHROME-PHP
  * @subpackage Chrome.Design.Theme
  */
-class Chrome_Design_Theme_Console implements Chrome_Design_Theme_Interface
+class Chrome_Design_Theme_Console extends Chrome_Design_Theme_Abstract
 {
-    public function initDesign(Chrome_Design_Interface $design)
+    public function initDesign(Chrome_Design_Interface $design, Chrome_Controller_Interface $controller)
     {
         $htmlList = new Chrome_Renderable_List();
-        $html = new Chrome_Renderable_Composition_Impl();
+        $html = new Chrome_Renderable_Composition();
         $html->setRenderableList($htmlList);
 
         $design->setRenderable($html);
 
-        $html->getRenderableList()->addRenderable($design->getController()->getView());
+        $html->getRenderableList()->addRenderable($controller->getView());
     }
 }

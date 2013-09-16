@@ -43,7 +43,6 @@ interface Chrome_Template_Interface extends Chrome_Renderable
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Template
- * @todo add plugin pattern!
  */
 abstract class Chrome_Template_Abstract implements Chrome_Template_Interface
 {
@@ -65,7 +64,6 @@ abstract class Chrome_Template_Abstract implements Chrome_Template_Interface
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Template
- * @todo maybe add plugin methods to extend this class in runtime?
  */
 class Chrome_Template extends Chrome_Template_Abstract
 {

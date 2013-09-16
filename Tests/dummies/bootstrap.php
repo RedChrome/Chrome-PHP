@@ -2,6 +2,8 @@
 
 //require_once LIB.'core/authentication/chain/null.php';
 
+require_once 'exception/dummy.php';
+
 require_once 'cookie.php';
 require_once 'session.php';
 

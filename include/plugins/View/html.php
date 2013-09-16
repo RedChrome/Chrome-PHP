@@ -13,24 +13,18 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 19:03:52] --> $
+ * @package CHROME-PHP
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://chrome-php.de/license/new-bsd New BSD License
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 19:03:52] --> $
  */
+if(CHROME_PHP !== true)
+    die();
 
-if(CHROME_PHP !== true) die();
-
-/**
- * @todo remove dependency to property JS in view class
- *
- */
 class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
 {
     private $_title = '';
-
     private $_JS = array();
-
     private $_CSS = array();
 
     public function getTitle()
@@ -40,13 +34,16 @@ class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
 
     public function addTitle(Chrome_View_Interface $obj, $title)
     {
-        if($this->_title === '') {
+        if($this->_title === '')
+        {
             $this->_title = $this->_getDefaultTitleBeginning();
         }
 
-        if(is_array($title)) {
+        if(is_array($title))
+        {
             $this->_title .= $this->_getDefaultTitleSeparator() . implode($this->_getDefaultTitleSeparator(), $title);
-        } else {
+        } else
+        {
             $this->_title .= $this->_getDefaultTitleSeparator() . $title;
         }
     }
@@ -56,46 +53,25 @@ class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
         $this->_title = $title;
     }
 
-    public function addJS(Chrome_View_Interface $obj, $filename = null, $directory = null)
+    public function addJS(Chrome_View_Interface $obj, $filename, $directory = '')
     {
-        if($filename === null and $directory === null) {
-            if(isset($obj->JS) and is_array($obj->JS)) {
-                $this->_JS = array_merge($obj->JS, $this->_JS);
-                return;
-            } else {
-                throw new Chrome_Exception('Cannot add a .js file! The "JS" property of the view class must be an array!');
-            }
-        } else {
-            if($filename === null) {
-                throw new Chrome_Exception('Either filename AND directory is not set, OR filename must be set!');
-            }
-
-            $this->_JS[] = _PUBLIC . $directory . $filename;
-        }
+        $this->_JS[] = _PUBLIC . $directory . $filename;
     }
 
-    public function setJS(Chrome_View_Interface $obj, array $js = null)
+    public function setJS(Chrome_View_Interface $obj, array $js)
     {
-        if($js === null) {
-
-            if(isset($obj->JS) and is_array($obj->JS)) {
-                $this->_JS = $obj->JS;
-            } else {
-                throw new Chrome_Exception('Cannot add multiple .js files if property "JS" of the view class is not an array!');
-            }
-            return;
-        }
-
         $this->_JS = $js;
     }
 
-    public function getJS(Chrome_View_Interface $obj = null, $getAsString = true)
+    public function getJS(Chrome_View_Interface $obj = null, $getAsHtmlString = true)
     {
-        if($getAsString === true) {
+        if($getAsHtmlString === true)
+        {
 
             $return = '';
 
-            foreach($this->_JS as $file) {
+            foreach($this->_JS as $file)
+            {
                 $return .= '<script type="text/javascript" src="' . $file . '"></script>' . "\n";
             }
 
@@ -105,46 +81,26 @@ class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
         return $this->_JS;
     }
 
-    public function addCSS(Chrome_View_Interface $obj, $filename = null, $directory = null)
+    public function addCSS(Chrome_View_Interface $obj, $filename, $directory = '')
     {
-        if($filename === null and $directory === null) {
-            if(isset($obj->CSS) and is_array($obj->CSS)) {
-                $this->_CSS = array_merge($obj->CSS, $this->_CSS);
-            } else {
-                throw new Chrome_Exception('Cannot add an .css file if property "CSS" does not exist OR it is not an array in a view class!');
-            }
-            return;
-        }
-
-        if($filename === null) {
-            throw new Chrome_Exception('No filename for a .css file given!');
-        }
-
         $this->_CSS[] = _PUBLIC . $directory . $filename;
     }
 
-    public function setCSS(Chrome_View_Interface $obj, array $css = null)
+    public function setCSS(Chrome_View_Interface $obj, array $css)
     {
-        if($css === null) {
-            if(isset($obj->CSS) and is_array($obj->CSS)) {
-                $this->_CSS = $obj->CSS;
-                return;
-            }
-
-            throw new Chrome_Exception('Cannot set .css files if property "CSS" does not exist OR it is not an array in a view class!');
-        }
-
         $this->_CSS = $css;
     }
 
-    public function getCSS(Chrome_View_Interface $obj = null, $getAsString = true)
+    public function getCSS(Chrome_View_Interface $obj = null, $getAsHtmlString = true)
     {
-        if($getAsString !== true) {
+        if($getAsHtmlString !== true)
+        {
             return $this->_CSS;
         }
 
         $return = '';
-        foreach($this->_CSS as $css) {
+        foreach($this->_CSS as $css)
+        {
             $return .= '<link rel="stylesheet" href="' . $css . '" type="text/css" />' . "\n";
         }
         return $return;
@@ -167,16 +123,7 @@ class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
 
     public function getMethods()
     {
-        return array(
-            'getTitle',
-            'addTitle',
-            'setTitle',
-            'addJS',
-            'addCSS',
-            'setJS',
-            'setCSS',
-            'getJS',
-            'getCSS');
+        return array('getTitle', 'addTitle', 'setTitle', 'addJS', 'addCSS', 'setJS', 'setCSS', 'getJS', 'getCSS');
     }
 
     public function getClassName()

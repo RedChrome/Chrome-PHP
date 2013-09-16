@@ -33,20 +33,6 @@ abstract class Chrome_Filter_Chain_Abstract
     protected $_filters = array();
 
     /**
-     * Chrome_Filter_Chain_Abstract::__construct()
-     *
-     * @param string $filterName Name of the filter, e.g. Chrome_Filter_Chain_Main ($filterName must always be unique)
-     * @return Chrome_Filter_Chain_Abstract
-     */
-    public function __construct($filterName = null)
-    {
-        // if no $filterName given, use the class name
-          if($filterName === null) {
-              $filterName = get_class($this);
-          }
-    }
-
-    /**
      * Chrome_Filter_Chain_Abstract::addFilter()
      *
      * Adds a filter to filter chain

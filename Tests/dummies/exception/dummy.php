@@ -13,13 +13,12 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 14:14:24] --> $
- * @author     Alexander Book
+ * @package CHROME-PHP
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 14:14:24] --> $
+ * @author Alexander Book
  */
-
 if(CHROME_PHP !== true)
     die();
 
@@ -32,7 +31,6 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Exception_Dummy extends Chrome_Exception
 {
-
 }
 
 /**
@@ -46,14 +44,16 @@ class Chrome_Exception_Handler_Dummy implements Chrome_Exception_Handler_Interfa
 {
     protected $_echoText = false;
 
-    public function __construct($echoText = false) {
+    public function __construct($echoText = false)
+    {
         $this->_echoText = $echoText;
     }
 
     public function exception(Exception $e)
     {
-        if($this->_echoText === true) {
-            echo 'There was an exception of type '.get_class($e).' with message '.$e->getMessage();
+        if($this->_echoText === true)
+        {
+            echo 'There was an exception of type ' . get_class($e) . ' with message ' . $e->getMessage();
             var_dump($e);
         }
     }

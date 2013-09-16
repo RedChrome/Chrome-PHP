@@ -1,10 +1,18 @@
 <?php
 
-require_once 'config.php';
-require_once 'include/chrome.php';
-require_once LIB.'core/error/exception.php';
-require_once LIB.'core/mime.php';
-require_once LIB.'core/file_system/file_system.php';
-require_once LIB.'exception/console.php';
+/**
+ * loads dependencies from composer
+ */
+require_once LIB.'autoload.php';
 
+
+/**
+ * load chrome-php core
+ */
+require_once LIB.'core/core.php';
+
+/**
+ * additional, non-core files
+ */
+require_once LIB.'exception/console.php';
 require_once 'Tests/dummies/bootstrap.php';

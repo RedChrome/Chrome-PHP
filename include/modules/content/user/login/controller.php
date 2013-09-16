@@ -50,15 +50,6 @@ class Chrome_Controller_Content_Login extends Chrome_Controller_Module_Abstract
         $this->_controller->execute();
     }
 
-    public function getResponse()
-    {
-        if($this->_requestHandler instanceof Chrome_Request_Handler_AJAX) {
-            Chrome_Response::setResponseClass('ajax');
-        }
-
-        return parent::getResponse();
-    }
-
     public function getView()
     {
         return $this->_controller->getView();

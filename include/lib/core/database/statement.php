@@ -27,8 +27,6 @@
 
 if(CHROME_PHP !== true) die();
 
-// TODO: use \Chrome\Registry\Object for database registry
-
 /**
  * Interface to store sent queries
  *

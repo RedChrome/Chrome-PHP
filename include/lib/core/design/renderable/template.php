@@ -36,7 +36,6 @@ class Chrome_Renderable_Template extends Chrome_Renderable_Composition
     {
         $this->_template = $template;
         $this->_exceptionHandler = $exceptionHandler;
-        // todo: set default exception handler
         parent::__construct();
     }
 

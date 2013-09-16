@@ -77,8 +77,6 @@ interface Chrome_Renderable_Composition_Interface extends Chrome_Renderable
  */
 interface Chrome_Design_Interface extends Chrome_Renderable
 {
-    public function getApplicationContext();
-
     public function setRenderable(Chrome_Renderable $renderable);
 
     public function getRenderable();
@@ -109,14 +107,46 @@ interface Chrome_Renderable_Options_Interface
  */
 interface Chrome_Design_Theme_Interface
 {
-    public function initDesign(Chrome_Design_Interface $design);
+    public function setApplicationContext(Chrome_Context_Application_Interface $appContext);
+
+    public function initDesign(Chrome_Design_Interface $design, Chrome_Controller_Interface $controller);
+}
+
+abstract class Chrome_Design_Theme_Abstract implements Chrome_Design_Theme_Interface
+{
+    protected $_appContext = null;
+
+    public function setApplicationContext(Chrome_Context_Application_Interface $appContext)
+    {
+        $this->_appContext = $appContext;
+    }
+}
+
+/**
+ * @package    CHROME-PHP
+ * @subpackage Chrome.Design
+ */
+interface Chrome_Design_Factory_Interface
+{
+    public function __construct(Chrome_Context_Application_Interface $appContext);
+
+    public function build();
+}
+
+abstract class Chrome_Design_Factory_Abstract implements Chrome_Design_Factory_Interface
+{
+    protected $_applicationContext = null;
+
+    public function __construct(Chrome_Context_Application_Interface $appContext)
+    {
+        $this->_applicationContext = $appContext;
+    }
 }
 
 // @todo remove those includes, place them anywhere else
 require_once 'renderable/composition.php';
 require_once 'renderable/template.php';
 require_once 'design/default.php';
-require_once 'factory.php';
 require_once 'factory/design.php';
 require_once 'factory/theme.php';
 class Chrome_Renderable_List implements Chrome_Renderable_List_Interface
