@@ -11,6 +11,6 @@ class Chrome_View_Box_Test extends Chrome_View
 
     public function render()
     {
-       return 'box....';
+       return 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nunc congue ipsum vestibulum libero. Aenean vitae justo. Nam eget tellus. Etiam convallis, est eu lobortis mattis, lectus tellus tempus felis, a ultricies erat ipsum at metus.';
     }
 }

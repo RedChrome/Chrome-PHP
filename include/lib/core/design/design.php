@@ -36,6 +36,12 @@ interface Chrome_Renderable_List_Interface extends Iterator
     public function setRenderables(array $renderables);
 
     public function getRenderable($index);
+
+    public function isLast();
+
+    public function isFirst();
+
+    public function count();
 }
 
 /**
@@ -182,6 +188,21 @@ class Chrome_Renderable_List implements Chrome_Renderable_List_Interface
     public function getRenderable($index)
     {
         return isset($this->_list[$index]) ? $this->_list[$index] : null;
+    }
+
+    public function isLast()
+    {
+        return $this->_position + 1 === $this->count();
+    }
+
+    public function isFirst()
+    {
+        return $this->_position === 0;
+    }
+
+    public function count()
+    {
+        return count($this->_list);
     }
 
     /*

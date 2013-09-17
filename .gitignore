@@ -7,3 +7,5 @@ include/lib/composer
 include/lib/psr
 include/lib/monolog
 include/lib/autoload.php
+public/css/yaml
+

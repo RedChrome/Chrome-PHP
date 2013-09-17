@@ -42,15 +42,15 @@ class Chrome_Design_Factory_Theme extends Chrome_Design_Factory_Abstract
 
         }
 
-        $theme = strtolower(trim($theme));
+        $themeLowered = strtolower(trim($theme));
 
-        if(!_isFile(THEME.$theme.'/theme.php')) {
-            throw new Chrome_Exception('Cannot load theme "'.$theme.'"! Theme is not valid. Corresponding theme.php missing');
+        if(!_isFile(THEME.$themeLowered.'/theme.php')) {
+            throw new Chrome_Exception('Cannot load theme "'.$themeLowered.'"! Theme is not valid. Corresponding theme.php missing');
         }
 
         require_once THEME.$theme.'/theme.php';
 
-        $themeClass = 'Chrome_Design_Theme_'.ucfirst($theme);
+        $themeClass = 'Chrome_Design_Theme_'.$theme;
 
         $theme = new $themeClass();
         $theme->setApplicationContext($this->_applicationContext);

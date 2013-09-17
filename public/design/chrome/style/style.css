@@ -4,10 +4,11 @@ body {
     font-size: 100%;
     font-family: Helvetica,Arial,sans-serif;
     margin: 0; padding: 1em;
+    min-width: 800px;
 }
 
 body > header {
-    min-width:  800px;
+    min-width: 800px;
 }
 
 body > footer > div {
@@ -17,12 +18,9 @@ body > footer > div {
 
 body > div.ym-column {
     min-width: 800px;
+    margin-top: 1em;
 }
-
-.ym-wrapper {
-    max-width: 80em;
-}
-
+https://github.com/yamlcss/yaml.git
 .ym-wbox {
     padding: 10px;
 }
@@ -43,6 +41,7 @@ div#rNavi {
 
 div.Navi {
 	background: url(../images/green/box_fr.png) 100% 100% no-repeat;
+	margin-bottom: 1em;
 }
 
 div.Navi > div {
@@ -84,6 +83,11 @@ h1 {
     margin: 0 0 0.7em; padding: 0.3em;
     text-align: center;
     border: 2px dashed silver;
+}
+
+.ym-wbox
+{
+	padding: 10px;
 }
 
 h3.boxtitle {

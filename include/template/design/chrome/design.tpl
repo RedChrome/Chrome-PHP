@@ -4,6 +4,7 @@
     <link rel="Shortcut Icon" href="public/design/chrome/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="public/design/chrome/style/style.css" type="text/css" />
     <link rel="stylesheet" href="public/design/chrome/style/dojo.css" type="text/css" />
+    <link rel="stylesheet" href="public/css/yaml/flexible-grids.css"  type="text/css" />
     <?php try { echo $VIEW->getRenderable(0)->render(); } catch(Chrome_Exception $e) { $exceptionHandler->exception($e); }?>
 </head>
 <body>

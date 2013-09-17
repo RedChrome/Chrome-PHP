@@ -25,6 +25,6 @@ if(CHROME_PHP !== true)
 class Chrome_View_Header_Header extends Chrome_View
 {
     public function render() {
-        return '<header><h1>Chrome-PHP Preview</h1></header>';
+        return '<header><div class="ym-col3"><div class="ym-wbox"><h1>Chrome-PHP Preview</h1></div></div></header>';
     }
 }

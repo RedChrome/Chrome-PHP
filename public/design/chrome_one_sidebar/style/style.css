@@ -1,0 +1,92 @@
+body {
+    color: black;
+	background-color: white;
+    font-size: 100%;
+    font-family: Helvetica,Arial,sans-serif;
+    margin: 0;
+}
+
+body > footer > div {
+    background-color: white;
+}
+
+
+main > div.ym-wrapper {
+	max-width: 90em;
+}
+
+div#rNavi {
+  	font-size: 0.85em;
+	width: 100%;
+}
+
+
+.boxcontent {
+	color: #444444;
+	font-size: 1.1em;
+}
+
+.boxtitle {
+	font-size: 1.7em;
+	margin-bottom: 1em;
+	text-align: left;
+}
+
+.boxsidebar {
+	padding-bottom: 0.4em;
+	margin-bottom: 1.1em;
+	border-bottom: 1px #dddddd solid;
+}
+
+.basic {
+	background: #f4f4f4;
+	border: 1px solid #ffffff;
+}
+
+.gradient {
+	background: #eee;
+	border: 1px solid #ddd;
+	background: -moz-linear-gradient(top, #eee, #ff);    
+	background: -webkit-linear-gradient(top, #eee, #fff);
+	background: -ms-linear-gradient(top, #eee, #fff);
+	background: -o-linear-gradient(top, #eee, #fff);
+	box-shadow: 1px 2px 4px rgba(0,0,0, .2);
+}
+
+img {
+	border: 0;
+}
+
+a {
+	color: #A2A2A2;
+	text-decoration: none;
+}
+
+a:hover {
+	color: black;
+	text-decoration: underline;
+}
+
+.highlight {
+	background-color:  red;
+	text-decoration: none;
+}
+
+.highlight:hover {
+	background-color: #F40000;
+	text-decoration: underline;
+}
+
+.blink {
+	text-decoration: blink;
+}
+
+.wrongInput {
+	color: red;
+}
+.wrongInput:hover {
+	color: silver;
+}
+.invisible {
+	display: none;
+}

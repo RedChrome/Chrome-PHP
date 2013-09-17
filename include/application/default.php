@@ -234,7 +234,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
                 $this->_applicationContext->setDesign($design);
 
                 $themeFactory = new Chrome_Design_Factory_Theme($this->_applicationContext);
-                $theme = $themeFactory->build();
+                $theme = $themeFactory->build('chrome_one_sidebar');
                 $theme->initDesign($design, $this->_controller);
             }
 

@@ -92,7 +92,7 @@ class Chrome_View_Footer_VarDump extends Chrome_View_Abstract
                 $return .= '<tr><td>'.$key.'</td><td>'.$this->exportArray($value).'</td></tr>';
             } else {
 
-                $return .= '<tr><td>'.$key.'</td><td>'.$value.'</td></tr>';
+                $return .= '<tr><td>'.$key.'</td><td>'.wordwrap($value, 75, ' ', true).'</td></tr>';
             }
         }
 

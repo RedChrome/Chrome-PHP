@@ -1,0 +1,29 @@
+.dojo_box {
+  margin-top: 10px;
+  color: #292929;
+  width: 270px;
+  top: 70%;
+  left: 0;
+  position: absolute;
+  border: 1px solid #BABABA;
+  background-color: #ddd;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 10px;
+  margin-bottom: 1em;
+  -o-border-radius: 10px;
+  -moz-border-radius: 12px;
+  -webkit-border-radius: 10px;
+  -webkit-box-shadow: 0px 3px 7px #adadad;
+  -moz-box-sizing: border-box;
+  -opera-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -khtml-box-sizing: border-box;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.dojo_display_none
+{
+	display:none;
+}
