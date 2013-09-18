@@ -71,22 +71,24 @@ class Chrome_TestSetup
 
         require_once LIB.'core/database/database.php';
 
+        $dbRegistry = new Chrome_Database_Registry_Connection();
+
 		// configure default database connection
 		try {
 			$defaultConnectionClass = 'Chrome_Database_Connection_'.ucfirst(CHROME_DATABASE);
 			$defaultConnection = new $defaultConnectionClass();
 			$defaultConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
 			$defaultConnection->connect();
+
+			$dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
 		}
 		catch (Exception $e) {
 			$this->_errorConfig->getExceptionHandler()->exception($e);
 		}
 
-		$dbRegistry = new Chrome_Database_Registry_Connection();
-		$dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
+		$databaseFactory = new Chrome_Database_Factory($dbRegistry, new Chrome_Database_Registry_Statement());
+		$databaseFactory->setLogger(new \Psr\Log\NullLogger());
 
-        $databaseFactory = new Chrome_Database_Factory($dbRegistry, new Chrome_Database_Registry_Statement());
-        $databaseFactory->setLogger(new \Psr\Log\NullLogger());
         //$databaseFactory->setLogger(new Chrome_Logger_Database());
 
         if(TEST_DATABASE_CONNECTIONS == true) {

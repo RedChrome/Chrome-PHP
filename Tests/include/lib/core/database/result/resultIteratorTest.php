@@ -51,10 +51,11 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
         $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
 
         $db->getAdapter()->setDataResource($this);
+        $this->assertFalse($db->getResult()->hasNext(), 'adapter has no elements, but hasNext indicates that there exist at least one element');
 
         foreach($db->getResult() as $key => $value)
         {
-            $this->assertTrue(false, 'this assertion should not get executed');
+            $this->assertTrue(false, 'adapter has no elements, but at least one element is in result');
         }
 
         $this->assertEquals(null, $db->getResult()->getNext());
@@ -67,8 +68,88 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
         $this->assertEquals(6, $db->getResult()->getAffectedRows());
     }
 
+    public function testHasNext()
+    {
+        $this->_dataArray = array(1, 2, 3, 4, 5, 6);
+
+        $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
+
+        // Dummy_Adapter gets used via connection_dummy as default adapter
+        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
+
+        // this will force the adapter to access this class using method getNext()
+        // and this will access the $_dataArray
+        $db->getAdapter()->setDataResource($this);
+        $result = $db->getResult();
+        $i = 0;
+        $this->assertFalse($result->isEmpty());
+        while($result->hasNext() === true)
+        {
+            $element = $result->getNext();
+            $this->assertNotEquals(null, $element);
+            ++$i;
+
+            if($i >= 7) {
+                $this->assertTrue(false, 'iterated over more than six elements, but adapter only contains six elements...');
+            }
+
+        }
+
+        $this->assertEquals(6, $i, 'adapter contains exactly 6 elements, result set have to contain 6 elements too');
+
+        $result->rewind();
+        $i = 0;
+        $this->assertFalse($result->isEmpty());
+        while($result->hasNext() === true)
+        {
+            $element = $result->getNext();
+
+            $this->assertNotEquals(null, $element, 'getNext should only return null if there was no next element, but checked in loop via hasNext()');
+
+            ++$i;
+
+            if($i >= 7) {
+                $this->assertTrue(false, 'iterated over more than six elements, but adapter only contains six elements...');
+            }
+        }
+
+        $this->assertEquals(6, $i, 'adapter contains exactly 6 elements, loop should iterate over exactly 6 elements. getNext does not return the very first element!');
+    }
+
     public function getNext()
     {
         return array_shift($this->_dataArray);
+    }
+
+    public function testSerialize()
+    {
+        $this->_dataArray = array(1, 2, 3, 4, 5, 6);
+
+        $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
+
+        // Dummy_Adapter gets used via connection_dummy as default adapter
+        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
+
+        // this will force the adapter to access this class using method getNext()
+        // and this will access the $_dataArray
+        $db->getAdapter()->setDataResource($this);
+
+        $result = $db->getResult();
+
+        $resultSerialized = serialize($result);
+        $resultUnserialized = unserialize($resultSerialized);
+
+        $i = 0;
+        while($resultUnserialized->hasNext() === true) {
+            ++$i;
+            $this->assertSame($result->getNext(), $resultUnserialized->getNext());
+
+            if($i >= 7) {
+                $this->assertTrue(false, 'accessed more than 7 elements in unserialized result');
+            }
+        }
+
+        $this->assertSame(6, $i);
+
     }
 }

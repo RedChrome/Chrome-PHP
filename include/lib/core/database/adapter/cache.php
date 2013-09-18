@@ -37,7 +37,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Database_Adapter_Cache implements Chrome_Database_Adapter_Interface
+class Chrome_Database_Adapter_Cache implements Chrome_Database_Adapter_Interface, Serializable
 {
     protected $_data = array();
 
@@ -46,24 +46,31 @@ class Chrome_Database_Adapter_Cache implements Chrome_Database_Adapter_Interface
     public function __construct(Chrome_Database_Result_Iterator $result)
     {
         $result->rewind();
-        while($result->hasNext()) {
-            $this->_data[] = $result->getNext();
+
+        foreach($result as $data)
+        {
+            $this->_data[] = $data;
         }
+
+        $result->rewind();
+
+        $this->_numRows = count($this->_data);
     }
 
-    public function __sleep()
+    public function serialize()
     {
-        return array('_data');
+        return serialize($this->_data);
     }
 
-    public function __wakeup()
+    public function unserialize($serialized)
     {
+        $this->_data = unserialize($serialized);
         $this->_numRows = count($this->_data);
     }
 
     private function _notSupportedMethod()
     {
-        throw new Chrome_Exception();
+        throw new Chrome_Exception('Adapter is just a cache. You cannot use db functionality from a cached object!');
     }
 
     public function query($query)

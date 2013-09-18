@@ -1,12 +1,5 @@
 <?php
 
-;
-
-require_once LIB.'core/database/database.php';
-require_once LIB.'core/database/connection/mysql.php';
-
-require_once 'Tests/dummies/database/connection/dummy.php';
-
 class DatabaseAdapterMysqlTest extends Chrome_TestCase
 {
     protected $_db;

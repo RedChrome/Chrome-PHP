@@ -145,6 +145,7 @@ class Chrome_Model_Design_Loader_Static_Cache extends Chrome_Model_Cache_Abstrac
 
         if($this->_cache->has($key))
         {
+            #var_dump($this->_cache->get($key));
             return $this->_cache->get($key);
         }
 

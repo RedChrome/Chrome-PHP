@@ -37,4 +37,10 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Strategy
     {
         return unserialize($data);
     }
+
+    protected function _isCacheable($data)
+    {
+        // we only serialize data that is not a object, or implements the Serializable interface
+        return (!is_object($data) OR $data instanceof Serializable);
+    }
 }

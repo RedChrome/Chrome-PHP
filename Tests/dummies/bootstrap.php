@@ -17,7 +17,7 @@ require_once 'authentication/fail.php';
 
 require_once 'database/connection/dummy.php';
 require_once 'database/adapter.php';
-//require_once 'database/interfaceModel.php';
+require_once 'database/interfaceModel.php';
 require_once 'database/result.php';
 
 require_once 'request/data.php';
@@ -26,3 +26,5 @@ require_once 'request/handler.php';
 require_once 'model/dummy.php';
 
 require_once 'cache/dummy.php';
+
+require_once 'registry.php';

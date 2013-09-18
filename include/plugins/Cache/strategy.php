@@ -118,6 +118,17 @@ abstract class Chrome_Cache_Strategy implements Chrome_Cache_Interface
     abstract protected function _decode($data);
 
     /**
+     * Checks whether the provided $data can get cached
+     *
+     * @param mixed $data
+     * @return boolean true if data can get cached, false else
+     */
+    protected function _isCacheable($data)
+    {
+        return true;
+    }
+
+    /**
      * Chrome_Cache_Strategy::__construct()
      *
      * Sets options and loads data from cache. Opens the file handle only if its needed.
@@ -193,6 +204,10 @@ abstract class Chrome_Cache_Strategy implements Chrome_Cache_Interface
      */
     public function set($name, $data)
     {
+        if(!$this->_isCacheable($data)) {
+            throw new Chrome_InvalidArgumentException('Data is not encodeable!');
+        }
+
         $this->_data[$name] = $data;
         $this->_dataChanged();
 

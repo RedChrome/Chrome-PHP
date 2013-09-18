@@ -1,9 +1,5 @@
 <?php
 
-require_once 'Tests/dummies/database/connection/dummy.php';
-require_once LIB . 'core/database/database.php';
-require_once LIB . 'core/database/connection/mysqli.php';
-
 class DatabaseAdapterMysqliTest extends DatabaseAdapterMysqlTest
 {
 
