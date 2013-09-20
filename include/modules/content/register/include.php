@@ -9,7 +9,8 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
         $this->setAttribute(self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST);
         $this->setAttribute(self::ATTRIBUTE_ID, $this->_id);
 
-        $lang = new Chrome_Language('modules/content/user/registration');
+        $lang = $this->getApplicationContext()->getViewContext()->getLocalization()->getTranslate();
+        //$lang = new Chrome_Language('modules/content/user/registration');
 
         $storageSession = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
 

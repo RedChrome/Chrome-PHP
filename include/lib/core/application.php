@@ -66,6 +66,10 @@ interface Chrome_Application_Interface extends Chrome_Exception_Processable_Inte
 
 interface Chrome_Context_View_Interface
 {
+    public function setLocalization(\Chrome\Localization\Localization_Interface $localization);
+
+    public function getLocalization();
+
     public function setPluginFacade(Chrome_View_Plugin_Facade_Interface $pluginFacade);
 
     public function getPluginFacade();
@@ -377,7 +381,19 @@ class Chrome_Context_View implements Chrome_Context_View_Interface
 
     protected $_factory      = null;
 
-    protected $_loggerRegistry  = null;
+    protected $_loggerRegistry = null;
+
+    protected $_localization = null;
+
+    public function setLocalization(\Chrome\Localization\Localization_Interface $localization)
+    {
+        $this->_localization = $localization;
+    }
+
+    public function getLocalization()
+    {
+        return $this->_localization;
+    }
 
     public function linkApplicationContext(Chrome_Context_Application_Interface $app)
     {

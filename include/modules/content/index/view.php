@@ -104,7 +104,8 @@ class Chrome_View_Index_STHOTHER extends Chrome_View_Abstract
             $template->assignTemplate('modules/content/index/form');
             $template->assign('FORM', $this->_controller->getForm());
             $template->assign('TOKEN', $option->getToken());
-            $template->assign('LANG', new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL));
+            $template->assign()
+            //$template->assign('LANG', new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL));
             return $template->render();
         } else
         {
@@ -143,7 +144,7 @@ class Chrome_View_Form_Index extends Chrome_View_Form_Abstract
     protected function _init()
     {
         $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Default');
-        $this->_renderer = new Chrome_View_Form_Index_Renderer();
+        $this->_renderer = new Chrome_View_Form_Index_Renderer($this);
 
         parent::_init();
     }

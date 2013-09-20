@@ -57,7 +57,7 @@ class Chrome_View_Box_Login extends Chrome_View_Strategy_Abstract
         $this->setViewTitle('Login');
         #$viewForm = new Chrome_View_Form_Login($this->_controller->getForm());
         $viewForm = Chrome_View_Form_Login::getInstance($this->_controller->getForm());
-        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Box($viewForm);
+        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Box($viewForm, $this->_viewContext);
 
         // this->_views = $this->_viewContext->getFactory()->build('Chrome_View_Box_Form_Login', $this->_controller);
     }
@@ -97,7 +97,8 @@ class Chrome_View_Box_Form_Login extends Chrome_View_Abstract
         $template->assignTemplate('modules/box/login/form_log_in');
         // assigning form and language
         $template->assign('FORM', $this->_controller->getForm());
-        $template->assign('LANG', new Chrome_Language('modules/content/user/login'));
+        $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate());
+        //$template->assign('LANG', new Chrome_Language('modules/content/user/login'));
         // return the rendered template
         return $template->render();
     }
@@ -113,11 +114,11 @@ class Chrome_View_Form_Renderer_Template_Login_Box extends Chrome_View_Form_Rend
     {
         $template = new Chrome_Template();
 
-        $lang = new Chrome_Language('modules/content/user/login');
+        //$lang = new Chrome_Language('modules/content/user/login');
 
         $template = new Chrome_Template();
         $template->assignTemplate('modules/box/login/form_log_in');
-        $template->assign('LANG', $lang);
+        $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate());
 
         return $template;
     }

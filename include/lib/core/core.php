@@ -138,7 +138,7 @@ require_once 'validator/validator.php';
 /**
  * load language class
  */
-require_once 'language.php';
+require_once 'localization/localization.php';
 
 /**
  * load require class to load other files

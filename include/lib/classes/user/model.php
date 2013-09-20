@@ -49,7 +49,6 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
         if($exists === true)
         {
             throw new Chrome_Exception('Cannot add user if he already exists!');
-            return false;
         }
 
         $group = (int) $group;
@@ -154,16 +153,6 @@ class Chrome_Model_User extends Chrome_Model_Decorator_Abstract
         }
 
         return $this->_getUserNameByEmailCache[$email];
-    }
-
-    public function getLanguageObject()
-    {
-        if($this->_languageObj === null)
-        {
-            $this->_languageObj = new Chrome_Language('classes/user/user');
-        }
-
-        return $this->_languageObj;
     }
 
     public function addUser($id, $email, $name)
