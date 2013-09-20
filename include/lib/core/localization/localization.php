@@ -50,7 +50,7 @@ interface Localization_Interface
  */
 interface Translate_Interface
 {
-    public function __construct(Localization_Interface $locale);
+    public function __construct(Localization_Interface $localization);
 
     public function get($key, array $params = array());
 
@@ -67,7 +67,7 @@ interface Translate_Interface
  */
 interface L12y
 {
-    public function setLocale(Localization_Interface $locale);
+    public function setLocale(Localization_Interface $localization);
 
     public function getLocale();
 }
@@ -79,15 +79,17 @@ interface L12y
  */
 class Translate_Simple implements Translate_Interface
 {
+    const INCLUDE_DIR = 'plugins/Language/';
+
     protected $_loadedModules = array();
 
     protected $_locale = null;
 
     protected $_translations = array();
 
-    public function __construct(Localization_Interface $locale)
+    public function __construct(Localization_Interface $localization)
     {
-        $this->_locale = $locale;
+        $this->_locale = $localization;
         $this->load('general');
     }
 
@@ -114,7 +116,7 @@ class Translate_Simple implements Translate_Interface
         {
             return;
         }
-        $file = BASEDIR.self::CHROME_LANGUAGE_INCLUDE_DIR.$this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/locale.ini';
+        $file = BASEDIR.self::INCLUDE_DIR.$this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/locale.ini';
 
         if(!_isFile($file))
         {
@@ -127,6 +129,13 @@ class Translate_Simple implements Translate_Interface
         {
             $this->_loadedModules[] = $section;
             $this->_translations = $this->_translations + $translations;
+
+            $newTranslation = array();
+            foreach($translations as $key => $value) {
+                $key = $section.'/'.$key;
+                $newTranslation[$key] = $value;
+            }
+            $this->_translations = $this->_translations + $newTranslation;
         }
 
         $this->_loadedModules[] = $module;
@@ -155,6 +164,58 @@ class Locale implements Locale_Interface
     public function getPrimaryLanguage()
     {
         return 'de';
+    }
+}
+
+class Localization implements Localization_Interface
+{
+    protected $_translate = null;
+
+    protected $_locale = null;
+
+    public function setTranslate(Translate_Interface $translate)
+    {
+        $this->_translate = $translate;
+    }
+
+    public function setLocale(Locale_Interface $locale)
+    {
+        $this->_locale = $locale;
+    }
+
+    public function getLocale()
+    {
+        return $this->_locale;
+    }
+
+    public function getTranslate()
+    {
+        return $this->_translate;
+    }
+
+    public function getDate()
+    {
+
+    }
+
+    public function getCurrency()
+    {
+
+    }
+
+    public function getNumberFormatter()
+    {
+
+    }
+
+    public function getCalendar()
+    {
+
+    }
+
+    public function getTimeZone()
+    {
+
     }
 }
 

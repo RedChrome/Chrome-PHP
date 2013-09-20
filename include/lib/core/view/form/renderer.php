@@ -44,20 +44,14 @@ abstract class Chrome_View_Form_Renderer_Abstract implements Chrome_View_Form_Re
     {
     }
 
-    public function __construct(Chrome_View_Form_Interface $viewForm, Chrome_Context_View_Interface $viewContext)
+    public function __construct(Chrome_View_Form_Interface $viewForm)
     {
-        $this->setViewContext($viewContext);
         $this->setViewForm($viewForm);
+        $this->setViewContext($viewForm->getViewContext());
     }
 
     public function render()
     {
-        /*
-        if(!($this->_viewForm instanceof Chrome_View_Form_Interface))
-        {
-            throw new Chrome_Exception('No View Form set!');
-        }*/
-
         $this->_setUp();
 
         return $this->_render();

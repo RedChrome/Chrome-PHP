@@ -1,6 +1,6 @@
 <?php echo $FORM['Register_StepTwo']->render(); ?>
 <?php //echo $FORM->render('error'); ?>
-<h6 class="ym-fbox-heading">Registrieren:</h6>
+<h6 class="ym-fbox-heading"><?= $LANG->get('register'); ?>:</h6>
 
 <?php echo $FORM['email']->render(); ?>
 

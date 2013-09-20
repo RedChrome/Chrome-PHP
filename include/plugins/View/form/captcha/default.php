@@ -32,7 +32,8 @@ class Chrome_View_Form_Element_Captcha_Default extends Chrome_View_Form_Element_
 
     protected function _render()
     {
-        $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL);
+        $lang = $this->_getTranslate();
+        //$lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL);
 
         /*
          * $label = ''; if(($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null) { $label = '<label for="'.$this->_formElement->getID().'">'.$label.'</label>'; }

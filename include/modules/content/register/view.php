@@ -9,13 +9,13 @@ class Chrome_View_Register extends Chrome_View_Strategy_Abstract
 
     public function setStepOne()
     {
-        $this->_views[] = new Chrome_View_Form_Renderer_Template_Register_StepOne(new Chrome_View_Form_Register_StepOne($this->_controller->getForm()));
+        $this->_views[] = new Chrome_View_Form_Renderer_Template_Register_StepOne(new Chrome_View_Form_Register_StepOne($this->_controller->getForm(), $this->_viewContext));
         // this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_StepOne', $this->_controller);
     }
 
     public function setStepTwo()
     {
-        $formView = new Chrome_View_Form_Register_StepTwo($this->_controller->getForm());
+        $formView = new Chrome_View_Form_Register_StepTwo($this->_controller->getForm(), $this->_viewContext);
         $this->_views[] = new Chrome_View_Form_Renderer_Template_Register_StepTwo($formView);
         #$this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_StepTwo', $this->_controller);
     }
@@ -55,7 +55,8 @@ class Chrome_View_Form_Renderer_Template_Register_StepOne extends Chrome_View_Fo
     {
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/stepOne');
-        $template->assign('LANG', new Chrome_Language('modules/content/user/registration'));
+        $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate());
+        //$template->assign('LANG', new Chrome_Language('modules/content/user/registration'));
         return $template;
     }
 }
@@ -67,7 +68,8 @@ class Chrome_View_Form_Renderer_Template_Register_StepTwo extends Chrome_View_Fo
     {
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/register/stepTwo');
-        $template->assign('LANG', new Chrome_Language('modules/content/user/registration'));
+        $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate());
+        //$template->assign('LANG', new Chrome_Language('modules/content/user/registration'));
         return $template;
     }
 }

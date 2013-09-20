@@ -158,6 +158,18 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $cacheFactoryRegistry = new \Chrome\Registry\Cache\Factory\Registry();
         $cacheFactoryRegistry->set(\Chrome\Registry\Cache\Factory\Registry::DEFAULT_FACTORY, new Chrome_Cache_Factory());
 
+        // @todo: just a dummy instanciation, do a better one later
+
+        $locale = new \Chrome\Localization\Locale();
+        $localization = new \Chrome\Localization\Localization();
+        $localization->setLocale($locale);
+        $translate = new \Chrome\Localization\Translate_Simple($localization);
+        #require_once 'Tests/dummies/localization/translate/test.php';
+        #$translate = new \Chrome\Localization\Translate_Test_XX($localization);
+        $localization->setTranslate($translate);
+
+        $viewContext->setLocalization($localization);
+
         // autoloader
         $autoloader = new Chrome_Require_Autoloader();
         $autoloader->setLogger($this->_loggerRegistry->get('autoloader'));

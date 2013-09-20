@@ -104,7 +104,7 @@ class Chrome_View_Index_STHOTHER extends Chrome_View_Abstract
             $template->assignTemplate('modules/content/index/form');
             $template->assign('FORM', $this->_controller->getForm());
             $template->assign('TOKEN', $option->getToken());
-            $template->assign()
+            $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate());
             //$template->assign('LANG', new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL));
             return $template->render();
         } else

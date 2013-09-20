@@ -68,21 +68,35 @@ interface Chrome_Context_View_Interface
 {
     public function setLocalization(\Chrome\Localization\Localization_Interface $localization);
 
+    /**
+     * @return \Chrome\Localization\Localization_Interface
+     */
     public function getLocalization();
 
     public function setPluginFacade(Chrome_View_Plugin_Facade_Interface $pluginFacade);
 
+    /**
+     * \@return Chrome_View_Plugin_Facade_Interface
+     */
     public function getPluginFacade();
 
     public function setFactory(Chrome_View_Factory_Interface $factory);
 
+    /**
+     * @return Chrome_View_Factory_Interface
+     */
     public function getFactory();
 
+    /**
+     * @return \Chrome\Registry\Logger\Registry_Interface
+     */
     public function getLoggerRegistry();
 
     /**
      * There is no setConfig(), because this object contains only a reference of config from application_context
      * So to change $_config, you need to be in application_context scope and use setConfig there.
+     *
+     * @return Chrome_Config_Interface
      */
     public function getConfig();
 
@@ -145,6 +159,9 @@ interface Chrome_Context_Application_Interface
 
     public function setViewContext(Chrome_Context_View_Interface $viewContext);
 
+    /**
+     * @return Chrome_Context_View_Interface
+     */
     public function getViewContext();
 
     public function setConfig(Chrome_Config_Interface $config);

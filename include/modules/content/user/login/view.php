@@ -2,9 +2,8 @@
 
 class Chrome_View_Content_User_Login extends Chrome_View_Abstract
 {
-
-    public function successfullyLogedIn() {
-
+    public function successfullyLogedIn()
+    {
         Chrome_Design_Composite_Content::getInstance()->addView(new Chrome_View_Content_User_Login_Successfully_Logged_In($this->_controller));
     }
 }
