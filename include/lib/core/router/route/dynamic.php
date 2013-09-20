@@ -41,7 +41,7 @@ class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
 
     private $_resources = array();
 
-    protected $_GET = array();
+    protected $_dataGet = array();
 
     private $_previousKey = null;
 
@@ -102,7 +102,7 @@ class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
 
                 if($key === '*')
                 {
-                    $this->_GET[$this->_previousKey] = $array[0];
+                    $this->_dataGet[$this->_previousKey] = $array[0];
                 }
 
                 if(is_array($value))
@@ -197,7 +197,7 @@ class Chrome_Model_Route_Dynamic_DB extends Chrome_Model_Database_Abstract
         $row = $result->getNext();
 
         // translate key=value,key2=value2 into an array {key => value, key2=>value2}
-        $GET = array();
+        $get = array();
         if(!empty($row['GET']))
         {
 
@@ -207,12 +207,12 @@ class Chrome_Model_Route_Dynamic_DB extends Chrome_Model_Database_Abstract
             {
 
                 $keyValue = explode('=', $keyValuePair);
-                $GET[$keyValue[0]] = $keyValue[1];
+                $get[$keyValue[0]] = $keyValue[1];
             }
         }
-        $row['GET'] = $GET;
+        $row['GET'] = $get;
 
-        $POST = array();
+        $post = array();
         if(!empty($row['POST']))
         {
 
@@ -222,10 +222,10 @@ class Chrome_Model_Route_Dynamic_DB extends Chrome_Model_Database_Abstract
             {
 
                 $keyValue = explode('=', $keyValuePair);
-                $POST[$keyValue[0]] = $keyValue[1];
+                $post[$keyValue[0]] = $keyValue[1];
             }
         }
-        $row['POST'] = $POST;
+        $row['POST'] = $post;
 
         return $row;
     }

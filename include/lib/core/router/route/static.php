@@ -145,7 +145,7 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Abstract
         }
 
         // translate key=value,key2=value2 into an array {key => value, key2=>value2}
-        $GET = array();
+        $get = array();
         if(!empty($row['GET']))
         {
 
@@ -155,12 +155,12 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Abstract
             {
 
                 $keyValue = explode('=', $keyValuePair);
-                $GET[$keyValue[0]] = $keyValue[1];
+                $get[$keyValue[0]] = $keyValue[1];
             }
         }
-        $row['GET'] = $GET;
+        $row['GET'] = $get;
 
-        $POST = array();
+        $post = array();
         if(!empty($row['POST']))
         {
 
@@ -170,10 +170,10 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Abstract
             {
 
                 $keyValue = explode('=', $keyValuePair);
-                $POST[$keyValue[0]] = $keyValue[1];
+                $post[$keyValue[0]] = $keyValue[1];
             }
         }
-        $row['POST'] = $POST;
+        $row['POST'] = $post;
 
         return $row;
     }

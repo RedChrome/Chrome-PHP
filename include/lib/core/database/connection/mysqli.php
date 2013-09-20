@@ -15,22 +15,13 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category   CHROME-PHP
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Database
- * @author     Alexander Book <alexander.book@gmx.de>
- * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.07.2013 23:18:45] --> $
- * @link       http://chrome-php.de
  */
-
-if(CHROME_PHP !== true) die();
 
 class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstract
 {
     protected $_isSetConnectionOptions = false;
-
     protected $_host;
     protected $_username;
     protected $_password;
@@ -40,7 +31,8 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
 
     public function setConnectionOptions($host, $username, $password, $database, $port = 3306, $socket = null)
     {
-        if(!extension_loaded('mysqli')) {
+        if(!extension_loaded('mysqli'))
+        {
             throw new Chrome_Exception('Extension MySQLi not loaded! Cannot use this adapter');
         }
 
@@ -52,8 +44,9 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
         $this->_port = (int) $port;
 
         // persistent connection
-        if(ini_get('mysqli.allow_persistent') == 1 AND stripos($this->_host, 'p:') === false) {
-            $this->_host = 'p:'.$this->_host;
+        if(ini_get('mysqli.allow_persistent') == 1 and stripos($this->_host, 'p:') === false)
+        {
+            $this->_host = 'p:' . $this->_host;
         }
 
         $this->_isSetConnectionOptions = true;
@@ -61,20 +54,34 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
 
     public function connect()
     {
-        if($this->_isConnected === true) {
+        if($this->_isConnected === true)
+        {
             return true;
         }
 
-        if($this->_isSetConnectionOptions === false) {
+        if($this->_isSetConnectionOptions === false)
+        {
             throw new Chrome_Exception('Cannot connect to MySQL Server without any information about the server! Call setConnectionOptions() before!');
         }
 
-        try {
-            $this->_connection = new mysqli($this->_host, $this->_username, $this->_password, $this->_database, $this->_port, $this->_socket);
-        } catch (Chrome_Exception $e) {
+        $this->_doConnect();
 
-            switch(mysqli_connect_errno()) {
-                    // TODO: add other exceptions
+        $this->_isConnected = true;
+
+        return true;
+    }
+
+    protected function _doConnect()
+    {
+        try
+        {
+            $this->_connection = new mysqli($this->_host, $this->_username, $this->_password, $this->_database, $this->_port, $this->_socket);
+        } catch(Chrome_Exception $e)
+        {
+
+            switch(mysqli_connect_errno())
+            {
+                // TODO: add other exceptions
 
                 case 1040: // too much connections
                 case 1044: // cannot access database
@@ -82,7 +89,7 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
                 case 2003: // cannot connect to server
                 case 2005:
                     {
-                        throw new Chrome_Exception_Database('Could not establish connection to server on "tcp://'.$this->_host.':'.$this->_port.'"!', Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER);
+                        throw new Chrome_Exception_Database('Could not establish connection to server on "tcp://' . $this->_host . ':' . $this->_port . '"!', Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER);
                     }
 
                 case 1045: // wrong password
@@ -94,12 +101,7 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
                         throw new Chrome_Exception_Database($e->getMessage(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
                     }
             }
-
         }
-
-        $this->_isConnected = true;
-
-        return true;
     }
 
     public function disconnect()

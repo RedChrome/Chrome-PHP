@@ -48,7 +48,5 @@ class Chrome_Validator_Form_Length extends Chrome_Validator
         if($length < $this->_options[self::CHROME_VALIDATOR_FORM_LENGTH_MIN]) {
             $this->_setError('Input too short');
         }
-
-        return;
     }
 }

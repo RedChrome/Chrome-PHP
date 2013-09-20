@@ -12,7 +12,7 @@ class Chrome_View_Index extends Chrome_View_Strategy_Abstract
     public function doSTH()
     {
         $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_TODO', $this->_controller);
-        #$this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_STHOTHER', $this->_controller);
+        // this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_STHOTHER', $this->_controller);
     }
 
     public function formIsValid()
@@ -73,6 +73,7 @@ class Chrome_View_Index_Form_Not_Created extends Chrome_View_Abstract
 }
 class Chrome_View_Index_STHOTHER extends Chrome_View_Abstract
 {
+
     public function render()
     {
         $form = $this->_controller->getForm();
@@ -94,23 +95,9 @@ class Chrome_View_Index_STHOTHER extends Chrome_View_Abstract
         return;
 
         // @todo
-
-        $formElement = $form->getElements('Index');
-        $option = $formElement->getOption();
-
-        if($option->getToken() !== null)
-        {
-            $template = new Chrome_Template();
-            $template->assignTemplate('modules/content/index/form');
-            $template->assign('FORM', $this->_controller->getForm());
-            $template->assign('TOKEN', $option->getToken());
-            $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate());
-            //$template->assign('LANG', new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL));
-            return $template->render();
-        } else
-        {
-            return '<form action="" name="redirect" method="post"><input type="submit" name="submit" value="Weiter"/></form>';
-        }
+        /*
+         * $formElement = $form->getElements('Index'); $option = $formElement->getOption(); if($option->getToken() !== null) { $template = new Chrome_Template(); $template->assignTemplate('modules/content/index/form'); $template->assign('FORM', $this->_controller->getForm()); $template->assign('TOKEN', $option->getToken()); $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate()); //$template->assign('LANG', new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL)); return $template->render(); } else { return '<form action="" name="redirect" method="post"><input type="submit" name="submit" value="Weiter"/></form>'; }
+         */
     }
 }
 class Chrome_View_Index_TODO extends Chrome_View_Abstract

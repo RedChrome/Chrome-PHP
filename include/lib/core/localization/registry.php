@@ -17,7 +17,7 @@
  * @subpackage Chrome.Localization
  */
 
-namespace Chrome\Registry\Language;
+namespace Chrome\Registry\Localization;
 
 use \Chrome\Registry\Object;
 
@@ -28,9 +28,9 @@ use \Chrome\Registry\Object;
  */
 interface Registry_Interface extends Object
 {
-    const DEFAULT_LANGUAGE = self::DEFAULT_OBJECT;
+    const DEFAULT_LOCALIZATION = self::DEFAULT_OBJECT;
 
-    public function set($key, \Chrome\Language\Language_Interface $language);
+    public function set($key, \Chrome\Localization\Localization_Interface $localization);
 }
 
 /**
@@ -40,14 +40,14 @@ interface Registry_Interface extends Object
  */
 class Registry extends \Chrome\Registry\Object_Abstract implements Registry_Interface
 {
-    public function set($key, \Chrome\Language\Language_Interface $language)
+    public function set($key, \Chrome\Localization\Localization_Interface $localization)
     {
-        $this->_set($key, $language);
+        $this->_set($key, $localization);
     }
 
     protected function _objectNotFound($key)
     {
-        throw new Chrome_Exception('Could not found language with key "'.$key.'"');
+        throw new Chrome_Exception('Could not found localization with key "'.$key.'"');
     }
 }
 
@@ -58,13 +58,13 @@ class Registry extends \Chrome\Registry\Object_Abstract implements Registry_Inte
  */
 class Registry_Single extends \Chrome\Registry\Object_Single_Abstract implements Registry_Interface
 {
-    public function set($key, \Chrome\Language\Language_Interface $language)
+    public function set($key, \Chrome\Localization\Localization_Interface $localization)
     {
-        $this->_set($language);
+        $this->_set($localization);
     }
 
     protected function _objectNotFound($key)
     {
-        throw new Chrome_Exception('No language set!');
+        throw new Chrome_Exception('No localization set!');
     }
 }

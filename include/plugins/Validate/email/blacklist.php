@@ -77,9 +77,7 @@ class Chrome_Validator_Email_Blacklist extends Chrome_Validator
         // $result = stristr($this->_getBlacklist(), $host);
 
         // everthing is fine
-        if($result === false)
-        {
-        } else
+        if($result !=== false)
         {
             $this->_setError(self::CHROME_VALIDATOR_EMAIL_BLACKLIST_EMAIL_ON_BLACKLIST);
         }

@@ -62,8 +62,6 @@ interface Translate_Interface
 /**
  * localizability, L12y
  *
- * @author albook
- *
  */
 interface L12y
 {
@@ -218,27 +216,3 @@ class Localization implements Localization_Interface
 
     }
 }
-
-//require_once 'migration.php';
-
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Localization
- *
-interface Chrome_Language_Interface
-{
-    const CHROME_LANGUAGE_GENERAL = '';
-
-    const CHROME_LANGUAGE_DEFAULT_LANGUAGE = CHROME_DEFAULT_LANGUAGE;
-
-    public function __construct($file, $language = null);
-
-    public function get($key);
-
-    public function getAll();
-
-    public function merge(Chrome_Language_Interface $languageObjectToMerge);
-
-    public function getAllGeneral();
-}*/

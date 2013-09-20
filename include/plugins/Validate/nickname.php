@@ -68,8 +68,5 @@ class Chrome_Validator_Nickname extends Chrome_Validator
         if($length > $this->_options[self::CHROME_VALIDATOR_NICKNAME_MAX_CHARS]) {
             $this->_setError('Nickname is too long');
         }
-
-        return;
-
     }
 }

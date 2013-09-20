@@ -65,6 +65,7 @@ class Chrome_Require_Loader_Readme implements Chrome_Require_Loader_Interface
 
     public function init(Chrome_Require_Autoloader_Interface $autoloader)
     {
+        $autoloader->loadClass('myClass');
         require_once 'needed file.php';
 
         // require needed files for your plugin

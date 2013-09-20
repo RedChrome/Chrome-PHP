@@ -1,39 +1,34 @@
 <?php
-
-if( CHROME_PHP !== true ) die();
-
+if(CHROME_PHP !== true)
+    die();
 class Chrome_Form_Index extends Chrome_Form_Abstract
 {
+
     protected function _init()
     {
         $this->_id = 'Index';
-        $this->setAttribute( self::ATTRIBUTE_NAME, $this->_id );
-        $this->setAttribute( self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_GET );
+        $this->setAttribute(self::ATTRIBUTE_NAME, $this->_id);
+        $this->setAttribute(self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_GET);
         // this sets $this->_id to 'Index'
-        $this->setAttribute( self::ATTRIBUTE_ID, 'Index' );
+        $this->setAttribute(self::ATTRIBUTE_ID, 'Index');
         $this->setAttribute(self::ATTRIBUTE_ACTION, '/');
 
         $lengthValidator = new Chrome_Validator_Form_Length();
-        $lengthValidator->setOptions( array(
-            Chrome_Validator_Form_Length::CHROME_VALIDATOR_FORM_LENGTH_MAX => 35,
-            Chrome_Validator_Form_Length::CHROME_VALIDATOR_FORM_LENGTH_MIN => 1
-                                            ) );
+        $lengthValidator->setOptions(array(Chrome_Validator_Form_Length::CHROME_VALIDATOR_FORM_LENGTH_MAX => 35,
+                                            Chrome_Validator_Form_Length::CHROME_VALIDATOR_FORM_LENGTH_MIN => 1));
 
         $emptyValidator = new Chrome_Validator_Form_Empty();
-        //$textValidators = array( $emptyValidator, $lengthValidator );
+        // $textValidators = array( $emptyValidator, $lengthValidator );
 
         $textValidators = new Chrome_Validator_Composition_And();
-        $textValidators->addValidators(array($emptyValidator, $lengthValidator ));
-
+        $textValidators->addValidators(array($emptyValidator, $lengthValidator));
 
         // form
-        $formElementOption = new Chrome_Form_Option_Element_Form(
-            new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id) );
+        $formElementOption = new Chrome_Form_Option_Element_Form(new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id));
         $formElementOption->setMaxAllowedTime(30)->setMinAllowedTime(1);
 
         $formElement = new Chrome_Form_Element_Form($this, $this->_id, $formElementOption);
         $this->_addElement($formElement);
-
 
         // radio
         $radioOption = new Chrome_Form_Option_Element_Multiple();
@@ -43,7 +38,6 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 
         $radioElement = new Chrome_Form_Element_Radio($this, 'radio', $radioOption);
         $this->_addElement($radioElement);
-
 
         // text
         $textOption = new Chrome_Form_Option_Element();
@@ -70,7 +64,6 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $checkboxElement = new Chrome_Form_Element_Checkbox($this, 'checkbox', $checkboxOption);
         $this->_addElement($checkboxElement);
 
-
         // select
         $selectOption = new Chrome_Form_Option_Element_Multiple();
         $selectOption->setAllowedValues(array('Value1', 'Value2', 'Value3'));
@@ -82,7 +75,6 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $selectElement = new Chrome_Form_Element_Select($this, 'select', $selectOption);
         $this->_addElement($selectElement);
 
-
         // submit
         $submitOption = new Chrome_Form_Option_Element_Values();
         $submitOption->setAllowedValues(array('Absenden'));
@@ -90,11 +82,9 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
         $this->_addElement($submitElement);
 
+        // this->_elements['birthday'] = new Chrome_Form_Element_Birthday($this, 'birthday', array());
 
-        #$this->_elements['birthday'] = new Chrome_Form_Element_Birthday($this, 'birthday', array());
-
-        //$this->addReceivingHandler(new Chrome_Form_Handler_Delete());*/
-
+        // $this->addReceivingHandler(new Chrome_Form_Handler_Delete());*/
 
         $storage = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
 

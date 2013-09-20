@@ -13,25 +13,23 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.URI
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 12:12:32] --> $
+ * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.03.2013 12:12:32] --> $
  */
-
-if(CHROME_PHP !== true) die();
+if(CHROME_PHP !== true)
+    die();
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.URI
  */
 interface Chrome_URI_Interface
 {
-    const CHROME_URI_AUTHORITY_HOST = 'HOST',
-          CHROME_URI_AUTHORITY_PORT = 'PORT',
-          CHROME_URI_AUTHORITY_USER = 'USER',
-          CHROME_URI_AUTHORITY_PASSWORD = 'PASSWORD';
+    const CHROME_URI_AUTHORITY_HOST = 'HOST', CHROME_URI_AUTHORITY_PORT = 'PORT', CHROME_URI_AUTHORITY_USER = 'USER', CHROME_URI_AUTHORITY_PASSWORD = 'PASSWORD';
 
     public function setProtocol($protocol);
 
@@ -70,26 +68,20 @@ interface Chrome_URI_Interface
  */
 class Chrome_URI implements Chrome_URI_Interface
 {
-    protected $_protocol  = 'http';
-
-    protected $_authority = array(
-                             self::CHROME_URI_AUTHORITY_HOST => null,
-                             self::CHROME_URI_AUTHORITY_PORT => null,
-                             self::CHROME_URI_AUTHORITY_USER => null,
-                             self::CHROME_URI_AUTHORITY_PASSWORD => null,
-                            );
-
-    protected $_path      = '';
-
-    protected $_query     = array();
-
-    protected $_fragment  = '';
-
-    protected $_url       = null;
+    protected $_protocol = 'http';
+    protected $_authority = array(self::CHROME_URI_AUTHORITY_HOST => null,
+                                self::CHROME_URI_AUTHORITY_PORT => null,
+                                self::CHROME_URI_AUTHORITY_USER => null,
+                                self::CHROME_URI_AUTHORITY_PASSWORD => null);
+    protected $_path = '';
+    protected $_query = array();
+    protected $_fragment = '';
+    protected $_url = null;
 
     public function __construct(Chrome_Request_Data_Interface $requestData = null, $useCurrentURI = false)
     {
-        if($useCurrentURI === true) {
+        if($useCurrentURI === true)
+        {
 
             $this->setURL('http://' . $requestData->getSERVERData('SERVER_NAME') . $requestData->getSERVERData('REQUEST_URI'));
         }
@@ -107,12 +99,10 @@ class Chrome_URI implements Chrome_URI_Interface
 
     public function setAuthority($host, $port = null, $user = '', $password = '')
     {
-        $this->_authority = array(
-                             self::CHROME_URI_AUTHORITY_HOST     => rtrim($host, '/'),
-                             self::CHROME_URI_AUTHORITY_PORT     => $port,
-                             self::CHROME_URI_AUTHORITY_USER     => $user,
-                             self::CHROME_URI_AUTHORITY_PASSWORD => $password,
-                            );
+        $this->_authority = array(self::CHROME_URI_AUTHORITY_HOST => rtrim($host, '/'),
+                                self::CHROME_URI_AUTHORITY_PORT => $port,
+                                self::CHROME_URI_AUTHORITY_USER => $user,
+                                self::CHROME_URI_AUTHORITY_PASSWORD => $password);
     }
 
     public function getAuthority()
@@ -157,17 +147,20 @@ class Chrome_URI implements Chrome_URI_Interface
 
     public function setURL($url)
     {
-        if(($data = @parse_url($url)) === false) {
+        if(($data = parse_url($url)) === false)
+        {
             throw new Chrome_Exception('Invalid URL "' . $url . '" given in Chrome_URI::setURL()!');
-        } else {
+        } else
+        {
 
-            $this->_protocol                                       = $data['scheme'];
-            $this->_authority[self::CHROME_URI_AUTHORITY_HOST]     = $data['host'];
-            $this->_authority[self::CHROME_URI_AUTHORITY_USER]     = (isset($data['user'])) ? $data['user'] : null;
-            $this->_authority[self::CHROME_URI_AUTHORITY_PORT]     = (isset($data['port'])) ? $data['port'] : null;
+            $this->_protocol = $data['scheme'];
+            $this->_authority[self::CHROME_URI_AUTHORITY_HOST] = $data['host'];
+            $this->_authority[self::CHROME_URI_AUTHORITY_USER] = (isset($data['user'])) ? $data['user'] : null;
+            $this->_authority[self::CHROME_URI_AUTHORITY_PORT] = (isset($data['port'])) ? $data['port'] : null;
             $this->_authority[self::CHROME_URI_AUTHORITY_PASSWORD] = (isset($data['pass'])) ? $data['pass'] : null;
-            $this->_path                                           = (isset($data['path'])) ? ltrim($data['path'], '/') : null;
-            if(isset($data['query'])) {
+            $this->_path = (isset($data['path'])) ? ltrim($data['path'], '/') : null;
+            if(isset($data['query']))
+            {
                 $this->setQuery($data['query']);
             }
             $this->_fragment = (isset($data['fragment'])) ? $data['fragment'] : null;
@@ -179,23 +172,28 @@ class Chrome_URI implements Chrome_URI_Interface
     public function getURL()
     {
         // create url
-
-        if($this->_url !== null) {
+        if($this->_url !== null)
+        {
             return $this->_url;
         }
 
         $url = '';
 
-        if(isset($this->_protocol) AND !empty($this->_protocol)) {
+        if(isset($this->_protocol) and !empty($this->_protocol))
+        {
             $url .= $this->_protocol . '://';
-        } else {
+        } else
+        {
             throw new Chrome_Exception('Cannot create url without a protocoll!');
         }
 
-        if(!empty($this->_authority[self::CHROME_URI_AUTHORITY_HOST])) {
-            if(!empty($this->_authority[self::CHROME_URI_AUTHORITY_USER])) {
+        if(!empty($this->_authority[self::CHROME_URI_AUTHORITY_HOST]))
+        {
+            if(!empty($this->_authority[self::CHROME_URI_AUTHORITY_USER]))
+            {
                 $url .= $this->_authority[self::CHROME_URI_AUTHORITY_USER];
-                if(!empty($this->_authority[self::CHROME_URI_AUTHORITY_PASSWORD])) {
+                if(!empty($this->_authority[self::CHROME_URI_AUTHORITY_PASSWORD]))
+                {
                     $url .= ':' . $this->_authority[self::CHROME_URI_AUTHORITY_PASSWORD];
                 }
                 $url .= '@';
@@ -203,26 +201,32 @@ class Chrome_URI implements Chrome_URI_Interface
 
             $url .= $this->_authority[self::CHROME_URI_AUTHORITY_HOST];
 
-            if(!empty($this->_authority[self::CHROME_URI_AUTHORITY_PORT])) {
+            if(!empty($this->_authority[self::CHROME_URI_AUTHORITY_PORT]))
+            {
                 $url .= ':' . $this->_authority[self::CHROME_URI_AUTHORITY_PORT];
             }
-        } else {
+        } else
+        {
             throw new Chrome_Exception('Cannot create url without a host');
         }
 
         $url .= '/';
 
-        if(!empty($this->_path)) {
+        if(!empty($this->_path))
+        {
             $url .= $this->_path;
-        } else {
+        } else
+        {
             throw new Chrome_Exception('Cannot create url without a path!');
         }
 
-        if(!empty($this->_query)) {
+        if(!empty($this->_query))
+        {
             $url .= '?' . http_build_query($this->_query);
         }
 
-        if(!empty($this->_fragment)) {
+        if(!empty($this->_fragment))
+        {
             $url .= '#' . $this->_fragment;
         }
 
