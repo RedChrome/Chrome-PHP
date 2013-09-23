@@ -228,7 +228,7 @@ interface Chrome_Form_Interface
      * or if $id is given, the element belonging to this id
      * @param int $id
      *        id of an element
-     * @return array
+     * @return Chrome_Form_Element_Interface|array
      */
     public function getElements($id = null);
 
@@ -1364,5 +1364,10 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function getApplicationContext()
     {
         return $this->_applicationContext;
+    }
+
+    protected function _getFormStorage()
+    {
+        return new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
     }
 }

@@ -41,7 +41,7 @@ class Chrome_View_Form_Element_Captcha_Default extends Chrome_View_Form_Element_
 
         $captchaName = $this->_formElement->getOption()->getCaptcha()->getFrontendOption(Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME);
 
-        $img = '<img src="' . _PUBLIC . 'captcha/default.php?name=' . $captchaName . '" id="captcha_' . $this->_formElement->getForm()->getID() . '" />';
+        $img = '<img src="' . _PUBLIC . 'captcha/default.php?name=' . $captchaName . '" id="captcha_' . $this->_formElement->getForm()->getID() . '"/>';
         // eturn $img;
 
         $input = '<input type="text" name="' . $this->_formElement->getID() . '" value="" ' . $this->_renderFlags() . '">.' .

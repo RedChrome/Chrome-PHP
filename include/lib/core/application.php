@@ -109,8 +109,11 @@ interface Chrome_Context_View_Interface
 
 interface Chrome_Context_Model_Interface
 {
-    public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry $cacheFactoryRegistry);
+    public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry_Interface $cacheFactoryRegistry);
 
+    /**
+     * @return \Chrome\Registry\Cache\Factory\Registry_Interface
+     */
     public function getCacheFactoryRegistry();
 
     public function setDatabaseFactory(Chrome_Database_Factory_Interface $factory);
@@ -139,6 +142,9 @@ interface Chrome_Context_Application_Interface
 
     public function setRequestHandler(Chrome_Request_Handler_Interface $reqHandler);
 
+    /**
+     * @return Chrome_Request_Handler_Interface
+     */
     public function getRequestHandler();
 
     public function setAuthentication(Chrome_Authentication_Interface $auth);
@@ -147,6 +153,9 @@ interface Chrome_Context_Application_Interface
 
     public function setModelContext(Chrome_Context_Model_Interface $modelContext);
 
+    /**
+     * @return Chrome_Context_Model_Interface
+     */
     public function getModelContext();
 
     public function setAuthorisation(Chrome_Authorisation_Interface $auth);
@@ -361,7 +370,7 @@ class Chrome_Context_Model implements Chrome_Context_Model_Interface
         $this->_loggerRegistry = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_LOGGER_REGISTRY);
     }
 
-    public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry $cachFactoryRegistry)
+    public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry_Interface $cachFactoryRegistry)
     {
         $this->_cacheFactoryRegistry = $cachFactoryRegistry;
     }

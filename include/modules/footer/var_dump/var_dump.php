@@ -34,7 +34,8 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Controller_Footer_VarDump extends Chrome_Controller_Module_Abstract
 {
-    protected function _execute() {
+    protected function _execute()
+    {
         $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Footer_VarDump', $this);
         $this->_view->setData($this->_requestData->getData(), $this->_requestData->getCookie(), $this->_requestData->getSession());
     }
@@ -55,14 +56,15 @@ class Chrome_View_Footer_VarDump extends Chrome_View_Abstract
 
     protected $_cookie, $_session;
 
-    public function setData($data, Chrome_Cookie_Interface $cookie, Chrome_Session_Interface $session) {
+    public function setData($data, Chrome_Cookie_Interface $cookie, Chrome_Session_Interface $session)
+    {
         $this->_data = $data;
         $this->_cookie = $cookie;
         $this->_session = $session;
     }
 
-    public function render() {
-
+    public function render()
+    {
         $data = $this->_data;
 
         return $return = '<table border="1">
@@ -82,8 +84,8 @@ class Chrome_View_Footer_VarDump extends Chrome_View_Abstract
         </table>';
     }
 
-    protected function exportArray(array $array) {
-
+    protected function exportArray(array $array)
+    {
         $return = '<table border="1">';
 
         foreach($array as $key => $value) {

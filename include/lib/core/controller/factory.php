@@ -23,11 +23,10 @@
 if(CHROME_PHP !== true)
     die();
 
-use \Chrome\Logger\Registry_Interface;
+use Chrome\Registry\Logger\Registry_Interface;
 
 interface Chrome_Controller_Factory_Interface
 {
-
     /**
      *
      * @return Chrome_Controller_Interface

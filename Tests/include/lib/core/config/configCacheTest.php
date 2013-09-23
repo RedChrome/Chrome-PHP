@@ -42,7 +42,7 @@ class ConfigCacheTest extends Chrome_TestCase
         $this->_cache->data = array('config' => 'cache_data');
         $this->_config->setConfig('anyName', 'anySubclass', 'anyValue');
 
-        $this->assertSame(array('anyName', 'anySubclass', 'anyValue', null, ''), $this->_model->arguments['setConfig'][0]);
+        $this->assertSame(array('anyName', 'anySubclass', 'anyValue', null, '', 0), $this->_model->arguments['setConfig'][0]);
         $this->assertSame(array(), $this->_cache->data);
     }
 }

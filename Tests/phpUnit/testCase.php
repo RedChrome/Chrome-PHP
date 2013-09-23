@@ -14,6 +14,16 @@ abstract class Chrome_TestCase extends PHPUnit_Framework_TestCase
     }
 }
 
+class PHPUnit_TextUI_Command_Chrome extends PHPUnit_TextUI_Command
+{
+    protected function createRunner()
+    {
+        $testRunner = new PHPUnit_TextUI_TestRunner_Chrome($this->arguments['loader']);
+        $testRunner->setTestSetup(new Chrome_TestSetup());
+        return $testRunner;
+    }
+}
+
 /**
  * These classes are needed to inject the application context into all Chrome_TestCase classes.
  */
@@ -54,15 +64,5 @@ class PHPUnit_TextUI_TestRunner_Chrome extends PHPUnit_TextUI_TestRunner
         }
 
         return $tests;
-    }
-}
-
-class PHPUnit_TextUI_Command_Chrome extends PHPUnit_TextUI_Command
-{
-    protected function createRunner()
-    {
-        $testRunner = new PHPUnit_TextUI_TestRunner_Chrome($this->arguments['loader']);
-        $testRunner->setTestSetup(new Chrome_TestSetup());
-        return $testRunner;
     }
 }

@@ -47,7 +47,7 @@ class Registry extends \Chrome\Registry\Object_Abstract implements Registry_Inte
 
     protected function _objectNotFound($key)
     {
-        throw new Chrome_Exception('Could not found localization with key "'.$key.'"');
+        throw new \Chrome_Exception('Could not found localization with key "'.$key.'"');
     }
 }
 
@@ -65,6 +65,6 @@ class Registry_Single extends \Chrome\Registry\Object_Single_Abstract implements
 
     protected function _objectNotFound($key)
     {
-        throw new Chrome_Exception('No localization set!');
+        throw new \Chrome_Exception('No localization set!');
     }
 }

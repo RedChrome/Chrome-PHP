@@ -175,7 +175,7 @@ class Chrome_File
         }
 
         if(!@copy($src.$file, $dest.$file)) {
-            throw new Chrome_File_Exception('The File: '.$file.' coudn\'t be copied from '.$src.' to '.$dest.'!');
+            throw new Chrome_Exception('The File: '.$file.' coudn\'t be copied from '.$src.' to '.$dest.'!');
         } else {
             // Sets permission
             if(self::_chper($dest.$file, $chmod)) return true;
@@ -193,11 +193,11 @@ class Chrome_File
      */
     public static function chper($file, $chmod)
     {
-        if(!self::exists($file)) throw new Chrome_File_Exception('Cannot change permission to '.$chmod.' because file '.$file.' doesn\'t exist!');
+        if(!self::exists($file)) throw new Chrome_Exception('Cannot change permission to '.$chmod.' because file '.$file.' doesn\'t exist!');
 
         if(strlen($chmod) == '3') $chmod = '0'.$chmod;
 
-        if(!@chmod($file, $chmod)) throw new Chrome_File_Exception('Coudn\'t change permission to '.$chmod.'!');
+        if(!@chmod($file, $chmod)) throw new Chrome_Exception('Coudn\'t change permission to '.$chmod.'!');
         else  return true;
     }
 
@@ -205,7 +205,7 @@ class Chrome_File
     {
         if(strlen($chmod) == '3') $chmod = '0'.$chmod;
 
-        if(!@chmod($file, $chmod)) throw new Chrome_File_Exception('Coudn\'t change permission to '.$chmod.'!');
+        if(!@chmod($file, $chmod)) throw new Chrome_Exception('Coudn\'t change permission to '.$chmod.'!');
         else  return true;
     }
 
@@ -235,7 +235,7 @@ class Chrome_File
         }
 
         if(!@copy($src.$file, $dest.$file)) {
-            throw new Chrome_File_Exception('The File: '.$file.' coudn\'t be moved from '.$src.' to '.$dest.'!');
+            throw new Chrome_Exception('The File: '.$file.' coudn\'t be moved from '.$src.' to '.$dest.'!');
         } else {
             @unlink($src.$file);
 
@@ -402,7 +402,7 @@ class Chrome_File
         foreach($files as $file) {
             // sets permission to 777 to delete file
             @chmod($file, 0777);
-            if(!@unlink($file)) throw new Chrome_File_Exception('The File '.$file.' coudn\'t be deleted!');
+            if(!@unlink($file)) throw new Chrome_Exception('The File '.$file.' coudn\'t be deleted!');
         }
 
         return true;

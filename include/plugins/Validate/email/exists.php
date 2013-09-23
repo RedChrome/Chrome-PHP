@@ -15,17 +15,9 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Validator
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [05.01.2013 17:18:52] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
-
 /**
- * TODO: adapt thsi class to current database interface
- *
  * Chrome_Validator_Email_Exists
  *
  * @package		CHROME-PHP
@@ -54,18 +46,14 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
      */
     protected $_options = array(self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS => true);
 
-    public function __construct(Chrome_DB_Interface_Abstract $interface = null)
+    public function __construct(Chrome_Database_Interface_Interface $interface)
     {
        $this->_dbInterface = $interface;
     }
 
     protected function _getDBInterface()
     {
-        if($this->_dbInterface === null) {
-            return Chrome_Database_Facade::getInterface(null, null);
-        } else {
-            return $this->_dbInterface;
-        }
+        return $this->_dbInterface;
     }
 
     protected function _validate()

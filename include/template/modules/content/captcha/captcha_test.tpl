@@ -1,15 +1,11 @@
-<?php echo $FORM->render('Captcha_Test'); ?>
-<?php echo $FORM->render('error'); ?>
+<?php echo $FORM['Captcha_Test']->render(); ?>
 <h6 class="ym-fbox-heading">Captcha Test:</h6>
-
-
-
     <div class="ym-fbox-text">
         <label for="captcha">Captcha: </label>
-        <?php echo $FORM->render('captcha'); ?>
+        <?php echo $FORM['captcha']->render(); ?>
     </div>
 
-    <?php echo $FORM->render('buttons')->element('submit'); ?>
+    <?php echo $FORM['buttons']->render(); ?>
 
 
-<?php echo $FORM->render('Captcha_Test'); ?>
+<?php echo $FORM['Captcha_Test']->render(); ?>

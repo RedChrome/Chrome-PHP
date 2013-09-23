@@ -30,6 +30,6 @@ class Chrome_View_Form_Element_Radio_Yaml extends Chrome_View_Form_Element_Radio
 {
     public function render()
     {
-        return '<div class="ym-fbox-check">' . parent::render().'</div>'
+        return '<div class="ym-fbox-check">' . parent::render().'</div>';
     }
 }

@@ -9,7 +9,7 @@ class Chrome_View_Index extends Chrome_View_Strategy_Abstract
         $this->addTitle('Form');
     }
 
-    public function doSTH()
+    public function doSth()
     {
         $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_TODO', $this->_controller);
         // this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_STHOTHER', $this->_controller);
@@ -112,6 +112,7 @@ class Chrome_View_Index_TODO extends Chrome_View_Abstract
                     <li><a href="login.html">Login</a></li>
                     <li><a href="logout.html">Logout</a></li>
                     <li><a href="registrieren.html">Register</a></li>
+                    <li><a href="captcha.html">Captcha</a></li>
                 </ul>
                 <br>
                 <div align="left">TODO LIST:<br>

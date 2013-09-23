@@ -22,10 +22,9 @@
 if(CHROME_PHP !== true)
     die();
 
-use \Chrome\Logger\Loggable_Interface;
-use \Chrome\Logger\Registry_Interface;
-use \Psr\Log\LoggerInterface;
-
+use Chrome\Registry\Logger\Registry_Interface;
+use Chrome\Logger\Loggable_Interface;
+use Psr\Log\LoggerInterface;
 
 interface Chrome_Model_Interface extends Loggable_Interface
 {
