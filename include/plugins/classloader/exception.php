@@ -16,31 +16,34 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.05.2013 17:24:09] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.05.2013 17:24:32] --> $
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Classloader;
 
 /**
- * Loads all classes beginning with 'Chrome_Cache_'
+ * Loads all classes beginning with 'Chrome_Require_'
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Require.Loader
+ * @subpackage Chrome.Require
  */
-class Chrome_Require_Loader_Cache extends Chrome_Require_Loader_Abstract
+class Classloader_Exception extends Classloader_Abstract
 {
     /**
-     * Loads a class, if $class beginns with 'Chrome_Cache_'
+     * Loads a class, if $class beginns with 'Chrome_Exception_'
      *
      * @param string $class
      * @return bool true if class was found
      */
     public function loadClass($class)
     {
-        if(preg_match('#Chrome_Cache_Option_(.{1,})_Interface#i', $class, $matches)) {
-            return PLUGIN.'Cache/'.strtolower($matches[1]).'.php';
-        } else if(preg_match('#Chrome_Cache_Option_(.{1,})#i', $class, $matches)) {
-            return PLUGIN.'Cache/'.strtolower($matches[1]).'.php';
+        if(preg_match('#Chrome_Exception_Handler_(.{1,})#i', $class, $matches)) {
+            return LIB.'exception/'.strtolower($matches[1]).'.php';
+        }
+
+        // does the class contain 'Chrome_Exception_'?
+        if(preg_match('#Chrome_Exception_(.{1,})#i', $class, $matches)) {
+            return LIB.'exception/'.strtolower($matches[1]).'.php';
         }
 
         return false;

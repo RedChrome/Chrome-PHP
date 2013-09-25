@@ -21,7 +21,7 @@
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Classloader;
 
 /**
  * Autoloader for database classes
@@ -29,7 +29,7 @@ if(CHROME_PHP !== true) die();
  * @package    CHROME-PHP
  * @subpackage Chrome.Require.Loader
  */
-class Chrome_Require_Loader_Database extends Chrome_Require_Loader_Abstract
+class Classloader_Database extends Classloader_Abstract
 {
     /**
      * loads the corresponding file for $className

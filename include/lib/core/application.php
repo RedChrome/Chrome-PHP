@@ -24,7 +24,7 @@ if(CHROME_PHP !== true)
 
 /**
  * @package CHROME-PHP
- * @subpackage Chrome.FrontController
+ * @subpackage Chrome.Application
  */
 interface Chrome_Application_Interface extends Chrome_Exception_Processable_Interface
 {
@@ -64,16 +64,50 @@ interface Chrome_Application_Interface extends Chrome_Exception_Processable_Inte
     public function getExceptionConfiguration();
 }
 
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Application.Context
+ */
 interface Chrome_Context_View_Interface
 {
+    /**
+     * Sets the plugin facade.
+     *
+     * The plugin facade is used to provide additional functionality for displaying views. Thus
+     * the plugin facade is only used in Views
+     *
+     * @param Chrome_View_Plugin_Facade_Interface $pluginFacade
+     */
     public function setPluginFacade(Chrome_View_Plugin_Facade_Interface $pluginFacade);
 
+    /**
+     * Returns the plugin facade, set via setPluginFacade
+     *
+     * @return Chrome_View_Plugin_Facade_Interface
+     */
     public function getPluginFacade();
 
+    /**
+     * Sets the view factory.
+     *
+     * A view factory is used to create views by only passing it's class name.
+     *
+     * @param Chrome_View_Factory_Interface $factory
+     */
     public function setFactory(Chrome_View_Factory_Interface $factory);
 
+    /**
+     * Returns a view factory
+     *
+     * @return Chrome_View_Factory_Interface
+     */
     public function getFactory();
 
+    /**
+     * See {@link Chrome_Context_View_Interface::getConfig()}, why there is no setLoggerRegistry
+     *
+     * @return Chrome\Registry\Logger\Registry_Interface
+     */
     public function getLoggerRegistry();
 
     /**
@@ -89,25 +123,80 @@ interface Chrome_Context_View_Interface
     public function linkApplicationContext(Chrome_Context_Application_Interface $app);
 }
 
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Application.Context
+ */
 interface Chrome_Context_Model_Interface
 {
+    /**
+     * Sets a cache factory registry.
+     *
+     * A cache factory registry contains multiple cache factories. Each cache factory is able to
+     * create a new cache object. Use this method to retrieve a cache factory registry
+     *
+     * @param \Chrome\Registry\Cache\Factory\Registry $cacheFactoryRegistry
+     */
     public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry $cacheFactoryRegistry);
 
+    /**
+     * Returns the cache factory registry
+     *
+     * @return \Chrome\Registry\Cache\Factory\Registry
+     */
     public function getCacheFactoryRegistry();
 
+    /**
+     * Sets a database factory
+     *
+     * A database factory is able to create a new database interface. This database interface is able to
+     * interact with the database. The required options are provided in buildInterface()
+     *
+     * @param Chrome_Database_Factory_Interface $factory
+     */
     public function setDatabaseFactory(Chrome_Database_Factory_Interface $factory);
 
+    /**
+     * Returns a database factory
+     *
+     * @return Chrome_Database_Factory_Interface
+     */
     public function getDatabaseFactory();
 
+    /**
+     * Returns a config instance
+     *
+     * @return Chrome_Config_Interface
+     */
     public function getConfig();
 
+    /**
+     * Returns a logger registry instance
+     *
+     * @return \Chrome\Registry\Logger\Registry_Interface
+     */
     public function getLoggerRegistry();
 
+    /**
+     * Links objects, which need to be accessed from view/model context with the application context.
+     * Thus the needed objects are the same (e.g. config, loggerRegistry, ..)
+     *
+     * @param Chrome_Context_Application_Interface $app
+     */
     public function linkApplicationContext(Chrome_Context_Application_Interface $app);
 }
 
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.Application.Context
+ */
 interface Chrome_Context_Application_Interface
 {
+    /**
+     * available objects to link, via getReference()
+     *
+     * @var string
+     */
     const VARIABLE_CONFIG = 'config',
           VARIABLE_LOGGER_REGISTRY = 'loggerRegistry';
 
@@ -119,48 +208,179 @@ interface Chrome_Context_Application_Interface
      */
     public function &getReference($variable);
 
+    /**
+     * Sets the request handler
+     *
+     * The request handler handles a request (e.g. http, json, console) and provides a
+     * request data object, which contains all parameters from the client
+     *
+     * @param Chrome_Request_Handler_Interface $reqHandler
+     */
     public function setRequestHandler(Chrome_Request_Handler_Interface $reqHandler);
 
+    /**
+     * Returns the request handler
+     *
+     * @return Chrome_Request_Handler_Interface
+     */
     public function getRequestHandler();
 
+    /**
+     * Sets the authentication service
+     *
+     * The authentication service is able to authenticate a client. Mostly this is done in the application
+     *
+     * @param Chrome_Authentication_Interface $auth
+     */
     public function setAuthentication(Chrome_Authentication_Interface $auth);
 
+    /**
+     * Returns the authetication service
+     *
+     * @return Chrome_Authentication_Interface
+     */
     public function getAuthentication();
 
+    /**
+     * Sets the model context
+     *
+     * The model context contains context information/objects for each Model object
+     *
+     * @param Chrome_Context_Model_Interface $modelContext
+     */
     public function setModelContext(Chrome_Context_Model_Interface $modelContext);
 
+    /**
+     * Returns the model context
+     *
+     * @return Chrome_Context_Model_Interface
+     */
     public function getModelContext();
 
+    /**
+     * Sets the authorisation service
+     *
+     * The authorisation service is used to authorize a client. Which means: this class says you, whether the
+     * client is allowed to do something or not.
+     *
+     * @param Chrome_Authorisation_Interface $auth
+     */
     public function setAuthorisation(Chrome_Authorisation_Interface $auth);
 
+    /**
+     * Returns the authorisation service
+     *
+     * @return Chrome_Authorisation_Interface
+     */
     public function getAuthorisation();
 
+    /**
+     * Sets the response object
+     *
+     * The response object handles every content, which gets send to the client
+     *
+     * @param Chrome_Response_Interface $response
+     */
     public function setResponse(Chrome_Response_Interface $response);
 
+    /**
+     * Returns the response object
+     *
+     * @return Chrome_Response_Interface
+     */
     public function getResponse();
 
+    /**
+     * Sets the view context
+     *
+     * The view context contains all information/objects for each View object
+     *
+     * @param Chrome_Context_View_Interface $viewContext
+     */
     public function setViewContext(Chrome_Context_View_Interface $viewContext);
 
+    /**
+     * Returns the view context
+     *
+     * @return Chrome_Context_View_Interface
+     */
     public function getViewContext();
 
+    /**
+     * Sets the config object
+     *
+     * The config object contains all configuration
+     *
+     * @param Chrome_Config_Interface $config
+     */
     public function setConfig(Chrome_Config_Interface $config);
 
+    /**
+     * Returns the config object
+     *
+     * @return Chrome_Config_Interface
+     */
     public function getConfig();
 
+    /**
+     * Sets the logger registry
+     *
+     * The logger registry contains a logger objects, to log something
+     *
+     * @param \Chrome\Registry\Logger\Registry_Interface $registry
+     */
     public function setLoggerRegistry(\Chrome\Registry\Logger\Registry_Interface $registry);
 
+    /**
+     * Returns the logger registry
+     *
+     * @return \Chrome\Registry\Logger\Registry_Interface
+     */
     public function getLoggerRegistry();
 
+    /**
+     * Sets the controller factory registry
+     *
+     * A controller factory registry may contain multiple controller factories. A controller factory is able to create a new controller instance
+     *
+     * @param \Chrome\Registry\Controller\Factory\Registry_Interface $registry
+     */
     public function setControllerFactoryRegistry(\Chrome\Registry\Controller\Factory\Registry_Interface $registry);
 
+    /**
+     * Returns a controller factory registry
+     *
+     * @return \Chrome\Registry\Controller\Factory\Registry_Interface
+     */
     public function getControllerFactoryRegistry();
 
+    /**
+     * Sets a design
+     *
+     * A design is a wrapper for a view composition. Thus a design only contains the entry point to render all registered views.
+     *
+     * @param Chrome_Design_Interface $design
+     */
     public function setDesign(Chrome_Design_Interface $design);
 
+    /**
+     * Returns a design object
+     *
+     * @return Chrome_Design_Interface
+     */
     public function getDesign();
 
+    /**
+     *
+     *
+     * @todo this should be available in the model too
+     * @param Chrome_Converter_Delegator_Interface $converter
+     */
     public function setConverter(Chrome_Converter_Delegator_Interface $converter);
 
+    /**
+     * @return Chrome_Converter_Delegator_Interface
+     */
     public function getConverter();
 }
 

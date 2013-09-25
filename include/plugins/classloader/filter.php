@@ -19,7 +19,7 @@
  * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.05.2013 17:24:37] --> $
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Classloader;
 
 /**
  * Loads all classes beginning with 'Chrome_Filter_Chain_'
@@ -27,7 +27,7 @@ if(CHROME_PHP !== true) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Require
  */
-class Chrome_Require_Loader_Filter extends Chrome_Require_Loader_Abstract
+class Classloader_Filter extends Classloader_Abstract
 {
     /**
      * Checks whether this class knows where the other class is located

@@ -16,34 +16,25 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.05.2013 17:24:32] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.05.2013 17:24:50] --> $
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Classloader;
 
 /**
- * Loads all classes beginning with 'Chrome_Require_'
+ * Loads all classes beginning with 'Chrome_Validator_'
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Require
  */
-class Chrome_Require_Loader_Exception extends Chrome_Require_Loader_Abstract
+class Classloader_Validator extends Classloader_Abstract
 {
-    /**
-     * Loads a class, if $class beginns with 'Chrome_Exception_'
-     *
-     * @param string $class
-     * @return bool true if class was found
-     */
     public function loadClass($class)
     {
-        if(preg_match('#Chrome_Exception_Handler_(.{1,})#i', $class, $matches)) {
-            return LIB.'exception/'.strtolower($matches[1]).'.php';
-        }
-
-        // does the class contain 'Chrome_Exception_'?
-        if(preg_match('#Chrome_Exception_(.{1,})#i', $class, $matches)) {
-            return LIB.'exception/'.strtolower($matches[1]).'.php';
+        // does the class contain 'Chrome_Validator_'?
+        if(preg_match('#Chrome_Validator_(.{1,})#i', $class, $matches))
+        {
+            return BASEDIR . 'plugins/Validate/' . strtolower(str_replace('_', '/', $matches[1])) . '.php';
         }
 
         return false;

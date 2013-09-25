@@ -23,7 +23,6 @@
 
 /**
  * load additional testing config
- *
  */
 require_once 'config.php';
 
@@ -40,7 +39,8 @@ class Chrome_TestSetup
 
     protected $_applicationContext = null;
 
-    public function getApplicationContext() {
+    public function getApplicationContext()
+    {
         return $this->_applicationContext;
     }
 
@@ -63,31 +63,30 @@ class Chrome_TestSetup
 
         $this->_databaseInitialized = true;
 
-        require_once PLUGIN.'Require/database.php';
-        $autoloader = new Chrome_Require_Autoloader();
+        require_once PLUGIN.'classloader/database.php';
+        $autoloader = new \Chrome\Classloader\Autoloader();
         $autoloader->setExceptionHandler($this->_errorConfig->getExceptionHandler());
         $autoloader->setLogger(new \Psr\Log\NullLogger());
-        $autoloader->appendAutoloader(new Chrome_Require_Loader_Database());
+        $autoloader->appendAutoloader(new \Chrome\Classloader\Classloader_Database());
 
         require_once LIB.'core/database/database.php';
 
         $dbRegistry = new Chrome_Database_Registry_Connection();
 
-		// configure default database connection
-		try {
-			$defaultConnectionClass = 'Chrome_Database_Connection_'.ucfirst(CHROME_DATABASE);
-			$defaultConnection = new $defaultConnectionClass();
-			$defaultConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
-			$defaultConnection->connect();
+        // configure default database connection
+        try {
+            $defaultConnectionClass = 'Chrome_Database_Connection_'.ucfirst(CHROME_DATABASE);
+            $defaultConnection = new $defaultConnectionClass();
+            $defaultConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
+            $defaultConnection->connect();
 
-			$dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
-		}
-		catch (Exception $e) {
-			$this->_errorConfig->getExceptionHandler()->exception($e);
-		}
+            $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
+        } catch(Exception $e) {
+            $this->_errorConfig->getExceptionHandler()->exception($e);
+        }
 
-		$databaseFactory = new Chrome_Database_Factory($dbRegistry, new Chrome_Database_Registry_Statement());
-		$databaseFactory->setLogger(new \Psr\Log\NullLogger());
+        $databaseFactory = new Chrome_Database_Factory($dbRegistry, new Chrome_Database_Registry_Statement());
+        $databaseFactory->setLogger(new \Psr\Log\NullLogger());
 
         //$databaseFactory->setLogger(new Chrome_Logger_Database());
 
@@ -120,11 +119,11 @@ class Chrome_TestSetup
         $_tempGlobals = $GLOBALS;
         $_tempCookie = $_COOKIE;
 
-		require_once 'Tests/include/application/test.php';
+        require_once 'Tests/include/application/test.php';
 
-		$application = new Chrome_Application_Test(new Chrome_Exception_Handler_Console());
-		$application->setModelContext($this->_applicationContext->getModelContext());
-		$application->init();
+        $application = new Chrome_Application_Test(new Chrome_Exception_Handler_Console());
+        $application->setModelContext($this->_applicationContext->getModelContext());
+        $application->init();
 
         $modelContext = $this->_applicationContext->getModelContext();
         $context = $application->getApplicationContext();

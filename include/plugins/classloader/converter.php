@@ -16,25 +16,29 @@
  * @package    CHROME-PHP
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.05.2013 17:24:50] --> $
+ * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 17:48:48] --> $
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Classloader;
 
 /**
- * Loads all classes beginning with 'Chrome_Validator_'
+ * Loads all classes beginning with 'Chrome_Converter_Delegate_'
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Require
+ * @subpackage Chrome.Require.Loader
  */
-class Chrome_Require_Loader_Validator extends Chrome_Require_Loader_Abstract
+class Classloader_Converter extends Classloader_Abstract
 {
+    /**
+     * Loads a class, if $class beginns with 'Chrome_Converter_Delegate_'
+     *
+     * @param string $class
+     * @return bool true if class was found
+     */
     public function loadClass($class)
     {
-        // does the class contain 'Chrome_Validator_'?
-        if(preg_match('#Chrome_Validator_(.{1,})#i', $class, $matches))
-        {
-            return BASEDIR . 'plugins/Validate/' . strtolower(str_replace('_', '/', $matches[1])) . '.php';
+        if(preg_match('#Chrome_Converter_Delegate_(.{1,})#i', $class, $matches)) {
+            return PLUGIN.'Converter/'.lcfirst($matches[1]).'.php';
         }
 
         return false;

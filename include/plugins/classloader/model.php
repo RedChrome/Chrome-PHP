@@ -20,8 +20,8 @@
  * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 17:33:11] --> $
  * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
+
+namespace Chrome\Classloader;
 
 /**
  * Interface for loading required files and loading classes
@@ -29,9 +29,8 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Require
  */
-interface Chrome_Require_Loader_Model_Interface extends Chrome_Require_Loader_Interface
+interface Classloader_Model_Interface extends Classloader_Interface
 {
-
     public function getClasses();
 
     public function getRequiredFiles();
@@ -43,7 +42,7 @@ interface Chrome_Require_Loader_Model_Interface extends Chrome_Require_Loader_In
  * @package CHROME-PHP
  * @subpackage Chrome.Require
  */
-class Chrome_Require_Loader_Model implements Chrome_Require_Loader_Model_Interface
+class Classloader_Model implements Classloader_Model_Interface
 {
     /**
      * Contains Chrome_Model_Abstract instance
@@ -73,7 +72,7 @@ class Chrome_Require_Loader_Model implements Chrome_Require_Loader_Model_Interfa
      */
     protected $_requiredFilesLoaded = false;
 
-    public function __construct(Chrome_Model_Interface $model)
+    public function __construct(\Chrome_Model_Interface $model)
     {
         $this->_model = $model;
 
@@ -85,7 +84,7 @@ class Chrome_Require_Loader_Model implements Chrome_Require_Loader_Model_Interfa
      *
      * @return void
      */
-    public function init(Chrome_Require_Autoloader_Interface $autoloader)
+    public function init(Autoloader_Interface $autoloader)
     {
         // already loaded required files
         if($this->_requiredFilesLoaded === true)

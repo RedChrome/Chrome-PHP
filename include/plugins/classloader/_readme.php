@@ -22,6 +22,8 @@
 
 die('readme file! Not supposed to run in script!');
 
+namespace Chrome\Classloader;
+
 /**
  * Chrome_Require_Loader_Readme, example implementation
  *
@@ -32,7 +34,7 @@ die('readme file! Not supposed to run in script!');
  * @pacakge CHROME-PHP
  * @subpackage Chrome.Require
  */
-class Chrome_Require_Loader_Readme implements Chrome_Require_Loader_Interface
+class Classloader_Readme extends Classloader_Abstract
 {
     // in this method you put your logic
     public function loadClass($class)
