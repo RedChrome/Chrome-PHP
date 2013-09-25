@@ -15,23 +15,25 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Application
  */
-
 if(CHROME_PHP !== true)
     die();
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Application
  */
 interface Chrome_Application_Interface extends Chrome_Exception_Processable_Interface
 {
+
     /**
      * getController()
      *
      * @return
+     *
      */
     public function getController();
 
@@ -65,11 +67,13 @@ interface Chrome_Application_Interface extends Chrome_Exception_Processable_Inte
 }
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Application.Context
  */
 interface Chrome_Context_View_Interface
 {
+
     /**
      * Sets the plugin facade.
      *
@@ -118,17 +122,20 @@ interface Chrome_Context_View_Interface
 
     /**
      * This method is needed to link the view context with the application context
-     * E.g. this method links the config object from app context with view context.
+     * E.g.
+     * this method links the config object from app context with view context.
      */
     public function linkApplicationContext(Chrome_Context_Application_Interface $app);
 }
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Application.Context
  */
 interface Chrome_Context_Model_Interface
 {
+
     /**
      * Sets a cache factory registry.
      *
@@ -187,6 +194,7 @@ interface Chrome_Context_Model_Interface
 }
 
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Application.Context
  */
@@ -197,13 +205,13 @@ interface Chrome_Context_Application_Interface
      *
      * @var string
      */
-    const VARIABLE_CONFIG = 'config',
-          VARIABLE_LOGGER_REGISTRY = 'loggerRegistry';
+    const VARIABLE_CONFIG = 'config', VARIABLE_LOGGER_REGISTRY = 'loggerRegistry';
 
     /**
      * Returns the request variable as a reference.
      *
-     * @param string $variable see VARIABLE_* as arguments
+     * @param string $variable
+     *        see VARIABLE_* as arguments
      * @return mixed
      */
     public function &getReference($variable);
@@ -371,7 +379,22 @@ interface Chrome_Context_Application_Interface
     public function getDesign();
 
     /**
+     * Sets a classloader
      *
+     * The class loader loads classes...
+     *
+     * @param \Chrome\Classloader\Classloader_Interface $classloader
+     */
+    public function setClassloader(\Chrome\Classloader\Classloader_Interface $classloader);
+
+    /**
+     * Returns the class loader
+     *
+     * @return \Chrome\Classloader\Classloader_Interface
+     */
+    public function getClassloader();
+
+    /**
      *
      * @todo this should be available in the model too
      * @param Chrome_Converter_Delegator_Interface $converter
@@ -379,34 +402,25 @@ interface Chrome_Context_Application_Interface
     public function setConverter(Chrome_Converter_Delegator_Interface $converter);
 
     /**
+     *
      * @return Chrome_Converter_Delegator_Interface
      */
     public function getConverter();
 }
-
 class Chrome_Context_Application implements Chrome_Context_Application_Interface
 {
-    protected $_requestHandler  = null;
-
-    protected $_authentication  = null;
-
-    protected $_authorisation   = null;
-
-    protected $_response        = null;
-
-    protected $_modelContext    = null;
-
-    protected $_viewContext     = null;
-
-    protected $_config          = null;
-
-    protected $_converter       = null;
-
-    protected $_loggerRegistry  = null;
-
-    protected $_design          = null;
-
+    protected $_requestHandler = null;
+    protected $_authentication = null;
+    protected $_authorisation = null;
+    protected $_response = null;
+    protected $_modelContext = null;
+    protected $_viewContext = null;
+    protected $_config = null;
+    protected $_converter = null;
+    protected $_loggerRegistry = null;
+    protected $_design = null;
     protected $_controllerFactroyRegistry = null;
+    protected $_classloader = null;
 
     public function &getReference($variable)
     {
@@ -423,12 +437,8 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
                 }
         }
         /*
-         * This works:
-            $var = $this->getConfig();
-            return $var;
-            but this not:
-            return $this->getConfig();
-        */
+         * This works: $var = $this->getConfig(); return $var; but this not: return $this->getConfig();
+         */
     }
 
     public function setControllerFactoryRegistry(\Chrome\Registry\Controller\Factory\Registry_Interface $registry)
@@ -542,16 +552,22 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
     {
         return $this->_design;
     }
-}
 
+    public function getClassloader()
+    {
+        return $this->_classloader;
+    }
+
+    public function setClassloader(\Chrome\Classloader\Classloader_Interface $classloader)
+    {
+        $this->_classloader = $classloader;
+    }
+}
 class Chrome_Context_Model implements Chrome_Context_Model_Interface
 {
     protected $_databaseFactory = null;
-
-    protected $_config          = null;
-
-    protected $_loggerRegistry  = null;
-
+    protected $_config = null;
+    protected $_loggerRegistry = null;
     protected $_cacheFactoryRegistry = null;
 
     public function linkApplicationContext(Chrome_Context_Application_Interface $app)
@@ -590,14 +606,11 @@ class Chrome_Context_Model implements Chrome_Context_Model_Interface
         return $this->_loggerRegistry;
     }
 }
-
 class Chrome_Context_View implements Chrome_Context_View_Interface
 {
     protected $_pluginFacade = null;
-
-    protected $_factory      = null;
-
-    protected $_loggerRegistry  = null;
+    protected $_factory = null;
+    protected $_loggerRegistry = null;
 
     public function linkApplicationContext(Chrome_Context_Application_Interface $app)
     {

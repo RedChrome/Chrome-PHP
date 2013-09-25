@@ -14,14 +14,14 @@
     "configLoadConfiguration": "SELECT `name`, `subclass`, `value`, `type` FROM cpp_config",
     "configSetConfiguration": "INSERT INTO cpp_config VALUES(\"?\", \"?\", \"?\", \"?\", \"?\", ?)",
 
-    "requireGetRequirements": "SELECT `name`, `path`, `class_loader` FROM cpp_require AS `r` WHERE `activated` = 1 ORDER BY r.priority ASC",
+    "requireGetRequirements": "SELECT `name`, `path`, `is_class_resolver` FROM cpp_autoload AS `r` WHERE `activated` = 1 ORDER BY r.priority ASC",
     "requireGetClasses": "SELECT `name`, `file` FROM cpp_class",
     "requireDeleteEntryByName": "DELETE FROM cpp_class WHERE `name` = \"?\" LIMIT 0,1",
     "requireDoesNameExist": "SELECT `id` FROM cpp_class WHERE `name` = \"?\" LIMIT 0,1",
     "requireSetClass": "INSERT INTO cpp_class(`id`, `name`, `file`) VALUES ('', \"?\", \"?\")",
 
-    "routeDynamicGetResourceById": "SELECT * FROM cpp_route_dynamic WHERE `id` = ? LIMIT 0,1",
-    "routeStaticGetRoute": "SELECT * FROM cpp_route_static WHERE `search` = \"?\" LIMIT 0,1",
+    "routeDynamicGetResourceById": "SELECT `name`, `class`, `GET`, `POST` FROM cpp_route_dynamic WHERE `id` = ? LIMIT 0,1",
+    "routeStaticGetRoute": "SELECT `name`, `class`, `POST`, `GET` FROM cpp_route_static WHERE `search` = \"?\" LIMIT 0,1",
     "routeStaticFindRoute": "SELECT `search` FROM cpp_route_static WHERE `name`= \"?\" LIMIT 0,1"
 
 }

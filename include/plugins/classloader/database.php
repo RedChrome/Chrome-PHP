@@ -14,33 +14,28 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.Database
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.05.2013 17:24:20] --> $
- * @author     Alexander Book
+ * @subpackage Chrome.Classloader
  */
 
 namespace Chrome\Classloader;
 
 /**
- * Autoloader for database classes
+ * Resolver for database classes
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.Require.Loader
+ * @subpackage Chrome.Classloader
  */
-class Classloader_Database extends Classloader_Abstract
+class Resolver_Database extends Resolver_Abstract
 {
     /**
-     * loads the corresponding file for $className
+     * Resolves the corresponding file for $className
      *
-     * Loads the file if $className beginns with 'Chrome_Database_'
-     * and the file exists.
+     * resolves the file if $className beginns with 'Chrome_Database_'
      *
      * @param string $className
-     * @return boolean true if file could get loaded
+     * @return file name, or false if not found
      */
-    public function loadClass($className)
+    public function resolve($className)
     {
         if(preg_match('#Chrome_Database_([a-z1-9]{1,})_(.{1,})#i', $className, $matches)) {
 

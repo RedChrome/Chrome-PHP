@@ -121,7 +121,9 @@ INSERT INTO `cp1_class` (`id`, `name`, `file`) VALUES
 (NULL, 'Chrome_User_Registration', 'lib/View/content/user/registration.class.php'),
 (NULL, 'Chrome_User_EMail', 'lib/User/user_email.php'),
 (NULL, 'Chrome_User_Login', 'lib/classes/user/user.php'),
-(NULL, 'Chrome_Controller_Index', 'modules/content/index/controller.php');
+(NULL, 'Chrome_Controller_Index', 'modules/content/index/controller.php'),
+(NULL, 'Chrome_Controller_Register', 'modules/content/register/controller.php'),
+(NULL, 'Chrome_Controller_Content_Logout', 'modules/content/user/logout/controller.php');
 
 DROP TABLE IF EXISTS `cp1_config`;
 CREATE TABLE IF NOT EXISTS `cp1_config` (
@@ -300,23 +302,23 @@ CREATE TABLE IF NOT EXISTS `cp1_rbac_user_role` (
 INSERT INTO `cp1_rbac_user_role` (`user_id`, `role_id`) VALUES
 (1, 4);
 
-DROP TABLE IF EXISTS `cp1_require`;
-CREATE TABLE IF NOT EXISTS `cp1_require` (
-  `id` int(3) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `cp1_autoload`;
+CREATE TABLE IF NOT EXISTS `cp1_autoload` (
+  `id` int(4) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `path` varchar(255) NOT NULL,
-  `activated` int(1) DEFAULT NULL,
+  `activated` tinyint(1) NOT NULL DEFAULT '0',
   `priority` int(2) NOT NULL DEFAULT '6',
-  `class_loader` int(1) NOT NULL,
+  `is_class_resolver` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_require` (`id`, `name`, `path`, `activated`, `priority`, `class_loader`) VALUES
-(NULL, '\\Chrome\\Classloader\\Classloader_Filter', 'plugins/classloader/filter.php', 1, 4, 1),
-(NULL, '\\Chrome\\Classloader\\Classloader_Exception', 'plugins/classloader/exception.php', 1, 4, 1),
-(NULL, '\\Chrome\\Classloader\\Classloader_Validator', 'plugins/classloader/validator.php', 1, 4, 1),
-(NULL, '\\Chrome\\Classloader\\Classloader_Form', 'plugins/classloader/form.php', 1, 4, 1),
-(NULL, '\\Chrome\\Classloader\\Classloader_Converter', 'plugins/classloader/converter.php', 1, 4, 1),
+INSERT INTO `cp1_autoload` (`id`, `name`, `path`, `activated`, `priority`, `is_class_resolver`) VALUES
+(NULL, '\\Chrome\\Classloader\\Resolver_Filter', 'plugins/classloader/filter.php', 1, 4, 1),
+(NULL, '\\Chrome\\Classloader\\Resolver_Exception', 'plugins/classloader/exception.php', 1, 4, 1),
+(NULL, '\\Chrome\\Classloader\\Resolver_Validator', 'plugins/classloader/validator.php', 1, 4, 1),
+(NULL, '\\Chrome\\Classloader\\Resolver_Form', 'plugins/classloader/form.php', 1, 4, 1),
+(NULL, '\\Chrome\\Classloader\\Resolver_Converter', 'plugins/classloader/converter.php', 1, 4, 1),
 (NULL, '\\Chrome_View_Plugin_HTML', 'plugins/View/html.php', 1, 6, 0),
 (NULL, '\\Chrome_View_Plugin_Decorator', 'plugins/View/decorator.php', 1, 6, 0),
 (NULL, '\\Chrome_View_Plugin_Error', 'plugins/View/error.php', 1, 6, 0),
@@ -355,14 +357,13 @@ CREATE TABLE IF NOT EXISTS `cp1_route_dynamic` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `class` varchar(255) NOT NULL,
-  `file` varchar(255) NOT NULL,
   `GET` varchar(511) NOT NULL,
   `POST` varchar(511) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_route_dynamic` (`id`, `name`, `class`, `file`, `GET`, `POST`) VALUES
-(1, 'news_show', 'Chrome_Controller_News', 'modules/content/news/controller.php', 'action=show', '');
+INSERT INTO `cp1_route_dynamic` (`id`, `name`, `class`, `GET`, `POST`) VALUES
+(1, 'news_show', 'Chrome_Controller_News', 'action=show', '');
 
 DROP TABLE IF EXISTS `cp1_route_static`;
 CREATE TABLE IF NOT EXISTS `cp1_route_static` (
@@ -370,22 +371,21 @@ CREATE TABLE IF NOT EXISTS `cp1_route_static` (
   `name` varchar(255) NOT NULL,
   `search` varchar(255) NOT NULL,
   `class` varchar(255) NOT NULL,
-  `file` varchar(255) NOT NULL,
   `POST` varchar(511) NOT NULL,
   `GET` varchar(511) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_route_static` (`id`, `name`, `search`, `class`, `file`, `POST`, `GET`) VALUES
-(NULL, 'index', '', 'Chrome_Controller_Index', 'modules/content/index/controller.php', '', ''),
-(NULL, 'index', 'index', 'Chrome_Controller_Index', 'modules/content/index/controller.php', '', ''),
-(NULL, 'login', 'login', 'Chrome_Controller_Content_Login', 'modules/content/user/login/controller.php', '', ''),
-(NULL, 'site_not_found', '404', 'Chrome_Controller_SiteNotFound', 'modules/content/SiteNotFound/controller.php', '', ''),
-(NULL, 'register', 'registrieren', 'Chrome_Controller_Register', 'modules/content/register/controller.php', '', 'action=register'),
-(NULL, 'news', 'news', 'Chrome_Controller_News', 'modules/content/news/controller.php', '', 'action=show'),
-(NULL, 'logout', 'logout', 'Chrome_Controller_Content_Logout', 'modules/content/user/logout/controller.php', '', ''),
-(NULL, 'register_confirm', 'registrierung_bestaetigen', 'Chrome_Controller_Register', 'modules/content/register/controller.php', '', 'action=confirm_registration'),
-(NULL, 'captcha', 'captcha', 'Chrome_Controller_Captcha', 'modules/content/captcha/controller.php', '', '');
+INSERT INTO `cp1_route_static` (`id`, `name`, `search`, `class`, `POST`, `GET`) VALUES
+(NULL, 'index', '', 'Chrome_Controller_Index', '', ''),
+(NULL, 'index', 'index', 'Chrome_Controller_Index', '', ''),
+(NULL, 'login', 'login', 'Chrome_Controller_Content_Login', '', ''),
+(NULL, 'site_not_found', '404', 'Chrome_Controller_SiteNotFound', '', ''),
+(NULL, 'register', 'registrieren', 'Chrome_Controller_Register', '', 'action=register'),
+(NULL, 'news', 'news', 'Chrome_Controller_News', '', 'action=show'),
+(NULL, 'logout', 'logout', 'Chrome_Controller_Content_Logout', '', ''),
+(NULL, 'register_confirm', 'registrierung_bestaetigen', 'Chrome_Controller_Register', '', 'action=confirm_registration'),
+(NULL, 'captcha', 'captcha', 'Chrome_Controller_Captcha', '', '');
 
 DROP TABLE IF EXISTS `cp1_user`;
 CREATE TABLE IF NOT EXISTS `cp1_user` (

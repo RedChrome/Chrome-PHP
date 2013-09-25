@@ -14,11 +14,7 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Require
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 17:33:11] --> $
- * @author Alexander Book
+ * @subpackage Chrome.Classloader
  */
 
 namespace Chrome\Classloader;
@@ -27,9 +23,9 @@ namespace Chrome\Classloader;
  * Interface for loading required files and loading classes
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Require
+ * @subpackage Chrome.Classloader
  */
-interface Classloader_Model_Interface extends Classloader_Interface
+interface Resolver_Model_Interface extends Resolver_Interface
 {
     public function getClasses();
 
@@ -37,12 +33,12 @@ interface Classloader_Model_Interface extends Classloader_Interface
 }
 
 /**
- * This class registers a autoloader to automatically load unknown classes via loadClass()
+ * This class resolves classes which are defined in $_model
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Require
+ * @subpackage Chrome.Classloader
  */
-class Classloader_Model implements Classloader_Model_Interface
+class Resolver_Model implements Resolver_Model_Interface
 {
     /**
      * Contains Chrome_Model_Abstract instance
@@ -84,7 +80,7 @@ class Classloader_Model implements Classloader_Model_Interface
      *
      * @return void
      */
-    public function init(Autoloader_Interface $autoloader)
+    public function init(Classloader_Interface $classloader)
     {
         // already loaded required files
         if($this->_requiredFilesLoaded === true)
@@ -96,11 +92,11 @@ class Classloader_Model implements Classloader_Model_Interface
 
         foreach($this->_require as $value)
         {
-            $autoloader->loadClassByFile($value['name'], BASEDIR . $value['path']);
+            $classloader->loadByFile($value['name'], BASEDIR . $value['path']);
 
-            if($value['class_loader'] == true)
+            if($value['is_class_resolver'] == true)
             {
-                $autoloader->appendAutoloader(new $value['name']());
+                $classloader->appendResolver(new $value['name']());
             }
         }
 
@@ -129,7 +125,7 @@ class Classloader_Model implements Classloader_Model_Interface
         return $this->_class;
     }
 
-    public function loadClass($className)
+    public function resolve($className)
     {
         if(isset($this->_class[$className]))
         {

@@ -49,7 +49,6 @@ class Chrome_Route_Static extends Chrome_Router_Route_Abstract
         }
 
         $this->_resource = new Chrome_Router_Resource();
-        $this->_resource->setFile($row['file']);
         $this->_resource->setClass($row['class']);
 
         if(count($row['GET']) > 0)

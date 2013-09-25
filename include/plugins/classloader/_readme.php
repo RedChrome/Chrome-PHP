@@ -15,29 +15,24 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Require
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:39:03] --> $
  */
-
-die('readme file! Not supposed to run in script!');
 
 namespace Chrome\Classloader;
 
+die('readme file! Not supposed to run in script!');
+
 /**
- * Chrome_Require_Loader_Readme, example implementation
+ * Resolver_Readme, example implementation
  *
- * Before usage you have to add this class to model and tell the model that this class
- * is a require_loader class!
+ * Example implementation of a class resolver
  *
- *
- * @pacakge CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Require
  */
-class Classloader_Readme extends Classloader_Abstract
+class Resolver_Readme extends Resolver_Abstract
 {
     // in this method you put your logic
-    public function loadClass($class)
+    public function resolve($class)
     {
         switch ($class)
         {
@@ -65,8 +60,10 @@ class Classloader_Readme extends Classloader_Abstract
         }
     }
 
-    public function init(Chrome_Require_Autoloader_Interface $autoloader)
+    public function init(Classloader_Interface $autoloader)
     {
+        $autoloader->loadByFile('myNeededClass', 'TheFileForThatClass.php');
+
         require_once 'needed file.php';
 
         // require needed files for your plugin

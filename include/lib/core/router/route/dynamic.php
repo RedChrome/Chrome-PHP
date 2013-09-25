@@ -70,7 +70,6 @@ class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
 
             $this->_resource = new Chrome_Router_Resource();
             $this->_resource->setClass($resource['class']);
-            $this->_resource->setFile($resource['file']);
 
             if(count($resource['GET']) > 0)
             {

@@ -95,7 +95,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @var \Chrome\Classloader\Autoloader_Interface
      */
-    private $_autoloader = null;
+    private $_classloader = null;
 
     /**
      * Chrome_Front_Controller::getController()
@@ -165,16 +165,15 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $cacheFactoryRegistry = new \Chrome\Registry\Cache\Factory\Registry();
         $cacheFactoryRegistry->set(\Chrome\Registry\Cache\Factory\Registry::DEFAULT_FACTORY, new Chrome_Cache_Factory());
 
-        $this->_initAutoloader();
+        $this->_initClassloader();
 
         $this->_initDatabase();
 
         $this->_initControllerFactory();
 
-        require_once LIB.'core/require/model.php';
+        require_once LIB.'core/classloader/model.php';
         // init require-class, can be skipped if every class is defined
-        $this->_autoloader
-                ->prependAutoloader(new \Chrome\Classloader\Classloader_Model(new Chrome_Model_Require_Cache(new Chrome_Model_Require_DB($this->_modelContext))));
+        $this->_classloader->prependResolver(new \Chrome\Classloader\Resolver_Model(new Chrome_Model_Require_Cache(new Chrome_Model_Require_DB($this->_modelContext))));
 
         $this->_initConfig();
 
@@ -217,7 +216,8 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
             // create controller class and set exception handler
             $controllerFactory = $this->_applicationContext->getControllerFactoryRegistry()->get();
-            $controllerFactory->loadControllerClass($resource->getFile());
+            $controllerFactory->loadControllerClass($resource->getClass());
+
             $this->_controller = $controllerFactory->build($resource->getClass());
             $this->_controller->setExceptionHandler(new Chrome_Exception_Handler_Default());
 
@@ -300,20 +300,24 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_applicationContext->setControllerFactoryRegistry($controllerFactoryRegistry);
     }
 
-    protected function _initAutoloader()
+    protected function _initClassloader()
     {
         // autoloader
-        $this->_autoloader = new \Chrome\Classloader\Autoloader();
+        $this->_classloader = new \Chrome\Classloader\Classloader();
+        $this->_applicationContext->setClassloader($this->_classloader);
+
         //$this->_autoloader = new Chrome_Require_Autoloader();
-        $this->_autoloader->setLogger($this->_loggerRegistry->get('autoloader'));
-        $this->_autoloader->setExceptionHandler(new Chrome_Exception_Handler_Default());
+        $this->_classloader->setLogger($this->_loggerRegistry->get('autoloader'));
+        $this->_classloader->setExceptionHandler(new Chrome_Exception_Handler_Default());
 
         require_once PLUGIN.'classloader/database.php';
         require_once PLUGIN.'classloader/cache.php';
         require_once PLUGIN.'classloader/model.php';
 
-        $this->_autoloader->appendAutoloader(new \Chrome\Classloader\Classloader_Database());
-        $this->_autoloader->appendAutoloader(new \Chrome\Classloader\Classloader_Cache());
+        $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver_Database());
+        $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver_Cache());
+
+        $autoloader = new \Chrome\Classloader\Autoloader($this->_classloader);
     }
 
     protected function _initAuthenticationAndAuthorisation()

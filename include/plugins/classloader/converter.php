@@ -14,28 +14,26 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 17:48:48] --> $
+ * @subpackage Chrome.Classloader
  */
 
 namespace Chrome\Classloader;
 
 /**
- * Loads all classes beginning with 'Chrome_Converter_Delegate_'
+ * Resolves all classes beginning with 'Chrome_Converter_Delegate_'
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Require.Loader
+ * @subpackage Chrome.Classloader
  */
-class Classloader_Converter extends Classloader_Abstract
+class Resolver_Converter extends Resolver_Abstract
 {
     /**
-     * Loads a class, if $class beginns with 'Chrome_Converter_Delegate_'
+     * Resolves a class, if $class beginns with 'Chrome_Converter_Delegate_'
      *
      * @param string $class
-     * @return bool true if class was found
+     * @return file name, or false if not found
      */
-    public function loadClass($class)
+    public function resolve($class)
     {
         if(preg_match('#Chrome_Converter_Delegate_(.{1,})#i', $class, $matches)) {
             return PLUGIN.'Converter/'.lcfirst($matches[1]).'.php';

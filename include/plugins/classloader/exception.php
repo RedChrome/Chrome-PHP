@@ -14,28 +14,26 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.05.2013 17:24:32] --> $
+ * @subpackage Chrome.Classloader
  */
 
 namespace Chrome\Classloader;
 
 /**
- * Loads all classes beginning with 'Chrome_Require_'
+ * resolves all classes beginning with 'Chrome_Require_'
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Require
+ * @subpackage Chrome.Classloader
  */
-class Classloader_Exception extends Classloader_Abstract
+class Resolver_Exception extends Resolver_Abstract
 {
     /**
-     * Loads a class, if $class beginns with 'Chrome_Exception_'
+     * resolves a class, if $class beginns with 'Chrome_Exception_'
      *
      * @param string $class
-     * @return bool true if class was found
+     * @return file name, or false if not found
      */
-    public function loadClass($class)
+    public function resolve($class)
     {
         if(preg_match('#Chrome_Exception_Handler_(.{1,})#i', $class, $matches)) {
             return LIB.'exception/'.strtolower($matches[1]).'.php';

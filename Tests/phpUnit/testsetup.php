@@ -64,10 +64,11 @@ class Chrome_TestSetup
         $this->_databaseInitialized = true;
 
         require_once PLUGIN.'classloader/database.php';
-        $autoloader = new \Chrome\Classloader\Autoloader();
-        $autoloader->setExceptionHandler($this->_errorConfig->getExceptionHandler());
-        $autoloader->setLogger(new \Psr\Log\NullLogger());
-        $autoloader->appendAutoloader(new \Chrome\Classloader\Classloader_Database());
+        $classloader = new \Chrome\Classloader\Classloader();
+        $classloader->setExceptionHandler($this->_errorConfig->getExceptionHandler());
+        $classloader->setLogger(new \Psr\Log\NullLogger());
+        $classloader->appendResolver(new \Chrome\Classloader\Resolver_Database());
+        $autoloader = new \Chrome\Classloader\Autoloader($classloader);
 
         require_once LIB.'core/database/database.php';
 
@@ -109,6 +110,7 @@ class Chrome_TestSetup
         $modelContext->setDatabaseFactory($databaseFactory);
         $this->_applicationContext = new Chrome_Context_Application();
         $this->_applicationContext->setModelContext($modelContext);
+        $this->_applicationContext->setClassloader($classloader);
     }
 
     public function testModules()
@@ -127,6 +129,7 @@ class Chrome_TestSetup
 
         $modelContext = $this->_applicationContext->getModelContext();
         $context = $application->getApplicationContext();
+
         $this->_applicationContext = clone $context;
         $this->_applicationContext->setModelContext($modelContext);
 

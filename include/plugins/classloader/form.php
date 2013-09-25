@@ -14,30 +14,26 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.05.2013 17:24:45] --> $
+ * @subpackage Chrome.Classloader
  */
 
 namespace Chrome\Classloader;
 
 /**
- * Loads all classes beginning with 'Chrome_Form_'
+ * Resolves all classes beginning with 'Chrome_Form_'
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Require
+ * @subpackage Chrome.Classloader
  */
-class Classloader_Form extends Classloader_Abstract
+class Resolver_Form extends Resolver_Abstract
 {
     /**
-     * Checks whether this class knows where the other class is located
+     * Resolves a class, if $class is of Chrome_Form_* type
      *
      * @param stinrg $class
-     *        name of the class
-     * @return boolean
-     * @throws Chrome_Exception
+     * @return file name, or false if not found
      */
-    public function loadClass($class)
+    public function resolve($class)
     {
         if(preg_match('#Chrome_Form_Element_(.{1,})#i', $class, $matches))
         {
