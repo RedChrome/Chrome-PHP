@@ -24,7 +24,8 @@ if(CHROME_PHP !== true)
     die();
 
 // TODO: Add a db scheme for Chrome_Model_Route_Dynamic_DB::getResourcesAsArray
-// TODO: Add regex support for single path, e.g. news/show/id/regex:|(\d)*?|/action/remove or something like that, but in fact, thats some kind of input validation... dont know if needed
+// TODO: Add regex support for single path, e.g. news/show/id/regex:|(\d)*?|/action/remove or something like that,
+//          but in fact, thats some kind of input validation... dont know if needed
 /**
  *
  * @package CHROME-PHP
@@ -58,9 +59,10 @@ class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
 
         $this->_resources = $this->_model->getResourcesAsArray();
 
-        if($this->_exist($array, $this->_resources) !== false)
-        {
+        $params = array();
 
+        if($this->_urlMatches($array, $this->_resources, $params) !== false)
+        {
             $resource = $this->_model->getResourceByID($this->_resourceID);
 
             if($resource === null or $resource == false)
@@ -72,6 +74,7 @@ class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
             $this->_resource->setClass($resource['class']);
             $this->_resource->setFile($resource['file']);
 
+            /*
             if(count($resource['GET']) > 0)
             {
                 $data->setGET($resource['GET']);
@@ -79,13 +82,55 @@ class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
             if(count($resource['POST']) > 0)
             {
                 $data->setPOST($resource['POST']);
-            }
+            }*/
 
             return true;
         } else
         {
             return false;
         }
+    }
+
+    protected function _urlMatches($urlAsArray, $availableResolutions, &$urlParams, $previousSegment = '')
+    {
+        $currentUrlSegment = array_shift($urlAsArray);//$urlAsArray[0];
+
+        if($currentUrlSegment === null)
+        {
+            $currentUrlSegment = '';
+        }
+
+        if(!is_array($availableResolutions)) {
+            if(is_int($availableResolutions)) {
+                $this->_resourceID = $availableResolutions;
+                return true;
+            }
+            // error, $availableResolutions is malformed
+            return false;
+        }
+
+        foreach($availableResolutions as $urlSegment => $nextResoultions)
+        {
+            // matched
+            if($urlSegment === $currentUrlSegment)
+            {
+                return $this->_urlMatches($urlAsArray, $nextResoultions, $urlParams, $currentUrlSegment);
+            }
+
+            if($urlSegment === '*')
+            {
+                if(!empty($currentUrlSegment) )
+                {
+                    $urlParams[$previousSegment] = $currentUrlSegment;
+                    return $this->_urlMatches($urlAsArray, $nextResoultions, $urlParams, $currentUrlSegment);
+                }
+
+                // expected any input, but got an empty input -> not valid
+                return false;
+            }
+        }
+
+        return false;
     }
 
     private function _exist($array, array $resource)
@@ -150,7 +195,7 @@ class Chrome_Model_Route_Dynamic_Cache extends Chrome_Model_Cache_Abstract
         if(($return = $this->_cache->get('getResource_' . $id)) === null)
         {
 
-            $return = $this->_decorator->getResourceByID($id);
+            $return = $this->_decorable->getResourceByID($id);
 
             if($return !== false)
             {
@@ -182,8 +227,10 @@ class Chrome_Model_Route_Dynamic_DB extends Chrome_Model_Database_Abstract
                     'site' => array(
                                     'news' => array(
                                                     'id' => array(
-                                                                '*' => array('' => 1,                                                                 // '' is an alias for 'show'
-                                                                'show' => 1, 'update' => 2)))));
+                                                                '*' => array('' => 1,// '' is an alias for 'show'
+                                                                             'show' => 1,
+                                                                             'update' => 2)
+                                                                            ))));
     }
 
     public function getResourceByID($id)
