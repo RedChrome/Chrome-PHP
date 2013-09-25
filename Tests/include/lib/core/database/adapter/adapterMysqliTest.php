@@ -19,7 +19,7 @@ class DatabaseAdapterMysqliTest extends DatabaseAdapterMysqlTest
 
     public function testTwoQueriesAtOnce()
     {
-        $result = $this->_db->query('SELECT * FROM cpp_require LIMIT 0,1');
+        $result = $this->_db->query('SELECT * FROM cpp_autoload LIMIT 0,1');
         $this->_db->clear();
         $result2 = $this->_db->query('SELECT * FROM cpp_class LIMIT 0,1');
     }

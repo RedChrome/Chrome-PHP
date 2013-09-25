@@ -26,7 +26,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         $this->doSkipTestsIfNeeded();
 
 
-        $this->_db->query('SELECT * FROM cpp_require WHERE true = false');
+        $this->_db->query('SELECT * FROM cpp_autoload WHERE true = false');
 
         $this->assertTrue($this->_db->getAdapter()->isEmpty());
 
@@ -37,7 +37,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
     {
         $this->doSkipTestsIfNeeded();
 
-        $this->_db->query('SELECT * FROM cpp_require LIMIT 0,2');
+        $this->_db->query('SELECT * FROM cpp_autoload LIMIT 0,2');
 
         $this->assertFalse($this->_db->getAdapter()->isEmpty());
         $this->assertEquals(2, $this->_db->getAdapter()->getAffectedRows());
@@ -61,7 +61,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
 
         $this->setExpectedException('Chrome_Exception_Database');
 
-        $this->_db->query('SELECT * FROM cpp_require LIgMIT 0,1');
+        $this->_db->query('SELECT * FROM cpp_autoload LIgMIT 0,1');
     }
 
     public function testBehaviourOnWrongQuery()
@@ -72,7 +72,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         // do not log the exception, we're expecting it
         $this->_db->setLogger(new \Psr\Log\NullLogger());
         try {
-            $this->_db->query('SELECT * FROM cpp_require LIgMIT 0,1');
+            $this->_db->query('SELECT * FROM cpp_autoload LIgMIT 0,1');
         }
         catch (Chrome_Exception_Database $e) {
             // do nothing
@@ -90,7 +90,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         // do not log the exception, we're expecting it
         $this->_db->setLogger(new \Psr\Log\NullLogger());
         try {
-            $this->_db->query('SELEC * FROM cpp_require LIMIT 0,1'); // this will result in an exception
+            $this->_db->query('SELEC * FROM cpp_autoload LIMIT 0,1'); // this will result in an exception
         }
         catch (Chrome_Exception_Database $e) {
             // do nothing
@@ -105,7 +105,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         // not escaped var => escaped var
         $array = array(
             'notEscaped' => 'notEscaped',
-            'cpp_require`' => 'cpp_require`',
+            'cpp_autoload`' => 'cpp_autoload`',
             '\'test\'' => '\\\'test\\\'',
             '"test"' => '\"test\"',
             'query---' => 'query---',
@@ -121,7 +121,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
 
         $this->doSkipTestsIfNeeded();
 
-        $this->_db->query('SELECT * FROM cpp_require');
+        $this->_db->query('SELECT * FROM cpp_autoload');
 
         $exists = false;
 
@@ -130,18 +130,18 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         while(($result = $resultSet->getNext()) !== false) {
             $exists = true;
             if(!is_file(BASEDIR.'/'.$result['path'])) {
-                $this->assertFalse(true, 'path '.BASEDIR.'/'.$result['path'].' does not exist, or database has wrong elements in table cpp_require or getNext() does not work');
+                $this->assertFalse(true, 'path '.BASEDIR.'/'.$result['path'].' does not exist, or database has wrong elements in table cpp_autoload or getNext() does not work');
             }
         }
 
-        $this->assertTrue($exists, 'no element found in table cpp_require? cannot be?');
+        $this->assertTrue($exists, 'no element found in table cpp_autoload? cannot be?');
     }
 
     public function testGetLastInsertedIdOnQueryNotContainingInsert()
     {
         $this->doSkipTestsIfNeeded();
 
-        $this->_db->query('SELECT * FROM cpp_require LIMIT 0,1');
+        $this->_db->query('SELECT * FROM cpp_autoload LIMIT 0,1');
 
         $this->assertNull($this->_db->getResult()->getLastInsertId());
 
