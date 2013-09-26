@@ -100,17 +100,17 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
 
             if($expectedSize > $acutalSize)
             {
-                $this->_setError('Too few values sent!');
+                $this->_setError('some_required_fields_were_not_send');
                 return false;
             }
 
             if($acutalSize > $expectedSize)
             {
-                $this->_setError('Too much values sent!');
+                $this->_setError('some_fields_were_too_much');
                 return false;
             }
 
-            $this->_setError('There are required values which were not sent!');
+            $this->_setError('some_required_fields_were_not_send');
             return false;
         }
 
@@ -126,7 +126,7 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
 
         if(sizeof($expectedArray) > sizeof($sentArray))
         {
-            $this->_setError('Required value was not sent!');
+            $this->_setError('some_required_fields_were_not_send');
             return false;
         }
 
@@ -134,7 +134,7 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
         {
             if(!in_array($value, $sentArray))
             {
-                $this->_setError('Required value was not sent!');
+                $this->_setError('some_required_fields_were_not_send');
                 return false;
             }
         }

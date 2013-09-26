@@ -54,7 +54,7 @@ interface Translate_Interface
 
     public function get($key, array $params = array());
 
-    public function load($module);
+    public function load($module, $submodule = null);
 
     public function getLocale();
 }
@@ -79,6 +79,8 @@ class Translate_Simple implements Translate_Interface
 {
     const INCLUDE_DIR = 'translations/';
 
+    const MODULE_GENERAL = 'general';
+
     protected $_loadedModules = array();
 
     protected $_locale = null;
@@ -93,6 +95,12 @@ class Translate_Simple implements Translate_Interface
 
     public function get($key, array $params = array())
     {
+        // assume that 1. key is $key and 2. key is $params
+        if(is_array($key) AND isset($key[0]) AND is_string($key[0]) AND isset($key[1]) AND is_array($key[1])) {
+            $params = $key[1];
+            $key = $key[0];
+        }
+
         if(!isset($this->_translations[$key]))
         {
             return $key;
@@ -107,18 +115,23 @@ class Translate_Simple implements Translate_Interface
         return strtr($this->_translations[$key], $replacements);
     }
 
-    public function load($module)
+    public function load($module, $submodule = null)
     {
+        if($submodule === null)
+        {
+            $submodule = 'locale';
+        }
+
         // module already loaded
-        if(in_array($module, $this->_loadedModules) === true)
+        if(in_array($module.'/'.$submodule, $this->_loadedModules) === true)
         {
             return;
         }
-        $file = RESOURCE.self::INCLUDE_DIR.$this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/locale.ini';
+        $file = RESOURCE.self::INCLUDE_DIR.$this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/'.$submodule.'.ini';
 
         if(!_isFile($file))
         {
-            throw new \Chrome_Exception('Could not load module '.$module.'. File "'.$file.'" does not exist');
+            throw new \Chrome_Exception('Could not load module '.$module.'/'.$submodule.'. File "'.$file.'" does not exist');
         }
 
         $parsed = parse_ini_file($file, true);
@@ -136,7 +149,7 @@ class Translate_Simple implements Translate_Interface
             $this->_translations = $this->_translations + $newTranslation;
         }
 
-        $this->_loadedModules[] = $module;
+        $this->_loadedModules[] = $module.'/'.$submodule;
     }
 
     public function getLocale()

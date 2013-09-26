@@ -290,6 +290,7 @@ class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface
 }
 class Chrome_View_Form_Element_Appendable_Error extends Chrome_View_Form_Element_Appendable_Abstract
 {
+    const TRANSLATE_MODULE = 'form/errors';
 
     public function render()
     {
@@ -301,9 +302,13 @@ class Chrome_View_Form_Element_Appendable_Error extends Chrome_View_Form_Element
         {
             $errors = '<ul>';
 
+            $translate = $this->_viewFormElement->getViewForm()->getViewContext()->getLocalization()->getTranslate();
+
+            $translate->load(self::TRANSLATE_MODULE);
+
             foreach($form->getValidationErrors($elementId) as $error)
             {
-                $errors .= '<li>' . $error . '</li>';
+                $errors .= '<li>' . $translate->get($error) . '</li>';
             }
 
             $this->_result = $errors . '</ul>' . $this->_result;

@@ -247,9 +247,15 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      *
      * @param string $msg error message
      */
-    protected function _setError($msg)
+    protected function _setError($msg, array $params = null)
     {
-        $this->_errorMsg[] = $msg;
+        if($params !== null)
+        {
+            $this->_errorMsg[] = array($msg, $params);
+        } else
+        {
+            $this->_errorMsg[] = $msg;
+        }
     }
 
     /**

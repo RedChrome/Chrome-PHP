@@ -67,7 +67,7 @@ class Chrome_Form_Element_Date extends Chrome_Form_Element_Abstract implements C
             return true;
         }
 
-        return 'ERRORCREATINGDATE';
+        return 'date_was_not_valid';
     }
 
     public function getStorableData()

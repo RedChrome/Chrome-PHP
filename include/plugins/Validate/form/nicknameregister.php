@@ -34,9 +34,9 @@ class Chrome_Validator_Form_NicknameRegister extends Chrome_Validator
     const CHROME_VALIDATOR_NICKNAME_MAX_CHARS = 'MAXCHARS',
           CHROME_VALIDATOR_NICKNAME_MIN_CHARS = 'MINCHARS';
 
-    const CHROME_VALIDATOR_NICKNAME_FORBIDDEN_CHARS = 'NICKNAMECONTAINSFORBIDDENCHARS',
-          CHROME_VALIDATOR_NICKNAME_TOO_LONG = 'NICKNAMETOOLONG',
-          CHROME_VALIDATOR_NICKNAME_TOO_SHORT = 'NICKNAMETOOSHORT';
+    const CHROME_VALIDATOR_NICKNAME_FORBIDDEN_CHARS = 'nickname_contains_forbidden_chars',
+          CHROME_VALIDATOR_NICKNAME_TOO_LONG = 'nickname_too_long',
+          CHROME_VALIDATOR_NICKNAME_TOO_SHORT = 'nickname_too_short';
 
     protected $_options = array(self::CHROME_VALIDATOR_NICKNAME_MAX_CHARS => 50,
                                 self::CHROME_VALIDATOR_NICKNAME_MIN_CHARS => 3);
@@ -51,10 +51,10 @@ class Chrome_Validator_Form_NicknameRegister extends Chrome_Validator
         $length = strlen($this->_data);
 
         if($length < $this->_options[self::CHROME_VALIDATOR_NICKNAME_MIN_CHARS]) {
-            $this->_setError(self::CHROME_VALIDATOR_NICKNAME_TOO_SHORT);
+            $this->_setError(self::CHROME_VALIDATOR_NICKNAME_TOO_SHORT, array('length' => self::CHROME_VALIDATOR_NICKNAME_MIN_CHARS));
         }
         if($length > $this->_options[self::CHROME_VALIDATOR_NICKNAME_MAX_CHARS]) {
-            $this->_setError(self::CHROME_VALIDATOR_NICKNAME_TOO_LONG);
+            $this->_setError(self::CHROME_VALIDATOR_NICKNAME_TOO_LONG, array('length' => self::CHROME_VALIDATOR_NICKNAME_MIN_CHARS);
         }
     }
 }

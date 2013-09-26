@@ -42,11 +42,11 @@ class Chrome_Validator_Form_Length extends Chrome_Validator
         $length = strlen($this->_data);
 
         if($length > $this->_options[self::CHROME_VALIDATOR_FORM_LENGTH_MAX]) {
-            $this->_setError('Input too long');
+            $this->_setError('input_too_long', array('length' => $this->_options[self::CHROME_VALIDATOR_FORM_LENGTH_MAX]));
         }
 
         if($length < $this->_options[self::CHROME_VALIDATOR_FORM_LENGTH_MIN]) {
-            $this->_setError('Input too short');
+            $this->_setError('input_too_short', array('length' => $this->_options[self::CHROME_VALIDATOR_FORM_LENGTH_MIN]));
         }
     }
 }
