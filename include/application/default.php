@@ -96,6 +96,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @return Chrome_Controller_Abstract
      */
+
     public function getController()
     {
         return $this->_controller;
@@ -105,13 +106,13 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @return Chrome_Front_Controller
      */
+
     public function __construct(Chrome_Exception_Handler_Interface $exceptionHandler = null)
     {
         $this->_initLoggers();
 
-        if($exceptionHandler === null)
-        {
-            require_once LIB . 'exception/frontcontroller.php';
+        if($exceptionHandler === null) {
+            require_once LIB.'exception/frontcontroller.php';
             $exceptionHandler = new Chrome_Exception_Handler_FrontController($this->_loggerRegistry->get('application'));
         }
 
@@ -122,13 +123,12 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @return void
      */
+
     public function init()
     {
-        try
-        {
+        try {
             $this->_init();
-        } catch(Chrome_Exception $e)
-        {
+        } catch(Chrome_Exception $e) {
             $this->_exceptionHandler->exception($e);
         }
     }
@@ -138,6 +138,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @return void
      */
+
     protected function _init()
     {
         $this->_exceptionConfiguration = new Chrome_Exception_Configuration();
@@ -159,16 +160,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $cacheFactoryRegistry->set(\Chrome\Registry\Cache\Factory\Registry::DEFAULT_FACTORY, new Chrome_Cache_Factory());
 
         // @todo: just a dummy instanciation, do a better one later
-
-        $locale = new \Chrome\Localization\Locale();
-        $localization = new \Chrome\Localization\Localization();
-        $localization->setLocale($locale);
-        $translate = new \Chrome\Localization\Translate_Simple($localization);
-        #require_once 'Tests/dummies/localization/translate/test.php';
-        #$translate = new \Chrome\Localization\Translate_Test_XX($localization);
-        $localization->setTranslate($translate);
-
-        $viewContext->setLocalization($localization);
+        $this->_initLocalization();
 
         // autoloader
         $autoloader = new Chrome_Require_Autoloader();
@@ -176,9 +168,9 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         {
             $autoloader->setExceptionHandler(new Chrome_Exception_Handler_Default());
 
-            require_once PLUGIN . 'Require/database.php';
-            require_once PLUGIN . 'Require/cache.php';
-            require_once PLUGIN . 'Require/model.php';
+            require_once PLUGIN.'Require/database.php';
+            require_once PLUGIN.'Require/cache.php';
+            require_once PLUGIN.'Require/model.php';
 
             $autoloader->appendAutoloader(new Chrome_Require_Loader_Database());
             $autoloader->appendAutoloader(new Chrome_Require_Loader_Cache());
@@ -188,7 +180,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $this->_initControllerFactory();
 
-        require_once LIB . 'core/require/model.php';
+        require_once LIB.'core/require/model.php';
         // init require-class, can be skipped if every class is defined
         $autoloader->prependAutoloader(new Chrome_Require_Loader_Model(new Chrome_Model_Require_Cache(new Chrome_Model_Require_DB($this->_modelContext))));
 
@@ -222,12 +214,14 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @return void
      */
+
     public function execute()
     {
-        try
-        {
+        try {
             // get the accessed resource by Router
-            $resource = $this->_router->route(new Chrome_URI($this->_applicationContext->getRequestHandler()->getRequestData(), true), $this->_applicationContext->getRequestHandler()->getRequestData());
+            $resource = $this->_router
+                    ->route(new Chrome_URI($this->_applicationContext->getRequestHandler()->getRequestData(), true),
+                            $this->_applicationContext->getRequestHandler()->getRequestData());
 
             // create controller class and set exception handler
             $controllerFactory = $this->_applicationContext->getControllerFactoryRegistry()->get();
@@ -240,8 +234,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $this->_controller->execute();
 
             // use the design from the controller, but only if he set one design
-            if( ($design = $this->_applicationContext->getDesign()) === null)
-            {
+            if(($design = $this->_applicationContext->getDesign()) === null) {
                 $design = new Chrome_Design();
                 $this->_applicationContext->setDesign($design);
 
@@ -255,8 +248,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $this->_postprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
 
             $this->_applicationContext->getResponse()->flush();
-        } catch(Chrome_Exception $e)
-        {
+        } catch(Chrome_Exception $e) {
             $this->_exceptionHandler->exception($e);
         }
     }
@@ -272,17 +264,43 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_modelContext->setDatabaseFactory($factory);
     }
 
+    protected function _initLocalization($localeString = null)
+    {
+        // use the string providede by browser
+        if($localeString === null) {
+            $localeString = (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : CHROME_DEFAULT_LOCALE;
+        }
+
+        try {
+            $locale = new \Chrome\Localization\Locale($localeString);
+            $localization = new \Chrome\Localization\Localization();
+            $localization->setLocale($locale);
+            $translate = new \Chrome\Localization\Translate_Simple($localization);
+            #require_once 'Tests/dummies/localization/translate/test.php';
+            #$translate = new \Chrome\Localization\Translate_Test_XX($localization);
+            $localization->setTranslate($translate);
+        } catch(Chrome_Exception $e) {
+            if($localeString !== CHROME_DEFAULT_LOCALE) {
+                $this->_initLocalization(CHROME_DEFAULT_LOCALE);
+            }
+
+            throw new Chrome_Exception('Could not initialize localization', 0, $e);
+        }
+
+        $this->_applicationContext->getViewContext()->setLocalization($localization);
+    }
+
     protected function _initLoggers()
     {
-        Chrome_Dir::createDir(TMP . CHROME_LOG_DIR, 0777, false);
+        Chrome_Dir::createDir(TMP.CHROME_LOG_DIR, 0777, false);
 
         $dateFormat = 'Y-m-d H:i:s:u';
-        $output = '[%datetime%] %channel%.%level_name%: %message%. %context% %extra%' . PHP_EOL;
+        $output = '[%datetime%] %channel%.%level_name%: %message%. %context% %extra%'.PHP_EOL;
 
         $formatter = new \Monolog\Formatter\LineFormatter($output, $dateFormat);
         $processor = new Chrome\Logger\Processor\Psr();
-        $stream = new \Monolog\Handler\StreamHandler(TMP . CHROME_LOG_DIR . CHROME_LOG_FILE);
-        $streamDatabase = new \Monolog\Handler\StreamHandler(TMP . CHROME_LOG_DIR . 'database.log');
+        $stream = new \Monolog\Handler\StreamHandler(TMP.CHROME_LOG_DIR.'log.log');
+        $streamDatabase = new \Monolog\Handler\StreamHandler(TMP.CHROME_LOG_DIR.'database.log');
         $stream->setFormatter($formatter);
         $stream->pushProcessor($processor);
         $streamDatabase->setFormatter($formatter);
@@ -292,8 +310,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $loggers = array('application', 'router', 'autoloader');
 
-        foreach($loggers as $loggerName)
-        {
+        foreach($loggers as $loggerName) {
             $logger = new \Monolog\Logger($loggerName);
             $logger->pushHandler($stream);
 
@@ -403,9 +420,12 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $routerLogger = $this->_loggerRegistry->get('router');
         // import(array('Chrome_Route_Static', 'Chrome_Route_Dynamic') );
         // matches static routes
-        $this->_router->addRoute(new Chrome_Route_Static(new Chrome_Model_Route_Static_Cache(new Chrome_Model_Route_Static_DB($this->_modelContext)), $routerLogger));
+        $this->_router
+                ->addRoute(new Chrome_Route_Static(new Chrome_Model_Route_Static_Cache(new Chrome_Model_Route_Static_DB($this->_modelContext)), $routerLogger));
         // matches dynamic created routes
-        $this->_router->addRoute(new Chrome_Route_Dynamic(new Chrome_Model_Route_Dynamic_Cache(new Chrome_Model_Route_Dynamic_DB($this->_modelContext)), $routerLogger));
+        $this->_router
+                ->addRoute(
+                        new Chrome_Route_Dynamic(new Chrome_Model_Route_Dynamic_Cache(new Chrome_Model_Route_Dynamic_DB($this->_modelContext)), $routerLogger));
         // matches routes to administration site
         $this->_router->addRoute(new Chrome_Route_Administration(new Chrome_Model_Route_Administration($this->_modelContext), $routerLogger));
     }
@@ -431,6 +451,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      * @param mixed $obj
      * @return void
      */
+
     public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)
     {
         $this->_exceptionHandler = $obj;
@@ -441,6 +462,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @return Chrome_Exception_Handler_Interface
      */
+
     public function getExceptionHandler()
     {
         return $this->_exceptionHandler;

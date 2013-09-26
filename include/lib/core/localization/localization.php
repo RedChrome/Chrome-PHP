@@ -77,7 +77,7 @@ interface L12y
  */
 class Translate_Simple implements Translate_Interface
 {
-    const INCLUDE_DIR = 'plugins/Language/';
+    const INCLUDE_DIR = 'translations/';
 
     protected $_loadedModules = array();
 
@@ -114,7 +114,7 @@ class Translate_Simple implements Translate_Interface
         {
             return;
         }
-        $file = BASEDIR.self::INCLUDE_DIR.$this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/locale.ini';
+        $file = RESOURCE.self::INCLUDE_DIR.$this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/locale.ini';
 
         if(!_isFile($file))
         {
@@ -150,7 +150,11 @@ class Translate_Simple implements Translate_Interface
  */
 interface Locale_Interface
 {
+    public function getLocaleString($useUnderscore = false);
+
     public function getPrimaryLanguage();
+
+    public function getRegion();
 }
 
 /**
@@ -159,9 +163,56 @@ interface Locale_Interface
  */
 class Locale implements Locale_Interface
 {
+    protected $_primaryLanguage = '';
+
+    protected $_region = '';
+
+    private $_localeParseTries = 0;
+
+    const MAX_PARSE_TRIES = 2;
+
+    public function __construct($localeString)
+    {
+        $this->_parseLocaleString($localeString);
+    }
+
+    protected function _parseLocaleString($localeString)
+    {
+        if(++$this->_localeParseTries >= self::MAX_PARSE_TRIES)
+        {
+            throw new \Chrome_Exception('The maximum number of tries to parse a locale string was reached');
+        }
+
+        // only use the first 5 chars: e.g. de-DE, en-US
+        $actualLocaleString = substr($localeString, 0, 5);
+        $matches = array();
+
+        // string was ok
+        if(preg_match('~([a-z]{2})(-|_)([a-z]{2})~i', $actualLocaleString, $matches) === 1)
+        {
+            $this->_primaryLanguage = strtolower($matches[1]);
+            $this->_region = strtoupper($matches[3]);
+            $this->_localeParseTries = 0;
+        } else {
+            $this->_parseLocaleString(CHROME_DEFAULT_LOCALE);
+        }
+    }
+
     public function getPrimaryLanguage()
     {
-        return 'de';
+        return $this->_primaryLanguage;
+    }
+
+    public function getRegion()
+    {
+        return $this->_region;
+    }
+
+    public function getLocaleString($useUnderscore = false)
+    {
+        $separation = ($useUnderscore === true) ? '_' : '-';
+
+        return $this->_primaryLanguage.$separation.$this->_region;
     }
 }
 

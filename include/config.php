@@ -57,15 +57,8 @@ if(!defined('E_USER_DEPRECATED')) {
     define('E_USER_DEPRECATED', 16384);
 }
 
-// Logs every exception
-// @deprecated, logging is activated by CHROME_DEVELOPER_STATUS
-define('CHROME_LOG_ERRORS', true);
-// Logs every SQL-Error
-define('CHROME_LOG_SQL_ERRORS', true);
 // log path
 define('CHROME_LOG_DIR', 'logs/');
-// log file, default, do not add an extension. this will be generated automatically
-define('CHROME_LOG_FILE', 'log.log');
 //E_ALL | E_STRICT | E_DEPRECATED | E_USER_DEPRECATED); # Display Errors, set to 0 to supress errors
 define('CHROME_DISPLAY_ERRORS', (E_ALL | E_STRICT));
 
@@ -105,6 +98,7 @@ define('CHROME_MEMORY_USAGE', memory_get_usage());
 define('CHROME_MEMORY_LIMIT', ini_get('memory_limit'));
 // charset, UTF-8, ISO-8859-1 http://www.iana.org/assignments/character-sets
 define('CHROME_CHARSET', 'ISO-8859-1');
+define('CHROME_DEFAULT_LOCALE', 'de-DE');
 define('CHROME_TIMEZONE', 'Europe/Berlin');
 define('CHROME_VERSION', '0.1');
 define('CHROME_VERSION_SUFFIX', 'beta');
