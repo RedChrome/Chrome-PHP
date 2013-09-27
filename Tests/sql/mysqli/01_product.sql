@@ -1,3 +1,4 @@
+SET FOREIGN_KEY_CHECKS = 0;
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -37,9 +38,9 @@ CREATE TABLE IF NOT EXISTS `cp1_authenticate` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-INSERT INTO `cp1_authenticate` (`password`, `password_salt`, `cookie_token`, `time`) VALUES
-('', '', '', 0),
-('b10617e307e7731817dac8b39f19d1418bde2e49db95139b', 'Gd{|Yw"BA4z4,czCw~g0', '5e4869588d85631bb513bcfd7a4d811469836f20a6cc05a0', 1374572687);
+INSERT INTO `cp1_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
+(0, '', '', '', 0),
+(1, 'b10617e307e7731817dac8b39f19d1418bde2e49db95139b', 'Gd{|Yw"BA4z4,czCw~g0', '5e4869588d85631bb513bcfd7a4d811469836f20a6cc05a0', 1374572687);
 
 DROP TABLE IF EXISTS `cp1_authorisation_rbac`;
 CREATE TABLE IF NOT EXISTS `cp1_authorisation_rbac` (
@@ -76,8 +77,8 @@ CREATE TABLE IF NOT EXISTS `cp1_authorisation_user_default` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `cp1_authorisation_user_default` (`user_id`, `group_id`) VALUES
-(1, 1),
-(2, 4);
+(0, 1),
+(1, 4);
 
 DROP TABLE IF EXISTS `cp1_class`;
 CREATE TABLE IF NOT EXISTS `cp1_class` (
@@ -402,7 +403,7 @@ CREATE TABLE IF NOT EXISTS `cp1_user` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 INSERT INTO `cp1_user` (`id`, `name`, `email`, `group`, `time`, `avatar`, `address`, `design`) VALUES
-(2, 'Alex', 'redchrome@gmx.de', 0, 1349179579, '', '', 'default');
+(1, 'Alex', 'redchrome@gmx.de', 0, 1349179579, '', '', 'default');
 
 DROP TABLE IF EXISTS `cp1_user_regist`;
 CREATE TABLE IF NOT EXISTS `cp1_user_regist` (
@@ -427,3 +428,4 @@ ALTER TABLE `cp1_user`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+SET FOREIGN_KEY_CHECKS = 1;
