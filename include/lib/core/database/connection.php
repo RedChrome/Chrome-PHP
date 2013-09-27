@@ -76,6 +76,24 @@ interface Chrome_Database_Connection_Interface
 }
 
 /**
+ * Additional interface to retrieve a schema
+ *
+ * Some databases allow the usage of schemas. To retrieve the schema, implement this interface
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
+interface Chrome_Database_Connection_SchemaProvider_Interface
+{
+    /**
+     * Returns the schema for the current connection
+     *
+     * @return string
+     */
+    public function getSchema();
+}
+
+/**
  * Interface for a connection registry
  *
  * These classes are storing the connection, associated with a connection name

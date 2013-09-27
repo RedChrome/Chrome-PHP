@@ -25,6 +25,8 @@ error_reporting(E_ALL);
 
 require_once 'phpUnit/testsetup.php';
 
+$sqlScriptDir = 'Tests/sql/';
+
 $testsetup = new Chrome_TestSetup();
 $testsetup->testDb();
 
@@ -51,6 +53,26 @@ function applySQLQueries($query, Chrome_Database_Interface_Interface $db)
     echo PHP_EOL.PHP_EOL;
 }
 
+function getAvailableSQLScripts($databaseName)
+{
+    if(!is_dir($databaseName)) {
+        die('No sql scripts found in dir '.$databaseName);
+    }
+
+    $files = scandir($databaseName, 0);
+    $sqlScripts = array();
+
+    foreach($files as $file)
+    {
+        if(Chrome_File::getExt($file) === 'sql')
+        {
+            $sqlScripts[] = $file;
+        }
+    }
+
+    return $sqlScripts;
+}
+
 $databaseFactory = $testsetup->getApplicationContext()->getModelContext()->getDatabaseFactory();
 $connectionRegistry = $databaseFactory->getConnectionRegistry();
 $connection = 'default';
@@ -74,9 +96,12 @@ if(isset($_SERVER['argv']) and isset($_SERVER['argv'][1]))
 }
 
 $db = $databaseFactory->buildInterface('simple', 'assoc', $connection);
+$suffix = strtolower($connectionRegistry->getConnectionObject($connection)->getDefaultAdapterSuffix());
+$scripts = getAvailableSQLScripts($sqlScriptDir.$suffix);
+$sqlScriptDir = $sqlScriptDir.$suffix.'/';
 
-echo 'applying product.sql using connection "' . $connection . '"' . PHP_EOL;
-applySQLQueries(file_get_contents('Tests/sql/product.sql'), $db);
-echo 'applying deltaProductTest.sql:' . PHP_EOL;
-applySQLQueries(file_get_contents('Tests/sql/deltaProductTest.sql'), $db);
-echo 'done';
+foreach($scripts as $sqlScript)
+{
+    echo 'applying '.$sqlScriptDir.$sqlScript.' using connection "' . $connection . '"' . PHP_EOL;
+    applySQLQueries(file_get_contents($sqlScriptDir.$sqlScript), $db);
+}

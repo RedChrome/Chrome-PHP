@@ -129,6 +129,14 @@ interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Resu
      * @return int the error code
      */
     public function getErrorCode();
+
+    /**
+     * Prepares the statement to use it with this adapter
+     *
+     * @param string $statement
+     * @return the prepared statement
+     */
+    public function prepareStatement($statement);
 }
 
 /**
@@ -193,5 +201,11 @@ abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapt
         $adapter->_isEmpty = true;
         $adapter->_cache = null;
         return $adapter;
+    }
+
+    public function prepareStatement($statement)
+    {
+        // replace table prefix
+        return str_replace('cpp_', DB_PREFIX . '_', $statement);
     }
 }

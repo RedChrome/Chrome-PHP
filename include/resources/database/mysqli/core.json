@@ -12,9 +12,9 @@
     "authorisationGetUserGroupById": "SELECT `group_id` FROM cpp_authorisation_user_default WHERE `user_id`= \"?\" ",
 
     "configLoadConfiguration": "SELECT `name`, `subclass`, `value`, `type` FROM cpp_config",
-    "configSetConfiguration": "INSERT INTO cpp_config VALUES(\"?\", \"?\", \"?\", \"?\", \"?\", ?)",
+    "configSetConfiguration": "INSERT INTO cpp_config (`name`, `subclass`, `value`, `type`, `modul`, `hidden`) VALUES(\"?\", \"?\", \"?\", \"?\", \"?\", ?)",
 
-    "requireGetRequirements": "SELECT `name`, `path`, `is_class_resolver` FROM cpp_autoload AS `r` WHERE `activated` = 1 ORDER BY r.priority ASC",
+    "requireGetRequirements": "SELECT `name`, `path`, `is_class_resolver` FROM cpp_autoload AS `r` WHERE `activated` = TRUE ORDER BY r.priority ASC",
     "requireGetClasses": "SELECT `name`, `file` FROM cpp_class",
     "requireDeleteEntryByName": "DELETE FROM cpp_class WHERE `name` = \"?\" LIMIT 0,1",
     "requireDoesNameExist": "SELECT `id` FROM cpp_class WHERE `name` = \"?\" LIMIT 0,1",
@@ -22,6 +22,8 @@
 
     "routeDynamicGetResourceById": "SELECT `name`, `class`, `GET`, `POST` FROM cpp_route_dynamic WHERE `id` = ? LIMIT 0,1",
     "routeStaticGetRoute": "SELECT `name`, `class`, `POST`, `GET` FROM cpp_route_static WHERE `search` = \"?\" LIMIT 0,1",
-    "routeStaticFindRoute": "SELECT `search` FROM cpp_route_static WHERE `name`= \"?\" LIMIT 0,1"
+    "routeStaticFindRoute": "SELECT `search` FROM cpp_route_static WHERE `name`= \"?\" LIMIT 0,1",
 
+    "designLoaderStaticGetViewsByPosition": "SELECT `file`, `class`, `type` FROM cpp_design_static WHERE `position` = \"?\" AND `theme` = \"?\"  ORDER BY `order` ASC"
+    	
 }

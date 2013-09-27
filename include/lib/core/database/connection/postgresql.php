@@ -27,7 +27,7 @@
 
 if(CHROME_PHP !== true) die();
 
-class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_Abstract
+class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_Abstract implements Chrome_Database_Connection_SchemaProvider_Interface
 {
     protected $_isSetConnectionOptions = false;
 
@@ -37,10 +37,11 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
     protected $_clientFlags;
     protected $_database;
     protected $_port;
+    protected $_schema;
 
-    public function setConnectionOptions($host, $username, $password, $database, $port = 3306, $clientFlags = 0)
+    public function setConnectionOptions($host, $username, $password, $database, $port = 3306, $schema = null, $clientFlags = 0)
     {
-        if(!extension_loaded('postgresql')) {
+        if(!extension_loaded('pgsql')) {
             throw new Chrome_Exception('Extension PostgreSQL not loaded! Cannot use this adapter');
         }
 
@@ -50,6 +51,8 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
         $this->_clientFlags = $clientFlags;
         $this->_database    = $database;
         $this->_port        = $port;
+
+        $this->_schema      = ($schema === null) ? $username : $schema;
 
         $this->_isSetConnectionOptions = true;
     }
@@ -65,7 +68,13 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
         }
 
         try {
-            $this->_connection = pg_connect('host=' . $this->_host . ' port="' . $this->_port . ' user=' . $this->_username . ' password=' . $this->_password . ' dbname=' . $this->_database. ' connect_timeout=1');
+            $hostString = '';
+
+            if(!empty($this->_host)) {
+                $hostString = 'host='.$this->_host;
+            }
+
+            $this->_connection = pg_connect($hostString.' port=' . $this->_port . ' user=' . $this->_username . ' password=' . $this->_password . ' dbname=' . $this->_database. ' connect_timeout=1');
 
             if($this->_connection === false) {
                 throw new Chrome_Exception_Database('Could not connect to PostgreSQL server!');
@@ -79,6 +88,11 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
         $this->_isConnected = true;
 
         return $this->_connection;
+    }
+
+    public function getSchema()
+    {
+        return $this->_schema;
     }
 
     public function disconnect()

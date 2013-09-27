@@ -98,6 +98,11 @@ class Chrome_Database_Adapter_Cache implements Chrome_Database_Adapter_Interface
 
     }
 
+    public function prepareStatement($statement)
+    {
+        return $statement;
+    }
+
     public function getErrorMessage()
     {
         $this->_notSupportedMethod();

@@ -104,6 +104,13 @@ class Chrome_TestSetup
             $mysqliTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
             #$mysqliTestConnection->connect();
             $dbRegistry->addConnection('mysqli_test', $mysqliTestConnection, true);
+
+
+            $postgresqlTestConnection = new Chrome_Database_Connection_Postgresql();
+            $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
+            $postgresqlTestConnection->connect();
+            $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
+            $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
         }
 
         $modelContext = new Chrome_Context_Model();

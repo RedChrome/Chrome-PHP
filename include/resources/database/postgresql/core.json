@@ -1,0 +1,28 @@
+{
+    "info": "File for PostgreSQL, saves all queries sent by core",
+
+    "authenticationDoesIdAndTokenExist": "SELECT \"id\" FROM cpp_? WHERE \"id\" = ? AND \"cookie_token\" = '?' LIMIT 1",
+    "authenticationUpdateTokenById": "UPDATE cpp_? SET \"cookie_token\" = '?' WHERE \"id\" = '?' LIMIT 1",
+    "authenticationGetPasswordAndSaltByIdentity": "SELECT \"password\",\"password_salt\" FROM cpp_authenticate WHERE \"id\" = '?' LIMIT 1",
+    "authenticationUpdateTimeById": "UPDATE cpp_authenticate SET \"time\" = '?' WHERE \"id\" = '?' LIMIT 1",
+    "authenticationGetIdByPassword": "SELECT \"id\" FROM cpp_authenticate WHERE \"password\" = '?' AND \"password_salt\" = '?' ORDER BY \"id\" DESC LIMIT 1",
+    "authenticationCreateAuthentication": "INSERT INTO cpp_authenticate(\"password\", \"password_salt\", \"time\") VALUES('?', '?', '?')",
+
+    "authorisationGetAccessById": "SELECT \"_access\" FROM cpp_authorisation_resource_default WHERE \"_resource_id\" = '?' AND \"_transformation\" = '?'",
+    "authorisationGetUserGroupById": "SELECT \"group_id\" FROM cpp_authorisation_user_default WHERE \"user_id\"= '?' ",
+
+    "configLoadConfiguration": "SELECT \"name\", \"subclass\", \"value\", \"type\" FROM cpp_config",
+    "configSetConfiguration": "INSERT INTO cpp_config (\"name\", \"subclass\", \"value\", \"type\", \"modul\", \"hidden\") VALUES('?', '?', '?', '?', '?', ?)",
+
+    "requireGetRequirements": "SELECT \"name\", \"path\", \"is_class_resolver\"::INT FROM cpp_autoload AS \"r\" WHERE \"activated\" = TRUE ORDER BY r.priority ASC",
+    "requireGetClasses": "SELECT \"name\", \"file\" FROM cpp_class",
+    "requireDeleteEntryByName": "DELETE FROM cpp_class WHERE \"name\" = '?' LIMIT 1",
+    "requireDoesNameExist": "SELECT \"id\" FROM cpp_class WHERE \"name\" = '?' LIMIT 1",
+    "requireSetClass": "INSERT INTO cpp_class(\"id\", \"name\", \"file\") VALUES ('', '?', '?')",
+
+    "routeDynamicGetResourceById": "SELECT \"name\", \"class\", \"GET\", \"POST\" FROM cpp_route_dynamic WHERE \"id\" = '?' LIMIT 1",
+    "routeStaticGetRoute": "SELECT \"name\", \"class\", \"POST\", \"GET\" FROM cpp_route_static WHERE \"search\" = '?' LIMIT 1",
+    "routeStaticFindRoute": "SELECT \"search\" FROM cpp_route_static WHERE \"name\"= '?' LIMIT 1",
+    			
+    "designLoaderStaticGetViewsByPosition": "SELECT \"file\", \"class\", \"type\" FROM cpp_design_static WHERE \"position\" = '?' AND \"theme\" = '?'  ORDER BY \"order\" ASC"
+}

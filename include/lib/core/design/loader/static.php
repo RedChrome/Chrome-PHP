@@ -158,7 +158,7 @@ class Chrome_Model_Design_Loader_Static extends Chrome_Model_Database_Abstract
 {
     protected function _setDatabaseOptions()
     {
-        $this->_dbInterface = 'Simple';
+        $this->_dbInterface = 'model';
         $this->_dbResult = array('Iterator', 'Assoc');
     }
 
@@ -166,6 +166,8 @@ class Chrome_Model_Design_Loader_Static extends Chrome_Model_Database_Abstract
     {
         $db = $this->_getDBInterface();
 
-        return $db->query('SELECT `file`, `class`, `type` FROM cpp_design_static WHERE `position` = "?" AND `theme` = "?"  ORDER BY `order` ASC', array($position, $theme));
+        return $db->loadQuery('designLoaderStaticGetViewsByPosition')->execute(array($position, $theme));
+
+        //return $db->query('SELECT `file`, `class`, `type` FROM cpp_design_static WHERE `position` = "?" AND `theme` = "?"  ORDER BY `order` ASC', array($position, $theme));
     }
 }

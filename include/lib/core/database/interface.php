@@ -321,8 +321,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
     protected function _prepareStatement($statement)
     {
-        // replace table prefix
-        $statement = str_replace('cpp_', DB_PREFIX . '_', $statement);
+        $statement = $this->_adapter->prepareStatement($statement);
         // do not allow to modifie the behavior of vsprintf manually...
         $statement = str_replace('%', '%%', $statement);
 

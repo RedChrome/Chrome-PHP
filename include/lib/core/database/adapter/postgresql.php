@@ -36,6 +36,8 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
 
     public function query($query)
     {
+        $query = str_replace('`', '"', $query);
+
         $this->_result = pg_query($this->_connection, $query);
 
         if($this->_result === false)
@@ -55,6 +57,18 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
                 $this->_isEmpty = false;
             }
         }
+    }
+
+    public function prepareStatement($statement)
+    {
+        if($this->_connectionObject instanceof Chrome_Database_Connection_SchemaProvider_Interface)
+        {
+            $statement = str_replace('cpp_', $this->_connectionObject->getSchema().'.'.DB_PREFIX.'_', $statement);
+        } else {
+            $statement = str_replace('cpp_', DB_PREFIX.'_', $statement);
+        }
+
+        return str_replace('`', '"', $statement);
     }
 
     public function getNext()
