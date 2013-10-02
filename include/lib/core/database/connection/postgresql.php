@@ -105,4 +105,9 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
         return 'Postgresql';
     }
 
+    public function getDatabaseName()
+    {
+        return 'postgresql';
+    }
+
 }

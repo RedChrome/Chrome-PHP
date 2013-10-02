@@ -111,4 +111,9 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
     {
         return 'Mysqli';
     }
+
+    public function getDatabaseName()
+    {
+        return 'mysql';
+    }
 }

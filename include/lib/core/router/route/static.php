@@ -124,10 +124,15 @@ class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
  */
 class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Abstract
 {
-
     protected function _setDatabaseOptions()
     {
         $this->_dbInterface = 'model';
+    }
+
+    protected function _connect()
+    {
+        parent::_connect();
+        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory()));
     }
 
     public function getRoute($search)

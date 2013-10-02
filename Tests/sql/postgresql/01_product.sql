@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS "chrome"."cp1_authenticate" (
 );
 
 INSERT INTO "chrome"."cp1_authenticate" ("id", "password", "password_salt", "cookie_token", "time") VALUES
-(0, '', '', '', 0),
-(1, 'b10617e307e7731817dac8b39f19d1418bde2e49db95139b', 'Gd{|Yw"BA4z4,czCw~g0', '5e4869588d85631bb513bcfd7a4d811469836f20a6cc05a0', 1374572687);
+(1, '', '', '', 0),
+(2, 'b10617e307e7731817dac8b39f19d1418bde2e49db95139b', 'Gd{|Yw"BA4z4,czCw~g0', '5e4869588d85631bb513bcfd7a4d811469836f20a6cc05a0', 1374572687);
 
 DROP TABLE IF EXISTS "chrome"."cp1_authorisation_rbac";
 CREATE TABLE IF NOT EXISTS "chrome"."cp1_authorisation_rbac" (
@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS "chrome"."cp1_authorisation_user_default" (
 );
 
 INSERT INTO "chrome"."cp1_authorisation_user_default" ("user_id", "group_id") VALUES
-(0, 1),
-(1, 4);
+(1, 1),
+(2, 4);
 
 DROP TABLE IF EXISTS "chrome"."cp1_class";
 CREATE TABLE IF NOT EXISTS "chrome"."cp1_class" (
@@ -392,7 +392,7 @@ CREATE TABLE IF NOT EXISTS "chrome"."cp1_user" (
 );
 
 INSERT INTO "chrome"."cp1_user" ("id", "name", "email", "group", "time", "avatar", "address", "design") VALUES
-(1, 'Alex', 'redchrome@gmx.de', 0, 1349179579, '', '', 'default');
+(2, 'Alex', 'redchrome@gmx.de', 0, 1349179579, '', '', 'default');
 
 DROP TABLE IF EXISTS "chrome"."cp1_user_regist";
 CREATE TABLE IF NOT EXISTS "chrome"."cp1_user_regist" (

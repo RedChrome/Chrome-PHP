@@ -52,6 +52,22 @@ class Chrome_Exception_Database extends Chrome_Exception
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
+class Chrome_Exception_Database_Query extends Chrome_Exception_Database
+{
+    protected $_executedQuery = '';
+
+    public function __construct($message = '', $executedQuery = '', $code = self::DATABASE_EXCEPTION_ERROR_IN_QUERY, Exception $prevException = null)
+    {
+        $this->_executedQuery = (string) $executedQuery;
+        parent::__construct($message, $code, $prevException);
+    }
+}
+
+/**
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 class Chrome_Exception_Database_Handler extends Chrome_Exception_Handler_Loggable_Abstract
 {
     public function exception(Exception $e)

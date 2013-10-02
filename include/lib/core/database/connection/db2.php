@@ -99,4 +99,9 @@ class Chrome_Database_Connection_DB2 extends Chrome_Database_Connection_Abstract
     {
         return 'Db2';
     }
+
+    public function getDatabaseName()
+    {
+        return 'db2';
+    }
 }

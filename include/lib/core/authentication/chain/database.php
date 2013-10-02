@@ -171,7 +171,7 @@ class Chrome_Authentication_Resource_Database implements Chrome_Authentication_R
     {
         $this->_id         = $id;
         $this->_credential = $credential;
-        $this->_autoLogin  = $autoLogin;
+        $this->_autoLogin  = (boolean) $autoLogin;
     }
 
     public function getID()
@@ -257,6 +257,12 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
         $this->_dbDIComposition = $composition;
         $this->_dbComposition = new Chrome_Database_Composition('model');
         $this->_options = array_merge($this->_options, $options);
+    }
+
+    protected function _connect()
+    {
+        parent::_connect();
+        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory()));
     }
 
     /**

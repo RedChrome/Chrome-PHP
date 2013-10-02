@@ -168,6 +168,12 @@ class Chrome_Model_Authentication_Cookie extends Chrome_Model_Database_Abstract
         $this->_dbDIComposition = $dbComposition;
     }
 
+    protected function _connect()
+    {
+        parent::_connect();
+        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory()));
+    }
+
     public function encodeCookieString($id, $token)
     {
         $id = (int) $id;

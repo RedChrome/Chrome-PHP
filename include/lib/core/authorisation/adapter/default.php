@@ -230,6 +230,12 @@ class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_Database_Abstra
         $this->_dbInterface = 'model';
     }
 
+    protected function _connect()
+    {
+        parent::_connect();
+        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory()));
+    }
+
     public function getAccessById($id, $transformation)
     {
         $db = $this->_getDBInterface();

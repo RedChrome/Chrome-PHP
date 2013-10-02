@@ -96,7 +96,7 @@ if(isset($_SERVER['argv']) and isset($_SERVER['argv'][1]))
 }
 
 $db = $databaseFactory->buildInterface('simple', 'assoc', $connection);
-$suffix = strtolower($connectionRegistry->getConnectionObject($connection)->getDefaultAdapterSuffix());
+$suffix = $connectionRegistry->getConnectionObject($connection)->getDatabaseName();
 $scripts = getAvailableSQLScripts($sqlScriptDir.$suffix);
 $sqlScriptDir = $sqlScriptDir.$suffix.'/';
 

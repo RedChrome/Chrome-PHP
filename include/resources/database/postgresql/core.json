@@ -2,9 +2,9 @@
     "info": "File for PostgreSQL, saves all queries sent by core",
 
     "authenticationDoesIdAndTokenExist": "SELECT \"id\" FROM cpp_? WHERE \"id\" = ? AND \"cookie_token\" = '?' LIMIT 1",
-    "authenticationUpdateTokenById": "UPDATE cpp_? SET \"cookie_token\" = '?' WHERE \"id\" = '?' LIMIT 1",
+    "authenticationUpdateTokenById": "UPDATE cpp_? SET \"cookie_token\" = '?' WHERE \"id\" = '?'",
     "authenticationGetPasswordAndSaltByIdentity": "SELECT \"password\",\"password_salt\" FROM cpp_authenticate WHERE \"id\" = '?' LIMIT 1",
-    "authenticationUpdateTimeById": "UPDATE cpp_authenticate SET \"time\" = '?' WHERE \"id\" = '?' LIMIT 1",
+    "authenticationUpdateTimeById": "UPDATE cpp_authenticate SET \"time\" = '?' WHERE \"id\" = '?'",
     "authenticationGetIdByPassword": "SELECT \"id\" FROM cpp_authenticate WHERE \"password\" = '?' AND \"password_salt\" = '?' ORDER BY \"id\" DESC LIMIT 1",
     "authenticationCreateAuthentication": "INSERT INTO cpp_authenticate(\"password\", \"password_salt\", \"time\") VALUES('?', '?', '?')",
 
@@ -12,7 +12,7 @@
     "authorisationGetUserGroupById": "SELECT \"group_id\" FROM cpp_authorisation_user_default WHERE \"user_id\"= '?' ",
 
     "configLoadConfiguration": "SELECT \"name\", \"subclass\", \"value\", \"type\" FROM cpp_config",
-    "configSetConfiguration": "INSERT INTO cpp_config (\"name\", \"subclass\", \"value\", \"type\", \"modul\", \"hidden\") VALUES('?', '?', '?', '?', '?', ?)",
+    "configSetConfiguration": "INSERT INTO cpp_config (\"name\", \"subclass\", \"value\", \"type\", \"modul\", \"hidden\") VALUES('?', '?', '?', '?', '?', ?::BOOLEAN)",
 
     "requireGetRequirements": "SELECT \"name\", \"path\", \"is_class_resolver\"::INT FROM cpp_autoload AS \"r\" WHERE \"activated\" = TRUE ORDER BY r.priority ASC",
     "requireGetClasses": "SELECT \"name\", \"file\" FROM cpp_class",

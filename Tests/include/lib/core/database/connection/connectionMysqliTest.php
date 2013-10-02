@@ -1,9 +1,9 @@
 <?php
 
-class DatabaseConnectionMysqliTest extends DatabaseConnectionMysqlTest
+class DatabaseConnectionMysqliTest extends AbstractDatabaseConnectionTestCase
 {
-    public function setUp()
+    public function _getDatabaseConnection()
     {
-        $this->_connection = new Chrome_Database_Connection_Mysqli();
+        return new Chrome_Database_Connection_Mysqli();
     }
 }

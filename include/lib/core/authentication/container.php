@@ -141,7 +141,7 @@ class Chrome_Authentication_Data_Container implements Chrome_Authentication_Data
      *
      * @var int
      */
-    protected $_id = false;
+    protected $_id = Chrome_Authentication_Interface::GUEST_ID;
 
     /**
      * contains whether the user gets automatically logged in or not

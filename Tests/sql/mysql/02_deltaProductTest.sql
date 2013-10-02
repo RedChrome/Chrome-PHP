@@ -19,11 +19,11 @@ TRUNCATE `cp1_user`;
 TRUNCATE `cp1_user_regist`;
 
 INSERT INTO `cp1_authorisation_user_default` (`user_id`, `group_id`) VALUES
-(0, 1),
-(1, 123456),
-(2, 89123),
-(3, 8388607),
-(4, 168804);
+(1, 1),
+(2, 123456),
+(3, 89123),
+(4, 8388607),
+(5, 168804);
 
 INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`) VALUES
 ('testValueString', 'testSubclass', 'testValue', 'string', 'anyModule', '0'),
@@ -33,8 +33,8 @@ INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 ('testValueDouble', 'testSubclass', '2.7182818', 'double', 'anyModule', '0');
 
 INSERT INTO `cp1_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
-(NULL, 'testAuthenticate', 'testAuthenticateSalt', NULL, 12345678),
-(NULL, 'eec1d7d507bf854c586a64f7a0db6e8a8db088eae96ccbb6', 'ahFB319VKaD', NULL, 12345678);
+(1, 'testAuthenticate', 'testAuthenticateSalt', NULL, 12345678),
+(2, 'eec1d7d507bf854c586a64f7a0db6e8a8db088eae96ccbb6', 'ahFB319VKaD', NULL, 12345678);
 -- password is test
 
 INSERT INTO `cp1_authorisation_resource_default` (`_resource_id`, `_transformation`, `_access`) VALUES

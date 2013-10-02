@@ -65,6 +65,13 @@ interface Chrome_Database_Connection_Interface
     public function isConnected();
 
     /**
+     * Returns the name of the database, in lower case, just digits and letters
+     *
+     * @return string
+     */
+    public function getDatabaseName();
+
+    /**
      * Returns the default adapter suffix.
      *
      * Every connection has a default adapter which is compatible with the connection. This method returns

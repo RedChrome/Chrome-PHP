@@ -29,3 +29,9 @@ if(getenv('TRAVIS') == true)
     // 5433 -> 9.1, 5432 -> 9.2, 5434 -> 9.3
     define('POSTGRESQL_PORT', 5433);
 }
+
+function _skipDatabaseTest($class)
+{
+    $toSkipTests = array();
+    return in_array($class, $toSkipTests);
+}

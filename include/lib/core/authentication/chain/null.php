@@ -56,7 +56,7 @@ class Chrome_Authentication_Chain_Null extends Chrome_Authentication_Chain_Abstr
 
         // guest status
         $container->setStatus(Chrome_Authentication_Data_Container_Interface::STATUS_GUEST);
-        $container->setID(0);
+        $container->setID(Chrome_Authentication_Interface::GUEST_ID);
 
         return $container;
     }

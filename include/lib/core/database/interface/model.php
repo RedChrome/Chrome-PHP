@@ -15,28 +15,21 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category CHROME-PHP
  * @package CHROME-PHP
  * @subpackage Chrome.Database
- * @author Alexander Book <alexander.book@gmx.de>
- * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 20:21:48] --> $
- * @link http://chrome-php.de
  */
 if(CHROME_PHP !== true)
     die();
 
 /**
- * @packagte CHROME-PHP
- *
+ * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
 interface Chrome_Model_Database_Statement_Interface
 {
-
     public function getStatement($key);
 }
+
 class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract
 {
     protected $_model = null;
@@ -67,6 +60,7 @@ class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract
 
     public function loadQuery($key)
     {
+        $this->clear();
         $this->_checkModel();
         try
         {
@@ -75,7 +69,6 @@ class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract
         {
             throw new Chrome_Exception_Database('Exception while getting sql statement for key "' . $key . '"!', null, $e);
         }
-
         return $this;
     }
 
@@ -84,12 +77,86 @@ class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract
         // use default one
         if($this->_model === null)
         {
-            $this->_model = Chrome_Model_Database_Statement::getInstance(null, $this->_adapter->getConnection());
+            throw new Chrome_Exception('No model set, which contains the stored queries');
         }
     }
 }
 class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implements Chrome_Model_Database_Statement_Interface
 {
+    private static $_caches = array();
+    const DEFAULT_NAMESPACE = 'core';
+
+    public function __construct($namespace, $database)
+    {
+        if(!is_string($namespace) or !is_string($database))
+        {
+            throw new Chrome_InvalidArgumentException('$namespace and $database must be of type string!');
+        }
+
+        $this->_namespace = $namespace;
+        $this->_database = $database;
+
+        if(isset(self::$_caches[$this->_database][$this->_namespace]))
+        {
+            $this->_cache = self::$_caches[$this->_database][$this->_namespace];
+        } else
+        {
+            parent::__construct($this);
+            self::$_caches[$this->_database][$this->_namespace] = $this->_cache;
+        }
+    }
+
+    public static function create($databaseObject, $namespace = null)
+    {
+        if($namespace === null)
+        {
+            $namespace = self::DEFAULT_NAMESPACE;
+        }
+
+        $database = null;
+
+        if($databaseObject instanceof Chrome_Database_Connection_Interface) {
+            $database = $databaseConnection->getDatabaseName();
+        } elseif($databaseObject instanceof Chrome_Database_Factory_Interface)
+        {
+            $database = $databaseObject->getConnectionRegistry()->getConnectionObject(Chrome_Database_Registry_Connection_Interface::DEFAULT_CONNECTION)->getDatabaseName();
+        } else {
+            throw new Chrome_InvalidArgumentException('$databaseObject must be of instance Chrome_Database_Connection_Interface or Chrome_Database_Factory_Interface');
+        }
+
+        return new self($namespace, $database);
+    }
+
+    public static function clearCaches()
+    {
+        self::$_caches = array();
+    }
+
+    protected function _setUpCache()
+    {
+        $this->_cacheOption = new Chrome_Cache_Option_Json();
+        $this->_cacheOption->setCacheFile(RESOURCE . 'database/' . strtolower($this->_database) . '/' . strtolower($this->_namespace) . '.json');
+        $this->_cacheInterface = 'Json';
+    }
+
+    public function getStatement($key)
+    {
+        $statement = $this->_cache->get($key);
+
+        // could not get statement
+        if($statement === null)
+        {
+            throw new Chrome_Exception('Could not retrieve sql statement for key "' . $key . '"!');
+        }
+
+        return $statement;
+    }
+}
+
+/*
+class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implements Chrome_Model_Database_Statement_Interface
+{
+
     private static $_instances = array();
     protected $_namespace = null;
     protected $_database = null;
@@ -160,3 +227,4 @@ class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implem
         return $statement;
     }
 }
+*/

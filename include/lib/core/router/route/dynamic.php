@@ -174,6 +174,12 @@ class Chrome_Model_Route_Dynamic_DB extends Chrome_Model_Database_Abstract
         $this->_dbInterface = 'model';
     }
 
+    protected function _connect()
+    {
+        parent::_connect();
+        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory()));
+    }
+
     public function getResourcesAsArray()
     {
         // just an example

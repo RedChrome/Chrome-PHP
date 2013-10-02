@@ -85,6 +85,13 @@ interface Chrome_Authentication_Interface extends Chrome_Exception_Processable_I
 {
 
     /**
+     * The id for all guests
+     *
+     * @var int
+     */
+    const GUEST_ID = 1;
+
+    /**
      *
      * @param Chrome_Authentication_Resource_Interface $resource
      *        [optional] if we want to authenticate with special options then
@@ -417,6 +424,12 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
 
     /**
      *
+     * @var boolean
+     */
+    protected $_isUser = false;
+
+    /**
+     *
      * @return Chrome_Authentication
      */
     public function __construct()
@@ -481,15 +494,15 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
             }
 
             // user should get authenticated as guest
-            if($id === 0 or $this->_container->getStatus() !== Chrome_Authentication_Data_Container_Interface::STATUS_USER)
+            if($id === self::GUEST_ID or $this->_container->getStatus() !== Chrome_Authentication_Data_Container_Interface::STATUS_USER)
             {
-                // id has to be positiv or 0!
-                // unknown error, should not happen
-                $this->_authenticationID = 0;
+                $this->_authenticationID = self::GUEST_ID;
+                $this->_isUser = false;
             } else
             { // successfully authenticated
 
                 $this->_authenticationID = $id;
+                $this->_isUser = true;
 
                 // update other chains, so that they know that sb. has successfully authenticated
                 // -> maybe any chain needs to update sth.?
@@ -507,7 +520,8 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
      */
     public function isUser()
     {
-        return $this->isAuthenticated() and $this->_authenticationID != 0;
+        return $this->_isUser;
+        // return $this->isAuthenticated() and $this->_authenticationID != 0;
     }
 
     /**
@@ -517,6 +531,7 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
     public function deAuthenticate()
     {
         $this->_isAuthenticated = false;
+        $this->_isUser = false;
         $this->_container = null;
         $this->_authenticationID = null;
 

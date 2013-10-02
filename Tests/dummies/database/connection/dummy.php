@@ -53,4 +53,9 @@ class Chrome_Database_Connection_Dummy implements Chrome_Database_Connection_Int
     public function throwExceptionOnConnect($e) {
         $this->_connectionException = $e;
     }
+
+    public function getDatabaseName()
+    {
+        return 'dummy';
+    }
 }

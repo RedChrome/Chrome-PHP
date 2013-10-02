@@ -12,7 +12,8 @@ class RegisterModelTest extends Chrome_TestCase
     public function setUp()
     {
         $this->_model = new Chrome_Model_Register($this->_appContext);
-        $this->_db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('simple', 'assoc');
+        $this->_db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('model', 'assoc');
+        $this->_db->setModel(Chrome_Model_Database_Statement::create($this->_appContext->getModelContext()->getDatabaseFactory(), 'test'));
 
         $auth = new Chrome_Authentication();
 
@@ -23,10 +24,8 @@ class RegisterModelTest extends Chrome_TestCase
 
         // just run this the first time. dont know why this does not work in setUpBeforeClass...
         if(self::$_int === 0) {
-            $this->_db->query('DELETE FROM cpp_user WHERE name = "testfinishRegistration"');
-            $this->_db->clear();
-            $this->_db->query('DELETE FROM cpp_user_regist WHERE email LIKE "$email%%"');
-            $this->_db->clear();
+            $this->_db->loadQuery('registerModelTest_DeleteOldTestValues')->execute();
+            $this->_db->loadQuery('registerModelTest_DeleteOldTestValues2')->execute();
             self::$_int++;
         }
 
@@ -37,9 +36,7 @@ class RegisterModelTest extends Chrome_TestCase
     {
         $key = $this->_model->generateActivationKey();
 
-        //$this->_db->select( '*' )->from( 'user_regist' )->where( '`key` = "' . $key . '"' )->limit( 0, 1 )->execute();
-
-        $this->_db->query('SELECT * FROM cpp_user_regist WHERE `key` = "?" LIMIT 0,1', array($key));
+        $this->_db->loadQuery('registerModelTest_testGenerateActivationKeyIsUniqueAndValid')->execute(array($key));
 
         $result = $this->_db->getResult()->getNext();
 
@@ -60,7 +57,7 @@ class RegisterModelTest extends Chrome_TestCase
     {
         $this->assertTrue($this->_model->addRegistrationRequest('$name', '$password', '$email1', '$activationKey'), 'module detected error inside!');
 
-        $this->_db->query('SELECT * FROM cpp_user_regist WHERE `key` = "$activationKey" LIMIT 0,1');
+        $this->_db->query('SELECT * FROM cpp_user_regist WHERE `key` = \'$activationKey\' LIMIT 1');
 
         //$this->_db->select( '*' )->from( 'user_regist' )->where( '`key` = "$activationKey"' )->limit( 0, 1 )->execute();
 
@@ -103,8 +100,10 @@ class RegisterModelTest extends Chrome_TestCase
 
         $this->assertFalse($check);
 
+        $this->_db->loadQuery('registerModelTest_CheckRegistrationWithInvalidActivationKey')
+            ->execute(array('testKey', 'anyExampleName', 13000000, 'anything...', 'anything..', 'anything.'));
 
-        $this->_db->query('INSERT INTO cpp_user_regist(`key`, `name`, `time`, `pass`, `pw_salt`, `email`) VALUES("testKey", "anyExampleName", 1300000000, "anything...", "anything..", "anything.")');
+        //$this->_db->query('INSERT INTO cpp_user_regist("key", "name", "time", "pass", "pw_salt", "email") VALUES(\'testKey\', \'anyExampleName\', 1300000000, \'anything...\', \'anything..\', \'anything.\')');
 
         // if this happes, maybe the expiration time is set very high in Chrome_Config?
         $this->assertFalse($this->_model->checkRegistration('testKey'), 'activationKey was not invalid, but it should be! (time expired)');
@@ -136,19 +135,19 @@ class RegisterModelTest extends Chrome_TestCase
         $this->assertTrue($return, 'maybe you have to set up test db?');
 
         $this->_db->clear();
-        $this->_db->query('SELECT * FROM cpp_user_regist WHERE `key` = "testfinishRegistrationKey"');
+        $this->_db->query('SELECT * FROM cpp_user_regist WHERE `key` = \'testfinishRegistrationKey\'');
 
 
         $this->assertFalse($this->_db->getResult()->getNext(), 'activationKey not deleted aferwards');
 
         $this->_db->clear();
-        $this->_db->query('SELECT * FROM cpp_user WHERE name = "'.$testFinishRegistrationName.'" ORDER BY id DESC');
+        $this->_db->query('SELECT * FROM cpp_user WHERE name = \''.$testFinishRegistrationName.'\' ORDER BY id DESC');
         $result = $this->_db->getResult()->getNext();
 
         $this->assertTrue($result !== false, 'no user created');
 
         $this->_db->clear();
-        $this->_db->query('SELECT * FROM cpp_authenticate WHERE id = "?"', array($result['id']));
+        $this->_db->query('SELECT * FROM cpp_authenticate WHERE id = \'?\'', array($result['id']));
         $result2 = $this->_db->getResult()->getNext();
 
         $this->assertTrue(! $this->_db->getResult()->isEmpty(), 'no entry created in authenticate');

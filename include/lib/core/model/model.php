@@ -23,9 +23,8 @@ if(CHROME_PHP !== true)
     die();
 
 use \Chrome\Logger\Loggable_Interface;
-use \Chrome\Logger\Registry_Interface;
 use \Psr\Log\LoggerInterface;
-
+use \Chrome\Registry\Logger\Registry_Interface;
 
 interface Chrome_Model_Interface extends Loggable_Interface
 {
@@ -71,7 +70,7 @@ abstract class Chrome_Model_Abstract implements Chrome_Model_Interface
             return $this->_logger;
         }
 
-        return $this->_modelContext->getLoggerRegistry()->getLogger(Registry_Interface::DEFAULT_LOGGER);
+        return $this->_modelContext->getLoggerRegistry()->get(Registry_Interface::DEFAULT_LOGGER);
     }
 }
 

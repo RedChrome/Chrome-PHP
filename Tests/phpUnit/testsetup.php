@@ -30,13 +30,10 @@ require_once 'config.php';
  * load chrome-php initializing file
  */
 require_once 'include/chrome.php';
-
 class Chrome_TestSetup
 {
     protected $_errorConfig = null;
-
     protected $_databaseInitialized = false;
-
     protected $_applicationContext = null;
 
     public function getApplicationContext()
@@ -57,60 +54,66 @@ class Chrome_TestSetup
 
     public function testDb()
     {
-        if($this->_databaseInitialized === true) {
+        if($this->_databaseInitialized === true)
+        {
             return;
         }
 
         $this->_databaseInitialized = true;
 
-        require_once PLUGIN.'classloader/database.php';
+        require_once PLUGIN . 'classloader/database.php';
         $classloader = new \Chrome\Classloader\Classloader();
         $classloader->setExceptionHandler($this->_errorConfig->getExceptionHandler());
         $classloader->setLogger(new \Psr\Log\NullLogger());
         $classloader->appendResolver(new \Chrome\Classloader\Resolver_Database());
         $autoloader = new \Chrome\Classloader\Autoloader($classloader);
 
-        require_once LIB.'core/database/database.php';
+        require_once LIB . 'core/database/database.php';
 
         $dbRegistry = new Chrome_Database_Registry_Connection();
 
         // configure default database connection
-        try {
-            $defaultConnectionClass = 'Chrome_Database_Connection_'.ucfirst(CHROME_DATABASE);
+        try
+        {
+            $defaultConnectionClass = 'Chrome_Database_Connection_' . ucfirst(CHROME_DATABASE);
             $defaultConnection = new $defaultConnectionClass();
             $defaultConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
-            $defaultConnection->connect();
+            //$defaultConnection->connect();
 
             $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
-        } catch(Exception $e) {
+        } catch(Exception $e)
+        {
             $this->_errorConfig->getExceptionHandler()->exception($e);
         }
 
         $databaseFactory = new Chrome_Database_Factory($dbRegistry, new Chrome_Database_Registry_Statement());
         $databaseFactory->setLogger(new \Psr\Log\NullLogger());
 
-        //$databaseFactory->setLogger(new Chrome_Logger_Database());
+        // $databaseFactory->setLogger(new Chrome_Logger_Database());
 
-        if(TEST_DATABASE_CONNECTIONS == true) {
+        if(TEST_DATABASE_CONNECTIONS == true)
+        {
 
             // configure default database connection
             // remove "#" in those lines, to connect to db at once. Now it will only connect if needed
             $mysqlTestConnection = new Chrome_Database_Connection_Mysql();
             $mysqlTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
-            #$mysqlTestConnection->connect();
+            // mysqlTestConnection->connect();
             $dbRegistry->addConnection('mysql_test', $mysqlTestConnection, true);
 
             $mysqliTestConnection = new Chrome_Database_Connection_Mysqli();
             $mysqliTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
-            #$mysqliTestConnection->connect();
+            // mysqliTestConnection->connect();
             $dbRegistry->addConnection('mysqli_test', $mysqliTestConnection, true);
 
-
-            $postgresqlTestConnection = new Chrome_Database_Connection_Postgresql();
-            $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
-            $postgresqlTestConnection->connect();
-            $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
-            $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
+            if(defined('POSTGRESQL_HOST'))
+            {
+                $postgresqlTestConnection = new Chrome_Database_Connection_Postgresql();
+                $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
+                $postgresqlTestConnection->connect();
+                $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
+                $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
+            }
         }
 
         $modelContext = new Chrome_Context_Model();

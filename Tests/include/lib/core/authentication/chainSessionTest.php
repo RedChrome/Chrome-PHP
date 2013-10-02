@@ -67,7 +67,7 @@ class AuthenticationChainSessionTest extends Chrome_TestCase
         // session should do nothing, because we're authenticating with a resource
         // and session does not support that! (with reason)
 
-        $id = mt_rand(1, 100);
+        $id = mt_rand(2, 100);
 
         $container = new Chrome_Authentication_Data_Container(__class__);
         $container->setID($id);

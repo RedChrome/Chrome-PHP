@@ -6,7 +6,7 @@ class ConfigModelTest extends Chrome_TestCase
 
     protected function setUp()
     {
-        $this->_config = new Chrome_Model_Config_DB($this->_appContext->getModelContext());
+        $this->_config = new Chrome_Model_Config_Database($this->_appContext->getModelContext());
     }
 
     public function testLoadConfig()
@@ -15,6 +15,7 @@ class ConfigModelTest extends Chrome_TestCase
 
         $this->assertTrue(is_array($config));
         $this->assertTrue(isset($config['testSubclass']));
+        $this->assertTrue(isset($config['testSubclass']['testValueString']));
         $this->assertSame('testValue', $config['testSubclass']['testValueString']);
         $this->assertSame(42, $config['testSubclass']['testValueInt']);
         $this->assertSame(true, $config['testSubclass']['testValueBool']);
@@ -26,7 +27,7 @@ class ConfigModelTest extends Chrome_TestCase
     {
         // clean up the database
         $db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('simple', 'assoc');
-        $db->query('DELETE FROM cpp_config WHERE name="testName" AND subclass="testSubclass"');
+        $db->query('DELETE FROM cpp_config WHERE name=\'testName\' AND subclass=\'testSubclass\'');
 
         $this->_config->setConfig('testName', 'testSubclass', true);
 
@@ -36,7 +37,7 @@ class ConfigModelTest extends Chrome_TestCase
 
         // clean up the database
         $db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('simple', 'assoc');
-        $db->query('DELETE FROM cpp_config WHERE name="testName" AND subclass="testSubclass"');
+        $db->query('DELETE FROM cpp_config WHERE name=\'testName\' AND subclass=\'testSubclass\'');
 
         $this->_config->setConfig('testName', 'testSubclass', true, 'boolean');
 

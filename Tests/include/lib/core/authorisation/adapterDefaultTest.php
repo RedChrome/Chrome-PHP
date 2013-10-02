@@ -8,14 +8,14 @@ class AuthorisationAdapterDefaultTest extends Chrome_TestCase
 
     // strcuture: userid,resourceid, resource_trafo, result
     protected $_array = array(
-        array(0, 'testIsAllowed', 'guestAllowed', true),
-        array(0, 'testIsAllowed', 'guestNotAllowed', false),
-        array(1, 'testIsAllowed', 'guestAllowed', false),
-        array(1, 'testIsAllowed', 'guestNotAllowed', true),
-        array(2, 'testIsAllowed', 'guestAllowed', true),
+        array(1, 'testIsAllowed', 'guestAllowed', true),
+        array(1, 'testIsAllowed', 'guestNotAllowed', false),
+        array(2, 'testIsAllowed', 'guestAllowed', false),
         array(2, 'testIsAllowed', 'guestNotAllowed', true),
         array(3, 'testIsAllowed', 'guestAllowed', true),
-        array(3, 'testIsAllowed', 'guestNotAllowed', true)
+        array(3, 'testIsAllowed', 'guestNotAllowed', true),
+        array(4, 'testIsAllowed', 'guestAllowed', true),
+        array(5, 'testIsAllowed', 'guestNotAllowed', true)
         );
 
     public function setUp() {
@@ -25,23 +25,21 @@ class AuthorisationAdapterDefaultTest extends Chrome_TestCase
         $this->_adapter->setModel($model);
     }
 
-
     public function testGetGroupId()
     {
         $this->_auth->id = 0;
 
         $container = new Chrome_Authentication_Data_Container(__class__);
-        $container->setID(0);
+        $container->setID(1);
 
         $this->_auth->dataContainer = $container;
 
         $this->assertEquals(1, $this->_adapter->getGroupId());
 
-        $container->setID(1);
+        $container->setID(2);
 
         $this->assertEquals(123456, $this->_adapter->getGroupId());
     }
-
 
     public function testIsAllowed() {
 
@@ -63,7 +61,6 @@ class AuthorisationAdapterDefaultTest extends Chrome_TestCase
 
         }
     }
-
 }
 
 class AuthorisationAdapterDefaultModelDefaultTest extends Chrome_TestCase
@@ -85,11 +82,11 @@ class AuthorisationAdapterDefaultModelDefaultTest extends Chrome_TestCase
 
     public function testGetUserGroupById() {
         // just random numbers
-        $this->assertEquals(1, $this->_model->getUserGroupById(0));
-        $this->assertEquals(123456, $this->_model->getUserGroupById(1));
-        $this->assertEquals(89123, $this->_model->getUserGroupById(2));
-        $this->assertEquals(8388607, $this->_model->getUserGroupById(3));
-        $this->assertEquals(168804, $this->_model->getUserGroupById(4));
+        $this->assertEquals(1, $this->_model->getUserGroupById(1));
+        $this->assertEquals(123456, $this->_model->getUserGroupById(2));
+        $this->assertEquals(89123, $this->_model->getUserGroupById(3));
+        $this->assertEquals(8388607, $this->_model->getUserGroupById(4));
+        $this->assertEquals(168804, $this->_model->getUserGroupById(5));
 
     }
 

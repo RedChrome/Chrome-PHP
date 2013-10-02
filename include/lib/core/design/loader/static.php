@@ -162,6 +162,12 @@ class Chrome_Model_Design_Loader_Static extends Chrome_Model_Database_Abstract
         $this->_dbResult = array('Iterator', 'Assoc');
     }
 
+    protected function _connect()
+    {
+        parent::_connect();
+        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory()));
+    }
+
     public function getViewsByPosition($position, $theme)
     {
         $db = $this->_getDBInterface();

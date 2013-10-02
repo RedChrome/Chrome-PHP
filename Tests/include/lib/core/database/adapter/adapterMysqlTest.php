@@ -16,7 +16,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
 
     public function doSkipTestsIfNeeded()
     {
-        if($this->_db === null) {
+        if($this->_db === null OR _skipDatabaseTest(get_class($this))) {
             $this->markTestSkipped();
         }
     }

@@ -36,13 +36,18 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
 
     public function query($query)
     {
-        $query = str_replace('`', '"', $query);
-
-        $this->_result = pg_query($this->_connection, $query);
-
-        if($this->_result === false)
+        try
         {
-            throw new Chrome_Exception_Database('Error while sending a query to database!');
+            $this->_result = pg_query($this->_connection, $query);
+
+            if($this->_result === false)
+            {
+                throw new Chrome_Exception_Database('Error while sending a query to database');
+            }
+
+        } catch(Chrome_Exception $e)
+        {
+            throw new Chrome_Exception_Database_Query($e->getMessage(), $query, 0, $e);
         }
 
         if(is_resource($this->_result) === true)
@@ -63,9 +68,10 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
     {
         if($this->_connectionObject instanceof Chrome_Database_Connection_SchemaProvider_Interface)
         {
-            $statement = str_replace('cpp_', $this->_connectionObject->getSchema().'.'.DB_PREFIX.'_', $statement);
-        } else {
-            $statement = str_replace('cpp_', DB_PREFIX.'_', $statement);
+            $statement = str_replace('cpp_', $this->_connectionObject->getSchema() . '.' . DB_PREFIX . '_', $statement);
+        } else
+        {
+            $statement = str_replace('cpp_', DB_PREFIX . '_', $statement);
         }
 
         return str_replace('`', '"', $statement);

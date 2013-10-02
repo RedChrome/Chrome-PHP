@@ -126,4 +126,9 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
     {
         return 'Mysql';
     }
+
+    public function getDatabaseName()
+    {
+        return 'mysql';
+    }
 }

@@ -20,12 +20,12 @@ if(CHROME_PHP !== true)
     die();
 
 /**
- * Chrome_Model_Require_DB
+ * Chrome_Model_Classloader_Database
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
+class Chrome_Model_Classloader_Database extends Chrome_Model_Database_Abstract
 {
 
     /**
@@ -34,6 +34,12 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
     protected function _setDatabaseOptions()
     {
         $this->_dbComposition = new Chrome_Database_Composition('model', 'iterator');
+    }
+
+    protected function _connect()
+    {
+        parent::_connect();
+        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory()));
     }
 
     /**
@@ -150,12 +156,12 @@ class Chrome_Model_Require_DB extends Chrome_Model_Database_Abstract
 }
 
 /**
- * Chrome_Model_Require_Cache
+ * Chrome_Model_Classloader_Cache
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Require
  */
-class Chrome_Model_Require_Cache extends Chrome_Model_Cache_Abstract
+class Chrome_Model_Classloader_Cache extends Chrome_Model_Cache_Abstract
 {
     /**
      * Namespace

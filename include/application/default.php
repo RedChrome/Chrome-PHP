@@ -173,7 +173,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         require_once LIB.'core/classloader/model.php';
         // init require-class, can be skipped if every class is defined
-        $this->_classloader->prependResolver(new \Chrome\Classloader\Resolver_Model(new Chrome_Model_Require_Cache(new Chrome_Model_Require_DB($this->_modelContext))));
+        $this->_classloader->prependResolver(new \Chrome\Classloader\Resolver_Model(new Chrome_Model_Classloader_Cache(new Chrome_Model_Classloader_Database($this->_modelContext))));
 
         $this->_initConfig();
 
@@ -254,6 +254,25 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $factory->setLogger($this->_loggerRegistry->get('database'));
 
         $this->_modelContext->setDatabaseFactory($factory);
+
+        /*
+         * Testing...
+         *
+        define('POSTGRESQL_HOST', 'localhost');
+        define('POSTGRESQL_USER', 'test');
+        define('POSTGRESQL_PASS', 'chrome');
+        define('POSTGRESQL_DB', 'chrome_db');
+        define('POSTGRESQL_SCHEMA', 'chrome');
+        // 5433 -> 9.1, 5432 -> 9.2, 5434 -> 9.3
+        define('POSTGRESQL_PORT', 5433);
+
+        $dbRegistry = $factory->getConnectionRegistry();
+        $postgresqlTestConnection = new Chrome_Database_Connection_Postgresql();
+        $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
+        $postgresqlTestConnection->connect();
+        $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
+        $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
+        */
     }
 
     protected function _initLoggers()
@@ -393,7 +412,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
     protected function _initConfig()
     {
         // configuration
-        $config = new Chrome_Config(new Chrome_Model_Config_Cache(new Chrome_Model_Config_DB($this->_modelContext)));
+        $config = new Chrome_Config(new Chrome_Model_Config_Cache(new Chrome_Model_Config_Database($this->_modelContext)));
         $this->_applicationContext->setConfig($config);
     }
 
