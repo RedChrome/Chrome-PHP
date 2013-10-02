@@ -61,6 +61,11 @@ class Chrome_Exception_Database_Query extends Chrome_Exception_Database
         $this->_executedQuery = (string) $executedQuery;
         parent::__construct($message, $code, $prevException);
     }
+
+    public function getExecutedQuery()
+    {
+        return $this->_executedQuery;
+    }
 }
 
 /**

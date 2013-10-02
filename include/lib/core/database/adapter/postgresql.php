@@ -74,7 +74,7 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
             $statement = str_replace('cpp_', DB_PREFIX . '_', $statement);
         }
 
-        return str_replace('`', '"', $statement);
+        return $statement;
     }
 
     public function getNext()
