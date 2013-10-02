@@ -133,7 +133,8 @@ class RegisterModelTest extends Chrome_TestCase
         $this->assertTrue($return, 'maybe you have to set up test db?');
 
         $this->_db->clear();
-        $this->_db->query('SELECT * FROM cpp_user_regist WHERE key = \'testfinishRegistrationKey\'');
+        $this->_db->loadQuery('registerModelTest_searchKey')->execute(array('testfinishRegistrationKey'));
+        //$this->_db->query('SELECT * FROM cpp_user_regist WHERE key = \'testfinishRegistrationKey\'');
 
 
         $this->assertFalse($this->_db->getResult()->getNext(), 'activationKey not deleted aferwards');

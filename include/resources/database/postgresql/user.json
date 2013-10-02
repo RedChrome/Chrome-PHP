@@ -1,0 +1,6 @@
+{
+	"info": "For Postgresql, queries for module user",
+	
+	"userCreateNewUser": "INSERT INTO cpp_user(\"id\", \"name\", \"email\", \"time\", \"group\") VALUES ('?', '?', '?', '?', '?')",
+	"userUserExists": "SELECT \"id\" FROM cpp_user WHERE \"id\" = '?' OR \"name\" = '?' OR \"email\" = '?' LIMIT 1"
+}

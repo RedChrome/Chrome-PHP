@@ -68,7 +68,6 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
         {
             $db = $this->_getDBInterface();
 
-
             $values = array('id' => $id, 'name' => $db->escape($username), 'email' => $db->escape($email), 'time' => CHROME_TIME, 'group' => $group);
 
             //$db->query('INSERT INTO cpp_user(id, name, email, time, group) VALUES (\'?\', \'?\', \'?\', \'?\', \'?\')', $values);
