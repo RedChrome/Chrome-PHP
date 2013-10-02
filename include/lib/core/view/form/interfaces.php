@@ -36,11 +36,13 @@ if(CHROME_PHP !== true)
 interface Chrome_View_Form_Interface
 {
     /**
-     * Creates a new Chrome_View_Form_Interface instance using any given $form
+     * Creates a new Chrome_View_Form_Interface instance using any given $form. The view context supplies additional
+     * display functionality.
      *
      * @param Chrome_Form_Interface $form a form object
+     * @param Chrome_Context_View_Interface $viewContext a view context
      */
-    public function __construct(Chrome_Form_Interface $form);
+    public function __construct(Chrome_Form_Interface $form, Chrome_Context_View_Interface $viewContext);
 
     /**
      * Sets a factory to create Chrome_View_Form_Element_Interface objects
@@ -77,6 +79,13 @@ interface Chrome_View_Form_Interface
      * @return Chrome_View_Form_Element_Interface
      */
     public function getViewElements($id = null);
+
+    /**
+     * Returns the view context, set in __construct
+     *
+     * @return Chrome_Context_View_Interface
+     */
+    public function getViewContext();
 }
 
 /**
@@ -133,6 +142,13 @@ interface Chrome_View_Form_Renderer_Interface extends Chrome_Renderable
      * @param Chrome_View_Form_Interface $viewForm
      */
     public function setViewForm(Chrome_View_Form_Interface $viewForm);
+
+    /**
+     * Sets a view context
+     *
+     * @param Chrome_Context_View_Interface $viewContext
+     */
+    public function setViewContext(Chrome_Context_View_Interface $viewContext);
 }
 
 

@@ -102,7 +102,9 @@ class Chrome_Exception_Handler_Console implements Chrome_Exception_Handler_Inter
 			return '...'.substr($file, $lengthSummed - $length, -1).$file{$lengthSummed - 1};
 		}
 
-		for($i = 1; $i < count($reversePaths); ++$i) {
+		$count = count($reversePaths);
+
+		for($i = 1; $i < $count; ++$i) {
 
 			$currentLength = strlen($reversePaths[$i]);
 

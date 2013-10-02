@@ -88,8 +88,6 @@ interface Chrome_File_System_Read_Interface
 }
 
 /**
- * TODO: check is_readable and is_writable etc..
- * only if we ask. Do not call them before..
  *
  * @package CHROME-PHP
  * @subpackage Chrome.File_System
@@ -605,7 +603,6 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
      *
      * gathers data for a dir
      *
-     * @todo do not get all data (is_readable) if they were already checked and the user just wants the files...
      * @param string $path
      * @return array
      */

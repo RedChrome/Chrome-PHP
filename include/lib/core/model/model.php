@@ -22,13 +22,12 @@
 if(CHROME_PHP !== true)
     die();
 
+use \Chrome\Registry\Logger\Registry_Interface;
 use \Chrome\Logger\Loggable_Interface;
 use \Psr\Log\LoggerInterface;
-use \Chrome\Registry\Logger\Registry_Interface;
 
 interface Chrome_Model_Interface extends Loggable_Interface
 {
-
     public function setModelContext(Chrome_Context_Model_Interface $modelContext);
 
     public function getModelContext();

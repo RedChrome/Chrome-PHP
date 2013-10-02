@@ -48,12 +48,12 @@ class Chrome_View_User_Login_Default extends Chrome_View_Strategy_Abstract
 
     public function showForm()
     {
-        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content(Chrome_View_Form_Login::getInstance($this->_controller->getForm()));
+        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content(Chrome_View_Form_Login::getInstance($this->_controller->getForm(), $this->_viewContext));
     }
 
     public function errorWhileLoggingIn()
     {
-        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content(Chrome_View_Form_Login::getInstance($this->_controller->getForm()));
+        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content(Chrome_View_Form_Login::getInstance($this->_controller->getForm(), $this->_viewContext));
     }
 }
 class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract
@@ -99,7 +99,9 @@ class Chrome_View_Form_Renderer_Template_Login_Content extends Chrome_View_Form_
     {
         $template = new Chrome_Template();
 
-        $lang = new Chrome_Language('modules/content/user/login');
+        $lang = $this->_viewContext->getLocalization()->getTranslate();
+
+        //$lang = new Chrome_Language('modules/content/user/login');
 
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/user/login/form_log_in');

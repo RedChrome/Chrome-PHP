@@ -117,7 +117,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
         return $result;
     }
 
-    public function finishRegistration($name, $pass, $pw_salt, $email, $activationKey, Chrome_Authentication_Create_Resource_Interface $resource = null)
+    public function finishRegistration($name, $pass, $pwSalt, $email, $activationKey, Chrome_Authentication_Create_Resource_Interface $resource = null)
     {
         try
         {

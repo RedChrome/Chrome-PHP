@@ -16,10 +16,11 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
+
 use \Chrome\Registry\Logger\Registry_Interface;
+
 interface Chrome_Controller_Factory_Interface
 {
-
     /**
      *
      * @return Chrome_Controller_Interface

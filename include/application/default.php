@@ -167,6 +167,16 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $this->_initClassloader();
 
+        $locale = new \Chrome\Localization\Locale();
+        $localization = new \Chrome\Localization\Localization();
+        $localization->setLocale($locale);
+        $translate = new \Chrome\Localization\Translate_Simple($localization);
+        #require_once 'Tests/dummies/localization/translate/test.php';
+        #$translate = new \Chrome\Localization\Translate_Test_XX($localization);
+        $localization->setTranslate($translate);
+
+        $viewContext->setLocalization($localization);
+
         $this->_initDatabase();
 
         $this->_initControllerFactory();

@@ -123,6 +123,6 @@ class Chrome_Model_Config_Cache extends Chrome_Model_Cache_Abstract
     public function setConfig($name, $subclass, $value, $type = null, $modul = '', $hidden = 0)
     {
         $this->_cache->remove('config');
-        $this->_decorable->setConfig($name, $subclass, $value, $type, $modul);
+        $this->_decorable->setConfig($name, $subclass, $value, $type, $modul, $hidden);
     }
 }

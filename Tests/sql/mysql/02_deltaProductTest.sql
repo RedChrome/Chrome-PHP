@@ -1,6 +1,5 @@
 SET FOREIGN_KEY_CHECKS=0;
 TRUNCATE `cp1_admin_navi`;
-TRUNCATE `cp1_authenticate`;
 TRUNCATE `cp1_authorisation_rbac`;
 TRUNCATE `cp1_authorisation_resource_default`;
 TRUNCATE `cp1_authorisation_user_default`;
@@ -32,9 +31,12 @@ INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 ('testValueUnknown', 'testSubclass', 'any value, 1 1 ', 'unknown', 'anyModule', '0'),
 ('testValueDouble', 'testSubclass', '2.7182818', 'double', 'anyModule', '0');
 
-INSERT INTO `cp1_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
-(1, 'testAuthenticate', 'testAuthenticateSalt', NULL, 12345678),
-(2, 'eec1d7d507bf854c586a64f7a0db6e8a8db088eae96ccbb6', 'ahFB319VKaD', NULL, 12345678);
+DELETE FROM `cp1_authenticate` WHERE `id` > 0;
+INSERT INTO `cp1_authenticate` (`id`,`password`, `password_salt`, `cookie_token`, `time`) VALUES
+('1', 'eec1d7d507bf854c586a64f7a0db6e8a8db088eae96ccbb6', 'ahFB319VKaD', NULL, 12345678),
+('2', 'testAuthenticate2', 'testAuthenticateSalt', NULL, 12345678),
+('3', 'testAuthenticate3', 'testAuthenticateSalt', NULL, 12345678),
+('4', 'testAuthenticate4', 'testAuthenticateSalt', NULL, 12345678);
 -- password is test
 
 INSERT INTO `cp1_authorisation_resource_default` (`_resource_id`, `_transformation`, `_access`) VALUES

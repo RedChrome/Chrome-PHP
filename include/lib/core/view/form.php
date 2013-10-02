@@ -36,12 +36,14 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     protected $_formElements = array();
     protected $_formElementFactory = null;
     protected $_formElementOptionFactory = null;
-    protected $_formElementFactoryDefault = 'Default';
+    protected $_formElementFactoryDefault = 'Suffix';
     protected $_formElementOptionFactoryDefault = 'Default';
     protected $_currentRenderCount = null;
+    protected $_viewContext = null;
 
-    public function __construct(Chrome_Form_Interface $form)
+    public function __construct(Chrome_Form_Interface $form, Chrome_Context_View_Interface $viewContext)
     {
+        $this->_viewContext = $viewContext;
         $this->_form = $form;
     }
 
@@ -56,6 +58,16 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         }
 
         $this->_formElements = array();
+    }
+
+    /**
+     * Returns the view context, set in __construct
+     *
+     * @return Chrome_Context_View_Interface
+     */
+    public function getViewContext()
+    {
+        return $this->_viewContext;
     }
 
     public function setElementOptionFactory(Chrome_View_Form_Element_Option_Factory_Interface $elementOptionFactory)
@@ -134,6 +146,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
 
     protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
     {
+        return $viewOption;
     }
 
     public function getViewElements($id = null)
@@ -158,7 +171,7 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
 {
     protected $_suffix = '';
 
-    public function __construct($formElementSuffix)
+    public function __construct($formElementSuffix = 'default')
     {
         $this->_suffix = ucfirst($formElementSuffix);
 

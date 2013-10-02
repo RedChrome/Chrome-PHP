@@ -33,7 +33,6 @@ class Chrome_Validator_Form_Element_Birthday extends Chrome_Validator
         $this->_years = new DateInterval('P' . $years . 'Y');
     }
 
-    // @todo: $this->_data is a string: yyyy-mm-dd. it would be better if its an object of DateTime!
     protected function _validate()
     {
         $currentDate = new DateTime();

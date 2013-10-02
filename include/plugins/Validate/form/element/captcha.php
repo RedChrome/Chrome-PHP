@@ -44,6 +44,8 @@ class Chrome_Validator_Form_Element_Captcha extends Chrome_Validator
 
         if($isValid !== true)
         {
+            // the captcha was invalid, so we create a new captcha for the client
+            $this->_captcha->create();
             $this->_setError('Captcha not valid');
         }
 

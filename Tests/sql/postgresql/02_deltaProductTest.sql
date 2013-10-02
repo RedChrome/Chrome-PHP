@@ -1,4 +1,3 @@
-TRUNCATE "chrome"."cp1_authenticate" CASCADE;
 TRUNCATE "chrome"."cp1_authorisation_rbac";
 TRUNCATE "chrome"."cp1_authorisation_resource_default";
 TRUNCATE "chrome"."cp1_authorisation_user_default" CASCADE;
@@ -17,13 +16,14 @@ TRUNCATE "chrome"."cp1_user";
 TRUNCATE "chrome"."cp1_user_regist";
 
 
-INSERT INTO "chrome"."cp1_authenticate" ("id", "password", "password_salt", "cookie_token", "time") VALUES
-('1', 'testAuthenticate', 'testAuthenticateSalt', NULL, 12345678),
-('2', 'eec1d7d507bf854c586a64f7a0db6e8a8db088eae96ccbb6', 'ahFB319VKaD', NULL, 12345678), -- password is test
-('3', 'testAuthenticate2', 'testAuthenticateSalt', NULL, 12345678),
-('4', 'testAuthenticate3', 'testAuthenticateSalt', NULL, 12345678),
-('5', 'testAuthenticate4', 'testAuthenticateSalt', NULL, 12345678);
-
+DELETE FROM "chrome"."cp1_authenticate" WHERE "id" > 0;
+ALTER SEQUENCE "chrome"."cp1_authenticate_id_seq" RESTART WITH 1;
+INSERT INTO "chrome"."cp1_authenticate" ("password", "password_salt", "cookie_token", "time") VALUES
+('eec1d7d507bf854c586a64f7a0db6e8a8db088eae96ccbb6', 'ahFB319VKaD', NULL, 12345678), -- password is test
+('testAuthenticate2', 'testAuthenticateSalt', NULL, 12345678),
+('testAuthenticate3', 'testAuthenticateSalt', NULL, 12345678),
+('testAuthenticate4', 'testAuthenticateSalt', NULL, 12345678),
+('testAuthenticate5', 'testAuthenticateSalt', NULL, 12345678);
 
 INSERT INTO "chrome"."cp1_authorisation_user_default" ("user_id", "group_id") VALUES
 (1, 1),

@@ -65,18 +65,18 @@ class AuthenticationChainDatabaseTest extends Chrome_TestCase
         $this->assertNotEquals('Chrome_Authentication_Chain_Database', $authContainer->getAuthenticatedBy());
 
         // user with id 2 exists...
-        $resource = new Chrome_Authentication_Resource_Database(2, 'wrongPW', 0);
+        $resource = new Chrome_Authentication_Resource_Database(1, 'wrongPW', 0);
 
         $authContainer = $this->_chain->authenticate($resource);
 
-        $this->assertTrue($this->_model->getPasswordAndSaltByIdentity(2) !== false, 'user with id 2 does not exist, run setupdb!');
+        $this->assertTrue($this->_model->getPasswordAndSaltByIdentity(1) !== false, 'user with id 1 does not exist, run setupdb!');
         $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
         $this->assertNotEquals('Chrome_Authentication_Chain_Database', $authContainer->getAuthenticatedBy());
     }
 
     public function testAuthenticateWithProperResourceAndRightData()
     {
-        $resource = new Chrome_Authentication_Resource_Database(2, 'test', 0);
+        $resource = new Chrome_Authentication_Resource_Database(1, 'test', 0);
 
         $authContainer = $this->_chain->authenticate($resource);
 

@@ -31,7 +31,6 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Form_Login extends Chrome_Form_Abstract
 {
-
     private static $_instance = null;
 
     /**
@@ -58,7 +57,8 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
     protected function _init()
     {
         // get lang obj for this module
-        $LANG = new Chrome_Language('modules/content/user/login');
+        $lang = $this->_applicationContext->getViewContext()->getLocalization()->getTranslate();
+        // $lang = new Chrome_Language('modules/content/user/login');
 
         $this->_id = 'login';
         $this->setAttribute(self::ATTRIBUTE_NAME, $this->_id);
@@ -104,7 +104,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
 
         // submit button, nothing special
         $submitOption = new Chrome_Form_Option_Element_Values();
-        $submitOption->setIsRequired(true)->setAllowedValues(array($LANG->get('login')));
+        $submitOption->setIsRequired(true)->setAllowedValues(array($lang->get('login')));
 
         $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
         $this->_addElement($submitElement);
@@ -122,16 +122,15 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $this->addReceivingHandler(new Chrome_Form_Handler_Destroy());
     }
 }
-
 class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
 {
     private static $_instance = null;
 
-    public static function getInstance(Chrome_Form_Interface $form)
+    public static function getInstance(Chrome_Form_Interface $form, Chrome_Context_View_Interface $viewContext)
     {
         if(self::$_instance === null)
         {
-            self::$_instance = new self($form);
+            self::$_instance = new self($form, $viewContext);
         }
 
         return self::$_instance;
@@ -139,7 +138,8 @@ class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
 
     protected function _initFactories()
     {
-        if($this->_formElementFactory === null) {
+        if($this->_formElementFactory === null)
+        {
             $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Default');
         }
         // $this->_renderer = new Chrome_View_Form_Index_Renderer();
@@ -149,32 +149,35 @@ class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
 
     protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
     {
+        $lang = $this->_viewContext->getLocalization()->getTranslate();
+
         switch($formElement->getID())
         {
             case 'identity':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('identity' => 'E-Mail')))->setPlaceholder('E-Mail');
+                    $currLang = $lang->get('modules/content/user/login/identity');
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('identity' => $currLang)))->setPlaceholder($currLang);
 
-                    // viewOption->setLabel(new Chrome_View_Form_Label_Default(array('test' => 'Value1_label', 'test2' => 'VaLUE2_label')));
                     break;
                 }
             case 'password':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('password' => 'Passwort')))->setPlaceholder('Password');
+                    $currLang = $lang->get('modules/content/user/login/password');
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('password' => $currLang)))->setPlaceholder($currLang);
                     break;
                 }
 
             case 'stay_loggedin':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('1' => 'Eingeloggt bleiben?')));
-                    // $viewOption->setLabelPosition($viewOption::LABEL_POSITION_FRONT);
+                    $currLang = $lang->get('modules/content/user/login/stay_loggedin');
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('1' => $currLang)));
                     break;
                 }
 
             case 'submit':
                 {
                     // viewOption->setLabelPosition($viewOption::LABEL_POSITION_BEHIND);
-                    // $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('submit' => 'Anmelden')));
+                    //$viewOption->setLabel(new Chrome_View_Form_Label_Default(array('submit' => 'Anmelden!!')));
                     break;
                 }
         }

@@ -62,8 +62,5 @@ class Chrome_Validator_Password extends Chrome_Validator
         if($this->_password !== $this->_password_2) {
             $this->_setError('The Passwords aren\'t equal!');
         }
-
-        // TODO: maybe add blacklist AND check pw with crack ext?
-        return;
     }
 }

@@ -32,7 +32,9 @@ class Chrome_View_Form_Element_Backward_Default extends Chrome_View_Form_Element
     protected function _render()
     {
         // @todo implement option: delte passwords via javascript on backward
-        $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_DEFAULT_LANGUAGE);
+
+        $lang = $this->_getTranslate();
+        //$lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_DEFAULT_LANGUAGE);
 
         $this->_flags['value'] = $lang->get('backward');
         $this->_flags['required'] = null;

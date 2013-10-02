@@ -32,7 +32,8 @@ class Chrome_View_Form_Element_Captcha_Default extends Chrome_View_Form_Element_
 
     protected function _render()
     {
-        $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL);
+        $lang = $this->_getTranslate();
+        //$lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL);
 
         /*
          * $label = ''; if(($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null) { $label = '<label for="'.$this->_formElement->getID().'">'.$label.'</label>'; }
@@ -40,7 +41,7 @@ class Chrome_View_Form_Element_Captcha_Default extends Chrome_View_Form_Element_
 
         $captchaName = $this->_formElement->getOption()->getCaptcha()->getFrontendOption(Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME);
 
-        $img = '<img src="' . _PUBLIC . 'captcha/default.php?name=' . $captchaName . '" id="captcha_' . $this->_formElement->getForm()->getID() . '" />';
+        $img = '<img src="' . _PUBLIC . 'captcha/default.php?name=' . $captchaName . '" id="captcha_' . $this->_formElement->getForm()->getID() . '"/>';
         // eturn $img;
 
         $input = '<input type="text" name="' . $this->_formElement->getID() . '" value="" ' . $this->_renderFlags() . '">.' .

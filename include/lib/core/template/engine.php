@@ -27,7 +27,7 @@ if(CHROME_PHP !== true)
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Template.Engine
- */ 
+ */
 interface Chrome_Template_Engine_Interface
 {
     public function __construct(Chrome_Template_Abstract $obj);
@@ -52,7 +52,7 @@ interface Chrome_Template_Engine_Interface
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Template.Engine
- */ 
+ */
 abstract class Chrome_Template_Engine_Abstract implements Chrome_Template_Engine_Interface
 {
     protected $_var = array();

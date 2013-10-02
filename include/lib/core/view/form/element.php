@@ -222,6 +222,10 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
         return $return;
     }
 
+    protected function _getTranslate()
+    {
+        return $this->_viewForm->getViewContext()->getLocalization()->getTranslate();
+    }
 
     public function addAppender(Chrome_View_Form_Element_Appendable_Interface $appender)
     {

@@ -60,7 +60,6 @@ class Chrome_File_System
      */
     private function __construct()
     {
-        Chrome_Model::setHandler('Chrome_File_System', $this);
         $this->_instanceRead = Chrome_File_System_Read::getInstance();
     }
 

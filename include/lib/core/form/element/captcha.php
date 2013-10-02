@@ -78,11 +78,18 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
     {
         parent::__construct($form, $id, $option);
         $this->_captcha = $option->getCaptcha();
+        $this->_captcha->create();
     }
 
     public function isCreated()
     {
-        return $this->_captcha instanceof Chrome_Captcha_Interface;
+        if($this->_captcha instanceof Chrome_Captcha_Interface)
+        {
+            $this->_captcha->create();
+            return true;
+        }
+
+        return false;
     }
 
     protected function _getValidator()

@@ -103,7 +103,7 @@ interface Chrome_Exception_Configuration_Interface extends Chrome_Exception_Proc
      * @param Exception $e Exception
      * @return void
      */
-    public function handleException(exception $exception);
+    public function handleException(Exception $exception);
 
     /**
      * Handles an error
@@ -214,32 +214,6 @@ class Chrome_Exception extends Exception
 
         parent::__construct((string) $msg, (double) $code, $prevException);
     }
-
-    /**
-     * Chrome_Exception::_getPrevious()
-     *
-     * @return Chrome_Exception
-     * @deprecated due to moving to php 5.3
-     * @todo remove
-     */
-    public function _getPrevious()
-    {
-        return $this->_prevException;
-    }
-
-    /**
-     * Chrome_Exception::_getTraceAsString()
-     *
-     * Returns the trace AS a string, but replaces the DB password
-     *
-     * @return string
-     * @deprecated due to moving to php 5.3
-     * @todo remove
-     */
-    public function _getTraceAsString()
-    {
-        return str_replace(DB_PASS, 'DB_PASS', $this->getTraceAsString());
-    }
 }
 
 /**
@@ -308,7 +282,7 @@ class Chrome_Exception_Configuration implements Chrome_Exception_Configuration_I
         return $this->_errorHandler;
     }
 
-    public function handleException(exception $exception)
+    public function handleException(Exception $exception)
     {
         $this->_exceptionHandler->exception($exception);
     }

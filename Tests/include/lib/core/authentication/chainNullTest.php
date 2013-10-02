@@ -19,7 +19,7 @@ class AuthenticationChainNullTest extends PHPUnit_Framework_TestCase
         $result = $this->_chain->authenticate($resource);
 
         $this->assertTrue($result->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_GUEST));
-        $this->assertEquals(1, $result->getID());
+        $this->assertEquals(0, $result->getID());
 
     }
 

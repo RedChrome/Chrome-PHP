@@ -31,6 +31,17 @@ if(CHROME_PHP !== true)
 class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
 {
 
+    protected function _setDatabaseOptions()
+    {
+        $this->_dbInterface = 'model';
+    }
+
+    protected function _connect()
+    {
+        parent::_connect();
+        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory(), 'user'));
+    }
+
     public function addUser($id, $email, $username, $group = null)
     {
         if($group === null)
@@ -49,7 +60,6 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
         if($exists === true)
         {
             throw new Chrome_Exception('Cannot add user if he already exists!');
-            return false;
         }
 
         $group = (int) $group;
@@ -58,10 +68,12 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
         {
             $db = $this->_getDBInterface();
 
-            $values = array('id' => $id,'name' => $db->escape($username),'email' => $db->escape($email),'time' => CHROME_TIME,'group' => $group);
 
-            $db->query('INSERT INTO cpp_user(id, name, email, time, `group`) VALUES ("?", "?", "?", "?", "?")', $values);
-            // $db->insert()->into('user')->values($values)->execute();
+            $values = array('id' => $id, 'name' => $db->escape($username), 'email' => $db->escape($email), 'time' => CHROME_TIME, 'group' => $group);
+
+            //$db->query('INSERT INTO cpp_user(id, name, email, time, group) VALUES (\'?\', \'?\', \'?\', \'?\', \'?\')', $values);
+            $db->loadQuery('userCreateNewUser')->execute($values);
+
             return true;
         } catch(Chrome_Exception $e)
         {
@@ -78,7 +90,8 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
 
             $id = (int) $id;
 
-            $db->query('SELECT id FROM cpp_user WHERE id = "?" OR name = "?" OR email = "?" LIMIT 0,1', array($id,$name,$email));
+            $db->loadQuery('userUserExists', array($id, $name, $email));
+            //$db->query('SELECT id FROM cpp_user WHERE id = \'?\' OR name = \'?\' OR email = \'?\' LIMIT 1', array($id, $name, $email));
 
             // $db->select(array('id'))->from('user')->where('id = ' . $id . ' OR name = "' . $name . '" OR email = "' . $email . '"')->limit(0, 1)->execute();
 
@@ -138,7 +151,7 @@ class Chrome_Model_User extends Chrome_Model_Decorator_Abstract
 
     public function getUserNameByID($id)
     {
-        if(! isset($this->_getUserNameByIDCache[$id]))
+        if(!isset($this->_getUserNameByIDCache[$id]))
         {
             $this->_getUserNameByIDCache[$id] = $this->_decorator->getUserNameByID($id);
         }
@@ -148,22 +161,12 @@ class Chrome_Model_User extends Chrome_Model_Decorator_Abstract
 
     public function getUserNameByEmail($email)
     {
-        if(! isset($this->_getUserNameByEmailCache[$email]))
+        if(!isset($this->_getUserNameByEmailCache[$email]))
         {
             $this->_getUserNameByEmailCache[$email] = $this->_decorator->_getUserNameByEmailCache($id);
         }
 
         return $this->_getUserNameByEmailCache[$email];
-    }
-
-    public function getLanguageObject()
-    {
-        if($this->_languageObj === null)
-        {
-            $this->_languageObj = new Chrome_Language('classes/user/user');
-        }
-
-        return $this->_languageObj;
     }
 
     public function addUser($id, $email, $name)

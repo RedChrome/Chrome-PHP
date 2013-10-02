@@ -201,43 +201,6 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         }
     }
 
-    /**
-     * _setFilter()
-     *
-     * @return void
-     *
-    protected function _setFilter()
-    {
-        if(!is_array($this->_filter))
-        {
-            return;
-        }
-
-        // @todo: NO singleton access!
-        $registry = Chrome_Registry::getInstance();
-
-        foreach($this->_filter as $filterChain => $filters)
-        {
-            if(is_string($filterChain))
-            {
-                $_filterChain = $registry->get('Chrome_Filter_Chain', 'Chrome_Filter_Chain_' . ucfirst($filterChain));
-            } elseif($filterChain instanceof Chrome_Filter_Chain_Abstract)
-            {
-                $_filterChain = $filterChain;
-            }
-
-            if(!($_filterChain instanceof Chrome_Filter_Chain_Abstract))
-            {
-                throw new Chrome_Exception('Cannot add a filter to a non-existing filter chain in Chrome_Controller_Abstract::_filter()!');
-            }
-
-            foreach($filters as $filter)
-            {
-                $_filterChain->addFilter($filter);
-            }
-        }
-    }*/
-
     public function getModel()
     {
         return $this->_model;

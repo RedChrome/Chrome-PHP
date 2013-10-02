@@ -185,7 +185,7 @@ class Chrome_Dir
 
         while($file = $dir->read()) {
             if(is_dir($path . '/' . $file) and ($file != '.' and $file != '..')) self::chper($path . '/' . $file);
-            else @chmod($path . '/' . $file);
+            else @chmod($path . '/' . $file, $chmod);
         }
 
         return true;

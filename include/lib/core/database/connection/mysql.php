@@ -15,17 +15,10 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category CHROME-PHP
  * @package CHROME-PHP
  * @subpackage Chrome.Database
- * @author Alexander Book <alexander.book@gmx.de>
- * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 18:59:01] --> $
- * @link http://chrome-php.de
  */
-if(CHROME_PHP !== true)
-    die();
+
 class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstract
 {
     protected $_isSetConnectionOptions = false;
@@ -65,6 +58,18 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
             throw new Chrome_Exception('Cannot connect with no information! Call setConnectionOptions() before!');
         }
 
+        $this->_doConnect();
+        $this->_selectDb();
+
+        $this->_isConnected = true;
+
+        unset($this->_password, $this->_username, $this->_database, $this->_host, $this->_clientFlags, $this->_port);
+
+        return true;
+    }
+
+    protected function _doConnect()
+    {
         try
         {
             $this->_connection = mysql_connect($this->_host . ':' . $this->_port, $this->_username, $this->_password);
@@ -91,6 +96,10 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
                     }
             }
         }
+    }
+
+    protected function _selectDb()
+    {
         try
         {
             mysql_select_db($this->_database, $this->_connection);
@@ -109,12 +118,6 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
                     }
             }
         }
-
-        $this->_isConnected = true;
-
-        unset($this->_password, $this->_username, $this->_database, $this->_host, $this->_clientFlags, $this->_port);
-
-        return true;
     }
 
     public function disconnect()

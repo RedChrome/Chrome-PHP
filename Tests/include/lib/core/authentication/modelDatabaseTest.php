@@ -41,6 +41,6 @@ class ModelDatabaseTest extends Chrome_TestCase
 
     public function getPasswordAndSaltByIdentityProvider()
     {
-        return array(array('2', 'eec1d7d507bf854c586a64f7a0db6e8a8db088eae96ccbb6', 'ahFB319VKaD'), array('1234567890', false, false));
+        return array(array('1', 'eec1d7d507bf854c586a64f7a0db6e8a8db088eae96ccbb6', 'ahFB319VKaD'), array('1234567890', false, false));
     }
 }

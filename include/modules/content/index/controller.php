@@ -48,6 +48,6 @@ class Chrome_Controller_Index extends Chrome_Controller_Module_Abstract
             $this->_form->create();
         }
 
-        $this->_view->doSTH();
+        $this->_view->doSth();
     }
 }

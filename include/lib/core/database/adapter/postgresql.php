@@ -28,6 +28,7 @@ if(CHROME_PHP !== true)
     die();
 class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstract
 {
+    protected $_lastExecutedQuery = '';
 
     public function isEmpty()
     {
@@ -40,11 +41,12 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
         {
             $this->_result = pg_query($this->_connection, $query);
 
+            $this->_lastExecutedQuery = $query;
+
             if($this->_result === false)
             {
                 throw new Chrome_Exception_Database('Error while sending a query to database');
             }
-
         } catch(Chrome_Exception $e)
         {
             throw new Chrome_Exception_Database_Query($e->getMessage(), $query, 0, $e);
@@ -142,8 +144,37 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
 
     public function getLastInsertId()
     {
-        // TODO:
-        throw new Chrome_Exception('not implemented');
-        // return SELECT currval('first_id_seq')
+        $matches = array();
+
+        if(preg_match('/^INSERT(\s*)INTO(\s*)([\w"\.]{1,})/is', $this->_lastExecutedQuery, $matches))
+        {
+            $tableName = str_replace('"', '', $matches[3]);
+
+            // Gets this table's last sequence value
+            $query = 'SELECT currval(\'' . $tableName . '_id_seq\')';
+
+            try
+            {
+
+                $result = pg_query($query);
+
+                if($result !== false)
+                {
+
+                    $resultArray = pg_fetch_array($result, null, PGSQL_NUM);
+
+                    if(isset($resultArray[0]))
+                    {
+                        return $resultArray[0];
+                    }
+                }
+            } catch(Chrome_Exception $e)
+            {
+                $e = null;
+                // do nothing, exception will be thrown outside.
+            }
+        }
+
+        throw new Chrome_Exception_Database('Could not retrieve last insert id');
     }
 }

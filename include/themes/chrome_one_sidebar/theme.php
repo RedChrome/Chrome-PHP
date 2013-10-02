@@ -31,7 +31,6 @@ class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstrac
         require_once LIB . 'core/design/options/static.php';
         require_once LIB . 'core/design/loader/static.php';
 
-        // @todo use another exception handler
         $exceptionHandler = new Chrome_Exception_Handler_Default();
 
         $template = new Chrome_Template();

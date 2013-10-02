@@ -89,7 +89,7 @@ interface Chrome_Authentication_Interface extends Chrome_Exception_Processable_I
      *
      * @var int
      */
-    const GUEST_ID = 1;
+    const GUEST_ID = 0;
 
     /**
      *

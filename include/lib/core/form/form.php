@@ -228,7 +228,7 @@ interface Chrome_Form_Interface
      * or if $id is given, the element belonging to this id
      * @param int $id
      *        id of an element
-     * @return array
+     * @return Chrome_Form_Element_Interface|array
      */
     public function getElements($id = null);
 
@@ -1028,11 +1028,42 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     }
 
     /**
+     * Sets the sent data from $dataSource
+     *
+     * $dataSource can be: CHROME_FORM_METHOD_POST, CHROME_FORM_METHOD_GET or anything else
+     *
+     * METHOD_POST and METHOD_GET use the values set in $_POST, $_GET
+     * anything else uses all available data from the request data.
+     *
+     * @param string $dataSource
+     */
+    protected function _setSentData($dataSource)
+    {
+        switch($dataSource)
+        {
+            case self::CHROME_FORM_METHOD_POST:
+                {
+                    $this->setSentData($this->getRequestData()->getPOSTData());
+                    break;
+                }
+            case self::CHROME_FORM_METHOD_GET:
+                {
+                    $this->setSentData($this->getRequestData()->getGETData());
+                    break;
+                }
+            default:
+                {
+                    $this->setSentData($this->getRequestData()->getData());
+                }
+        }
+    }
+
+    /**
      * Chrome_Form_Abstract::setAttribute()
      *
      * Sets an form attribute
      * Special attributes: 'method', 'action'
-     * 'method': Sets the input data: available are CHROME_FORM_METHOD_POST, CHROME_FORM_METHOD_GET for input data from $_POST or $_GET
+     * 'method': Sets the input data: available are CHROME_FORM_METHOD_POST, CHROME_FORM_METHOD_GET {@link Chrome_Form_Abstract::_setSentData()}
      * 'action': Sets the form action in <form action="">
      * 'store: adds a store handler. This will store the user input. $value must be an instance of Chrome_Form_Handler_Store_Interface
      *
@@ -1046,23 +1077,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
         {
             case self::ATTRIBUTE_METHOD:
                 {
-                    switch($value)
-                    {
-                        case self::CHROME_FORM_METHOD_POST:
-                            {
-                                $this->setSentData($this->getRequestData()->getPOSTData());
-                                break;
-                            }
-                        case self::CHROME_FORM_METHOD_GET:
-                            {
-                                $this->setSentData($this->getRequestData()->getGETData());
-                                break;
-                            }
-                        default:
-                            {
-                                $this->setSentData($this->getRequestData()->getData());
-                            }
-                    }
+                    $this->_setSentData($value);
                     break;
                 }
             case self::ATTRIBUTE_ACTION:
@@ -1349,5 +1364,10 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function getApplicationContext()
     {
         return $this->_applicationContext;
+    }
+
+    protected function _getFormStorage()
+    {
+        return new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
     }
 }

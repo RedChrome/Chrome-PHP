@@ -9,7 +9,8 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
         $this->setAttribute(self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST);
         $this->setAttribute(self::ATTRIBUTE_ID, $this->_id);
 
-        $lang = new Chrome_Language('modules/content/user/registration');
+        $lang = $this->getApplicationContext()->getViewContext()->getLocalization()->getTranslate();
+        //$lang = new Chrome_Language('modules/content/user/registration');
 
         $storageSession = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
 
@@ -48,7 +49,8 @@ class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
 
     protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
     {
-        $lang = new Chrome_Language('modules/content/user/registration');
+        $lang = $this->_viewContext->getLocalization()->getTranslate();
+        //$lang = new Chrome_Language('modules/content/user/registration');
 
         switch($formElement->getID())
         {
@@ -72,7 +74,8 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
         $this->setAttribute(self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST);
         $this->setAttribute(self::ATTRIBUTE_ID, $this->_id);
 
-        $lang = new Chrome_Language('modules/content/user/registration');
+        $lang = $this->_applicationContext->getViewContext()->getLocalization()->getTranslate();
+        //$lang = new Chrome_Language('modules/content/user/registration');
 
         $emailValidatorDefault = new Chrome_Validator_Email_Default();
         //$emailExistsValidator = new Chrome_Validator_Email_Exists();
@@ -162,7 +165,8 @@ class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
 
     protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
     {
-        $lang = new Chrome_Language('modules/content/user/registration');
+        $lang = $this->_viewContext->getLocalization()->getTranslate();
+        //$lang = new Chrome_Language('modules/content/user/registration');
 
         switch($formElement->getID())
         {

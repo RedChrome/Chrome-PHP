@@ -41,6 +41,7 @@ interface Loggable_Interface extends LoggerAwareInterface
 }
 
 namespace Chrome\Registry\Logger;
+
 use \Psr\Log\LoggerInterface;
 /**
  * Interface for a logger registry

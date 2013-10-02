@@ -73,6 +73,12 @@ interface Chrome_Application_Interface extends Chrome_Exception_Processable_Inte
  */
 interface Chrome_Context_View_Interface
 {
+    public function setLocalization(\Chrome\Localization\Localization_Interface $localization);
+
+    /**
+     * @return \Chrome\Localization\Localization_Interface
+     */
+    public function getLocalization();
 
     /**
      * Sets the plugin facade.
@@ -117,6 +123,8 @@ interface Chrome_Context_View_Interface
     /**
      * There is no setConfig(), because this object contains only a reference of config from application_context
      * So to change $_config, you need to be in application_context scope and use setConfig there.
+     *
+     * @return Chrome_Config_Interface
      */
     public function getConfig();
 
@@ -135,16 +143,15 @@ interface Chrome_Context_View_Interface
  */
 interface Chrome_Context_Model_Interface
 {
-
     /**
      * Sets a cache factory registry.
      *
      * A cache factory registry contains multiple cache factories. Each cache factory is able to
      * create a new cache object. Use this method to retrieve a cache factory registry
      *
-     * @param \Chrome\Registry\Cache\Factory\Registry $cacheFactoryRegistry
+     * @param \Chrome\Registry\Cache\Factory\Registry_Interface $cacheFactoryRegistry
      */
-    public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry $cacheFactoryRegistry);
+    public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry_Interface $cacheFactoryRegistry);
 
     /**
      * Returns the cache factory registry
@@ -576,7 +583,7 @@ class Chrome_Context_Model implements Chrome_Context_Model_Interface
         $this->_loggerRegistry = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_LOGGER_REGISTRY);
     }
 
-    public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry $cachFactoryRegistry)
+    public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry_Interface $cachFactoryRegistry)
     {
         $this->_cacheFactoryRegistry = $cachFactoryRegistry;
     }
@@ -611,6 +618,18 @@ class Chrome_Context_View implements Chrome_Context_View_Interface
     protected $_pluginFacade = null;
     protected $_factory = null;
     protected $_loggerRegistry = null;
+
+    protected $_localization = null;
+
+    public function setLocalization(\Chrome\Localization\Localization_Interface $localization)
+    {
+        $this->_localization = $localization;
+    }
+
+    public function getLocalization()
+    {
+        return $this->_localization;
+    }
 
     public function linkApplicationContext(Chrome_Context_Application_Interface $app)
     {

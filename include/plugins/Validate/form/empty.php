@@ -36,7 +36,5 @@ class Chrome_Validator_Form_Empty extends Chrome_Validator
         if(empty($this->_data) OR $this->_data == null OR $this->_data == '') {
             $this->_setError('Input is empty');
         }
-
-        return;
     }
 }

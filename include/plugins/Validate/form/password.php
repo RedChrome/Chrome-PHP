@@ -75,6 +75,5 @@ class Chrome_Validator_Form_Password extends Chrome_Validator
         }
 
         // TODO: maybe add blacklist AND check pw with crack ext?
-        return;
     }
 }

@@ -26,6 +26,11 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Form_Element_Submit extends Chrome_Form_Element_Abstract
 {
+    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Values_Interface $option)
+    {
+        parent::__construct($form, $id, $option);
+    }
+
     public function isCreated()
     {
         return true;

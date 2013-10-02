@@ -329,7 +329,6 @@ abstract class Chrome_Cache_Strategy implements Chrome_Cache_Interface
             fwrite($this->_filePointer, $encodedData);
         } catch(Chrome_Exception $e)
         {
-            Chrome_Log::logException($e, E_WARNING);
             return;
         }
     }
@@ -343,8 +342,6 @@ abstract class Chrome_Cache_Strategy implements Chrome_Cache_Interface
      */
     protected function _loadData()
     {
-        $data = '';
-
         /*
          * while(!feof($this->_filePointer)) { $data .= fgets($this->_filePointer, 8192); }
          */
@@ -355,7 +352,7 @@ abstract class Chrome_Cache_Strategy implements Chrome_Cache_Interface
             $this->_data = $this->_decode($data);
         } catch(Chrome_Exception $e)
         {
-            Chrome_Log::logException($e, E_WARNING);
+            $this->_data = array();
         }
     }
 
