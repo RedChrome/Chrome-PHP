@@ -185,7 +185,7 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      *
      * @var string
      */
-    const ERROR_NOT_SENT = 'ERRORNOTSENT';
+    const ERROR_NOT_SENT = 'element_not_sent';
 
     /**
      * current option
@@ -640,7 +640,7 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
         // user can only select one item, but has sent more than one item
         if($this->_option->getSelectMultiple() === false and is_array($data) and count($data) > 1)
         {
-            return 'Cannot select more than one item';
+            return 'cannt_select_more_than_one_item';
         }
 
         return true;

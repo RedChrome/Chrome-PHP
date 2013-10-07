@@ -15,13 +15,8 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category  CHROME-PHP
  * @package   CHROME-PHP
- * @author    Alexander Book <alexander.book@gmx.de>
- * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
- * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 17:22:25] --> $
- * @link      http://chrome-php.de
+ * @subpackage Chrome.Core
  */
 
 if(CHROME_PHP !== true)
@@ -57,15 +52,8 @@ if(!defined('E_USER_DEPRECATED')) {
     define('E_USER_DEPRECATED', 16384);
 }
 
-// Logs every exception
-// @deprecated, logging is activated by CHROME_DEVELOPER_STATUS
-define('CHROME_LOG_ERRORS', true);
-// Logs every SQL-Error
-define('CHROME_LOG_SQL_ERRORS', true);
 // log path
 define('CHROME_LOG_DIR', 'logs/');
-// log file, default, do not add an extension. this will be generated automatically
-define('CHROME_LOG_FILE', 'log.log');
 //E_ALL | E_STRICT | E_DEPRECATED | E_USER_DEPRECATED); # Display Errors, set to 0 to supress errors
 define('CHROME_DISPLAY_ERRORS', (E_ALL | E_STRICT));
 
@@ -105,6 +93,7 @@ define('CHROME_MEMORY_USAGE', memory_get_usage());
 define('CHROME_MEMORY_LIMIT', ini_get('memory_limit'));
 // charset, UTF-8, ISO-8859-1 http://www.iana.org/assignments/character-sets
 define('CHROME_CHARSET', 'ISO-8859-1');
+define('CHROME_DEFAULT_LOCALE', 'de-DE');
 define('CHROME_TIMEZONE', 'Europe/Berlin');
 define('CHROME_VERSION', '0.1');
 define('CHROME_VERSION_SUFFIX', 'beta');

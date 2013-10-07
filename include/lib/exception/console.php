@@ -31,38 +31,51 @@ class Chrome_Exception_Handler_Console implements Chrome_Exception_Handler_Inter
 {
 	public function exception(Exception $e)
 	{
-		echo 'Uncaught exception of type '.get_class($e).' with message:'.PHP_EOL.PHP_EOL;
-		echo '"'.$e->getMessage().'"';
-		echo PHP_EOL.PHP_EOL;
-		echo 'Printing stack trace:'.PHP_EOL;
-
-		$trace = $e->getTrace();
-
-		foreach($trace as $key => $call) {
-
-			if(!isset($call['file']) || !isset($call['line'])) {
-				continue;
-			}
-
-			if(strlen($call['file']) > 65) {
-				$call['file'] = $this->_fileWrap($call['file'], 65, DIRECTORY_SEPARATOR);
-			}
-
-			$toEcho = sprintf('#%-2s %-69s :%-4s', $key, $call['file'], $call['line']).PHP_EOL.'|--> ';
-
-			if(isset($call['class'])) {
-				$toEcho .= $call['class'].'::';
-			}
-
-			if(isset($call['function'])) {
-				$toEcho .= $call['function'].'()';
-			}
-
-			echo $toEcho;
-			echo PHP_EOL.PHP_EOL;
-		}
+        echo 'Uncaught ';
+		$this->_doPrintException($e);
 
 		exit(1);
+	}
+
+	protected function _doPrintException(Exception $e)
+	{
+	    echo 'exception of type '.get_class($e).' with message:'.PHP_EOL.PHP_EOL;
+	    echo '"'.$e->getMessage().'"';
+	    echo PHP_EOL.PHP_EOL;
+	    echo 'Printing stack trace:'.PHP_EOL;
+
+	    $trace = $e->getTrace();
+
+	    foreach($trace as $key => $call) {
+
+	        if(!isset($call['file']) || !isset($call['line'])) {
+	            continue;
+	        }
+
+	        if(strlen($call['file']) > 65) {
+	            $call['file'] = $this->_fileWrap($call['file'], 65, DIRECTORY_SEPARATOR);
+	        }
+
+	        $toEcho = sprintf('#%-2s %-69s :%-4s', $key, $call['file'], $call['line']).PHP_EOL.'|--> ';
+
+	        if(isset($call['class'])) {
+	            $toEcho .= $call['class'].'::';
+	        }
+
+	        if(isset($call['function'])) {
+	            $toEcho .= $call['function'].'()';
+	        }
+
+	        echo $toEcho;
+	        echo PHP_EOL.PHP_EOL;
+	    }
+
+	    $previous = $e->getPrevious();
+
+	    if($previous !== null) {
+	        echo PHP_EOL.'Caused by ';#.PHP_EOL.$previous->getMessage().PHP_EOL.PHP_EOL;
+	        $this->_doPrintException($previous);
+	    }
 	}
 
 	/**

@@ -144,6 +144,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
      * => Will raise CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME
      *
      * @var string
+     * @todo clean it up. remove unneeded consts.
      */
     const CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE = 'FORM',
             CHROME_FORM_ELEMENT_FORM_TOKEN = 'TOKEN',
@@ -156,7 +157,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
      * Errors of this element:
      *
      * CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME:
-     * Happens if the user waitet more than $CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME seconds
+     * Happens if the user waited more than $CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME seconds
      *
      * CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME:
      * Happens if the user was faster than $CHROME_FORM_ELEMENT_FORM_MIN_ALLOWED_TIME seconds
@@ -166,10 +167,10 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
      *
      * @var unknown
      */
-    const CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME = 'ERRORMAXALLOWEDTIME',
-             CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME = 'ERRORMINALLOWEDTIME',
-             CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN = 'ERRORTOKEN',
-             CHROME_FORM_ELEMENT_ERROR_NOT_CREATED = 'ERRORNOTCREATED';
+    const CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME = 'maximum_time_exceeded',
+             CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME = 'minimum_time_fall_short',
+             CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN = 'token_not_valid',
+             CHROME_FORM_ELEMENT_ERROR_NOT_CREATED = 'form_not_created';
 
     protected $_storage = null;
 

@@ -42,7 +42,7 @@ class Chrome_Validator_Form_Element_SentReadonly extends Chrome_Validator
     {
         if($this->_option->getIsReadonly() === true) {
             if($this->_data !== null) {
-                $this->_setError('Inputfield which is marked as readonly was sent');
+                $this->_setError('readonly_field_was_sent');
                 return false;
             }
 
@@ -53,7 +53,7 @@ class Chrome_Validator_Form_Element_SentReadonly extends Chrome_Validator
 
             foreach($this->_option->getReadonly() as $readonlyInput) {
                 if(in_array($readonlyInput, (array) $this->_data)) {
-                    $this->_setError('Inputfield which is marked as readonly was sent');
+                    $this->_setError('readonly_field_was_sent');
                     return false;
                 }
             }

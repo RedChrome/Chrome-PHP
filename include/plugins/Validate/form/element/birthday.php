@@ -41,7 +41,7 @@ class Chrome_Validator_Form_Element_Birthday extends Chrome_Validator
 
         if($this->_data >= $maxDate)
         {
-            $this->_setError('Date not in the required intervall!');
+            $this->_setError('birthday_date_not_in_valid_intervall', array('age' => $this->_years));
             return false;
         }
         return true;

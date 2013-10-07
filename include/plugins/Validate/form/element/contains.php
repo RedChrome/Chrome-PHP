@@ -48,7 +48,7 @@ class Chrome_Validator_Form_Element_Contains extends Chrome_Validator
 
             foreach($this->_data as $sentValue) {
                 if(!in_array($sentValue, $this->_allowedValues)) {
-                    $this->_setError('Found value which was not allowed');
+                    $this->_setError('input_not_allowed');
                     return false;
                 }
             }
@@ -57,10 +57,7 @@ class Chrome_Validator_Form_Element_Contains extends Chrome_Validator
         }
 
         if(!in_array($this->_data, $this->_allowedValues)) {
-
-            var_dump($this->_data,$this->_allowedValues);
-
-            $this->_setError('Input did not matched allowed values');
+            $this->_setError('input_not_allowed');
             return false;
         }
 

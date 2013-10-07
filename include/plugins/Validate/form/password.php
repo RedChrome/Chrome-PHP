@@ -34,9 +34,9 @@ class Chrome_Validator_Form_Password extends Chrome_Validator
     const CHROME_VALIDATOR_PASSWORD_MIN_LENGTH = 'MINLENGTH',
           CHROME_VALIDATOR_PASSWORD_MAX_LENGTH = 'MAXLENGTH';
 
-    const CHROME_VALIDATOR_PASSWORD_TOO_SHORT = 'PASSWORDTOOSHORT',
-          CHROME_VALIDATOR_PASSWORD_TOO_LONG  = 'PASSWORDTOOLONG',
-          CHROME_VALIDATOR_PASSWORDS_NOT_EQUAL = 'PASSWORDSNOTEQUAL';
+    const CHROME_VALIDATOR_PASSWORD_TOO_SHORT = 'password_too_short',
+          CHROME_VALIDATOR_PASSWORD_TOO_LONG  = 'password_too_long',
+          CHROME_VALIDATOR_PASSWORDS_NOT_EQUAL = 'passwords_not_equal';
 
     protected $_password1 = null;
     protected $_password2 = null;
@@ -61,12 +61,12 @@ class Chrome_Validator_Form_Password extends Chrome_Validator
 
         // pw too short
         if($strlenPw1 < $this->_options[self::CHROME_VALIDATOR_PASSWORD_MIN_LENGTH]) {
-            $this->_setError(self::CHROME_VALIDATOR_PASSWORD_TOO_SHORT);
+            $this->_setError(self::CHROME_VALIDATOR_PASSWORD_TOO_SHORT, array('length' => $this->_options[self::CHROME_VALIDATOR_PASSWORD_MIN_LENGTH]));
         }
 
         // pw too long
         if($strlenPw1 > $this->_options[self::CHROME_VALIDATOR_PASSWORD_MAX_LENGTH]) {
-            $this->_setError(self::CHROME_VALIDATOR_PASSWORD_TOO_LONG);
+            $this->_setError(self::CHROME_VALIDATOR_PASSWORD_TOO_LONG, array('length' => $this->_options[self::CHROME_VALIDATOR_PASSWORD_MAX_LENGTH]));
         }
 
         // pws not equal
