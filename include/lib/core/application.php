@@ -18,8 +18,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Application
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *

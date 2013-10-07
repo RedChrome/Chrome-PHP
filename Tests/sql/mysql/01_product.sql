@@ -127,7 +127,8 @@ INSERT INTO `cp1_class` (`name`, `file`) VALUES
 ('Chrome_Controller_Index', 'modules/content/index/controller.php'),
 ('Chrome_Controller_Register', 'modules/content/register/controller.php'),
 ('Chrome_Controller_Content_Logout', 'modules/content/user/logout/controller.php'),
-('Chrome_Controller_Content_Login', 'modules/content/user/login/controller.php');
+('Chrome_Controller_Content_Login', 'modules/content/user/login/controller.php'),
+('Chrome_Controller_Captcha', 'modules/content/captcha/controller.php');
 
 DROP TABLE IF EXISTS `cp1_config`;
 CREATE TABLE IF NOT EXISTS `cp1_config` (

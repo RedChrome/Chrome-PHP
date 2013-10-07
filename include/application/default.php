@@ -241,7 +241,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
                 $this->_applicationContext->setDesign($design);
 
                 $themeFactory = new Chrome_Design_Factory_Theme($this->_applicationContext);
-                $theme = $themeFactory->build('chrome_one_sidebar');
+                $theme = $themeFactory->build();
                 $theme->initDesign($design, $this->_controller);
             }
 
@@ -283,6 +283,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
         $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
         */
+
     }
 
     protected function _initLoggers()
