@@ -54,6 +54,7 @@ if(!defined('E_USER_DEPRECATED')) {
 
 // log path
 define('CHROME_LOG_DIR', 'logs/');
+define('CHROME_LOCALIZATION_DEFAULT', 'de-DE');
 //E_ALL | E_STRICT | E_DEPRECATED | E_USER_DEPRECATED); # Display Errors, set to 0 to supress errors
 define('CHROME_DISPLAY_ERRORS', (E_ALL | E_STRICT));
 

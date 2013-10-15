@@ -167,15 +167,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $this->_initClassloader();
 
-        $locale = new \Chrome\Localization\Locale();
-        $localization = new \Chrome\Localization\Localization();
-        $localization->setLocale($locale);
-        $translate = new \Chrome\Localization\Translate_Simple($localization);
-        #require_once 'Tests/dummies/localization/translate/test.php';
-        #$translate = new \Chrome\Localization\Translate_Test_XX($localization);
-        $localization->setTranslate($translate);
-
-        $viewContext->setLocalization($localization);
+        $this->_initLocalization();
 
         $this->_initDatabase();
 
@@ -286,6 +278,27 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
     }
 
+    protected function _initLocalization($locale = null)
+    {
+        if($locale === null) {
+            $locale = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : CHROME_LOCALIZATION_DEFAULT;
+        }
+
+        try {
+            $locale = new \Chrome\Localization\Locale($locale);
+            $localization = new \Chrome\Localization\Localization();
+            $localization->setLocale($locale);
+            $translate = new \Chrome\Localization\Translate_Simple($localization);
+            #require_once 'Tests/dummies/localization/translate/test.php';
+            #$translate = new \Chrome\Localization\Translate_Test_XX($localization);
+            $localization->setTranslate($translate);
+            $this->_applicationContext->getViewContext()->setLocalization($localization);
+        } catch(Chrome_Exception $e)
+        {
+            $this->_initLocalization(CHROME_LOCALIZATION_DEFAULT);
+        }
+    }
+
     protected function _initLoggers()
     {
         Chrome_Dir::createDir(TMP.CHROME_LOG_DIR, 0777, false);
@@ -295,7 +308,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $formatter = new \Monolog\Formatter\LineFormatter($output, $dateFormat);
         $processor = new Chrome\Logger\Processor\Psr();
-        $stream = new \Monolog\Handler\StreamHandler(TMP.CHROME_LOG_DIR.CHROME_LOG_FILE);
+        $stream = new \Monolog\Handler\StreamHandler(TMP.CHROME_LOG_DIR.'log.log');
         $streamDatabase = new \Monolog\Handler\StreamHandler(TMP.CHROME_LOG_DIR.'database.log');
         $stream->setFormatter($formatter);
         $stream->pushProcessor($processor);

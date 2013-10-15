@@ -54,7 +54,7 @@ class Chrome_Validator_Form_NicknameRegister extends Chrome_Validator
             $this->_setError(self::CHROME_VALIDATOR_NICKNAME_TOO_SHORT, array('length' => self::CHROME_VALIDATOR_NICKNAME_MIN_CHARS));
         }
         if($length > $this->_options[self::CHROME_VALIDATOR_NICKNAME_MAX_CHARS]) {
-            $this->_setError(self::CHROME_VALIDATOR_NICKNAME_TOO_LONG, array('length' => self::CHROME_VALIDATOR_NICKNAME_MIN_CHARS);
+            $this->_setError(self::CHROME_VALIDATOR_NICKNAME_TOO_LONG, array('length' => self::CHROME_VALIDATOR_NICKNAME_MIN_CHARS));
         }
     }
 }
