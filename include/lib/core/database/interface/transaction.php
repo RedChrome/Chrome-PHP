@@ -31,7 +31,7 @@ require_once LIB.'exception/transaction.php';
 
 interface Chrome_Database_Interface_Transaction_Interface
 {
-    public function beginTransaction();
+    public function begin();
 
     public function commit();
 
@@ -40,15 +40,26 @@ interface Chrome_Database_Interface_Transaction_Interface
 
 class Chrome_Database_Interface_Transaction extends Chrome_Database_Interface_Decorator_Abstract implements Chrome_Database_Interface_Transaction_Interface
 {
-    public function beginTransaction()
+    protected $_transactionInitialized = true;
+
+    public function begin()
     {
         $this->_adapter->query('BEGIN');
+    }
+
+    public function __destruct()
+    {
+        if($this->_transactionInitialized === true)
+        {
+            $this->rollback();
+        }
     }
 
     public function commit()
     {
         try {
             $this->_adapter->query('COMMIT');
+            $this->_transactionInitialized = false;
         } catch(Chrome_Exception_Database $e) {
             throw new Chrome_Exception_Database_Transaction($e->getMessage(), $e->getCode(), $e, $e->handleException());
         }
@@ -57,6 +68,7 @@ class Chrome_Database_Interface_Transaction extends Chrome_Database_Interface_De
     public function rollback()
     {
         $this->_adapter->query('ROLLBACK');
+        $this->_transactionInitialized = false;
     }
 
     public function query($query, array $params = array())

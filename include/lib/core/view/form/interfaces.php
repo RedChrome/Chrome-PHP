@@ -16,8 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -291,47 +289,166 @@ interface Chrome_View_Form_Element_Option_Attachable_Interface extends Chrome_Vi
 }
 
 /**
- * @todo add doc
+ * Basic interface for a form element.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
 interface Chrome_View_Form_Element_Interface extends Chrome_Renderable
 {
+    /**
+     * Returns the id of the view form element
+     *
+     * Do not use getId to retrieve the unique form element id, use getName instead.
+     *
+     * @return string
+     */
     public function getId();
 
+    /**
+     * Returns the name of the view form element
+     *
+     * The id may not be equal to the name. The name is the unique identifier for this form element.
+     * The id may be composed by the name, maybe there is a prefix added..
+     *
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * Returns the corresponding form element
+     *
+     * @return Chrome_Form_Element_Interface
+     */
     public function getFormElement();
 
+    /**
+     * Sets the option
+     *
+     * This may be used to render the form element
+     *
+     * @param Chrome_View_Form_Element_Option_Interface $option
+     */
     public function setOption(Chrome_View_Form_Element_Option_Interface $option);
 
+    /**
+     * Returns the option
+     *
+     * @return Chrome_View_Form_Element_Option_Interface
+     */
     public function getOption();
 
+    /**
+     * Sets an attribute
+     *
+     * This may be visible in html output
+     *
+     * @param string $key
+     * @param string $value
+     */
     public function setAttribute($key, $value);
 
+    /**
+     * Returns a the attribute with the key $key
+     *
+     * @param string $key
+     * @return string
+     */
     public function getAttribute($key);
 
+    /**
+     * Returns a flag, identified by $key
+     *
+     * The flags are set inside this instance and cannot be manipulated from outside.
+     *
+     * @param string $key
+     * @return string
+     */
     public function getFlag($key);
 
+    /**
+     * Sets the view form. This view form should contain this element
+     *
+     * @param Chrome_View_Form_Interface $viewForm
+     */
     public function setViewForm(Chrome_View_Form_Interface $viewForm);
 
+    /**
+     * Returns the view form, set via setViewForm
+     *
+     * @return Chrome_View_Form_Interface
+     */
     public function getViewForm();
 
-    public function addAppender(Chrome_View_Form_Element_Appendable_Interface $decorator);
 
-    public function getAppenders();
-
+    /**
+     * Resets all attributes, flags and other options (not necessaryly the actual option set via setOption).
+     *
+     * This might be usefull, if you want to render this element multiple times.
+     */
     public function reset();
 }
 
 /**
- * @todo add doc
+ * This interface is used, if you want to mark a element as appendable.
+ *
+ * That means, you cann add appenders to the element, which get rendered one by one in the order they wered added.
+ * Those appenders can only appender or overwrite the render result of this element! They cannot modify the behaviour of this element.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-interface Chrome_View_Form_Element_Appendable_Interface extends Chrome_Renderable
+interface Chrome_View_Form_Element_Appendable_Interface
 {
+    /**
+     * Add an appender element.
+     *
+     * This gets rendered after this element was rendered. But note that the appender can control
+     * the actual render-output.
+     *
+     * @param Chrome_View_Form_Element_Appender_Interface $appendableElement
+     */
+    public function addAppender(Chrome_View_Form_Element_Appender_Interface $appendableElement);
+
+    /**
+     * Returns all appended elements
+     *
+     * @return array
+    */
+    public function getAppenders();
+}
+
+/**
+ * This interface is used, if you want to append/overwrite additional render output.
+ *
+ * This cannot be used to modify the behaviour of the appendeable object.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
+interface Chrome_View_Form_Element_Appender_Interface extends Chrome_Renderable
+{
+    /**
+     * Sets the result from the previous render call,
+     *
+     * This may be needed if you actually want to append something to the previous render result.
+     *
+     * @param string $result
+     */
     public function setResult($result);
+}
+
+/**
+ * Interface for a form element, which can get manipulated
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
+interface Chrome_View_Form_Element_Manipulateable_Interface
+{
+    public function addManipulator(Chrome_View_Form_Element_Manipulator_Interface $manipulator);
+
+    public function getManipulators();
 }
 
 /**
@@ -340,9 +457,34 @@ interface Chrome_View_Form_Element_Appendable_Interface extends Chrome_Renderabl
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-interface Chrome_View_Form_Element_Decorator_Interface extends Chrome_Renderable
+interface Chrome_View_Form_Element_Manipulator_Interface extends Chrome_Renderable
 {
+    public function setManipulateable(Chrome_View_Form_Element_Interface $manipulateable);
 
+    public function manipulate();
+
+    public function preRenderManipulate();
+
+    public function postRenderManipulate();
+}
+
+/**
+ * Interface for attributes
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
+interface Chrome_View_Form_Attribute_Interface extends IteratorAggregate
+{
+    public function setAttribute($key, $value, $overwriteable = true);
+
+    public function getAttribute($key);
+
+    public function getAllAttributes();
+
+    public function isWriteable($key);
+
+    public function exists($key);
 }
 
 /**

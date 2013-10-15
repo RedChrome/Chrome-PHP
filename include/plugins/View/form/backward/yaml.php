@@ -14,20 +14,18 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Form
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:47:11] --> $
+ * @subpackage Chrome.View.Form
  */
-if(CHROME_PHP !== true)
-    die();
 
+/**
+ * load default visualisation for backward button
+ */
 require_once 'default.php';
 
 /**
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Form
+ * @subpackage Chrome.View.Form
  */
 class Chrome_View_Form_Element_Backward_Yaml extends Chrome_View_Form_Element_Backward_Default
 {

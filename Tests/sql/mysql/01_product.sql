@@ -133,8 +133,8 @@ INSERT INTO `cp1_class` (`name`, `file`) VALUES
 DROP TABLE IF EXISTS `cp1_config`;
 CREATE TABLE IF NOT EXISTS `cp1_config` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(50) NOT NULL,
-  `subclass` VARCHAR(50) NOT NULL,
+  `name` VARCHAR(256) NOT NULL,
+  `subclass` VARCHAR(256) NOT NULL,
   `value` VARCHAR(256) NOT NULL,
   `type` VARCHAR(10) NOT NULL,
   `modul` VARCHAR(35) NOT NULL,
@@ -160,9 +160,10 @@ INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 ('Title_Ending', 'Site', '', 'string', '', FALSE),
 ('Title_Separator', 'Site', ' :: ', 'string', '', FALSE),
 ('name', 'Site', 'CHROME-PHP', 'string', '', FALSE),
-('public_key', 'Captcha', '6LcQrt4SAAAAAIPs9toLqZ761XTA39aS_AWP-Nog', 'string', '', FALSE),
-('private_key', 'Captcha', '6LcQrt4SAAAAAF7flTN8uwi_9eSFy43jOuUcPGm3', 'string', '', FALSE),
-('recaptcha_theme', 'Captcha', 'clean', 'string', '', FALSE),
+('public_key', 'Captcha/Recaptcha', '6LcQrt4SAAAAAIPs9toLqZ761XTA39aS_AWP-Nog', 'string', '', FALSE),
+('private_key', 'Captcha/Recaptcha', '6LcQrt4SAAAAAF7flTN8uwi_9eSFy43jOuUcPGm3', 'string', '', FALSE),
+('server_api', 'Captcha/Recaptcha', 'http://www.google.com/recaptcha/api', 'string', '', FALSE),
+('recaptcha_theme', 'Captcha/Recaptcha', 'clean', 'string', '', FALSE),
 ('default_theme', 'Theme', 'chrome', 'string', '', FALSE);
 
 DROP TABLE IF EXISTS `cp1_design_controller`;

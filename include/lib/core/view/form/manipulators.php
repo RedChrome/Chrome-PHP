@@ -17,24 +17,30 @@
  * @subpackage Chrome.View.Form
  */
 
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.View.Form
- */
-class Chrome_View_Form_Element_Radio_Default extends Chrome_View_Form_Element_Multiple_Abstract
+abstract class Chrome_View_Form_Element_Manipulator_Abstract implements Chrome_View_Form_Element_Manipulator_Interface
 {
-    private $_int = 0;
+    protected $_manipulateable = null;
 
-    protected function _getNext()
+    public function setManipulateable(Chrome_View_Form_Element_Interface $manipulateable)
     {
-        $next = $this->_availableSelections[$this->_int];
-        $this->_int = ++$this->_int % count($this->_availableSelections);
-        return $next;
+        $this->_manipulateable = $manipulateable;
+    }
+}
+
+class Chrome_View_Form_Element_Manipulator_NecessaryAttributes extends Chrome_View_Form_Element_Manipulator_Abstract
+{
+    public function preRenderManipulate()
+    {
+
     }
 
-    protected function _render()
+    public function postRenderManipulate()
     {
-        return '<input type="radio" ' . $this->_renderFlags() . '/>';
+
+    }
+
+    public function manipulate()
+    {
+
     }
 }

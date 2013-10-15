@@ -14,13 +14,14 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://chrome-php.de/license/new-bsd New BSD License
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 19:03:52] --> $
+ * @subpackage Chrome.View
  */
-if(CHROME_PHP !== true)
-    die();
 
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.View
+ *
+ */
 class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
 {
     private $_title = '';

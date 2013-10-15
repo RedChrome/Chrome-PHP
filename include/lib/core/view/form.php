@@ -20,6 +20,7 @@ if(CHROME_PHP !== true)
     die();
 
 require_once 'form/interfaces.php';
+require_once 'form/manipulators.php';
 require_once 'form/renderer.php';
 require_once 'form/option.php';
 require_once 'form/element.php';
