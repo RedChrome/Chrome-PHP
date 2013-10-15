@@ -1,7 +1,6 @@
 <?php
-	$FORM['login']->setAttribute('class', 'ym-form ym-columnar');
-	//
-	$FORM['login']->setAttribute('id', 'login');
+	$FORM['login']->getAttribute()->setAttribute('class', 'ym-form ym-columnar');
+	$FORM['login']->getAttribute()->setAttribute('id', 'login');
 	echo $FORM['login']->render();
 ?>
 <div class="ym-fbox ym-fbox-text">

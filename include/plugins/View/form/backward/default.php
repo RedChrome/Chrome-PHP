@@ -31,12 +31,12 @@ class Chrome_View_Form_Element_Backward_Default extends Chrome_View_Form_Element
         $lang = $this->_getTranslate();
         //$lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_DEFAULT_LANGUAGE);
 
-        $this->_flags->setAttribute('value', $lang->get('backward'));
-        $this->_flags->remove('required');
+        $this->_attribute->setAttribute('value', $lang->get('backward'));
+        $this->_attribute->remove('required');
 
 
         $formId = $this->_viewForm->getViewElements($this->_formElement->getForm()->getID())->getId();#->getFlag('id');
-        $this->_flags->setAttribute('onclick', 'javascript:truncate_form_input(\'' . $formId . '\');return true');
+        $this->_attribute->setAttribute('onclick', 'javascript:truncate_form_input(\'' . $formId . '\');return true');
 
         return '<input type="submit" ' . $this->_renderFlags() . '/>';
 

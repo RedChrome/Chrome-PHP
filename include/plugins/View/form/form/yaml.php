@@ -26,6 +26,6 @@ class Chrome_View_Form_Element_Form_Yaml extends Chrome_View_Form_Element_Form_D
 {
     protected function _init()
     {
-        $this->_attribute['class'] = 'ym-form linearize-form ym-columnar';
+        $this->_attribute->setAttribute('class', 'ym-form linearize-form ym-columnar');
     }
 }

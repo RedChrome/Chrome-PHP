@@ -1,5 +1,5 @@
 <?php
-    $FORM['Register_StepOne']->setAttribute('class', 'ym-form ym-columnar ym-linearize');
+    $FORM['Register_StepOne']->getAttribute()->setAttribute('class', 'ym-form ym-columnar ym-linearize');
     echo $FORM['Register_StepOne']->render();
 ?>
 <?php //echo $FORM->render('error'); ?>

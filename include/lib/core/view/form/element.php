@@ -36,20 +36,25 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     protected $_option = null;
     protected $_elementOption = null;
     protected $_renderCount = 0;
-    protected $_flags = null;
-    protected $_attribute = array();
+    #protected $_flags = null;
+    /**
+     *
+     * @var Chrome_View_Form_Attribute_Interface
+     */
+    protected $_attribute = null;
     protected $_viewForm = null;
     protected $_appenders = array();
 
     protected $_manipulators = array();
 
-
     abstract protected function _render();
 
     public function __construct(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $option)
     {
-        $this->_flags = new Chrome_View_Form_Attribute();
-        $this->_flags->setAttribute('name', $formElement->getID(), false);
+        $this->_attribute = new Chrome_View_Form_Attribute();
+        $this->_attribute->setAttribute('name', $formElement->getID(), false);
+
+        #$this->_attribute = new Chrome_View_Form_Attribute();
 
         $this->_formElement = $formElement;
         $this->_elementOption = $formElement->getOption();
@@ -94,14 +99,10 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     {
     }
 
-    public function setAttribute($key, $value)
+    public function getAttribute()
     {
-        $this->_attribute[$key] = $value;
-    }
-
-    public function getAttribute($key)
-    {
-        return isset($this->_attribute[$key]) ? $this->_attribute[$key] : null;
+        return $this->_attribute;
+        #return isset($this->_attribute[$key]) ? $this->_attribute[$key] : null;
     }
 
     public function reset()
@@ -119,46 +120,43 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
         $this->_option->setRenderCount($this->_renderCount);
         #var_dump($this->_renderCount);
         $this->_id = $this->_getIdPrefix() . $this->_name;
-        $this->_flags->setAttribute('id', $this->_id);
+        $this->_attribute->setAttribute('id', $this->_id);
         #$this->_flags['id'] = $this->_id;
         #$this->_attribute = array();
         $this->_init();
-    }
-
-    public function getFlag($key)
-    {
-        return $this->_flags->getAttribute($key);
-        //return isset($this->_flags[$key]) ? $this->_flags[$key] : null;
     }
 
     protected function _setFlags()
     {
         if(($placeholder = $this->_option->getPlaceholder()) !== null)
         {
-            $this->_flags->setAttribute('placeholder', $placeholder);
+            $this->_attribute->setAttribute('placeholder', $placeholder);
             #$this->_flags['placeholder'] = $placeholder;
         }
 
         if($this->_elementOption->getIsRequired() === false)
         {
-            $this->_flags->setAttribute('value', $this->_option->getDefaultInput());
+            $this->_attribute->setAttribute('value', $this->_option->getDefaultInput());
         }
 
         if(($storedData = $this->_option->getStoredData()) !== null)
         {
-            $this->_flags->setAttribute('value', $storedData);
+            $this->_attribute->setAttribute('value', $storedData);
         }
 
         //$this->_flags['name'] = $this->_name
-        $this->_flags->setAttribute('id', $this->getId());
+        $this->_attribute->setAttribute('id', $this->getId());
 
-        $this->_flags->setAttribute('readonly', $this->_elementOption->getIsReadonly());
-        $this->_flags->setAttribute('required', ($this->_elementOption->getIsRequired() === true) ? 'required' : null);
+        if($this->_elementOption->getIsReadonly() === true) {
+            $this->_attribute->setAttribute('readonly', 'readonly');
+        }
+
+        $this->_attribute->setAttribute('required', ($this->_elementOption->getIsRequired() === true) ? 'required' : null);
     }
 
     protected function _setFlag($name, $value)
     {
-        $this->_flags->setAttribute($name, $value);
+        $this->_attribute->setAttribute($name, $value);
         //$this->_flags[$name] = $value;
     }
 
@@ -191,18 +189,17 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     {
         $return = '';
 
-        foreach($this->_flags as $type => $value)
+        foreach($this->_attribute as $type => $value)
         {
             if(empty($value) or $value === null)
             {
                 continue;
             }
 
-            unset($this->_attribute[$type]);
-
             $return .= ' ' . $type . '="' . $value . '"';
         }
 
+        /*
         foreach($this->_attribute as $key => $value)
         {
             if(empty($value))
@@ -211,7 +208,7 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
             }
 
             $return .= ' ' . $key . '="' . $value . '"';
-        }
+        }*/
 
         return substr($return, 1);
     }
@@ -291,7 +288,7 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
     protected $_readOnlyInputs = array();
     protected $_requiredInputs = array();
     protected $_defaultInput = array();
-    protected $_tempFlag = array();
+    protected $_attributeCopy = null;
 
     abstract protected function _getNext();
 
@@ -312,7 +309,8 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
 
         if(count($this->_availableSelections) > 1)
         {
-            $this->_flags['name'] = $this->_flags['name'] . '[]';
+            $this->_attribute->setAttribute('name', $this->_name.'[]');
+            #$this->_attribute['name'] = $this->_attribute['name'] . '[]';
         }
 
         $this->_readOnlyInputs = $this->_elementOption->getReadonly();
@@ -333,29 +331,26 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
     public function render()
     {
         $this->_init();
-        $this->_tempFlag = array();
         ++$this->_count;
         $this->_current = $this->_getNext();
 
         $this->_setTempFlags();
         $return = $this->_renderAppenders($this->_render());
         $this->reset();
+        $this->_attribute = $this->_attributeCopy;
         return $return;
-    }
-
-    protected function _setTempFlag($key, $value)
-    {
-        $this->_tempFlag[$key] = $value;
     }
 
     public function getTempFlag($key)
     {
-        return (isset($this->_tempFlag[$key])) ? $this->_tempFlag[$key] : null;
+        return $this->_attribute->getAttribute($key);
+        #return (isset($this->_tempFlag[$key])) ? $this->_tempFlag[$key] : null;
     }
 
     public function setTempFlag($key, $value)
     {
-        $this->_tempFlag[$key] = $value;
+        $this->_attribute->setAttribute($key, $value);
+        #$this->_tempFlag[$key] = $value;
     }
 
     public function getCurrent()
@@ -365,37 +360,26 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
 
     protected function _setTempFlags()
     {
+        $this->_attributeCopy = clone $this->_attribute;
+
         if(in_array($this->_current, $this->_readOnlyInputs))
         {
-            $this->_setTempFlag('disabled', 'disabled');
+            $this->_attribute->setAttribute('disabled', 'disabled');
         }
 
         if(in_array($this->_current, $this->_defaultInput))
         {
-            $this->_setTempFlag('checked', 'checked');
+           $this->_attribute->setAttribute('checked', 'checked');
         }
 
         if(in_array($this->_current, $this->_requiredInputs))
         {
-            $this->_setTempFlag('required', 'required');
+            $this->_attribute->setAttribute('required', 'required');
         }
 
-        $this->_setTempFlag('value', $this->_current);
+        $this->_attribute->setAttribute('value', $this->_current);
 
-        $this->_setTempFlag('id', $this->_id . self::SEPARATOR . $this->_count);
-    }
-
-    protected function _renderFlags()
-    {
-        $flags = $this->_flags;
-
-        $this->_flags = array_merge($this->_flags->getAllAttributes(), $this->_tempFlag);
-
-        $flagsRendered = parent::_renderFlags();
-
-        $this->_flags = $flags;
-
-        return $flagsRendered;
+        $this->_attribute->setAttribute('id', $this->_id . self::SEPARATOR . $this->_count);
     }
 }
 

@@ -28,7 +28,7 @@ class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option
 {
     protected $_storedData = null;
     protected $_label = null;
-    protected $_placeholder = '';
+    protected $_placeholder = null;
     protected $_defaultInput = array();
     protected $_renderCount = 0;
 

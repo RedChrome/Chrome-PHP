@@ -28,27 +28,6 @@ class Chrome_View_Form_Element_Buttons_Yaml extends Chrome_View_Form_Element_But
 
     public function render()
     {
-        return '<div class="ym-fbox-button">' . parent::render() . '</div>';
-    }
-
-    public function element($name, array $options = array())
-    {
-        $return = '';
-
-        if($this->_int === 0)
-        {
-            $return .= '<div class="ym-fbox-button">';
-        }
-
-        $return .= parent::element($name, $options);
-
-        $this->_int++;
-
-        if($this->_int === count($this->_formElement->getOptions(Chrome_Form_Element_Buttons::CHROME_FORM_ELEMENT_BUTTONS)))
-        {
-            $return .= '</div>';
-        }
-
-        return $return;
+        return '<div class="ym-fbox-button ym-fbox-footer">' . parent::render() . '</div>';
     }
 }

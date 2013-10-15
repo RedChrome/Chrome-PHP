@@ -42,13 +42,15 @@ class Chrome_View_Form_Element_Select_Default extends Chrome_View_Form_Element_M
 
         if($this->_elementOption->getSelectMultiple() === true)
         {
-            $this->_flags['multiple'] = 'multiple';
+            $this->_attribute['multiple'] = 'multiple';
         }
     }
 
     protected function _setTempFlags()
     {
-        $this->_tempFlag['id'] = $this->_id;
+       // todo: is this okay?
+        #$this->_tempFlag->setAttribute()
+        $this->_attribute['id'] = $this->_id;
     }
 
     public function _render()

@@ -341,7 +341,7 @@ class Chrome_View_Form_Element_Appender_Label extends Chrome_View_Form_Element_A
         {
             $for = $this->_viewFormElement->getId();#$this->_viewFormElement->getFlag('id');
 
-            $name = $this->_viewFormElement->getFlag('name');
+            $name = $this->_viewFormElement->getAttribute()->getAttribute('name');
         }
 
         if($isRequired === false and $this->_viewFormElement->getFormElement()->getOption()->getIsRequired())

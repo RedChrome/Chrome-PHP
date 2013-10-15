@@ -339,32 +339,11 @@ interface Chrome_View_Form_Element_Interface extends Chrome_Renderable
     public function getOption();
 
     /**
-     * Sets an attribute
+     * Returns the object, containing all attributes
      *
-     * This may be visible in html output
-     *
-     * @param string $key
-     * @param string $value
+     * @return Chrome_View_Form_Attribute_Interface
      */
-    public function setAttribute($key, $value);
-
-    /**
-     * Returns a the attribute with the key $key
-     *
-     * @param string $key
-     * @return string
-     */
-    public function getAttribute($key);
-
-    /**
-     * Returns a flag, identified by $key
-     *
-     * The flags are set inside this instance and cannot be manipulated from outside.
-     *
-     * @param string $key
-     * @return string
-     */
-    public function getFlag($key);
+    public function getAttribute();
 
     /**
      * Sets the view form. This view form should contain this element

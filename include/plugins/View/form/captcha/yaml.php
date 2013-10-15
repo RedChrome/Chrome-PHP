@@ -26,7 +26,7 @@ class Chrome_View_Form_Element_Captcha_Yaml extends Chrome_View_Form_Element_Cap
 {
     public function render()
     {
-        $this->setAttribute('class', 'ym-button');
+        $this->_attribute->setAttribute('class', 'ym-button');
         return '<div class="ym-fbox-text">' . parent::render() . '</div>';
     }
 }

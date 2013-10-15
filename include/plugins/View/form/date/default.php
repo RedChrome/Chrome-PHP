@@ -29,16 +29,16 @@ class Chrome_View_Form_Element_Date_Default extends Chrome_View_Form_Element_Abs
     {
         parent::_setFlags();
 
-        if($this->_flags->exists('value'))
+        if($this->_attribute->exists('value'))
         {
             return;
         }
 
-        $inputValue = $this->_flags->getAttribute('value');
+        $inputValue = $this->_attribute->getAttribute('value');
 
         if($inputValue instanceof DateTime)
         {
-            $this->_flags->setAttribute('value', $inputValue->format('Y-m-d'));
+            $this->_attribute->setAttribute('value', $inputValue->format('Y-m-d'));
         }
     }
 
