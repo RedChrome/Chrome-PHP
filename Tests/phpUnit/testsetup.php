@@ -110,9 +110,9 @@ class Chrome_TestSetup
             {
                 $postgresqlTestConnection = new Chrome_Database_Connection_Postgresql();
                 $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
-                $postgresqlTestConnection->connect();
+                #$postgresqlTestConnection->connect();
                 $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
-                $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
+                #$dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
             }
         }
 

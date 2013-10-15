@@ -14,14 +14,15 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.View
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version Git: <git_id>
- * @author Alexander Book
+ * @subpackage Chrome.View.Form
  */
-if(CHROME_PHP !== true)
-    die();
+
+/**
+ * Class responsible to visualize a date input
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
 class Chrome_View_Form_Element_Date_Default extends Chrome_View_Form_Element_Abstract
 {
     protected function _setFlags()

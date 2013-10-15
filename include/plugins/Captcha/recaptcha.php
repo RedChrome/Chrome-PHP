@@ -14,12 +14,8 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:52:28] --> $
+ * @subpackage Chrome.Captcha
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * load ReCaptcha lib
@@ -27,6 +23,7 @@ if(CHROME_PHP !== true)
 require_once LIB . 'reCaptcha/recaptchalib.php';
 
 /**
+ * Class responsible for recaptcha logic
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Captcha
@@ -63,8 +60,7 @@ class Chrome_Captcha_Engine_Recaptcha implements Chrome_Captcha_Engine_Interface
         }
 
         $config = $this->_appContext->getConfig();
-        $privatekey = $config->getConfig('Captcha', 'private_key');
-        // todo: can we save this in session?
+        $privatekey = $config->getConfig('Captcha/Recaptcha', 'private_key');
         $resp = recaptcha_check_answer($privatekey, $this->_reqData->getSERVERData('REMOTE_ADDR'), $recaptchaChallengeField, $recaptchaResponseField);
 
         $this->_error = $resp->error;

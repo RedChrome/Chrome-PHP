@@ -12,15 +12,16 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
+ *
  * @package CHROME-PHP
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://chrome-php.de/license/new-bsd New BSD License
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 18:22:26] --> $
+ * @subpackage Chrome.View
  */
-if(CHROME_PHP !== true)
-    die();
 
-    // TODO: finish error codes
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.View
+ * @todo: finish error codes
+ */
 class Chrome_View_Plugin_Error extends Chrome_View_Plugin_Abstract
 {
     public function setError(Chrome_View_Interface $obj, $errorCode)

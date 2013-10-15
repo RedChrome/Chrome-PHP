@@ -167,7 +167,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $this->_initClassloader();
 
-        $locale = new \Chrome\Localization\Locale();
+        $locale = new \Chrome\Localization\Locale('de-DE');
         $localization = new \Chrome\Localization\Localization();
         $localization->setLocale($locale);
         $translate = new \Chrome\Localization\Translate_Simple($localization);
@@ -295,7 +295,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $formatter = new \Monolog\Formatter\LineFormatter($output, $dateFormat);
         $processor = new Chrome\Logger\Processor\Psr();
-        $stream = new \Monolog\Handler\StreamHandler(TMP.CHROME_LOG_DIR.CHROME_LOG_FILE);
+        $stream = new \Monolog\Handler\StreamHandler(TMP.CHROME_LOG_DIR.'log.log');
         $streamDatabase = new \Monolog\Handler\StreamHandler(TMP.CHROME_LOG_DIR.'database.log');
         $stream->setFormatter($formatter);
         $stream->pushProcessor($processor);

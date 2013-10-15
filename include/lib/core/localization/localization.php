@@ -30,6 +30,9 @@ interface Localization_Interface
 {
     public function getLocale();
 
+    /**
+     * @return \Chrome\Localization\Translate_Interface
+     */
     public function getTranslate();
 
     public function getDate();

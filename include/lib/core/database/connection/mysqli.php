@@ -29,6 +29,8 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
     protected $_database;
     protected $_port;
 
+    protected $_isPersistent = false;
+
     public function setConnectionOptions($host, $username, $password, $database, $port = 3306, $socket = null)
     {
         if(!extension_loaded('mysqli'))
@@ -46,6 +48,7 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
         // persistent connection
         if(ini_get('mysqli.allow_persistent') == 1 and stripos($this->_host, 'p:') === false)
         {
+            $this->_isPersistent = true;
             $this->_host = 'p:' . $this->_host;
         }
 
@@ -106,7 +109,17 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
 
     public function disconnect()
     {
-        // do nothing, we're using a persistent connection
+        // no connection established, cannot disconnect
+        if(!($this->_connection instanceof mysqli) )
+        {
+            return;
+        }
+
+        // only disconnect, if we havens set up a persistent connection
+        if($this->_isPersistent === false)
+        {
+            $this->_connection->close();
+        }
     }
 
     public function getDefaultAdapterSuffix()

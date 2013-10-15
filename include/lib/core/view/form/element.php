@@ -20,12 +20,13 @@ if(CHROME_PHP !== true)
     die();
 
 /**
+ * @todo migrate $_attribute from type array to Chrome_View_Form_Attribute.
  * @todo add a method to set id prefix.
  * @todo add doc
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Element_Interface
+abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Element_Interface, Chrome_View_Form_Element_Appendable_Interface, Chrome_View_Form_Element_Manipulateable_Interface
 {
     const SEPARATOR = '_';
 
@@ -35,17 +36,21 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     protected $_option = null;
     protected $_elementOption = null;
     protected $_renderCount = 0;
-    protected $_flags = array();
+    protected $_flags = null;
     protected $_attribute = array();
     protected $_viewForm = null;
     protected $_appenders = array();
 
-    /**
-     *
-     * @param Chrome_Form_Element_Interface $formElement
-    */
+    protected $_manipulators = array();
+
+
+    abstract protected function _render();
+
     public function __construct(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $option)
     {
+        $this->_flags = new Chrome_View_Form_Attribute();
+        $this->_flags->setAttribute('name', $formElement->getID(), false);
+
         $this->_formElement = $formElement;
         $this->_elementOption = $formElement->getOption();
         $this->_id = $this->_getIdPrefix($option) . $formElement->getID();
@@ -55,8 +60,6 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
 
         #$this->_init();
     }
-
-    abstract protected function _render();
 
     public function getId()
     {
@@ -103,47 +106,60 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
 
     public function reset()
     {
+        /**
+        if($this->_option instanceof Chrome_View_Form_Element_Option_Attachable_Interface) {
+
+            foreach($this->_option->getAttachments() as $attachment)
+            {
+                $attachment->reset();
+            }
+        }*/
+
         ++$this->_renderCount;
         $this->_option->setRenderCount($this->_renderCount);
         #var_dump($this->_renderCount);
         $this->_id = $this->_getIdPrefix() . $this->_name;
-        $this->_flags['id'] = $this->_id;
+        $this->_flags->setAttribute('id', $this->_id);
+        #$this->_flags['id'] = $this->_id;
         #$this->_attribute = array();
         $this->_init();
     }
 
     public function getFlag($key)
     {
-        return isset($this->_flags[$key]) ? $this->_flags[$key] : null;
+        return $this->_flags->getAttribute($key);
+        //return isset($this->_flags[$key]) ? $this->_flags[$key] : null;
     }
 
     protected function _setFlags()
     {
         if(($placeholder = $this->_option->getPlaceholder()) !== null)
         {
-            $this->_flags['placeholder'] = $placeholder;
+            $this->_flags->setAttribute('placeholder', $placeholder);
+            #$this->_flags['placeholder'] = $placeholder;
         }
 
         if($this->_elementOption->getIsRequired() === false)
         {
-            $this->_flags['value'] = $this->_option->getDefaultInput();
+            $this->_flags->setAttribute('value', $this->_option->getDefaultInput());
         }
 
         if(($storedData = $this->_option->getStoredData()) !== null)
         {
-            $this->_flags['value'] = $storedData;
+            $this->_flags->setAttribute('value', $storedData);
         }
 
-        $this->_flags['name'] = $this->_name;
-        $this->_flags['id'] = $this->getId();
+        //$this->_flags['name'] = $this->_name
+        $this->_flags->setAttribute('id', $this->getId());
 
-        $this->_flags['readonly'] = $this->_elementOption->getIsReadonly();
-        $this->_flags['required'] = ($this->_elementOption->getIsRequired() === true) ? 'required' : null;
+        $this->_flags->setAttribute('readonly', $this->_elementOption->getIsReadonly());
+        $this->_flags->setAttribute('required', ($this->_elementOption->getIsRequired() === true) ? 'required' : null);
     }
 
     protected function _setFlag($name, $value)
     {
-        $this->_flags[$name] = $value;
+        $this->_flags->setAttribute($name, $value);
+        //$this->_flags[$name] = $value;
     }
 
     /**
@@ -202,8 +218,20 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
 
     public function render()
     {
+        foreach($this->_manipulators as $manipulator)
+        {
+            $manipulator->preRenderManipulate();
+        }
+
         $this->reset();
-        return $this->_renderAppenders($this->_render());
+        $return = $this->_renderAppenders($this->_render());
+
+        foreach($this->_manipulators as $manipulator)
+        {
+            $manipulator->postRenderManipulate();
+        }
+
+        return $return;
     }
 
     protected function _renderAppenders($return)
@@ -227,7 +255,7 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
         return $this->_viewForm->getViewContext()->getLocalization()->getTranslate();
     }
 
-    public function addAppender(Chrome_View_Form_Element_Appendable_Interface $appender)
+    public function addAppender(Chrome_View_Form_Element_Appender_Interface $appender)
     {
         $this->_appenders[] = $appender;
     }
@@ -235,6 +263,18 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     public function getAppenders()
     {
         return $this->_appenders;
+    }
+
+    public function addManipulator(Chrome_View_Form_Element_Manipulator_Interface $manipulator)
+    {
+        $this->_manipulators[] = $manipulator;
+        $manipulator->setManipulateable($this);
+        $manipulator->manipulate();
+    }
+
+    public function getManipulators()
+    {
+        return $this->_manipulators;
     }
 }
 
@@ -366,6 +406,11 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
  */
 abstract class Chrome_View_Form_Element_Attachable_Abstract extends Chrome_View_Form_Element_Abstract
 {
+    public function __construct(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Attachable_Interface $option)
+    {
+        parent::__construct($formElement, $option);
+    }
+
     public function reset()
     {
         parent::reset();
@@ -382,7 +427,7 @@ abstract class Chrome_View_Form_Element_Attachable_Abstract extends Chrome_View_
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-abstract class Chrome_View_Form_Element_Appendable_Abstract implements Chrome_View_Form_Element_Appendable_Interface
+abstract class Chrome_View_Form_Element_Appender_Abstract implements Chrome_View_Form_Element_Appender_Interface
 {
     protected $_viewFormElement = null;
     protected $_viewOption = null;
@@ -396,5 +441,69 @@ abstract class Chrome_View_Form_Element_Appendable_Abstract implements Chrome_Vi
     public function setResult($result)
     {
         $this->_result = $result;
+    }
+}
+
+
+/**
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
+class Chrome_View_Form_Attribute implements Chrome_View_Form_Attribute_Interface
+{
+    protected $_attributes = array();
+
+    protected $_notOverwriteableAttributes = array();
+
+    public function setAttribute($key, $value, $overwriteable = true)
+    {
+        $key = self::_processKey($key);
+
+        if(isset($this->_notOverwriteableAttributes[$key])) {
+            throw new \Chrome_Exception('Cannot reset a non-overwriteable attribute');
+        }
+
+        $this->_attributes[$key] = $value;
+
+        if($overwriteable === false)
+        {
+            $this->_notOverwriteableAttributes[$key] = true;
+        }
+    }
+
+    protected static function _processKey($key)
+    {
+        return strtolower($key);
+    }
+
+    public function getAttribute($key)
+    {
+        $key = self::_processKey($key);
+
+        return isset($this->_attributes[$key]) ? $this->_attributes[$key] : null;
+    }
+
+    public function getAllAttributes()
+    {
+        return $this->_attributes;
+    }
+
+    public function exists($key)
+    {
+        $key = self::_processKey($key);
+
+        return isset($this->_attributes[$key]);
+    }
+
+    public function isWriteable($key)
+    {
+        $key = self::_processKey($key);
+
+        return isset($this->_notOverwriteableAttributes[$key]);
+    }
+
+    public function getIterator()
+    {
+        // @todo: implement getIterator()
     }
 }

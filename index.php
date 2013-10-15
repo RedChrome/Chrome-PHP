@@ -34,3 +34,4 @@ $application = new Chrome_Application_Default();
 $application->init();
 $application->execute();
 //TODO: set up Zend_Mail properly
+//TODO: add recpatcha error messages to translate
