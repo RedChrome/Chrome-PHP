@@ -389,7 +389,7 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
     {
         $flags = $this->_flags;
 
-        $this->_flags = array_merge($this->_flags, $this->_tempFlag);
+        $this->_flags = array_merge($this->_flags->getAllAttributes(), $this->_tempFlag);
 
         $flagsRendered = parent::_renderFlags();
 
@@ -459,9 +459,7 @@ class Chrome_View_Form_Attribute implements Chrome_View_Form_Attribute_Interface
     {
         $key = self::_processKey($key);
 
-        if(isset($this->_notOverwriteableAttributes[$key])) {
-            throw new \Chrome_Exception('Cannot reset a non-overwriteable attribute');
-        }
+        $this->_checkOverwriteableKey($key);
 
         $this->_attributes[$key] = $value;
 
@@ -502,8 +500,24 @@ class Chrome_View_Form_Attribute implements Chrome_View_Form_Attribute_Interface
         return isset($this->_notOverwriteableAttributes[$key]);
     }
 
+    public function remove($key)
+    {
+        $key = self::_processKey($key);
+
+        $this->_checkOverwriteableKey($key);
+
+        unset($this->_attributes[$key]);
+    }
+
+    protected function _checkOverwriteableKey($key)
+    {
+        if(isset($this->_notOverwriteableAttributes[$key])) {
+            throw new \Chrome_Exception('Cannot reset a non-overwriteable attribute');
+        }
+    }
+
     public function getIterator()
     {
-        // @todo: implement getIterator()
+        return new ArrayIterator($this->_attributes);
     }
 }

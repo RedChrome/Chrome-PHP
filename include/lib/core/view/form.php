@@ -195,10 +195,10 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
 
         $object = new $class($formElement, $formOption);
 
-        $label = new Chrome_View_Form_Element_Appendable_Label($object);
+        $label = new Chrome_View_Form_Element_Appender_Label($object);
         $object->addAppender($label);
 
-        $error = new Chrome_View_Form_Element_Appendable_Error($object);
+        $error = new Chrome_View_Form_Element_Appender_Error($object);
         $object->addAppender($error);
 
         return $object;
@@ -289,7 +289,7 @@ class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface
         return $this->_labels[$this->_values[$labelForValue]];
     }
 }
-class Chrome_View_Form_Element_Appendable_Error extends Chrome_View_Form_Element_Appendable_Abstract
+class Chrome_View_Form_Element_Appender_Error extends Chrome_View_Form_Element_Appender_Abstract
 {
     const TRANSLATE_MODULE = 'form/errors';
 
@@ -318,7 +318,7 @@ class Chrome_View_Form_Element_Appendable_Error extends Chrome_View_Form_Element
         return $this->_result;
     }
 }
-class Chrome_View_Form_Element_Appendable_Label extends Chrome_View_Form_Element_Appendable_Abstract
+class Chrome_View_Form_Element_Appender_Label extends Chrome_View_Form_Element_Appender_Abstract
 {
 
     protected function _renderLabel(Chrome_View_Form_Label_Interface $label)

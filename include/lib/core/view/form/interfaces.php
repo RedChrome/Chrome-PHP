@@ -457,7 +457,7 @@ interface Chrome_View_Form_Element_Manipulateable_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-interface Chrome_View_Form_Element_Manipulator_Interface extends Chrome_Renderable
+interface Chrome_View_Form_Element_Manipulator_Interface
 {
     public function setManipulateable(Chrome_View_Form_Element_Interface $manipulateable);
 
@@ -485,6 +485,8 @@ interface Chrome_View_Form_Attribute_Interface extends IteratorAggregate
     public function isWriteable($key);
 
     public function exists($key);
+
+    public function remove($key);
 }
 
 /**
