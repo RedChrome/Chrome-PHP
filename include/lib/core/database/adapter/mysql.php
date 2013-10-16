@@ -46,12 +46,10 @@ class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
         if(is_resource($this->_result) === true)
         {
 
-            // TODO: what happens if affected_rows = false?
+            // what happens if affected_rows = false?
+            // -> it does return -1 on error. no need to mention this.
             $this->_isEmpty = !(mysql_affected_rows($this->_connection) > 0);
 
-            /*
-             * $this->_cache = $this->getNext(); if($this->_cache === false) { $this->_isEmpty = true; } else { $this->_isEmpty = false; }
-             */
         } else
         {
             $this->_isEmpty = true;

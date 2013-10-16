@@ -122,9 +122,6 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
     /**
      * Options for this element:
      *
-     * - CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE:
-     * Cannot be set! Namespace in session
-     *
      * - CHROME_FORM_ELEMENT_FORM_TOKEN:
      * Cannot be set! Namespace in session for token
      * => Wil raise CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN, if sent token didn't macht the saved(in session) token
@@ -144,10 +141,8 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
      * => Will raise CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME
      *
      * @var string
-     * @todo clean it up. remove unneeded consts.
      */
-    const CHROME_FORM_ELEMENT_FORM_SESSION_NAMESPACE = 'FORM',
-            CHROME_FORM_ELEMENT_FORM_TOKEN = 'TOKEN',
+    const CHROME_FORM_ELEMENT_FORM_TOKEN = 'TOKEN',
             CHROME_FORM_ELEMENT_FORM_TOKEN_NAMESPACE = 'TOKENNAMESPACE',
             CHROME_FORM_ELEMENT_FORM_TIME = 'TIME',
             CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME = 'MAXALLOWEDTIME',

@@ -190,6 +190,13 @@ interface Chrome_Context_Model_Interface
     public function getLoggerRegistry();
 
     /**
+     * Returns a converter instance
+     *
+     * @return Chrome_Converter_Delegator_Interface
+     */
+    public function getConverter();
+
+    /**
      * Links objects, which need to be accessed from view/model context with the application context.
      * Thus the needed objects are the same (e.g. config, loggerRegistry, ..)
      *
@@ -210,7 +217,7 @@ interface Chrome_Context_Application_Interface
      *
      * @var string
      */
-    const VARIABLE_CONFIG = 'config', VARIABLE_LOGGER_REGISTRY = 'loggerRegistry';
+    const VARIABLE_CONFIG = 'config', VARIABLE_LOGGER_REGISTRY = 'loggerRegistry', VARIABLE_CONVERTER = 'converter';
 
     /**
      * Returns the request variable as a reference.
@@ -400,18 +407,20 @@ interface Chrome_Context_Application_Interface
     public function getClassloader();
 
     /**
+     * Sets a converter instance
      *
-     * @todo this should be available in the model too
      * @param Chrome_Converter_Delegator_Interface $converter
      */
     public function setConverter(Chrome_Converter_Delegator_Interface $converter);
 
     /**
+     * Returns a converter instance
      *
      * @return Chrome_Converter_Delegator_Interface
      */
     public function getConverter();
 }
+
 class Chrome_Context_Application implements Chrome_Context_Application_Interface
 {
     protected $_requestHandler = null;
@@ -439,6 +448,10 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
             case self::VARIABLE_LOGGER_REGISTRY:
                 {
                     return $this->_loggerRegistry;
+                }
+            case self::VARIABLE_CONVERTER:
+                {
+                    return $this->_converter;
                 }
         }
         /*
@@ -574,11 +587,13 @@ class Chrome_Context_Model implements Chrome_Context_Model_Interface
     protected $_config = null;
     protected $_loggerRegistry = null;
     protected $_cacheFactoryRegistry = null;
+    protected $_converter = null;
 
     public function linkApplicationContext(Chrome_Context_Application_Interface $app)
     {
         $this->_config = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_CONFIG);
         $this->_loggerRegistry = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_LOGGER_REGISTRY);
+        $this->_converter = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_CONVERTER);
     }
 
     public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry_Interface $cachFactoryRegistry)
@@ -609,6 +624,11 @@ class Chrome_Context_Model implements Chrome_Context_Model_Interface
     public function getLoggerRegistry()
     {
         return $this->_loggerRegistry;
+    }
+
+    public function getConverter()
+    {
+        return $this->_converter;
     }
 }
 class Chrome_Context_View implements Chrome_Context_View_Interface

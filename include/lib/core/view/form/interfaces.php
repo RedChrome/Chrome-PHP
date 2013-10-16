@@ -346,6 +346,13 @@ interface Chrome_View_Form_Element_Interface extends Chrome_Renderable
     public function getAttribute();
 
     /**
+     * Sets an attribute object, which contains all attribute for this element
+     *
+     * @param Chrome_View_Form_Attribute_Interface $attribute
+     */
+    public function setAttribute(Chrome_View_Form_Attribute_Interface $attribute);
+
+    /**
      * Sets the view form. This view form should contain this element
      *
      * @param Chrome_View_Form_Interface $viewForm
@@ -393,8 +400,17 @@ interface Chrome_View_Form_Element_Appendable_Interface
      * Returns all appended elements
      *
      * @return array
-    */
+     */
     public function getAppenders();
+
+    /**
+     * Sets all appenders.
+     *
+     * The array must only contain objects of type Chrome_View_Form_Element_Appender_Interface
+     *
+     * @param array $appenders
+     */
+    public function setAppenders(array $appenders);
 }
 
 /**
@@ -428,6 +444,8 @@ interface Chrome_View_Form_Element_Manipulateable_Interface
     public function addManipulator(Chrome_View_Form_Element_Manipulator_Interface $manipulator);
 
     public function getManipulators();
+
+    public function setManipulators(array $manipulators);
 }
 
 /**
@@ -450,6 +468,7 @@ interface Chrome_View_Form_Element_Manipulator_Interface
 /**
  * Interface for attributes
  *
+ * @todo is the flag overwriteable really necessary?
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */

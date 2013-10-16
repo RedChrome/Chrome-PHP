@@ -18,11 +18,6 @@
  */
 
 /**
- * @todo is this needed?
- */
-#require_once LIB.'ReCaptcha/recaptchalib.php';
-
-/**
  * Class responsible to visualize recaptcha input
  *
  * @package CHROME-PHP
@@ -32,18 +27,15 @@ class Chrome_View_Form_Element_Captcha_Recaptcha extends Chrome_View_Form_Elemen
 {
     protected function _render()
     {
-        $appContext = $this->_formElement->getForm()->getApplicationContext();
-        $config = $appContext->getConfig();
+        $this->_formElement->getForm()->getApplicationContext()->getConfig();
 
         $publickey = $config->getConfig('Captcha/Recaptcha', 'public_key');
         $server = $config->getConfig('Captcha/Recaptcha', 'server_api');
 
         $errorpart = '';
         if($this->_formElement->getForm()->hasErrors($this->_formElement->getID())) {
-            $lang = $appContext->getViewContext()->getLocalization()->getTranslate();
-            $lang->load('form/errors', 'recaptcha');
             $errors = $this->_formElement->getErrors();
-            $errorpart = '&amp;error='.$lang->get($errors[0]);;
+            $errorpart = '&amp;error='.$errors[0];
         }
 
         // add a hidden input text. This is needed for the captcha element to return isSent() = true

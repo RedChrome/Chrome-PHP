@@ -27,7 +27,7 @@ abstract class Chrome_View_Form_Element_Manipulator_Abstract implements Chrome_V
     }
 }
 
-class Chrome_View_Form_Element_Manipulator_NecessaryAttributes extends Chrome_View_Form_Element_Manipulator_Abstract
+class Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements extends Chrome_View_Form_Element_Manipulator_Abstract
 {
     public function preRenderManipulate()
     {
@@ -41,6 +41,31 @@ class Chrome_View_Form_Element_Manipulator_NecessaryAttributes extends Chrome_Vi
 
     public function manipulate()
     {
+        $option = $this->_manipulateable->getOption();
+        $attribute = $this->_manipulateable->getAttribute();
+        $elementOption = $this->_manipulateable->getFormElement()->getOption();
 
+        if(($placeholder = $option->getPlaceholder()) !== null)
+        {
+            $attribute->setAttribute('placeholder', $placeholder);
+        }
+
+        if($elementOption->getIsRequired() === false)
+        {
+            $attribute->setAttribute('value', $option->getDefaultInput());
+        }
+
+        if(($storedData = $option->getStoredData()) !== null)
+        {
+            $attribute->setAttribute('value', $storedData);
+        }
+
+        $attribute->setAttribute('id', $this->getId());
+
+        if($elementOption->getIsReadonly() === true) {
+            $attribute->setAttribute('readonly', 'readonly');
+        }
+
+        $attribute->setAttribute('required', ($this->_elementOption->getIsRequired() === true) ? 'required' : null);
     }
 }

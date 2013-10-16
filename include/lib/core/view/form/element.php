@@ -16,11 +16,8 @@
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
- * @todo migrate $_attribute from type array to Chrome_View_Form_Attribute.
  * @todo add a method to set id prefix.
  * @todo add doc
  * @package CHROME-PHP
@@ -36,7 +33,6 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     protected $_option = null;
     protected $_elementOption = null;
     protected $_renderCount = 0;
-    #protected $_flags = null;
     /**
      *
      * @var Chrome_View_Form_Attribute_Interface
@@ -45,6 +41,11 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     protected $_viewForm = null;
     protected $_appenders = array();
 
+    /**
+     * Containing all manipulators
+     *
+     * @var array
+     */
     protected $_manipulators = array();
 
     abstract protected function _render();
@@ -53,8 +54,6 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     {
         $this->_attribute = new Chrome_View_Form_Attribute();
         $this->_attribute->setAttribute('name', $formElement->getID(), false);
-
-        #$this->_attribute = new Chrome_View_Form_Attribute();
 
         $this->_formElement = $formElement;
         $this->_elementOption = $formElement->getOption();
@@ -102,7 +101,11 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     public function getAttribute()
     {
         return $this->_attribute;
-        #return isset($this->_attribute[$key]) ? $this->_attribute[$key] : null;
+    }
+
+    public function setAttribute(Chrome_View_Form_Attribute_Interface $attribute)
+    {
+        $this->_attribute = $attribute;
     }
 
     public function reset()
@@ -152,12 +155,6 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
         }
 
         $this->_attribute->setAttribute('required', ($this->_elementOption->getIsRequired() === true) ? 'required' : null);
-    }
-
-    protected function _setFlag($name, $value)
-    {
-        $this->_attribute->setAttribute($name, $value);
-        //$this->_flags[$name] = $value;
     }
 
     /**
@@ -262,6 +259,16 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
         return $this->_appenders;
     }
 
+    public function setAppenders(array $appenders)
+    {
+        $this->_appenders = array();
+
+        foreach($appenders as $appender)
+        {
+            $this->addAppender($appender);
+        }
+    }
+
     public function addManipulator(Chrome_View_Form_Element_Manipulator_Interface $manipulator)
     {
         $this->_manipulators[] = $manipulator;
@@ -272,6 +279,16 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
     public function getManipulators()
     {
         return $this->_manipulators;
+    }
+
+    public function setManipulators(array $manipulators)
+    {
+        $this->_manipulators = array();
+
+        foreach($manipulators as $manipulator)
+        {
+            $this->addManipulator($manipulator);
+        }
     }
 }
 

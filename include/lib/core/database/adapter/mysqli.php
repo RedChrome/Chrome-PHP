@@ -105,13 +105,15 @@ class Chrome_Database_Adapter_Mysqli extends Chrome_Database_Adapter_Abstract
 
         if($rows <= 0) {
 
-            if(is_bool($this->_result)) {
+            if($this->_result === true) {
+                $this->_rows = 0;
                 return 0;
             }
 
             $rows = $this->_result->num_rows;
 
             if($rows === false) {
+                $this->_rows = 0;
                 return 0;
             }
         }
