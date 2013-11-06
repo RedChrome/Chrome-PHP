@@ -81,27 +81,31 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
             $this->_connection = new mysqli($this->_host, $this->_username, $this->_password, $this->_database, $this->_port, $this->_socket);
         } catch(Chrome_Exception $e)
         {
-
             switch(mysqli_connect_errno())
             {
-                // TODO: add other exceptions
-
-                case 1040: // too much connections
+                case 1040: // too many connections
                 case 1044: // cannot access database
+                case 2000: // unknown mysql error
                 case 2002: // cant connect through socket
                 case 2003: // cannot connect to server
+                case 2004: // cannot create tcp soccet.
                 case 2005:
                     {
-                        throw new Chrome_Exception_Database('Could not establish connection to server on "tcp://' . $this->_host . ':' . $this->_port . '"!', Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER);
+                        throw new Chrome_Exception_Database('Could not establish connection to server on "' . $this->_host . ':' . $this->_port . '"!', Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER, $e);
+                    }
+
+                case 1044: // no rights to access the database
+                    {
+                        throw new Chrome_Exception_Database('User is not allowed to access the provided database "'.$this->_database.'"', Chrome_Exception_Database::NO_SUFFICIENT_RIGHTS, $e);
                     }
 
                 case 1045: // wrong password
                     {
-                        throw new Chrome_Exception_Database('Could not connect to MySQL Server. Wrong Username and/or password', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD);
+                        throw new Chrome_Exception_Database('Could not connect to MySQL Server. Wrong Username and/or password', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD, $e);
                     }
                 default:
                     {
-                        throw new Chrome_Exception_Database($e->getMessage(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
+                        throw new Chrome_Exception_Database($e->getMessage(), Chrome_Exception_Database::UNKNOWN, $e);
                     }
             }
         }

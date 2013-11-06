@@ -92,7 +92,7 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
 
                 default:
                     {
-                        throw new Chrome_Exception_Database('(' . mysql_errno() . ') ' . mysql_error(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN);
+                        throw new Chrome_Exception_Database('(' . mysql_errno() . ') ' . mysql_error(), Chrome_Exception_Database::UNKNOWN);
                     }
             }
         }
@@ -114,7 +114,7 @@ class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstra
 
                 default:
                     {
-                        throw new Chrome_Exception_Database('(' . mysql_errno() . ') ' . mysql_error(), Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN, $e);
+                        throw new Chrome_Exception_Database('(' . mysql_errno() . ') ' . mysql_error(), Chrome_Exception_Database::UNKNOWN, $e);
                     }
             }
         }

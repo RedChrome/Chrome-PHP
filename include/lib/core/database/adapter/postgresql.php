@@ -15,17 +15,16 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category CHROME-PHP
  * @package CHROME-PHP
  * @subpackage Chrome.Database
- * @author Alexander Book <alexander.book@gmx.de>
- * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.01.2013 16:18:08] --> $
- * @link http://chrome-php.de
  */
-if(CHROME_PHP !== true)
-    die();
+
+/**
+ * Adapter for postgresql server
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstract
 {
     protected $_lastExecutedQuery = '';
@@ -49,7 +48,7 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
             }
         } catch(Chrome_Exception $e)
         {
-            throw new Chrome_Exception_Database_Query($e->getMessage(), $query, 0, $e);
+            throw new Chrome_Exception_Database_Query($e->getMessage(), $query, Chrome_Exception_Database_Query::ERROR_WHILE_EXECUTING_QUERY, $e);
         }
 
         if(is_resource($this->_result) === true)

@@ -20,8 +20,6 @@
  * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:24:56] --> $
  * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -44,7 +42,10 @@ class Chrome_Exception_Database extends Chrome_Exception
     const DATABASE_EXCEPTION_INVALID_CONNECTION_GIVEN = 11;
     const DATABASE_EXCEPTION_NO_VALID_RIGHT_HANDLER = 12;
     const DATABASE_EXCEPTION_INVALID_STATE = 13;
-    const DATABASE_EXCEPTION_UNKNOWN = 14;
+    const UNKNOWN = 14;
+
+    const ERROR_WHILE_EXECUTING_QUERY = 15;
+    const NO_SUFFICIENT_RIGHTS = 16;
 }
 
 /**
@@ -115,7 +116,7 @@ class Chrome_Exception_Database_Handler extends Chrome_Exception_Handler_Loggabl
                     die('There is an error in a query! See log files for more information.');
                 }
 
-            case Chrome_Exception_Database::DATABASE_EXCEPTION_UNKNOWN:
+            case Chrome_Exception_Database::UNKNOWN:
             default:
                 {
                     $this->_logger->error('There was an error in the database: ' . $e->getMessage() . "\n" . $e->_getTraceAsString() . "\n");

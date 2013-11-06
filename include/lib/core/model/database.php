@@ -83,3 +83,15 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
     {
     }
 }
+
+abstract class Chrome_Model_Database_Application_Abstract extends Chrome_Model_Database_Abstract
+{
+    protected $_applicationContext = null;
+
+    public function __construct(Chrome_Context_Application_Interface $appContext)
+    {
+        $this->_applicationContext = $appContext;
+
+        parent::__construct($appContext->getModelContext());
+    }
+}
