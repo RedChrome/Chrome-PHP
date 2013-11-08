@@ -16,8 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * Interface for attributes
@@ -37,13 +35,53 @@ interface Chrome_Form_Attribute_Interface
 }
 
 /**
- * Interface for an element option class.
- * This contains the settings for a form element
+ * The basic form element option interface
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Option
  */
-interface Chrome_Form_Option_Element_Interface
+interface Chrome_Form_Option_Element_Basic_Interface
+{
+    /**
+     * Sets a validator
+     *
+     * @param Chrome_Validator_Interface $validator
+     */
+    public function setValidator(Chrome_Validator_Interface $validator);
+
+    /**
+     * Returns the validator, set via setValidator
+     *
+     * This validator is used in the corresponding form element to validate the input
+     *
+     * @return Chrome_Validator_Interface
+     */
+    public function getValidator();
+
+    /**
+     * Sets a conversion
+     *
+     * This conversion is used in the corresponding form element to convert the input
+     *
+     * @param Chrome_Converter_List_Interface $conversion
+     */
+    public function setConversion(Chrome_Converter_List_Interface $conversion);
+
+    /**
+     * Returns the conversion, set via setConversion
+     *
+     * @return Chrome_Converter_List_Interface
+     */
+    public function getConversion();
+}
+
+/**
+ * Interface for the standard element option class.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Form.Option
+ */
+interface Chrome_Form_Option_Element_Interface extends Chrome_Form_Option_Element_Basic_Interface
 {
     public function setIsRequired($boolean);
 
@@ -53,32 +91,23 @@ interface Chrome_Form_Option_Element_Interface
 
     public function getIsReadonly();
 
-    public function setValidator(Chrome_Validator_Interface $validator);
+    public function setAllowedValue($allowedValue);
 
-    public function getValidator();
-
-    public function setConversion(Chrome_Converter_List_Interface $conversion);
-
-    public function getConversion();
-}
-interface Chrome_Form_Option_Element_Values_Interface extends Chrome_Form_Option_Element_Interface
-{
-
-    public function setAllowedValues(array $allowedValues);
-
-    public function getAllowedValues();
+    public function getAllowedValue();
 }
 
 /**
- * This interface is for input fields with more than one value (e.g.
- * radio, checkbox)
+ * This interface is for input fields with more than one value (e.g. radio, checkbox, select etc..)
  * In setRequired/Readonly you can specify witch input value is required/readonly
- * If you use setIsRequired/Readonly, then it is assumed, that every possible input value is expected to
- * bei required/readonly. So you could also use setRequired/Readonly(array(..all possible values)) to
- * achieve the same result.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Form.Option
  */
-interface Chrome_Form_Option_Element_Multiple_Interface extends Chrome_Form_Option_Element_Values_Interface
+interface Chrome_Form_Option_Element_Multiple_Interface extends Chrome_Form_Option_Element_Basic_Interface
 {
+    public function setAllowedValues(array $allowedValues);
+
+    public function getAllowedValues();
 
     public function setRequired(array $multipleValues);
 
@@ -92,49 +121,21 @@ interface Chrome_Form_Option_Element_Multiple_Interface extends Chrome_Form_Opti
 
     public function getSelectMultiple();
 }
+
 interface Chrome_Form_Option_Element_Attachable_Interface
 {
-
     public function attach(Chrome_Form_Element_Interface $element);
 
     public function setAttachments(array $elements);
 
     public function getAttachments();
 }
-class Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Interface
+
+class Chrome_Form_Option_Element_Basic implements Chrome_Form_Option_Element_Basic_Interface
 {
-
-    protected $_isRequired = false;
-
-    protected $_isReadonly = false;
-
     protected $_validator = null;
 
     protected $_converter = null;
-
-    public function setIsRequired($boolean)
-    {
-        $this->_isRequired = (bool) $boolean;
-
-        return $this;
-    }
-
-    public function getIsRequired()
-    {
-        return $this->_isRequired;
-    }
-
-    public function setIsReadonly($boolean)
-    {
-        $this->_isReadonly = (bool) $boolean;
-
-        return $this;
-    }
-
-    public function getIsReadonly()
-    {
-        return $this->_isReadonly;
-    }
 
     public function setValidator(Chrome_Validator_Interface $validator)
     {
@@ -160,8 +161,61 @@ class Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Interface
         return $this->_converter;
     }
 }
-class Chrome_Form_Option_Element_Values extends Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Values_Interface
+
+class Chrome_Form_Option_Element extends Chrome_Form_Option_Element_Basic implements Chrome_Form_Option_Element_Interface
 {
+    protected $_isRequired = false;
+
+    protected $_isReadonly = false;
+
+    protected $_validator = null;
+
+    protected $_converter = null;
+
+    protected $_allowedValue = null;
+
+    public function setIsRequired($boolean)
+    {
+        $this->_isRequired = (bool) $boolean;
+
+        return $this;
+    }
+
+    public function getIsRequired()
+    {
+        return $this->_isRequired;
+    }
+
+    public function setIsReadonly($boolean)
+    {
+        $this->_isReadonly = (bool) $boolean;
+
+        return $this;
+    }
+
+    public function getIsReadonly()
+    {
+        return $this->_isReadonly;
+    }
+
+    public function setAllowedValue($allowedValue)
+    {
+        $this->_allowedValue = $allowedValue;
+    }
+
+    public function getAllowedValue()
+    {
+        return $this->_allowedValue;
+    }
+}
+
+class Chrome_Form_Option_Element_Multiple extends Chrome_Form_Option_Element_Basic implements Chrome_Form_Option_Element_Multiple_Interface
+{
+    protected $_required = array();
+
+    protected $_readonly = array();
+
+    protected $_selectMultiple = true;
 
     protected $_allowedValues = array();
 
@@ -176,15 +230,6 @@ class Chrome_Form_Option_Element_Values extends Chrome_Form_Option_Element imple
     {
         return $this->_allowedValues;
     }
-}
-class Chrome_Form_Option_Element_Multiple extends Chrome_Form_Option_Element_Values implements Chrome_Form_Option_Element_Multiple_Interface
-{
-
-    protected $_required = array();
-
-    protected $_readonly = array();
-
-    protected $_selectMultiple = true;
 
     public function __construct()
     {

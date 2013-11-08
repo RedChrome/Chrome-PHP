@@ -195,11 +195,26 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
 
         $object = new $class($formElement, $formOption);
 
-        $label = new Chrome_View_Form_Element_Appender_Label($object);
-        $object->addAppender($label);
+        if($object instanceof Chrome_View_Form_Element_Appendable_Interface)
+        {
+            $label = new Chrome_View_Form_Element_Appender_Label($object);
+            $object->addAppender($label);
 
-        $error = new Chrome_View_Form_Element_Appender_Error($object);
-        $object->addAppender($error);
+            $error = new Chrome_View_Form_Element_Appender_Error($object);
+            $object->addAppender($error);
+        }
+
+        if($object instanceof Chrome_View_Form_Element_Manipulateable_Interface)
+        {
+            if($object instanceof Chrome_View_Form_Element_Multiple_Abstract)
+            {
+                // add manipulator for multiple elements.
+            } else {
+                $object->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements());
+            }
+        }
+
+
 
         return $object;
     }

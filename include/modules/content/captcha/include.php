@@ -21,8 +21,8 @@ class Chrome_Form_Captcha extends Chrome_Form_Abstract
 
         //$this->_elements['error'] = new Chrome_Form_Element_Error($this, 'error', array(Chrome_Form_Element_Error::CHROME_FORM_ELEMENT_DECORATOR_OPTIONS => array(Chrome_Form_Decorator_Error_Default::CHROME_FORM_DECORATOR_ERROR_DISPLAY_ALL => true)));
 
-        $submitOption = new Chrome_Form_Option_Element_Values();
-        $submitOption->setIsRequired(true)->setAllowedValues(array('test it!'));
+        $submitOption = new Chrome_Form_Option_Element();
+        $submitOption->setIsRequired(true)->setAllowedValue('test it!');
         $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
 
         //$this->_addElement($submitElement);

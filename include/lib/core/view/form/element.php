@@ -131,6 +131,7 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
 
     protected function _setFlags()
     {
+        /*
         if(($placeholder = $this->_option->getPlaceholder()) !== null)
         {
             $this->_attribute->setAttribute('placeholder', $placeholder);
@@ -155,6 +156,7 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
         }
 
         $this->_attribute->setAttribute('required', ($this->_elementOption->getIsRequired() === true) ? 'required' : null);
+        */
     }
 
     /**
@@ -293,6 +295,9 @@ abstract class Chrome_View_Form_Element_Abstract implements Chrome_View_Form_Ele
 }
 
 /**
+ * @todo improve interface of this class.
+ * e.g. we can set here a option which is not allowed via the inherited method setOption.
+ *
  * @todo add doc
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form

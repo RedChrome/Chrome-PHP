@@ -21,17 +21,11 @@ if(CHROME_PHP !== true)
     die();
 
 /**
- * @todo use superclass checkbox and allow only one input value
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract implements Chrome_Form_Element_Storable
+class Chrome_Form_Element_Radio extends Chrome_Form_Element_Multiple_Abstract implements Chrome_Form_Element_Storable
 {
-    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Multiple_Interface $option)
-    {
-        parent::__construct($form, $id, $option);
-    }
-
     public function isCreated()
     {
         return true;
@@ -39,24 +33,10 @@ class Chrome_Form_Element_Radio extends Chrome_Form_Element_Abstract implements 
 
     protected function _getValidator()
     {
-        $or = new Chrome_Validator_Composition_Or();
+        // this is important, because the radio can only accept ONE input!
+        $this->_option->setSelectMultiple(false);
 
-        $and = new Chrome_Validator_Composition_And();
-
-        $or->addValidator(new Chrome_Validator_Form_Element_Readonly($this->_option));
-        $or->addValidator($and);
-
-        $and->addValidator(new Chrome_Validator_Form_Element_SentReadonly($this->_option));
-        $and->addValidator(new Chrome_Validator_Form_Element_Required($this->_option));
-        $and->addValidator(new Chrome_Validator_Form_Element_Contains($this->_option->getAllowedValues()));
-
-        if(($validator = $this->_option->getValidator()) !== null) {
-            $and->addValidator($validator);
-        }
-
-        $this->_addUserValidator($and);
-
-        return $or;
+        return parent::_getValidator();
     }
 
     public function getStorableData()

@@ -60,12 +60,12 @@ class Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements exte
             $attribute->setAttribute('value', $storedData);
         }
 
-        $attribute->setAttribute('id', $this->getId());
+        $attribute->setAttribute('id', $this->_manipulateable->getId());#$this->getId());
 
         if($elementOption->getIsReadonly() === true) {
             $attribute->setAttribute('readonly', 'readonly');
         }
 
-        $attribute->setAttribute('required', ($this->_elementOption->getIsRequired() === true) ? 'required' : null);
+        $attribute->setAttribute('required', ($elementOption->getIsRequired() === true) ? 'required' : null);
     }
 }

@@ -441,10 +441,27 @@ interface Chrome_View_Form_Element_Appender_Interface extends Chrome_Renderable
  */
 interface Chrome_View_Form_Element_Manipulateable_Interface
 {
+    /**
+     * Adds a new manipulator
+     *
+     * @param Chrome_View_Form_Element_Manipulator_Interface $manipulator
+     */
     public function addManipulator(Chrome_View_Form_Element_Manipulator_Interface $manipulator);
 
+    /**
+     * Returns all manipulators, the order is the same as they were added (or set)
+     *
+     * @return array
+     */
     public function getManipulators();
 
+    /**
+     * Removes the old manipulaters and replaces them with $manipulators
+     *
+     * Note that the array must contain only instances of Chrome_View_Form_Element_Manipulator_Interface
+     *
+     * @param array $manipulators array containing manipulators
+     */
     public function setManipulators(array $manipulators);
 }
 
@@ -468,7 +485,6 @@ interface Chrome_View_Form_Element_Manipulator_Interface
 /**
  * Interface for attributes
  *
- * @todo is the flag overwriteable really necessary?
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */

@@ -16,13 +16,11 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * Interface for all form elements
  *
- * A form element is an analogon to a html input field (e.g. <input>, <select>, ...) and thus has an unique name/id for the corresponding
+ * A form element is an analogon to a html input field (e.g. < input >, < select >, ...) and thus has an unique name/id for the corresponding
  * form.
  *
  * A form element has three main states: created, sent, valid. These states can be accessed using isCreated, isSent, isValid.
@@ -168,20 +166,15 @@ interface Chrome_Form_Element_Storable extends Chrome_Form_Element_Interface
 }
 
 /**
- * Chrome_Form_Element_Abstract
- *
- * Abstract class of all form element classes. Implements a default cache for isCreated, isSent and isValid.
- *
- * This call only supports single data. If you want to receive multiple values, use {@link Chrome_Form_Element_Multiple_Abstract}
+ * The implementation of a basic form element.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Form.Element
+ * @subpackage Chrome.Form.Storage
  */
-abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Interface
+abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element_Interface
 {
     /**
-     * This error will be raised if the element is marked as required and the user
-     * did not sent data.
+     * This error will be raised if no input was send.
      *
      * @var string
      */
@@ -230,18 +223,18 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     protected $_isCreated = null;
 
     /**
-     * Cache for getData()
-     *
-     * @var mixed
-     */
-    protected $_data = null;
-
-    /**
      * Cache of isSent method
      *
      * @var boolean
      */
     protected $_isSent = null;
+
+    /**
+     * Cache for getData()
+     *
+     * @var mixed
+     */
+    protected $_data = null;
 
     /**
      * Creates a new form element.
@@ -250,16 +243,73 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      *        The corresponding form object
      * @param string $id
      *        the id of the form element. must be unique inside of $form
-     * @param Chrome_Form_Option_Element_Interface $options
+     * @param Chrome_Form_Option_Element_Basic_Interface $options
      *        options for this form element
      *
      * @return Chrome_Form_Element_Abstract
      */
-    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Interface $option)
+    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Basic_Interface $option)
     {
         $this->_id = $id;
         $this->_form = $form;
         $this->_option = $option;
+    }
+
+    protected function _isCreated()
+    {
+        // overwrite this method, or isCreated()
+        throw new Chrome_Exception('Method not overwritten!');
+    }
+
+    /**
+     * Determines whether this element is created.
+     *
+     * This method is a default implementation of a cache using _isCreated() for validation
+     *
+     * @return boolean
+     */
+    public function isCreated()
+    {
+        // cache
+        if($this->_isCreated !== null)
+        {
+            return $this->_isCreated;
+        }
+
+        // either _isCreated() exists or this method is overwritten..
+        $this->_isCreated = $this->_isCreated();
+        return $this->_isCreated;
+    }
+
+    protected function _isSent()
+    {
+        if($this->_form->getSentData($this->_id) === null)
+        {
+            $this->_errors[] = self::ERROR_NOT_SENT;
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Determines whether this element is sent.
+     *
+     * This method is a default implementation of a cache using _isSent() for validation
+     *
+     * @return boolean
+     */
+    public function isSent()
+    {
+        // cache
+        if($this->_isSent !== null)
+        {
+            return $this->_isSent;
+        }
+
+        // either _isSent() exists or this method is overwritten..
+        $this->_isSent = $this->_isSent();
+        return $this->_isSent;
     }
 
     /**
@@ -288,45 +338,6 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
-     * Returns the data, which was sent by client.
-     *
-     * Sometimes it is needed to convert this data before using validation. But then you have to ensure, that the
-     * validators stays valid by itself. (That means, that the validators must be able to handle the converted data)
-     * A use case would be to convert data to a date object.
-     *
-     * @return mixed
-     */
-    protected function _getDataToValidate()
-    {
-        return $this->_form->getSentData($this->_id);
-    }
-
-    /**
-     * Gets the validator from $_options and may append/prepend additional validators to it
-     *
-     * @return Chrome_Validator_Interface
-     */
-    protected function _getValidator()
-    {
-        $composition = new Chrome_Validator_Composition_Or();
-        $composition->addValidator(new Chrome_Validator_Form_Element_Readonly($this->_option));
-
-        $andComposition = new Chrome_Validator_Composition_And();
-        $andComposition->addValidator(new Chrome_Validator_Form_Element_Required($this->_option));
-
-        if($this->_option instanceof Chrome_Form_Option_Element_Values)
-        {
-            $andComposition->addValidator(new Chrome_Validator_Form_Element_Contains($this->_option->getAllowedValues()));
-        }
-
-        $this->_addUserValidator($andComposition);
-
-        $composition->addValidator($andComposition);
-
-        return $composition;
-    }
-
-    /**
      * Adds the "user validator" from $option->getValidator to $validator
      *
      * This will add the validator given by the option instance to the given $validator.
@@ -348,67 +359,61 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
-     * Determines whether this element is created.
+     * Returns the data, which was sent by client.
      *
-     * This method is a default implementation of a cache using _isCreated() for validation
+     * Sometimes it is needed to convert this data before using validation. But then you have to ensure, that the
+     * validators stays valid by itself. (That means, that the validators must be able to handle the converted data)
      *
-     * @return boolean
+     * A use case would be to convert a string "(mm-dd-yy)" to a date object.
+     *
+     * @return mixed
      */
-    public function isCreated()
+    protected function _getDataToValidate()
     {
-        // cache
-        if($this->_isCreated !== null)
-        {
-            return $this->_isCreated;
-        }
-
-        // either _isCreated() exists or this method is overwritten..
-        $this->_isCreated = $this->_isCreated();
-        return $this->_isCreated;
+        return $this->_form->getSentData($this->_id);
     }
 
     /**
-     * Determines whether this element is sent.
      *
-     * This method is a default implementation of a cache using _isSent() for validation
-     *
-     * @return boolean
+     * @return Chrome_Validator_Interface
      */
-    public function isSent()
+    abstract protected function _getValidator();
+
+    public function getData()
     {
         // cache
-        if($this->_isSent !== null)
+        if($this->_data !== null)
         {
-            return $this->_isSent;
+            return $this->_data;
         }
 
-        // either _isSent() exists or this method is overwritten..
-        $this->_isSent = $this->_isSent();
-        return $this->_isSent;
+        $this->_data = $this->_getData();
+
+        return $this->_data;
     }
 
+    abstract protected function _getData();
+
     /**
-     * Default implementation of _isSent
+     * This will do the acutal convertion step.
      *
-     * If the form element is required, then the client has to send data (if the client did not sent data, then it will return false).
-     * If it is marked as readonly, then the client is unable to send data, so it will be sent.
+     * Returns the converted data.
      *
-     * @return boolean
+     * @param mixed $data
+     * @return mixed
      */
-    protected function _isSent()
+    protected function _convert($data)
     {
-        if($this->_option->getIsRequired() === false or $this->_option->getIsReadonly() === true)
+        $conversion = $this->_option->getConversion();
+
+        if($conversion === null)
         {
-            return true;
+            return $data;
         }
 
-        if($this->_form->getSentData($this->_id) === null)
-        {
-            $this->_errors[] = self::ERROR_NOT_SENT;
-            return false;
-        }
+        $converter = $this->_form->getApplicationContext()->getConverter();
 
-        return true;
+        return $converter->convert($conversion, $data);
     }
 
     /**
@@ -442,6 +447,88 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
+     * Returns the corresponding form object
+     *
+     * @see Chrome_Form_Element_Interface::getForm()
+     * @return Chrome_Form_Interface
+     */
+    public function getForm()
+    {
+        return $this->_form;
+    }
+}
+
+/**
+ * Chrome_Form_Element_Abstract
+ *
+ * Abstract class of all form element classes. Implements a default cache for isCreated, isSent and isValid.
+ *
+ * This call only supports single data. If you want to receive multiple values, use {@link Chrome_Form_Element_Multiple_Abstract}
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Form.Element
+ */
+abstract class Chrome_Form_Element_Abstract extends Chrome_Form_Element_Basic_Abstract
+{
+    /**
+     * (non-PHPdoc)
+     *
+     * @see Chrome_Form_Element_Basic_Abstract::__construct()
+     */
+    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Interface $option)
+    {
+        parent::__construct($form, $id, $option);
+    }
+
+    /**
+     * Gets the validator from $_options and may append/prepend additional validators to it
+     *
+     * @return Chrome_Validator_Interface
+     */
+    protected function _getValidator()
+    {
+        $composition = new Chrome_Validator_Composition_Or();
+        $composition->addValidator(new Chrome_Validator_Form_Element_Readonly($this->_option));
+
+        $andComposition = new Chrome_Validator_Composition_And();
+        $andComposition->addValidator(new Chrome_Validator_Form_Element_Required($this->_option));
+
+        if(($allowedValue = $this->_option->getAllowedValue()) !== null)
+        {
+            $andComposition->addValidator(new Chrome_Validator_Form_Element_Contains(array($allowedValue)));
+        }
+
+        if($this->_option instanceof Chrome_Form_Option_Element_Attachable_Interface)
+        {
+            $andComposition->addValidator(new Chrome_Validator_Form_Element_Attachment($this->_option));
+        }
+
+        $this->_addUserValidator($andComposition);
+
+        $composition->addValidator($andComposition);
+
+        return $composition;
+    }
+
+    /**
+     * Default implementation of _isSent
+     *
+     * If the form element is required, then the client has to send data (if the client did not sent data, then it will return false).
+     * If it is marked as readonly, then the client is unable to send data, so it will be sent.
+     *
+     * @return boolean
+     */
+    protected function _isSent()
+    {
+        if($this->_option->getIsRequired() === false or $this->_option->getIsReadonly() === true)
+        {
+            return true;
+        }
+
+        return parent::_isSent();
+    }
+
+    /**
      *
      * @see Chrome_Form_Element_Interface::destroy()
      * @return void
@@ -462,14 +549,11 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
     }
 
     /**
-     * Returns the corresponding form object
      *
-     * @see Chrome_Form_Element_Interface::getForm()
-     * @return Chrome_Form_Interface
+     * @see Chrome_Form_Element_Interface::create()
      */
-    public function getForm()
+    public function create()
     {
-        return $this->_form;
     }
 
     /**
@@ -478,53 +562,15 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
      * @see Chrome_Form_Element_Interface::getData()
      * @return mixed
      */
-    public function getData()
+    protected function _getData()
     {
-        // cache
-        if($this->_data !== null)
-        {
-            return $this->_data;
-        }
-
         if($this->_option->getIsReadonly() === true)
         {
             $this->_data = null;
             return null;
         }
 
-        $this->_data = $this->_convert($this->_form->getSentData($this->_id));
-
-        return $this->_data;
-    }
-
-    /**
-     * This will do the acutal convertion step.
-     *
-     * Returns the converted data.
-     *
-     * @param mixed $data
-     * @return mixed
-     */
-    protected function _convert($data)
-    {
-        $conversion = $this->_option->getConversion();
-
-        if($conversion === null)
-        {
-            return $data;
-        }
-
-        $converter = $this->_form->getApplicationContext()->getConverter();
-
-        return $converter->convert($conversion, $data);
-    }
-
-    /**
-     *
-     * @see Chrome_Form_Element_Interface::create()
-     */
-    public function create()
-    {
+        return $this->_convert($this->_form->getSentData($this->_id));
     }
 }
 
@@ -534,9 +580,8 @@ abstract class Chrome_Form_Element_Abstract implements Chrome_Form_Element_Inter
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element_Abstract
+abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element_Basic_Abstract
 {
-
     /**
      * Creates a new form element, which supports multiple input values
      *
@@ -564,6 +609,7 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
 
         $and = new Chrome_Validator_Composition_And();
 
+        // todo: cannot use this validator, since option is not an instance of Chrome_Form_Option_Element_Interface
         $or->addValidator(new Chrome_Validator_Form_Element_Readonly($this->_option));
         $or->addValidator($and);
 
@@ -575,6 +621,11 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
         if(($validator = $this->_option->getValidator()) !== null)
         {
             $and->addValidator($validator);
+        }
+
+        if($this->_option instanceof Chrome_Form_Option_Element_Attachable_Interface)
+        {
+            $andComposition->addValidator(new Chrome_Validator_Form_Element_Attachment($this->_option));
         }
 
         $this->_addUserValidator($and);
@@ -589,14 +640,9 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
      *
      * @return mixed
      */
-    public function getData()
+    protected function _getData()
     {
-        // cache
-        if($this->_data !== null)
-        {
-            return $this->_data;
-        }
-
+        // todo: cannot use this method
         if($this->_option->getIsReadonly() === true)
         {
             $this->_data = null;
@@ -621,19 +667,18 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
             $data[$key] = $this->_convert($data[$key]);
         }
 
-        $this->_data = $data;
-
         return $data;
     }
 
     /**
      * A validation for this form element.
      *
-     * Returns a string (which is symbolizes false), if the client is not allowed to send more values, but
+     * Returns a string (which symbolizes false), if the client is not allowed to send more values, but
      * he still tried to do so. Otherwise, it returns true.
      *
-     * @param string $data the data, sent by client. You could also use $this->getData()
-     * @return string|boolean
+     * @param string $data
+     *        the data, sent by client. You could also use $this->getData()
+     * @return string boolean
      */
     public function inlineValidation($data)
     {
@@ -656,6 +701,17 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
         // do nothing
     }
 
+    protected function _isSent()
+    {
+        // @todo: find equivalent way to express this, since this method cannot be used
+        if($this->_option->getIsRequired() === false or $this->_option->getIsReadonly() === true)
+        {
+            return true;
+        }
+
+        return parent::_isSent();
+    }
+
     /**
      * Default implementation of {@link Chrome_Form_Element_Interface::isCreated()}
      *
@@ -669,11 +725,33 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
     /**
      * Default implementation of {@link Chrome_Form_Element_Storable::getStorableData()}
      *
+     * This has no effect unless you explicitly implement the Chrome_Form_Element_Storable interface to the class
+     *
      * @return mixed
      */
     public function getStorableData()
     {
         return $this->getData();
+    }
+
+    /**
+     *
+     * @see Chrome_Form_Element_Interface::destroy()
+     * @return void
+     */
+    public function destroy()
+    {
+        // do nothing
+    }
+
+    /**
+     *
+     * @see Chrome_Form_Element_Interface::renew()
+     * @return void
+     */
+    public function renew()
+    {
+        // do nothing
     }
 }
 

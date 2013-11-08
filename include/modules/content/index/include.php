@@ -76,8 +76,8 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $this->_addElement($selectElement);
 
         // submit
-        $submitOption = new Chrome_Form_Option_Element_Values();
-        $submitOption->setAllowedValues(array('Absenden'));
+        $submitOption = new Chrome_Form_Option_Element();
+        $submitOption->setAllowedValue('Absenden');
 
         $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
         $this->_addElement($submitElement);

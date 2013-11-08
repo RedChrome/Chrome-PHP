@@ -32,14 +32,14 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
 {
     protected $_option = null;
 
-    public function __construct(Chrome_Form_Option_Element_Interface $option)
+    public function __construct(Chrome_Form_Option_Element_Basic_Interface $option)
     {
         $this->_option = $option;
     }
 
     protected function _validate()
     {
-        if($this->_option instanceof Chrome_Form_Option_Element_Multiple)
+        if($this->_option instanceof Chrome_Form_Option_Element_Multiple_Interface)
         {
 
             if(!is_array($this->_data))
@@ -66,20 +66,10 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
 
                 return true;
             }
-        } elseif($this->_option instanceof Chrome_Form_Option_Element_Attachable_Interface)
-        {
-            foreach($this->_option->getAttachments() as $attachment)
-            {
-                if($attachment->isValid())
-                {
-                    return true;
-                }
-            }
+        }
 
-            return false;
-        } else
+        if($this->_option instanceof Chrome_Form_Option_Element_Interface)
         {
-
             if($this->_option->getIsRequired() === true and $this->_data === null)
             {
                 return false;
@@ -87,6 +77,8 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
 
             return true;
         }
+
+        return true;
     }
 
     protected function _compareArraysToEquality($expectedArray, $sentArray)

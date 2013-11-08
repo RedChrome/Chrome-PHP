@@ -103,8 +103,8 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $this->_addElement($checkboxElement);
 
         // submit button, nothing special
-        $submitOption = new Chrome_Form_Option_Element_Values();
-        $submitOption->setIsRequired(true)->setAllowedValues(array($lang->get('login')));
+        $submitOption = new Chrome_Form_Option_Element();
+        $submitOption->setIsRequired(true)->setAllowedValue($lang->get('login'));
 
         $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
         $this->_addElement($submitElement);

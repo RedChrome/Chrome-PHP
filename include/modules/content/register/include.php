@@ -28,8 +28,8 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
         $acceptElement = new Chrome_Form_Element_Checkbox($this, 'accept', $acceptOption);
         $this->_addElement($acceptElement);
 
-        $submitOption = new Chrome_Form_Option_Element_Values();
-        $submitOption->setAllowedValues(array($lang->get('register')));
+        $submitOption = new Chrome_Form_Option_Element();
+        $submitOption->setAllowedValue($lang->get('register'));
 
         $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
         $this->_addElement($submitElement);
@@ -109,8 +109,8 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 
         $backwardButton = new Chrome_Form_Element_Backward($this, 'backward', new Chrome_Form_Option_Element());
 
-        $submitOption = new Chrome_Form_Option_Element_Values();
-        $submitOption->setIsRequired(false)->setAllowedValues(array($lang->get('register')));
+        $submitOption = new Chrome_Form_Option_Element();
+        $submitOption->setIsRequired(false)->setAllowedValue($lang->get('register'));
         $submitButton = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
 
         $buttonsOption = new Chrome_Form_Option_Element_Buttons();
