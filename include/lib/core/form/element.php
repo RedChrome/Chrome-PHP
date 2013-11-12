@@ -18,7 +18,7 @@
  */
 
 /**
- * Interface for all form elements
+ * Interface for basic form elements
  *
  * A form element is an analogon to a html input field (e.g. < input >, < select >, ...) and thus has an unique name/id for the corresponding
  * form.
@@ -33,9 +33,8 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Element
  */
-interface Chrome_Form_Element_Interface
+interface Chrome_Form_Element_Basic_Interface
 {
-
     /**
      * Checks whether this form element was successfully created.
      *
@@ -104,15 +103,6 @@ interface Chrome_Form_Element_Interface
     public function getData();
 
     /**
-     * Returns the option class for this element
-     *
-     * The option class contains information about this form element.
-     *
-     * @return Chrome_Form_Option_Element_Interface
-     */
-    public function getOption();
-
-    /**
      * Returns the id/name of this form element.
      *
      * The id is unique in the corresponding form instance. It have not to be unique over all form classes
@@ -139,6 +129,42 @@ interface Chrome_Form_Element_Interface
      * @return Chrome_Form_Interface
      */
     public function getForm();
+}
+
+/**
+ * Interface for form elements
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Form.Element
+ */
+interface Chrome_Form_Element_Interface extends Chrome_Form_Element_Basic_Interface
+{
+    /**
+     * Returns the option class for this element
+     *
+     * The option class contains information about this form element.
+     *
+     * @return Chrome_Form_Option_Element_Interface
+     */
+    public function getOption();
+}
+
+/**
+ * Interface for form element with multiple values
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Form.Element
+ */
+interface Chrome_Form_Element_Multiple_Interface extends Chrome_Form_Element_Basic_Interface
+{
+    /**
+     * Returns the option class for this element
+     *
+     * The option class contains information about this form element.
+     *
+     * @return Chrome_Form_Option_Element_Multiple_Interface
+     */
+    public function getOption();
 }
 
 /**
@@ -171,7 +197,7 @@ interface Chrome_Form_Element_Storable extends Chrome_Form_Element_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Storage
  */
-abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element_Interface
+abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element_Basic_Interface
 {
     /**
      * This error will be raised if no input was send.
@@ -377,7 +403,11 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
      *
      * @return Chrome_Validator_Interface
      */
-    abstract protected function _getValidator();
+    protected function _getValidator()
+    {
+        // Either this method, or isValid must get overwritten!
+        throw new Chrome_Exception('Method not overwritten');
+    }
 
     public function getData()
     {
@@ -417,9 +447,8 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
     }
 
     /**
-     *
-     * @see Chrome_Form_Element_Interface::getOption()
-     * @return Chrome_Form_Option_Element_Interface
+     * Returns the option
+     * @return Chrome_Form_Option_Element_Basic_Interface
      */
     public function getOption()
     {
@@ -468,7 +497,7 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Element
  */
-abstract class Chrome_Form_Element_Abstract extends Chrome_Form_Element_Basic_Abstract
+abstract class Chrome_Form_Element_Abstract extends Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element_Interface
 {
     /**
      * (non-PHPdoc)
@@ -491,6 +520,8 @@ abstract class Chrome_Form_Element_Abstract extends Chrome_Form_Element_Basic_Ab
         $composition->addValidator(new Chrome_Validator_Form_Element_Readonly($this->_option));
 
         $andComposition = new Chrome_Validator_Composition_And();
+        $composition->addValidator($andComposition);
+
         $andComposition->addValidator(new Chrome_Validator_Form_Element_Required($this->_option));
 
         if(($allowedValue = $this->_option->getAllowedValue()) !== null)
@@ -504,8 +535,6 @@ abstract class Chrome_Form_Element_Abstract extends Chrome_Form_Element_Basic_Ab
         }
 
         $this->_addUserValidator($andComposition);
-
-        $composition->addValidator($andComposition);
 
         return $composition;
     }
@@ -580,7 +609,7 @@ abstract class Chrome_Form_Element_Abstract extends Chrome_Form_Element_Basic_Ab
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element_Basic_Abstract
+abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element_Multiple_Interface
 {
     /**
      * Creates a new form element, which supports multiple input values
@@ -605,13 +634,7 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
      */
     protected function _getValidator()
     {
-        $or = new Chrome_Validator_Composition_Or();
-
         $and = new Chrome_Validator_Composition_And();
-
-        // todo: cannot use this validator, since option is not an instance of Chrome_Form_Option_Element_Interface
-        $or->addValidator(new Chrome_Validator_Form_Element_Readonly($this->_option));
-        $or->addValidator($and);
 
         $and->addValidator(new Chrome_Validator_Form_Element_Inline(array($this, 'inlineValidation')));
         $and->addValidator(new Chrome_Validator_Form_Element_SentReadonly($this->_option));
@@ -625,12 +648,12 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
 
         if($this->_option instanceof Chrome_Form_Option_Element_Attachable_Interface)
         {
-            $andComposition->addValidator(new Chrome_Validator_Form_Element_Attachment($this->_option));
+            $and->addValidator(new Chrome_Validator_Form_Element_Attachment($this->_option));
         }
 
         $this->_addUserValidator($and);
 
-        return $or;
+        return $and;
     }
 
     /**
@@ -642,13 +665,6 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
      */
     protected function _getData()
     {
-        // todo: cannot use this method
-        if($this->_option->getIsReadonly() === true)
-        {
-            $this->_data = null;
-            return null;
-        }
-
         $data = $this->_form->getSentData($this->_id);
 
         if($data == null)
@@ -703,8 +719,7 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
 
     protected function _isSent()
     {
-        // @todo: find equivalent way to express this, since this method cannot be used
-        if($this->_option->getIsRequired() === false or $this->_option->getIsReadonly() === true)
+        if(count($this->_option->getRequired()) == 0)
         {
             return true;
         }

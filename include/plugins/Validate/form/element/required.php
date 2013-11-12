@@ -47,25 +47,12 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
                 $this->_data = array($this->_data);
             }
 
-            // every available input must have been sent, but nothing more, nothing less!
-            if($this->_option->getIsRequired() === true)
+            if($this->_compareArraysToSubset($this->_option->getRequired(), $this->_data) === false)
             {
-
-                if($this->_compareArraysToEquality($this->_option->getAllowedValues(), $this->_data) === false)
-                {
-                    return false;
-                }
-
-                return true;
-            } else
-            {
-                if($this->_compareArraysToSubset($this->_option->getRequired(), $this->_data) === false)
-                {
-                    return false;
-                }
-
-                return true;
+                return false;
             }
+
+            return true;
         }
 
         if($this->_option instanceof Chrome_Form_Option_Element_Interface)
@@ -81,42 +68,14 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
         return true;
     }
 
-    protected function _compareArraysToEquality($expectedArray, $sentArray)
-    {
-        if(($expectedArray == $sentArray) === false)
-        {
-
-            // compare the size of both arrays, to test they are equal
-            $expectedSize = sizeof($expectedArray);
-            $acutalSize = sizeof($sentArray);
-
-            if($expectedSize > $acutalSize)
-            {
-                $this->_setError('some_required_fields_were_not_send');
-                return false;
-            }
-
-            if($acutalSize > $expectedSize)
-            {
-                $this->_setError('some_fields_were_too_much');
-                return false;
-            }
-
-            $this->_setError('some_required_fields_were_not_send');
-            return false;
-        }
-
-        return true;
-    }
-
     protected function _compareArraysToSubset($expectedArray, $sentArray)
     {
-        if(sizeof($expectedArray) === 0)
+        if(count($expectedArray) === 0)
         {
             return true;
         }
 
-        if(sizeof($expectedArray) > sizeof($sentArray))
+        if(count($expectedArray) > count($sentArray))
         {
             $this->_setError('some_required_fields_were_not_send');
             return false;

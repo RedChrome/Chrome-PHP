@@ -19,7 +19,7 @@
 
 /**
  *
- * This interface is an analogue to Chrome_Form_Interface. It contains all Chrome_View_Form_Element_Interface $viewElement's for all Chrome_Form_Element_Interface $element's
+ * This interface is an analogue to Chrome_Form_Interface. It contains all Chrome_View_Form_Element_Interface $viewElement's for all Chrome_Form_Element_Basic_Interface $element's
  * elements from a Chrome_Form_Interface $form.
  *
  * A $form contains some $element's and each $element has a corresponding $viewElement. This class is (some kind of) a set of all $viewElement's. Note that the id's
@@ -100,11 +100,11 @@ interface Chrome_View_Form_Element_Factory_Interface
      * This returns a Chrome_View_Form_Element_Interface instance, which can render a $formElement. To create this object, we need a viewElementOption object
      * which contains some infos about the rendering
      *
-     * @param Chrome_Form_Element_Interface $formElement
+     * @param Chrome_Form_Element_Basic_Interface $formElement
      * @param Chrome_View_Form_Element_Option_Interface $formOption
      * @return Chrome_View_Form_Element_Interface
      */
-    public function getElement(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewFormElementOption);
+    public function getElement(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewFormElementOption);
 }
 
 /**
@@ -120,10 +120,10 @@ interface Chrome_View_Form_Element_Option_Factory_Interface
      *
      * Note that the viewElementOption really depends on $formElement.
      *
-     * @param Chrome_Form_Element_Interface $formElement
+     * @param Chrome_Form_Element_Basic_Interface $formElement
      * @return Chrome_View_Form_Element_Option_Interface
      */
-    public function getElementOption(Chrome_Form_Element_Interface $formElement);
+    public function getElementOption(Chrome_Form_Element_Basic_Interface $formElement);
 }
 
 /**
@@ -155,6 +155,7 @@ interface Chrome_View_Form_Renderer_Interface extends Chrome_Renderable
  *
  * This contains all necessary options for rendering a form element.
  *
+ * @todo extend this interface from Chrome_View_Form_Element_Option_Basic_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
@@ -249,52 +250,12 @@ interface Chrome_View_Form_Element_Option_Multiple_Interface extends Chrome_View
 }
 
 /**
- * An option interface for elements which support to attach other form elements.
- *
- * Sometimes a form element can have multiple sub-elements. In this case, use this option interface and attach
- * the additional form elements to the option instance, NOT to the actual main element.
- *
- * For example, the element "buttons" can attach multiple button's.(Why? Because the form is sent if at least one button was sent, but
- * this could not be designed with the current api).
- *
- * @package CHROME-PHP
- * @subpackage Chrome.View.Form
- */
-interface Chrome_View_Form_Element_Option_Attachable_Interface extends Chrome_View_Form_Element_Option_Interface
-{
-    /**
-     * Attaches a form element
-     *
-     * This makes a form element a sub-element for the form element, which belongs to this option
-     *
-     * @param Chrome_View_Form_Element_Interface $element form element to attach
-     */
-    public function attach(Chrome_View_Form_Element_Interface $element);
-
-    /**
-     * Returns all attachments (added by {@link Chrome_View_Form_Element_Option_Attachable_Interface::attach()})
-     *
-     * @return array, containing all attachments, numerically indexed. (index corresponds to the order of attaching)
-     */
-    public function getAttachments();
-
-    /**
-     * Discards all previous set attachments and sets the new attachments
-     *
-     * Note that the values of $elements must be instances of Chrome_View_Form_Element_Interface
-     *
-     * @param array $elements containg the new attachments, all instances of Chrome_View_Form_Element_Interface
-     */
-    public function setAttachments(array $elements);
-}
-
-/**
  * Basic interface for a form element.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-interface Chrome_View_Form_Element_Interface extends Chrome_Renderable
+interface Chrome_View_Form_Element_Basic_Interface extends Chrome_Renderable
 {
     /**
      * Returns the id of the view form element
@@ -318,18 +279,9 @@ interface Chrome_View_Form_Element_Interface extends Chrome_Renderable
     /**
      * Returns the corresponding form element
      *
-     * @return Chrome_Form_Element_Interface
+     * @return Chrome_Form_Element_Basic_Interface
      */
     public function getFormElement();
-
-    /**
-     * Sets the option
-     *
-     * This may be used to render the form element
-     *
-     * @param Chrome_View_Form_Element_Option_Interface $option
-     */
-    public function setOption(Chrome_View_Form_Element_Option_Interface $option);
 
     /**
      * Returns the option
@@ -366,13 +318,89 @@ interface Chrome_View_Form_Element_Interface extends Chrome_Renderable
      */
     public function getViewForm();
 
-
     /**
      * Resets all attributes, flags and other options (not necessaryly the actual option set via setOption).
      *
      * This might be usefull, if you want to render this element multiple times.
      */
     public function reset();
+}
+
+/**
+ * Interface for a default view form element
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
+interface Chrome_View_Form_Element_Interface extends Chrome_View_Form_Element_Basic_Interface
+{
+    /**
+     * Sets the option
+     *
+     * This may be used to render the form element
+     *
+     * @param Chrome_View_Form_Element_Option_Interface $option
+     */
+    public function setOption(Chrome_View_Form_Element_Option_Interface $option);
+}
+
+/**
+ * Interface for view form elements with multiple values
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
+interface Chrome_View_Form_Element_Multiple_Interface extends Chrome_View_Form_Element_Basic_Interface
+{
+    /**
+     * Sets the option
+     *
+     * This may be used to render the form element
+     *
+     * @param Chrome_View_Form_Element_Option_Multiple_Interface $option
+     */
+    public function setOption(Chrome_View_Form_Element_Option_Multiple_Interface $option);
+}
+
+
+/**
+ * An option interface for elements which support to attach other form elements.
+ *
+ * Sometimes a form element can have multiple sub-elements. In this case, use this option interface and attach
+ * the additional form elements to the option instance, NOT to the actual main element.
+ *
+ * For example, the element "buttons" can attach multiple button's.(Why? Because the form is sent if at least one button was sent, but
+ * this could not be designed with the current api).
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
+interface Chrome_View_Form_Element_Option_Attachable_Interface extends Chrome_View_Form_Element_Option_Interface
+{
+    /**
+     * Attaches a form element
+     *
+     * This makes a form element a sub-element for the form element, which belongs to this option
+     *
+     * @param Chrome_View_Form_Element_Interface $element form element to attach
+     */
+    public function attach(Chrome_View_Form_Element_Interface $element);
+
+    /**
+     * Returns all attachments (added by {@link Chrome_View_Form_Element_Option_Attachable_Interface::attach()})
+     *
+     * @return array, containing all attachments, numerically indexed. (index corresponds to the order of attaching)
+    */
+    public function getAttachments();
+
+    /**
+     * Discards all previous set attachments and sets the new attachments
+     *
+     * Note that the values of $elements must be instances of Chrome_View_Form_Element_Interface
+     *
+     * @param array $elements containg the new attachments, all instances of Chrome_View_Form_Element_Interface
+    */
+    public function setAttachments(array $elements);
 }
 
 /**

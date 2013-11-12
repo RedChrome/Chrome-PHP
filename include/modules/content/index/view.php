@@ -137,7 +137,7 @@ class Chrome_View_Form_Index extends Chrome_View_Form_Abstract
         parent::_init();
     }
 
-    protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
+    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
     {
         switch($formElement->getID())
         {

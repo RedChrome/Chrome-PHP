@@ -70,7 +70,6 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $selectOption->setSelectMultiple(true);
         $selectOption->setReadonly(array('Value2'));
         $selectOption->setRequired(array('Value2'));
-        $selectOption->setIsRequired(false);
 
         $selectElement = new Chrome_Form_Element_Select($this, 'select', $selectOption);
         $this->_addElement($selectElement);

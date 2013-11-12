@@ -97,7 +97,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         // only true or false are allowed, to be sure the user has sent on of them, we add the boolConverter
         // this determines, whether the user stays logged in, even if he leaves the website
         $checkboxOption = new Chrome_Form_Option_Element_Multiple();
-        $checkboxOption->setIsRequired(false)->setAllowedValues(array(1));
+        $checkboxOption->setAllowedValues(array(1));
 
         $checkboxElement = new Chrome_Form_Element_Checkbox($this, 'stay_loggedin', $checkboxOption);
         $this->_addElement($checkboxElement);
@@ -147,7 +147,7 @@ class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
         parent::_initFactories();
     }
 
-    protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
+    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
     {
         $lang = $this->_viewContext->getLocalization()->getTranslate();
 

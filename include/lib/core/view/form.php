@@ -16,8 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-if(CHROME_PHP !== true)
-    die();
 
 require_once 'form/interfaces.php';
 require_once 'form/manipulators.php';
@@ -120,7 +118,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         $this->_currentRenderCount = null;
     }
 
-    protected function _setUpElement(Chrome_Form_Element_Interface $formElement)
+    protected function _setUpElement(Chrome_Form_Element_Basic_Interface $formElement)
     {
         $formOption = $this->_formElementOptionFactory->getElementOption($formElement);
 
@@ -145,7 +143,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         return $element;
     }
 
-    protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
+    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
     {
         return $viewOption;
     }
@@ -182,7 +180,7 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
         }
     }
 
-    public function getElement(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $formOption)
+    public function getElement(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $formOption)
     {
         $class = 'Chrome_View_Form_Element_';
 
@@ -208,13 +206,15 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
         {
             if($object instanceof Chrome_View_Form_Element_Multiple_Abstract)
             {
-                // add manipulator for multiple elements.
-            } else {
-                $object->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements());
+                // todo: add manipulator for multiple elements.
+            } else if($object instanceof Chrome_View_Form_Element_Interface) {
+
+                // exclude the basic form elements, like Chrome_Form_Element_Form
+                if( !($object->getFormElement() instanceof Chrome_Form_Element_Basic_Interface) ) {
+                    $object->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements());
+                }
             }
         }
-
-
 
         return $object;
     }
@@ -228,7 +228,7 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
 class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_Form_Element_Option_Factory_Interface
 {
 
-    public function getElementOption(Chrome_Form_Element_Interface $formElement)
+    public function getElementOption(Chrome_Form_Element_Basic_Interface $formElement)
     {
         if($formElement instanceof Chrome_Form_Element_Multiple_Abstract or stristr(get_class($formElement), 'Chrome_Form_Element_Radio') !== false)
         {
@@ -245,7 +245,7 @@ class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_For
         return $viewElementOption;
     }
 
-    protected function _setDefaultOptions(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewElementOption)
+    protected function _setDefaultOptions(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewElementOption)
     {
         foreach(($formElement->getForm()->getAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE)) as $handler)
         {
@@ -357,11 +357,11 @@ class Chrome_View_Form_Element_Appender_Label extends Chrome_View_Form_Element_A
             $for = $this->_viewFormElement->getId();#$this->_viewFormElement->getFlag('id');
 
             $name = $this->_viewFormElement->getAttribute()->getAttribute('name');
-        }
 
-        if($isRequired === false and $this->_viewFormElement->getFormElement()->getOption()->getIsRequired())
-        {
-            $isRequired = true;
+            if($isRequired === false and $this->_viewFormElement->getFormElement()->getOption()->getIsRequired())
+            {
+                $isRequired = true;
+            }
         }
 
         if($isRequired === true)

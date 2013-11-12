@@ -228,7 +228,7 @@ interface Chrome_Form_Interface
      * or if $id is given, the element belonging to this id
      * @param int $id
      *        id of an element
-     * @return Chrome_Form_Element_Interface|array
+     * @return Chrome_Form_Element_Basic_Interface|array
      */
     public function getElements($id = null);
 
@@ -589,11 +589,11 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     /**
      * Adds a form element to the form
      *
-     * @param Chrome_Form_Element_Interface $element
+     * @param Chrome_Form_Element_Basic_Interface $element
      *        element to add
      * @return void
      */
-    protected function _addElement(Chrome_Form_Element_Interface $element)
+    protected function _addElement(Chrome_Form_Element_Basic_Interface $element)
     {
         $this->_elements[$element->getID()] = $element;
     }

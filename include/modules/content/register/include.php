@@ -23,7 +23,7 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
         // this->_addElement($errorElement);
 
         $acceptOption = new Chrome_Form_Option_Element_Multiple();
-        $acceptOption->setIsRequired(true)->setAllowedValues(array('accepted'));
+        $acceptOption->setRequired(array('accepted'))->setAllowedValues(array('accepted'));
 
         $acceptElement = new Chrome_Form_Element_Checkbox($this, 'accept', $acceptOption);
         $this->_addElement($acceptElement);
@@ -47,7 +47,7 @@ class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
         parent::_initFactories();
     }
 
-    protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
+    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
     {
         $lang = $this->_viewContext->getLocalization()->getTranslate();
         //$lang = new Chrome_Language('modules/content/user/registration');
@@ -163,7 +163,7 @@ class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
         parent::_initFactories();
     }
 
-    protected function _modifyElementOption(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
+    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
     {
         $lang = $this->_viewContext->getLocalization()->getTranslate();
         //$lang = new Chrome_Language('modules/content/user/registration');

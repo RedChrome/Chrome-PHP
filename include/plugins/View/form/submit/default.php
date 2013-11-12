@@ -25,9 +25,9 @@ class Chrome_View_Form_Element_Submit_Default extends Chrome_View_Form_Element_A
 {
     protected function _render()
     {
-        $allowedValues = $this->_elementOption->getAllowedValues();
+        $allowedValues = $this->_elementOption->getAllowedValue();
 
-        $this->_attribute->setAttribute('value', array_pop($allowedValues));
+        $this->_attribute->setAttribute('value', $allowedValues);
         $this->_attribute->remove('required');
 
         return '<input type="submit" '.$this->_renderFlags().'/>';

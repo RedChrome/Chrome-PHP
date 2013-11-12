@@ -28,7 +28,7 @@ class Chrome_Form_Option_Element_Buttons extends Chrome_Form_Option_Element impl
 {
     protected $_buttons = array();
 
-    public function attach(Chrome_Form_Element_Interface $element)
+    public function attach(Chrome_Form_Element_Basic_Interface $element)
     {
         $this->_buttons[] = $element;
 
@@ -45,8 +45,8 @@ class Chrome_Form_Option_Element_Buttons extends Chrome_Form_Option_Element impl
         $this->_buttons = array();
 
         foreach($elements as $element) {
-            if(!($element instanceof Chrome_Form_Element_Interface)) {
-                throw new Chrome_Exception('All elements in array have to be instances of Chrome_Form_Element_Interface');
+            if(!($element instanceof Chrome_Form_Element_Basic_Interface)) {
+                throw new Chrome_Exception('All elements in array have to be instances of Chrome_Form_Element_Basic_Interface');
             }
 
             $this->_buttons[] = $element;

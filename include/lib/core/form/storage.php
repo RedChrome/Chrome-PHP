@@ -36,21 +36,21 @@ interface Chrome_Form_Handler_Store_Interface
     /**
      * Returns true if this handler can/(or has) stored user input for $element
      *
-     * @param Chrome_Form_Element_Interface $element
+     * @param Chrome_Form_Element_Basic_Interface $element
      *        a form element
      *
      * @return boolean
      */
-    public function hasStored(Chrome_Form_Element_Interface $element);
+    public function hasStored(Chrome_Form_Element_Basic_Interface $element);
 
     /**
      * Returns the stored data for $element
      *
-     * @param Chrome_Form_Element_Interface $element
+     * @param Chrome_Form_Element_Basic_Interface $element
      *        a form element
      * @return mixed
      */
-    public function getStored(Chrome_Form_Element_Interface $element);
+    public function getStored(Chrome_Form_Element_Basic_Interface $element);
 }
 
 /**

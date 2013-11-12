@@ -24,7 +24,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Option_Element_Form extends Chrome_Form_Option_Element
+class Chrome_Form_Option_Element_Form extends Chrome_Form_Option_Element_Basic
 {
     protected $_token = null;
     protected $_maxTime = 3600;
@@ -36,8 +36,6 @@ class Chrome_Form_Option_Element_Form extends Chrome_Form_Option_Element
     public function __construct(Chrome_Form_Storage_Interface $storage)
     {
         $this->setStorage($storage);
-        $this->setIsReadonly(false);
-        $this->setIsRequired(true);
     }
 
     public function setToken($token)
@@ -117,7 +115,7 @@ class Chrome_Form_Option_Element_Form extends Chrome_Form_Option_Element
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
+class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract
 {
     /**
      * Options for this element:
@@ -268,7 +266,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
         }
     }
 
-    public function destory()
+    public function destroy()
     {
         $this->_storage->remove($this->_id);
     }
@@ -317,6 +315,11 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Abstract
     protected function _createToken()
     {
         return md5(uniqid(mt_rand(), true));
+    }
+
+    protected function _getData()
+    {
+        return $this->_convert($this->_form->getSentData($this->_id));
     }
 
     /**

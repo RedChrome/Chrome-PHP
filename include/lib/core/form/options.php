@@ -124,7 +124,7 @@ interface Chrome_Form_Option_Element_Multiple_Interface extends Chrome_Form_Opti
 
 interface Chrome_Form_Option_Element_Attachable_Interface
 {
-    public function attach(Chrome_Form_Element_Interface $element);
+    public function attach(Chrome_Form_Element_Basic_Interface $element);
 
     public function setAttachments(array $elements);
 

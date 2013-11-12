@@ -81,12 +81,12 @@ class Chrome_Form_Handler_Store implements Chrome_Form_Handler_Interface, Chrome
         }
     }
 
-    public function hasStored(Chrome_Form_Element_Interface $element)
+    public function hasStored(Chrome_Form_Element_Basic_Interface $element)
     {
         return in_array($element->getID(), $this->_whiteList);
     }
 
-    public function getStored(Chrome_Form_Element_Interface $element)
+    public function getStored(Chrome_Form_Element_Basic_Interface $element)
     {
         return $this->_storage->get($element->getID());
     }
