@@ -244,15 +244,6 @@ abstract class Chrome_View_Form_Element_Abstract extends Chrome_View_Form_Elemen
 
     public function reset()
     {
-        /**
-         * if($this->_option instanceof Chrome_View_Form_Element_Option_Attachable_Interface) {
-         *
-         * foreach($this->_option->getAttachments() as $attachment)
-         * {
-         * $attachment->reset();
-         * }
-         * }
-         */
         ++$this->_renderCount;
         $this->_option->setRenderCount($this->_renderCount);
         // ar_dump($this->_renderCount);
@@ -263,13 +254,6 @@ abstract class Chrome_View_Form_Element_Abstract extends Chrome_View_Form_Elemen
         $this->_init();
     }
 
-    protected function _setFlags()
-    {
-        /*
-         * if(($placeholder = $this->_option->getPlaceholder()) !== null) { $this->_attribute->setAttribute('placeholder', $placeholder); #$this->_flags['placeholder'] = $placeholder; } if($this->_elementOption->getIsRequired() === false) { $this->_attribute->setAttribute('value', $this->_option->getDefaultInput()); } if(($storedData = $this->_option->getStoredData()) !== null) { $this->_attribute->setAttribute('value', $storedData); } //$this->_flags['name'] = $this->_name $this->_attribute->setAttribute('id', $this->getId()); if($this->_elementOption->getIsReadonly() === true) { $this->_attribute->setAttribute('readonly', 'readonly'); } $this->_attribute->setAttribute('required', ($this->_elementOption->getIsRequired() === true) ? 'required' : null);
-         */
-    }
-
     /**
      *
      * @param Chrome_View_Form_Option_Interface $option
@@ -278,7 +262,6 @@ abstract class Chrome_View_Form_Element_Abstract extends Chrome_View_Form_Elemen
     {
         $this->_option = $option;
         $this->_renderCount = $option->getRenderCount();
-        $this->_setFlags();
     }
 
 

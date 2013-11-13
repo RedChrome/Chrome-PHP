@@ -501,7 +501,7 @@ interface Chrome_View_Form_Element_Manipulateable_Interface
  */
 interface Chrome_View_Form_Element_Manipulator_Interface
 {
-    public function setManipulateable(Chrome_View_Form_Element_Interface $manipulateable);
+    public function setManipulateable(Chrome_View_Form_Element_Basic_Interface $manipulateable);
 
     public function manipulate();
 

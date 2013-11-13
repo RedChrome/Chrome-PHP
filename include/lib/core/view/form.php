@@ -204,6 +204,8 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
 
         if($object instanceof Chrome_View_Form_Element_Manipulateable_Interface)
         {
+            $object->addManipulator(new Chrome_View_Form_Element_Manipulator_IdPrefix());
+
             if($object instanceof Chrome_View_Form_Element_Multiple_Abstract)
             {
                 // todo: add manipulator for multiple elements.

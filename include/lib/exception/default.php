@@ -72,7 +72,7 @@ class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Inter
 
             $prev = $e->getPrevious();
 
-            if( ($prev instanceof Exception) AND !($prev instanceof Chrome_Exception AND $prev->handleException() === false) ) {
+            if( ($prev instanceof Exception) AND !($prev instanceof Chrome_Exception) ) {
 
                 $return .= '<h4>...caused by '.$prev->getFile().'('.$prev->getLine().')</h4>';
 

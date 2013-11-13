@@ -295,6 +295,9 @@ interface Chrome_Form_Interface
     /**
      * getAttribute()
      *
+     * Returns a attribute set via setAttribute().
+     * If $key does not exist, then null will be returned.
+     *
      * @param string $key
      * @return mixed
      */
