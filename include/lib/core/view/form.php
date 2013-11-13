@@ -208,7 +208,9 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
 
             if($object instanceof Chrome_View_Form_Element_Multiple_Abstract)
             {
-                // todo: add manipulator for multiple elements.
+                // @todo: test that.
+                $object->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForMultipleElement());
+
             } else if($object instanceof Chrome_View_Form_Element_Interface) {
 
                 // exclude the basic form elements, like Chrome_Form_Element_Form
@@ -229,10 +231,9 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
  */
 class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_Form_Element_Option_Factory_Interface
 {
-
     public function getElementOption(Chrome_Form_Element_Basic_Interface $formElement)
     {
-        if($formElement instanceof Chrome_Form_Element_Multiple_Abstract or stristr(get_class($formElement), 'Chrome_Form_Element_Radio') !== false)
+        if($formElement instanceof Chrome_Form_Element_Multiple_Interface)
         {
             $viewElementOption = new Chrome_View_Form_Element_Option_Multiple();
         } else if($formElement->getOption() instanceof Chrome_Form_Option_Element_Attachable_Interface)
@@ -258,6 +259,7 @@ class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_For
         }
     }
 }
+
 class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface
 {
     protected $_currentInt = 0;
@@ -306,6 +308,7 @@ class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface
         return $this->_labels[$this->_values[$labelForValue]];
     }
 }
+
 class Chrome_View_Form_Element_Appender_Error extends Chrome_View_Form_Element_Appender_Abstract
 {
     const TRANSLATE_MODULE = 'form/errors';
@@ -335,6 +338,7 @@ class Chrome_View_Form_Element_Appender_Error extends Chrome_View_Form_Element_A
         return $this->_result;
     }
 }
+
 class Chrome_View_Form_Element_Appender_Label extends Chrome_View_Form_Element_Appender_Abstract
 {
 

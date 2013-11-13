@@ -17,8 +17,10 @@
  * @subpackage Chrome.Core
  */
 
-if(CHROME_PHP !== true) die();
-
+/**
+ * load attribute interfaces
+ */
+require_once 'misc/attribute.php';
 
 /**
  * load registry for objects

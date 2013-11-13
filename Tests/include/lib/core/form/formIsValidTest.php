@@ -11,7 +11,7 @@ class FormIsValidTest extends Chrome_TestCase
     public function setUp()
     {
         $this->_form = new Test_Chrome_Form_No_Elements($this->_appContext);
-        $this->_option = new Chrome_Form_Option_Element_Multiple();
+        $this->_option = new Chrome_Form_Option_Element();
     }
 
     protected function _addElement()

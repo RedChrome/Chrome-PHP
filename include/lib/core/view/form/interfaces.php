@@ -220,22 +220,6 @@ interface Chrome_View_Form_Element_Option_Interface
      * @return mixed
      */
     public function getStoredData();
-
-    /**
-     * Return the render count set via setRenderCount
-     *
-     * @return int
-     */
-    public function getRenderCount();
-
-    /**
-     * Sets the render count
-     *
-     * Only use this method, if you understood why this method was introduced.
-     *
-     * @param int $int
-     */
-    public function setRenderCount($int);
 }
 
 /**
@@ -494,41 +478,47 @@ interface Chrome_View_Form_Element_Manipulateable_Interface
 }
 
 /**
- * @todo add doc and finish interface.
+ * Interface for an object, which is able to manipulate view form elements.
+ *
+ * This interfaces provides three manipulation methods:
+ *     - manipulate
+ *     - preRenderManipulate
+ *     - postRenderManipulate
+ *
+ * The methods are intended to manipulate the view form element.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
 interface Chrome_View_Form_Element_Manipulator_Interface
 {
+    /**
+     * Sets the object which gets manipulates
+     *
+     * @param Chrome_View_Form_Element_Basic_Interface $manipulateable
+     */
     public function setManipulateable(Chrome_View_Form_Element_Basic_Interface $manipulateable);
 
+    /**
+     * This method gets called when the manipulator is added to the view form element.
+     *
+     * @return void
+     */
     public function manipulate();
 
+    /**
+     * This method gets called before the view form element renderes.
+     *
+     * @return void
+     */
     public function preRenderManipulate();
 
+    /**
+     * This method gets called after the view form element was rendered.
+     *
+     * @return void
+     */
     public function postRenderManipulate();
-}
-
-/**
- * Interface for attributes
- *
- * @package CHROME-PHP
- * @subpackage Chrome.View.Form
- */
-interface Chrome_View_Form_Attribute_Interface extends IteratorAggregate
-{
-    public function setAttribute($key, $value, $overwriteable = true);
-
-    public function getAttribute($key);
-
-    public function getAllAttributes();
-
-    public function isWriteable($key);
-
-    public function exists($key);
-
-    public function remove($key);
 }
 
 /**

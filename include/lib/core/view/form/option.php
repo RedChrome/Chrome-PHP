@@ -15,9 +15,8 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
+ * @todo: add doc
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -30,7 +29,6 @@ class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option
     protected $_label = null;
     protected $_placeholder = null;
     protected $_defaultInput = array();
-    protected $_renderCount = 0;
 
     public function getPlaceholder()
     {
@@ -72,19 +70,6 @@ class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option
     public function setDefaultInput($input)
     {
         $this->_defaultInput = $input;
-    }
-
-    public function getRenderCount()
-    {
-        return $this->_renderCount;
-    }
-
-    /**
-     * (non-PHPdoc) @see Chrome_View_Form_Element_Option_Interface::setRenderCount()
-     */
-    public function setRenderCount($int)
-    {
-        $this->_renderCount = (int) $int;
     }
 }
 

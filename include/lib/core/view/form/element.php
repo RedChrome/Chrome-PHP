@@ -17,6 +17,9 @@
  * @subpackage Chrome.View.Form
  */
 
+use \Chrome\Misc\Attribute_Secure_Interface;
+use \Chrome\Misc\Attribute_Secure;
+
 /**
  * Implemenatation of Chrome_View_Form_Element_Basic_Interface with several other usefull interfaces
  *
@@ -34,7 +37,7 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
 
     /**
      *
-     * @var Chrome_View_Form_Attribute_Interface
+     * @var Attribute_Secure_Interface
      */
     protected $_attribute = null;
     protected $_viewForm = null;
@@ -83,8 +86,8 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
 
     protected function _init()
     {
-        $this->_attribute = new Chrome_View_Form_Attribute();
-        $this->_attribute->setAttribute('name', $this->_name, false);
+        $this->_attribute = new Attribute_Secure();
+        $this->_attribute->setAttribute('name', $this->_name);
         $this->_attribute->setAttribute('id', $this->_name);
     }
 
@@ -128,7 +131,7 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
         return $this->_attribute;
     }
 
-    public function setAttribute(Chrome_View_Form_Attribute_Interface $attribute)
+    public function setAttribute(Attribute_Secure_Interface $attribute)
     {
         $this->_attribute = $attribute;
     }
@@ -222,38 +225,12 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
 
 /**
  *
- * @todo add a method to set id prefix.
- * @todo clean this class.
  * @todo add doc
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
 abstract class Chrome_View_Form_Element_Abstract extends Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Form_Element_Interface
 {
-    protected $_renderCount = 0;
-
-    protected function _getIdPrefix(Chrome_View_Form_Element_Option_Interface $option = null)
-    {
-        if($option === null)
-        {
-            $option = $this->_option;
-        }
-
-        return $this->_formElement->getForm()->getID() . self::SEPARATOR . $option->getRenderCount() . self::SEPARATOR;
-    }
-
-    public function reset()
-    {
-        ++$this->_renderCount;
-        $this->_option->setRenderCount($this->_renderCount);
-        // ar_dump($this->_renderCount);
-        $this->_id = $this->_getIdPrefix() . $this->_name;
-        $this->_attribute->setAttribute('id', $this->_id);
-        // this->_flags['id'] = $this->_id;
-        // this->_attribute = array();
-        $this->_init();
-    }
-
     /**
      *
      * @param Chrome_View_Form_Option_Interface $option
@@ -261,22 +238,16 @@ abstract class Chrome_View_Form_Element_Abstract extends Chrome_View_Form_Elemen
     public function setOption(Chrome_View_Form_Element_Option_Interface $option)
     {
         $this->_option = $option;
-        $this->_renderCount = $option->getRenderCount();
     }
-
-
 }
 
 /**
- *
- * @todo improve interface of this class.
- *       e.g. we can set here a option which is not allowed via the inherited method setOption.
  *
  * @todo add doc
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Form_Element_Basic_Abstract
+abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Form_Element_Multiple_Interface
 {
     protected $_current = null;
     protected $_count = 0;
@@ -311,11 +282,10 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
             // this->_attribute['name'] = $this->_attribute['name'] . '[]';
         }
 
-        $this->_readOnlyInputs = $this->_elementOption->getReadonly();
+        /*$this->_readOnlyInputs = $this->_elementOption->getReadonly();
         $this->_requiredInputs = $this->_elementOption->getRequired();
 
         // the user has to select the required input by it's own.
-        // if($this->_elementOption->getIsRequired() === false)
         if(count($this->_elementOption->getRequired()) === 0)
         {
             $this->_defaultInput = $this->_option->getDefaultInput();
@@ -324,28 +294,49 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
         if(($storedData = $this->_option->getStoredData()) !== null)
         {
             $this->_defaultInput = $storedData;
-        }
+        }*/
     }
 
     public function render()
     {
-        $this->_init();
         ++$this->_count;
         $this->_current = $this->_getNext();
 
         $this->_setTempFlags();
+
+        foreach($this->_manipulators as $manipulator)
+        {
+            $manipulator->preRenderManipulate();
+        }
+
+
         $return = $this->_renderAppenders($this->_render());
-        $this->reset();
+
         $this->_attribute = $this->_attributeCopy;
+
+        foreach($this->_manipulators as $manipulator)
+        {
+            $manipulator->postRenderManipulate();
+        }
+
         return $return;
     }
 
+    /**
+     * @todo: remove
+     * @param unknown $key
+     */
     public function getTempFlag($key)
     {
         return $this->_attribute->getAttribute($key);
         // eturn (isset($this->_tempFlag[$key])) ? $this->_tempFlag[$key] : null;
     }
 
+    /**
+     * @todo remove
+     * @param unknown $key
+     * @param unknown $value
+     */
     public function setTempFlag($key, $value)
     {
         $this->_attribute->setAttribute($key, $value);
@@ -360,14 +351,12 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
     public function setOption(Chrome_View_Form_Element_Option_Multiple_Interface $option)
     {
         $this->_option = $option;
-        $this->_renderCount = $option->getRenderCount();
-        $this->_setFlags();
     }
 
     protected function _setTempFlags()
     {
         $this->_attributeCopy = clone $this->_attribute;
-
+        /*
         if(in_array($this->_current, $this->_readOnlyInputs))
         {
             $this->_attribute->setAttribute('disabled', 'disabled');
@@ -383,7 +372,7 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
             $this->_attribute->setAttribute('required', 'required');
         }
 
-        $this->_attribute->setAttribute('value', $this->_current);
+        $this->_attribute->setAttribute('value', $this->_current);*/
 
         $this->_attribute->setAttribute('id', $this->_name . self::SEPARATOR . $this->_count);
     }
@@ -436,80 +425,3 @@ abstract class Chrome_View_Form_Element_Appender_Abstract implements Chrome_View
     }
 }
 
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.View.Form
- */
-class Chrome_View_Form_Attribute implements Chrome_View_Form_Attribute_Interface
-{
-    protected $_attributes = array();
-    protected $_notOverwriteableAttributes = array();
-
-    public function setAttribute($key, $value, $overwriteable = true)
-    {
-        $key = self::_processKey($key);
-
-        $this->_checkOverwriteableKey($key);
-
-        $this->_attributes[$key] = $value;
-
-        if($overwriteable === false)
-        {
-            $this->_notOverwriteableAttributes[$key] = true;
-        }
-    }
-
-    protected static function _processKey($key)
-    {
-        return strtolower($key);
-    }
-
-    public function getAttribute($key)
-    {
-        $key = self::_processKey($key);
-
-        return isset($this->_attributes[$key]) ? $this->_attributes[$key] : null;
-    }
-
-    public function getAllAttributes()
-    {
-        return $this->_attributes;
-    }
-
-    public function exists($key)
-    {
-        $key = self::_processKey($key);
-
-        return isset($this->_attributes[$key]);
-    }
-
-    public function isWriteable($key)
-    {
-        $key = self::_processKey($key);
-
-        return isset($this->_notOverwriteableAttributes[$key]);
-    }
-
-    public function remove($key)
-    {
-        $key = self::_processKey($key);
-
-        $this->_checkOverwriteableKey($key);
-
-        unset($this->_attributes[$key]);
-    }
-
-    protected function _checkOverwriteableKey($key)
-    {
-        if(isset($this->_notOverwriteableAttributes[$key]))
-        {
-            throw new \Chrome_Exception('Cannot reset a non-overwriteable attribute');
-        }
-    }
-
-    public function getIterator()
-    {
-        return new ArrayIterator($this->_attributes);
-    }
-}

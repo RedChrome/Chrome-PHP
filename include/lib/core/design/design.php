@@ -45,6 +45,7 @@ interface Chrome_Renderable_List_Interface extends Iterator
 }
 
 /**
+ * Interface for all renaderable objects. Those objects are supposed to be responsible for displaying.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Design
@@ -52,6 +53,7 @@ interface Chrome_Renderable_List_Interface extends Iterator
 interface Chrome_Renderable
 {
     /**
+     * Renders the object
      *
      * @return mixed
      */

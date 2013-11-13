@@ -15,6 +15,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
+ * @todo: add doc
  */
 abstract class Chrome_View_Form_Element_Manipulator_Abstract implements Chrome_View_Form_Element_Manipulator_Interface
 {
@@ -67,6 +68,62 @@ class Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements exte
         $attribute->setAttribute('required', ($elementOption->getIsRequired() === true) ? 'required' : null);
     }
 }
+
+class Chrome_View_Form_Element_Manipulator_AttributesForMultipleElement extends Chrome_View_Form_Element_Manipulator_Abstract
+{
+    protected $_defaultInput;
+
+    protected $_readOnlyInputs;
+
+    protected $_requiredInputs;
+
+    public function preRenderManipulate()
+    {
+        $current = $this->_manipulateable->getCurrent();
+
+        if(in_array($current, $this->_readOnlyInputs))
+        {
+            $this->_attribute->setAttribute('disabled', 'disabled');
+        }
+
+        if(in_array($current, $this->_defaultInput))
+        {
+            $this->_attribute->setAttribute('checked', 'checked');
+        }
+
+        if(in_array($current, $this->_requiredInputs))
+        {
+            $this->_attribute->setAttribute('required', 'required');
+        }
+
+        $this->_attribute->setAttribute('value', $this->_current);
+    }
+
+    public function postRenderManipulate()
+    {
+    }
+
+    public function manipulate()
+    {
+        $elementOption = $this->_manipulateable->getFormElement()->getOption();
+        $viewOption = $this->_manipulateable->getOption();
+
+        $this->_readOnlyInputs = $elementOption->getReadonly();
+        $this->_requiredInputs = $elementOption->getRequired();
+
+        // the user has to select the required input by it's own.
+        if(count($elementOption->getRequired()) === 0)
+        {
+            $this->_defaultInput = $viewOption->getDefaultInput();
+        }
+
+        if(($storedData = $viewOption->getStoredData()) !== null)
+        {
+            $this->_defaultInput = $storedData;
+        }
+    }
+}
+
 class Chrome_View_Form_Element_Manipulator_IdPrefix extends Chrome_View_Form_Element_Manipulator_Abstract
 {
     const PREFIX_SEPERATOR = '_';
@@ -75,22 +132,24 @@ class Chrome_View_Form_Element_Manipulator_IdPrefix extends Chrome_View_Form_Ele
     protected $_prefix = '';
     protected $_seperator = '';
 
-    // @todo: finish this concept with id prefix...
+    // @todo: test the id prefix
     public function preRenderManipulate()
     {
         $attribute = $this->_manipulateable->getAttribute();
 
-        $this->_renderCount = (int) $this->_manipulateable->getFormElement()->getForm()->getAttribute(self::FORM_ATTRIBUTE_RENDER_COUNT);
-
         $attribute->setAttribute('id', $this->_prefix . self::PREFIX_SEPERATOR . $this->_renderCount . self::PREFIX_SEPERATOR . $attribute->getAttribute('name'));
+        $this->_manipulateable->getFormElement()->getForm()->setAttribute(self::FORM_ATTRIBUTE_RENDER_COUNT, ++$this->_renderCount);
     }
 
     public function postRenderManipulate()
     {
-        // this->_manipulateable->getFormElement()->getForm()->setAttribute(self::FORM_ATTRIBUTE_RENDER_COUNT, ++$this->_renderCount);
     }
 
     public function manipulate()
     {
+        $form = $this->_manipulateable->getFormElement()->getForm();
+
+        $this->_prefix = $form->getID();
+        $this->_renderCount = (int) $form->getAttribute(self::FORM_ATTRIBUTE_RENDER_COUNT);
     }
 }

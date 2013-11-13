@@ -2,7 +2,7 @@
 
 abstract class Text_Chrome_Form extends Chrome_Form_Abstract
 {
-    public function addElement(Chrome_Form_Element_Interface $element)
+    public function addElement(Chrome_Form_Element_Basic_Interface $element)
     {
         $this->_addElement($element);
     }
