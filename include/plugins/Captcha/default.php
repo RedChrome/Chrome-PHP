@@ -33,6 +33,8 @@ class Chrome_Captcha_Engine_Default implements Chrome_Captcha_Engine_Interface
     protected $_session = null;
     protected $_key = null;
 
+    const KEY_LENGTH = 6;
+
     public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Context_Application_Interface $appContext, array $backendOptions)
     {
         $backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME] = $name;
@@ -91,7 +93,10 @@ class Chrome_Captcha_Engine_Default implements Chrome_Captcha_Engine_Interface
 
     protected function _createKey()
     {
-        $this->_key = base_convert(mt_rand(0x19A100, 0x39AA3FF), 10, 36);
+        for($i = 0; $i < self::KEY_LENGTH; ++$i)
+        {
+            $this->_key .= base_convert(mt_rand(0, 35), 10, 36);
+        }
     }
 
     protected function _saveKey()

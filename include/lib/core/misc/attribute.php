@@ -141,6 +141,11 @@ class Attribute_Secure implements Attribute_Secure_Interface
         return isset($this->_attributes[$key]);
     }
 
+    public function hasAttribute($key)
+    {
+        return $this->exists($key);
+    }
+
     public function isWriteable($key)
     {
         $key = self::_processKey($key);
@@ -167,6 +172,6 @@ class Attribute_Secure implements Attribute_Secure_Interface
 
     public function getIterator()
     {
-        return new ArrayIterator($this->_attributes);
+        return new \ArrayIterator($this->_attributes);
     }
 }

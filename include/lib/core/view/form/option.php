@@ -69,7 +69,7 @@ class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option
 
     public function setDefaultInput($input)
     {
-        $this->_defaultInput = $input;
+        $this->_defaultInput = (array) $input;
     }
 }
 

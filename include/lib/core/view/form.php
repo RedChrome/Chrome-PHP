@@ -37,7 +37,6 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     protected $_formElementOptionFactory = null;
     protected $_formElementFactoryDefault = 'Suffix';
     protected $_formElementOptionFactoryDefault = 'Default';
-    protected $_currentRenderCount = null;
     protected $_viewContext = null;
 
     public function __construct(Chrome_Form_Interface $form, Chrome_Context_View_Interface $viewContext)
@@ -50,11 +49,6 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     {
         $this->_formElementFactory = $elementFactory;
 
-        $any = current($this->_formElements);
-
-        if($any !== false) {
-            $this->_currentRenderCount = $any->getOption()->getRenderCount();
-        }
 
         $this->_formElements = array();
     }
@@ -114,8 +108,6 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
 
             $this->_formElements[$formElementId] = $this->_setUpElement($formElement);
         }
-
-        $this->_currentRenderCount = null;
     }
 
     protected function _setUpElement(Chrome_Form_Element_Basic_Interface $formElement)
@@ -123,11 +115,6 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         $formOption = $this->_formElementOptionFactory->getElementOption($formElement);
 
         $formOption = $this->_modifyElementOption($formElement, $formOption);
-
-        if($this->_currentRenderCount !== null)
-        {
-            $formOption->setRenderCount($this->_currentRenderCount);
-        }
 
         if($formElement->getOption() instanceof Chrome_Form_Option_Element_Attachable_Interface)
         {

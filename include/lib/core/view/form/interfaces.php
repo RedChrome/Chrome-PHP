@@ -17,6 +17,8 @@
  * @subpackage Chrome.View.Form
  */
 
+use Chrome\Misc\Attribute_Secure_Interface;
+
 /**
  *
  * This interface is an analogue to Chrome_Form_Interface. It contains all Chrome_View_Form_Element_Interface $viewElement's for all Chrome_Form_Element_Basic_Interface $element's
@@ -286,7 +288,7 @@ interface Chrome_View_Form_Element_Basic_Interface extends Chrome_Renderable
      *
      * @param Chrome_View_Form_Attribute_Interface $attribute
      */
-    public function setAttribute(Chrome_View_Form_Attribute_Interface $attribute);
+    public function setAttribute(Attribute_Secure_Interface $attribute);
 
     /**
      * Sets the view form. This view form should contain this element

@@ -71,7 +71,7 @@ class Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements exte
 
 class Chrome_View_Form_Element_Manipulator_AttributesForMultipleElement extends Chrome_View_Form_Element_Manipulator_Abstract
 {
-    protected $_defaultInput;
+    protected $_defaultInput = array();
 
     protected $_readOnlyInputs;
 
@@ -80,23 +80,24 @@ class Chrome_View_Form_Element_Manipulator_AttributesForMultipleElement extends 
     public function preRenderManipulate()
     {
         $current = $this->_manipulateable->getCurrent();
+        $attribute = $this->_manipulateable->getAttribute();
 
         if(in_array($current, $this->_readOnlyInputs))
         {
-            $this->_attribute->setAttribute('disabled', 'disabled');
+            $attribute->setAttribute('disabled', 'disabled');
         }
 
         if(in_array($current, $this->_defaultInput))
         {
-            $this->_attribute->setAttribute('checked', 'checked');
+            $attribute->setAttribute('checked', 'checked');
         }
 
         if(in_array($current, $this->_requiredInputs))
         {
-            $this->_attribute->setAttribute('required', 'required');
+            $attribute->setAttribute('required', 'required');
         }
 
-        $this->_attribute->setAttribute('value', $this->_current);
+        $attribute->setAttribute('value', $current);
     }
 
     public function postRenderManipulate()
@@ -119,7 +120,7 @@ class Chrome_View_Form_Element_Manipulator_AttributesForMultipleElement extends 
 
         if(($storedData = $viewOption->getStoredData()) !== null)
         {
-            $this->_defaultInput = $storedData;
+            $this->_defaultInput = (array) $storedData;
         }
     }
 }
@@ -128,17 +129,16 @@ class Chrome_View_Form_Element_Manipulator_IdPrefix extends Chrome_View_Form_Ele
 {
     const PREFIX_SEPERATOR = '_';
     const FORM_ATTRIBUTE_RENDER_COUNT = 'render_count';
+
     protected $_renderCount = 0;
     protected $_prefix = '';
-    protected $_seperator = '';
 
-    // @todo: test the id prefix
     public function preRenderManipulate()
     {
         $attribute = $this->_manipulateable->getAttribute();
 
         $attribute->setAttribute('id', $this->_prefix . self::PREFIX_SEPERATOR . $this->_renderCount . self::PREFIX_SEPERATOR . $attribute->getAttribute('name'));
-        $this->_manipulateable->getFormElement()->getForm()->setAttribute(self::FORM_ATTRIBUTE_RENDER_COUNT, ++$this->_renderCount);
+        $this->_manipulateable->getFormElement()->getForm()->setAttribute(self::FORM_ATTRIBUTE_RENDER_COUNT, $this->_renderCount);
     }
 
     public function postRenderManipulate()
@@ -150,6 +150,6 @@ class Chrome_View_Form_Element_Manipulator_IdPrefix extends Chrome_View_Form_Ele
         $form = $this->_manipulateable->getFormElement()->getForm();
 
         $this->_prefix = $form->getID();
-        $this->_renderCount = (int) $form->getAttribute(self::FORM_ATTRIBUTE_RENDER_COUNT);
+        $this->_renderCount = (int) $form->getAttribute(self::FORM_ATTRIBUTE_RENDER_COUNT) + 1;
     }
 }

@@ -28,7 +28,7 @@ class Chrome_View_Form_Element_Captcha_Default extends Chrome_View_Form_Element_
     protected function _render()
     {
         $lang = $this->_getTranslate();
-        //$lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL);
+        // $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL);
 
         /*
          * $label = ''; if(($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null) { $label = '<label for="'.$this->_formElement->getID().'">'.$label.'</label>'; }
@@ -39,9 +39,10 @@ class Chrome_View_Form_Element_Captcha_Default extends Chrome_View_Form_Element_
         $img = '<img src="' . _PUBLIC . 'captcha/default.php?name=' . $captchaName . '" id="captcha_' . $this->_formElement->getForm()->getID() . '"/>';
         // eturn $img;
 
-        $input = '<input type="text" name="' . $this->_formElement->getID() . '" value="" ' . $this->_renderFlags() . '">.' .
-             '<a onclick="javascript:document.getElementById(\'captcha_' . $this->_formElement->getForm()->getID() . '\').src=\'' . _PUBLIC . 'captcha/default.php?name=' .
-             $captchaName . '&renew=\'+getToken()">' . $lang->get('captcha_renew') . '</a>';
-        return $img . $input;
+        return '<fieldset style="text-align:center">' . "\n\t\t" . '<legend>Verification Required!</legend>' . "\n\t\t" .
+             '<p>Type the characters you see in the picture below</p>' . "\n\t\t" . '<p>' . $img . '<br><a onclick="javascript:document.getElementById(\'captcha_' .
+             $this->_formElement->getForm()->getID() . '\').src=\'' . _PUBLIC . 'captcha/default.php?name=' . $captchaName . '&renew=\'+getToken()">' . $lang->get('captcha_renew') .
+             '</a></p><input type="text" name="' . $this->_formElement->getID() .
+             '" autocomplete="off" value="" ' . $this->_renderFlags() . '"></fieldset>';
     }
 }
