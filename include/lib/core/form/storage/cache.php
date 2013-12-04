@@ -17,9 +17,6 @@
  * @subpackage Chrome.Form
  */
 
-if(CHROME_PHP !== true)
-    die();
-
 /**
  * Implementation of {@link Chrome_Form_Storage_Interface}
  *

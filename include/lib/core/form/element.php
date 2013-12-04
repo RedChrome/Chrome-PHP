@@ -20,8 +20,7 @@
 /**
  * Interface for basic form elements
  *
- * A form element is an analogon to a html input field (e.g. < input >, < select >, ...) and thus has an unique name/id for the corresponding
- * form.
+ * A form element is an analogon to a html input field (e.g. < input >, < select >, ...) and thus has an unique name/id for the corresponding form.
  *
  * A form element has three main states: created, sent, valid. These states can be accessed using isCreated, isSent, isValid.
  *
@@ -110,6 +109,13 @@ interface Chrome_Form_Element_Basic_Interface
      * @return string
      */
     public function getID();
+
+    /**
+     * Resets the internal cache
+     *
+     * @return void
+     */
+    public function reset();
 
     /**
      * Returns the errors, occured while calling isCreated, isSent, isValid
@@ -484,6 +490,15 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
     public function getForm()
     {
         return $this->_form;
+    }
+
+    public function reset()
+    {
+        $this->_isCreated = null;
+        $this->_isSent = null;
+        $this->_isValid = null;
+        $this->_errors = array();
+        $this->_data = null;
     }
 }
 

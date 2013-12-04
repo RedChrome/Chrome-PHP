@@ -287,6 +287,7 @@ interface Chrome_View_Form_Element_Basic_Interface extends Chrome_Renderable
      * Sets an attribute object, which contains all attribute for this element
      *
      * @param Chrome_View_Form_Attribute_Interface $attribute
+     * @return void
      */
     public function setAttribute(Attribute_Secure_Interface $attribute);
 
@@ -294,6 +295,7 @@ interface Chrome_View_Form_Element_Basic_Interface extends Chrome_Renderable
      * Sets the view form. This view form should contain this element
      *
      * @param Chrome_View_Form_Interface $viewForm
+     * @return void
      */
     public function setViewForm(Chrome_View_Form_Interface $viewForm);
 
@@ -308,6 +310,8 @@ interface Chrome_View_Form_Element_Basic_Interface extends Chrome_Renderable
      * Resets all attributes, flags and other options (not necessaryly the actual option set via setOption).
      *
      * This might be usefull, if you want to render this element multiple times.
+     *
+     * @return void
      */
     public function reset();
 }
@@ -456,7 +460,7 @@ interface Chrome_View_Form_Element_Appender_Interface extends Chrome_Renderable
 interface Chrome_View_Form_Element_Manipulateable_Interface
 {
     /**
-     * Adds a new manipulator
+     * Adds a new manipulator and calls the method "manipulate" of the added manipulator
      *
      * @param Chrome_View_Form_Element_Manipulator_Interface $manipulator
      */
