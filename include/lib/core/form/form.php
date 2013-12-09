@@ -18,8 +18,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * load interface and classes for form options
@@ -132,7 +130,7 @@ interface Chrome_Form_Interface
      * setSentData()
      *
      * Sets the data from the user, e.g. POST or GET.
-     * the effect from this function can also be achived by
+     * the effect from this function can also be achieved by
      * setting the attribute ATTRIBUTE_METHOD to POST or GET via {@see setAttbribute()}
      *
      * <code>
@@ -430,6 +428,13 @@ interface Chrome_Form_Interface
      * @return Chrome_Context_Application_Interface
      */
     public function getApplicationContext();
+
+    /**
+     * Resets the cache
+     *
+     * @return void
+     */
+    public function reset();
 }
 
 /**
@@ -512,6 +517,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      * @var array
      */
     protected $_errors = array(self::CHROME_FORM_ERRORS_CREATION => array(), self::CHROME_FORM_ERRORS_RECEIVING => array(), self::CHROME_FORM_ERRORS_VALIDATION => array());
+
     /**
      * Attributes for the form
      *
@@ -1367,6 +1373,21 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     public function getApplicationContext()
     {
         return $this->_applicationContext;
+    }
+
+    public function reset()
+    {
+        $this->_isCreated = null;
+        $this->_isValid = null;
+        $this->_isSent = null;
+        $this->_sentData = array();
+        $this->_data = array();
+        $this->_errors = array(self::CHROME_FORM_ERRORS_CREATION => array(), self::CHROME_FORM_ERRORS_RECEIVING => array(), self::CHROME_FORM_ERRORS_VALIDATION => array());
+
+        foreach($this->_elements as $element)
+        {
+            $element->reset();
+        }
     }
 
     protected function _getFormStorage()

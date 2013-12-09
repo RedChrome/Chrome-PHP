@@ -16,8 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * Interface for all 'store handlers'.

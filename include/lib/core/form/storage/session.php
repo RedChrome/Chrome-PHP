@@ -17,8 +17,6 @@
  * @subpackage Chrome.Form
  */
 
-if(CHROME_PHP !== true) die();
-
 /**
  * Implementation of {@link Chrome_Form_Storage_Interface}
  *
@@ -46,11 +44,7 @@ class Chrome_Form_Storage_Session implements Chrome_Form_Storage_Interface
     {
         $content = $this->_session->get(self::FORM_NAMESPACE);
 
-        if(!isset($content[$this->_formId])) {
-            return null;
-        }
-
-        if(!isset($content[$this->_formId][$elementName])) {
+        if(!isset($content[$this->_formId]) OR !isset($content[$this->_formId][$elementName])) {
             return null;
         }
 

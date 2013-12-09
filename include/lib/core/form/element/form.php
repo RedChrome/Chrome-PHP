@@ -16,8 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -179,17 +177,13 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract
      */
     public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Form $option)
     {
-        // cannot be set using parent::__construct(), because $option is not an instance of Chrome_Form_Option_Element_Interface
-        $this->_form = $form;
-        $this->_id = $id;
-        $this->_option = $option;
-        $this->setStorage($option->getStorage());
+        parent::__construct($form, $id, $option);
 
-        // this checks whether the form was created before, and if, then we use the token from the last time
+        $this->setStorage($option->getStorage());
+        // this checks whether the form was created before, and if it was created, then we use the token from the last time
         // we have to renew the timer!
         if($this->_storage->has($this->_id) === true)
         {
-
             $storedData = $this->_storage->get($this->_id);
 
             if(isset($storedData[self::CHROME_FORM_ELEMENT_FORM_TOKEN]) and $this->_option->getToken() === null)
@@ -212,7 +206,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract
             return false;
         }
 
-        $storedData = $this->_storage->get($this->_id);
+        //$storedData = $this->_storage->get($this->_id);
 
         return true;
     }
@@ -233,14 +227,14 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract
             return false;
         }
 
-        if($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_option->getMaxAllowedTime() < CHROME_TIME)
+        if($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_option->getMaxAllowedTime() < $this->_option->getTime())
         {
             $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME;
             $this->_isValid = false;
             return false;
         }
 
-        if($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_option->getMinAllowedTime() > CHROME_TIME)
+        if($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_option->getMinAllowedTime() > $this->_option->getTime())
         {
             $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME;
             $this->_isValid = false;
@@ -271,11 +265,6 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract
         $this->_storage->remove($this->_id);
     }
 
-    public function getData()
-    {
-        return $this->_form->getSentData($this->_option->getTokenNamespace());
-    }
-
     public function create()
     {
         if($this->_option->getToken() === null)
@@ -294,12 +283,14 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract
 
         $formData = $this->_storage->get($this->_id);
 
-        $data = array(self::CHROME_FORM_ELEMENT_FORM_TIME => CHROME_TIME, self::CHROME_FORM_ELEMENT_FORM_TOKEN => $token);
+        $time = $this->_option->getTime();
+
+        $data = array(self::CHROME_FORM_ELEMENT_FORM_TIME => $time, self::CHROME_FORM_ELEMENT_FORM_TOKEN => $token);
 
         $this->_storage->set($this->_id, $data);
 
         $this->_option->setToken($token);
-        $this->_option->setTime(CHROME_TIME);
+        $this->_option->setTime($time);
     }
 
     public function setStorage(Chrome_Form_Storage_Interface $storage)
@@ -319,7 +310,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract
 
     protected function _getData()
     {
-        return $this->_convert($this->_form->getSentData($this->_id));
+        return $this->_convert($this->_form->getSentData($this->_option->getTokenNamespace()));
     }
 
     /**
@@ -331,7 +322,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract
     {
         $data = $this->_storage->get($this->_id);
 
-        $data[self::CHROME_FORM_ELEMENT_FORM_TIME] = CHROME_TIME;
+        $data[self::CHROME_FORM_ELEMENT_FORM_TIME] = $this->_option->getTime();
 
         $this->_storage->set($this->_id, $data);
     }

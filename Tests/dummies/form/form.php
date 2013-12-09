@@ -1,6 +1,6 @@
 <?php
 
-abstract class Text_Chrome_Form extends Chrome_Form_Abstract
+abstract class Test_Chrome_Form extends Chrome_Form_Abstract
 {
     public function addElement(Chrome_Form_Element_Basic_Interface $element)
     {
@@ -8,14 +8,14 @@ abstract class Text_Chrome_Form extends Chrome_Form_Abstract
     }
 }
 
-class Test_Chrome_Form_No_Elements extends Text_Chrome_Form
+class Test_Chrome_Form_No_Elements extends Test_Chrome_Form
 {
     protected function _init()
     {
     }
 }
 
-class Test_Chrome_Form_One_Element extends Text_Chrome_Form
+class Test_Chrome_Form_One_Element extends Test_Chrome_Form
 {
     protected function _init()
     {
