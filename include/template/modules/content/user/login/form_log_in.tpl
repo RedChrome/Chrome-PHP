@@ -7,6 +7,6 @@
 
 <?php echo $FORM['stay_loggedin']->render(); ?>
 
-<?php echo $FORM['submit']->render(); ?>
+<?php echo $FORM['buttons']->render(); ?>
 
 <?php echo $FORM['login']->render(); ?>

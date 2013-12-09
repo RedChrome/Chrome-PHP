@@ -15,13 +15,7 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.View
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [31.05.2013 20:13:54] --> $
- * @author     Alexander Book
  */
-
-if(CHROME_PHP !== true) die();
 
 require_once 'factory.php';
 require_once 'form.php';
@@ -171,3 +165,16 @@ abstract class Chrome_View_Strategy_Abstract extends Chrome_View_Abstract
         $this->_views[] = $renderable;
     }
 }
+
+class Chrome_View_Template_Simple_Abstract extends Chrome_View_Abstract
+{
+    protected $_templateFile = '';
+
+    public function render()
+    {
+        $template = new Chrome_Template();
+        $template->assignTemplate($this->_templateFile);
+        return $template->render();
+    }
+}
+

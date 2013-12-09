@@ -39,8 +39,8 @@ class Chrome_View_Form_Element_Captcha_Default extends Chrome_View_Form_Element_
         $img = '<img src="' . _PUBLIC . 'captcha/default.php?name=' . $captchaName . '" id="captcha_' . $this->_formElement->getForm()->getID() . '"/>';
         // eturn $img;
 
-        return '<fieldset style="text-align:center">' . "\n\t\t" . '<legend>Verification Required!</legend>' . "\n\t\t" .
-             '<p>Type the characters you see in the picture below</p>' . "\n\t\t" . '<p>' . $img . '<br><a onclick="javascript:document.getElementById(\'captcha_' .
+        return '<fieldset style="text-align:center">' . "\n\t\t" . '<legend>'.$lang->get('captcha_verification').'</legend>' . "\n\t\t" .
+             '<p>'.$lang->get('captcha_manual').'</p>' . "\n\t\t" . '<p>' . $img . '<br><a onclick="javascript:document.getElementById(\'captcha_' .
              $this->_formElement->getForm()->getID() . '\').src=\'' . _PUBLIC . 'captcha/default.php?name=' . $captchaName . '&renew=\'+getToken()">' . $lang->get('captcha_renew') .
              '</a></p><input type="text" name="' . $this->_formElement->getID() .
              '" autocomplete="off" value="" ' . $this->_renderFlags() . '"></fieldset>';

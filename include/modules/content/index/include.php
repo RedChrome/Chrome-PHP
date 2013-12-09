@@ -1,6 +1,6 @@
 <?php
-if(CHROME_PHP !== true)
-    die();
+
+
 class Chrome_Form_Index extends Chrome_Form_Abstract
 {
 
@@ -24,7 +24,8 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $textValidators->addValidators(array($emptyValidator, $lengthValidator));
 
         // form
-        $formElementOption = new Chrome_Form_Option_Element_Form(new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id));
+        $storageSession = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
+        $formElementOption = new Chrome_Form_Option_Element_Form($storageSession);
         $formElementOption->setMaxAllowedTime(30)->setMinAllowedTime(1);
 
         $formElement = new Chrome_Form_Element_Form($this, $this->_id, $formElementOption);
@@ -58,7 +59,7 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         // checkbox
         $checkboxOption = new Chrome_Form_Option_Element_Multiple();
         $checkboxOption->setAllowedValues(array('Value1', 'Value2', 'vAlue3'));
-        $checkboxOption->setRequired(array('Value1', 'Value2'));
+        $checkboxOption->setRequired(array('vAlue3', 'Value2'));
         $checkboxOption->setReadonly(array('Value1'));
 
         $checkboxElement = new Chrome_Form_Element_Checkbox($this, 'checkbox', $checkboxOption);
@@ -69,7 +70,7 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $selectOption->setAllowedValues(array('Value1', 'Value2', 'Value3'));
         $selectOption->setSelectMultiple(true);
         $selectOption->setReadonly(array('Value2'));
-        $selectOption->setRequired(array('Value2'));
+        $selectOption->setRequired(array('Value3'));
 
         $selectElement = new Chrome_Form_Element_Select($this, 'select', $selectOption);
         $this->_addElement($selectElement);
@@ -85,13 +86,13 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 
         // $this->addReceivingHandler(new Chrome_Form_Handler_Delete());*/
 
-        $storage = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
+        #$storage = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
 
         $storageOption = new Chrome_Form_Option_Storage();
-        $storageOption->setStorageEnabled(true);
-        $storageOption->setStoreNullData(true);
-        $storageOption->setStoreInvalidData(false);
+        #$storageOption->setStorageEnabled(true);
+        #$storageOption->setStoreNullData(true);
+        #$storageOption->setStoreInvalidData(false);
 
-        $this->setAttribute(self::ATTRIBUTE_STORE, new Chrome_Form_Handler_Store($storage, $storageOption, array('radio')));
+        $this->setAttribute(self::ATTRIBUTE_STORE, new Chrome_Form_Handler_Store($storageSession, $storageOption, array('radio', 'select', 'text', 'checkbox')));
     }
 }

@@ -14,11 +14,7 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.User
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.06.2013 14:46:08] --> $
- * @author Alexander Book
+ * @subpackage Chrome.Content.User
  */
 if(CHROME_PHP !== true)
     die();
@@ -26,7 +22,7 @@ if(CHROME_PHP !== true)
 /**
  *
  * @package CHROME-PHP
- * @subpackage Chrome.User
+ * @subpackage Chrome.Content.User
  */
 class Chrome_View_Box_Login extends Chrome_View_Strategy_Abstract
 {
@@ -70,8 +66,9 @@ class Chrome_View_Box_Login extends Chrome_View_Strategy_Abstract
  * TODO: move this to another box module
  * This is the View for the User Menu
  *
+ *
  * @package CHROME-PHP
- * @subpackage Chrome.User
+ * @subpackage Chrome.Content.User
  */
 class Chrome_View_Box_LoggedIn extends Chrome_View_Abstract
 {
@@ -85,7 +82,7 @@ class Chrome_View_Box_LoggedIn extends Chrome_View_Abstract
 /**
  *
  * @package CHROME-PHP
- * @subpackage Chrome.User
+ * @subpackage Chrome.Content.User
  */
 class Chrome_View_Box_Form_Login extends Chrome_View_Abstract
 {
@@ -103,11 +100,17 @@ class Chrome_View_Box_Form_Login extends Chrome_View_Abstract
         return $template->render();
     }
 }
+
+/**
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Content.User
+ */
 class Chrome_View_Form_Renderer_Template_Login_Box extends Chrome_View_Form_Renderer_Template_Abstract
 {
     protected function _setUp()
     {
-        $this->_viewForm->setElementFactory(new Chrome_View_Form_Element_Factory_Suffix('Default'));
+        $this->_viewForm->setElementFactory(new Chrome_View_Form_Element_Factory_Suffix('Yaml'));
     }
 
     protected function _getTemplate()

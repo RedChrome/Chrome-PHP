@@ -274,7 +274,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $postgresqlTestConnection->connect();
         $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
         $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
-        */
+        #*/
 
     }
 

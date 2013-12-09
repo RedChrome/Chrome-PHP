@@ -38,7 +38,8 @@ class Chrome_Template_Engine_Plain extends Chrome_Template_Engine_Abstract
     public function render()
     {
         // here we need to set vars, so that php knows the content of the tmpl-vars!!
-        foreach($this->_var as $key => $value) {
+        foreach($this->_var as $key => $value)
+        {
             $$key = $value;
         }
 

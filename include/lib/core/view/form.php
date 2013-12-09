@@ -49,7 +49,6 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     {
         $this->_formElementFactory = $elementFactory;
 
-
         $this->_formElements = array();
     }
 
@@ -116,6 +115,11 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
 
         $formOption = $this->_modifyElementOption($formElement, $formOption);
 
+        if( !($formOption instanceof Chrome_View_Form_Element_Option_Basic_Interface) )
+        {
+            throw new Chrome_Exception('Either option factory or _modifyElementOption returned NOT an instanceof Chrome_View_Form_Element_Option_Basic_Interface');
+        }
+
         if($formElement->getOption() instanceof Chrome_Form_Option_Element_Attachable_Interface)
         {
             foreach($formElement->getOption()->getAttachments() as $attachmentElement)
@@ -130,7 +134,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         return $element;
     }
 
-    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
+    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
     {
         return $viewOption;
     }
@@ -167,7 +171,7 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
         }
     }
 
-    public function getElement(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $formOption)
+    public function getElement(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $formOption)
     {
         $class = 'Chrome_View_Form_Element_';
 
@@ -191,17 +195,17 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
 
         if($object instanceof Chrome_View_Form_Element_Manipulateable_Interface)
         {
-            $object->addManipulator(new Chrome_View_Form_Element_Manipulator_IdPrefix());
-
             if($object instanceof Chrome_View_Form_Element_Multiple_Abstract)
             {
-                // @todo: test that.
+                $object->addManipulator(new Chrome_View_Form_Element_Manipulator_IdPrefixForMultipleElement());
                 $object->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForMultipleElement());
 
             } else if($object instanceof Chrome_View_Form_Element_Interface) {
 
+                $object->addManipulator(new Chrome_View_Form_Element_Manipulator_IdPrefix());
+
                 // exclude the basic form elements, like Chrome_Form_Element_Form
-                if( !($object->getFormElement() instanceof Chrome_Form_Element_Basic_Interface) ) {
+                if( ($object->getFormElement() instanceof Chrome_Form_Element_Interface) ) {
                     $object->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements());
                 }
             }
@@ -235,7 +239,7 @@ class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_For
         return $viewElementOption;
     }
 
-    protected function _setDefaultOptions(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewElementOption)
+    protected function _setDefaultOptions(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewElementOption)
     {
         foreach(($formElement->getForm()->getAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE)) as $handler)
         {
@@ -300,8 +304,16 @@ class Chrome_View_Form_Element_Appender_Error extends Chrome_View_Form_Element_A
 {
     const TRANSLATE_MODULE = 'form/errors';
 
+    const ATTRIBUTE_ALREADY_RENDERED = 'appender_error_rendered';
+
     public function render()
     {
+        if($this->_viewFormElement->getOption()->getInternalAttribute(self::ATTRIBUTE_ALREADY_RENDERED) === true) {
+            return $this->_result;
+        }
+
+        $this->_viewFormElement->getOption()->setInternalAttribute(self::ATTRIBUTE_ALREADY_RENDERED, true);
+
         $formElement = $this->_viewFormElement->getFormElement();
         $elementId = $formElement->getID();
         $form = $formElement->getForm();
@@ -319,7 +331,7 @@ class Chrome_View_Form_Element_Appender_Error extends Chrome_View_Form_Element_A
                 $errors .= '<li>' . $translate->get($error) . '</li>';
             }
 
-            $this->_result = $errors . '</ul>' . $this->_result;
+            return $errors . '</ul>' . $this->_result;
         }
 
         return $this->_result;
@@ -328,27 +340,23 @@ class Chrome_View_Form_Element_Appender_Error extends Chrome_View_Form_Element_A
 
 class Chrome_View_Form_Element_Appender_Label extends Chrome_View_Form_Element_Appender_Abstract
 {
-
     protected function _renderLabel(Chrome_View_Form_Label_Interface $label)
     {
         $isRequired = false;
         $required = '';
-        $for = '';
+
+        $for = $this->_viewFormElement->getId();
 
         if($this->_viewFormElement instanceof Chrome_View_Form_Element_Multiple_Abstract)
         {
-            $for = $this->_viewFormElement->getTempFlag('id');
-
             $name = $this->_viewFormElement->getCurrent();
 
-            if($this->_viewFormElement->getTempFlag('required') !== null)
+            if($this->_viewFormElement->getAttribute()->getAttribute('required') !== null)
             {
                 $isRequired = true;
             }
         } else
         {
-            $for = $this->_viewFormElement->getId();#$this->_viewFormElement->getFlag('id');
-
             $name = $this->_viewFormElement->getAttribute()->getAttribute('name');
 
             if($isRequired === false and $this->_viewFormElement->getFormElement()->getOption()->getIsRequired())

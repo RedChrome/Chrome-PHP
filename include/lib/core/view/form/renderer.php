@@ -86,3 +86,21 @@ abstract class Chrome_View_Form_Renderer_Template_Abstract extends Chrome_View_F
         return $this->_template->render();
     }
 }
+
+/**
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
+abstract class Chrome_View_Form_Renderer_Template_Simple_Abstract extends Chrome_View_Form_Renderer_Template_Abstract
+{
+    protected $_templateFile = '';
+
+    protected function _getTemplate()
+    {
+        $template = new Chrome_Template();
+        $template->assignTemplate($this->_templateFile);
+        $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate());
+        return $template;
+    }
+}

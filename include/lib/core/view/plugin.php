@@ -15,22 +15,20 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.06.2013 15:59:23] --> $
- * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
+ * Interface for a view plugin.
+ *
+ *
+ * This interface only provides one central method: getMethods()
+ * The actual mapping will be done in {@link Chrome_View_Plugin_Facade_Interface}
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
 interface Chrome_View_Plugin_Interface
 {
-
     /**
      * Chrome_View_Helper_Abstract::getMethods()
      *
@@ -60,7 +58,6 @@ interface Chrome_View_Plugin_Interface
  */
 abstract class Chrome_View_Plugin_Abstract implements Chrome_View_Plugin_Interface
 {
-
     protected $_applicationContext = null;
 
     /**
@@ -75,13 +72,16 @@ abstract class Chrome_View_Plugin_Abstract implements Chrome_View_Plugin_Interfa
 }
 
 /**
+ * Interface for handling plugin calls
+ *
+ * The facade can register plugins, which will be called if a plugin method was accessed.
+ * The mapping is done in the call-Function.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
 interface Chrome_View_Plugin_Facade_Interface
 {
-
     /**
      * isCallable()
      *
@@ -115,16 +115,15 @@ interface Chrome_View_Plugin_Facade_Interface
 }
 
 /**
- * Chrome_View_Handler
+ * Chrome_View_Plugin_Facade
  *
- * Helper for Chrome_View
+ * Implementation of Chrome_View_Plugin_Facade_Interface
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
 class Chrome_View_Plugin_Facade implements Chrome_View_Plugin_Facade_Interface
 {
-
     /**
      * Contains all helpers
      * Structure:

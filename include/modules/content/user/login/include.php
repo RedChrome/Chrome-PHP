@@ -107,7 +107,12 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $submitOption->setIsRequired(true)->setAllowedValue($lang->get('login'));
 
         $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
-        $this->_addElement($submitElement);
+
+        $buttonsOption = new Chrome_Form_Option_Element_Buttons();
+        $buttonsOption->attach($submitElement);
+        $buttonsElement = new Chrome_Form_Element_Buttons($this, 'buttons', $buttonsOption);
+
+        $this->_addElement($buttonsElement);
 
         // cause this form can get used everywhere, we need to be sure
         // that this form is once created
@@ -147,7 +152,7 @@ class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
         parent::_initFactories();
     }
 
-    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
+    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
     {
         $lang = $this->_viewContext->getLocalization()->getTranslate();
 
@@ -171,13 +176,6 @@ class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
                 {
                     $currLang = $lang->get('modules/content/user/login/stay_loggedin');
                     $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('1' => $currLang)));
-                    break;
-                }
-
-            case 'submit':
-                {
-                    // viewOption->setLabelPosition($viewOption::LABEL_POSITION_BEHIND);
-                    //$viewOption->setLabel(new Chrome_View_Form_Label_Default(array('submit' => 'Anmelden!!')));
                     break;
                 }
         }

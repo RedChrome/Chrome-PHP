@@ -85,6 +85,10 @@ abstract class Chrome_Template_Engine_Abstract implements Chrome_Template_Engine
 
     public function assignTemplate($name, $path = '')
     {
+        if(empty($name)) {
+            throw new Chrome_Exception('No template file given!');
+        }
+
         if(strstr($name, '.tpl') === false) {
             $name .= '.tpl';
         }

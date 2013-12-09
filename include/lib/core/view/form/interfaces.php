@@ -52,7 +52,7 @@ interface Chrome_View_Form_Interface
     public function setElementFactory(Chrome_View_Form_Element_Factory_Interface $elementFactory);
 
     /**
-     * Sets a factory to create Chrome_View_Form_Element_Option_Interface objects
+     * Sets a factory to create Chrome_View_Form_Element_Option_Basic_Interface objects
      *
      * @param Chrome_View_Form_Element_Option_Factory_Interface $elementOptionFactory
      */
@@ -103,14 +103,14 @@ interface Chrome_View_Form_Element_Factory_Interface
      * which contains some infos about the rendering
      *
      * @param Chrome_Form_Element_Basic_Interface $formElement
-     * @param Chrome_View_Form_Element_Option_Interface $formOption
+     * @param Chrome_View_Form_Element_Option_Basic_Interface $formOption
      * @return Chrome_View_Form_Element_Interface
      */
-    public function getElement(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewFormElementOption);
+    public function getElement(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewFormElementOption);
 }
 
 /**
- * A factory to create Chrome_View_Form_Element_Option_Interface objects
+ * A factory to create Chrome_View_Form_Element_Option_Basic_Interface objects
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
@@ -118,12 +118,12 @@ interface Chrome_View_Form_Element_Factory_Interface
 interface Chrome_View_Form_Element_Option_Factory_Interface
 {
     /**
-     * Creates a new Chrome_View_Form_Element_Option_Interface instance
+     * Creates a new Chrome_View_Form_Element_Option_Basic_Interface instance
      *
      * Note that the viewElementOption really depends on $formElement.
      *
      * @param Chrome_Form_Element_Basic_Interface $formElement
-     * @return Chrome_View_Form_Element_Option_Interface
+     * @return Chrome_View_Form_Element_Option_Basic_Interface
      */
     public function getElementOption(Chrome_Form_Element_Basic_Interface $formElement);
 }
@@ -151,17 +151,42 @@ interface Chrome_View_Form_Renderer_Interface extends Chrome_Renderable
     public function setViewContext(Chrome_Context_View_Interface $viewContext);
 }
 
+/**
+ * Interface for default view form element options.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
+interface Chrome_View_Form_Element_Option_Basic_Interface
+{
+    /**
+     * Sets an attribute which is only for internal usage.
+     *
+     * This will not get displayed to the user.
+     *
+     * @param string $key
+     * @param mixed $value
+     */
+    public function setInternalAttribute($key, $value);
+
+    /**
+     * Returns an internal attribute
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function getInternalAttribute($key);
+}
 
 /**
  * An option interface.
  *
  * This contains all necessary options for rendering a form element.
  *
- * @todo extend this interface from Chrome_View_Form_Element_Option_Basic_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-interface Chrome_View_Form_Element_Option_Interface
+interface Chrome_View_Form_Element_Option_Interface extends Chrome_View_Form_Element_Option_Basic_Interface
 {
     /**
      * Sets a label. This will render a <label for=""></label>
@@ -272,7 +297,7 @@ interface Chrome_View_Form_Element_Basic_Interface extends Chrome_Renderable
     /**
      * Returns the option
      *
-     * @return Chrome_View_Form_Element_Option_Interface
+     * @return Chrome_View_Form_Element_Option_Basic_Interface
      */
     public function getOption();
 
@@ -361,7 +386,7 @@ interface Chrome_View_Form_Element_Multiple_Interface extends Chrome_View_Form_E
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-interface Chrome_View_Form_Element_Option_Attachable_Interface extends Chrome_View_Form_Element_Option_Interface
+interface Chrome_View_Form_Element_Option_Attachable_Interface extends Chrome_View_Form_Element_Option_Basic_Interface
 {
     /**
      * Attaches a form element
@@ -495,7 +520,7 @@ interface Chrome_View_Form_Element_Manipulateable_Interface
 interface Chrome_View_Form_Element_Manipulator_Interface
 {
     /**
-     * Sets the object which gets manipulates
+     * Sets the object which gets manipulated
      *
      * @param Chrome_View_Form_Element_Basic_Interface $manipulateable
      */
@@ -524,26 +549,79 @@ interface Chrome_View_Form_Element_Manipulator_Interface
 }
 
 /**
- * @todo add doc
+ * Interface labels.
+ *
+ * A label contains of the actual label, the position and the mapping from the value to the label
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
 interface Chrome_View_Form_Label_Interface
 {
-    const LABEL_POSITION_FRONT = 'FRONT';
+    /**
+     * The position of the label in front of the actual input
+     *
+     * @var int
+     */
+    const LABEL_POSITION_FRONT = 2;
 
-    const LABEL_POSITION_BEHIND = 'BEHIND';
+    /**
+     * The position of the label behind the actual input
+     *
+     * @var int
+     */
+    const LABEL_POSITION_BEHIND = 3;
 
-    const LABEL_POSITION_DEFAULT = 'DEFAULT';
+    /**
+     * The default position of all labels, maybe front or behind, but not 'none'
+     *
+     * @var int
+     */
+    const LABEL_POSITION_DEFAULT = 1;
 
-    const LABEL_POSITION_NONE = 'NONE';
+    /**
+     * The label will be deactivated. Thus, the label will not be displayed
+     *
+     * @var int
+     */
+    const LABEL_POSITION_NONE = 0;
 
+    /**
+     * Sets the position of the label
+     *
+     * available position are given as constants:
+     * LABEL_POSITION_FRONT, LABEL_POSITION_BEHIND, LABEL_POSITION_DEFAULT,
+     * LABEL_POSITION_NONE.
+     *
+     * Only this constants are supported.
+     *
+     * @param int $labelPosition the constantes of this interface
+     */
     public function setPosition($labelPosition);
 
+    /**
+     * Returns the position of the label.
+     *
+     * Use the constants of this interface to determine what the return value means.
+     *
+     * @return int
+     */
     public function getPosition();
 
+    /**
+     * Sets the label for the input value $labelForValue with the label $label
+     *
+     * This defines implicitly a mapping, which mapps $labelForValue to $label.
+     *
+     * @param string $labelForValue
+     * @param string $label
+     */
     public function setLabel($labelForValue, $label);
 
+    /**
+     * Returns the label for the value $labelForValue
+     *
+     * @param string $labelForValue
+     */
     public function getLabel($labelForValue);
 }

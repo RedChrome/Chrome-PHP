@@ -15,14 +15,7 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Template
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 18:35:15] --> $
- * @author     Alexander Book
  */
-
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * load needed template core files

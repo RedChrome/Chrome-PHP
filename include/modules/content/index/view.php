@@ -1,6 +1,5 @@
 <?php
-if(CHROME_PHP !== true)
-    die();
+
 class Chrome_View_Index extends Chrome_View_Strategy_Abstract
 {
 
@@ -12,7 +11,6 @@ class Chrome_View_Index extends Chrome_View_Strategy_Abstract
     public function doSth()
     {
         $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_TODO', $this->_controller);
-        // this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_STHOTHER', $this->_controller);
     }
 
     public function formIsValid()
@@ -91,13 +89,6 @@ class Chrome_View_Index_STHOTHER extends Chrome_View_Abstract
         $input = new Chrome_View_Form_Element_Text_Default($formElement, $option);
 
         return $input->render();
-
-        return;
-
-        // @todo
-        /*
-         * $formElement = $form->getElements('Index'); $option = $formElement->getOption(); if($option->getToken() !== null) { $template = new Chrome_Template(); $template->assignTemplate('modules/content/index/form'); $template->assign('FORM', $this->_controller->getForm()); $template->assign('TOKEN', $option->getToken()); $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate()); //$template->assign('LANG', new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL)); return $template->render(); } else { return '<form action="" name="redirect" method="post"><input type="submit" name="submit" value="Weiter"/></form>'; }
-         */
     }
 }
 class Chrome_View_Index_TODO extends Chrome_View_Abstract
@@ -132,18 +123,21 @@ class Chrome_View_Form_Index extends Chrome_View_Form_Abstract
     protected function _init()
     {
         $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Default');
+        $this->_formElementOptionFactory = new Chrome_View_Form_Element_Option_Factory_Default();
         $this->_renderer = new Chrome_View_Form_Index_Renderer($this);
 
         parent::_init();
     }
 
-    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
+    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
     {
         switch($formElement->getID())
         {
             case 'radio':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('test' => 'Value1_label', 'test2' => 'VaLUE2_label')));
+                    $label = new Chrome_View_Form_Label_Default(array('test' => 'Value1_label', 'test2' => 'VaLUE2_label'));
+                    $label->setPosition(Chrome_View_Form_Label_Interface::LABEL_POSITION_FRONT);
+                    $viewOption->setLabel($label);
                     break;
                 }
             case 'password':
@@ -160,57 +154,69 @@ class Chrome_View_Form_Index extends Chrome_View_Form_Abstract
 
             case 'checkbox':
                 {
-                    $viewOption->setLabelPosition($viewOption::LABEL_POSITION_BEHIND);
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('Value1' => 'Value1_label', 'Value2' => 'Value2_Label', 'vAlue3' => 'VALUE3_LABEL')));
+                    $label = new Chrome_View_Form_Label_Default(array('Value1' => 'Value1_label', 'Value2' => 'Value2_Label', 'vAlue3' => 'VALUE3_LABEL'));
+                    $label->setPosition(Chrome_View_Form_Label_Interface::LABEL_POSITION_BEHIND);
+
+                    $viewOption->setLabel($label);
                     break;
                 }
 
             case 'select':
                 {
                     $viewOption->setDefaultInput(array('Value1'));
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('Value1' => 'VALUE1_Label', 'Value2' => 'Value2_Label', 'Value3' => 'v3_Label')));
+                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('select' => 'Meine Auswahl - Test', 'Value1' => 'VALUE1_Label', 'Value2' => 'Value2_Label', 'Value3' => 'v3_Label')));
                     break;
                 }
         }
+
+        return $viewOption;
     }
 }
 class Chrome_View_Form_Index_Renderer extends Chrome_View_Form_Renderer_Abstract
 {
-
     protected function _render()
     {
         $return = '<fieldset style="border:dashed">
     <legend>Form</legend>' . "\n";
 
-        $formElements = $this->_formView->getViewElements();
+        $formElements = $this->_viewForm->getViewElements();
 
         $return .= $formElements['Index']->render();
+        $return .= '<br>'."\n";
 
         $return .= $formElements['radio']->render();
+        $return .= '<br>'."\n";
 
         $return .= $formElements['radio']->render();
 
         // foreach($this->_formView->getViewElements() as $viewElement) {
         // echo '<pre>'.htmlspecialchars($viewElement->render()).'</pre>';
         // }
+        $return .= '<br>'."\n";
 
         $return .= $formElements['password']->render();
+        $return .= '<br>'."\n";
 
         $return .= $formElements['password']->render();
+        $return .= '<br>'."\n";
 
         $return .= $formElements['text']->render();
+        $return .= '<br>'."\n";
 
         $return .= $formElements['checkbox']->render();
         $return .= $formElements['checkbox']->render();
         $return .= $formElements['checkbox']->render();
+        $return .= '<br>'."\n";
 
         $return .= $formElements['select']->render();
+        $return .= '<br>'."\n";
 
         $return .= $formElements['submit']->render();
+        $return .= '<br>'."\n";
 
         $return .= ($formElements['Index']->render());
         $return .= '</fieldset>';
 
-        return '<pre>' . htmlspecialchars($return) . '</pre>' . $return . '';
+        return $return . '';
     }
 }

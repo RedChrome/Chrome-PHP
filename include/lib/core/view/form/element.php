@@ -28,8 +28,6 @@ use \Chrome\Misc\Attribute_Secure;
  */
 abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Form_Element_Basic_Interface, Chrome_View_Form_Element_Appendable_Interface, Chrome_View_Form_Element_Manipulateable_Interface
 {
-    // todo: remove this const
-    const SEPARATOR = '_';
     protected $_formElement = null;
     protected $_name = null;
     protected $_option = null;
@@ -50,7 +48,9 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
      */
     protected $_manipulators = array();
 
-    public function __construct(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $option)
+    protected $_rendered = false;
+
+    public function __construct(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $option)
     {
         $this->_formElement = $formElement;
         $this->_elementOption = $formElement->getOption();
@@ -67,6 +67,10 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
 
     public function render()
     {
+        if($this->_rendered === true) {
+            $this->reset();
+        }
+
         foreach($this->_manipulators as $manipulator)
         {
             $manipulator->preRenderManipulate();
@@ -78,6 +82,8 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
         {
             $manipulator->postRenderManipulate();
         }
+
+        $this->_rendered = true;
 
         return $return;
     }
@@ -94,6 +100,8 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
     public function reset()
     {
         $this->_init();
+
+        $this->_rendered = false;
 
         foreach($this->_manipulators as $manipulator)
         {
@@ -254,7 +262,6 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
     protected $_availableSelections = array();
     protected $_readOnlyInputs = array();
     protected $_requiredInputs = array();
-    protected $_defaultInput = array();
     protected $_attributeCopy = null;
 
     abstract protected function _getNext();
@@ -279,22 +286,7 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
         if(count($this->_availableSelections) > 1)
         {
             $this->_attribute->setAttribute('name', $this->_name . '[]');
-            // this->_attribute['name'] = $this->_attribute['name'] . '[]';
         }
-
-        /*$this->_readOnlyInputs = $this->_elementOption->getReadonly();
-        $this->_requiredInputs = $this->_elementOption->getRequired();
-
-        // the user has to select the required input by it's own.
-        if(count($this->_elementOption->getRequired()) === 0)
-        {
-            $this->_defaultInput = $this->_option->getDefaultInput();
-        }
-
-        if(($storedData = $this->_option->getStoredData()) !== null)
-        {
-            $this->_defaultInput = $storedData;
-        }*/
     }
 
     public function render()
@@ -302,13 +294,14 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
         ++$this->_count;
         $this->_current = $this->_getNext();
 
-        $this->_setTempFlags();
+        $this->_attributeCopy = clone $this->_attribute;
 
         foreach($this->_manipulators as $manipulator)
         {
             $manipulator->preRenderManipulate();
         }
 
+        #$this->_setTempFlags();
 
         $return = $this->_renderAppenders($this->_render());
 
@@ -320,27 +313,6 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
         }
 
         return $return;
-    }
-
-    /**
-     * @todo: remove
-     * @param unknown $key
-     */
-    public function getTempFlag($key)
-    {
-        return $this->_attribute->getAttribute($key);
-        // eturn (isset($this->_tempFlag[$key])) ? $this->_tempFlag[$key] : null;
-    }
-
-    /**
-     * @todo remove
-     * @param unknown $key
-     * @param unknown $value
-     */
-    public function setTempFlag($key, $value)
-    {
-        $this->_attribute->setAttribute($key, $value);
-        // this->_tempFlag[$key] = $value;
     }
 
     public function getCurrent()
@@ -355,25 +327,6 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
 
     protected function _setTempFlags()
     {
-        $this->_attributeCopy = clone $this->_attribute;
-        /*
-        if(in_array($this->_current, $this->_readOnlyInputs))
-        {
-            $this->_attribute->setAttribute('disabled', 'disabled');
-        }
-
-        if(in_array($this->_current, $this->_defaultInput))
-        {
-            $this->_attribute->setAttribute('checked', 'checked');
-        }
-
-        if(in_array($this->_current, $this->_requiredInputs))
-        {
-            $this->_attribute->setAttribute('required', 'required');
-        }
-
-        $this->_attribute->setAttribute('value', $this->_current);*/
-
         $this->_attribute->setAttribute('id', $this->_name . self::SEPARATOR . $this->_count);
     }
 }

@@ -14,19 +14,14 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.User
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 18:49:48] --> $
- * @author Alexander Book
+ * @subpackage Chrome.Content.User
  */
-if(CHROME_PHP !== true)
-    die();
+
 
 /**
  *
  * @package CHROME-PHP
- * @subpackage Chrome.User
+ * @subpackage Chrome.Content.User
  */
 class Chrome_View_User_Login_Default extends Chrome_View_Strategy_Abstract
 {
@@ -81,7 +76,6 @@ class Chrome_View_User_Default_SuccessfullyLoggedIn extends Chrome_View_Abstract
 }
 class Chrome_View_User_Default_FormNotValid extends Chrome_View_Abstract
 {
-
     public function render()
     {
         return 'form was not valid!';
@@ -100,8 +94,6 @@ class Chrome_View_Form_Renderer_Template_Login_Content extends Chrome_View_Form_
         $template = new Chrome_Template();
 
         $lang = $this->_viewContext->getLocalization()->getTranslate();
-
-        //$lang = new Chrome_Language('modules/content/user/login');
 
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/user/login/form_log_in');

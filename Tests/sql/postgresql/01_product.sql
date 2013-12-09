@@ -114,7 +114,8 @@ INSERT INTO "chrome"."cp1_class" ("id", "name", "file") VALUES
 (DEFAULT, 'Chrome_Controller_Register', 'modules/content/register/controller.php'),
 (DEFAULT, 'Chrome_Controller_Content_Logout', 'modules/content/user/logout/controller.php'),
 (DEFAULT, 'Chrome_Controller_Content_Login', 'modules/content/user/login/controller.php'),
-(DEFAULT, 'Chrome_Controller_Captcha', 'modules/content/captcha/controller.php');
+(DEFAULT, 'Chrome_Controller_Captcha', 'modules/content/captcha/controller.php'),
+(DEFAULT, 'Chrome_Controller_SiteNotFound', 'modules/content/SiteNotFound/controller.php');
 
 DROP TABLE IF EXISTS "chrome"."cp1_config";
 CREATE TABLE IF NOT EXISTS "chrome"."cp1_config" (

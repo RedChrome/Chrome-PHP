@@ -25,10 +25,21 @@
  */
 class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option_Interface
 {
+    protected $_internalAttribute = array();
     protected $_storedData = null;
     protected $_label = null;
     protected $_placeholder = null;
     protected $_defaultInput = array();
+
+    public function setInternalAttribute($key, $value)
+    {
+        $this->_internalAttribute[$key] = $value;
+    }
+
+    public function getInternalAttribute($key)
+    {
+        return (isset($this->_internalAttribute[$key])) ? $this->_internalAttribute[$key] : null;
+    }
 
     public function getPlaceholder()
     {

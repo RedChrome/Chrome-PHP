@@ -16,8 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -75,7 +73,6 @@ class Chrome_Form_Handler_Store implements Chrome_Form_Handler_Interface, Chrome
 
             if($this->_doStore($element) === true)
             {
-
                 $this->_storage->set($elementId, $element->getStorableData());
             }
         }

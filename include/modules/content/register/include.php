@@ -1,7 +1,6 @@
 <?php
 class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
 {
-
     protected function _init()
     {
         $this->_id = 'Register_StepOne';
@@ -32,7 +31,12 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
         $submitOption->setAllowedValue($lang->get('register'));
 
         $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
-        $this->_addElement($submitElement);
+
+        $buttonsOption = new Chrome_Form_Option_Element_Buttons();
+        $buttonsOption->attach($submitElement);
+
+        $buttonsElement = new Chrome_Form_Element_Buttons($this, 'buttons', $buttonsOption);
+        $this->_addElement($buttonsElement);
 
         $storeHandler = new Chrome_Form_Handler_Store($storageSession, new Chrome_Form_Option_Storage(), array('accept'));
         $this->setAttribute(self::ATTRIBUTE_STORE, $storeHandler);
@@ -43,11 +47,11 @@ class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
 
     protected function _initFactories()
     {
-        $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Default');
+        $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Yaml');
         parent::_initFactories();
     }
 
-    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
+    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
     {
         $lang = $this->_viewContext->getLocalization()->getTranslate();
         //$lang = new Chrome_Language('modules/content/user/registration');
@@ -163,7 +167,7 @@ class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
         parent::_initFactories();
     }
 
-    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $viewOption)
+    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
     {
         $lang = $this->_viewContext->getLocalization()->getTranslate();
         //$lang = new Chrome_Language('modules/content/user/registration');

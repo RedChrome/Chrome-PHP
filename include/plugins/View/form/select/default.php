@@ -24,46 +24,30 @@
  */
 class Chrome_View_Form_Element_Select_Default extends Chrome_View_Form_Element_Multiple_Abstract
 {
-
-    private $_int = 0;
-
     protected function _getNext()
     {
-        $next = $this->_availableSelections[$this->_int];
-        $this->_int = ++$this->_int % count($this->_availableSelections);
-        return $next;
+        return $this->_name;
     }
 
     protected function _init()
     {
         parent::_init();
 
-        $this->_option->setLabelPosition(Chrome_View_Form_Element_Option_Multiple_Interface::LABEL_POSITION_NONE);
-
         if($this->_elementOption->getSelectMultiple() === true)
         {
-            $this->_attribute['multiple'] = 'multiple';
+            $this->_attribute->setAttribute('multiple', 'multiple');
         }
-    }
-
-    protected function _setTempFlags()
-    {
-       // todo: is this okay?
-        #$this->_tempFlag->setAttribute()
-        $this->_attribute['id'] = $this->_id;
     }
 
     public function _render()
     {
         $return = '<select '.$this->_renderFlags().' size="1">'."\n";
 
-        $savedValues = (array) $this->_option->getStoredData(); #$this->_formElement->getSavedData();
+        $savedValues = (array) $this->_option->getStoredData();
 
         $label = $this->_option->getLabel();
 
-
         $defaultSelection = (array) $this->_option->getDefaultInput();
-        //$this->getOption(Chrome_Form_Decorator_Abstract::CHROME_FORM_DECORATOR_DEFAULT_INPUT);
 
         $arrayMerged = array();
 
@@ -79,11 +63,7 @@ class Chrome_View_Form_Element_Select_Default extends Chrome_View_Form_Element_M
 
         $readOnly = $this->_elementOption->getReadonly();
 
-        // all entries are readOnly
-        if($this->_elementOption->getIsReadonly() === true)
-        {
-            $readOnly = $array;
-        } else if(!is_array($readOnly))
+        if(!is_array($readOnly))
         {
             // everything is enabled
             $readOnly = array();

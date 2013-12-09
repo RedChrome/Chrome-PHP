@@ -1,5 +1,4 @@
-<?php echo $FORM['Register_StepTwo']->render(); ?>
-<?php //echo $FORM->render('error'); ?>
+<?php echo $FORM['Register_StepTwo']->render(); ?><?php //echo $FORM->render('error'); ?>
 <h6 class="ym-fbox-heading"><?= $LANG->get('register'); ?>:</h6>
 
 <?php echo $FORM['email']->render(); ?>
@@ -16,5 +15,4 @@
 
 <?php echo $FORM['buttons']->render(); ?>
 
-<?php //echo $FORM->render('buttons')->element('submit'); ?>
 <?php echo $FORM['Register_StepTwo']->render(); ?>
