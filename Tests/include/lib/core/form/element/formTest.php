@@ -212,11 +212,15 @@ class FormElementFormTest extends Chrome_TestCase
         $this->assertNotNull($this->_option->getToken());
 
         $optionCloned = clone $this->_option;
+
         $optionCloned->setToken(null);
+        $optionCloned->setStorage(new Chrome_Form_Storage_Session(new Chrome_Session_Dummy(new Chrome_Cookie_Dummy(), Chrome_Hash::getInstance()), 'TEST_FORM_ELEMENT_FORM'), $this->_id);
+        $optionCloned->getStorage()->remove($this->_id);
+        $this->assertNull($optionCloned->getStorage()->get($this->_id));
         $optionCloned->setStorage($this->_option->getStorage());
 
         $anotherFormElement = new Chrome_Form_Element_Form($this->_form, $this->_id, $optionCloned);
 
-        $this->assertEquals($optionCloned->getToken(), $this->_option->getToken());
+        $this->assertEquals($this->_option->getToken(), $optionCloned->getToken());
     }
 }

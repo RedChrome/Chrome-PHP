@@ -45,7 +45,15 @@ interface Chrome_View_Form_Interface
     public function __construct(Chrome_Form_Interface $form, Chrome_Context_View_Interface $viewContext);
 
     /**
-     * Sets a factory to create Chrome_View_Form_Element_Interface objects
+     * Sets a factory to create Chrome_View_Form_Element_Interface objects.
+     *
+     * If there are already created view form elements, then they are destroyed and re-created by the
+     * new element factory (the re-creation will happen when calling getViewElements())
+     *
+     * This method can be used, to re-set the created view form elements. Just use
+     * <code>
+     * $viewForm->setElementFactory($viewForm->getElementFactory());
+     * </code>
      *
      * @param Chrome_View_Form_Element_Factory_Interface $elementFactory
      */

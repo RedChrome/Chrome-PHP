@@ -17,9 +17,6 @@
  * @subpackage Chrome.Form
  */
 
-if(CHROME_PHP !== true)
-    die();
-
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
