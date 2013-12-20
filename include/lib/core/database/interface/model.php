@@ -74,7 +74,6 @@ class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract
 
     protected function _checkModel()
     {
-        // use default one
         if($this->_model === null)
         {
             throw new Chrome_Exception('No model set, which contains the stored queries');

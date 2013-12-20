@@ -17,39 +17,22 @@
  * @subpackage Chrome.Validator
  */
 
+use Chrome\Helper\User\Email_Interface;
+
 /**
- * Chrome_Validator_Email_Exists
+ * A Validator that checks whether the email is already used
+ * for an user or a registration
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */
 class Chrome_Validator_Email_Exists extends Chrome_Validator
 {
-    protected $_dbInterface = null;
+    protected $_helper = null;
 
-    /**
-     * This option is needed to determine, whether the validator returns true or fale on valid
-     * E.g. if you want to check whether there exists no other email with the same name, then we
-     * want to return true on not valid. Or if you want to check that the email exists, then we want to
-     * return true on valid...
-     *
-     * @var string
-     */
-    const CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS = 'VALIDONSUCCESS';
-
-    const CHROME_VALIDATOR_EMAIL_EXISTS_EMAIL_EXISTS = 'EMAILEXISTS';
-
-    /**
-     * By default: return true if email exists
-     *
-     * @var array
-     */
-    protected $_options = array(self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS => true);
-
-    // TODO: do not use this object, use a model instead.
-    public function __construct(Chrome_Database_Interface_Interface $interface)
+    public function __construct(Email_Interface $emailHelper)
     {
-       $this->_dbInterface = $interface;
+        $this->_helper = $emailHelper;
     }
 
     protected function _getDBInterface()
@@ -59,7 +42,13 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
 
     protected function _validate()
     {
+        $emailIsUsed = $this->_helper->emailIsUsed($this->_data);
 
+        // TODO: finish to implement this validator
+
+        throw new Chrome_Exception('Not implemented');
+
+        /*
         $email = $this->_data;
 
         $dbInterface = $this->_getDBInterface();
@@ -103,6 +92,6 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
             $this->_setError(self::CHROME_VALIDATOR_EMAIL_EXISTS_EMAIL_EXISTS);
             return;
         }
-
+        */
     }
 }

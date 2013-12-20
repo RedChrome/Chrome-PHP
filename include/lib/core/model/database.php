@@ -18,6 +18,7 @@
  */
 
 /**
+ * A abstract model which gets it's data from a database
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Model
@@ -54,6 +55,14 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
         }
     }
 
+    /**
+     * Gets a new db interface instance
+     *
+     * If $clear is set to true, then the interface will get cleared.
+     *
+     * @param string $clear
+     * @return Chrome_Database_Interface_Interface
+     */
     protected function _getDBInterface($clear = true)
     {
         if($this->_dbInterfaceInstance === null)
@@ -78,6 +87,14 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
     }
 }
 
+/**
+ * A abstract model which needs also a application context.
+ *
+ * This model gets it's data from the database
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Model
+ */
 abstract class Chrome_Model_Database_Application_Abstract extends Chrome_Model_Database_Abstract
 {
     protected $_applicationContext = null;

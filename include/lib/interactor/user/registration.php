@@ -45,10 +45,11 @@ class Registration
 
             $activationKey = $this->_generateActivationKey();
 
-            if($this->_model->hasEmail($email) OR $this->_modelUser->hasEmail($email)) {
+            $helper = new \Chrome\Helper\User\Email($this->_appContext->getModelContext()->getFactory());
 
-                //TODO: set error.
-                // do not continue
+            if($helper->emailIsUsed($email) === true) {
+                // TODO: email is used, so cannot create a new registration request with this email, implement the details
+                //
                 return false;
             }
 
