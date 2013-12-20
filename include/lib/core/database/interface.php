@@ -15,20 +15,12 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category   CHROME-PHP
  * @package    CHROME-PHP
  * @subpackage Chrome.Database
- * @author     Alexander Book <alexander.book@gmx.de>
- * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 22:41:24] --> $
- * @link       http://chrome-php.de
  */
 
 //TODO: enable right_handler support
 
-if(CHROME_PHP !== true)
-    die();
 
 use \Chrome\Logger\Loggable_Interface;
 use \Psr\Log\LoggerInterface;

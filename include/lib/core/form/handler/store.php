@@ -28,7 +28,6 @@
  */
 class Chrome_Form_Handler_Store implements Chrome_Form_Handler_Interface, Chrome_Form_Handler_Store_Interface
 {
-
     protected $_storage = null;
 
     protected $_option = null;

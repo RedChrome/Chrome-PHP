@@ -15,13 +15,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.User
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 18:49:08] --> $
- * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -36,16 +30,8 @@ class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Module_A
         $this->_require = array('file' => array(CONTENT . 'user/login/include.php', CONTENT . 'user/login/view/default.php', CONTENT . 'user/login/model.php'));
     }
 
-    protected function _execute()
+    protected function _handleForm()
     {
-        $this->_form = Chrome_Form_Login::getInstance($this->_applicationContext);
-
-        $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_User_Login_Default', $this);
-
-        $this->_model = new Chrome_Model_Login($this->_applicationContext, $this->_form);
-
-        $this->_form->create();
-
         if($this->_model->isLoggedIn() == true)
         {
             $this->_view->alreadyLoggedIn();
@@ -82,5 +68,18 @@ class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Module_A
                 $this->_exceptionHandler->exception($e);
             }
         }
+    }
+
+    protected function _execute()
+    {
+        $this->_form = Chrome_Form_Login::getInstance($this->_applicationContext);
+
+        $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_User_Login_Default', $this);
+
+        $this->_model = new Chrome_Model_Login($this->_applicationContext, $this->_form);
+
+        $this->_form->create();
+
+        $this->_handleForm();
     }
 }

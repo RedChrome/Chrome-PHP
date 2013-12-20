@@ -15,13 +15,7 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Controller
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 16:33:20] --> $
- * @author     Alexander Book
  */
-
-if(CHROME_PHP !== true) die();
 
 /**
  * @package CHROME-PHP
@@ -34,8 +28,6 @@ abstract class Chrome_Controller_Module_Abstract extends Chrome_Controller_Abstr
         parent::__construct($appContext);
 
         $this->_initialize();
-
-        //$this->_setFilter();
 
         $this->_require();
     }

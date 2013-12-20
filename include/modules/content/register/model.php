@@ -1,5 +1,6 @@
 <?php
 
+//TODO: create interface for this class
 // todo: refactor this class. e.g. sendRegisterEmail has nothign to do with this model
 class Chrome_Model_Register extends Chrome_Model_Database_Abstract
 {
@@ -25,6 +26,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
         $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory(), 'register'));
     }
 
+    //TODO: should not be in a model
     public function sendRegisterEmail($email, $name, $activationKey)
     {
         // TODO: move this
@@ -48,6 +50,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
         return true;
     }
 
+    //TODO: should not be in a model
     public function generateActivationKey()
     {
         $key = Chrome_Hash::getInstance()->hash(Chrome_Hash::randomChars(10));
@@ -89,6 +92,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
         return true;
     }
 
+    //TODO: should not be in a model
     public function checkRegistration($activationKey)
     {
         if(empty($activationKey))
@@ -117,14 +121,14 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
         return $result;
     }
 
+    //TODO: should not be in a model
     public function finishRegistration($name, $pass, $pwSalt, $email, $activationKey, Chrome_Authentication_Create_Resource_Interface $resource = null)
     {
         try
         {
-
             if($resource === null)
             {
-                $resource = new Chrome_Authentication_Create_Resource_Database($pass, $pw_salt);
+                $resource = new Chrome_Authentication_Create_Resource_Database($pass, $pwSalt);
             }
 
             $this->_applicationContext->getAuthentication()->createAuthentication($resource);
@@ -199,5 +203,20 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
         }
 
         return true;
+    }
+
+    public function hasActivationKey($key)
+    {
+        //TODO: implement
+    }
+
+    public function hasEmail($email)
+    {
+        //TODO: implement
+    }
+
+    public function addRegistration($name, $password, $passwordSalt, $email, $time, $activationKey)
+    {
+        //TODO: implement
     }
 }

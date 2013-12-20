@@ -15,13 +15,7 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Model
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 18:49:36] --> $
- * @author     Alexander Book
  */
-
-if(CHROME_PHP !== true) die();
 
 /**
  * @package    CHROME-PHP

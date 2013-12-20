@@ -123,7 +123,6 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
                 } else {
                     $success = $this->_model->finishRegistration($result['name'], $result['pass'], $result['pw_salt'], $result['email'], $this->_requestData->getGET('activationKey'));
 
-
                     // user successfully registered
                     if($success === true) {
 

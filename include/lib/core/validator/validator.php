@@ -289,6 +289,25 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
         $this->_errorMsg = array();
         return $return;
     }
+
+    protected function _validateByValidator(Chrome_Validator_Interface $validator, $expected = true)
+    {
+        $validator->setData($this->_data);
+
+        if($validator->isValid()) {
+            $valid = true;
+        } else {
+            $valid = false;
+        }
+
+        if($valid == $expected) {
+            return true;
+        } else {
+            $this->_errorMsg += $validator->getAllErrors();
+
+            return false;
+        }
+    }
 }
 
 abstract class Chrome_Validator_Composition_Abstract extends Chrome_Validator implements Chrome_Validator_Composition_Interface

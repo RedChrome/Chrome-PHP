@@ -89,6 +89,13 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
     protected $_manipulators = array();
 
     /**
+     * Indicates whether this object was already rendered
+     *
+     * @var boolean
+     */
+    protected $_rendered = false;
+
+    /**
      * Creates a new view form element and initializes it
      *
      * @param Chrome_Form_Element_Basic_Interface $formElement
@@ -423,8 +430,8 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
 
     public function __construct(Chrome_Form_Element_Multiple_Interface $formElement, Chrome_View_Form_Element_Option_Multiple_Interface $option)
     {
-        parent::__construct($formElement, $option);
         $this->_elementOption = $formElement->getOption();
+        parent::__construct($formElement, $option);
     }
 
     public function reset()

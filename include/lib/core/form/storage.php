@@ -30,7 +30,6 @@
  */
 interface Chrome_Form_Handler_Store_Interface
 {
-
     /**
      * Returns true if this handler can/(or has) stored user input for $element
      *
@@ -42,11 +41,11 @@ interface Chrome_Form_Handler_Store_Interface
     public function hasStored(Chrome_Form_Element_Basic_Interface $element);
 
     /**
-     * Returns the stored data for $element
+     * Returns the stored data for $element. If no data was stored, null is returned
      *
      * @param Chrome_Form_Element_Basic_Interface $element
      *        a form element
-     * @return mixed
+     * @return mixed|null
      */
     public function getStored(Chrome_Form_Element_Basic_Interface $element);
 }
@@ -59,7 +58,6 @@ interface Chrome_Form_Handler_Store_Interface
  */
 interface Chrome_Form_Storage_Interface
 {
-
     /**
      * Retrieves the data for $elementName
      *
@@ -105,7 +103,6 @@ interface Chrome_Form_Storage_Interface
  */
 interface Chrome_Form_Option_Storable_Interface
 {
-
     /**
      * Whether the storage is enabled.
      * If it is not enabled, no data will be stored.
@@ -186,7 +183,6 @@ class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interfac
     protected $_storeInvalidData = false;
 
     /**
-     * (non-PHPdoc)
      * @see Chrome_Form_Option_Storable_Interface::getStorageEnabled()
      */
     public function getStorageEnabled()
@@ -195,7 +191,6 @@ class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interfac
     }
 
     /**
-     * (non-PHPdoc)
      * @see Chrome_Form_Option_Storable_Interface::getStoreNullData()
      */
     public function getStoreNullData()
@@ -204,7 +199,6 @@ class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interfac
     }
 
     /**
-     * (non-PHPdoc)
      * @see Chrome_Form_Option_Storable_Interface::getStoreInvalidData()
      */
     public function getStoreInvalidData()
@@ -213,7 +207,6 @@ class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interfac
     }
 
     /**
-     * (non-PHPdoc)
      * @see Chrome_Form_Option_Storable_Interface::setStorageEnabled()
      */
     public function setStorageEnabled($bool)
@@ -222,7 +215,6 @@ class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interfac
     }
 
     /**
-     * (non-PHPdoc)
      * @see Chrome_Form_Option_Storable_Interface::setStoreNullData()
      */
     public function setStoreNullData($bool)
@@ -231,7 +223,6 @@ class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interfac
     }
 
     /**
-     * (non-PHPdoc)
      * @see Chrome_Form_Option_Storable_Interface::setStoreInvalidData()
      */
     public function setStoreInvalidData($bool)

@@ -14,14 +14,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Model
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.06.2013 15:09:44] --> $
- * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
-
 use \Chrome\Registry\Logger\Registry_Interface;
 use \Chrome\Logger\Loggable_Interface;
 use \Psr\Log\LoggerInterface;

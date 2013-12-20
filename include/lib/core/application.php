@@ -20,13 +20,11 @@
  */
 
 /**
- *
  * @package CHROME-PHP
  * @subpackage Chrome.Application
  */
 interface Chrome_Application_Interface extends Chrome_Exception_Processable_Interface
 {
-
     /**
      * getController()
      *
@@ -71,9 +69,18 @@ interface Chrome_Application_Interface extends Chrome_Exception_Processable_Inte
  */
 interface Chrome_Context_View_Interface
 {
+    /**
+     * Sets the localization
+     *
+     * The localization is used to use the proper layout of representing e.g. currency/date/etc..
+     *
+     * @param \Chrome\Localization\Localization_Interface $localization
+     */
     public function setLocalization(\Chrome\Localization\Localization_Interface $localization);
 
     /**
+     * Returns the localization
+     *
      * @return \Chrome\Localization\Localization_Interface
      */
     public function getLocalization();
@@ -157,6 +164,22 @@ interface Chrome_Context_Model_Interface
      * @return \Chrome\Registry\Cache\Factory\Registry
      */
     public function getCacheFactoryRegistry();
+
+    /**
+     * Returns a model factory
+     *
+     * @return \Chrome\Model\Factory_Interface
+     */
+    public function getFactory();
+
+    /**
+     * Sets a model factory.
+     *
+     * A model factory, used to retrieve models according to the needed interface
+     *
+     * @param \Chrome\Model\Factory_Interface $factory
+     */
+    public function setFactory(\Chrome\Model\Factory_Interface $factory);
 
     /**
      * Sets a database factory
@@ -588,12 +611,23 @@ class Chrome_Context_Model implements Chrome_Context_Model_Interface
     protected $_loggerRegistry = null;
     protected $_cacheFactoryRegistry = null;
     protected $_converter = null;
+    protected $_factory = null;
 
     public function linkApplicationContext(Chrome_Context_Application_Interface $app)
     {
         $this->_config = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_CONFIG);
         $this->_loggerRegistry = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_LOGGER_REGISTRY);
         $this->_converter = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_CONVERTER);
+    }
+
+    public function getFactory()
+    {
+        return $this->_factory;
+    }
+
+    public function setFactory(\Chrome\Model\Factory_Interface $factory)
+    {
+        $this->_factory = $factory;
     }
 
     public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry_Interface $cachFactoryRegistry)

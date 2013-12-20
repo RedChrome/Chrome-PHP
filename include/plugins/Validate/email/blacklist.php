@@ -15,12 +15,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Validator
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 13:16:20] --> $
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * Chrome_Validator_Email_Blacklist
@@ -46,8 +41,13 @@ class Chrome_Validator_Email_Blacklist extends Chrome_Validator
     protected $_options = array(
                                 self::CHROME_VALIDATOR_EMAIL_BLACKLIST_BLACKLIST_HOST => null);
 
-    public function __construct()
+    protected $_config = null;
+
+    public function __construct(Chrome_Config_Interface $configuration)
     {
+        //TODO: finish the rest of this class
+        $this->_config = $configuration;
+
     }
 
     protected function _validate()
@@ -85,7 +85,6 @@ class Chrome_Validator_Email_Blacklist extends Chrome_Validator
 
     protected function _getBlacklist()
     {
-
         // TODO: use config to get blacklist
         if($this->_options[self::CHROME_VALIDATOR_EMAIL_BLACKLIST_BLACKLIST_HOST] !== null)
         {

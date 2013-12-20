@@ -23,9 +23,15 @@
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Form_Default extends Chrome_View_Form_Element_Abstract
+class Chrome_View_Form_Element_Form_Default extends Chrome_View_Form_Element_Basic_Abstract
 {
     private $_int = 0;
+
+    protected function _init()
+    {
+        parent::_init();
+        $this->_elementOption = $this->_formElement->getOption();
+    }
 
     protected function _render()
     {

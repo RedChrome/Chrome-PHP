@@ -46,6 +46,7 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
      */
     protected $_options = array(self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS => true);
 
+    // TODO: do not use this object, use a model instead.
     public function __construct(Chrome_Database_Interface_Interface $interface)
     {
        $this->_dbInterface = $interface;
