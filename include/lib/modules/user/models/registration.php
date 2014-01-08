@@ -32,4 +32,23 @@ class Registration extends \Chrome_Model_Database_Statement_Abstract implements 
     {
         return !$this->_getDBInterface()->loadQuery('emailExists')->execute(array($email))->isEmpty();
     }
+
+    public function getRegistrationRequestByActivationKey($activationKey)
+    {
+        $result = $this->_getDBInterface()->loadQuery('getRegistration')->execute(array($activationKey));
+
+        if($result->isEmpty()) {
+            return null;
+        }
+
+        $row = $result->getNext();
+
+        $registrationRequest = new \Chrome\Model\User\Registration\Request();
+
+        $registrationRequest->setActivationKey($activationKey)->setEmail($row['email'])->setId($row['id'])->setName($row['name'])->setPasswordHashed($row['pass'])->setPasswordSalt($row['pw_salt'])->setTime($row['time']);
+
+        return $registrationRequest;
+    }
+
+
 }

@@ -20,7 +20,7 @@
  */
 namespace Chrome\Validator\User;
 
-class Email extends \Chrome_Validator
+class Email extends \Chrome_Validator_Composer_Abstract
 {
     protected $_config = null;
 
@@ -29,46 +29,42 @@ class Email extends \Chrome_Validator
         $this->_config = $config;
     }
 
-    protected function _validate()
+    protected function _getValidator()
     {
-        if(!$this->_validateByValidator(new \Chrome_Validator_Email_Default())) {
-            return false;
-        }
+        $emailDefaultValidator = new \Chrome_Validator_Email_Default();
+        $emailBlacklistValidator = new \Chrome_Validator_Email_Blacklist($this->_config);
 
-        if(!$this->_validateByValidator(new \Chrome_Validator_Email_Blacklist($this->_config))) {
-            return false;
-        }
+        $andComposition = new \Chrome_Validator_Composition_And();
+        $andComposition->addValidator($emailDefaultValidator);
+        $andComposition->addValidator($emailBlacklistValidator);
 
-        return true;
+        return $andComposition;
     }
 }
 
 namespace Chrome\Validator\User\Registration;
 
-use Chrome\Helper\User\Email_Interface;
-
-class Email extends \Chrome_Validator
+class Email extends \Chrome_Validator_Composer_Abstract
 {
     protected $_config = null;
 
     protected $_helper = null;
 
-    public function __construct(\Chrome_Config_Interface $config, Email_Interface $emailHelper)
+    public function __construct(\Chrome_Config_Interface $config, Chrome\Helper\User\Email_Interface $emailHelper)
     {
         $this->_config = $config;
         $this->_helper = $emailHelper;
     }
 
-    protected function _validate()
+    protected function _getValidator()
     {
-        if(!$this->_validateByValidator(new Email($this->_config))) {
-            return false;
-        }
+        $userEmailValidator = new \Chrome\Validator\User\Email($this->_config);
+        $existsValidator = new \Chrome_Validator_Email_Exists($this->_helper);
 
-        $emailExists = new \Chrome_Validator_Email_Exists($this->_helper);
+        $andComposition = new \Chrome_Validator_Composition_And();
+        $andComposition->addValidator($userEmailValidator);
+        $andComposition->addValidator($existsValidator);
 
-        if(!$this->_validateByValidator($emailExists, false)) {
-            return false;
-        }
+        return $andComposition;
     }
 }

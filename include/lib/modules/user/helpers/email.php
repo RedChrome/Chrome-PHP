@@ -42,7 +42,11 @@ class Email implements Email_Interface
         return false;
     }
 
-    public function isEmailValid($email)
+    /**
+     * @todo remove
+     * @return \Chrome_Validator_Composition_And
+     */
+    public function getEmailValidator()
     {
         $emailStructureValidator = new \Chrome_Validator_Email_Default();
         $emailBlacklistValidator = new \Chrome_Validator_Email_Blacklist($this->_config);
@@ -50,6 +54,18 @@ class Email implements Email_Interface
         $andComposition = new \Chrome_Validator_Composition_And();
         $andComposition->addValidator($emailStructureValidator);
         $andComposition->addValidator($emailBlacklistValidator);
+
+        return $andComposition;
+    }
+
+    /**
+     * @todo remove
+     * (non-PHPdoc)
+     * @see \Chrome\Helper\User\Email_Interface::isEmailValid()
+     */
+    public function isEmailValid($email)
+    {
+        $validator = $this->getEmailValidator();
 
         $andComposition->setData($email);
 

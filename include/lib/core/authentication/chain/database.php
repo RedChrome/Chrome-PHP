@@ -191,9 +191,11 @@ class Chrome_Authentication_Create_Resource_Database implements Chrome_Authentic
     protected $_credential     = '';
     protected $_credentialSalt = '';
     protected $_id             = null;
+    protected $_identity       = '';
 
-    public function __construct($credential, $salt = null)
+    public function __construct($identity, $credential, $salt = null)
     {
+        $this->_identity       = $identity;
         $this->_credential     = $credential;
         $this->_credentialSalt = $salt;
     }
@@ -206,6 +208,11 @@ class Chrome_Authentication_Create_Resource_Database implements Chrome_Authentic
     public function getCredentialSalt()
     {
         return $this->_credentialSalt;
+    }
+
+    public function getIdentity()
+    {
+        return $this->_identity;
     }
 
     public function getID()

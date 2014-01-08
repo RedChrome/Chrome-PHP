@@ -19,6 +19,8 @@
  */
 namespace Chrome\Helper\User;
 
+use Chrome\Model\User\Registration\Request_Interface;
+
 interface Email_Interface
 {
     /**
@@ -34,8 +36,27 @@ interface Email_Interface
     /**
      * Checks whether the email is valid
      *
+     * @todo remove
      * @param string $email
      * @return boolean
      */
     public function isEmailValid($email);
+}
+
+interface Request_Interface
+{
+    /**
+     * Checks whether the nickname is valid
+     *
+     * @param string $name
+     * @returns boolean
+     */
+    public function isNameValid($name);
+
+    /**
+     * Checks whether the password is valid
+     * @param string $password
+     * @returns boolean
+     */
+    public function isPasswordValid($password);
 }

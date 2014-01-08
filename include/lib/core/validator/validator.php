@@ -350,3 +350,26 @@ abstract class Chrome_Validator_Composition_Abstract extends Chrome_Validator im
         }
     }
 }
+
+/**
+ * Use this validator if you want to compose a complex set of validators together
+ *
+ * The composing logic should get put in _getValidator
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Validator
+ */
+abstract class Chrome_Validator_Composer_Abstract extends Chrome_Validator
+{
+    /**
+     * Composes multiple validators to one complex validator
+     *
+     * @return Chrome_Validator_Interface
+     */
+    abstract protected function _getValidator();
+
+    protected function _validate()
+    {
+        return $this->_getValidator()->validate();
+    }
+}

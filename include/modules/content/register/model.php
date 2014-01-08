@@ -72,9 +72,9 @@ class Chrome_Model_Register extends Chrome_Model_Database_Statement_Abstract
 
         $passwordSalt = Chrome_Hash::randomChars(self::CHROME_MODEL_REGISTER_PW_SALT_LENGTH);
         $password = Chrome_Hash::getInstance()->hash_algo($password, CHROME_USER_HASH_ALGORITHM, $passwordSalt);
+
         try
         {
-
             $db->loadQuery('registerAddRegistrationRequest')->execute(array($name, $password, $passwordSalt, $email, CHROME_TIME, $activationKey));
         } catch(Chrome_Exception_Database $e)
         {

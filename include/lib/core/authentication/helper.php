@@ -35,9 +35,9 @@ class Creation implements Creation_Interface
         $this->_auth = $auth;
     }
 
-    public function createAuthentication($password, $passwordSalt)
+    public function createAuthentication($identity, $password, $passwordSalt)
     {
-        $createResource = new \Chrome_Authentication_Create_Resource_Database($password, $passwordSalt);
+        $createResource = new \Chrome_Authentication_Create_Resource_Database($identity, $password, $passwordSalt);
 
         $this->_auth->createAuthentication($createResource);
 
