@@ -203,7 +203,11 @@ class Classloader implements Classloader_Interface
      */
     protected function _doLoadClassByFile($class, $fileName)
     {
-        $this->_loadFile($fileName);
+        // use an absolute path:
+        // sometimes, the classloader is called in the shutdown phase. php.net says that
+        // the working dir may change in this phase. To aviod that, use an absolute path
+        // see http://www.php.net/manual/de/function.register-shutdown-function.php
+        $this->_loadFile(ROOT.DIRECTORY_SEPARATOR.$fileName);
 
         $this->_addClass($class);
     }

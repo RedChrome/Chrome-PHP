@@ -168,4 +168,9 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
     {
         return $this->_exceptionConfiguration;
     }
+
+    public function getDiContainer()
+    {
+        return null;
+    }
 }

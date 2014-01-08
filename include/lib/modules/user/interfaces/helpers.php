@@ -17,7 +17,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Module.User
  */
-namespace \Chrome\Helper\User;
+namespace Chrome\Helper\User;
 
 interface Email_Interface
 {
@@ -30,4 +30,12 @@ interface Email_Interface
      * @return boolean
      */
     public function emailIsUsed($email);
+
+    /**
+     * Checks whether the email is valid
+     *
+     * @param string $email
+     * @return boolean
+     */
+    public function isEmailValid($email);
 }

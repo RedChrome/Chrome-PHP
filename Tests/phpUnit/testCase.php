@@ -3,7 +3,12 @@
 
 abstract class Chrome_TestCase extends PHPUnit_Framework_TestCase
 {
-    protected $_session, $_cookie, $_appContext;
+    protected $_session, $_cookie, $_appContext, $_diContainer;
+
+    public function setDIContainer(\Chrome\DI\Container_Interface $diContainer)
+    {
+        $this->_diContainer = $diContainer;
+    }
 
     public function setApplicationContext(Chrome_Context_Application_Interface $appContext)
     {
@@ -30,28 +35,31 @@ class PHPUnit_TextUI_Command_Chrome extends PHPUnit_TextUI_Command
 class PHPUnit_TextUI_TestRunner_Chrome extends PHPUnit_TextUI_TestRunner
 {
     protected $_appContext = null;
+    protected $_diContainer = null;
 
     public function setTestSetup(Chrome_TestSetup $testsetup)
     {
         $testsetup->testModules();
         $this->_appContext = $testsetup->getApplicationContext();
-
+        $this->_diContainer = $testsetup->getDiContainer();
     }
 
-    protected function _injectAppContext($testClass)
+    protected function _injectAppContextAndDiContainer($testClass)
     {
         if($testClass instanceof PHPUnit_Framework_TestSuite) {
             foreach($testClass->tests() as $test) {
                 if($test instanceof PHPUnit_Framework_TestSuite) {
-                    $this->_injectAppContext($test);
+                    $this->_injectAppContextAndDiContainer($test);
                 } else
                 if($test instanceof Chrome_TestCase) {
                     $test->setApplicationContext($this->_appContext);
+                    $test->setDIContainer($this->_diContainer);
                 }
             }
         } else
         if($testClass instanceof Chrome_TestCase) {
             $testClass->setApplicationContext($this->_appContext);
+            $test->setDIContainer($this->_diContainer);
         }
     }
 
@@ -60,7 +68,7 @@ class PHPUnit_TextUI_TestRunner_Chrome extends PHPUnit_TextUI_TestRunner
         $tests = parent::getTest($suiteClassName, $suiteClassFile, $suffixes);
 
         foreach($tests->tests() as $testClass) {
-            $this->_injectAppContext($testClass);
+            $this->_injectAppContextAndDiContainer($testClass);
         }
 
         return $tests;

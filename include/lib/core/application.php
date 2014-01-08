@@ -60,6 +60,13 @@ interface Chrome_Application_Interface extends Chrome_Exception_Processable_Inte
      * @return Chrome_Exception_Configuration_Interface
      */
     public function getExceptionConfiguration();
+
+    /**
+     * Returns the dependency injection container
+     *
+     * @return \Chrome\DI\Container_Interface
+     */
+    public function getDiContainer();
 }
 
 /**
@@ -164,22 +171,6 @@ interface Chrome_Context_Model_Interface
      * @return \Chrome\Registry\Cache\Factory\Registry
      */
     public function getCacheFactoryRegistry();
-
-    /**
-     * Returns a model factory
-     *
-     * @return \Chrome\Model\Factory_Interface
-     */
-    public function getFactory();
-
-    /**
-     * Sets a model factory.
-     *
-     * A model factory, used to retrieve models according to the needed interface
-     *
-     * @param \Chrome\Model\Factory_Interface $factory
-     */
-    public function setFactory(\Chrome\Model\Factory_Interface $factory);
 
     /**
      * Sets a database factory

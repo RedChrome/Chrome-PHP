@@ -18,24 +18,24 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Module.User
  */
-namespace \Chrome\Validator\User;
+namespace Chrome\Validator\User;
 
 class Email extends \Chrome_Validator
 {
-    protected $_appContext = null;
+    protected $_config = null;
 
-    public function __construct(Chrome_Context_Application_Interface $appContext)
+    public function __construct(\Chrome_Config_Interface $config)
     {
-        $this->_appContext = $appContext;
+        $this->_config = $config;
     }
 
     protected function _validate()
     {
-        if(!$this->_validateByValidator(new Chrome_Validator_Email_Default())) {
+        if(!$this->_validateByValidator(new \Chrome_Validator_Email_Default())) {
             return false;
         }
 
-        if(!$this->_validateByValidator(new Chrome_Validator_Email_Blacklist($this->_appContext->getConfig()))) {
+        if(!$this->_validateByValidator(new \Chrome_Validator_Email_Blacklist($this->_config))) {
             return false;
         }
 
@@ -43,24 +43,29 @@ class Email extends \Chrome_Validator
     }
 }
 
-namespace \Chrome\Validator\User\Registration;
+namespace Chrome\Validator\User\Registration;
+
+use Chrome\Helper\User\Email_Interface;
 
 class Email extends \Chrome_Validator
 {
-    protected $_appContext = null;
+    protected $_config = null;
 
-    public function __construct(Chrome_Context_Application_Interface $appContext)
+    protected $_helper = null;
+
+    public function __construct(\Chrome_Config_Interface $config, Email_Interface $emailHelper)
     {
-        $this->_appContext = $appContext;
+        $this->_config = $config;
+        $this->_helper = $emailHelper;
     }
 
     protected function _validate()
     {
-        if(!$this->_validateByValidator(new Email($this->_appContext))) {
+        if(!$this->_validateByValidator(new Email($this->_config))) {
             return false;
         }
 
-        $emailExists = new \Chrome_Validator_Email_Exists($interface);
+        $emailExists = new \Chrome_Validator_Email_Exists($this->_helper);
 
         if(!$this->_validateByValidator($emailExists, false)) {
             return false;

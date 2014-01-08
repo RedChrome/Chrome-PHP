@@ -19,8 +19,6 @@
  * @license http://chrome-php.de/license/new-bsd New BSD License
  * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 20:15:08] --> $
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -96,6 +94,8 @@ interface Chrome_Design_Interface extends Chrome_Renderable
  */
 interface Chrome_Design_Loader_Interface
 {
+    public function setTheme($theme);
+
     public function addComposition(Chrome_Renderable_Composition_Interface $composition);
 
     public function getCompositions();
@@ -117,7 +117,8 @@ interface Chrome_Design_Theme_Interface
 {
     public function setApplicationContext(Chrome_Context_Application_Interface $appContext);
 
-    public function initDesign(Chrome_Design_Interface $design, Chrome_Controller_Interface $controller);
+    // TODO: refine this method
+    public function initDesign(Chrome_Design_Interface $design, Chrome_Controller_Interface $controller, \Chrome\DI\Container_Interface $container);
 }
 
 abstract class Chrome_Design_Theme_Abstract implements Chrome_Design_Theme_Interface

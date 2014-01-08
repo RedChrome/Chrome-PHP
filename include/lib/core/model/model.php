@@ -62,7 +62,9 @@ abstract class Chrome_Model_Abstract implements Chrome_Model_Interface
             return $this->_logger;
         }
 
-        return $this->_modelContext->getLoggerRegistry()->get(Registry_Interface::DEFAULT_LOGGER);
+        if($this->_modelContext !== null) {
+            return $this->_modelContext->getLoggerRegistry()->get(Registry_Interface::DEFAULT_LOGGER);
+        }
     }
 }
 

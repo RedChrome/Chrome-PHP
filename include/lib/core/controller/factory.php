@@ -18,7 +18,7 @@
  */
 
 use \Chrome\Registry\Logger\Registry_Interface;
-
+// @todo remove all of this file!
 interface Chrome_Controller_Factory_Interface
 {
     /**

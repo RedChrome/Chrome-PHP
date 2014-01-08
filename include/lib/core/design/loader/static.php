@@ -15,12 +15,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Design
- * @copyright Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license http://chrome-php.de/license/new-bsd New BSD License
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [31.05.2013 20:06:44] --> $
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -29,7 +24,6 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 {
-
     protected $_compositions = array();
 
     protected $_controllerFactory = null;
@@ -40,11 +34,16 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 
     protected $_theme = '';
 
-    public function __construct(Chrome_Controller_Factory $controllerFactory, Chrome_View_Factory_Interface $viewFactory, Chrome_Model_Abstract $model, $theme)
+    // @todo remove dependency to controller/view factory, use dependency container
+    public function __construct(Chrome_Controller_Factory $controllerFactory, Chrome_View_Factory_Interface $viewFactory, Chrome_Model_Abstract $model)
     {
         $this->_controllerFactory = $controllerFactory;
         $this->_viewFactory = $viewFactory;
         $this->_model = $model;
+    }
+
+    public function setTheme($theme)
+    {
         $this->_theme = $theme;
     }
 
@@ -145,7 +144,6 @@ class Chrome_Model_Design_Loader_Static_Cache extends Chrome_Model_Cache_Abstrac
 
         if($this->_cache->has($key))
         {
-            #var_dump($this->_cache->get($key));
             return $this->_cache->get($key);
         }
 
@@ -154,26 +152,15 @@ class Chrome_Model_Design_Loader_Static_Cache extends Chrome_Model_Cache_Abstrac
         return $data;
     }
 }
-class Chrome_Model_Design_Loader_Static extends Chrome_Model_Database_Abstract
+class Chrome_Model_Design_Loader_Static extends Chrome_Model_Database_Statement_Abstract
 {
     protected function _setDatabaseOptions()
     {
-        $this->_dbInterface = 'model';
         $this->_dbResult = array('Iterator', 'Assoc');
-    }
-
-    protected function _connect()
-    {
-        parent::_connect();
-        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory()));
     }
 
     public function getViewsByPosition($position, $theme)
     {
-        $db = $this->_getDBInterface();
-
-        return $db->loadQuery('designLoaderStaticGetViewsByPosition')->execute(array($position, $theme));
-
-        //return $db->query('SELECT `file`, `class`, `type` FROM cpp_design_static WHERE `position` = "?" AND `theme` = "?"  ORDER BY `order` ASC', array($position, $theme));
+        return $this->_getDBInterface()->loadQuery('designLoaderStaticGetViewsByPosition')->execute(array($position, $theme));
     }
 }

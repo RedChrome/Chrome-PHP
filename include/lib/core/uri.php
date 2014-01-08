@@ -80,7 +80,7 @@ class Chrome_URI implements Chrome_URI_Interface
 
     public function __construct(Chrome_Request_Data_Interface $requestData = null, $useCurrentURI = false)
     {
-        if($useCurrentURI === true)
+        if($useCurrentURI === true AND $requestData !== null)
         {
 
             $this->setURL('http://' . $requestData->getSERVERData('SERVER_NAME') . $requestData->getSERVERData('REQUEST_URI'));

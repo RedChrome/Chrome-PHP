@@ -18,9 +18,11 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Module.User
  */
-namespace \Chrome\Model\User;
+namespace Chrome\Model\User;
 
 interface User_Interface
 {
     public function hasEmail($email);
+
+    public function addUser($name, $email);
 }

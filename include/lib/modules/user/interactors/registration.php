@@ -25,27 +25,33 @@ class Registration
 {
     const MAX_RETRIES_FOR_ACTIVATIONKEY = 10;
 
-    protected $_appContext;
+    protected $_appContext = null;
 
-    public function __construct(\Chrome_Context_Application_Interface $app)
+    protected $_model = null;
+
+    public function __construct(\Chrome_Context_Application_Interface $app, \Chrome\Model\User\Registration_Interface $registrationModel)
     {
         $this->_appContext = $app;
-        $this->_model = $app->getModelContext()->getFactory()->build('Chrome_Model_Register');
-        $this->_modelUser = $app->getModelContext()->getFactory()->build('\Chrome\Model\User_Interface');
+        $this->_model = $registrationModel;
     }
 
-    public function addRegistrationRequest($name, $password, $email)
+    public function addRegistrationRequest($name, $password, $email, \Chrome\Helper\User\Email_Interface $helper)
     {
         $requestAdded = false;
+
+        if(!$helper->isEmailValid($email)) {
+            // TODO: implement the details
+            return false;
+        }
 
         try {
 
             $passwordSalt = \Chrome_Hash::randomChars(self::CHROME_MODEL_REGISTER_PW_SALT_LENGTH);
             $password = \Chrome_Hash::getInstance()->hash_algo($password, CHROME_USER_HASH_ALGORITHM, $passwordSalt);
 
-            $activationKey = $this->_generateActivationKey();
+            // TODO: check whether password is strong enough, email is valid
 
-            $helper = new \Chrome\Helper\User\Email($this->_appContext->getModelContext()->getFactory());
+            $activationKey = $this->_generateActivationKey();
 
             if($helper->emailIsUsed($email) === true) {
                 // TODO: email is used, so cannot create a new registration request with this email, implement the details
@@ -98,6 +104,45 @@ class Registration
 
         // another try
         return $this->generateActivationKey($retryTimes++);
+    }
+
+    public function activateRegistrationRequest($activationKey, \Chrome\Model\User\User_Interface $userModel, \Chrome\Helper\Authentication\Creation_Interface $authHelper)
+    {
+        if($this->isRegistrationRequestActivateable($activationKey) !== true) {
+            $this->_model->discardRegistrationRequestByActivationKey($activationKey);
+            // TODO: set proper error
+            return false;
+        }
+
+        $request = $this->_model->getRegistrationRequestByActivationKey($activationKey);
+
+        if(!($request instanceof \Chrome\Model\User\Registration\Request_Interface)) {
+            // TODO: set proper error
+            return false;
+        }
+
+        try {
+            $userModel->addUser($request->getName(), $request->getEmail());
+        } catch(Chrome_Exception $e) {
+            // TODO: set proper error
+            return false;
+        }
+
+        $authHelper->createAuthentication($request->getHashedPassword(), $request->getPasswordSalt());
+        // TODO: add authenticate, group etc..
+
+        try {
+            $this->_model->discardRegistrationRequestByActivationKey($activationKey);
+        } catch(Chrome_Exception $e) {
+            // TODO: what now?
+        }
+
+        return true;
+    }
+
+    public function isRegistrationRequestActivateable($activationKey)
+    {
+
     }
 
 }

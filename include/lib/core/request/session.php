@@ -17,9 +17,6 @@
  * @subpackage Chrome.Session
  */
 
-if(CHROME_PHP !== true)
-    die();
-
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Session
@@ -181,14 +178,22 @@ class Chrome_Session implements Chrome_Session_Interface
     protected $_hash     = null;
 
     /**
+     * The request data
+     *
+     * @var Chrome_Request_Data_Interface
+     */
+    protected $_requestData = null;
+
+    /**
      * Chrome_Session::__construct()
      *
      * @return Chrome_Session
      */
-    public function __construct(Chrome_Cookie_Interface $cookie, Chrome_Hash_Interface $hash)
+    public function __construct(Chrome_Cookie_Interface $cookie, Chrome_Request_Data_Interface $requestData, Chrome_Hash_Interface $hash)
     {
         $this->_cookie = $cookie;
         $this->_hash   = $hash;
+        $this->_requestData = $requestData;
 
         // garbace collector should never run... we have an own implementation
         @ini_set('session.gc_probability', 0);
@@ -355,8 +360,8 @@ class Chrome_Session implements Chrome_Session_Interface
         // create new ID AND salt
         $uniqid = $this->_hash->hash(uniqid(mt_rand(), true));
         $salt = $this->_hash->hash(uniqid(mt_rand(), true));
-        $userAgent = $this->_hash->hash($_SERVER['HTTP_USER_AGENT'], $salt);
-        $remoteAddr = $this->_hash->hash($_SERVER['REMOTE_ADDR'], $salt);
+        $userAgent = $this->_hash->hash($this->_requestData->getSERVERData('HTTP_USER_AGENT'), $salt);
+        $remoteAddr = $this->_hash->hash($this->_requestData->getSERVERData('REMOTE_ADDR'), $salt);
 
         // start session AND set cookie
         session_id($uniqid);
@@ -387,8 +392,8 @@ class Chrome_Session implements Chrome_Session_Interface
         // create new ID and salt
         $uniqid = $this->_hash->hash(uniqid(mt_rand(), true));
         $salt = $this->_hash->hash(uniqid(mt_rand(), true));
-        $userAgent = $this->_hash->hash($_SERVER['HTTP_USER_AGENT'], $salt);
-        $remoteAddr = $this->_hash->hash($_SERVER['REMOTE_ADDR'], $salt);
+        $userAgent = $this->_hash->hash($this->_requestData->getSERVERData('HTTP_USER_AGENT'), $salt);
+        $remoteAddr = $this->_hash->hash($this->_requestData->getSERVERData('REMOTE_ADDR'), $salt);
 
         // start session AND set cookie
         session_id($uniqid);

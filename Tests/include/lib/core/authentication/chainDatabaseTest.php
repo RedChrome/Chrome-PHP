@@ -13,7 +13,7 @@ class AuthenticationChainDatabaseTest extends Chrome_TestCase
     public function setUp()
     {
         if($this->_model === null) {
-            $this->_model = new Chrome_Model_Authentication_Database($this->_appContext->getModelContext());
+            $this->_model = new Chrome_Model_Authentication_Database($this->_diContainer->get('\Chrome_Database_Factory_Interface'), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface'));
         }
 
         $this->_chain = new Chrome_Authentication_Chain_Database($this->_model, $this->_updateTime, $this->_setTime);

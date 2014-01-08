@@ -18,8 +18,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * @package CHROME-PHP
@@ -28,9 +26,30 @@ if(CHROME_PHP !== true)
 interface Chrome_Model_Database_Statement_Interface
 {
     public function getStatement($key);
+
+    public function setNamespace($namespace);
+
+    /**
+     * Sets the database name of the used database
+     *
+     * Since some databases use other sql commands, we have to use for every database
+     * other sql-queries. This method will help to identify the correct sql-queries.
+     *
+     * @param string $connectionName
+     */
+    public function setDatabaseName($databaseNmae);
 }
 
-class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract
+interface Chrome_Database_Interface_Model_Interface
+{
+    public function loadQuery($key);
+
+    public function execute(array $parameters = array());
+
+    public function setModel(Chrome_Model_Database_Statement_Interface $model);
+}
+
+class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract implements Chrome_Database_Interface_Model_Interface
 {
     protected $_model = null;
 
@@ -60,8 +79,20 @@ class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract
 
     public function loadQuery($key)
     {
-        $this->clear();
-        $this->_checkModel();
+        if($this->_model === null)
+        {
+            throw new Chrome_Exception('No model set, which contains the stored queries');
+        }
+
+        // only clear, if there was a query sent before..
+        if($this->_query !== null) {
+            $this->clear();
+        } else {
+            // we have to inform the model which database we're using, since the model will determine
+            // the sql query depending of the database
+            $this->_model->setDatabaseName($this->_adapter->getConnection()->getDatabaseName());
+        }
+
         try
         {
             $this->_query = $this->_model->getStatement($key);
@@ -71,139 +102,69 @@ class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract
         }
         return $this;
     }
-
-    protected function _checkModel()
-    {
-        if($this->_model === null)
-        {
-            throw new Chrome_Exception('No model set, which contains the stored queries');
-        }
-    }
 }
+
+
 class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implements Chrome_Model_Database_Statement_Interface
 {
-    private static $_caches = array();
     const DEFAULT_NAMESPACE = 'core';
 
-    public function __construct($namespace, $database)
+    // TODO: make this non-static, and add a cache in constructor
+    protected static $_caches = array();
+
+    protected $_database = null;
+    protected $_namespace = null;
+
+    public function __construct($namespace = null)
     {
-        if(!is_string($namespace) or !is_string($database))
-        {
-            throw new Chrome_InvalidArgumentException('$namespace and $database must be of type string!');
+        if(!is_string($namespace)) {
+            $namespace = self::DEFAULT_NAMESPACE;
         }
 
-        $this->_namespace = $namespace;
-        $this->_database = $database;
+        $this->setNamespace($namespace);
+    }
 
-        if(isset(self::$_caches[$this->_database][$this->_namespace]))
-        {
+    protected function _initCache()
+    {
+        // only init cache, if all needed params are set.
+        if($this->_database === null OR $this->_namespace === null) {
+            return;
+        }
+
+        if(isset(self::$_caches[$this->_database][$this->_namespace])) {
             $this->_cache = self::$_caches[$this->_database][$this->_namespace];
-        } else
-        {
+        } else {
+            // use parent constructor to create a cache, this will be available in $this->_cache.
             parent::__construct($this);
             self::$_caches[$this->_database][$this->_namespace] = $this->_cache;
         }
     }
 
-    public static function create($databaseObject, $namespace = null)
+    public function setDatabaseName($databaseName)
     {
-        if($namespace === null)
-        {
-            $namespace = self::DEFAULT_NAMESPACE;
+        if(!is_string($databaseName)) {
+            throw new Chrome_InvalidArgumentException('Argument $databaseName must be of type string');
         }
 
-        $database = null;
+        $this->_database = $databaseName;
 
-        if($databaseObject instanceof Chrome_Database_Connection_Interface) {
-            $database = $databaseConnection->getDatabaseName();
-        } elseif($databaseObject instanceof Chrome_Database_Factory_Interface)
-        {
-            $database = $databaseObject->getConnectionRegistry()->getConnectionObject(Chrome_Database_Registry_Connection_Interface::DEFAULT_CONNECTION)->getDatabaseName();
-        } else {
-            throw new Chrome_InvalidArgumentException('$databaseObject must be of instance Chrome_Database_Connection_Interface or Chrome_Database_Factory_Interface');
+        $this->_initCache();
+    }
+
+    public function setNamespace($namespace)
+    {
+        if(!is_string($namespace)) {
+            throw new Chrome_InvalidArgumentException('Argument $namspace must be of type string');
         }
 
-        return new self($namespace, $database);
-    }
-
-    public static function clearCaches()
-    {
-        self::$_caches = array();
-    }
-
-    protected function _setUpCache()
-    {
-        $this->_cacheOption = new Chrome_Cache_Option_Json();
-        $this->_cacheOption->setCacheFile(RESOURCE . 'database/' . strtolower($this->_database) . '/' . strtolower($this->_namespace) . '.json');
-        $this->_cacheInterface = 'Json';
-    }
-
-    public function getStatement($key)
-    {
-        $statement = $this->_cache->get($key);
-
-        // could not get statement
-        if($statement === null)
-        {
-            throw new Chrome_Exception('Could not retrieve sql statement for key "' . $key . '"!');
-        }
-
-        return $statement;
-    }
-}
-
-/*
-class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implements Chrome_Model_Database_Statement_Interface
-{
-
-    private static $_instances = array();
-    protected $_namespace = null;
-    protected $_database = null;
-    const DEFAULT_NAMESPACE = 'core';
-    const DEFAULT_DATABASE = CHROME_DATABASE;
-
-    public function __construct($namespace, $database)
-    {
         $this->_namespace = $namespace;
 
-        if($database instanceof Chrome_Database_Connection_Interface)
-        {
-            $this->_database = strtolower($database->getDefaultAdapterSuffix());
-        } else
-        {
-            $this->_database = $database;
-        }
-
-        parent::__construct($this);
+        $this->_initCache();
     }
 
-    public static function getInstance($namespace = null, $database = null)
+    public function clearCache()
     {
-        if($namespace === null)
-        {
-            $namespace = self::DEFAULT_NAMESPACE;
-        }
-
-        if($database instanceof Chrome_Database_Connection_Interface)
-        {
-            $database = strtolower($database->getDefaultAdapterSuffix());
-        } else
-        {
-            $database = $database;
-        }
-
-        if($database === null)
-        {
-            $database = self::DEFAULT_DATABASE;
-        }
-
-        if(!isset(self::$_instances[$database][$namespace]))
-        {
-
-            self::$_instances[$database][$namespace] = new self($namespace, $database);
-        }
-
-        return self::$_instances[$database][$namespace];
+        $this->_caches = array();
     }
 
     protected function _setUpCache()
@@ -215,15 +176,18 @@ class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implem
 
     public function getStatement($key)
     {
+        if($this->_cache === null) {
+            throw new Chrome_Exception('No database select. Use setDatabaseName before calling getStatement');
+        }
+
         $statement = $this->_cache->get($key);
 
         // could not get statement
         if($statement === null)
         {
-            throw new Chrome_Exception('Could not retrieve sql statement for key "' . $key . '"!');
+            throw new Chrome_Exception('Could not retrieve sql statement for key "' . $key . '" for database "'.$this->_database.'" and namespace "'.$this->_namespace.'"!');
         }
 
         return $statement;
     }
 }
-*/

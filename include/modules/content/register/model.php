@@ -2,28 +2,23 @@
 
 //TODO: create interface for this class
 // todo: refactor this class. e.g. sendRegisterEmail has nothign to do with this model
-class Chrome_Model_Register extends Chrome_Model_Database_Abstract
+class Chrome_Model_Register extends Chrome_Model_Database_Statement_Abstract
 {
     const CHROME_MODEL_REGISTER_PW_SALT_LENGTH = 20;
     const CHROME_MODEL_REGISTER_TABLE = 'user_regist';
-    protected $_applicationContext = null;
+
+    protected $_config = null;
 
     protected function _setDatabaseOptions()
     {
-        $this->_dbInterface = 'model';
         $this->_dbResult = 'assoc';
+        $this->_dbStatementModel->setNamespace('register');
     }
 
-    public function __construct(Chrome_Context_Application_Interface $app)
+    public function __construct(Chrome_Database_Factory_Interface $factory, Chrome_Model_Database_Statement_Interface $statementModel, Chrome_Config_Interface $config)
     {
-        $this->_applicationContext = $app;
-        parent::__construct($app->getModelContext());
-    }
-
-    protected function _connect()
-    {
-        parent::_connect();
-        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory(), 'register'));
+        $this->_config = $config;
+        parent::__construct($factory, $statementModel);
     }
 
     //TODO: should not be in a model
@@ -83,7 +78,7 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
             $db->loadQuery('registerAddRegistrationRequest')->execute(array($name, $password, $passwordSalt, $email, CHROME_TIME, $activationKey));
         } catch(Chrome_Exception_Database $e)
         {
-
+            // TODO: cannor rely on this
             $this->getLogger()->error($e);
 
             return false;
@@ -195,9 +190,8 @@ class Chrome_Model_Register extends Chrome_Model_Database_Abstract
             return false;
         }
 
-        if(CHROME_TIME - $result['time'] > $this->_applicationContext->getConfig()->getConfig('Registration', 'expiration'))
+        if(CHROME_TIME - $result['time'] > $this->_config->getConfig('Registration', 'expiration'))
         {
-
             $this->_deleteActivationKey($activationKey);
             return false;
         }

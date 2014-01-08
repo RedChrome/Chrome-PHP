@@ -1089,6 +1089,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
                     $this->_setSentData($value);
                     break;
                 }
+            // TODO: do not implement this, use a router class
             case self::ATTRIBUTE_ACTION:
                 {
                     if(strpos($value, ROOT_URL) === false)

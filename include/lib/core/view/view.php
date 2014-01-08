@@ -166,7 +166,32 @@ abstract class Chrome_View_Strategy_Abstract extends Chrome_View_Abstract
     }
 }
 
-class Chrome_View_Template_Simple_Abstract extends Chrome_View_Abstract
+abstract class NEWChrome_View_Strategy_Abstract extends Chrome_View
+{
+    protected $_views = array();
+
+    public function render()
+    {
+        $return = '';
+
+        if(!is_array($this->_views)) {
+            $this->_views = array($this->_views);
+        }
+
+        foreach($this->_views as $view) {
+            $return .= $view->render();
+        }
+
+        return $return;
+    }
+
+    public function addRenderable(Chrome_Renderable $renderable)
+    {
+        $this->_views[] = $renderable;
+    }
+}
+
+class Chrome_View_Template_Simple_Abstract extends Chrome_View
 {
     protected $_templateFile = '';
 

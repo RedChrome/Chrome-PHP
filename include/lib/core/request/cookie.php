@@ -16,8 +16,6 @@
  * @package    CHROME-PHP
  * @subpackage Chrome.Cookie
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * @package CHROME-PHP
@@ -136,6 +134,13 @@ class Chrome_Cookie implements Chrome_Cookie_Interface
     protected $_hash = null;
 
     /**
+     * The request data
+     *
+     * @var Chrome_Request_Data_Interface
+     */
+    protected $_requestData = null;
+
+    /**
      * Chrome_cookie::__construct()
      *
      * @return Chrome_cookie
@@ -143,7 +148,7 @@ class Chrome_Cookie implements Chrome_Cookie_Interface
     public function __construct(Chrome_Request_Data_Interface $requestData, Chrome_Hash_Interface $hash = null)
     {
         $this->_hash = $hash;
-
+        $this->_requestData = $requestData;
         $this->_cookie = $requestData->getCOOKIEData();
 
         if(!is_array($this->_cookie)) {
@@ -267,7 +272,9 @@ class Chrome_Cookie implements Chrome_Cookie_Interface
         }
 
         // you can modifie this, so you get a better protection against session hijacking
-        $string = 'random_string.' . $_SERVER['HTTP_USER_AGENT'] . $_SERVER['HTTP_USER_AGENT'] {2} . $_SERVER['HTTP_USER_AGENT'] {0};
+
+        $serverData = $this->_requestData->getSERVERData('HTTP_USER_AGENT');
+        $string = 'random_string.' . $serverData . $serverData{2} . $serverData{0};
 
         $this->_validationCode  = $this->_hash->hash($string);
 

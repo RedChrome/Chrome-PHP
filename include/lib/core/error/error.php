@@ -14,12 +14,8 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.11.2012 11:46:08] --> $
+ * @subpackage Chrome.Exception
  */
-
-if(CHROME_PHP !== true) die();
 
 if(CHROME_DEVELOPER_STATUS === true or CHROME_DISPLAY_ERRORS !== '') {
     @ini_set('display_errors', 'On');

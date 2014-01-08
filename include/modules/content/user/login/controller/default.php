@@ -32,7 +32,7 @@ class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Module_A
 
     protected function _handleForm()
     {
-        if($this->_model->isLoggedIn() == true)
+        if($this->_applicationContext->getAuthentication()->isUser() == true)
         {
             $this->_view->alreadyLoggedIn();
         } else
@@ -76,7 +76,7 @@ class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Module_A
 
         $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_User_Login_Default', $this);
 
-        $this->_model = new Chrome_Model_Login($this->_applicationContext, $this->_form);
+        //$this->_model = new Chrome_Model_Login($this->_applicationContext, $this->_form);
 
         $this->_form->create();
 

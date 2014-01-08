@@ -119,8 +119,14 @@ if($found == false) {
 
 define('ROOT_URL', dirname($rooturl));
 define('ROOT', dirname(dirname(__file__)));
-define('_PUBLIC', str_repeat('../', substr_count(substr($_SERVER['REQUEST_URI'], (strlen(ROOT_URL))+2), '/')) .'public/');
-define('IMAGE', $fileLevel . 'public/image/');
+
+// TODO: remove this const since this will be available in a appropriate class
+if(isset($_SERVER['REQUEST_URI'])) {
+    define('_PUBLIC', str_repeat('../', substr_count(substr($_SERVER['REQUEST_URI'], (strlen(ROOT_URL))+2), '/')) .'public/');
+} else {
+    define('_PUBLIC', 'Tests/');
+}
+define('IMAGE', _PUBLIC.'image/');
 define('VIEW', $fileLevel . 'include/modules/');
 define('MODULE', VIEW);
 define('CONTENT', VIEW . 'content/');

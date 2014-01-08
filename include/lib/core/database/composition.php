@@ -15,18 +15,11 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category   CHROME-PHP
  * @package    CHROME-PHP
  * @subpackage Chrome.Database
- * @author     Alexander Book <alexander.book@gmx.de>
- * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [06.03.2013 22:01:00] --> $
- * @link       http://chrome-php.de
  */
 
-if(CHROME_PHP !== true) die();
-
+// TODO: remove setInterface and setResult
 interface Chrome_Database_Composition_Interface
 {
     public function merge(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null);

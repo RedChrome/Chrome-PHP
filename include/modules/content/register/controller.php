@@ -12,11 +12,14 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
 
     protected $_session;
 
-    protected function _initialize()
+    protected $_authorisation = null;
+
+    public function __construct(Chrome_Context_Application_Interface $appContext, Chrome_Model_Register $model, Chrome_View_Register $view)
     {
-        //TODO: move those out of class
-        $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Register', $this);
-        $this->_model = new Chrome_Model_Register($this->_applicationContext);
+        $this->_applicationContext = $appContext;
+        $this->_setRequestHandler($appContext->getRequestHandler());
+        $this->_model = $model;
+        $this->_view = $view;
     }
 
     protected function _execute()
@@ -149,7 +152,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
             $this->_form->create();
         }
 
-        $this->_view->setStepOne();
+        $this->_view->setStepOne($this->_form);
 
         $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = array('step' => 2);
     }
@@ -162,7 +165,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
 
         $this->_form->create();
 
-        $this->_view->setStepTwo();
+        $this->_view->setStepTwo($this->_form);
 
         $array = $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE];
         $array['step'] = 3;

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * CHROME-PHP CMS
  *
@@ -22,12 +21,12 @@
 /**
  * loads dependencies from composer
  */
-require_once LIB.'autoload.php';
+require_once LIB . 'autoload.php';
 
 /**
  * load chrome-php core
  */
-require_once LIB.'core/core.php';
+require_once LIB . 'core/core.php';
 
 /**
  * Application for web requests
@@ -69,7 +68,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
     /**
      *
-     * @var Chrome_Controller_Abstract
+     * @var Chrome_Controller_Interface
      */
     private $_controller = null;
 
@@ -98,11 +97,16 @@ class Chrome_Application_Default implements Chrome_Application_Interface
     private $_classloader = null;
 
     /**
+     *
+     * @var \Chrome\DI\Container_Interface
+     */
+    private $_diContainer = null;
+
+    /**
      * Chrome_Front_Controller::getController()
      *
      * @return Chrome_Controller_Abstract
      */
-
     public function getController()
     {
         return $this->_controller;
@@ -112,13 +116,13 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @return Chrome_Front_Controller
      */
-
     public function __construct(Chrome_Exception_Handler_Interface $exceptionHandler = null)
     {
         $this->_initLoggers();
 
-        if($exceptionHandler === null) {
-            require_once LIB.'exception/frontcontroller.php';
+        if($exceptionHandler === null)
+        {
+            require_once LIB . 'exception/frontcontroller.php';
             $exceptionHandler = new Chrome_Exception_Handler_FrontController($this->_loggerRegistry->get('application'));
         }
 
@@ -129,12 +133,13 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @return void
      */
-
     public function init()
     {
-        try {
+        try
+        {
             $this->_init();
-        } catch(Chrome_Exception $e) {
+        } catch(Chrome_Exception $e)
+        {
             $this->_exceptionHandler->exception($e);
         }
     }
@@ -144,7 +149,6 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @return void
      */
-
     protected function _init()
     {
         $this->_exceptionConfiguration = new Chrome_Exception_Configuration();
@@ -159,8 +163,18 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_applicationContext->setViewContext($viewContext);
         $this->_applicationContext->setModelContext($this->_modelContext);
 
+        // TODO: add needed instances.
+        $this->_initDiContainer();
+        $closureHandler = $this->_diContainer->getHandler('closure');
+        $registryHandler = $this->_diContainer->getHandler('registry');
+        $registryHandler->add('\Chrome_Context_View_Interface', $viewContext);
+        $registryHandler->add('\Chrome_Context_Model_Interface', $this->_modelContext);
+        $registryHandler->add('\Chrome_Context_Application_Interface', $this->_applicationContext);
+        // TODO: ... continue to add those.
+
         $viewFactory = new Chrome_View_Factory($viewContext);
         $viewContext->setFactory($viewFactory);
+        $registryHandler->add('\Chrome_View_Factory_Interface', $viewFactory);
 
         $cacheFactoryRegistry = new \Chrome\Registry\Cache\Factory\Registry();
         $cacheFactoryRegistry->set(\Chrome\Registry\Cache\Factory\Registry::DEFAULT_FACTORY, new Chrome_Cache_Factory());
@@ -170,14 +184,18 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_initLocalization();
 
         $this->_initDatabase();
+        $registryHandler->add('\Chrome_Database_Factory_Interface', $this->_modelContext->getDatabaseFactory());
 
         $this->_initControllerFactory();
 
-        require_once LIB.'core/classloader/model.php';
+        require_once LIB . 'core/classloader/model.php';
+        require_once LIB.'core/database/interface/model.php';
+
         // init require-class, can be skipped if every class is defined
-        $this->_classloader->prependResolver(new \Chrome\Classloader\Resolver_Model(new Chrome_Model_Classloader_Cache(new Chrome_Model_Classloader_Database($this->_modelContext))));
+        $this->_classloader->prependResolver($this->_diContainer->get('\Chrome\Classloader\Resolver_Model_Interface'));
 
         $this->_initConfig();
+        $registryHandler->add('\Chrome_Config_Interface', $this->_applicationContext->getConfig());
 
         $this->_initRequestAndResponse();
 
@@ -207,20 +225,17 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @return void
      */
-
     public function execute()
     {
-        try {
+        try
+        {
             // get the accessed resource by Router
-            $resource = $this->_router
-                    ->route(new Chrome_URI($this->_applicationContext->getRequestHandler()->getRequestData(), true),
-                            $this->_applicationContext->getRequestHandler()->getRequestData());
+            $resource = $this->_router->route(new Chrome_URI($this->_applicationContext->getRequestHandler()->getRequestData(), true), $this->_applicationContext->getRequestHandler()->getRequestData());
 
-            // create controller class and set exception handler
-            $controllerFactory = $this->_applicationContext->getControllerFactoryRegistry()->get();
-            $controllerFactory->loadControllerClass($resource->getClass());
+            $this->_classloader->load($resource->getClass());
+            $this->_controller = $this->_diContainer->get($resource->getClass());
 
-            $this->_controller = $controllerFactory->build($resource->getClass());
+            #$this->_controller = $controllerFactory->build($resource->getClass());
             $this->_controller->setExceptionHandler(new Chrome_Exception_Handler_Default());
 
             $this->_preprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
@@ -228,13 +243,14 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $this->_controller->execute();
 
             // use the design from the controller, but only if he set one design
-            if(($design = $this->_applicationContext->getDesign()) === null) {
+            if(($design = $this->_applicationContext->getDesign()) === null)
+            {
                 $design = new Chrome_Design();
                 $this->_applicationContext->setDesign($design);
 
                 $themeFactory = new Chrome_Design_Factory_Theme($this->_applicationContext);
                 $theme = $themeFactory->build('chrome_one_sidebar');
-                $theme->initDesign($design, $this->_controller);
+                $theme->initDesign($design, $this->_controller, $this->_diContainer);
             }
 
             $this->_applicationContext->getResponse()->write($design->render());
@@ -242,7 +258,8 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $this->_postprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
 
             $this->_applicationContext->getResponse()->flush();
-        } catch(Chrome_Exception $e) {
+        } catch(Chrome_Exception $e)
+        {
             $this->_exceptionHandler->exception($e);
         }
     }
@@ -256,41 +273,32 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $factory->setLogger($this->_loggerRegistry->get('database'));
 
         $this->_modelContext->setDatabaseFactory($factory);
-
         /*
-         * Testing...
-         *
-        define('POSTGRESQL_HOST', 'localhost');
-        define('POSTGRESQL_USER', 'test');
-        define('POSTGRESQL_PASS', 'chrome');
-        define('POSTGRESQL_DB', 'chrome_db');
-        define('POSTGRESQL_SCHEMA', 'chrome');
-        // 5433 -> 9.1, 5432 -> 9.2, 5434 -> 9.3
-        define('POSTGRESQL_PORT', 5433);
-
-        $dbRegistry = $factory->getConnectionRegistry();
-        $postgresqlTestConnection = new Chrome_Database_Connection_Postgresql();
-        $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
-        $postgresqlTestConnection->connect();
-        $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
-        $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
-        #*/
-
+         * Testing... define('POSTGRESQL_HOST', 'localhost'); define('POSTGRESQL_USER', 'test'); define('POSTGRESQL_PASS', 'chrome');
+         * define('POSTGRESQL_DB', 'chrome_db'); define('POSTGRESQL_SCHEMA', 'chrome'); // 5433 -> 9.1, 5432 -> 9.2, 5434 -> 9.3
+         * define('POSTGRESQL_PORT', 5433); $dbRegistry = $factory->getConnectionRegistry();
+         * $postgresqlTestConnection = new Chrome_Database_Connection_Postgresql();
+         * $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
+         * $postgresqlTestConnection->connect(); $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
+         * $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true); #
+         */
     }
 
     protected function _initLocalization($locale = null)
     {
-        if($locale === null) {
+        if($locale === null)
+        {
             $locale = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : CHROME_LOCALIZATION_DEFAULT;
         }
 
-        try {
+        try
+        {
             $locale = new \Chrome\Localization\Locale($locale);
             $localization = new \Chrome\Localization\Localization();
             $localization->setLocale($locale);
             $translate = new \Chrome\Localization\Translate_Simple($localization);
-            #require_once 'Tests/dummies/localization/translate/test.php';
-            #$translate = new \Chrome\Localization\Translate_Test_XX($localization);
+            // require_once 'Tests/dummies/localization/translate/test.php';
+            // $translate = new \Chrome\Localization\Translate_Test_XX($localization);
             $localization->setTranslate($translate);
             $this->_applicationContext->getViewContext()->setLocalization($localization);
         } catch(Chrome_Exception $e)
@@ -301,15 +309,15 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
     protected function _initLoggers()
     {
-        Chrome_Dir::createDir(TMP.CHROME_LOG_DIR, 0777, false);
+        Chrome_Dir::createDir(TMP . CHROME_LOG_DIR, 0777, false);
 
         $dateFormat = 'Y-m-d H:i:s:u';
-        $output = '[%datetime%] %channel%.%level_name%: %message%. %context% %extra%'.PHP_EOL;
+        $output = '[%datetime%] %channel%.%level_name%: %message%. %context% %extra%' . PHP_EOL;
 
         $formatter = new \Monolog\Formatter\LineFormatter($output, $dateFormat);
         $processor = new Chrome\Logger\Processor\Psr();
-        $stream = new \Monolog\Handler\StreamHandler(TMP.CHROME_LOG_DIR.'log.log');
-        $streamDatabase = new \Monolog\Handler\StreamHandler(TMP.CHROME_LOG_DIR.'database.log');
+        $stream = new \Monolog\Handler\StreamHandler(TMP . CHROME_LOG_DIR . 'log.log');
+        $streamDatabase = new \Monolog\Handler\StreamHandler(TMP . CHROME_LOG_DIR . 'database.log');
         $stream->setFormatter($formatter);
         $stream->pushProcessor($processor);
         $streamDatabase->setFormatter($formatter);
@@ -319,7 +327,8 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $loggers = array('application', 'router', 'autoloader');
 
-        foreach($loggers as $loggerName) {
+        foreach($loggers as $loggerName)
+        {
             $logger = new \Monolog\Logger($loggerName);
             $logger->pushHandler($stream);
 
@@ -341,6 +350,8 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $controllerFactoryRegistry->set(\Chrome\Registry\Controller\Factory\Registry_Single::DEFAULT_FACTORY, $controllerFactory);
 
         $this->_applicationContext->setControllerFactoryRegistry($controllerFactoryRegistry);
+
+        $this->_diContainer->getHandler('registry')->add('\Chrome_Controller_Factory_Interface', $controllerFactory);
     }
 
     protected function _initClassloader()
@@ -349,13 +360,13 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_classloader = new \Chrome\Classloader\Classloader();
         $this->_applicationContext->setClassloader($this->_classloader);
 
-        //$this->_autoloader = new Chrome_Require_Autoloader();
+        // $this->_autoloader = new Chrome_Require_Autoloader();
         $this->_classloader->setLogger($this->_loggerRegistry->get('autoloader'));
         $this->_classloader->setExceptionHandler(new Chrome_Exception_Handler_Default());
 
-        require_once PLUGIN.'classloader/database.php';
-        require_once PLUGIN.'classloader/cache.php';
-        require_once PLUGIN.'classloader/model.php';
+        require_once PLUGIN . 'classloader/database.php';
+        require_once PLUGIN . 'classloader/cache.php';
+        require_once PLUGIN . 'classloader/model.php';
 
         $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver_Database());
         $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver_Cache());
@@ -375,8 +386,8 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $authentication = new Chrome_Authentication();
         $authentication->setExceptionHandler($handler);
 
-        $dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($this->_modelContext));
-        $cookieAuth = new Chrome_Authentication_Chain_Cookie(new Chrome_Model_Authentication_Cookie($this->_modelContext), $cookie);
+        $dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($this->_modelContext->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface')));
+        $cookieAuth = new Chrome_Authentication_Chain_Cookie(new Chrome_Model_Authentication_Cookie($this->_modelContext->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface')), $cookie);
         $sessionAuth = new Chrome_Authentication_Chain_Session($session);
 
         // set authentication chains in the right order
@@ -387,7 +398,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         // set authorisation service
         // Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB())); // better one, but not finished ;)
         $adapter = new Chrome_Authorisation_Adapter_Default($authentication);
-        $adapter->setModel(new Chrome_Model_Authorisation_Default_DB($this->_modelContext));
+        $adapter->setModel($this->_diContainer->get('\Chrome_Model_Authorisation_Default_Interface'));
 
         $authorisation = new Chrome_Authorisation($adapter);
 
@@ -436,7 +447,9 @@ class Chrome_Application_Default implements Chrome_Application_Interface
     protected function _initConfig()
     {
         // configuration
-        $config = new Chrome_Config(new Chrome_Model_Config_Cache(new Chrome_Model_Config_Database($this->_modelContext)));
+        $closure = $this->_diContainer->getHandler('closure');
+
+        $config = new Chrome_Config($this->_diContainer->get('\Chrome_Model_Config_Interface'));
         $this->_applicationContext->setConfig($config);
     }
 
@@ -449,12 +462,10 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $routerLogger = $this->_loggerRegistry->get('router');
         // import(array('Chrome_Route_Static', 'Chrome_Route_Dynamic') );
         // matches static routes
-        $this->_router
-                ->addRoute(new Chrome_Route_Static(new Chrome_Model_Route_Static_Cache(new Chrome_Model_Route_Static_DB($this->_modelContext)), $routerLogger));
+
+        $this->_router->addRoute(new Chrome_Route_Static($this->_diContainer->get('\Chrome_Model_Route_Static_Interface'), $routerLogger));
         // matches dynamic created routes
-        $this->_router
-                ->addRoute(
-                        new Chrome_Route_Dynamic(new Chrome_Model_Route_Dynamic_Cache(new Chrome_Model_Route_Dynamic_DB($this->_modelContext)), $routerLogger));
+        $this->_router->addRoute(new Chrome_Route_Dynamic($this->_diContainer->get('\Chrome_Model_Route_Dynamic_Interface'), $routerLogger));
         // matches routes to administration site
         $this->_router->addRoute(new Chrome_Route_Administration(new Chrome_Model_Route_Administration($this->_modelContext), $routerLogger));
     }
@@ -474,13 +485,99 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_applicationContext->setConverter($converter);
     }
 
+    protected function _initDiContainer()
+    {
+
+        $this->_diContainer = new \Chrome\DI\Container();
+        require_once LIB . 'core/dependency_injection/closure.php';
+        require_once LIB . 'core/dependency_injection/registry.php';
+        require_once LIB . 'core/dependency_injection/controller.php';
+        $registry = new \Chrome\DI\Handler\Registry();
+        $closure = new \Chrome\DI\Handler\Closure();
+        $controller = new \Chrome\DI\Handler\Controller();
+
+        $this->_diContainer->attachHandler('registry', $registry);
+        $this->_diContainer->attachHandler('closure', $closure);
+        $this->_diContainer->attachHandler('controller', $controller);
+
+        $closure->add('\Chrome_Model_Config_Database', function ($container) {
+            return new Chrome_Model_Config_Database($container->get('\Chrome_Database_Factory_Interface'), $container->get('\Chrome_Model_Database_Statement_Interface'));
+        });
+
+        $closure->add('\Chrome_Model_Config_Interface', function ($container) {
+            return new Chrome_Model_Config_Cache($container->get('\Chrome_Model_Config_Database'));
+        }, true);
+
+        $closure->add('\Chrome_Model_Database_Statement_Interface', function ($container) {
+            return new \Chrome_Model_Database_Statement();
+        });
+
+        $closure->add('\Chrome_Model_Classloader_Database', function ($c) {
+            return new \Chrome_Model_Classloader_Database($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'));
+        });
+
+        $closure->add('\Chrome_Model_Route_Static_Interface', function ($c) {
+            return new \Chrome_Model_Route_Static_Cache($c->get('\Chrome_Model_Route_Static_DB'));
+        }, true);
+
+        $closure->add('\Chrome_Model_Route_Static_DB', function ($c) {
+            return new Chrome_Model_Route_Static_DB($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'));
+        });
+
+        $closure->add('\Chrome_Design_Loader_Interface', function ($c) {
+            $controllerFactory = $c->get('\Chrome_Controller_Factory_Interface');
+            $viewFactory = $c->get('\Chrome_View_Factory_Interface');
+            $model = $c->get('\Chrome_Model_Design_Loader_Static_Interface');
+            return new Chrome_Design_Loader_Static($controllerFactory, $viewFactory, $model);
+        });
+
+        $closure->add('\Chrome_Model_Design_Loader_Static_Interface', function ($c) {
+            return new Chrome_Model_Design_Loader_Static_Cache($c->get('\Chrome_Model_Design_Loader_Static_DB'));
+        }, true);
+
+        $closure->add('\Chrome_Model_Design_Loader_Static_DB', function ($c) {
+            return new Chrome_Model_Design_Loader_Static($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'));
+        });
+
+        $closure->add('\Chrome\Classloader\Resolver_Model_Interface', function ($c) {
+            return new \Chrome\Classloader\Resolver_Model($c->get('\Chrome_Model_Classloader_Model_Interface'));
+        });
+
+        $closure->add('\Chrome_Model_Classloader_Model_Interface', function ($c) {
+            return new Chrome_Model_Classloader_Cache($c->get('\Chrome_Model_Classloader_Model_Database'));
+        }, true);
+
+        $closure->add('\Chrome_Model_Classloader_Model_Database', function ($c) {
+            return new Chrome_Model_Classloader_Database($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'));
+        });
+
+        $closure->add('\Chrome_Model_Authorisation_Default_Interface', function ($c) {
+            return new Chrome_Model_Authorisation_Default_DB($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'));
+        });
+
+        $closure->add('\Chrome_Model_Route_Dynamic_Interface', function ($c) {
+            return new Chrome_Model_Route_Dynamic_Cache($c->get('\Chrome_Model_Route_Dynamic_DB'));
+        });
+
+        $closure->add('\Chrome_Model_Route_Dynamic_DB', function ($c) {
+            return new Chrome_Model_Route_Dynamic_DB($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'));
+        });
+
+        $closure->add('\Chrome_Model_Register', function ($c) {
+            return new Chrome_Model_Register($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'), $c->get('\Chrome_Config_Interface'));
+        });
+
+        $closure->add('Chrome_Controller_Register', function ($c) {
+            return new Chrome_Controller_Register($c->get('\Chrome_Context_Application_Interface'), $c->get('\Chrome_Model_Register'), new Chrome_View_Register($c->get('\Chrome_Context_View_Interface')));
+        });
+    }
+
     /**
      * setExceptionHandler()
      *
      * @param mixed $obj
      * @return void
      */
-
     public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)
     {
         $this->_exceptionHandler = $obj;
@@ -491,7 +588,6 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @return Chrome_Exception_Handler_Interface
      */
-
     public function getExceptionHandler()
     {
         return $this->_exceptionHandler;
@@ -500,6 +596,11 @@ class Chrome_Application_Default implements Chrome_Application_Interface
     public function getApplicationContext()
     {
         return $this->_applicationContext;
+    }
+
+    public function getDiContainer()
+    {
+        return $this->_diContainer;
     }
 
     public function getExceptionConfiguration()

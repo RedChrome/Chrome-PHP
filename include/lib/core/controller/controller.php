@@ -15,13 +15,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:55:42] --> $
- * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 require_once 'factory.php';
 require_once 'registry.php';
@@ -33,7 +27,6 @@ require_once 'registry.php';
  */
 interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Interface
 {
-
     /**
      * execute()
      *
@@ -42,11 +35,11 @@ interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Inter
     public function execute();
 
     /**
-     *
+     * @todo remove
      * @param Chrome_Context_Application_Interface $appContext
      * @return Chrome_Controller_Interface
      */
-    public function __construct(Chrome_Context_Application_Interface $appContext);
+    //public function __construct(Chrome_Context_Application_Interface $appContext);
 
     /**
      * Sets the application context
@@ -84,7 +77,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      * <code>
      * ...
      * catch(Chrome_Exception $e) {
-     * $this->_exceptionHandler->exception($e);
+     *  $this->_exceptionHandler->exception($e);
      * }
      * </code>
      *

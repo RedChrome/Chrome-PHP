@@ -16,8 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * Chrome_Model_Classloader_Database
@@ -25,7 +23,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Chrome_Model_Classloader_Database extends Chrome_Model_Database_Abstract
+class Chrome_Model_Classloader_Database extends Chrome_Model_Database_Statement_Abstract
 {
 
     /**
@@ -33,13 +31,7 @@ class Chrome_Model_Classloader_Database extends Chrome_Model_Database_Abstract
      */
     protected function _setDatabaseOptions()
     {
-        $this->_dbComposition = new Chrome_Database_Composition('model', 'iterator');
-    }
-
-    protected function _connect()
-    {
-        parent::_connect();
-        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory()));
+        $this->_dbResult = 'iterator';
     }
 
     /**

@@ -15,17 +15,9 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category   CHROME-PHP
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
- * @author     Alexander Book <alexander.book@gmx.de>
- * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.05.2013 22:07:18] --> $
- * @link       http://chrome-php.de
  */
-
-if(CHROME_PHP !== true) die();
 
 /**
  * @package    CHROME-PHP
@@ -196,21 +188,14 @@ class Chrome_Authentication_Resource_Database implements Chrome_Authentication_R
  */
 class Chrome_Authentication_Create_Resource_Database implements Chrome_Authentication_Create_Resource_Database_Interface
 {
-    protected $_identity       = '';
     protected $_credential     = '';
     protected $_credentialSalt = '';
     protected $_id             = null;
 
-    public function __construct($identity, $credential, $salt = null)
+    public function __construct($credential, $salt = null)
     {
-        $this->_identity       = $identity;
         $this->_credential     = $credential;
         $this->_credentialSalt = $salt;
-    }
-
-    public function getIdentity()
-    {
-        return $this->_identity;
     }
 
     public function getCredential()
@@ -238,11 +223,8 @@ class Chrome_Authentication_Create_Resource_Database implements Chrome_Authentic
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstract
+class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Statement_Abstract
 {
-    //protected $_dbInterface = 'interface';
-    protected $_dbInterface = 'model';
-
     protected $_options = array(
                            'dbTable'          => 'authenticate',
                            'dbIdentity'       => 'id',
@@ -251,18 +233,9 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Abstrac
                            'dbTime'           => 'time',
                           );
 
-    public function __construct(Chrome_Context_Model_Interface $model, array $options = array(), Chrome_Database_Composition_Interface $composition = null)
+    public function setOptions(array $options)
     {
-        parent::__construct($model);
-        $this->_dbDIComposition = $composition;
-        $this->_dbComposition = new Chrome_Database_Composition('model');
         $this->_options = array_merge($this->_options, $options);
-    }
-
-    protected function _connect()
-    {
-        parent::_connect();
-        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory()));
     }
 
     /**

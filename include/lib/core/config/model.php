@@ -28,21 +28,13 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Config
  */
-class Chrome_Model_Config_Database extends Chrome_Model_Database_Abstract
+class Chrome_Model_Config_Database extends Chrome_Model_Database_Statement_Abstract
 {
     const TYPE_INT = 'integer', TYPE_STRING = 'string', TYPE_DOUBLE = 'double', TYPE_BOOL = 'boolean';
 
     protected function _setDatabaseOptions()
     {
-        $this->_dbInterface = 'model';
-
         $this->_dbResult = 'iterator';
-    }
-
-    protected function _connect()
-    {
-        parent::_connect();
-        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory()));
     }
 
     public function loadConfig()

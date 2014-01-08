@@ -36,9 +36,16 @@ class Chrome_TestSetup
     protected $_databaseInitialized = false;
     protected $_applicationContext = null;
 
+    protected $_diContainer = null;
+
     public function getApplicationContext()
     {
         return $this->_applicationContext;
+    }
+
+    public function getDiContainer()
+    {
+        return $this->_diContainer;
     }
 
     public function __construct()
@@ -136,6 +143,12 @@ class Chrome_TestSetup
         $application = new Chrome_Application_Test(new Chrome_Exception_Handler_Console());
         $application->setModelContext($this->_applicationContext->getModelContext());
         $application->init();
+        $this->_diContainer = $application->getDiContainer();
+
+        require_once 'Tests/dummies/database/interface/model.php';
+        $this->_diContainer->getHandler('closure')->add('\Chrome_Model_Database_Statement_Test_Interface', function ($c) {
+            return new \Test_Chrome_Model_Database_Statement();
+        });
 
         $modelContext = $this->_applicationContext->getModelContext();
         $context = $application->getApplicationContext();

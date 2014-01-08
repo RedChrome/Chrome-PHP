@@ -52,11 +52,11 @@ class Chrome_Controller_Box_Login extends Chrome_Controller_Module_Abstract
     {
         // setting up
 
-        $this->_model = new Chrome_Model_Login($this->_applicationContext, null);
+        //$this->_model = new Chrome_Model_Login($this->_applicationContext, null);
         $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Box_Login', $this);
 
         // if the user is logged in, then show the user menu
-        if($this->_model->isLoggedIn() === true) {
+        if($this->_applicationContext->getAuthentication()->isUser() === true) {
 
             $this->_view->showUserMenu();
 

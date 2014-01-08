@@ -18,9 +18,34 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Module.User
  */
-namespace \Chrome\Model\User;
+namespace Chrome\Model\User;
 
 interface Registration_Interface
 {
     public function hasEmail($email);
+
+    public function discardRegistrationRequestByEmail($email);
+
+    public function discardRegistrationRequestByActivationKey($activationKey);
+
+    /**
+     * @param string $activationKey
+     * @return Chrome\Model\User\Registration\Request_Interface
+     */
+    public function getRegistrationRequestByActivationKey($activationKey);
+}
+
+namespace Chrome\Model\User\Registration;
+
+interface Request_Interface
+{
+    public function getEmail();
+
+    public function getName();
+
+    public function getId();
+
+    public function getHashedPassword();
+
+    public function getPasswordSalt();
 }

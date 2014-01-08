@@ -16,8 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -26,7 +24,7 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstract
 {
-    public function initDesign(Chrome_Design_Interface $design, Chrome_Controller_Interface $controller)
+    public function initDesign(Chrome_Design_Interface $design, Chrome_Controller_Interface $controller, \Chrome\DI\Container_Interface $diContainer)
     {
         require_once LIB . 'core/design/options/static.php';
         require_once LIB . 'core/design/loader/static.php';
@@ -64,7 +62,6 @@ class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstrac
                             'footer' => $footer,
                             'postBodyIn' => $postBodyIn);
 
-        $model = new Chrome_Model_Design_Loader_Static_Cache(new Chrome_Model_Design_Loader_Static($this->_appContext->getModelContext()));
         $controllerFactory = $this->_appContext->getControllerFactoryRegistry()->get();
         $viewFactory = $this->_appContext->getViewContext()->getFactory();
 
@@ -75,8 +72,9 @@ class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstrac
         {
             $option->setPosition($key);
             $composition->setOption($option);
+            $loader = $diContainer->get('\Chrome_Design_Loader_Interface');
+            $loader->setTheme('chrome_one_sidebar');
 
-            $loader = new Chrome_Design_Loader_Static($controllerFactory, $viewFactory, $model, 'chrome_one_sidebar');
             $loader->addComposition($composition);
             $loader->load();
 

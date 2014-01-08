@@ -17,12 +17,6 @@
  * @subpackage Chrome.Model
  */
 
-/**
- * A abstract model which gets it's data from a database
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Model
- */
 abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
 {
     protected $_dbAdapter = Chrome_Database_Factory_Interface::DEFAULT_ADAPTER;
@@ -30,29 +24,35 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
     protected $_dbResult = Chrome_Database_Factory_Interface::DEFAULT_RESULT;
     protected $_dbConnection = Chrome_Database_Registry_Connection_Interface::DEFAULT_CONNECTION;
 
-    // this is a composition set INSIDE the child class
-    protected $_dbComposition = null;
+    private $_dbInterfaceInstance = null;
 
-    // this is a composition injected from OUTSIDE the child class
-    protected $_dbDIComposition = null;
-    protected $_dbInterfaceInstance = null;
+    protected $_dbFactory = null;
 
-    public function __construct(Chrome_Context_Model_Interface $modelContext)
+    /**
+     * @param Chrome_Context_Model_Interface $modelContext
+     */
+    public function __construct(Chrome_Database_Factory_Interface $databaseFactory)
     {
-        $this->setModelContext($modelContext);
+        $this->_dbFactory = $databaseFactory;
+    }
+
+    public function setAdapter($adapter)
+    {
+        $this->_dbAdapter = $adapter;
+    }
+
+    public function setConnection($connection)
+    {
+        $this->_dbConnection = $connection;
     }
 
     protected function _connect()
     {
         $this->_setDatabaseOptions();
 
-        if($this->_dbComposition !== null)
-        {
-            $this->_dbInterfaceInstance = $this->_modelContext->getDatabaseFactory()->buildInterfaceViaComposition($this->_dbComposition, $this->_dbDIComposition);
-        } else
-        {
-            $this->_dbInterfaceInstance = $this->_modelContext->getDatabaseFactory()->buildInterface($this->_dbInterface, $this->_dbResult, $this->_dbConnection, $this->_dbAdapter);
-        }
+        $this->_dbInterfaceInstance = $this->_dbFactory->buildInterface($this->_dbInterface, $this->_dbResult, $this->_dbConnection, $this->_dbAdapter);
+
+        return $this->_dbInterfaceInstance;
     }
 
     /**
@@ -87,22 +87,24 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
     }
 }
 
-/**
- * A abstract model which needs also a application context.
- *
- * This model gets it's data from the database
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Model
- */
-abstract class Chrome_Model_Database_Application_Abstract extends Chrome_Model_Database_Abstract
+abstract class Chrome_Model_Database_Statement_Abstract extends Chrome_Model_Database_Abstract
 {
-    protected $_applicationContext = null;
+    protected $_dbStatementModel = null;
 
-    public function __construct(Chrome_Context_Application_Interface $appContext)
+    protected $_dbInterface = 'model';
+
+    public function __construct(Chrome_Database_Factory_Interface $factory, Chrome_Model_Database_Statement_Interface $statementModel)
     {
-        $this->_applicationContext = $appContext;
+        parent::__construct($factory);
+        $this->_dbStatementModel = $statementModel;
+    }
 
-        parent::__construct($appContext->getModelContext());
+    protected function _connect()
+    {
+        $interfaceInstance = parent::_connect();
+
+        if($interfaceInstance instanceof Chrome_Database_Interface_Model_Interface) {
+            $interfaceInstance->setModel($this->_dbStatementModel);
+        }
     }
 }

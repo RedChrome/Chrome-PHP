@@ -11,13 +11,15 @@ class RegisterModelTest extends Chrome_TestCase
 
     public function setUp()
     {
-        $this->_model = new Chrome_Model_Register($this->_appContext);
+        $this->_model = new Chrome_Model_Register($this->_diContainer->get('\Chrome_Database_Factory_Interface'), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface'), $this->_diContainer->get('\Chrome_Config_Interface'));
         $this->_db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('model', 'assoc');
-        $this->_db->setModel(Chrome_Model_Database_Statement::create($this->_appContext->getModelContext()->getDatabaseFactory(), 'test'));
+        $model = $this->_diContainer->get('\Chrome_Model_Database_Statement_Test_Interface');
+        $model->setNamespace('test');
+        $this->_db->setModel($model);
 
         $auth = new Chrome_Authentication();
 
-        $dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($this->_appContext->getModelContext()));
+        $dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($this->_diContainer->get('\Chrome_Database_Factory_Interface'), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface')));
         $auth->addChain($dbAuth);
 
         $this->_appContext->setAuthentication($auth);
@@ -28,9 +30,7 @@ class RegisterModelTest extends Chrome_TestCase
             $this->_db->loadQuery('registerModelTest_DeleteOldTestValues2')->execute();
             self::$_int++;
         }
-
     }
-
 
     public function testGenerateActivationKeyIsUniqueAndValid()
     {

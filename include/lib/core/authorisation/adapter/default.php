@@ -15,12 +15,8 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Authorisation
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [25.03.2013 16:22:24] --> $
  */
 
-if(CHROME_PHP !== true) die();
 
 /**
  * Chrome_Authorisation_Adapter_Default
@@ -223,19 +219,8 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
  * @package CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
-class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_Database_Abstract
+class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_Database_Statement_Abstract
 {
-    protected function _setDatabaseOptions()
-    {
-        $this->_dbInterface = 'model';
-    }
-
-    protected function _connect()
-    {
-        parent::_connect();
-        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory()));
-    }
-
     public function getAccessById($id, $transformation)
     {
         $db = $this->_getDBInterface();

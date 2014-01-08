@@ -18,29 +18,45 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Module.User
  */
-namespace \Chrome\Helper\User;
+namespace Chrome\Helper\User;
 
 class Email implements Email_Interface
 {
-    protected $_modelFactory = null;
+    protected $_config = null;
+    protected $_userModel = null;
+    protected $_registrationModel = null;
 
-    public function __construct(\Chrome\Model\Factory_Interface $modelFactory)
+    public function __construct(\Chrome\Model\User\User_Interface $userModel, \Chrome\Model\User\Registration_Interface $registrationModel, \Chrome_Config_Interface $config)
     {
-        $this->_modelFactory = modelFactory;
+        $this->_userModel = $userModel;
+        $this->_registrationModel = $registrationModel;
+        $this->_config = $config;
     }
 
     public function emailIsUsed($email)
     {
-        $userModel = $this->_modelFactory->build('\Chrome\Model\User\User_Interface');
-
-        $registrationModel = $this->_modelFactory->build('\Chrome\Model\User\Registration_Interface');
-
-        if($userModel->hasEmail($email) OR $registrationModel->hasEmail($email)) {
+        if($this->_userModel->hasEmail($email) OR $this->_registrationModel->hasEmail($email)) {
             return true;
         }
 
         return false;
     }
 
+    public function isEmailValid($email)
+    {
+        $emailStructureValidator = new \Chrome_Validator_Email_Default();
+        $emailBlacklistValidator = new \Chrome_Validator_Email_Blacklist($this->_config);
 
+        $andComposition = new \Chrome_Validator_Composition_And();
+        $andComposition->addValidator($emailStructureValidator);
+        $andComposition->addValidator($emailBlacklistValidator);
+
+        $andComposition->setData($email);
+
+        // TODO: save the errors.
+        $isValid = $andComposition->isValid();
+
+        return $isValid;
+
+    }
 }

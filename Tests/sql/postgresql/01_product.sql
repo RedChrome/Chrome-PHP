@@ -106,6 +106,7 @@ INSERT INTO "chrome"."cp1_class" ("id", "name", "file") VALUES
 (DEFAULT, 'Chrome_Redirection', 'lib/core/redirection.php'),
 (DEFAULT, 'Chrome_Controller_User_Login_Page', 'modules/content/user/login/page.php'),
 (DEFAULT, 'Chrome_Model_User_Database', 'lib/classes/user/model.php'),
+(DEFAULT, 'Chrome_Model_Database_Statement', 'lib/core/database/interface/model.php'),
 (DEFAULT, 'Chrome_Form_Decorator_Individual_Abstract', 'lib/core/form/decorator.php'),
 (DEFAULT, 'Chrome_User_Registration', 'lib/View/content/user/registration.class.php'),
 (DEFAULT, 'Chrome_User_EMail', 'lib/User/user_email.php'),

@@ -15,17 +15,9 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category   CHROME-PHP
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
- * @author     Alexander Book <alexander.book@gmx.de>
- * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.05.2013 22:07:36] --> $
- * @link       http://chrome-php.de
  */
-
-if(CHROME_PHP !== true) die();
 
 /**
  * @package    CHROME-PHP
@@ -44,7 +36,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
     protected $_cookie  = null;
 
     /**
-     * @param Chrome_Model_Abstract $model model which implements the methods of {@see Chrome_Model_Authentication_Cookie}
+     * @param Chrome_Model_Abstract $model model which implements the methods of Chrome_Model_Authentication_Cookie
      * @param Chrome_Cookie_Interface $this->_cookie
      * @param array $options:
      *                  - cookie_namespace: (string) Namespace of the cookie, default: _AUTH
@@ -53,12 +45,15 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
      *
      * @return Chrome_Authentication_Chain_Cookie
      */
-    public function __construct(Chrome_Model_Abstract $model, Chrome_Cookie_Interface $cookie, array $options = array())
+    public function __construct(Chrome_Model_Abstract $model, Chrome_Cookie_Interface $cookie)
     {
         $this->_model         = $model;
-        $this->_options       = array_merge($this->_options, $options);
-
         $this->_cookie        = $cookie;
+    }
+
+    public function setOptions(array $options)
+    {
+        $this->_options       = array_merge($this->_options, $options);
     }
 
     protected function _update(Chrome_Authentication_Data_Container_Interface $return)
@@ -148,7 +143,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
     }
 }
 
-class Chrome_Model_Authentication_Cookie extends Chrome_Model_Database_Abstract
+class Chrome_Model_Authentication_Cookie extends Chrome_Model_Database_Statement_Abstract
 {
     protected $_options = array(
                            'dbTable'       => 'authenticate',
@@ -160,27 +155,20 @@ class Chrome_Model_Authentication_Cookie extends Chrome_Model_Database_Abstract
      *
      * @return Chrome_Model_Authentication_Cookie
      */
-    public function __construct(Chrome_Context_Model_Interface $model, array $options = array(), Chrome_Database_Composition_Interface $dbComposition = null)
+    public function __construct(Chrome_Database_Factory_Interface $factory, Chrome_Model_Database_Statement_Interface $statementModel, array $options = array())
     {
-        parent::__construct($model);
-        $this->_options = array_merge($options, $this->_options);
-        $this->_dbComposition = new Chrome_Database_Composition('model');
-        $this->_dbDIComposition = $dbComposition;
+        parent::__construct($factory, $statementModel);
+        $this->_options = array_merge($this->_options, $options);
     }
 
-    protected function _connect()
-    {
-        parent::_connect();
-        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory()));
-    }
-
+    // TODO: this belongs to an entity, not model
     public function encodeCookieString($id, $token)
     {
         $id = (int) $id;
 
         return base64_encode($id . '.' . $token);
     }
-
+    // TODO: this belongs to an entity, not model
     public function decodeCookieString($string)
     {
         // data is base64 encoded
@@ -217,6 +205,7 @@ class Chrome_Model_Authentication_Cookie extends Chrome_Model_Database_Abstract
             ->execute(array($this->_options['dbTable'], $token, $id));
     }
 
+    // TODO: this belongs to an entity, not model
     public function createNewToken()
     {
         $hash  = Chrome_Hash::getInstance();

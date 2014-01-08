@@ -18,28 +18,18 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Module.User
  */
-namespace \Chrome\Model\User;
+namespace Chrome\Model\User;
 
-class User extends \Chrome_Model_Database_Abstract implements User_Interface
+class Registration extends \Chrome_Model_Database_Statement_Abstract implements Registration_Interface
 {
     protected function _setDatabaseOptions()
     {
-        $this->_dbInterface = 'model';
         $this->_dbResult = 'assoc';
-    }
-
-    protected function _connect()
-    {
-        parent::_connect();
-        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory(), 'register'));
+        $this->_dbStatementModel->setNamespace('register');
     }
 
     public function hasEmail($email)
     {
-        $db = $this->_getDBInterface();
-
-        $result = $db->loadQuery('emailExists')->execute(array($email));
-
-        return !$result->isEmpty();
+        return !$this->_getDBInterface()->loadQuery('emailExists')->execute(array($email))->isEmpty();
     }
 }

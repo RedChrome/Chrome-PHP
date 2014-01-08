@@ -165,7 +165,7 @@ abstract class Chrome_Request_Data_Abstract implements Chrome_Request_Data_Inter
             'COOKIE' => $_COOKIE);
 
         $this->_cookie = new Chrome_Cookie($this, Chrome_Hash::getInstance());
-        $this->_session = new Chrome_Session($this->_cookie, Chrome_Hash::getInstance());
+        $this->_session = new Chrome_Session($this->_cookie, $this, Chrome_Hash::getInstance());
     }
 
     protected function _getData($varName, $key = null)

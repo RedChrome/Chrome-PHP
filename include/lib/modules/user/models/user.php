@@ -18,20 +18,14 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Module.User
  */
-namespace \Chrome\Model\User;
+namespace Chrome\Model\User;
 
-class User extends \Chrome_Model_Database_Abstract implements User_Interface
+class User extends \Chrome_Model_Database_Statement_Abstract implements User_Interface
 {
     protected function _setDatabaseOptions()
     {
-        $this->_dbInterface = 'model';
+        $this->_dbStatementModel->setNamespace('user');
         $this->_dbResult = 'assoc';
-    }
-
-    protected function _connect()
-    {
-        parent::_connect();
-        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory(), 'user'));
     }
 
     public function hasEmail($email)
@@ -41,5 +35,10 @@ class User extends \Chrome_Model_Database_Abstract implements User_Interface
         $result = $db->loadQuery('emailExists')->execute(array($email));
 
         return !$result->isEmpty();
+    }
+
+    public function addUser($name, $email)
+    {
+        $this->_getDBInterface()->loadQuery('addUser')->execute(array($name, $email, CHROME_TIME));
     }
 }

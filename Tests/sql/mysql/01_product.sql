@@ -120,6 +120,7 @@ INSERT INTO `cp1_class` (`name`, `file`) VALUES
 ('Chrome_Redirection', 'lib/core/redirection.php'),
 ('Chrome_Controller_User_Login_Page', 'modules/content/user/login/page.php'),
 ('Chrome_Model_User_Database', 'lib/classes/user/model.php'),
+('Chrome_Model_Database_Statement', 'lib/core/database/interface/model.php'),
 ('Chrome_Form_Decorator_Individual_Abstract', 'lib/core/form/decorator.php'),
 ('Chrome_User_Registration', 'lib/View/content/user/registration.class.php'),
 ('Chrome_User_EMail', 'lib/User/user_email.php'),
