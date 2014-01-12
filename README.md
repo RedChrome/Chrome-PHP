@@ -1,5 +1,4 @@
-# Chrome-PHP Framework <img src="https://travis-ci.org/RedChrome/Chrome-PHP.png?branch=master" />
-
+# Chrome-PHP Framework [![Build Status](https://travis-ci.org/RedChrome/Chrome-PHP.png?branch=master)](https://travis-ci.org/RedChrome/Chrome-PHP)
 
 Chrome-PHP is an object-oriented PHP framework which is based on well-known design patterns like MVC. It's goal is to be a really flexible framework without any complicated configuration files and tries to offer intuitive interfaces for development. 
 
@@ -11,6 +10,8 @@ A live demo is available at http://chrome.bplaced.net/
   - MySQL
   - PostgreSQL 
   - DB2(in progess)
+  
+We're tring to remove the requirement to have a database. But this takes some time..
 
 ## License
 ### Chrome-PHP under Creative Commons License 3.0
