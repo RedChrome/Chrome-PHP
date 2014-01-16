@@ -104,22 +104,22 @@ class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract
     }
 }
 
-
 class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implements Chrome_Model_Database_Statement_Interface
 {
     const DEFAULT_NAMESPACE = 'core';
 
-    // TODO: make this non-static, and add a cache in constructor
-    protected static $_caches = array();
-
     protected $_database = null;
     protected $_namespace = null;
 
-    public function __construct($namespace = null)
+    protected $_externalCache = null;
+
+    public function __construct(\Chrome\Cache\Cache_Interface $cache, $namespace = null)
     {
         if(!is_string($namespace)) {
             $namespace = self::DEFAULT_NAMESPACE;
         }
+
+        $this->_externalCache = $cache;
 
         $this->setNamespace($namespace);
     }
@@ -131,13 +131,19 @@ class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implem
             return;
         }
 
-        if(isset(self::$_caches[$this->_database][$this->_namespace])) {
-            $this->_cache = self::$_caches[$this->_database][$this->_namespace];
-        } else {
+        if(($this->_cache = $this->_externalCache->get($this->_database.'/'.$this->_namespace)) === null) {
             // use parent constructor to create a cache, this will be available in $this->_cache.
-            parent::__construct($this);
-            self::$_caches[$this->_database][$this->_namespace] = $this->_cache;
+            //parent::__construct($this);
+            $this->_cache = $this->_createCache($this->_database, $this->_namespace);
+            $this->_externalCache->set($this->_database.'/'.$this->_namespace, $this->_cache);
         }
+    }
+
+    protected function _createCache($database, $namespace)
+    {
+        $options = new \Chrome\Cache\Option\File\Json();
+        $options->setCacheFile(RESOURCE . 'database/' . strtolower($database) . '/' . strtolower($namespace) . '.json');
+        return new \Chrome\Cache\File\Json($options);
     }
 
     public function setDatabaseName($databaseName)
@@ -165,13 +171,6 @@ class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implem
     public function clearCache()
     {
         $this->_caches = array();
-    }
-
-    protected function _setUpCache()
-    {
-        $this->_cacheOption = new Chrome_Cache_Option_Json();
-        $this->_cacheOption->setCacheFile(RESOURCE . 'database/' . strtolower($this->_database) . '/' . strtolower($this->_namespace) . '.json');
-        $this->_cacheInterface = 'Json';
     }
 
     public function getStatement($key)

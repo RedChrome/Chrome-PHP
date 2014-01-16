@@ -32,15 +32,6 @@ interface Email_Interface
      * @return boolean
      */
     public function emailIsUsed($email);
-
-    /**
-     * Checks whether the email is valid
-     *
-     * @todo remove
-     * @param string $email
-     * @return boolean
-     */
-    public function isEmailValid($email);
 }
 
 interface Request_Interface
@@ -49,14 +40,14 @@ interface Request_Interface
      * Checks whether the nickname is valid
      *
      * @param string $name
-     * @returns boolean
+     * @return boolean
      */
     public function isNameValid($name);
 
     /**
      * Checks whether the password is valid
      * @param string $password
-     * @returns boolean
+     * @return boolean
      */
     public function isPasswordValid($password);
 }

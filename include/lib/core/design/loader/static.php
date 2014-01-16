@@ -130,29 +130,19 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 }
 class Chrome_Model_Design_Loader_Static_Cache extends Chrome_Model_Cache_Abstract
 {
-
-    protected function _setUpCache()
-    {
-        $this->_cacheInterface = 'Serialization';
-        $this->_cacheOption = new Chrome_Cache_Option_Serialization();
-        $this->_cacheOption->setCacheFile(CACHE.'_designLoaderStatic.cache');
-    }
-
     public function getViewsByPosition($position, $theme)
     {
         $key = $theme . '/' . $position;
 
-        if($this->_cache->has($key))
+        if(!$this->_cache->has($key))
         {
-            return $this->_cache->get($key);
+            $this->_cache->set($key, $this->_decorable->getViewsByPosition($position, $theme));
         }
 
-        $data = $this->_decorable->getViewsByPosition($position, $theme);
-        $this->_cache->set($key, $data);
-        return $data;
+        return $this->_cache->get($key);
     }
 }
-class Chrome_Model_Design_Loader_Static extends Chrome_Model_Database_Statement_Abstract
+class Chrome_Model_Design_Loader_Static_DB extends Chrome_Model_Database_Statement_Abstract
 {
     protected function _setDatabaseOptions()
     {

@@ -15,21 +15,30 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 19:16:43] --> $
  */
-if(CHROME_PHP !== true)
-    die();
 
-require_once 'strategy.php';
+namespace Chrome\Cache\Option\File;
 
-class Chrome_Cache_Option_Json extends Chrome_Cache_Option_Strategy
+/**
+ * An options class for json caches
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Cache
+ */
+class Json extends \Chrome\Cache\Option\File\Strategy
 {
 
 }
 
-class Chrome_Cache_Json extends Chrome_Cache_Strategy
+namespace Chrome\Cache\File;
+
+/**
+ * A file cache which uses as encoding a serialization
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Cache
+ */
+class Json extends \Chrome\Cache\File\Strategy
 {
     protected function _encode(array $data)
     {

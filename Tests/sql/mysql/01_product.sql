@@ -153,6 +153,8 @@ INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 ('email_sender_name', 'Registration', 'Registrierung', 'string', '', FALSE),
 ('email_subject', 'Registration', 'Registrierung auf Localhost!', 'string', '', FALSE),
 ('expiration', 'Registration', '604800', 'integer', '', FALSE),
+('name_min_length', 'user', '3', 'integer', '', FALSE),
+('name_max_length', 'user', '50', 'integer', '', FALSE),
 ('Gallery_Page_Limit', 'Gallery', '9', 'integer', '', FALSE),
 ('Meta_Desc', 'Site', '', 'string', '', FALSE),
 ('Meta_Keywords', 'Site', '', 'string', '', FALSE),

@@ -47,7 +47,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
     {
         $this->doSkipTestsIfNeeded();
 
-        $this->_db->query('DELETE FROM cpp_user_regist LIMIT 1');
+        $this->_db->query('DELETE FROM cpp_user_regist LIMIT 0');
 
         $this->assertTrue($this->_db->getAdapter()->isEmpty());
 

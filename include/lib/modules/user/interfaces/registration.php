@@ -31,6 +31,8 @@ interface Registration_Interface
      * @return \Chrome\Model\User\Registration\Request_Interface
      */
     public function getRegistrationRequestByActivationKey($activationKey);
+
+    public function addRegistration($email, $password, $passwordSalt, $activationKey, $name, $time);
 }
 
 namespace Chrome\Model\User\Registration;
@@ -52,7 +54,7 @@ interface Request_Interface
     public function getTime();
 }
 
-class Request
+class Request implements Request_Interface
 {
     protected $_email = '';
 
@@ -65,6 +67,8 @@ class Request
     protected $_passwordSalt = '';
 
     protected $_activationKey = '';
+
+    protected $_time = 0;
 
     public function getTime()
     {

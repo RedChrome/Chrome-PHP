@@ -176,10 +176,9 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $viewContext->setFactory($viewFactory);
         $registryHandler->add('\Chrome_View_Factory_Interface', $viewFactory);
 
-        $cacheFactoryRegistry = new \Chrome\Registry\Cache\Factory\Registry();
-        $cacheFactoryRegistry->set(\Chrome\Registry\Cache\Factory\Registry::DEFAULT_FACTORY, new Chrome_Cache_Factory());
-
         $this->_initClassloader();
+
+        //$registryHandler->add('\Chrome_Model_Database_Statement_Cache', $this->_diContainer->get('\Chrome_Cache_Factory_Interface')->build('memory'));
 
         $this->_initLocalization();
 
@@ -492,37 +491,40 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         require_once LIB . 'core/dependency_injection/closure.php';
         require_once LIB . 'core/dependency_injection/registry.php';
         require_once LIB . 'core/dependency_injection/controller.php';
+        require_once LIB . 'core/dependency_injection/model.php';
+        require_once LIB . 'core/dependency_injection/validator.php';
         $registry = new \Chrome\DI\Handler\Registry();
         $closure = new \Chrome\DI\Handler\Closure();
         $controller = new \Chrome\DI\Handler\Controller();
+        $model = new \Chrome\DI\Handler\Model();
+        $validator = new \Chrome\DI\Handler\Validator();
 
         $this->_diContainer->attachHandler('registry', $registry);
         $this->_diContainer->attachHandler('closure', $closure);
         $this->_diContainer->attachHandler('controller', $controller);
+        $this->_diContainer->attachHandler('model', $model);
+        $this->_diContainer->attachHandler('validator', $validator);
 
-        $closure->add('\Chrome_Model_Config_Database', function ($container) {
-            return new Chrome_Model_Config_Database($container->get('\Chrome_Database_Factory_Interface'), $container->get('\Chrome_Model_Database_Statement_Interface'));
-        });
+        $closure->add('\Chrome_Model_Config_Interface', function ($c) {
 
-        $closure->add('\Chrome_Model_Config_Interface', function ($container) {
-            return new Chrome_Model_Config_Cache($container->get('\Chrome_Model_Config_Database'));
+            $cacheOption = new \Chrome\Cache\Option\File\Serialization();
+            $cacheOption->setCacheFile(CACHE . '_config.cache');
+            $cache = new \Chrome\Cache\File\Serialization($cacheOption);
+
+            return new Chrome_Model_Config_Cache($c->get('\Chrome_Model_Config_Database'), $cache);
         }, true);
 
-        $closure->add('\Chrome_Model_Database_Statement_Interface', function ($container) {
-            return new \Chrome_Model_Database_Statement();
-        });
-
-        $closure->add('\Chrome_Model_Classloader_Database', function ($c) {
-            return new \Chrome_Model_Classloader_Database($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'));
+        $closure->add('\Chrome_Model_Database_Statement_Interface', function ($c) {
+            return new \Chrome_Model_Database_Statement($c->get('\Chrome\Cache\Memory'));
         });
 
         $closure->add('\Chrome_Model_Route_Static_Interface', function ($c) {
-            return new \Chrome_Model_Route_Static_Cache($c->get('\Chrome_Model_Route_Static_DB'));
-        }, true);
+            $cacheOption = new \Chrome\Cache\Option\File\Serialization();
+            $cacheOption->setCacheFile(CACHE.'router/_static.cache');
+            $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
-        $closure->add('\Chrome_Model_Route_Static_DB', function ($c) {
-            return new Chrome_Model_Route_Static_DB($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'));
-        });
+            return new \Chrome_Model_Route_Static_Cache($c->get('\Chrome_Model_Route_Static_DB'), $cache);
+        }, true);
 
         $closure->add('\Chrome_Design_Loader_Interface', function ($c) {
             $controllerFactory = $c->get('\Chrome_Controller_Factory_Interface');
@@ -532,35 +534,36 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         });
 
         $closure->add('\Chrome_Model_Design_Loader_Static_Interface', function ($c) {
-            return new Chrome_Model_Design_Loader_Static_Cache($c->get('\Chrome_Model_Design_Loader_Static_DB'));
-        }, true);
+            $cacheOption = new \Chrome\Cache\Option\File\Serialization();
+            $cacheOption->setCacheFile(CACHE.'_designLoaderStatic.cache');
+            $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
-        $closure->add('\Chrome_Model_Design_Loader_Static_DB', function ($c) {
-            return new Chrome_Model_Design_Loader_Static($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'));
-        });
+            return new Chrome_Model_Design_Loader_Static_Cache($c->get('\Chrome_Model_Design_Loader_Static_DB'), $cache);
+        }, true);
 
         $closure->add('\Chrome\Classloader\Resolver_Model_Interface', function ($c) {
             return new \Chrome\Classloader\Resolver_Model($c->get('\Chrome_Model_Classloader_Model_Interface'));
         });
 
         $closure->add('\Chrome_Model_Classloader_Model_Interface', function ($c) {
-            return new Chrome_Model_Classloader_Cache($c->get('\Chrome_Model_Classloader_Model_Database'));
+
+            $cacheOption = new \Chrome\Cache\Option\File\Serialization();
+            $cacheOption->setCacheFile(CACHE.'_require.cache');
+            $cache = new \Chrome\Cache\File\Serialization($cacheOption);
+
+            return new Chrome_Model_Classloader_Cache($c->get('\Chrome_Model_Classloader_Model_Database'), $cache);
         }, true);
 
-        $closure->add('\Chrome_Model_Classloader_Model_Database', function ($c) {
-            return new Chrome_Model_Classloader_Database($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'));
-        });
-
         $closure->add('\Chrome_Model_Authorisation_Default_Interface', function ($c) {
-            return new Chrome_Model_Authorisation_Default_DB($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'));
+            return $c->get('\Chrome_Model_Authorisation_Default_DB');
         });
 
         $closure->add('\Chrome_Model_Route_Dynamic_Interface', function ($c) {
-            return new Chrome_Model_Route_Dynamic_Cache($c->get('\Chrome_Model_Route_Dynamic_DB'));
-        });
+            $cacheOption = new \Chrome\Cache\Option\File\Serialization();
+            $cacheOption->setCacheFile(CACHE.'router/_dynamic.cache');
+            $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
-        $closure->add('\Chrome_Model_Route_Dynamic_DB', function ($c) {
-            return new Chrome_Model_Route_Dynamic_DB($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'));
+            return new Chrome_Model_Route_Dynamic_Cache($c->get('\Chrome_Model_Route_Dynamic_DB'), $cache);
         });
 
         $closure->add('\Chrome_Model_Register', function ($c) {
@@ -569,6 +572,35 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $closure->add('Chrome_Controller_Register', function ($c) {
             return new Chrome_Controller_Register($c->get('\Chrome_Context_Application_Interface'), $c->get('\Chrome_Model_Register'), new Chrome_View_Register($c->get('\Chrome_Context_View_Interface')));
+        });
+
+        $closure->add('\Chrome\Interactor\User\Registration_Interface', function ($c) {
+            $return = new \Chrome\Interactor\User\Registration($c->get('\Chrome_Config_Interface'), $c->get('\Chrome\Model\User\Registration_Interface'));
+            $emailValidator = $c->get('\Chrome\Validator\User\Registration\Email');
+            $nameValidator = $c->get('\Chrome_Validator_Name');
+            $passwordValidator = $c->get('\Chrome_Validator_Password');
+            $return->setValidators($emailValidator, $nameValidator, $passwordValidator);
+            return $return;
+        });
+
+        $closure->add('\Chrome\Validator\User\Registration\Email', function ($c) {
+            return new \Chrome\Validator\User\Registration\Email($c->get('\Chrome_Config_Interface'), $c->get('\Chrome\Helper\User\Email_Interface'));
+        });
+
+        $closure->add('\Chrome\Helper\User\Email_Interface', function ($c) {
+            return new \Chrome\Helper\User\Email($c->get('\Chrome\Model\User\User_Interface'), $c->get('\Chrome\Model\User\Registration_Interface'));
+        }, true);
+
+        $closure->add('\Chrome\Model\User\User_Interface', function ($c) {
+            return $c->get('\Chrome\Model\User\User');
+        });
+
+        $closure->add('\Chrome\Model\User\Registration_Interface', function ($c) {
+            return $c->get('\Chrome\Model\User\Registration');
+        });
+
+        $closure->add('\Chrome\Cache\Memory', function ($c) {
+            return new \Chrome\Cache\Memory();
         });
     }
 

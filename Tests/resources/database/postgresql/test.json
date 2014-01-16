@@ -1,8 +1,0 @@
-{
-	"registerModelTest_CheckRegistrationWithInvalidActivationKey": "INSERT INTO cpp_user_regist(\"key\", \"name\", \"time\", \"pass\", \"pw_salt\", \"email\") VALUES('?', '?', ?, '?', '?', '?')",
-	"registerModelTest_DeleteOldTestValues": "DELETE FROM cpp_user WHERE name = 'testfinishRegistration'",
-	"registerModelTest_DeleteOldTestValues2": 	"DELETE FROM cpp_user_regist WHERE email LIKE '$email%%'",
-	"registerModelTest_testGenerateActivationKeyIsUniqueAndValid": "SELECT * FROM cpp_user_regist WHERE \"key\" = '?' LIMIT 1",
-	"registerModelTest_testRegistrationRequestIsProperlyAdded": "SELECT * FROM cpp_user_regist WHERE \"key\" = '?' LIMIT 1",
-	"registerModelTest_searchKey": "SELECT * FROM cpp_user_regist WHERE \"key\" = '?'"
-}

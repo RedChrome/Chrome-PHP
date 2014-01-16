@@ -47,3 +47,56 @@ abstract class Chrome_Model_Decorator_Abstract extends Chrome_Model_Abstract
         return $this->_decorable;
     }
 }
+
+/**
+ * An abstract class to cache a model class
+ *
+ * @package    CHROME-PHP
+ * @subpackage Chrome.Model
+ */
+abstract class Chrome_Model_Cache_Abstract extends Chrome_Model_Decorator_Abstract
+{
+    /**
+     * contains an instance of a cache class
+     *
+     * @var \Chrome\Cache\Cache_Interface
+     */
+    protected $_cache = null;
+
+    /**
+     * Creates a new cache model
+     *
+     * This is a decorator pattern.
+     *
+     * @param Chrome_Model_Abstract $instance instance of another model object
+     * @return Chrome_Model_Cache_Abstract
+     */
+    public function __construct(Chrome_Model_Abstract $instance, \Chrome\Cache\Cache_Interface $cache)
+    {
+        parent::__construct($instance);
+        $this->setCache($cache);
+    }
+
+    /**
+     * Sets a cache object
+     *
+     * @param Chrome_Cache_Interface $cache
+     */
+    public function setCache(\Chrome\Cache\Cache_Interface $cache)
+    {
+        $this->_cache = $cache;
+    }
+
+    /**
+     * This methods clears the entire cache
+     *
+     * @return bool
+     */
+    public function clearCache()
+    {
+        if($this->_cache !== null) {
+            $this->_cache->clear();
+        }
+    }
+}
+

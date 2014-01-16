@@ -156,23 +156,6 @@ interface Chrome_Context_View_Interface
 interface Chrome_Context_Model_Interface
 {
     /**
-     * Sets a cache factory registry.
-     *
-     * A cache factory registry contains multiple cache factories. Each cache factory is able to
-     * create a new cache object. Use this method to retrieve a cache factory registry
-     *
-     * @param \Chrome\Registry\Cache\Factory\Registry_Interface $cacheFactoryRegistry
-     */
-    public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry_Interface $cacheFactoryRegistry);
-
-    /**
-     * Returns the cache factory registry
-     *
-     * @return \Chrome\Registry\Cache\Factory\Registry
-     */
-    public function getCacheFactoryRegistry();
-
-    /**
      * Sets a database factory
      *
      * A database factory is able to create a new database interface. This database interface is able to
@@ -600,7 +583,6 @@ class Chrome_Context_Model implements Chrome_Context_Model_Interface
     protected $_databaseFactory = null;
     protected $_config = null;
     protected $_loggerRegistry = null;
-    protected $_cacheFactoryRegistry = null;
     protected $_converter = null;
     protected $_factory = null;
 
@@ -619,16 +601,6 @@ class Chrome_Context_Model implements Chrome_Context_Model_Interface
     public function setFactory(\Chrome\Model\Factory_Interface $factory)
     {
         $this->_factory = $factory;
-    }
-
-    public function setCacheFactoryRegistry(\Chrome\Registry\Cache\Factory\Registry_Interface $cachFactoryRegistry)
-    {
-        $this->_cacheFactoryRegistry = $cachFactoryRegistry;
-    }
-
-    public function getCacheFactoryRegistry()
-    {
-        return $this->_cacheFactoryRegistry;
     }
 
     public function setDatabaseFactory(Chrome_Database_Factory_Interface $factory)

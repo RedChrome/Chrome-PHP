@@ -1,7 +1,7 @@
 <?php
 
 require_once CONTENT . 'register/model.php';
-
+/*
 class RegisterModelTest extends Chrome_TestCase
 {
     protected $_model;
@@ -122,6 +122,7 @@ class RegisterModelTest extends Chrome_TestCase
         //$this->_db->query('DELETE FROM cpp_user WHERE name = "testfinishRegistration"');
 
         //$this->_db->delete()->from( 'user' )->where( 'name = "testfinishRegistration" ' )->execute();
+        /*
         $success = $this->_model->addRegistrationRequest($testFinishRegistrationName, $testFinishRegistrationPass, $testfinishRegistrationEmail, 'testfinishRegistrationKey');
 
         $this->assertTrue($success, 'could not add registration request');
@@ -151,4 +152,4 @@ class RegisterModelTest extends Chrome_TestCase
 
         $this->assertTrue(! $this->_db->getResult()->isEmpty(), 'no entry created in authenticate');
     }
-}
+}*/

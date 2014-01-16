@@ -214,10 +214,20 @@ class Chrome_Exception extends Exception
 /**
  * Class for exceptions to symbolize that a method/function got invalid arguments.
  *
- * @pacakge CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Exception
  */
 class Chrome_InvalidArgumentException extends Chrome_Exception
+{
+}
+
+/**
+ * Class for exceptions to symbolize that a class got into a illegal state
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Exception
+ */
+class Chrome_IllegalStateException extends Chrome_Exception
 {
 }
 

@@ -15,13 +15,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Config
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.04.2013 15:05:55] --> $
- * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -89,14 +83,6 @@ class Chrome_Model_Config_Database extends Chrome_Model_Database_Statement_Abstr
  */
 class Chrome_Model_Config_Cache extends Chrome_Model_Cache_Abstract
 {
-
-    protected function _setUpCache()
-    {
-        $this->_cacheOption = new Chrome_Cache_Option_Serialization();
-        $this->_cacheOption->setCacheFile(CACHE . '_config.cache');
-        $this->_cacheInterface = 'serialization';
-    }
-
     public function loadConfig()
     {
         if(!$this->_cache->has('config'))

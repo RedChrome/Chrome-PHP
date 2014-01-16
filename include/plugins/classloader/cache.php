@@ -20,7 +20,7 @@
 namespace Chrome\Classloader;
 
 /**
- * Resolves all classes beginning with 'Chrome_Cache_'
+ * Resolves all classes beginning with '\Chrome\Cache\'
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
@@ -35,10 +35,11 @@ class Resolver_Cache extends Resolver_Abstract
      */
     public function resolve($class)
     {
-        if(preg_match('#Chrome_Cache_Option_(.{1,})_Interface#i', $class, $matches)) {
-            return PLUGIN.'Cache/'.strtolower($matches[1]).'.php';
-        } else if(preg_match('#Chrome_Cache_Option_(.{1,})#i', $class, $matches)) {
-            return PLUGIN.'Cache/'.strtolower($matches[1]).'.php';
+        if(preg_match('#Chrome\\\\Cache\\\\(Option\\\\)?(.{1,})(_Interface)?#', $class, $matches)) {
+
+            $matches[2] = strtolower(str_replace('\\', '/', $matches[2]));
+
+            return PLUGIN.'Cache/'.$matches[2].'.php';
         }
 
         return false;

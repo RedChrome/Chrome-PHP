@@ -10,18 +10,18 @@ class ConfigCacheTest extends Chrome_TestCase
 
     protected function setUp()
     {
-        $this->_cache = new Test_Chrome_Cache_Dummy();
+        $this->_cache = new \Chrome\Cache\Memory();
 
         $this->_model = new Test_Chrome_Model_Dummy();
 
-        $this->_config = new Chrome_Model_Config_Cache($this->_model);
+        $this->_config = new Chrome_Model_Config_Cache($this->_model, $this->_cache);
 
         $this->_config->setCache($this->_cache);
     }
 
     public function testloadConfigCacheHit()
     {
-        $this->_cache->data = array('config' => 'cache_hit');
+        $this->_cache->set('config', 'cache_hit');
 
         $this->assertSame(array(), $this->_model->arguments);
 
@@ -34,15 +34,17 @@ class ConfigCacheTest extends Chrome_TestCase
         $config = $this->_config->loadConfig();
         $this->assertSame(array(), $this->_model->arguments['loadConfig'][0]);
         $this->assertSame($config, 'anyData');
-        $this->assertSame(array('config' => 'anyData'), $this->_cache->data);
+        $this->assertSame('anyData', $this->_cache->get('config'));
     }
 
     public function testSetConfig()
     {
-        $this->_cache->data = array('config' => 'cache_data');
+        $this->_cache->set('config', 'cache_data');
         $this->_config->setConfig('anyName', 'anySubclass', 'anyValue');
 
         $this->assertSame(array('anyName', 'anySubclass', 'anyValue', null, '', 0), $this->_model->arguments['setConfig'][0]);
-        $this->assertSame(array(), $this->_cache->data);
+        $this->assertSame(null, $this->_cache->get('setConfig'));
+        $this->assertSame(null, $this->_cache->get('anyName'));
+        $this->assertSame(null, $this->_cache->get('anySubclass'));
     }
 }

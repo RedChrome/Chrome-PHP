@@ -21,41 +21,63 @@
 
 namespace Chrome\Interactor\User;
 
+use \Chrome\Model\User\Registration\Request_Interface;
+
 class Registration
 {
     const MAX_RETRIES_FOR_ACTIVATIONKEY = 10;
 
-    protected $_appContext = null;
+    protected $_config = null;
 
     protected $_model = null;
 
-    public function __construct(\Chrome_Context_Application_Interface $app, \Chrome\Model\User\Registration_Interface $registrationModel)
+    protected $_emailValidator = null;
+
+    protected $_nameValidator = null;
+
+    protected $_passwordValidator = null;
+
+    private $_validatorsForAddingRegistrationRequestSet = false;
+
+    public function __construct(\Chrome_Config_Interface $config, \Chrome\Model\User\Registration_Interface $registrationModel)
     {
-        $this->_appContext = $app;
+        $this->_config = $config;
         $this->_model = $registrationModel;
     }
 
-    public function addRegistrationRequest(\Chrome\Model\User\Registration\Request_Interface $registrationRequest, \Chrome\Helper\User\Email_Interface $emailHelper, \Chrome\Helper\User\Request_Interface $requestHelper)
+    public function setValidators(\Chrome_Validator_Interface $emailValidator, \Chrome_Validator_Interface $nameValidator, \Chrome_Validator_Interface $passwordValidator)
     {
+        $this->_emailValidator = $emailValidator;
+        $this->_nameValidator  = $nameValidator;
+        $this->_passwordValidator = $passwordValidator;
+        $this->_validatorsForAddingRegistrationRequestSet = true;
+    }
+
+    public function addRegistrationRequest(Request_Interface $registrationRequest)
+    {
+        if($this->_validatorsForAddingRegistrationRequestSet !== true)
+        {
+            throw new \Chrome_IllegalStateException('No validators set.');
+        }
+
         $requestAdded = false;
 
         $email = $registrationRequest->getEmail();
         $name  = $registrationRequest->getName();
         $password = $registrationRequest->getPassword();
 
-        // TODO: remove those helpers, get validators instead
-        if($emailHelper->isEmailValid($email) !== true) {
+        if($this->_emailValidator->isValidData($email) !== true) {
             // TODO: implement the details
             return false;
         }
 
-        if($requestHelper->isNameValid($name) !== true)
+        if($this->_nameValidator->isValidData($name) !== true)
         {
             // TODO: implement the details
             return false;
         }
 
-        if($requestHelper->isPasswordValid($password) !== true)
+        if($this->_passwordValidator->isValidData($password) !== true)
         {
             // TODO: implement the details
             return false;
@@ -68,12 +90,7 @@ class Registration
 
             $activationKey = $this->_generateActivationKey();
 
-            if($emailHelper->emailIsUsed($email) === true) {
-                // TODO: email is used, so cannot create a new registration request with this email, implement the details
-                return false;
-            }
-
-            $this->_model->addRegistration($name, $password, $passwordSalt, $email, CHROME_TIME, $activationKey);
+            $this->_model->addRegistration($email, $password, $passwordSalt, $activationKey, $name, CHROME_TIME);
 
             $requestAdded = true;
 
@@ -154,10 +171,8 @@ class Registration
 
     public function isRegistrationRequestActivateable(\Chrome\Model\User\Registration\Request_Interface $request)
     {
-        $config = $this->_appContext->getConfig();
-
-        if($config->getConfig('registration', 'request_has_expiration') === true) {
-            if($config->getConfig('registration', 'request_expiration') + $request->getTime() < CHROME_TIME) {
+        if($this->_config->getConfig('registration', 'request_has_expiration') === true) {
+            if($this->_config->getConfig('registration', 'request_expiration') + $request->getTime() < CHROME_TIME) {
                 // registration request is too old
                 return false;
             }

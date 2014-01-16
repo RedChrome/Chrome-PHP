@@ -74,5 +74,4 @@ abstract class Chrome_Model_Abstract implements Chrome_Model_Interface
  */
 require_once 'decorator.php';
 require_once 'database.php';
-require_once 'cache.php';
 /**#@!*/

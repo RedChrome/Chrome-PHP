@@ -23,7 +23,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Chrome_Model_Classloader_Database extends Chrome_Model_Database_Statement_Abstract
+class Chrome_Model_Classloader_Model_Database extends Chrome_Model_Database_Statement_Abstract
 {
 
     /**
@@ -163,21 +163,6 @@ class Chrome_Model_Classloader_Cache extends Chrome_Model_Cache_Abstract
     const CHROME_MODEL_REQUIRE_CACHE_CLASS_NAMESPACE = '_';
 
     /**
-     * Chrome_Model_Require_Cache::_cache()
-     *
-     * Sets cache instance
-     *
-     * @return void
-     */
-    protected function _setUpCache()
-    {
-        require_once PLUGIN . 'Cache/serialization.php';
-        $this->_cacheOption = new Chrome_Cache_Option_Serialization();
-        $this->_cacheOption->setCacheFile(CACHE.'_require.cache');
-        $this->_cacheInterface = 'serialization';
-    }
-
-    /**
      * Chrome_Model_Require_Cache::getRequirements()
      *
      * Gets all requirements
@@ -188,7 +173,6 @@ class Chrome_Model_Classloader_Cache extends Chrome_Model_Cache_Abstract
     {
         if(($return = $this->_cache->get('getRequirements')) === null)
         {
-
             $return = $this->_decorable->getRequirements();
             $this->_cache->set('getRequirements', $return);
         }
@@ -207,7 +191,6 @@ class Chrome_Model_Classloader_Cache extends Chrome_Model_Cache_Abstract
     {
         if(($return = $this->_cache->get('getClasses')) === null or count($return) == 0)
         {
-
             $return = $this->_decorable->getClasses();
 
             $this->_cache->set('getClasses', $return);
@@ -229,7 +212,6 @@ class Chrome_Model_Classloader_Cache extends Chrome_Model_Cache_Abstract
     {
         if(($return = $this->_cache->get(self::CHROME_MODEL_REQUIRE_CACHE_CLASS_NAMESPACE . $name)) !== null)
         {
-
             return $return;
         }
 

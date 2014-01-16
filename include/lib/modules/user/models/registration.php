@@ -37,7 +37,8 @@ class Registration extends \Chrome_Model_Database_Statement_Abstract implements 
     {
         $result = $this->_getDBInterface()->loadQuery('getRegistration')->execute(array($activationKey));
 
-        if($result->isEmpty()) {
+        if($result->isEmpty())
+        {
             return null;
         }
 
@@ -45,10 +46,20 @@ class Registration extends \Chrome_Model_Database_Statement_Abstract implements 
 
         $registrationRequest = new \Chrome\Model\User\Registration\Request();
 
-        $registrationRequest->setActivationKey($activationKey)->setEmail($row['email'])->setId($row['id'])->setName($row['name'])->setPasswordHashed($row['pass'])->setPasswordSalt($row['pw_salt'])->setTime($row['time']);
+        $registrationRequest->setActivationKey($activationKey)->setEmail($row['email'])->setId($row['id'])
+                            ->setName($row['name'])->setPassword($row['pass'])->setPasswordSalt($row['pw_salt'])
+                            ->setTime($row['time']);
 
         return $registrationRequest;
     }
 
+    public function discardRegistrationRequestByActivationKey($activationKey)
+    {
+        $this->_getDBInterface()->loadQuery('removeRegistrationWithActivationKey')->execute(array($activationKey));
+    }
 
+    public function addRegistration($email, $password, $passwordSalt, $activationKey, $name, $time)
+    {
+        $this->_getDBInterface()->loadQuery('addRegistration')->execute(array($email, $password, $passwordSalt, $activationKey, $name, $time));
+    }
 }

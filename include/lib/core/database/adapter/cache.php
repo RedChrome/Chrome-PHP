@@ -19,9 +19,6 @@
  * @subpackage Chrome.Database
  */
 
-if(CHROME_PHP !== true)
-    die();
-
 /**
  * Adapter to cache result sets using Chrome_Cache_Interface
  *

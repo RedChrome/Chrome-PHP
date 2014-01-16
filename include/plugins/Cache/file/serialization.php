@@ -16,17 +16,29 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
  */
-if(CHROME_PHP !== true)
-    die();
 
-require_once 'strategy.php';
+namespace Chrome\Cache\Option\File;
 
-class Chrome_Cache_Option_Serialization extends Chrome_Cache_Option_Strategy
+/**
+ * An options class for serializations caches
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Cache
+ */
+class Serialization extends \Chrome\Cache\Option\File\Strategy
 {
 
 }
 
-class Chrome_Cache_Serialization extends Chrome_Cache_Strategy
+namespace Chrome\Cache\File;
+
+/**
+ * A file cache which uses as encoding a serialization
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Cache
+ */
+class Serialization extends \Chrome\Cache\File\Strategy
 {
     protected function _encode(array $data)
     {
@@ -41,6 +53,6 @@ class Chrome_Cache_Serialization extends Chrome_Cache_Strategy
     protected function _isCacheable($data)
     {
         // we only serialize data that is not a object, or implements the Serializable interface
-        return (!is_object($data) OR $data instanceof Serializable);
+        return (!is_object($data) OR $data instanceof \Serializable);
     }
 }

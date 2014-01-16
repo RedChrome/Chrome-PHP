@@ -22,15 +22,13 @@ namespace Chrome\Helper\User;
 
 class Email implements Email_Interface
 {
-    protected $_config = null;
     protected $_userModel = null;
     protected $_registrationModel = null;
 
-    public function __construct(\Chrome\Model\User\User_Interface $userModel, \Chrome\Model\User\Registration_Interface $registrationModel, \Chrome_Config_Interface $config)
+    public function __construct(\Chrome\Model\User\User_Interface $userModel, \Chrome\Model\User\Registration_Interface $registrationModel)
     {
         $this->_userModel = $userModel;
         $this->_registrationModel = $registrationModel;
-        $this->_config = $config;
     }
 
     public function emailIsUsed($email)
@@ -40,39 +38,5 @@ class Email implements Email_Interface
         }
 
         return false;
-    }
-
-    /**
-     * @todo remove
-     * @return \Chrome_Validator_Composition_And
-     */
-    public function getEmailValidator()
-    {
-        $emailStructureValidator = new \Chrome_Validator_Email_Default();
-        $emailBlacklistValidator = new \Chrome_Validator_Email_Blacklist($this->_config);
-
-        $andComposition = new \Chrome_Validator_Composition_And();
-        $andComposition->addValidator($emailStructureValidator);
-        $andComposition->addValidator($emailBlacklistValidator);
-
-        return $andComposition;
-    }
-
-    /**
-     * @todo remove
-     * (non-PHPdoc)
-     * @see \Chrome\Helper\User\Email_Interface::isEmailValid()
-     */
-    public function isEmailValid($email)
-    {
-        $validator = $this->getEmailValidator();
-
-        $andComposition->setData($email);
-
-        // TODO: save the errors.
-        $isValid = $andComposition->isValid();
-
-        return $isValid;
-
     }
 }

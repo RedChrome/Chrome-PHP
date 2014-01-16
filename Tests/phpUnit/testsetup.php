@@ -147,7 +147,7 @@ class Chrome_TestSetup
 
         require_once 'Tests/dummies/database/interface/model.php';
         $this->_diContainer->getHandler('closure')->add('\Chrome_Model_Database_Statement_Test_Interface', function ($c) {
-            return new \Test_Chrome_Model_Database_Statement();
+            return new \Test_Chrome_Model_Database_Statement($c->get('\Chrome\Cache\Memory'));
         });
 
         $modelContext = $this->_applicationContext->getModelContext();

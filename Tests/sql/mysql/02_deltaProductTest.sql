@@ -39,6 +39,17 @@ INSERT INTO `cp1_authenticate` (`id`,`password`, `password_salt`, `cookie_token`
 ('4', 'testAuthenticate4', 'testAuthenticateSalt', NULL, 12345678);
 -- password is test
 
+INSERT INTO `cp1_user` (`email`) VALUES ('RegistrationTest_testEmailFromUser');
+
+INSERT INTO `cpp_user_regist` (`email`, `key`) VALUES 
+('RegistrationTest_testEmail1', 'activationKey00001'), 
+('RegistrationTest_testEmail2', 'activationKey2'), 
+('RegistrationTest_testEmail3', 'activationKey3'), 
+('RegistrationTest_testEmail4', 'activationKey4');
+
+INSERT INTO `cp1_user_regist` (`id`, `name`, `pass`, `pw_salt`, `email`, `time`, `key`) VALUES
+(NULL, 'myName', 'examplePW', 'examplePWSalt', 'RegistrationTest_testEMAIL', '123', 'activationKey5');
+
 INSERT INTO `cp1_authorisation_resource_default` (`_resource_id`, `_transformation`, `_access`) VALUES
 ('test', 'read', 1234666),
 ('test', 'write', 913785),

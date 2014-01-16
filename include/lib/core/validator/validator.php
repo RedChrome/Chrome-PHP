@@ -28,6 +28,15 @@
 interface Chrome_Validator_Interface
 {
     /**
+     * Resets all previously done configurations, validations or other customizations.
+     *
+     * The previously set options will not be modified. Use this, if you want to validate other data
+     *
+     * @return void
+     */
+    public function reset();
+
+    /**
      * Sets the data to validate
      *
      * @param mixed $data
@@ -56,6 +65,16 @@ interface Chrome_Validator_Interface
      * @return bool true if data is valid, false else
      */
     public function isValid();
+
+    /**
+     * Returns exactly the same as isValid with the given data.
+     *
+     * This is a shortcut for setting data, validating it and retrieving the isValid result.
+     *
+     * @param mixed $data
+     * @return boolean
+     */
+    public function isValidData($data);
 
     /**
      * Returns one error while validating or an error with the data
@@ -253,6 +272,28 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
     }
 
     /**
+     * @see Chrome_Validator_Interface::reset()
+     */
+    public function reset()
+    {
+        $this->_errorMsg = array();
+        $this->_data = null;
+        $this->_isValid = null;
+    }
+
+    /**
+     * @see Chrome_Validator_Interface::isValidData()
+     */
+    public function isValidData($data)
+    {
+        $this->_reset();
+        $this->setData($data);
+        $this->validate();
+
+        return $this->_isValid;
+    }
+
+    /**
      * Determines whether $data was valid/invalid using this validator
      *
      * @return boolean
@@ -282,25 +323,6 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
         $return = $this->_errorMsg;
         $this->_errorMsg = array();
         return $return;
-    }
-
-    protected function _validateByValidator(Chrome_Validator_Interface $validator, $expected = true)
-    {
-        $validator->setData($this->_data);
-
-        if($validator->isValid()) {
-            $valid = true;
-        } else {
-            $valid = false;
-        }
-
-        if($valid == $expected) {
-            return true;
-        } else {
-            $this->_errorMsg += $validator->getAllErrors();
-
-            return false;
-        }
     }
 }
 
@@ -346,7 +368,6 @@ abstract class Chrome_Validator_Composition_Abstract extends Chrome_Validator im
         foreach($this->_validators as $validator)
         {
             $validator->setData($data);
-
         }
     }
 }
@@ -370,6 +391,31 @@ abstract class Chrome_Validator_Composer_Abstract extends Chrome_Validator
 
     protected function _validate()
     {
-        return $this->_getValidator()->validate();
+        $validator = $this->_getValidator();
+        $validator->setData($this->_data);
+        $validator->validate();
+
+        return $validator->isValid();
+    }
+}
+
+/**
+ * An abstract validator, which needs a configuration
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Validator
+ */
+abstract class Chrome_Validator_Configurable extends Chrome_Validator
+{
+    /**
+     * The configurations
+     *
+     * @var \Chrome_Config_Interface
+     */
+    protected $_config = null;
+
+    public function __construct(\Chrome_Config_Interface $config)
+    {
+        $this->_config = $config;
     }
 }

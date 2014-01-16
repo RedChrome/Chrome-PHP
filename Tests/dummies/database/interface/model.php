@@ -2,10 +2,10 @@
 
 class Test_Chrome_Model_Database_Statement extends Chrome_Model_Database_Statement
 {
-    protected function _setUpCache()
+    protected function _createCache($database, $namespace)
     {
-        $this->_cacheOption = new Chrome_Cache_Option_Json();
-        $this->_cacheOption->setCacheFile(ROOT . '/Tests/resources/database/' . strtolower($this->_database) . '/' . strtolower($this->_namespace) . '.json');
-        $this->_cacheInterface = 'Json';
+        $cacheOption = new \Chrome\Cache\Option\File\Json();
+        $cacheOption->setCacheFile(ROOT . '/Tests/resources/database/' . strtolower($database) . '/' . strtolower($namespace) . '.json');
+        return new \Chrome\Cache\File\Json($cacheOption);
     }
 }

@@ -17,11 +17,15 @@
  * @subpackage Chrome.Cache
  */
 
+namespace Chrome\Cache\Option;
+
 /**
+ * An option interface for the session cache
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
  */
-interface Chrome_Cache_Option_Session_Interface extends Chrome_Cache_Option_Interface
+interface Session_Interface extends Option_Interface
 {
     /**
      * Sets the namespace for session. must be non-empty
@@ -40,7 +44,7 @@ interface Chrome_Cache_Option_Session_Interface extends Chrome_Cache_Option_Inte
      *
      * @param Chrome_Session_Interface $session
      */
-    public function setSession(Chrome_Session_Interface $session);
+    public function setSession(\Chrome_Session_Interface $session);
 
     /**
      * Returns the session instance
@@ -51,16 +55,18 @@ interface Chrome_Cache_Option_Session_Interface extends Chrome_Cache_Option_Inte
 }
 
 /**
+ * Default implementation of the option session interface
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
  */
-class Chrome_Cache_Option_Session implements Chrome_Cache_Option_Session_Interface
+class Session implements Session_Interface
 {
     protected $_namespace = '';
 
     protected $_session = null;
 
-    public function __construct(Chrome_Session_Interface $session, $namespace)
+    public function __construct(\Chrome_Session_Interface $session, $namespace)
     {
         $this->setSession($session);
         $this->setNamespace($namespace);
@@ -70,7 +76,7 @@ class Chrome_Cache_Option_Session implements Chrome_Cache_Option_Session_Interfa
     {
         if(!is_string($namespace) and !empty($namespace))
         {
-            throw new Chrome_InvalidArgumentException('Argument $namespace must be a non-empty string');
+            throw new \Chrome_InvalidArgumentException('Argument $namespace must be a non-empty string');
         }
 
         $this->_namespace = $namespace;
@@ -81,7 +87,7 @@ class Chrome_Cache_Option_Session implements Chrome_Cache_Option_Session_Interfa
         return $this->_namespace;
     }
 
-    public function setSession(Chrome_Session_Interface $session)
+    public function setSession(\Chrome_Session_Interface $session)
     {
         $this->_session = $session;
     }
@@ -92,17 +98,21 @@ class Chrome_Cache_Option_Session implements Chrome_Cache_Option_Session_Interfa
     }
 }
 
+namespace Chrome\Cache;
+
 /**
+ * A cache using the user's session
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
  */
-class Chrome_Cache_Session implements Chrome_Cache_Interface
+class Chrome_Cache_Session implements Cache_Interface
 {
     protected $_session;
 
     protected $_namespace = null;
 
-    public function __construct(Chrome_Cache_Option_Session_Interface $option)
+    public function __construct(\Chrome\Cache\Option\Session_Interface $option)
     {
         $this->_namespace = $option->getNamespace();
         $this->_session = $option->getSession();

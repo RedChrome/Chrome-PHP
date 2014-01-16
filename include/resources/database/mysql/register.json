@@ -6,6 +6,8 @@
     "registerGetRegistrationRequest": "SELECT `name`, `pass`, `pw_salt`, `email`, `time` FROM cpp_user_regist WHERE `key` = \"?\" LIMIT 0,1",
     "registerDeleteActivationKey": "DELETE FROM cpp_user_regist WHERE `key`  = \"?\"",
     
-	"emailExists": "SELECT COUNT(`email`) FROM cpp_user_regist WHERE `email` = '?'",
-	"getRegistration": "SELECT `name`,`pass`, `pw_salt`, `email`, `time` FROM cpp_user_regist WHERE `key` = '?'"
+	"emailExists": "SELECT `email` FROM `cpp_user_regist` WHERE `email` = '?' LIMIT 0,1",
+	"getRegistration": "SELECT `id`, `name`, `pass`, `pw_salt`, `email`, `time` FROM cpp_user_regist WHERE `key` = '?'",
+	"removeRegistrationWithActivationKey": "DELETE FROM `cpp_user_regist` WHERE `key` = '?'",
+	"addRegistration": "INSERT INTO `cpp_user_regist` (`email`, `pass`, `pw_salt`, `key`, `name`, `time`)  VALUES(\"?\",\"?\",\"?\",\"?\",\"?\",\"?\")"
 }
