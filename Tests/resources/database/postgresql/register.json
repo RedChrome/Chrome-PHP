@@ -1,0 +1,5 @@
+{	
+	"setUp1": "DELETE FROM cpp_user_regist WHERE \"email\" = 'RegistrationTest_testEmail2' OR \"email\" = 'RegistrationTest_testEmail3'",
+	"setUp2": "INSERT INTO cpp_user_regist (\"email\", \"key\") VALUES ('RegistrationTest_testEmail2', 'activationKey2'), ('RegistrationTest_testEmail3', 'activationKey3')",
+	"truncate": "DELETE FROM \"cpp_user_regist\" WHERE \"key\" LIKE 'activationKeyAdded%'"
+}
