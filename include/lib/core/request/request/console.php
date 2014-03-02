@@ -15,13 +15,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Request
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.04.2013 16:48:44] --> $
- * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -32,6 +26,13 @@ class Chrome_Request_Handler_Console implements Chrome_Request_Handler_Interface
 {
     protected $_requestData = null;
 
+    protected $_hash = null;
+
+    public function __construct(\Chrome\Hash\Hash_Interface $hash)
+    {
+        $this->_hash = $hash;
+    }
+
     public function canHandleRequest()
     {
         return PHP_SAPI === 'cli';
@@ -41,7 +42,7 @@ class Chrome_Request_Handler_Console implements Chrome_Request_Handler_Interface
     {
         if($this->_requestData === null)
         {
-            $this->_requestData = new Chrome_Request_Data_Console();
+            $this->_requestData = new Chrome_Request_Data_Console($this->_hash);
         }
 
         return $this->_requestData;

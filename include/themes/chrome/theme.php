@@ -70,10 +70,6 @@ class Chrome_Design_Theme_Chrome extends Chrome_Design_Theme_Abstract
                             'footer' => $footer,
                             'postBodyIn' => $postBodyIn);
 
-        $model = new Chrome_Model_Design_Loader_Static_Cache(new Chrome_Model_Design_Loader_Static($this->_appContext->getModelContext()));
-        $controllerFactory = $this->_appContext->getControllerFactoryRegistry()->get();
-        $viewFactory = $this->_appContext->getViewContext()->getFactory();
-
         $option = new Chrome_Renderable_Options_Static();
 
         // apply loaders
@@ -82,7 +78,7 @@ class Chrome_Design_Theme_Chrome extends Chrome_Design_Theme_Abstract
             $option->setPosition($key);
             $composition->setOption($option);
 
-            $loader = new Chrome_Design_Loader_Static($controllerFactory, $viewFactory, $model, 'chrome');
+            $loader = $diContainer->get('\Chrome_Design_Loader_Interface');
             $loader->addComposition($composition);
             $loader->load();
 

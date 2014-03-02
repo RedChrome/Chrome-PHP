@@ -206,7 +206,7 @@ class Chrome_Router implements Chrome_Router_Interface
     public function route(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data)
     {
         // replace ROOT,
-        $path = ltrim(preg_replace('#\A' . ROOT_URL . '#', '', '/' . $url->getPath()), '/');
+        $path = ltrim(preg_replace('#\A' . ROOT_URL . '#', '', '/'.$url->getPath()), '/');
         $url->setPath($path);
 
         try

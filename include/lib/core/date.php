@@ -14,116 +14,82 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.Date
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.10.2012 22:09:06] --> $
+ * @subpackage Chrome.Localization
  */
 
-if(CHROME_PHP !== true)
-    die();
+namespace Chrome\Localization;
 
-interface Chrome_Date_Interface
+interface DateTime_Interface
 {
+    const DATE_FULL  = 'full',
+          DATE_LONG  = 'long',
+          DATE_MED   = 'medium',
+          DATE_SHORT = 'short',
+          DATE_NONE  = null,
+          DATE_DEF   = 'default';
 
+    const TIME_FULL  = 'full',
+          TIME_LONG  = 'long',
+          TIME_SHORT = 'short',
+          TIME_NONE  = null,
+          TIME_DEF   = 'default';
+
+    const DEFAULT_DIFF_FORMAT = '';
+
+    public function setPattern($pattern);
+
+    public function setFormat($dateFormat = self::DATE_DEF, $timeFormat = self::TIME_DEF);
+
+    public function format($date);
+
+    #public function diffFormat($date, $reference = CHROME_TIME, $format = self::DEFAULT_DIFF_FORMAT);
 }
 
 /**
- * Chrome_Date
+ * DateTime
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Date
+ * @subpackage Chrome.Localization
  */
-class Chrome_Date implements Chrome_Date_Interface
+class DateTime implements DateTime_Interface
 {
-    private function _addPlural($nb, $str)
+    protected $_formatter = null;
+
+    protected $_locale  = null;
+
+    protected $_timezone = null;
+
+    protected $_dateFormat = null;
+
+    protected $_timeFormat = null;
+
+    protected $_pattern = '';
+
+    public function __construct(Locale_Interface $locale)
     {
-        return $nb > 1 ? $str.'s' : $str;
+        $this->_locale = $locale->getLocaleString();
+        $this->_timezone = $locale->getTimezone();
     }
 
-    public function formatDateDiff($start, $end = null)
+    protected function _createFormatter($dateType, $timeType, $pattern)
     {
-        if(!($start instanceof DateTime)) {
-            $start = new DateTime($start);
-        }
-
-        if($end === null) {
-            $end = new DateTime();
-        }
-
-        if(!($end instanceof DateTime)) {
-            $end = new DateTime($end);
-        }
-
-        $interval = $end->diff($start);
-
-
-        $format = array();
-        if($interval->y !== 0) {
-            $format[] = "%y ".$this->_addPlural($interval->y, "year");
-        }
-        if($interval->m !== 0) {
-            $format[] = "%m ".$this->_addPlural($interval->m, "month");
-        }
-        if($interval->d !== 0) {
-            $format[] = "%d ".$this->_addPlural($interval->d, "day");
-        }
-        if($interval->h !== 0) {
-            $format[] = "%h ".$this->_addPlural($interval->h, "hour");
-        }
-        if($interval->i !== 0) {
-            $format[] = "%i ".$this->_addPlural($interval->i, "minute");
-        }
-        if($interval->s !== 0) {
-            if(!count($format)) {
-                return "less than a minute ago";
-            } else {
-                $format[] = "%s ".$this->_addPlural($interval->s, "second");
-            }
-        }
-
-        // We use the two biggest parts
-        if(count($format) > 1) {
-            $format = array_shift($format)." AND ".array_shift($format);
-        } else {
-            $format = array_pop($format);
-        }
-
-        // Prepend 'since ' OR whatever you like
-        return $interval->format($format);
+        return new \IntlDateFormatter($this->_locale, $dateType, $timeType, $this->_timezone, \IntlDateFormatter::GREGORIAN, $pattern);
     }
 
-    public function getYears($desc = true)
+    public function setPattern($pattern)
     {
-        $year = date('Y', CHROME_TIME);
-        $years = array();
-        if($desc == true) {
-            for($i = 0; $i <= 100; ++$i) {
-                $years[] = $year - $i;
-            }
-        } else {
-            for($i = 100; $i >= 0; --$i) {
-                $years[] = $year - $i;
-            }
-        }
-
-        return $years;
+        $this->_pattern = $pattern;
     }
 
-    public function getMonths(Chrome_Language $lang = null, $addMonth = true)
+    public function setFormat($dateFormat = self::DATE_DEF, $timeFormat = self::TIME_DEF)
     {
-
-        if($lang == null) {
-            $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_DEFAULT_LANGUAGE);
-        }
-
-        return array($lang->get('january'), $lang->get('february'), $lang->get('march'), $lang->get('april'), $lang->get('may'), $lang->get('june'), $lang->get('july'), $lang->get('august'), $lang->get('september'), $lang->get('oktober'), $lang->get('november'), $lang->get('december'));
+        $this->_dateFormat = $dateFormat;
+        $this->_timeFormat = $timeFormat;
+        $this->_pattern = '';
     }
 
-    public function getDays()
+    public function format($date)
     {
-        return array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
-
+        // todo
     }
-
 }

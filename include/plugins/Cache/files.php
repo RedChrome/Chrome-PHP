@@ -15,42 +15,74 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Cache
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [24.03.2013 00:25:18] --> $
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Cache\Option;
 
-// @todo clean up this class to use it again
-
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.Cache
- */
-class Chrome_Cache_Files implements Chrome_Cache_Interface
+class Files implements Option_Interface
 {
-    protected $_dir = null;
+    protected $_dir = CACHE;
 
-    protected $_extension = null;
+    protected $_extension = '.cache';
 
-    public function __construct($dir, $extension = '.cache')
+    public function setDirectory($dir)
     {
-        $this->_dir = CACHE.$dir;
+        $this->_dir = $dir;
 
         if($dir{strlen($dir) - 1} !== '/') {
             $this->_dir .= '/';
         }
 
-        if(!_isDir($this->_dir)) {
-            Chrome_Dir::createDir($this->_dir);
+        if(!_isDir($dir)) {
+            \Chrome_Dir::createDir($dir);
+        }
+    }
+
+    public function setExtension($ext)
+    {
+        if(strstr($ext, '.') === false) {
+            $ext = '.'.$ext;
         }
 
-        if(strstr($extension, '.') === false) {
-            $extension = '.'.$extension;
-        }
+        $this->_extension = $ext;
+    }
 
-        $this->_extension = $extension;
+    public function getDirectory()
+    {
+        return $this->_dir;
+    }
+
+    public function getExtension()
+    {
+        return $this->_extension;
+    }
+}
+
+namespace Chrome\Cache;
+
+/**
+ * A cache using multiple files as storage.
+ *
+ * This is a pretty simple implementation, so for performance reasons, you should put another cache
+ * infront of this one.
+ * E.g. get($file) will always read from a file, regardless the file was read before or not.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Cache
+ */
+class Files implements Cache_Interface
+{
+    protected $_dir = null;
+
+    protected $_extension = null;
+
+    protected $_option = null;
+
+    public function __construct(\Chrome\Cache\Option\Files $option)
+    {
+        $this->_option = $option;
+        $this->_dir = $option->getDirectory();
+        $this->_extension = $option->getExtension();
     }
 
     public function has($file)
@@ -60,7 +92,7 @@ class Chrome_Cache_Files implements Chrome_Cache_Interface
 
     public function get($file)
     {
-        if($this->isCached($file)) {
+        if($this->has($file)) {
             return file_get_contents($this->_dir.$file.$this->_extension);
         } else {
             return null;
@@ -69,7 +101,7 @@ class Chrome_Cache_Files implements Chrome_Cache_Interface
 
     public function remove($file)
     {
-        return _rmFile($this->_dir.$file.$this->_extension);
+        _rmFile($this->_dir.$file.$this->_extension);
     }
 
     public function clear()
@@ -79,11 +111,12 @@ class Chrome_Cache_Files implements Chrome_Cache_Interface
 
     public function set($file, $content)
     {
-        return file_put_contents($this->_dir.$file.$this->_extension, $content);
+        return (file_put_contents($this->_dir.$file.$this->_extension, $content) >= 0);
     }
 
     public function flush()
     {
         // do nothing
+        return true;
     }
 }

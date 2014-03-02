@@ -163,29 +163,24 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_applicationContext->setViewContext($viewContext);
         $this->_applicationContext->setModelContext($this->_modelContext);
 
-        // TODO: add needed instances.
         $this->_initDiContainer();
         $closureHandler = $this->_diContainer->getHandler('closure');
         $registryHandler = $this->_diContainer->getHandler('registry');
         $registryHandler->add('\Chrome_Context_View_Interface', $viewContext);
         $registryHandler->add('\Chrome_Context_Model_Interface', $this->_modelContext);
         $registryHandler->add('\Chrome_Context_Application_Interface', $this->_applicationContext);
-        // TODO: ... continue to add those.
 
         $viewFactory = new Chrome_View_Factory($viewContext);
         $viewContext->setFactory($viewFactory);
         $registryHandler->add('\Chrome_View_Factory_Interface', $viewFactory);
+        $registryHandler->add('\Chrome\Hash\Hash_Interface', new \Chrome\Hash\Hash());
 
         $this->_initClassloader();
-
-        //$registryHandler->add('\Chrome_Model_Database_Statement_Cache', $this->_diContainer->get('\Chrome_Cache_Factory_Interface')->build('memory'));
 
         $this->_initLocalization();
 
         $this->_initDatabase();
         $registryHandler->add('\Chrome_Database_Factory_Interface', $this->_modelContext->getDatabaseFactory());
-
-        $this->_initControllerFactory();
 
         require_once LIB . 'core/classloader/model.php';
         require_once LIB.'core/database/interface/model.php';
@@ -287,7 +282,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
     {
         if($locale === null)
         {
-            $locale = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : CHROME_LOCALIZATION_DEFAULT;
+            $locale = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : CHROME_LOCALE_DEFAULT;
         }
 
         try
@@ -296,13 +291,13 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $localization = new \Chrome\Localization\Localization();
             $localization->setLocale($locale);
             $translate = new \Chrome\Localization\Translate_Simple($localization);
-            // require_once 'Tests/dummies/localization/translate/test.php';
-            // $translate = new \Chrome\Localization\Translate_Test_XX($localization);
+            #require_once 'Tests/dummies/localization/translate/test.php';
+            #$translate = new \Chrome\Localization\Translate_Test_XX($localization);
             $localization->setTranslate($translate);
             $this->_applicationContext->getViewContext()->setLocalization($localization);
         } catch(Chrome_Exception $e)
         {
-            $this->_initLocalization(CHROME_LOCALIZATION_DEFAULT);
+            $this->_initLocalization(CHROME_LOCALE_DEFAULT);
         }
     }
 
@@ -341,18 +336,6 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_loggerRegistry->set(\Chrome\Registry\Logger\Registry::DEFAULT_LOGGER, $this->_loggerRegistry->get('application'));
     }
 
-    protected function _initControllerFactory()
-    {
-        $controllerFactoryRegistry = new \Chrome\Registry\Controller\Factory\Registry_Single();
-
-        $controllerFactory = new \Chrome_Controller_Factory($this->_applicationContext);
-        $controllerFactoryRegistry->set(\Chrome\Registry\Controller\Factory\Registry_Single::DEFAULT_FACTORY, $controllerFactory);
-
-        $this->_applicationContext->setControllerFactoryRegistry($controllerFactoryRegistry);
-
-        $this->_diContainer->getHandler('registry')->add('\Chrome_Controller_Factory_Interface', $controllerFactory);
-    }
-
     protected function _initClassloader()
     {
         // autoloader
@@ -386,7 +369,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $authentication->setExceptionHandler($handler);
 
         $dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($this->_modelContext->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface')));
-        $cookieAuth = new Chrome_Authentication_Chain_Cookie(new Chrome_Model_Authentication_Cookie($this->_modelContext->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface')), $cookie);
+        $cookieAuth = new Chrome_Authentication_Chain_Cookie(new Chrome_Model_Authentication_Cookie($this->_modelContext->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface')), $cookie, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
         $sessionAuth = new Chrome_Authentication_Chain_Session($session);
 
         // set authentication chains in the right order
@@ -425,8 +408,9 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         // the last one should _always_ return true in canHandleRequest
         // $request->addRequestObject();
         // this handler is always capable of handling a request, so it always returns true in canHandleRequest
-        $requestFactory->addRequestObject(new Chrome_Request_Handler_HTTP());
-        $requestFactory->addRequestObject(new Chrome_Request_Handler_Console());
+        $hash = $this->_diContainer->get('\Chrome\Hash\Hash_Interface');
+        $requestFactory->addRequestObject(new Chrome_Request_Handler_HTTP($hash));
+        #$requestFactory->addRequestObject(new Chrome_Request_Handler_Console($hash));
 
         $reqHandler = $requestFactory->getRequest();
         $this->_applicationContext->setRequestHandler($requestFactory->getRequest());
@@ -437,7 +421,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $responseFactory->addResponseHandler(new Chrome_Response_Handler_JSON($reqHandler));
         $responseFactory->addResponseHandler(new Chrome_Response_Handler_HTTP($reqHandler));
-        $responseFactory->addResponseHandler(new Chrome_Response_Handler_Console($reqHandler));
+        #$responseFactory->addResponseHandler(new Chrome_Response_Handler_Console($reqHandler));
 
         $response = $responseFactory->getResponse();
         $this->_applicationContext->setResponse($response);
@@ -527,10 +511,9 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         }, true);
 
         $closure->add('\Chrome_Design_Loader_Interface', function ($c) {
-            $controllerFactory = $c->get('\Chrome_Controller_Factory_Interface');
             $viewFactory = $c->get('\Chrome_View_Factory_Interface');
             $model = $c->get('\Chrome_Model_Design_Loader_Static_Interface');
-            return new Chrome_Design_Loader_Static($controllerFactory, $viewFactory, $model);
+            return new Chrome_Design_Loader_Static($c, $viewFactory, $model);
         });
 
         $closure->add('\Chrome_Model_Design_Loader_Static_Interface', function ($c) {
@@ -571,7 +554,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         });
 
         $closure->add('Chrome_Controller_Register', function ($c) {
-            return new Chrome_Controller_Register($c->get('\Chrome_Context_Application_Interface'), $c->get('\Chrome_Model_Register'), new Chrome_View_Register($c->get('\Chrome_Context_View_Interface')));
+            return new Chrome_Controller_Register($c->get('\Chrome_Context_Application_Interface'), $c->get('\Chrome\Interactor\User\Registration_Interface'), new Chrome_View_Register($c->get('\Chrome_Context_View_Interface')));
         });
 
         $closure->add('\Chrome\Interactor\User\Registration_Interface', function ($c) {

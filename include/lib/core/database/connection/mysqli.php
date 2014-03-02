@@ -71,6 +71,8 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
 
         $this->_isConnected = true;
 
+        unset($this->_password, $this->_username);
+
         return true;
     }
 
@@ -79,6 +81,7 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
         try
         {
             $this->_connection = new mysqli($this->_host, $this->_username, $this->_password, $this->_database, $this->_port, $this->_socket);
+            $this->_connection->set_charset('utf8');
         } catch(Chrome_Exception $e)
         {
             switch(mysqli_connect_errno())

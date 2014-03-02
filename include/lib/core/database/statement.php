@@ -69,7 +69,7 @@ interface Chrome_Database_Registry_Statement_Interface
  * Default implementation of interface Chrome_Database_Registry_Statement_Interface
  *
  * @package CHROME-PHP
- * @subpackage Chrome.File_System
+ * @subpackage Chrome.Database
  */
 class Chrome_Database_Registry_Statement implements Chrome_Database_Registry_Statement_Interface
 {

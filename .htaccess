@@ -15,11 +15,17 @@
 	Deny from All
 </Files>
 
+# Do not list files in directorys
+#Options -Indexes
+
 <IfModule mod_rewrite.c>
 	RewriteEngine On
-
-    RewriteCond %{REQUEST_URI} ![^/]*public
-	RewriteRule !\.(js|ico|gif|jpeg|png|css)$ index.php [L]
+	
+	RewriteCond %{REQUEST_URI} [^/]*public/captcha/ [NC]
+	RewriteRule .* application/captcha.php [L]
+	
+    RewriteCond %{REQUEST_URI} ![^/]*(public|application) [NC]
+	RewriteRule !\.(js|ico|gif|jpeg|png|css)$ application/index.php [L]
 
 </IfModule>
 

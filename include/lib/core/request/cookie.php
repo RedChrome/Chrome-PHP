@@ -129,7 +129,7 @@ class Chrome_Cookie implements Chrome_Cookie_Interface
     /**
      * Class to hash strings
      *
-     * @var Chrome_Hash_Interface
+     * @var \Chrome\Hash\Hash_Interface
      */
     protected $_hash = null;
 
@@ -145,7 +145,7 @@ class Chrome_Cookie implements Chrome_Cookie_Interface
      *
      * @return Chrome_cookie
      */
-    public function __construct(Chrome_Request_Data_Interface $requestData, Chrome_Hash_Interface $hash = null)
+    public function __construct(Chrome_Request_Data_Interface $requestData, \Chrome\Hash\Hash_Interface $hash)
     {
         $this->_hash = $hash;
         $this->_requestData = $requestData;

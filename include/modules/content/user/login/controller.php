@@ -21,8 +21,6 @@
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true) die();
-
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.User

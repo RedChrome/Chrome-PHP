@@ -2,15 +2,15 @@
 
 ;
 
-class CookieTest extends PHPUnit_Framework_TestCase
+class CookieTest extends Chrome_TestCase
 {
     public function setUp() {
-        $this->_cookie = new Chrome_Cookie(new Chrome_Request_Data_Dummy(), Chrome_Hash::getInstance());
+        $this->_cookie = new Chrome_Cookie(new Chrome_Request_Data_Dummy(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
     }
 
     public function testConstruct() {
 
-        $this->_cookie = new Chrome_Cookie(new Chrome_Request_Data_Dummy(), Chrome_Hash::getInstance());
+        $this->_cookie = new Chrome_Cookie(new Chrome_Request_Data_Dummy(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
 
         $this->assertTrue($this->_cookie instanceof Chrome_Cookie_Interface);
 
@@ -106,7 +106,7 @@ class CookieTest extends PHPUnit_Framework_TestCase
         $requestData = new Chrome_Request_Data_Dummy();
         $requestData->_COOKIEData = array(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY => 'anInvalidKey',
                'anotherKey' => 'anyValue' );
-        $this->_cookie = new Chrome_Cookie($requestData, Chrome_Hash::getInstance());
+        $this->_cookie = new Chrome_Cookie($requestData, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
 
         $this->assertNull($this->_cookie->getCookie('anotherKey') );
 
@@ -122,7 +122,7 @@ class CookieTest extends PHPUnit_Framework_TestCase
         $requestData->_COOKIEData = array(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY => $this->_cookie->getCookie(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY),
                'testKey' => 'anyTestValue' );
 
-        $this->_cookie = new Chrome_Cookie($requestData, Chrome_Hash::getInstance());
+        $this->_cookie = new Chrome_Cookie($requestData, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
 
         $this->assertEquals('anyTestValue', $this->_cookie->getCookie('testKey'));
 

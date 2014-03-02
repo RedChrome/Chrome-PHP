@@ -66,7 +66,7 @@ interface Chrome_Response_HTTP_Interface extends Chrome_Response_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Response
  */
-class Chrome_Response_HTTP implements Chrome_Response_Interface
+class Chrome_Response_HTTP implements Chrome_Response_HTTP_Interface
 {
     protected $_status = '200 OK';
     protected $_headers = array('Content-Type' => 'text/html');

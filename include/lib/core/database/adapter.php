@@ -146,6 +146,12 @@ interface Chrome_Database_Adapter_Constructor_Interface
     public function __construct(Chrome_Database_Connection_Interface $connection);
 }
 
+/**
+ * An implementation of the basic methods of Chrome_Database_Adapter_Interface.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapter_Interface, Chrome_Database_Adapter_Constructor_Interface
 {
     protected $_connectionObject = null;

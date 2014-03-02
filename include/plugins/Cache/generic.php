@@ -83,6 +83,8 @@ namespace Chrome\Cache;
  *
  * This class caches every method call of the decorateable by using another cache.
  *
+ * This class can get used to set up a multi-cache object, which means, that you can create a cache of a cache.
+ *
  * For performance and api reasons, you shouldn't use this class. But for a quick cache feature, this is good enough.
  *
  * @package CHROME-PHP

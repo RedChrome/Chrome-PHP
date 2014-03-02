@@ -20,9 +20,6 @@
  * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [07.03.2012 18:49:36] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
-
 // @todo clean up this class to use it again
 
 /**

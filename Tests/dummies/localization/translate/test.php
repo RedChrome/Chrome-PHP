@@ -11,7 +11,7 @@ use Chrome\Localization\Translate_Simple;
  */
 class Translate_Test_XX extends Translate_Simple
 {
-    public function load($module)
+    public function load($module, $submodule = null)
     {
         // do nothing
     }

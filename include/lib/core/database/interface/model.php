@@ -20,13 +20,37 @@
  */
 
 /**
+ * An interface to retrieve datbase statements
+ *
+ * A database statement is grouped by the database name and the namespace.
+ * Since different databases have different statements (sql is not consistently used), those statements may vary.
+ * To avoid collisions between the $key's, there is another parameter, the namespace. This must be used to group
+ * the statements from different modules.
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
 interface Chrome_Model_Database_Statement_Interface
 {
+    /**
+     * Tries to retrieve a statement which is associated with a $key
+     *
+     * If there was no statement found with the given $key, then a Exception is thrown.
+     * If namespace or database name were not set, another Exception is thrown
+     *
+     * @throws Chrome_Exception
+     * @param string $key
+     * @return string
+     */
     public function getStatement($key);
 
+    /**
+     * Sets the namespace.
+     *
+     * A set of statements can get grouped into a namespace to avoid collisions with other modules.
+     *
+     * @param string $namespace
+     */
     public function setNamespace($namespace);
 
     /**
@@ -40,27 +64,55 @@ interface Chrome_Model_Database_Statement_Interface
     public function setDatabaseName($databaseNmae);
 }
 
+/**
+ * An interface to execute statements, given by an external statement provider (aka model)
+ *
+ * Use loadQuery, to load a statement via the model. Then execute this statement with additions parameters
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 interface Chrome_Database_Interface_Model_Interface
 {
+    /**
+     * Loads a query from the model.
+     *
+     * Throws an exception if the statement could not get loaded by the model
+     *
+     * @throws Chrome_Exception
+     * @param string $key
+     * @return void
+     */
     public function loadQuery($key);
 
+    /**
+     * Executes a loaded query using the provided parameters.
+     * All parameters are getting escaped.
+     *
+     * @param array $parameters
+     *        containing the parameters in numerical order to replace '?' in query string. every parameter gets escaped
+     *
+     * @return Chrome_Database_Result_Interface the result class containing the answer for the prepared query
+     */
     public function execute(array $parameters = array());
 
+    /**
+     * Sets the model class which provides the statements
+     *
+     * @param Chrome_Model_Database_Statement_Interface $model
+     */
     public function setModel(Chrome_Model_Database_Statement_Interface $model);
 }
-
+/**
+ * A basic implementation of Chrome_Database_Interface_Model_Interface
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract implements Chrome_Database_Interface_Model_Interface
 {
     protected $_model = null;
 
-    /**
-     * Executes a loaded query using the provieded parameters.
-     * All parameters are getting escaped.
-     *
-     * @param array $parameters
-     *        containing the parameters in numerical order to replace '?' in query string. every parameter get escaped
-     * @return Chrome_Database_Result_Interface the result class containing the answer for the prepared query
-     */
     public function execute(array $parameters = array())
     {
         if(count($parameters) >= 1)
@@ -104,6 +156,12 @@ class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract
     }
 }
 
+/**
+ * A implementation of Chrome_Model_Database_Statement_Interface using a cache to retrieve statements.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implements Chrome_Model_Database_Statement_Interface
 {
     const DEFAULT_NAMESPACE = 'core';

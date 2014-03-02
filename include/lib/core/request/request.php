@@ -129,6 +129,8 @@ interface Chrome_Request_Data_Interface
 require_once 'cookie.php';
 require_once 'session.php';
 
+use \Chrome\Hash\Hash_Interface;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Request
@@ -153,7 +155,7 @@ abstract class Chrome_Request_Data_Abstract implements Chrome_Request_Data_Inter
     /**
      * @return Chrome_Request_Data_Interface
      */
-    public function __construct()
+    public function __construct(Hash_Interface $hash)
     {
         $this->_vars = array(
             'SERVER' => $_SERVER,
@@ -164,8 +166,8 @@ abstract class Chrome_Request_Data_Abstract implements Chrome_Request_Data_Inter
             'ENV' => $_ENV,
             'COOKIE' => $_COOKIE);
 
-        $this->_cookie = new Chrome_Cookie($this, Chrome_Hash::getInstance());
-        $this->_session = new Chrome_Session($this->_cookie, $this, Chrome_Hash::getInstance());
+        $this->_cookie = new Chrome_Cookie($this, $hash);
+        $this->_session = new Chrome_Session($this->_cookie, $this, $hash);
     }
 
     protected function _getData($varName, $key = null)
@@ -339,10 +341,14 @@ class Chrome_Request_Factory implements Chrome_Request_Factory_Interface
             }
         }
 
+        if($this->_request === null) {
+            throw new Chrome_Exception('No appropriate request handler found');
+        }
+
         // well that should never happen. every Chrome_Request_Handler_Interface has to return an object of Chrome_Request_Data_Interface
         // null is also not allowed!
         if(!($this->_requestData instanceof Chrome_Request_Data_Interface) or $this->_requestData === null) {
-            throw new Chrome_Exception('Unexpected return value of "'.get_class($this->_request).'" in method getRequestData()! Expected an object of interface Chrome_Request_Data_Interface, actual="'.get_class($this->_requestData).'"! Violation of interface declaration!');
+            throw new Chrome_Exception('Unexpected return value of "'.get_class($this->_request).'" in method getRequestData(). Expected an object of interface Chrome_Request_Data_Interface, actual="'.get_class($this->_requestData).'". Violation of interface declaration');
         }
 
         // unset all global data, but DO NOT UNSET SESSION!!! http://php.net/manual/de/function.unset.php#77926

@@ -62,9 +62,6 @@ class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstrac
                             'footer' => $footer,
                             'postBodyIn' => $postBodyIn);
 
-        $controllerFactory = $this->_appContext->getControllerFactoryRegistry()->get();
-        $viewFactory = $this->_appContext->getViewContext()->getFactory();
-
         $option = new Chrome_Renderable_Options_Static();
 
         // apply loaders

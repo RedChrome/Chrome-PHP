@@ -36,12 +36,12 @@ class Chrome_View_Form_Element_Captcha_Default extends Chrome_View_Form_Element_
 
         $captchaName = $this->_formElement->getOption()->getCaptcha()->getFrontendOption(Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME);
 
-        $img = '<img src="' . _PUBLIC . 'captcha/default.php?name=' . $captchaName . '" id="captcha_' . $this->_formElement->getForm()->getID() . '"/>';
+        $img = '<img src="' . _PUBLIC . 'captcha/default/?name=' . $captchaName . '" id="captcha_' . $this->_formElement->getForm()->getID() . '"/>';
         // eturn $img;
 
         return '<fieldset style="text-align:center">' . "\n\t\t" . '<legend>'.$lang->get('captcha_verification').'</legend>' . "\n\t\t" .
              '<p>'.$lang->get('captcha_manual').'</p>' . "\n\t\t" . '<p>' . $img . '<br><a onclick="javascript:document.getElementById(\'captcha_' .
-             $this->_formElement->getForm()->getID() . '\').src=\'' . _PUBLIC . 'captcha/default.php?name=' . $captchaName . '&renew=\'+getToken()">' . $lang->get('captcha_renew') .
+             $this->_formElement->getForm()->getID() . '\').src=\'' . _PUBLIC . 'captcha/default/?name=' . $captchaName . '&renew=\'+getToken()">' . $lang->get('captcha_renew') .
              '</a></p><input type="text" name="' . $this->_formElement->getID() .
              '" autocomplete="off" value="" ' . $this->_renderFlags() . '"></fieldset>';
     }

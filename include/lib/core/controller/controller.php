@@ -17,9 +17,6 @@
  * @subpackage Chrome.Controller
  */
 
-require_once 'factory.php';
-require_once 'registry.php';
-
 /**
  *
  * @package CHROME-PHP
@@ -33,13 +30,6 @@ interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Inter
      * @return void
      */
     public function execute();
-
-    /**
-     * @todo remove
-     * @param Chrome_Context_Application_Interface $appContext
-     * @return Chrome_Controller_Interface
-     */
-    //public function __construct(Chrome_Context_Application_Interface $appContext);
 
     /**
      * Sets the application context
@@ -94,6 +84,12 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      * @var array
      */
     protected $_require = array();
+
+    /**
+     * @todo doc comment.
+     * @var unknown
+     */
+    protected $_interactor = null;
 
     /**
      * contains an instance of Chrome_Model_Abstract

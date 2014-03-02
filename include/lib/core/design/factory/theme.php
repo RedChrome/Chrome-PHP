@@ -15,14 +15,13 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Design
- * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.06.2013 16:10:35] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
-
+/**
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Design
+ */
 class Chrome_Design_Factory_Theme extends Chrome_Design_Factory_Abstract
 {
     const DEFAULT_THEME = '';

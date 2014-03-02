@@ -43,7 +43,6 @@ class Chrome_Exception_Database extends Chrome_Exception
     const DATABASE_EXCEPTION_NO_VALID_RIGHT_HANDLER = 12;
     const DATABASE_EXCEPTION_INVALID_STATE = 13;
     const UNKNOWN = 14;
-
     const ERROR_WHILE_EXECUTING_QUERY = 15;
     const NO_SUFFICIENT_RIGHTS = 16;
 }
@@ -56,13 +55,11 @@ class Chrome_Exception_Database extends Chrome_Exception
 class Chrome_Exception_Database_Query extends Chrome_Exception_Database
 {
     protected $_executedQuery = '';
-
     public function __construct($message = '', $executedQuery = '', $code = self::DATABASE_EXCEPTION_ERROR_IN_QUERY, Exception $prevException = null)
     {
-        $this->_executedQuery = (string) $executedQuery;
+        $this->_executedQuery = ( string ) $executedQuery;
         parent::__construct($message, $code, $prevException);
     }
-
     public function getExecutedQuery()
     {
         return $this->_executedQuery;
@@ -78,9 +75,9 @@ class Chrome_Exception_Database_Handler extends Chrome_Exception_Handler_Loggabl
 {
     public function exception(Exception $e)
     {
-        switch($e->getCode())
+        switch ($e->getCode())
         {
-            case Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER:
+            case Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER :
                 {
                     $trace = $e->getTrace();
 
@@ -89,7 +86,7 @@ class Chrome_Exception_Database_Handler extends Chrome_Exception_Handler_Loggabl
                     die('Could not connect to database-server! See log files for more information.');
                 }
 
-            case Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD:
+            case Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD :
                 {
                     $trace = $e->getTrace();
 
@@ -98,7 +95,7 @@ class Chrome_Exception_Database_Handler extends Chrome_Exception_Handler_Loggabl
                     die('Could not access database-server! See log files for more information.');
                 }
 
-            case Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE:
+            case Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE :
                 {
                     $trace = $e->getTrace();
 
@@ -107,7 +104,7 @@ class Chrome_Exception_Database_Handler extends Chrome_Exception_Handler_Loggabl
                     die('Could not select database! See log files for more information.');
                 }
 
-            case Chrome_Exception_Database::DATABASE_EXCEPTION_ERROR_IN_QUERY:
+            case Chrome_Exception_Database::DATABASE_EXCEPTION_ERROR_IN_QUERY :
                 {
                     $trace = $e->getTrace();
                     $query = $trace[0]['args'][1];
@@ -116,8 +113,8 @@ class Chrome_Exception_Database_Handler extends Chrome_Exception_Handler_Loggabl
                     die('There is an error in a query! See log files for more information.');
                 }
 
-            case Chrome_Exception_Database::UNKNOWN:
-            default:
+            case Chrome_Exception_Database::UNKNOWN :
+            default :
                 {
                     $this->_logger->error('There was an error in the database: ' . $e->getMessage() . "\n" . $e->_getTraceAsString() . "\n");
                     die('There was an unknown error in the database! See log files for more information');

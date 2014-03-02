@@ -356,22 +356,6 @@ interface Chrome_Context_Application_Interface
     public function getLoggerRegistry();
 
     /**
-     * Sets the controller factory registry
-     *
-     * A controller factory registry may contain multiple controller factories. A controller factory is able to create a new controller instance
-     *
-     * @param \Chrome\Registry\Controller\Factory\Registry_Interface $registry
-     */
-    public function setControllerFactoryRegistry(\Chrome\Registry\Controller\Factory\Registry_Interface $registry);
-
-    /**
-     * Returns a controller factory registry
-     *
-     * @return \Chrome\Registry\Controller\Factory\Registry_Interface
-     */
-    public function getControllerFactoryRegistry();
-
-    /**
      * Sets a design
      *
      * A design is a wrapper for a view composition. Thus a design only contains the entry point to render all registered views.
@@ -430,7 +414,6 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
     protected $_converter = null;
     protected $_loggerRegistry = null;
     protected $_design = null;
-    protected $_controllerFactroyRegistry = null;
     protected $_classloader = null;
 
     public function &getReference($variable)
@@ -454,16 +437,6 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
         /*
          * This works: $var = $this->getConfig(); return $var; but this not: return $this->getConfig();
          */
-    }
-
-    public function setControllerFactoryRegistry(\Chrome\Registry\Controller\Factory\Registry_Interface $registry)
-    {
-        $this->_controllerFactroyRegistry = $registry;
-    }
-
-    public function getControllerFactoryRegistry()
-    {
-        return $this->_controllerFactroyRegistry;
     }
 
     public function setConfig(Chrome_Config_Interface $config)
@@ -584,23 +557,12 @@ class Chrome_Context_Model implements Chrome_Context_Model_Interface
     protected $_config = null;
     protected $_loggerRegistry = null;
     protected $_converter = null;
-    protected $_factory = null;
 
     public function linkApplicationContext(Chrome_Context_Application_Interface $app)
     {
         $this->_config = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_CONFIG);
         $this->_loggerRegistry = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_LOGGER_REGISTRY);
         $this->_converter = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_CONVERTER);
-    }
-
-    public function getFactory()
-    {
-        return $this->_factory;
-    }
-
-    public function setFactory(\Chrome\Model\Factory_Interface $factory)
-    {
-        $this->_factory = $factory;
     }
 
     public function setDatabaseFactory(Chrome_Database_Factory_Interface $factory)

@@ -20,8 +20,6 @@
  * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.04.2013 10:52:09] --> $
  * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *

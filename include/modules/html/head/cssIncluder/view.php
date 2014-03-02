@@ -5,7 +5,7 @@ class Chrome_View_Html_Head_CssIncluder extends Chrome_View
     public function render()
     {
        return '<title>'.$this->getTitle().'</title>'."\n"
-                .'<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">'."\n"
+                .'<meta http-equiv="content-type" content="text/html; charset=UTF-8">'."\n"
                 .'<meta name="description" content="{DESCRIPTION}" />'."\n"
                 .'<meta name="keywords" content="{KEYWORDS}" />'."\n"
                 .'<meta name="robots" content="index, follow" />'."\n"

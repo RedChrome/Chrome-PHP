@@ -189,7 +189,7 @@ class Chrome_Session implements Chrome_Session_Interface
      *
      * @return Chrome_Session
      */
-    public function __construct(Chrome_Cookie_Interface $cookie, Chrome_Request_Data_Interface $requestData, Chrome_Hash_Interface $hash)
+    public function __construct(Chrome_Cookie_Interface $cookie, Chrome_Request_Data_Interface $requestData, \Chrome\Hash\Hash_Interface $hash)
     {
         $this->_cookie = $cookie;
         $this->_hash   = $hash;

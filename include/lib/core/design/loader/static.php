@@ -26,7 +26,7 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 {
     protected $_compositions = array();
 
-    protected $_controllerFactory = null;
+    protected $_dependencyContainer = null;
 
     protected $_viewFactory = null;
 
@@ -34,10 +34,9 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 
     protected $_theme = '';
 
-    // @todo remove dependency to controller/view factory, use dependency container
-    public function __construct(Chrome_Controller_Factory $controllerFactory, Chrome_View_Factory_Interface $viewFactory, Chrome_Model_Abstract $model)
+    public function __construct(\Chrome\DI\Container_Interface $dependencyContainer, Chrome_View_Factory_Interface $viewFactory, Chrome_Model_Abstract $model)
     {
-        $this->_controllerFactory = $controllerFactory;
+        $this->_dependencyContainer = $dependencyContainer;
         $this->_viewFactory = $viewFactory;
         $this->_model = $model;
     }
@@ -96,6 +95,8 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
             {
                 case 'view':
                     {
+                        // TODO: use dependency container to create view
+                        #$view = $this->_dependencyContainer->get($row['class']);
                         $view = $this->_viewFactory->build($row['class']);
 
                         break;
@@ -103,7 +104,7 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 
                 case 'controller':
                     {
-                        $controller = $this->_controllerFactory->build($row['class']);
+                        $controller = $this->_dependencyContainer->get($row['class']);
 
                         $controller->execute();
 

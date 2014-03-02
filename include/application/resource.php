@@ -63,6 +63,13 @@ require_once LIB.'core/application.php';
 class Chrome_Application_Resource implements Chrome_Application_Interface
 {
     /**
+     * Contains the application class
+     *
+     * @var string
+     */
+    protected $_appClass = '';
+
+    /**
      *
      * @var Chrome_Context_Application_Interface
      */
@@ -96,6 +103,16 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
         return null;
     }
 
+    public function __construct(Chrome_Exception_Handler_Interface $handler = null)
+    {
+        if($handler === null) {
+            require_once LIB.'exception/default.php';
+            $handler = new Chrome_Exception_Handler_Default();
+        }
+
+        $this->_exceptionHandler = $handler;
+    }
+
     /**
      * Set up all needed classes and dependencies
      *
@@ -103,6 +120,10 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
      */
     public function init()
     {
+        $this->_exceptionConfiguration = new Chrome_Exception_Configuration();
+        $this->_exceptionConfiguration->setExceptionHandler($this->_exceptionHandler);
+        $this->_exceptionConfiguration->setErrorHandler(new Chrome_Exception_Error_Handler_Default());
+
         $viewContext = new Chrome_Context_View();
         $this->_modelContext = new Chrome_Context_Model();
         $this->_applicationContext = new Chrome_Context_Application();
@@ -117,7 +138,7 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
         require_once LIB . 'core/request/request/http.php';
         require_once LIB . 'core/response/response/http.php';
 
-        $requestFactory->addRequestObject(new Chrome_Request_Handler_HTTP());
+        $requestFactory->addRequestObject(new Chrome_Request_Handler_HTTP(new Chrome\Hash\Hash()));
 
         $reqHandler = $requestFactory->getRequest();
         $requestData = $requestFactory->getRequestDataObject();
@@ -134,8 +155,26 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
         $this->_applicationContext->setResponse($response);
     }
 
+    public function setApplication($appClass)
+    {
+        $this->_appClass = $appClass;
+    }
+
     public function execute()
     {
+        try {
+            if(!class_exists($this->_appClass, false)) {
+                throw new Chrome_Exception('Could not find application class '.$this->_appClass);
+            }
+
+            $class = new $this->_appClass($this);
+
+            $class->execute();
+
+        } catch(Chrome_Exception $e)
+        {
+            $this->_exceptionHandler->exception($e);
+        }
     }
 
     /**

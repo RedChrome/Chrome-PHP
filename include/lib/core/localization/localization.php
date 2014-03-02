@@ -171,6 +171,8 @@ interface Locale_Interface
     public function getPrimaryLanguage();
 
     public function getRegion();
+
+    public function getTimezone();
 }
 
 /**
@@ -222,6 +224,11 @@ class Locale implements Locale_Interface
     public function getRegion()
     {
         return $this->_region;
+    }
+
+    public function getTimezone()
+    {
+        return CHROME_TIMEZONE;
     }
 
     public function getLocaleString($useUnderscore = false)

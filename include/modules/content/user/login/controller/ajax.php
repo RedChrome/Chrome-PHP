@@ -44,7 +44,7 @@ class Chrome_Controller_Content_Login_AJAX extends Chrome_Controller_Content_Log
 
         $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_User_Login_Ajax', $this);
 
-        $this->_model = new Chrome_Model_Login($this->_applicationContext, $this->_form);
+        #$this->_model = new Chrome_Model_Login($this->_applicationContext, $this->_form);
 
         $this->_handleForm();
     }

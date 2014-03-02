@@ -20,8 +20,13 @@
 use Chrome\Helper\User\Email_Interface;
 
 /**
- * A Validator that checks whether the email is already used
- * for an user or a registration
+ * A Validator that checks whether the email exists or not.
+ *
+ * Important is $returnTrueIfExists. If this is set to true, then
+ * this validator will return true if email exists, false else.
+ *
+ * If it is set to false, then it will return false if email exists and
+ * true if the email does not exist.
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
@@ -30,9 +35,12 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
 {
     protected $_helper = null;
 
-    public function __construct(Email_Interface $emailHelper)
+    protected $_returnConverter = true;
+
+    public function __construct(Email_Interface $emailHelper, $returnTrueIfExists)
     {
         $this->_helper = $emailHelper;
+        $this->_returnConverter = $returnTrueIfExists;
     }
 
     protected function _getDBInterface()
@@ -42,56 +50,18 @@ class Chrome_Validator_Email_Exists extends Chrome_Validator
 
     protected function _validate()
     {
-        $emailIsUsed = $this->_helper->emailIsUsed($this->_data);
+        $emailIsUsed = (bool) $this->_helper->emailIsUsed($this->_data);
 
-        // TODO: finish to implement this validator
-
-        throw new Chrome_Exception('Not implemented');
-
-        /*
-        $email = $this->_data;
-
-        $dbInterface = $this->_getDBInterface();
-
-        // checking users, trying to register
-        //$dbInterface->select('email')->from('user_regist')->where('email = "'.$dbInterface->escape($email).'"')->execute();
-
-        $resultSet = $dbInterface->query('SELECT email FROM cpp_user_regist WHERE email = "?"', array($email));
-
-        $result = $resultSet->getNext();
-
-        // the email does not exist
-        if($result === false) {
-            $return = !(bool) $this->_options[self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS];
+        if($this->_returnConverter === true) {
+            $return = $emailIsUsed;
         } else {
-            $return = (bool) $this->_options[self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS];
+            $return = !$emailIsUsed;
         }
 
         if($return === false) {
-            $this->_setError(self::CHROME_VALIDATOR_EMAIL_EXISTS_EMAIL_EXISTS);
-            return;
+            $this->_setError('email_exists');
         }
 
-        $dbInterface->clear();
-
-        // checking registered users
-        //$dbInterface->select('email')->from('user')->where('email = "'.$dbInterface->escape($email).'"')->execute();
-
-        $resultSet = $dbInterface->query('SELECT email FROM cpp_user WHERE email = "?"', array($email));
-
-        $result = $resultSet->getNext();
-
-        // the email does not exist
-        if($result === false) {
-            $return = !(bool) $this->_options[self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS];
-        } else {
-            $return = (bool) $this->_options[self::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS];
-        }
-
-        if($return === false) {
-            $this->_setError(self::CHROME_VALIDATOR_EMAIL_EXISTS_EMAIL_EXISTS);
-            return;
-        }
-        */
+        return $return;
     }
 }

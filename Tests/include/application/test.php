@@ -35,4 +35,24 @@ class Chrome_Application_Test extends Chrome_Application_Default
     {
         $this->_model = $modelContext;
     }
+
+    protected function _initRequestAndResponse()
+    {
+        // distinct which request is sent
+        $requestFactory = new Chrome_Request_Factory();
+        // set up the available request handler
+
+        $hash = new \Chrome\Hash\Hash();
+        $requestFactory->addRequestObject(new Chrome_Request_Handler_Console($hash));
+
+        $reqHandler = $requestFactory->getRequest();
+        $this->_applicationContext->setRequestHandler($requestFactory->getRequest());
+
+        $responseFactory = new Chrome_Response_Factory();
+
+        $responseFactory->addResponseHandler(new Chrome_Response_Handler_Console($reqHandler));
+
+        $response = $responseFactory->getResponse();
+        $this->_applicationContext->setResponse($response);
+    }
 }

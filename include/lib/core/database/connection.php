@@ -18,14 +18,7 @@
  * @category   CHROME-PHP
  * @package    CHROME-PHP
  * @subpackage Chrome.Database
- * @author     Alexander Book <alexander.book@gmx.de>
- * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 21:17:52] --> $
- * @link       http://chrome-php.de
  */
-
-if(CHROME_PHP !== true) die();
 
 /**
  * Interface for a database connection
@@ -168,6 +161,12 @@ interface Chrome_Database_Registry_Connection_Interface
     public function isExisting($name);
 }
 
+/**
+ * An implementation of the basic methods for a database connection holder
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 abstract class Chrome_Database_Connection_Abstract implements Chrome_Database_Connection_Interface
 {
     protected $_connection  = null;
@@ -185,6 +184,12 @@ abstract class Chrome_Database_Connection_Abstract implements Chrome_Database_Co
     }
 }
 
+/**
+ * A complete implementation of a database connection registry
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 class Chrome_Database_Registry_Connection implements Chrome_Database_Registry_Connection_Interface
 {
     protected $_connections = array();

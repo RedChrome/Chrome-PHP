@@ -31,7 +31,7 @@ if(CHROME_PHP !== true)
 //Database... default: MySQLi
 define('CHROME_DATABASE', 'mysqli');
 //SQL-Host
-define('DB_HOST', 'localhost');
+define('DB_HOST', '127.0.0.1');
 //SQL-Password
 define('DB_PASS', 'chrome-php-password');
 //SQL-Username
@@ -54,7 +54,6 @@ if(!defined('E_USER_DEPRECATED')) {
 
 // log path
 define('CHROME_LOG_DIR', 'logs/');
-define('CHROME_LOCALIZATION_DEFAULT', 'de-DE');
 //E_ALL | E_STRICT | E_DEPRECATED | E_USER_DEPRECATED); # Display Errors, set to 0 to supress errors
 define('CHROME_DISPLAY_ERRORS', (E_ALL | E_STRICT));
 
@@ -93,32 +92,43 @@ define('CHROME_MTIME', microtime(true));
 define('CHROME_MEMORY_USAGE', memory_get_usage());
 define('CHROME_MEMORY_LIMIT', ini_get('memory_limit'));
 // charset, UTF-8, ISO-8859-1 http://www.iana.org/assignments/character-sets
-define('CHROME_CHARSET', 'ISO-8859-1');
-define('CHROME_DEFAULT_LOCALE', 'de-DE');
+define('CHROME_LOCALE_DEFAULT', 'de-DE');
 define('CHROME_TIMEZONE', 'Europe/Berlin');
 define('CHROME_VERSION', '0.1');
 define('CHROME_VERSION_SUFFIX', 'beta');
 define('CHROME_DEFAULT_LANGUAGE', 'ger');
 
-$fileLevel = '';
-$rooturl   = $_SERVER['SCRIPT_NAME'];
-$found     = false;
-for($intFileLevel = 0; $intFileLevel < 10; ++$intFileLevel) {
+if(!defined('ROOT_URL')) {
+    $fileLevel = '';
+    $rooturl   = $_SERVER['SCRIPT_NAME'];
 
-    if(file_exists($fileLevel . 'include/config.php')) {
-        $found = true;
-        break;
+    $found     = false;
+    for($intFileLevel = 0; $intFileLevel < 10; ++$intFileLevel) {
+
+        if(file_exists($fileLevel . 'include/config.php')) {
+            $found = true;
+            break;
+        }
+        $fileLevel .= '../';
+        $rooturl    = dirname($rooturl);
     }
-    $fileLevel .= '../';
-    $rooturl    = dirname($rooturl);
+
+    if($found == false) {
+        die('Could not locate config.php file!');
+    }
+
+    define('ROOT_URL', dirname($rooturl));
+    define('FILE_LEVEL', $fileLevel);
+
+    // not needed anymore
+    unset($fileLevel, $intFileLevel, $rooturl, $found);
+}
+if(!defined('ROOT')) {
+    define('ROOT', dirname(dirname(__file__)));
 }
 
-if($found == false) {
-    die('Could not locate config.php file!');
-}
-
-define('ROOT_URL', dirname($rooturl));
-define('ROOT', dirname(dirname(__file__)));
+// change the working dir to the ROOT
+chdir(ROOT);
 
 // TODO: remove this const since this will be available in a appropriate class
 if(isset($_SERVER['REQUEST_URI'])) {
@@ -127,11 +137,11 @@ if(isset($_SERVER['REQUEST_URI'])) {
     define('_PUBLIC', 'Tests/');
 }
 define('IMAGE', _PUBLIC.'image/');
-define('VIEW', $fileLevel . 'include/modules/');
+define('VIEW', FILE_LEVEL . 'include/modules/');
 define('MODULE', VIEW);
 define('CONTENT', VIEW . 'content/');
-define('BASEDIR', $fileLevel . 'include/');
-define('BASE', $fileLevel);
+define('BASEDIR', FILE_LEVEL.'include/');
+define('BASE', FILE_LEVEL);
 define('ADMIN', BASEDIR . 'admin/');
 define('LIB', BASEDIR . 'lib/');
 define('TEMPLATE', BASEDIR . 'template/');
@@ -141,9 +151,6 @@ define('PLUGIN', BASEDIR . 'plugins/');
 define('RESOURCE', BASEDIR.'resources/');
 define('THEME', BASEDIR.'themes/');
 define('APPLICATION', BASEDIR.'application/');
-
-// not needed anymore
-unset($fileLevel, $intFileLevel, $rooturl, $found);
 
 // SET SOME .INI VARS
 // @codingStandardsIgnoreStart

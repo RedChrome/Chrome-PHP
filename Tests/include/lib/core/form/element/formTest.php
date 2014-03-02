@@ -26,7 +26,7 @@ class FormElementFormTest extends Chrome_TestCase
     {
         $this->_form = new Test_Chrome_Form_Element_Form($this->_appContext);
         // do not use the default session -> this would pollute the session namespace
-        $storage = new Chrome_Form_Storage_Session(new Chrome_Session_Dummy(new Chrome_Cookie_Dummy(), Chrome_Hash::getInstance()), 'TEST_FORM_ELEMENT_FORM');
+        $storage = new Chrome_Form_Storage_Session(new Chrome_Session_Dummy(new Chrome_Cookie_Dummy(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface')), 'TEST_FORM_ELEMENT_FORM');
         $this->_option = new Chrome_Form_Option_Element_Form($storage);
     }
 
@@ -214,7 +214,7 @@ class FormElementFormTest extends Chrome_TestCase
         $optionCloned = clone $this->_option;
 
         $optionCloned->setToken(null);
-        $optionCloned->setStorage(new Chrome_Form_Storage_Session(new Chrome_Session_Dummy(new Chrome_Cookie_Dummy(), Chrome_Hash::getInstance()), 'TEST_FORM_ELEMENT_FORM'), $this->_id);
+        $optionCloned->setStorage(new Chrome_Form_Storage_Session(new Chrome_Session_Dummy(new Chrome_Cookie_Dummy(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface')), 'TEST_FORM_ELEMENT_FORM'), $this->_id);
         $optionCloned->getStorage()->remove($this->_id);
         $this->assertNull($optionCloned->getStorage()->get($this->_id));
         $optionCloned->setStorage($this->_option->getStorage());

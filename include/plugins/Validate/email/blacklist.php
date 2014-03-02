@@ -45,9 +45,7 @@ class Chrome_Validator_Email_Blacklist extends Chrome_Validator
 
     public function __construct(Chrome_Config_Interface $configuration)
     {
-        //TODO: finish the rest of this class
         $this->_config = $configuration;
-
     }
 
     protected function _validate()
@@ -72,9 +70,8 @@ class Chrome_Validator_Email_Blacklist extends Chrome_Validator
 
         $host = substr($email, $posOfAt + 1, $posOfDot - $posOfAt - 1);
 
-        // TODO: add blacklist support
         // if $result === false, then it was not found
-        // $result = stristr($this->_getBlacklist(), $host);
+        $result = stristr($this->_getBlacklist(), $host);
 
         // everthing is fine
         if($result !== false)
@@ -85,14 +82,6 @@ class Chrome_Validator_Email_Blacklist extends Chrome_Validator
 
     protected function _getBlacklist()
     {
-        // TODO: use config to get blacklist
-        if($this->_options[self::CHROME_VALIDATOR_EMAIL_BLACKLIST_BLACKLIST_HOST] !== null)
-        {
-            return $this->_options[self::CHROME_VALIDATOR_EMAIL_BLACKLIST_BLACKLIST_HOST];
-        } else
-        {
-            return array();
-            // return $config->getConfig('Registration', 'blacklist_host');
-        }
+        return $config->getConfig('general', 'blacklist_host');
     }
 }

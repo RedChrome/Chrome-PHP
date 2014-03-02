@@ -21,9 +21,6 @@
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
-
 require_once 'http.php';
 
 /**

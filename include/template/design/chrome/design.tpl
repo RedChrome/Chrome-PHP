@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="Shortcut Icon" href="public/design/chrome/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="public/design/chrome/style/style.css" type="text/css" />
-    <link rel="stylesheet" href="public/design/chrome/style/dojo.css" type="text/css" />
-    <link rel="stylesheet" href="public/design/chrome/style/flexible-grids.css"  type="text/css" />
+    <link rel="Shortcut Icon" href="<?php echo _PUBLIC; ?>design/chrome/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="<?php echo _PUBLIC; ?>design/chrome/style/style.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo _PUBLIC; ?>design/chrome/style/dojo.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo _PUBLIC; ?>design/chrome/style/flexible-grids.css"  type="text/css" />
     <?php try { echo $VIEW->getRenderable(0)->render(); } catch(Chrome_Exception $e) { $exceptionHandler->exception($e); }?>
 </head>
 <body>

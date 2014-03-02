@@ -18,16 +18,17 @@
  * @category CHROME-PHP
  * @package CHROME-PHP
  * @author Alexander Book <alexander.book@gmx.de>
- * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.06.2013 23:59:34] --> $
- * @link http://chrome-php.de
+ * @copyright 2014 Chrome - PHP <alexander.book@gmx.de>
  */
 
 /**
  * load chrome-php framework
  */
-require_once 'include/chrome.php';
+define('ROOT_URL', dirname(dirname($_SERVER['PHP_SELF'])));
+define('ROOT', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
+define('FILE_LEVEL', '');
+
+require_once '../include/chrome.php';
 require_once APPLICATION . 'default.php';
 
 $application = new Chrome_Application_Default();

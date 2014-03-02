@@ -9,10 +9,11 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
     protected $_options = array(
         'cookie_namespace' => '_AUTH_TEST',
         'cookie_renew_probability' => 1,
-        //'cookie_instance'          => Chrome_Cookie_Dummy::getInstance(),
         );
 
     protected $_model = null;
+
+    protected $_resetCookie = true;
 
     public function setUp()
     {
@@ -20,15 +21,14 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
             $this->_model = new Chrome_Model_Authentication_Cookie($this->_appContext->getModelContext()->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface'));
         }
 
-        if(!isset($this->_options['cookie_instance']) OR $this->_options['cookie_instance'] !== false) {
+        if($this->_resetCookie === true OR !($this->_cookie instanceof Chrome_Cookie_Interface) ) {
             $this->_cookie = new Chrome_Cookie_Dummy();
-            $this->_options['cookie_instance'] = $this->_cookie;
-        } else {
-            $this->_cookie = $this->_appContext->getRequestHandler()->getRequestData()->getCookie();
         }
 
+        $this->_resetCookie = true;
 
-        $this->_chain = new Chrome_Authentication_Chain_Cookie($this->_model, $this->_cookie);
+
+        $this->_chain = new Chrome_Authentication_Chain_Cookie($this->_model, $this->_cookie, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
         $this->_chain->setOptions($this->_options);
         $this->_chain->setChain(new Chrome_Authentication_Chain_Null());
     }
@@ -43,19 +43,11 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
 
         $this->_chain->update($container);
 
-        if($this->_options['cookie_instance'] !== null) {
-            $this->assertArrayHasKey($this->_options['cookie_namespace'], $this->_options['cookie_instance']->_cookie);
-        } else {
-            $this->assertTrue($this->_cookie->offsetExists($this->_options['cookie_namespace']));
-        }
+        $this->assertArrayHasKey($this->_options['cookie_namespace'], $this->_cookie->_cookie);
 
         $this->_chain->update($container);
 
-        if($this->_options['cookie_instance'] !== null) {
-            $this->assertArrayHasKey($this->_options['cookie_namespace'], $this->_options['cookie_instance']->_cookie);
-        } else {
-            $this->assertTrue(Chrome_Cookie::getInstance()->offsetExists($this->_options['cookie_namespace']));
-        }
+        $this->assertArrayHasKey($this->_options['cookie_namespace'], $this->_cookie->_cookie);
     }
 
     /**
@@ -77,6 +69,9 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
      */
     public function testAuthenticateWithoutResource()
     {
+        $authContainer = $this->_chain->authenticate();
+        $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
+
         $id = 1;
 
         $container = new Chrome_Authentication_Data_Container(__class__);
@@ -97,42 +92,54 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
      */
     public function testAuthenticateWithoutResourceAndWrongUserInput()
     {
-        $this->_options['cookie_instance']->setCookie($this->_options['cookie_namespace'], $this->_model->encodeCookieString(12, 'anyStringWith\''));
+        $this->testAuthenticateWithoutResource();
+
+        $cookie = clone $this->_cookie;
+        $cookie2 = clone $this->_cookie;
+
+        $this->_chain->deAuthenticate();
+
+        $authContainer = $this->_chain->authenticate();
+        $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
+
+        $this->_cookie = $cookie;
+        $this->_resetCookie = false;
+        $this->setUp();
+
+        $authContainer = $this->_chain->authenticate();
+        $this->assertTrue($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
+
+        // set the cookie string to something unexpected.
+        $cookie2->_cookie[$this->_options['cookie_namespace']] = ')&%TBFEHFG&A/()QB§';
+
+        $this->_cookie = $cookie2;
+        $this->_resetCookie = false;
+        $this->setUp();
+        $authContainer = $this->_chain->authenticate();
+        $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
+
+
+
+        // this id does NOT exist
+        $id = 8312471782;
+
+        $container = new Chrome_Authentication_Data_Container(__class__);
+        $container->setID($id);
+        $container->setAutoLogin(true);
+
+        $this->_chain->update($container);
 
         $authContainer = $this->_chain->authenticate();
 
         $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
-
-
-        $this->_options['cookie_instance']->setCookie($this->_options['cookie_namespace'], $this->_model->encodeCookieString(null, 'anyToken'));
-
-        $authContainer = $this->_chain->authenticate();
-
-        $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
-
-
-
-        $this->_options['cookie_instance']->setCookie($this->_options['cookie_namespace'], $this->_model->encodeCookieString(123456, null));
-
-        $authContainer = $this->_chain->authenticate();
-
-        $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
-
-
-
-        // this id should not exist 123456789
-        $this->_options['cookie_instance']->setCookie($this->_options['cookie_namespace'], $this->_model->encodeCookieString(123456789, 'anyToken'));
-
-        $authContainer = $this->_chain->authenticate();
-
-        $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER), 'maybe id exists?');
     }
 
     /**
      * @depends testUpdate
      */
     public function testAuthenticateWithDefaultCookieInterface() {
-        $this->_options['cookie_instance'] = null;
+        $this->_options['cookie_instance'] = $this->_appContext->getRequestHandler()->getRequestData()->getCookie();
+        $this->_resetCookie = false;
         $this->setUp();
         $this->testUpdate();
     }

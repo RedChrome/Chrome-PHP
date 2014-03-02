@@ -283,8 +283,10 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Stateme
     public function createAuthentication($credential, $salt = null)
     {
         if($salt === null) {
-            $salt = Chrome_Hash::getInstance()->randomChars(12);
-            $hash = Chrome_Hash::getInstance()->hash($credential, $salt);
+            $hashObj = new \Chrome\Hash\Hash();
+
+            $salt = $hashObj->randomChars(12);
+            $hash = $hashObj->hash($credential, $salt);
         } else {
             $hash = $credential;
         }
@@ -299,6 +301,8 @@ class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Stateme
 
     public static function hashUserPassword($password, $salt)
     {
-        return Chrome_Hash::getInstance()->hash_algo($password, CHROME_USER_HASH_ALGORITHM, $salt);
+        $hash  = new \Chrome\Hash\Hash();
+
+        return $hash->hash($password, $salt, CHROME_USER_HASH_ALGORITHM);
     }
 }

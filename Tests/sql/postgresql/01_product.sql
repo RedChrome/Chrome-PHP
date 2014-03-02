@@ -315,7 +315,6 @@ INSERT INTO "chrome"."cp1_autoload" ("name", "path", "activated", "priority", "i
 ('\Chrome\Classloader\Resolver_Converter', 'plugins/classloader/converter.php',TRUE, 4, TRUE),
 ('\Chrome_View_Plugin_HTML', 'plugins/View/html.php', TRUE, 6, FALSE),
 ('\Chrome_View_Plugin_Decorator', 'plugins/View/decorator.php', TRUE, 6, FALSE),
-('\Chrome_View_Plugin_Error', 'plugins/View/error.php', TRUE, 6, FALSE),
 ('\Chrome_Filter_Chain_Preprocessor', 'plugins/Filter/chain/preprocessor.php', TRUE, 6, FALSE),
 ('\Chrome_Filter_Chain_Postprocessor', 'plugins/Filter/chain/postprocessor.php', TRUE, 6, FALSE),
 ('\Chrome_Exception_Handler_Authentication', 'lib/exception/authentication.php', TRUE, 6, FALSE),

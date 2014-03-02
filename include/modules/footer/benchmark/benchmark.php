@@ -20,13 +20,10 @@
  * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:31:08] --> $
  * @author     Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * Chrome_View_Footer_Benchmark
  *
- * @package
  * @author CHROME-PHP
  * @copyright Alexander Book
  * @version 2010
@@ -34,10 +31,11 @@ if(CHROME_PHP !== true)
  */
 class Chrome_View_Footer_Benchmark extends Chrome_View
 {
-    public function render() {
-        return 'rendered in '.sprintf('%01.2f', (microtime(true)- CHROME_MTIME)* 1000).' msec<br>
-Consumed '.memory_get_usage(true) .' Byte so far<br>
-Peak usage was '.memory_get_peak_usage(true) .' Byte so far
+    public function render()
+    {
+        return 'rendered in ' . sprintf('%01.2f', (microtime(true) - CHROME_MTIME) * 1000) . ' msec<br>
+Consumed ' . memory_get_usage(true) . ' Byte so far<br>
+Peak usage was ' . memory_get_peak_usage(true) . ' Byte so far
 ';
     }
 }

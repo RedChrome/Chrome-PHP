@@ -145,7 +145,7 @@ CREATE TABLE IF NOT EXISTS `cp1_config` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`) VALUES
-('blacklist_host', 'Registration', 'localhost,', 'string', '', FALSE),
+('blacklist_host', 'general', 'localhost,', 'string', '', FALSE),
 ('comment_block_sec', 'News', '30', 'integer', '', FALSE),
 ('Default_Design', 'Design', 'chrome', 'string', '', FALSE),
 ('default_user_group', 'Registration', '1', 'integer', '', FALSE),
@@ -331,7 +331,6 @@ INSERT INTO `cp1_autoload` (`name`, `path`, `activated`, `priority`, `is_class_r
 ('\\Chrome\\Classloader\\Resolver_Converter', 'plugins/classloader/converter.php',TRUE, 4, TRUE),
 ('\\Chrome_View_Plugin_HTML', 'plugins/View/html.php', TRUE, 6, FALSE),
 ('\\Chrome_View_Plugin_Decorator', 'plugins/View/decorator.php', TRUE, 6, FALSE),
-('\\Chrome_View_Plugin_Error', 'plugins/View/error.php', TRUE, 6, FALSE),
 ('\\Chrome_Filter_Chain_Preprocessor', 'plugins/Filter/chain/preprocessor.php', TRUE, 6, FALSE),
 ('\\Chrome_Filter_Chain_Postprocessor', 'plugins/Filter/chain/postprocessor.php', TRUE, 6, FALSE),
 ('\\Chrome_Exception_Handler_Authentication', 'lib/exception/authentication.php', TRUE, 6, FALSE),

@@ -59,7 +59,7 @@ class Email extends \Chrome_Validator_Composer_Abstract
     protected function _getValidator()
     {
         $userEmailValidator = new \Chrome\Validator\User\Email($this->_config);
-        $existsValidator = new \Chrome_Validator_Email_Exists($this->_helper);
+        $existsValidator = new \Chrome_Validator_Email_Exists($this->_helper, false);
 
         $andComposition = new \Chrome_Validator_Composition_And();
         $andComposition->addValidator($userEmailValidator);

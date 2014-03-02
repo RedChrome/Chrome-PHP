@@ -164,7 +164,12 @@ interface Chrome_Database_Factory_Interface extends Loggable_Interface
     public function getDefaultResultClass();
 }
 
-
+/**
+ * An implementation of the basic methods for a database factory
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 abstract class Chrome_Database_Factory_Abstract implements Chrome_Database_Factory_Interface
 {
     protected $_connectionRegistry = null;
@@ -210,6 +215,12 @@ abstract class Chrome_Database_Factory_Abstract implements Chrome_Database_Facto
     }
 }
 
+/**
+ * A complete implementation of a database factory
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
 class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
 {
     protected $_defaultInterface = 'simple';
