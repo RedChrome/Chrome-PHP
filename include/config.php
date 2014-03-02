@@ -127,6 +127,10 @@ if(!defined('ROOT')) {
     define('ROOT', dirname(dirname(__file__)));
 }
 
+if(!defined('CHROME_CLASSLOADER_ABSOLUTE_FILE_LOADING')) {
+    define('CHROME_CLASSLOADER_ABSOLUTE_FILE_LOADING', true);
+}
+
 // change the working dir to the ROOT
 chdir(ROOT);
 

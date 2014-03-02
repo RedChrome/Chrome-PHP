@@ -207,7 +207,11 @@ class Classloader implements Classloader_Interface
         // sometimes, the classloader is called in the shutdown phase. php.net says that
         // the working dir may change in this phase. To aviod that, use an absolute path
         // see http://www.php.net/manual/de/function.register-shutdown-function.php
-        $this->_loadFile(ROOT.DIRECTORY_SEPARATOR.$fileName);
+        if(CHROME_CLASSLOADER_ABSOLUTE_FILE_LOADING === true) {
+            $this->_loadFile(ROOT.DIRECTORY_SEPARATOR.$fileName);
+        } else {
+            $this->_loadFile($fileName);
+        }
 
         $this->_addClass($class);
     }

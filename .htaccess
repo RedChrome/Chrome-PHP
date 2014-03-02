@@ -16,7 +16,7 @@
 </Files>
 
 # Do not list files in directorys
-#Options -Indexes
+Options -Indexes
 
 <IfModule mod_rewrite.c>
 	RewriteEngine On
