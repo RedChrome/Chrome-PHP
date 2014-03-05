@@ -15,18 +15,18 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Authorisation
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.11.2012 22:58:56] --> $
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Authorisation\Assert;
+
+use \Chrome\Authorisation\Resource\Resource_Interface;
 
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
-class Chrome_Authorisation_Assert_Resource_Owner implements Chrome_Authorisation_Assert_Abstract
+class Resource_Owner extends Assert_Abstract
 {
     private $_userID  = null;
 
@@ -37,7 +37,7 @@ class Chrome_Authorisation_Assert_Resource_Owner implements Chrome_Authorisation
         $this->_userID = $userID;
     }
 
-    public function assert(Chrome_Authorisation_Resource_Interface $authResource)
+    public function assert(Resource_Interface $authResource)
     {
         // current user has to be the resource owner and must not be a guest
         $return = (($this->_userID == $this->_rUserID) AND ($this->_userID != 0));

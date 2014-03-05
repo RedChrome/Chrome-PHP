@@ -8,7 +8,7 @@
     "authenticationGetIdByPassword": "SELECT \"id\" FROM cpp_authenticate WHERE \"password\" = '?' AND \"password_salt\" = '?' ORDER BY \"id\" DESC LIMIT 1",
     "authenticationCreateAuthentication": "INSERT INTO cpp_authenticate(\"password\", \"password_salt\", \"time\") VALUES('?', '?', '?')",
 
-    "authorisationGetAccessById": "SELECT \"_access\" FROM cpp_authorisation_resource_default WHERE \"_resource_id\" = '?' AND \"_transformation\" = '?'",
+    "authorisationGetAccessById": "SELECT \"resource_group\" FROM cpp_authorisation_resource_default WHERE \"resource_id\" = '?' AND \"transformation\" = '?'",
     "authorisationGetUserGroupById": "SELECT \"group_id\" FROM cpp_authorisation_user_default WHERE \"user_id\"= '?' ",
 
     "configLoadConfiguration": "SELECT \"name\", \"subclass\", \"value\", \"type\" FROM cpp_config",
@@ -24,5 +24,11 @@
     "routeStaticGetRoute": "SELECT \"name\", \"class\", \"POST\", \"GET\" FROM cpp_route_static WHERE \"search\" = '?' LIMIT 1",
     "routeStaticFindRoute": "SELECT \"search\" FROM cpp_route_static WHERE \"name\"= '?' LIMIT 1",
     			
-    "designLoaderStaticGetViewsByPosition": "SELECT \"file\", \"class\", \"type\" FROM cpp_design_static WHERE \"position\" = '?' AND \"theme\" = '?'  ORDER BY \"order\" ASC"
+    "designLoaderStaticGetViewsByPosition": "SELECT \"file\", \"class\", \"type\" FROM cpp_design_static WHERE \"position\" = '?' AND \"theme\" = '?'  ORDER BY \"order\" ASC",
+    
+    "resourceGetResourceId": "SELECT \"id\" FROM cpp_resource WHERE \"name\" = \"?\" AND \"parameter\" = '?'",
+    "resourceGetResource": "SELECT \"name\", \"parameter\" FROM cpp_resource WHERE \"id\" = ?",
+    "resourceCreateResource": "INSERT INTO cpp_resource VALUES (NULL, '?', '?')",
+    "resourceDeleteResource": "DELETE FORM cpp_resource WHERE \"name\" = \"?\" AND \"parameter\" = '?'",
+    "resourceDeleteResourceId": "DELETE FROM cpp_resource WHERE \"id\" = ?"
 }

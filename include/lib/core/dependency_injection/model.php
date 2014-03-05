@@ -31,7 +31,7 @@ class Model implements Handler_Interface
 
     public function get($key, Container_Interface $container)
     {
-        if(!is_subclass_of($key, 'Chrome_Model_Database_Statement_Abstract')) {
+        if(!is_subclass_of($key, '\Chrome_Model_Database_Statement_Abstract')) {
             return null;
         }
 

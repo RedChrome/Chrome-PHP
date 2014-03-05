@@ -65,7 +65,7 @@ class Registration
     {
         if($this->_validatorsForAddingRegistrationRequestSet !== true)
         {
-            throw new \Chrome_IllegalStateException('No validators set.');
+            throw new \Chrome_IllegalStateException('No validators set');
         }
 
         $requestAdded = false;
@@ -198,8 +198,12 @@ class Registration
 
     protected function _validateRegistrationRequest(\Chrome\Model\User\Registration\Request_Interface $regRequest, $activationKey)
     {
-        if(empty($regRequest->getEmail()) OR empty($regRequest->getName()) OR empty($regRequest->getPassword())
-                OR empty($regRequest->getPasswordSalt())) {
+        $email  = $regRequest->getEmail();
+        $name   = $regRequest->getName();
+        $pw     = $regRequest->getPassword();
+        $pwSalt = $regRequest->getPasswordSalt();
+
+        if(empty($email) OR empty($name) OR empty($pw) OR empty($pwSalt)) {
             return false;
         }
 

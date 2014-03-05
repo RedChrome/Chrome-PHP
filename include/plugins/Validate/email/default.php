@@ -27,7 +27,13 @@ class Chrome_Validator_Email_Default extends Chrome_Validator
 {
     const CHROME_VALIDATOR_EMAIL_DEFAULT_MAX_LENGTH = 'EMAILMAXLENGTH', CHROME_VALIDATOR_EMAIL_DEFAULT_MIN_LENGTH = 'EMAILMINLENGTH';
     const CHROME_VALIDATOR_EMAIL_DEFAULT_TOO_SHORT = 'EMAILTOOSHORT', CHROME_VALIDATOR_EMAIL_DEFAULT_TOO_LONG = 'EMAILTOOLONG', CHROME_VALIDATOR_EMAIL_DEFAULT_NOT_VALID = 'EMAILNOTVALID';
-    protected $_options = array(self::CHROME_VALIDATOR_EMAIL_DEFAULT_MAX_LENGTH => 200, self::CHROME_VALIDATOR_EMAIL_DEFAULT_MIN_LENGTH => 10);
+
+    /**
+     * Actually an email address cannot be larger than 254 byte by RFC 5321
+     *
+     * @var array
+     */
+    protected $_options = array(self::CHROME_VALIDATOR_EMAIL_DEFAULT_MAX_LENGTH => 255, self::CHROME_VALIDATOR_EMAIL_DEFAULT_MIN_LENGTH => 10);
 
     public function __construct()
     {

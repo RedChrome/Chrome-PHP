@@ -152,3 +152,8 @@ require_once 'classloader/classloader.php';
  * load application interfaces
  */
 require_once 'application.php';
+
+/**
+ * load resource interface
+ */
+require_once 'resource.php';

@@ -22,7 +22,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
     {
         $authorisation = $this->_applicationContext->getAuthorisation();
 
-        if($authorisation->isAllowed(new Chrome_Authorisation_Resource('register', 'register')) === false)
+        if($authorisation->isAllowed(new \Chrome\Authorisation\Resource\Resource(new \Chrome\Resource\Resource('register'), 'register')) === false)
         {
             $this->_view->alreadyRegistered();
             return;

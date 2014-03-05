@@ -15,38 +15,36 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Authorisation
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [11.03.2013 01:06:18] --> $
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Authorisation\Resource;
 
+use \Chrome\Authorisation\Assert\Assert_Interface;
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
-interface Chrome_Authorisation_Resource_Interface
+interface Resource_Interface
 {
     /**
-     * getID()
+     * getResource()
      *
-     * Returns the id of the resource
+     * Returns the resource
      *
      * @return mixed
      */
-    public function getID();
+    public function getResource();
 
     /**
-     * setID()
+     * setResource()
      *
-     * Sets the id of the resource
+     * Sets the resource, you want to check the access for
      *
      * @param mixed $id resource id
      * @return void
      */
-    public function setID($id);
+    public function setResource(\Chrome\Resource\Resource_Interface $resource);
 
     /**
      * getAssert()
@@ -65,7 +63,7 @@ interface Chrome_Authorisation_Resource_Interface
      * @param Chrome_Authorisation_Assert_Interface $assert the assertion object
      * @return void
      */
-    public function setAssert(Chrome_Authorisation_Assert_Interface $assert);
+    public function setAssert(Assert_Interface $assert);
 
     /**
      * setTransformation()
@@ -87,27 +85,27 @@ interface Chrome_Authorisation_Resource_Interface
     public function getTransformation();
 }
 
-class Chrome_Authorisation_Resource implements Chrome_Authorisation_Resource_Interface
+class Resource implements Resource_Interface
 {
-    protected $_id             = null;
+    protected $_resource       = null;
     protected $_assert         = null;
     protected $_transformation = null;
 
-    public function __construct($id, $transformation, Chrome_Authorisation_Assert_Interface $assert = null)
+    public function __construct(\Chrome\Resource\Resource_Interface $resource, $transformation, Assert_Interface $assert = null)
     {
-        $this->_id             = $id;
+        $this->_resource       = $resource;
         $this->_transformation = $transformation;
         $this->_assert         = $assert;
     }
 
-    public function getID()
+    public function getResource()
     {
-        return $this->_id;
+        return $this->_resource;
     }
 
-    public function setID($id)
+    public function setResource(\Chrome\Resource\Resource_Interface $resource)
     {
-        $this->_id = $id;
+        $this->_resource = $resource;
     }
 
     public function getAssert()
@@ -115,7 +113,7 @@ class Chrome_Authorisation_Resource implements Chrome_Authorisation_Resource_Int
         return $this->_assert;
     }
 
-    public function setAssert(Chrome_Authorisation_Assert_Interface $assert)
+    public function setAssert(Assert_Interface $assert)
     {
         $this->_assert = $assert;
     }
@@ -131,17 +129,21 @@ class Chrome_Authorisation_Resource implements Chrome_Authorisation_Resource_Int
     }
 }
 
+namespace Chrome\Authorisation\Assert;
+
+use \Chrome\Authorisation\Resource\Resource_Interface;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
-interface Chrome_Authorisation_Assert_Interface
+interface Assert_Interface
 {
     /**
      * @return bool
      */
-    public function assert(Chrome_Authorisation_Resource_Interface $resource);
+    public function assert(Resource_Interface $resource);
 
     /**
      * @param string $key
@@ -156,7 +158,7 @@ interface Chrome_Authorisation_Assert_Interface
     public function getOption($key);
 }
 
-abstract class Chrome_Authorisation_Assert_Abstract implements Chrome_Authorisation_Assert_Interface
+abstract class Assert_Abstract implements Assert_Interface
 {
     protected $_option = array();
 
@@ -179,44 +181,52 @@ abstract class Chrome_Authorisation_Assert_Abstract implements Chrome_Authorisat
     }
 }
 
+namespace Chrome\Authorisation\Adapter;
+
+use Chrome\Authorisation\Resource\Resource_Interface;
+
 /**
  * Chrome_Authorisation_Adapter_Interface
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
-interface Chrome_Authorisation_Adapter_Interface
+interface Adapter_Interface
 {
-    /**
-     * Returns a new authorisation adapter instance
-     *
-     * @param Chrome_Authentication_Interface $auth authentication object
-     * @return Chrome_Authorisation_Adapter_Interface
-     */
-    public function __construct(Chrome_Authentication_Interface $auth);
-
     /**
      * isAllowed()
      *
      * @param Chrome_Authorisation_Resource_Interface $obj
+     * @param int $userId
      * @return boolean true if allowed to access resource, false else
      */
-    public function isAllowed(Chrome_Authorisation_Resource_Interface $obj);
+    public function isAllowed(Resource_Interface $obj, $userId);
 }
 
+namespace Chrome\Authorisation;
+
+use \Chrome\Authorisation\Adapter\Adapter_Interface;
+use \Chrome\Authorisation\Resource\Resource_Interface;
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
-interface Chrome_Authorisation_Interface
+interface Authorisation_Interface
 {
+    /**
+     * Sets the user id, for which the authorisation will be checked
+     *
+     * @param int $userId
+     */
+    public function setUserId($userId);
+
     /**
      * Returns a new authorisation instance
      *
      * @param Chrome_Authorisation_Adapter_Interface $auth authorisation adapter
      * @return Chrome_Authorisation_Interface
-     */
-    public function __construct(Chrome_Authorisation_Adapter_Interface $auth);
+     *
+    public function __construct(Adapter_Interface $auth);
 
     /**
      * setAuthorisationAdapter()
@@ -225,8 +235,8 @@ interface Chrome_Authorisation_Interface
      *
      * @param Chrome_Authorisation_Adapter_Interface $adapter
      * @return void
-     */
-    public function setAuthorisationAdapter(Chrome_Authorisation_Adapter_Interface $adapter);
+     *
+    public function setAuthorisationAdapter(Adapter_Interface $adapter);
 
     /**
      * getAuthorisationAdapter()
@@ -234,7 +244,7 @@ interface Chrome_Authorisation_Interface
      * Returns the authorisation adapter e.g. RBAC
      *
      * @return Chrome_Authorisation_Adapter_Interface
-     */
+     *
     public function getAuthorisationAdapter();
 
     /**
@@ -243,36 +253,38 @@ interface Chrome_Authorisation_Interface
      * @param Chrome_Authorisation_Resource_Interface $obj
      * @return boolean true if allowed to access resource, false else
      */
-    public function isAllowed(Chrome_Authorisation_Resource_Interface $obj);
+    public function isAllowed(Resource_Interface $obj);
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
-class Chrome_Authorisation implements Chrome_Authorisation_Interface
+class Authorisation implements Authorisation_Interface
 {
     private $_adapter = null;
+
+    /**
+     * The user id
+     *
+     * @var int
+     */
+    protected $_userId = 0;
+
+    /**
+     * @see \Chrome\Authorisation\Authorisation_Interface::setUserId()
+     */
+    public function setUserId($userId)
+    {
+        $this->_userId = (int) $userId;
+    }
 
     /**
      * Chrome_Authorisation::__construct()
      *
      * @return Chrome_Authorisation
      */
-    public function __construct(Chrome_Authorisation_Adapter_Interface $adapter)
-    {
-        $this->_adapter = $adapter;
-    }
-
-    /**
-     * setAuthorisationAdapter()
-     *
-     * Sets the adapter, which handles every authorisation request
-     *
-     * @param Chrome_Authorisation_Adapter_Interface $adapter
-     * @return void
-     */
-    public function setAuthorisationAdapter(Chrome_Authorisation_Adapter_Interface $adapter)
+    public function __construct(Adapter_Interface $adapter)
     {
         $this->_adapter = $adapter;
     }
@@ -293,8 +305,19 @@ class Chrome_Authorisation implements Chrome_Authorisation_Interface
      * @param Chrome_Authorisation_Resource_Interface $obj
      * @return boolean true if allowed to access resource, false else
      */
-    public function isAllowed(Chrome_Authorisation_Resource_Interface $resource)
+    public function isAllowed(Resource_Interface $resource)
     {
-        return $this->_adapter->isAllowed($resource);
+        $assert = $resource->getAssert();
+
+        if($assert !== null) {
+            $return = $assert->assert($resource);
+
+            // the assertion object want us to skipp the rest of the authorisation process
+            if($assert->getOption('return') === true) {
+                return $return;
+            }
+        }
+
+        return $this->_adapter->isAllowed($resource, $this->_userId);
     }
 }

@@ -118,8 +118,6 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
         $authContainer = $this->_chain->authenticate();
         $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
 
-
-
         // this id does NOT exist
         $id = 8312471782;
 

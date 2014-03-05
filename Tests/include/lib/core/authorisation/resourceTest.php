@@ -8,20 +8,22 @@ class AuthorisationResourceTest extends PHPUnit_Framework_TestCase
 
         $assert = new Chrome_Authorisation_Assert_Dummy();
 
-        $resource = new Chrome_Authorisation_Resource('test', 'create');
+        $resource = new \Chrome\Resource\Resource('test');
+        $authResource = new \Chrome\Authorisation\Resource\Resource($resource, 'create');
 
-        $this->assertEquals('test', $resource->getID());
-        $this->assertEquals('create', $resource->getTransformation());
-        $this->assertNull($resource->getAssert());
+        $this->assertEquals($resource, $authResource->getResource());
+        $this->assertEquals('create', $authResource->getTransformation());
+        $this->assertNull($authResource->getAssert());
 
+        $resource2 = new \Chrome\Resource\Resource('test2');
 
-        $resource->setID('test2');
-        $resource->setTransformation('read');
-        $resource->setAssert($assert);
+        $authResource->setResource($resource2);
+        $authResource->setTransformation('read');
+        $authResource->setAssert($assert);
 
-        $this->assertEquals('test2', $resource->getID());
-        $this->assertEquals('read', $resource->getTransformation());
-        $this->assertSame($assert, $resource->getAssert());
+        $this->assertEquals($resource2, $authResource->getResource());
+        $this->assertEquals('read', $authResource->getTransformation());
+        $this->assertSame($assert, $authResource->getAssert());
 
     }
 

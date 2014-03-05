@@ -70,24 +70,19 @@ class Chrome_Route_Static extends Chrome_Router_Route_Abstract
  */
 class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
 {
-    protected function _setUpCache()
-    {
-        $this->_cacheOption = new Chrome_Cache_Option_Serialization();
-        $this->_cacheOption->setCacheFile(CACHE.'router/_static.cache');
-
-        $this->_cacheInterface = 'serialization';
-    }
+    const CACHE_NAMESPACE_GET_ROUTE = 1;
+    const CACHE_NAMESPACE_FINDE_ROUTE = 2;
 
     public function getRoute($search)
     {
-        if(($return = $this->_cache->get('getRoute_' . $search)) === null)
+        if(($return = $this->_cache->get(self::CACHE_NAMESPACE_GET_ROUTE . $search)) === null)
         {
 
             $return = $this->_decorable->getRoute($search);
 
             if($return !== false)
             {
-                $this->_cache->set('getRoute_' . $search, $return);
+                $this->_cache->set(self::CACHE_NAMESPACE_GET_ROUTE. $search, $return);
             }
         }
 
@@ -96,14 +91,13 @@ class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
 
     public function findRoute($search)
     {
-        if(($return = $this->_cache->get('findRoute_' . $search)) === null)
+        if(($return = $this->_cache->get(self::CACHE_NAMESPACE_FINDE_ROUTE. $search)) === null)
         {
-
             $return = $this->_decorable->findRoute($search);
 
             if($return !== false)
             {
-                $this->_cache->set('findRoute_' . $search, $return);
+                $this->_cache->set(self::CACHE_NAMESPACE_FINDE_ROUTE. $search, $return);
             }
         }
 
@@ -135,12 +129,10 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Statement_Abstr
         $get = array();
         if(!empty($row['GET']))
         {
-
             // input is like key=value,key2=value2,..
             $keyValuePairs = explode(',', $row['GET']);
             foreach($keyValuePairs as $keyValuePair)
             {
-
                 $keyValue = explode('=', $keyValuePair);
                 $get[$keyValue[0]] = $keyValue[1];
             }
@@ -150,7 +142,6 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Statement_Abstr
         $post = array();
         if(!empty($row['POST']))
         {
-
             // input is like key=value,key2=value2,..
             $keyValuePairs = explode(',', $row['POST']);
             foreach($keyValuePairs as $keyValuePair)
@@ -175,4 +166,7 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Statement_Abstr
 
         return $row;
     }
+
+    // TODO:
+    //public function findRouteForResource()
 }

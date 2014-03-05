@@ -1,7 +1,7 @@
 Hallo <?php echo $name; ?>,<br />
 <br />
 Sie haben sich erfolgreich auf <?php echo $config->getConfig('Site', 'name'); ?> registriert.<br />
-Um die Registrierung abzuschließen m&uuml;ssen sie folgende Seite besuchen:<br /><br />
+Um die Registrierung abzuschlieï¿½en m&uuml;ssen sie folgende Seite besuchen:<br /><br />
 
 <a href="/registrierung_bestaetigen.html?activationKey=<?php echo $activationKey; ?>">Link</a><br /><br />
 
@@ -9,7 +9,7 @@ Falls sie nicht weitergeleitet werden, besuchen Sie die Seite manuell und geben 
 
 <?php echo $activationKey; ?><br /><br />
 
-Viele Gr&uuml;ße,<br />
+Viele Gr&uuml;ÃŸe,<br />
 Ihr <?php echo $config->getConfig('Site', 'name'); ?> Team
 
 Falls Sie sich nicht registriert haben, ignorieren Sie bitte diese E-Mail!

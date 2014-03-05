@@ -39,13 +39,17 @@ INSERT INTO "chrome"."cp1_config" ("name", "subclass", "value", "type", "modul",
 ('testValueUnknown', 'testSubclass', 'any value, 1 1 ', 'unknown', 'anyModule', '0'),
 ('testValueDouble', 'testSubclass', '2.7182818', 'double', 'anyModule', '0');
 
+INSERT INTO "chrome"."cp1_resource" ("id", "name") VALUES
+(1000, 'test'),
+(1001, 'test2'),
+(1002, 'testIsAllowed');
 
-INSERT INTO "chrome"."cp1_authorisation_resource_default" ("_resource_id", "_transformation", "_access") VALUES
-('test', 'read', 1234666),
-('test', 'write', 913785),
-('test2', 'anyTrafo', 18462),
-('testIsAllowed', 'guestAllowed', 1),
-('testIsAllowed', 'guestNotAllowed', 123456);
+INSERT INTO "chrome"."cp1_authorisation_resource_default" ("resource_id", "transformation", "resource_group") VALUES
+(1000, 'read', 1234666),
+(1000, 'write', 913785),
+(1001, 'anyTrafo', 18462),
+(1002, 'guestAllowed', 1),
+(1002, 'guestNotAllowed', 123456);
 
 DROP TABLE IF EXISTS "chrome"."testing";
 CREATE TABLE IF NOT EXISTS "chrome"."testing" (

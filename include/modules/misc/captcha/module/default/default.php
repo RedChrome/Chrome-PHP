@@ -18,7 +18,7 @@ class Simple
         }
 
         if($requestData->getGETData('renew') !== null) {
-            $captcha = new \Chrome_Captcha($requestData->getGETData('name'), $applicationContext, array(), array());
+            $captcha = new \Chrome_Captcha($requestData->getGETData('name'), $appContext, array(), array());
             $captcha->renew();
             $key = $session['CAPTCHA_'.$requestData->getGETData('name')];
 

@@ -96,13 +96,11 @@ class Chrome_TestSetup
         $databaseFactory = new Chrome_Database_Factory($dbRegistry, new Chrome_Database_Registry_Statement());
         $databaseFactory->setLogger(new \Psr\Log\NullLogger());
 
-        // $databaseFactory->setLogger(new Chrome_Logger_Database());
-
         if(TEST_DATABASE_CONNECTIONS == true)
         {
 
             // configure default database connection
-            // remove "#" in those lines, to connect to db at once. Now it will only connect if needed
+            // remove comment in those lines, to connect to db at once. Now it will only connect if needed
             $mysqlTestConnection = new Chrome_Database_Connection_Mysql();
             $mysqlTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
             // mysqlTestConnection->connect();

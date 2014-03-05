@@ -59,18 +59,14 @@ INSERT INTO `cp1_authorisation_rbac` (`id`, `user_id`, `group`) VALUES
 DROP TABLE IF EXISTS `cp1_authorisation_resource_default`;
 CREATE TABLE IF NOT EXISTS `cp1_authorisation_resource_default` (
   `id` INTEGER UNSIGNED  NOT NULL AUTO_INCREMENT,
-  `_resource_id` VARCHAR(256) NOT NULL,
-  `_transformation` VARCHAR(256) NOT NULL,
-  `_access` INTEGER NOT NULL,
+  `resource_id` INTEGER(11) NOT NULL,
+  `transformation` VARCHAR(256) NOT NULL,
+  `resource_group` INTEGER NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_authorisation_resource_default` (`id`, `_resource_id`, `_transformation`, `_access`) VALUES
-(1, 'test', 'read', 2097),
-(2, 'test', 'write', 2097151),
-(3, 'register', 'register', 1),
-(4, 'test_resource_1', '0', 157),
-(5, 'admin_index', '', 4);
+INSERT INTO `cp1_authorisation_resource_default` (`id`, `resource_id`, `transformation`, `resource_group`) VALUES
+(3, 3, 'register', 1);
 
 DROP TABLE IF EXISTS `cp1_authorisation_user_default`;
 CREATE TABLE IF NOT EXISTS `cp1_authorisation_user_default` (
@@ -114,9 +110,9 @@ INSERT INTO `cp1_class` (`name`, `file`) VALUES
 ('Chrome_Authentication_Chain_Session', 'lib/core/authentication/chain/session.php'),
 ('Chrome_Authentication_Chain_Cookie', 'lib/core/authentication/chain/cookie.php'),
 ('Chrome_Authentication', 'lib/core/authentication/authentication.php'),
-('Chrome_Authorisation_Adapter_Interface', 'lib/core/authorisation/authorisation.php'),
-('Chrome_Authorisation_Adapter_Default', 'lib/core/authorisation/adapter/default.php'),
-('Chrome_Authorisation', 'lib/core/authorisation/authorisation.php'),
+('\\Chrome\\Authorisation\\Authorisation', 'lib/core/authorisation/authorisation.php'),
+('\\Chrome\\Authorisation\\Adapter\\Adapter_Interface', 'lib/core/authorisation/authorisation.php'),
+('\\Chrome\\Authorisation\\Adapter\\Simple', 'lib/core/authorisation/adapter/simple.php'),
 ('Chrome_Redirection', 'lib/core/redirection.php'),
 ('Chrome_Controller_User_Login_Page', 'modules/content/user/login/page.php'),
 ('Chrome_Model_User_Database', 'lib/classes/user/model.php'),
@@ -130,7 +126,9 @@ INSERT INTO `cp1_class` (`name`, `file`) VALUES
 ('Chrome_Controller_Content_Logout', 'modules/content/user/logout/controller.php'),
 ('Chrome_Controller_Content_Login', 'modules/content/user/login/controller.php'),
 ('Chrome_Controller_Captcha', 'modules/content/captcha/controller.php'),
-('Chrome_Controller_SiteNotFound', 'modules/content/SiteNotFound/controller.php');
+('Chrome_Controller_SiteNotFound', 'modules/content/SiteNotFound/controller.php'),
+('\\Chrome\\Interactor\\User\\Registration',  'lib/modules/user/interactors/registration.php');
+
 
 DROP TABLE IF EXISTS `cp1_config`;
 CREATE TABLE IF NOT EXISTS `cp1_config` (
@@ -194,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `cp1_design_static` (
   `position` VARCHAR(50) NOT NULL,
   `type` VARCHAR(10) NOT NULL,
   `theme` VARCHAR(256) NOT NULL,
-  `order` INTEGER NOT NULL,
+  `order` INTEGER(2) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
@@ -338,8 +336,8 @@ INSERT INTO `cp1_autoload` (`name`, `path`, `activated`, `priority`, `is_class_r
 ('\\Chrome_Authentication_Chain_Database', 'lib/core/authentication/chain/database.php', TRUE, 6, FALSE),
 ('\\Chrome_Authentication_Chain_Cookie', 'lib/core/authentication/chain/cookie.php', TRUE, 6, FALSE),
 ('\\Chrome_Authentication_Chain_Session', 'lib/core/authentication/chain/session.php', TRUE, 6, FALSE),
-('\\Chrome_Authorisation', 'lib/core/authorisation/authorisation.php', TRUE, 6, FALSE),
-('\\Chrome_Authorisation_Adapter_Default', 'lib/core/authorisation/adapter/default.php', TRUE, 6, FALSE),
+('\\Chrome\\Authorisation\\Authorisation', 'lib/core/authorisation/authorisation.php', TRUE, 6, FALSE),
+('\\Chrome\\Authorisation\\Adapter\\Simple', 'lib/core/authorisation/adapter/simple.php', TRUE, 6, FALSE),
 ('\\Chrome_Route_Static', 'lib/core/router/route/static.php', TRUE, 6, FALSE),
 ('\\Chrome_Route_Dynamic', 'lib/core/router/route/dynamic.php', TRUE, 6, FALSE),
 ('\\Chrome_Route_Administration', 'lib/core/router/route/administration.php', TRUE, 6, FALSE),
@@ -371,6 +369,28 @@ CREATE TABLE IF NOT EXISTS `cp1_route_dynamic` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `cp1_resource`;
+CREATE TABLE IF NOT EXISTS `cp1_resource` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `parameter` varchar(130) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQUE` (`name`,`parameter`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+
+--
+-- Daten für Tabelle `cp1_resource`
+--
+
+INSERT INTO `cp1_resource` (`id`, `name`, `parameter`) VALUES
+(1, 'index', ''),
+(2, 'login', ''),
+(3, 'register', ''),
+(4, 'logout', ''),
+(5, 'siteNotFound', ''),
+(6, 'registrationConfirm', ''),
+(7, 'testCaptcha', '');
+
 INSERT INTO `cp1_route_dynamic` (`id`, `name`, `class`, `GET`, `POST`) VALUES
 (1, 'news_show', 'Chrome_Controller_News', 'action=show', '');
 
@@ -400,7 +420,7 @@ DROP TABLE IF EXISTS `cp1_user`;
 CREATE TABLE IF NOT EXISTS `cp1_user` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
-  `email` VARCHAR(200) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
   `group` INTEGER NOT NULL DEFAULT '0',
   `time` INTEGER NOT NULL,
   `avatar` VARCHAR(256) NULL,
@@ -410,8 +430,8 @@ CREATE TABLE IF NOT EXISTS `cp1_user` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_user` (`id`, `name`, `email`, `group`, `time`, `avatar`, `address`, `design`) VALUES
-(1, 'Alex', 'redchrome@gmx.de', 0, 1349179579, '', '', 'default');
+INSERT INTO `cp1_user` (`id`, `name`, `email`, `time`, `avatar`, `address`, `design`) VALUES
+(1, 'Alex', 'redchrome@gmx.de', 1349179579, '', '', 'default');
 
 DROP TABLE IF EXISTS `cp1_user_regist`;
 CREATE TABLE IF NOT EXISTS `cp1_user_regist` (
@@ -419,7 +439,7 @@ CREATE TABLE IF NOT EXISTS `cp1_user_regist` (
   `name` VARCHAR(50) NOT NULL,
   `pass` VARCHAR(100) NOT NULL,
   `pw_salt` VARCHAR(20) NOT NULL,
-  `email` VARCHAR(200) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
   `time` INTEGER NOT NULL,
   `key` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id`),

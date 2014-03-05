@@ -33,6 +33,7 @@ class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstrac
 
         $template = new Chrome_Template();
         $template->assignTemplate('design/chrome_one_sidebar/layout.tpl');
+        $template->assign('LINKER', $diContainer->get('\Chrome\Linker\Linker_Interface'));
 
         // this list needs 7 renderables
         $htmlList = new Chrome_Renderable_List();

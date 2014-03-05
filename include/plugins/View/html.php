@@ -17,6 +17,8 @@
  * @subpackage Chrome.View
  */
 
+use \Chrome\Resource\Resource_Interface;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.View
@@ -54,9 +56,9 @@ class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
         $this->_title = $title;
     }
 
-    public function addJS(Chrome_View_Interface $obj, $filename, $directory = '')
+    public function addJS(Chrome_View_Interface $obj, Resource_Interface $resource)
     {
-        $this->_JS[] = _PUBLIC . $directory . $filename;
+        $this->_JS[] = $this->_applicationContext->getDiContainer()->get('\Chrome\Linker\Linker_Interface')->get($resource);
     }
 
     public function setJS(Chrome_View_Interface $obj, array $js)
@@ -84,6 +86,7 @@ class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
 
     public function addCSS(Chrome_View_Interface $obj, $filename, $directory = '')
     {
+        // TODO: use linker
         $this->_CSS[] = _PUBLIC . $directory . $filename;
     }
 

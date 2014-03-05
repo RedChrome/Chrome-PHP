@@ -19,8 +19,6 @@
  */
 namespace Chrome\Helper\User;
 
-use Chrome\Model\User\Registration\Request_Interface;
-
 interface Email_Interface
 {
     /**

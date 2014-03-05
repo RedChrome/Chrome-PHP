@@ -16,8 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Content.User
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -30,7 +28,7 @@ class Chrome_View_Box_Login extends Chrome_View_Strategy_Abstract
     protected function _setUp()
     {
         // add the .js file for ajax support
-        $this->addJS('javascript/modules/box/login.js');
+        $this->addJS(new \Chrome\Resource\Resource('public/javascript/modules/box/login.js'));
     }
 
     /**

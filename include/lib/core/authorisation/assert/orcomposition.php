@@ -15,23 +15,22 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Authorisation
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 15:32:27] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+namespace Chrome\Authorisation\Assert;
+
+use \Chrome\Authorisation\Resource\Resource_Interface;
 
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
-abstract class Chrome_Authorisation_Asserts_OR extends Chrome_Authorisation_Asserts_Abstract
+abstract class ORComposition extends Asserts_Abstract
 {
-    public function assert(Chrome_Authorisation_Resource_Interface $authResource)
+    public function assert(Resource_Interface $authResource)
     {
-        // a  logical interconnection of OR
+        // a logical interconnection of OR
         foreach($this->_asserts as $assert) {
             if($assert->assert($authResource) === true) {
                 return true;

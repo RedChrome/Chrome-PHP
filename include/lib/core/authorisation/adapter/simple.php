@@ -16,10 +16,13 @@
  * @package    CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
+namespace Chrome\Authorisation\Adapter;
 
-
+use \Chrome\Authorisation\Resource\Resource_Interface;
+use \Chrome\Authorisation\Authorisation_Interface;
+use \Chrome\Model\Authorisation\Adapter\Simple\Model_Interface;
 /**
- * Chrome_Authorisation_Adapter_Default
+ * Simple
  *
  * Simple Authorisation via bit operations
  *
@@ -38,58 +41,21 @@
  * @package    CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
-class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapter_Interface
+class Simple implements Adapter_Interface
 {
     /**
      * Maximum of groups, a user can have
+     *
+     * This is a limit from php, because php cannot handle integers bigger than 2^CONST.
      *
      * @var int
      */
     const CHROME_AUTHORISATION_DEFAULT_MAX_GROUPS = 24;
 
     /**
-     * @var Chrome_Authentication_Interface
-     */
-    protected $_auth = null;
-
-    /**
-     * Instance of a model, which fetches the required information.
-     * the object must implement the following methods:
-     *
-     *  - (int) public getAccessById($id, $transformation), returns the access representation of the id $id with transformation $transformation
-     *  - (int) public getUserGroupById($id), returns the group of the user
-     *
      * @var Chrome_Model_Abstract
      */
     protected $_model = null;
-
-    /**
-     * Contains the user id
-     *
-     * @var int
-     */
-    protected $_userID = null;
-
-    /**
-     * Contains the group representation of the user
-     *
-     * @var int
-     */
-    protected $_groupID = null;
-
-    /**
-     * Caches every isAllowed request
-     *
-     * @var array
-     */
-    protected $_cache = array();
-
-    /**
-     * Contains the converted group id
-     *
-     * @var int
-     */
-    protected $_int = 0;
 
     /**
      * __construct()
@@ -97,79 +63,27 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
      * @param Chrome_Authentication_Interface $auth
      * @return Chrome_Authorisation_Adapter_Default
      */
-    public function __construct(Chrome_Authentication_Interface $auth)
-    {
-        $this->_auth = $auth;
-    }
-
-    /**
-     * setModel()
-     *
-     * {@see $_model} See $this->_model for more information about the model
-     *
-     * @param Chrome_Model_Abstract $model
-     * @return void
-     */
-    public function setModel(Chrome_Model_Abstract $model)
+    public function __construct(Model_Interface $model)
     {
         $this->_model = $model;
-    }
-
-    /**
-     *
-     * @return void
-     */
-    protected function _setUp()
-    {
-        if(!$this->_auth->isAuthenticated()) {
-            //throw new Chrome_Exception('Authentication must have been done before authorisation!');
-            // no access
-            $this->_int = 0;
-            return;
-        }
-
-        $container = $this->_auth->getAuthenticationDataContainer();
-
-        $this->_userID  = (int) $container->getID();
-
-        $this->_groupID = $this->_model->getUserGroupById($this->_userID);
-
-        $this->_createIntegerRepresentation();
-
-        // reset cache
-        $this->_cache = array();
     }
 
     /**
      * isAllowed()
      *
      * @param Chrome_Authorisation_Resource_Interface $resource
+     * @param int $userId the user id
      * @return boolean true if allowed to access resource, false else
      */
-    public function isAllowed(Chrome_Authorisation_Resource_Interface $resource)
+    public function isAllowed(Resource_Interface $resource, $userId)
     {
-        $this->_setUp();
-
-        $assert = $resource->getAssert();
-
-        if($assert !== null) {
-            $return = $assert->assert($resource);
-
-            if($assert->getOption('return') === true) {
-                return $return;
-            }
-        }
-
-        $id             = $resource->getID();
-        $transformation = $resource->getTransformation();
-
-        if(isset($this->_cache[$id][$transformation])) {
-            return $this->_cache[$id][$transformation];
-        }
+        $userGroup     = $this->_model->getUserGroupById($userId);
 
         // int has to be between 0 and 2^(self::CHROME_AUTHORISATION_DEFAULT_MAX_GROUPS+1) - 1
-        $int    = $this->_model->getAccessById($id, $transformation);
-        $access = ($int & $this->_int);
+        $resourceGroup = $this->_model->getResourceGroupByResource($resource->getResource(), $resource->getTransformation());
+
+        // here is the authorisation logic
+        $access = ($resourceGroup & $userGroup);
 
         if($access == 0) {
             $access = false;
@@ -177,69 +91,75 @@ class Chrome_Authorisation_Adapter_Default implements Chrome_Authorisation_Adapt
             $access = true;
         }
 
-        $this->_cache[$id][$transformation] = $access;
         return $access;
-    }
-
-    /**
-     * _createIntegerRepresentation()
-     *
-     * Creates the integer representation, in fact it does not much
-     *
-     * @return void
-     */
-    protected function _createIntegerRepresentation()
-    {
-        if($this->_groupID === null) {
-            throw new Chrome_Exception('No Group-ID set!');
-        }
-
-        $this->_int = $this->_groupID;
-    }
-
-    /**
-     * getGroupId()
-     *
-     * Returns the group id of the current user
-     *
-     * @return int
-     */
-    public function getGroupId()
-    {
-        $this->_setUp();
-
-        return $this->_groupID;
     }
 }
 
+namespace Chrome\Model\Authorisation\Adapter\Simple;
+
+use \Chrome\Resource\Resource_Interface;
+
 /**
- * Chrome_Model_Authorisation_Default_DB
- *
+ * An interface for the model for the simple adapter authorisation
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
-class Chrome_Model_Authorisation_Default_DB extends Chrome_Model_Database_Statement_Abstract
+interface Model_Interface
 {
-    public function getAccessById($id, $transformation)
-    {
-        $db = $this->_getDBInterface();
+    /**
+     * Returns for the resource $resource and the transformation $transformation the group, which is allowed to
+     * access it.
+     *
+     * @param Resource_Interface $resource
+     * @param string $transformation
+     * @return int, the group representation
+     */
+    public function getResourceGroupByResource(Resource_Interface $resource, $transformation);
 
-        $result = $db->loadQuery('authorisationGetAccessById')
-            ->execute(array($id, $transformation));
+    /**
+     * Returns the user group for the user with the id $id.
+     *
+     * @param int $id user id
+     * @return int, the group representation
+     */
+    public function getUserGroupById($id);
+}
+
+/**
+ * Database
+ *
+ * Actually you could use a left join on resource and authorisation_resource, but this would imply
+ * that the resource data is kept in the same database.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Authorisation
+ */
+class Database extends \Chrome_Model_Database_Statement_Abstract implements Model_Interface
+{
+    protected $_resourceModel = null;
+
+    public function setResourceModel(\Chrome\Resource\Model_Interface $model)
+    {
+        $this->_resourceModel = $model;
+    }
+
+    public function getResourceGroupByResource(Resource_Interface $resource, $transformation)
+    {
+        // retrieve the resource id
+        $resourceId = $this->_resourceModel->getResourceId($resource);
+
+        $result = $this->_getDBInterface()->loadQuery('authorisationGetAccessById')->execute(array($resourceId, $transformation));
 
         $return = $result->getNext();
-        return (int) $return['_access'];
+        return (int) $return['resource_group'];
     }
 
     public function getUserGroupById($id)
     {
         $id = (int) $id;
 
-        $db = $this->_getDBInterface();
-
-        $result = $db->loadQuery('authorisationGetUserGroupById')
-            ->execute(array($id));
+        $result = $this->_getDBInterface()->loadQuery('authorisationGetUserGroupById')->execute(array($id));
 
         $return = $result->getNext();
         return (int) $return['group_id'];

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="Shortcut Icon" href="<?php echo _PUBLIC; ?>design/chrome_one_sidebar/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="<?php echo _PUBLIC; ?>design/chrome_one_sidebar/style/flexible-grids.css"  type="text/css" />
-    <link rel="stylesheet" href="<?php echo _PUBLIC; ?>design/chrome_one_sidebar/style/style.css" type="text/css" />
-    <link rel="stylesheet" href="<?php echo _PUBLIC; ?>design/chrome_one_sidebar/style/dojo.css" type="text/css" />
+    <link rel="Shortcut Icon" href="<?php echo $LINKER->get(new \Chrome\Resource\Resource('public/design/chrome_one_sidebar/favicon.ico'));?>" type="image/x-icon" />
+    <link rel="stylesheet" href="<?php echo $LINKER->get(new \Chrome\Resource\Resource('public/design/chrome_one_sidebar/style/flexible-grids.css'));?>"  type="text/css" />
+    <link rel="stylesheet" href="<?php echo $LINKER->get(new \Chrome\Resource\Resource('public/design/chrome_one_sidebar/style/style.css'));?>" type="text/css" />
+    <link rel="stylesheet" href="<?php echo $LINKER->get(new \Chrome\Resource\Resource('public/design/chrome_one_sidebar/style/dojo.css'));?>" type="text/css" />
     <?php try { echo $VIEW->getRenderable(0)->render(); } catch(Chrome_Exception $e) { $exceptionHandler->exception($e); }?>
 </head>
 <body>
@@ -60,9 +60,9 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"></script>
-<script type="text/javascript" src="<?php echo _PUBLIC;?>javascript/dojo.js"></script>
-<script type="text/javascript" src="<?php echo _PUBLIC;?>javascript/ganalytics.js"></script>
-<script type="text/javascript" src="<?php echo _PUBLIC;?>javascript/form_utility.js"></script>
+<script type="text/javascript" src="<?php echo $LINKER->get(new \Chrome\Resource\Resource('public/javascript/dojo.js'));?>"></script>
+<script type="text/javascript" src="<?php echo $LINKER->get(new \Chrome\Resource\Resource('public/javascript/ganalytics.js'));?>"></script>
+<script type="text/javascript" src="<?php echo $LINKER->get(new \Chrome\Resource\Resource('public/javascript/form_utility.js'));?>"></script>
 <?php try { echo $VIEW->getRenderable(5)->render(); } catch(Chrome_Exception $e) {$exceptionHandler->exception($e); }?>
 <!--<script type="text/javascript" src="'._PUBLIC.'javascript/Framework/dojo.js" djConfig="parseOnLoad:true, isDebug: true"></script>-->
 </body>

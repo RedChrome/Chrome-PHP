@@ -20,6 +20,8 @@
  */
 namespace Chrome\Helper\User;
 
+require_once LIB.'modules/user/interfaces/helpers.php';
+
 class Email implements Email_Interface
 {
     protected $_userModel = null;

@@ -15,18 +15,18 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Authorisation
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 15:31:11] --> $
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Authorisation\Assert;
+
+use \Chrome\Authorisation\Resource\Resource_Interface;
 
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
-abstract class Chrome_Authorisation_Asserts_Abstract extends Chrome_Authorisation_Assert_Abstract
+abstract class Asserts_Abstract extends Assert_Abstract
 {
     protected $_asserts = array();
 
@@ -35,7 +35,7 @@ abstract class Chrome_Authorisation_Asserts_Abstract extends Chrome_Authorisatio
         $this->_asserts = $asserts;
     }
 
-    public function addAssert(Chrome_Authorisation_Assert_Interface $assert)
+    public function addAssert(Assert_Interface $assert)
     {
         $this->_asserts[] = $assert;
     }

@@ -226,6 +226,20 @@ interface Chrome_Context_Application_Interface
     public function &getReference($variable);
 
     /**
+     * Sets the Dependency injection container
+     *
+     * @param \Chrome\DI\Container_Interface $container
+     */
+    public function setDiContainer(\Chrome\DI\Container_Interface $container);
+
+    /**
+     * Returns the dependency injection container
+     *
+     * @return \Chrome\DI\Container_Interface
+     */
+    public function getDiContainer();
+
+    /**
      * Sets the request handler
      *
      * The request handler handles a request (e.g. http, json, console) and provides a
@@ -280,14 +294,14 @@ interface Chrome_Context_Application_Interface
      * The authorisation service is used to authorize a client. Which means: this class says you, whether the
      * client is allowed to do something or not.
      *
-     * @param Chrome_Authorisation_Interface $auth
+     * @param \Chrome\Authorisation\Authorisation_Interface $auth
      */
-    public function setAuthorisation(Chrome_Authorisation_Interface $auth);
+    public function setAuthorisation(\Chrome\Authorisation\Authorisation_Interface $auth);
 
     /**
      * Returns the authorisation service
      *
-     * @return Chrome_Authorisation_Interface
+     * @return \Chrome\Authorisation\Authorisation_Interface
      */
     public function getAuthorisation();
 
@@ -415,6 +429,7 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
     protected $_loggerRegistry = null;
     protected $_design = null;
     protected $_classloader = null;
+    protected $_diContainer = null;
 
     public function &getReference($variable)
     {
@@ -437,6 +452,16 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
         /*
          * This works: $var = $this->getConfig(); return $var; but this not: return $this->getConfig();
          */
+    }
+
+    public function setDiContainer(\Chrome\DI\Container_Interface $container)
+    {
+        $this->_diContainer = $container;
+    }
+
+    public function getDiContainer()
+    {
+        return $this->_diContainer;
     }
 
     public function setConfig(Chrome_Config_Interface $config)
@@ -491,7 +516,7 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
         return $this->_authentication;
     }
 
-    public function setAuthorisation(Chrome_Authorisation_Interface $auth)
+    public function setAuthorisation(\Chrome\Authorisation\Authorisation_Interface $auth)
     {
         $this->_authorisation = $auth;
     }

@@ -1,4 +1,5 @@
 <?php
+use Chrome\Authorisation\Adapter\Simple;
 /**
  * CHROME-PHP CMS
  *
@@ -377,13 +378,6 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         // the last should be the slowest, thats the db
         $authentication->addChain($cookieAuth)->addChain($sessionAuth)->addChain($dbAuth);
 
-        // set authorisation service
-        // Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB())); // better one, but not finished ;)
-        $adapter = new Chrome_Authorisation_Adapter_Default($authentication);
-        $adapter->setModel($this->_diContainer->get('\Chrome_Model_Authorisation_Default_Interface'));
-
-        $authorisation = new Chrome_Authorisation($adapter);
-
         // first authentication
         // user gets authenticated if session or cookie is set
         // for db authentication use:
@@ -392,6 +386,11 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         //
         // $authentication->authenticate(new Chrome_Authentication_Resource_Database('RedChrome', 'tiger', true));
         $authentication->authenticate();
+
+        // set authorisation service
+        // Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB())); // better one, but not finished ;)
+        $adapter = new \Chrome\Authorisation\Adapter\Simple($this->_diContainer->get('\Chrome\Model\Authorisation\Simple\Model_Interface'));
+        $authorisation = new \Chrome\Authorisation\Authorisation($adapter, $authentication->getAuthenticationID());
 
         $this->_applicationContext->setAuthentication($authentication);
         $this->_applicationContext->setAuthorisation($authorisation);
@@ -472,6 +471,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
     {
 
         $this->_diContainer = new \Chrome\DI\Container();
+        $this->_applicationContext->setDiContainer($this->_diContainer);
         require_once LIB . 'core/dependency_injection/closure.php';
         require_once LIB . 'core/dependency_injection/registry.php';
         require_once LIB . 'core/dependency_injection/controller.php';
@@ -537,8 +537,10 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             return new Chrome_Model_Classloader_Cache($c->get('\Chrome_Model_Classloader_Model_Database'), $cache);
         }, true);
 
-        $closure->add('\Chrome_Model_Authorisation_Default_Interface', function ($c) {
-            return $c->get('\Chrome_Model_Authorisation_Default_DB');
+        $closure->add('\Chrome\Model\Authorisation\Simple\Model_Interface', function ($c) {
+            $model = $c->get('\Chrome\Model\Authorisation\Adapter\Simple\Database');
+            $model->setResourceModel($c->get('\Chrome\Resource\Model_Interface'));
+            return $model;
         });
 
         $closure->add('\Chrome_Model_Route_Dynamic_Interface', function ($c) {
@@ -558,7 +560,9 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         });
 
         $closure->add('\Chrome\Interactor\User\Registration_Interface', function ($c) {
-            $return = new \Chrome\Interactor\User\Registration($c->get('\Chrome_Config_Interface'), $c->get('\Chrome\Model\User\Registration_Interface'));
+            require_once LIB.'modules/user/interactors/registration.php';
+
+            $return = new \Chrome\Interactor\User\Registration($c->get('\Chrome_Config_Interface'), $c->get('\Chrome\Model\User\Registration_Interface'), $c->get('\Chrome\Hash\Hash_Interface'));
             $emailValidator = $c->get('\Chrome\Validator\User\Registration\Email');
             $nameValidator = $c->get('\Chrome_Validator_Name');
             $passwordValidator = $c->get('\Chrome_Validator_Password');
@@ -567,24 +571,43 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         });
 
         $closure->add('\Chrome\Validator\User\Registration\Email', function ($c) {
+            require_once LIB.'modules/user/validators/email.php';
+
             return new \Chrome\Validator\User\Registration\Email($c->get('\Chrome_Config_Interface'), $c->get('\Chrome\Helper\User\Email_Interface'));
         });
 
         $closure->add('\Chrome\Helper\User\Email_Interface', function ($c) {
+            require_once LIB.'modules/user/helpers/email.php';
+
             return new \Chrome\Helper\User\Email($c->get('\Chrome\Model\User\User_Interface'), $c->get('\Chrome\Model\User\Registration_Interface'));
         }, true);
 
         $closure->add('\Chrome\Model\User\User_Interface', function ($c) {
+            require_once LIB.'modules/user/models/user.php';
+
             return $c->get('\Chrome\Model\User\User');
         });
 
         $closure->add('\Chrome\Model\User\Registration_Interface', function ($c) {
+            require_once LIB.'modules/user/models/registration.php';
+
             return $c->get('\Chrome\Model\User\Registration');
         });
 
         $closure->add('\Chrome\Cache\Memory', function ($c) {
             return new \Chrome\Cache\Memory();
         });
+
+        $closure->add('\Chrome\Resource\Model_Interface', function ($c) {
+            return $c->get('\Chrome\Resource\Model\Database');
+        }, true);
+
+        $closure->add('\Chrome\Linker\Linker_Interface', function ($c) {
+            require_once LIB.'core/linker/linker.php';
+
+            return new \Chrome\Linker\HTML\Linker(new \Chrome_URI($c->get('\Chrome_Context_Application_Interface')->getRequestHandler()->getRequestData(), true), $c->get('\Chrome\Resource\Model_Interface'));
+        }, true);
+
     }
 
     /**

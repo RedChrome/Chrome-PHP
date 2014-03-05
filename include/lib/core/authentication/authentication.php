@@ -74,7 +74,6 @@ interface Chrome_Authentication_Create_Resource_Interface
  */
 interface Chrome_Authentication_Interface extends Chrome_Exception_Processable_Interface
 {
-
     /**
      * The id for all guests
      *
