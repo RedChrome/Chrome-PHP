@@ -57,10 +57,6 @@ class Chrome_Route_Static extends Chrome_Router_Route_Abstract
 
         return true;
     }
-
-    public function url(Chrome_Router_Resource_Interface $resource)
-    {
-    }
 }
 
 /**

@@ -166,11 +166,6 @@ class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
         }
         return false;
     }
-
-    public function url(Chrome_Router_Resource_Interface $resource)
-    {
-        die('Not implemented yet');
-    }
 }
 
 /**

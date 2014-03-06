@@ -291,13 +291,17 @@ CREATE TABLE IF NOT EXISTS "chrome"."cp1_resource" (
 );
 
 INSERT INTO "cp1_resource" ("id", "name", "parameter") VALUES
-(1, 'index', ''),
-(2, 'login', ''),
-(3, 'register', ''),
-(4, 'logout', ''),
-(5, 'siteNotFound', ''),
-(6, 'registrationConfirm', ''),
-(7, 'testCaptcha', '');
+(0, '', '');
+
+INSERT INTO "cp1_resource" ("name", "parameter") VALUES
+('', ''),
+('index', ''),
+('login', ''),
+('register', ''),
+('logout', ''),
+('siteNotFound', ''),
+('registrationConfirm', ''),
+('testCaptcha', '');
 
 INSERT INTO "chrome"."cp1_rbac_user_group" ("user_id", "group_id") VALUES
 (1, 4);

@@ -599,13 +599,19 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         });
 
         $closure->add('\Chrome\Resource\Model_Interface', function ($c) {
-            return $c->get('\Chrome\Resource\Model\Database');
+            return $c->get('\Chrome\Model\Resource\Database');
         }, true);
 
         $closure->add('\Chrome\Linker\Linker_Interface', function ($c) {
             require_once LIB.'core/linker/linker.php';
+            require_once LIB.'core/linker/http/relative.php';
+            require_once LIB.'core/linker/http/url.php';
 
-            return new \Chrome\Linker\HTML\Linker(new \Chrome_URI($c->get('\Chrome_Context_Application_Interface')->getRequestHandler()->getRequestData(), true), $c->get('\Chrome\Resource\Model_Interface'));
+            $linker = new \Chrome\Linker\HTTP\Linker(new \Chrome_URI($c->get('\Chrome_Context_Application_Interface')->getRequestHandler()->getRequestData(), true), $c->get('\Chrome\Resource\Model_Interface'));
+            $linker->addResourceHelper(new \Chrome\Linker\HTTP\Helper\Relative());
+            $linker->addResourceHelper(new \Chrome\Linker\HTTP\Helper\Url());
+
+            return $linker;
         }, true);
 
     }

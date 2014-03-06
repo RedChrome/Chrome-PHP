@@ -382,14 +382,18 @@ CREATE TABLE IF NOT EXISTS `cp1_resource` (
 -- Daten für Tabelle `cp1_resource`
 --
 
-INSERT INTO `cp1_resource` (`id`, `name`, `parameter`) VALUES
-(1, 'index', ''),
-(2, 'login', ''),
-(3, 'register', ''),
-(4, 'logout', ''),
-(5, 'siteNotFound', ''),
-(6, 'registrationConfirm', ''),
-(7, 'testCaptcha', '');
+INSERT INTO `cp1_resource` (`id`, `name`, `parameter`) VALUES (0, '', '');
+UPDATE `cp1_resource` SET `id` = 0;
+ALTER TABLE `cp1_resource` AUTO_INCREMENT = 1;
+
+INSERT INTO `cp1_resource` (`name`, `parameter`) VALUES
+('index', ''),
+('login', ''),
+('register', ''),
+('logout', ''),
+('siteNotFound', ''),
+('registrationConfirm', ''),
+('testCaptcha', '');
 
 INSERT INTO `cp1_route_dynamic` (`id`, `name`, `class`, `GET`, `POST`) VALUES
 (1, 'news_show', 'Chrome_Controller_News', 'action=show', '');

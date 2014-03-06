@@ -29,32 +29,22 @@ use \Chrome\Resource\Resource_Interface;
 interface Linker_Interface
 {
     /**
-     * @var boolean
-     */
-    const DEFAULT_LINK_TYPE = null;
-
-    /**
      * Returns the link to a resource.
      *
-     * If the linker is unable to return a relative link, then an absolute link will be returned.
-     *
-     * Never expect the linker to return a relative link!
-     *
      * @param string $resourceId a resource identificator
-     * @param boolean $relative [optional] if true, the link will be returned relatively, but this cannot be guaranteed!
      * @return mixed
      */
-    public function getLink($resourceId, $relative = self::DEFAULT_LINK_TYPE);
+    public function getLink($resourceId);
 
     /**
      * Wrapper for {@link Linker_Interface::getLink}, always returns the link relatively
      *
      * @param string $resourceId
      */
-    public function get(Resource_Interface $resource, $relative = self::DEFAULT_LINK_TYPE);
+    public function get(Resource_Interface $resource);
 }
 
-namespace Chrome\Linker\HTML;
+namespace Chrome\Linker\HTTP;
 
 use \Chrome\Linker\Linker_Interface;
 use \Chrome\Resource\Resource_Interface;
@@ -66,11 +56,20 @@ use \Chrome\Resource\Model_Interface;
  */
 class Linker implements Linker_Interface
 {
+    /**
+     * @var boolean
+     */
+    const DEFAULT_LINK_TYPE = null;
+
     protected $_absolutePrefix = '';
 
     protected $_relativePrefix = '';
 
     protected $_model = null;
+
+    protected $_resourceHelper = array();
+
+    protected $_resourceIdHelper = array();
 
     public function __construct(\Chrome_URI_Interface $requestedURL, Model_Interface $model)
     {
@@ -84,7 +83,7 @@ class Linker implements Linker_Interface
         $authority = $currentURL->getAuthority();
         $host = $authority[\Chrome_URI_Interface::CHROME_URI_AUTHORITY_HOST];
 
-        // do not add http: or https:, since // is for both ;)
+        // do not add http: or https:, since // is for both
         $this->_absolutePrefix = '//'.$host.'/'.trim(ROOT_URL, '/').'/';
     }
 
@@ -95,6 +94,11 @@ class Linker implements Linker_Interface
         $relativeLevel = substr_count($remainingPath, '/');
 
         $this->_relativePrefix = str_repeat('../', $relativeLevel);
+    }
+
+    protected function _noLinkFound($resource, $relative)
+    {
+        return $this->_absolutePrefix.'404?'.$resource;
     }
 
     protected function _processUrl($url, $relative)
@@ -112,7 +116,20 @@ class Linker implements Linker_Interface
             throw new \Chrome_Exception('$resourceId must be of type integer, given '.$resourceId);
         }
 
-        $resource = $this->_model->getResource($resourceId);
+        foreach($this->_resourceIdHelper as $helper)
+        {
+            if( ($link = $helper->linkByResourceId($resourceId)) !== false) {
+
+                if(isset($link['skip']) AND $link['skip'] === true) {
+                    return $link['link'];
+                } else {
+                    return $this->_processUrl($link['link'], $relative);
+                }
+            }
+        }
+
+        return $this->_noLinkFound($resource, $relative);
+
         /*
         if(strstr($resourceId, 'public/') !== false) {
             return $this->_processUrl($resourceId, $relative);
@@ -120,19 +137,90 @@ class Linker implements Linker_Interface
 
         throw new \Chrome_Exception('Could not link to '.$resourceId);
         */
-        return $this->get($resource, $relative);
+        #return $this->get($resource, $relative);
 
         // TODO: Auto-generated method stub
     }
 
+    public function addResourceHelper(\Chrome\Linker\HTTP\Helper\Helper_Interface $helper)
+    {
+        $this->_resourceHelper[] = $helper;
+    }
+
+    public function addResourceIdHelper(\Chrome\Linker\HTTP\Helper\Helper_Interface $helper)
+    {
+        $this->_resourceIdHelper[] = $helper;
+    }
+
     public function get(Resource_Interface $resource, $relative = self::DEFAULT_LINK_TYPE)
     {
+        foreach($this->_resourceHelper as $helper)
+        {
+            if( ($link = $helper->linkByResource($resource)) !== false) {
+
+                if(isset($link['skip']) AND $link['skip'] === true) {
+                    return $link['link'];
+                } else {
+                    return $this->_processUrl($link['link'], $relative);
+                }
+            }
+        }
+
+        if($resource->getResourceId() !== null) {
+            return $this->getLink($resource->getResourceId(), $relative);
+        }
+
+        return $this->_noLinkFound($resource, $relative);
+
+        /*
         if(strstr($resource->getResourceName(), 'public/') !== false) {
             return $this->_processUrl($resource->getResourceName(), $relative);
         }
 
         throw new \Chrome_Exception('Could not link to '.var_export($resource, true));
 
-        #return $this->getLink($resourceId, true);
+        #return $this->getLink($resourceId, true);*/
     }
+}
+
+
+namespace Chrome\Linker\HTTP\Helper;
+
+use \Chrome\Resource\Resource_Interface;
+
+interface Helper_Interface
+{
+    /**
+     * Returns an array, if the resource could get linked,
+     * false if the resource could not get linked.
+     *
+     * If this methods returns an array, then it is assumed, that
+     * the resource can get accessed via this array (URL)
+     *
+     * Structure of the array
+     * array('link' => $link, 'skip' => $boolean),
+     * 'skip' symbolizes, whether $link will be returned (if its true) or
+     * a relativ/absolute prefix will be added (skip = false)
+     *
+     * @param Resource_Interface $resource
+     * @return array|false
+     */
+    public function linkByResource(Resource_Interface $resource);
+
+    /**
+     * Returns an array, if the resource could get linked,
+     * false if the resource could not get linked.
+     *
+     * If this methods returns an array, then it is assumed, that
+     * the resource can get accessed via this array (URL)
+     *
+     * Structure of the array
+     * array('link' => $link, 'skip' => $boolean),
+     * 'skip' symbolizes, whether $link will be returned (if its true) or
+     * a relativ/absolute prefix will be added (skip = false)
+     *
+     * @param int $resource
+     * @return array|false
+     */
+    public function linkById($resourceId);
 }

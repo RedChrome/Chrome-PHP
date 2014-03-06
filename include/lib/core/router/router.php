@@ -15,13 +15,8 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Router
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
  * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 17:39:14] --> $
- * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 use \Chrome\Logger\Loggable_Interface;
 use \Psr\Log\LoggerInterface;
@@ -36,8 +31,6 @@ interface Chrome_Router_Route_Interface
     public function match(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data);
 
     public function getResource();
-
-    public function url(Chrome_Router_Resource_Interface $resource);
 }
 
 /**
@@ -72,14 +65,7 @@ interface Chrome_Router_Result_Interface
 
     public function getName();
 }
-interface Chrome_Router_Resource_Interface
-{
 
-    public function getName();
-    // TODO: finish interface with better names
-    // public function getRequestOptions();
-    public function setReturnAsAbsolutPath($boolean);
-}
 abstract class Chrome_Router_Route_Abstract implements Chrome_Router_Route_Interface, Loggable_Interface
 {
     protected $_logger = null;
@@ -238,16 +224,5 @@ class Chrome_Router implements Chrome_Router_Interface
     public function getExceptionHandler()
     {
         return $this->_exceptionHandler;
-    }
-
-    public function url(Chrome_Router_Resource_Interface $resource)
-    {
-        foreach($this->_routerClasses as $router)
-        {
-            if(($return = $router->url($name, $options)) !== false)
-            {
-                return $return;
-            }
-        }
     }
 }

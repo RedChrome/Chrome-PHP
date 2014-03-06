@@ -92,11 +92,6 @@ class Chrome_Route_Administration extends Chrome_Router_Route_Abstract
 
         return true;
     }
-
-    public function url(Chrome_Router_Resource_Interface $resource)
-    {
-        die('Not implemented yet');
-    }
 }
 class Chrome_Router_Resource_Administration extends Chrome_Router_Resource
 {

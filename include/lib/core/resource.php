@@ -33,6 +33,8 @@ interface Resource_Interface
     public function getResourceId();
 
     public function equals(Resource_Interface $resource);
+
+    public function __toString();
 }
 
 // @TODO: configure sql create syntax for the cpp_resource table
@@ -113,8 +115,21 @@ class Resource implements Resource_Interface
         if($this->_resourceId !== null) {
             return $resource->getResourceId() === $this->_resourceId;
         } else {
-            return ($resource->getResourceName() === $this->getResourceName() AND $resource->getResourceParameters() === $this->getResourceParameters());
+            return (($resource->getResourceName() === $this->getResourceName()) AND (sizeof(array_diff_assoc($resource->getResourceParameters(), $this->getResourceParameters()))) === 0);
         }
+    }
+
+    public function __toString()
+    {
+        $params = array();
+
+        foreach($this->_resourceParams as $key => $param) {
+            $params[] = $key.'='.$param;
+        }
+
+        $str = implode('/', $params);
+
+        return $this->_resourceName.'/'.$str;
     }
 }
 
@@ -144,7 +159,7 @@ interface Model_Interface
 }
 
 // TODO: namespace should be \Chrome\Model\Resource
-namespace Chrome\Resource\Model;
+namespace Chrome\Model\Resource;
 
 use Chrome\Resource\Model_Interface;
 use Chrome\Resource\Resource_Interface;
@@ -190,10 +205,15 @@ class Database extends \Chrome_Model_Database_Statement_Abstract implements Mode
         $this->_getDBInterface()->loadQuery('resourceGetResourceId')->execute(array($resource->getResourceName(), $this->_convertArrayParamsToString($resource->getResourceParameters())));
 
         $result = $db->getResult();
-        $array = $result->getNext();
-        $id = (int) $array['id'];
-        $resource->setResourceId($id);
-        return $id;
+
+        if(!$result->isEmpty()) {
+            $array = $result->getNext();
+            $id = (int) $array['id'];
+            $resource->setResourceId($id);
+            return $id;
+        } else {
+            return 0;
+        }
     }
 
     public function getResource($resourceId)
@@ -204,10 +224,14 @@ class Database extends \Chrome_Model_Database_Statement_Abstract implements Mode
 
         $db->loadQuery('resourceGetResource')->execute(array($resourceId));
 
-        $result = $db->getResult()->getNext();
-        $resource = new Resource($result['name'], $this->_convertStringParamsToArray($result['parameter']), $resourceId);
+        $result = $db->getResult();
 
-        return $resource;
+        if(!$result->isEmpty()) {
+            $result = $db->getResult()->getNext();
+            return new Resource($result['name'], $this->_convertStringParamsToArray($result['parameter']), $resourceId);
+        } else {
+            return new Resource('', array(), $resourceId);
+        }
     }
 
     public function deleteResourceId($resourceId)
