@@ -1092,22 +1092,13 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
             // TODO: do not implement this, use a router class
             case self::ATTRIBUTE_ACTION:
                 {
-                    if(strpos($value, ROOT_URL) === false)
-                    {
-                        if($value{0} == '/')
-                        {
-                            $value = ROOT_URL . $value;
-                        } else
-                        {
-                            $value = ROOT_URL . '/' . $value;
-                        }
-                    }
+                    $linker = $this->_applicationContext->getDiContainer()->get('\Chrome\Linker\Linker_Interface');
 
-                    if($value{0} !== '/') {
-                        $value = '/'.$value;
+                    if($value instanceof \Chrome\Resource\Resource_Interface) {
+                        $this->_attribts[$key] = $linker->get($value);
+                    } else {
+                        $this->_attribts[$key] = $linker->getLink($value);
                     }
-
-                    $this->_attribts[$key] = $value;
 
                     return;
                 }

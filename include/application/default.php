@@ -469,7 +469,6 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
     protected function _initDiContainer()
     {
-
         $this->_diContainer = new \Chrome\DI\Container();
         $this->_applicationContext->setDiContainer($this->_diContainer);
         require_once LIB . 'core/dependency_injection/closure.php';
@@ -499,7 +498,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         }, true);
 
         $closure->add('\Chrome_Model_Database_Statement_Interface', function ($c) {
-            return new \Chrome_Model_Database_Statement($c->get('\Chrome\Cache\Memory'));
+            return new \Chrome_Model_Database_Statement($c->get('\Chrome\Cache\Memory\DBStatement'));
         });
 
         $closure->add('\Chrome_Model_Route_Static_Interface', function ($c) {
@@ -507,7 +506,11 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $cacheOption->setCacheFile(CACHE.'router/_static.cache');
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
-            return new \Chrome_Model_Route_Static_Cache($c->get('\Chrome_Model_Route_Static_DB'), $cache);
+            return new \Chrome_Model_Route_Static_Cache($c->get('\Chrome_Model_Route_Static_Database'), $cache);
+        }, true);
+
+        $closure->add('\Chrome_Model_Route_Static_Database', function($c) {
+            return $c->get('\Chrome_Model_Route_Static_DB');
         }, true);
 
         $closure->add('\Chrome_Design_Loader_Interface', function ($c) {
@@ -594,6 +597,11 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             return $c->get('\Chrome\Model\User\Registration');
         });
 
+        $closure->add('\Chrome\Cache\Memory\DBStatement', function ($c) {
+            // fix this cache, only one instance!
+            return $c->get('\Chrome\Cache\Memory');
+        }, true);
+
         $closure->add('\Chrome\Cache\Memory', function ($c) {
             return new \Chrome\Cache\Memory();
         });
@@ -602,18 +610,25 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             return $c->get('\Chrome\Model\Resource\Database');
         }, true);
 
+        $closure->add('\Chrome\Linker\HTTP\Helper\Model\Static_Interface', function($c) {
+            $model = $c->get('\Chrome_Model_Route_Static_Database');
+            $model->setResourceModel($c->get('\Chrome\Resource\Model_Interface'));
+            return $model;
+        }, true);
+
         $closure->add('\Chrome\Linker\Linker_Interface', function ($c) {
             require_once LIB.'core/linker/linker.php';
             require_once LIB.'core/linker/http/relative.php';
             require_once LIB.'core/linker/http/url.php';
+            require_once LIB.'core/linker/http/static.php';
 
             $linker = new \Chrome\Linker\HTTP\Linker(new \Chrome_URI($c->get('\Chrome_Context_Application_Interface')->getRequestHandler()->getRequestData(), true), $c->get('\Chrome\Resource\Model_Interface'));
-            $linker->addResourceHelper(new \Chrome\Linker\HTTP\Helper\Relative());
-            $linker->addResourceHelper(new \Chrome\Linker\HTTP\Helper\Url());
+            $linker->addResourceHelper(new \Chrome\Linker\HTTP\Helper\RelativeHelper());
+            $linker->addResourceHelper(new \Chrome\Linker\HTTP\Helper\StaticHelper($c->get('\Chrome\Linker\HTTP\Helper\Model\Static_Interface')));
+            $linker->addResourceHelper(new \Chrome\Linker\HTTP\Helper\UrlHelper());
 
             return $linker;
         }, true);
-
     }
 
     /**

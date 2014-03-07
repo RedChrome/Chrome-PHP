@@ -20,7 +20,7 @@ namespace Chrome\Linker\HTTP\Helper;
 
 use \Chrome\Resource\Resource_Interface;
 
-class Relative implements Helper_Interface
+class RelativeHelper implements Helper_Interface
 {
     public function linkByResource(Resource_Interface $resource)
     {

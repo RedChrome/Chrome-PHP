@@ -8,8 +8,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 
-DROP TABLE IF EXISTS `cp1_admin_navi`;
-CREATE TABLE IF NOT EXISTS `cp1_admin_navi` (
+DROP TABLE IF EXISTS `cpp_admin_navi`;
+CREATE TABLE IF NOT EXISTS `cpp_admin_navi` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `parentid` INTEGER NOT NULL,
   `isparent` INTEGER NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `cp1_admin_navi` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
-INSERT INTO `cp1_admin_navi` (`parentid`, `isparent`, `name`, `action`, `url`, `access`) VALUES
+INSERT INTO `cpp_admin_navi` (`parentid`, `isparent`, `name`, `action`, `url`, `access`) VALUES
 ( 0, 1, 'Gallery', 'Gallery', 'gallery/gallery.php', 2),
 (1, 0, 'Events', 'Gallery_Events', 'gallery/events.php', 2),
 (1, 0, 'Bilder', 'Gallery_Images', 'gallery/images.php', 2),
@@ -28,8 +28,8 @@ INSERT INTO `cp1_admin_navi` (`parentid`, `isparent`, `name`, `action`, `url`, `
 (4, 0, 'Hinzuf&uuml;gen', 'News_add', 'news/news_add.php', 2),
 (1, 0, 'Bild Hochladen', 'Gallery_Image_Upload', 'gallery/upload_image.php', 2);
 
-DROP TABLE IF EXISTS `cp1_authenticate` CASCADE;
-CREATE TABLE IF NOT EXISTS `cp1_authenticate` (
+DROP TABLE IF EXISTS `cpp_authenticate` CASCADE;
+CREATE TABLE IF NOT EXISTS `cpp_authenticate` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `password` VARCHAR(256) NOT NULL,
   `password_salt` VARCHAR(256) NOT NULL,
@@ -38,26 +38,26 @@ CREATE TABLE IF NOT EXISTS `cp1_authenticate` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
+INSERT INTO `cpp_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
 (0, '', '', '', 0);
-UPDATE `cp1_authenticate` SET `id` = 0 WHERE `id` = 1;
-ALTER TABLE `cp1_authenticate` AUTO_INCREMENT = 1;
-INSERT INTO `cp1_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
+UPDATE `cpp_authenticate` SET `id` = 0 WHERE `id` = 1;
+ALTER TABLE `cpp_authenticate` AUTO_INCREMENT = 1;
+INSERT INTO `cpp_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
 (NULL, 'b10617e307e7731817dac8b39f19d1418bde2e49db95139b', 'Gd{|Yw"BA4z4,czCw~g0', '5e4869588d85631bb513bcfd7a4d811469836f20a6cc05a0', 1374572687);
 
-DROP TABLE IF EXISTS `cp1_authorisation_rbac`;
-CREATE TABLE IF NOT EXISTS `cp1_authorisation_rbac` (
+DROP TABLE IF EXISTS `cpp_authorisation_rbac`;
+CREATE TABLE IF NOT EXISTS `cpp_authorisation_rbac` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` INTEGER NOT NULL,
   `group` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_authorisation_rbac` (`id`, `user_id`, `group`) VALUES
+INSERT INTO `cpp_authorisation_rbac` (`id`, `user_id`, `group`) VALUES
 (1, 1, 'user');
 
-DROP TABLE IF EXISTS `cp1_authorisation_resource_default`;
-CREATE TABLE IF NOT EXISTS `cp1_authorisation_resource_default` (
+DROP TABLE IF EXISTS `cpp_authorisation_resource_default`;
+CREATE TABLE IF NOT EXISTS `cpp_authorisation_resource_default` (
   `id` INTEGER UNSIGNED  NOT NULL AUTO_INCREMENT,
   `resource_id` INTEGER(11) NOT NULL,
   `transformation` VARCHAR(256) NOT NULL,
@@ -65,29 +65,29 @@ CREATE TABLE IF NOT EXISTS `cp1_authorisation_resource_default` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_authorisation_resource_default` (`id`, `resource_id`, `transformation`, `resource_group`) VALUES
+INSERT INTO `cpp_authorisation_resource_default` (`id`, `resource_id`, `transformation`, `resource_group`) VALUES
 (3, 3, 'register', 1);
 
-DROP TABLE IF EXISTS `cp1_authorisation_user_default`;
-CREATE TABLE IF NOT EXISTS `cp1_authorisation_user_default` (
+DROP TABLE IF EXISTS `cpp_authorisation_user_default`;
+CREATE TABLE IF NOT EXISTS `cpp_authorisation_user_default` (
   `user_id` INTEGER NOT NULL,
   `group_id` INTEGER NOT NULL,
   KEY `authIdUserDefault` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_authorisation_user_default` (`user_id`, `group_id`) VALUES
+INSERT INTO `cpp_authorisation_user_default` (`user_id`, `group_id`) VALUES
 (0, 1),
 (1, 4);
 
-DROP TABLE IF EXISTS `cp1_class`;
-CREATE TABLE IF NOT EXISTS `cp1_class` (
+DROP TABLE IF EXISTS `cpp_class`;
+CREATE TABLE IF NOT EXISTS `cpp_class` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(256) NOT NULL,
   `file` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_class` (`name`, `file`) VALUES
+INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome_Converter', 'lib/core/converter/converter.php'),
 ('Chrome_Converter_List', 'lib/core/converter/converter.php'),
 ('Chrome_Exception_Handler_Authentication', 'lib/exception/authentication.php'),
@@ -130,8 +130,8 @@ INSERT INTO `cp1_class` (`name`, `file`) VALUES
 ('\\Chrome\\Interactor\\User\\Registration',  'lib/modules/user/interactors/registration.php');
 
 
-DROP TABLE IF EXISTS `cp1_config`;
-CREATE TABLE IF NOT EXISTS `cp1_config` (
+DROP TABLE IF EXISTS `cpp_config`;
+CREATE TABLE IF NOT EXISTS `cpp_config` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(256) NOT NULL,
   `subclass` VARCHAR(256) NOT NULL,
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `cp1_config` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`) VALUES
+INSERT INTO `cpp_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`) VALUES
 ('blacklist_host', 'general', 'localhost,', 'string', '', FALSE),
 ('comment_block_sec', 'News', '30', 'integer', '', FALSE),
 ('Default_Design', 'Design', 'chrome', 'string', '', FALSE),
@@ -168,23 +168,23 @@ INSERT INTO `cp1_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 ('recaptcha_theme', 'Captcha/Recaptcha', 'clean', 'string', '', FALSE),
 ('default_theme', 'Theme', 'chrome', 'string', '', FALSE);
 
-DROP TABLE IF EXISTS `cp1_design_controller`;
-CREATE TABLE IF NOT EXISTS `cp1_design_controller` (
+DROP TABLE IF EXISTS `cpp_design_controller`;
+CREATE TABLE IF NOT EXISTS `cpp_design_controller` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `controller_class` VARCHAR(256) NOT NULL,
   `design_class` VARCHAR(500) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `cp1_design_layout`;
-CREATE TABLE IF NOT EXISTS `cp1_design_layout` (
+DROP TABLE IF EXISTS `cpp_design_layout`;
+CREATE TABLE IF NOT EXISTS `cpp_design_layout` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `controller` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `cp1_design_static`;
-CREATE TABLE IF NOT EXISTS `cp1_design_static` (
+DROP TABLE IF EXISTS `cpp_design_static`;
+CREATE TABLE IF NOT EXISTS `cpp_design_static` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(75) NOT NULL,
   `file` VARCHAR(100) NOT NULL,
@@ -196,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `cp1_design_static` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_design_static` (`name`, `file`, `class`, `position`, `type`, `theme`, `order`) VALUES
+INSERT INTO `cpp_design_static` (`name`, `file`, `class`, `position`, `type`, `theme`, `order`) VALUES
 ('right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome', 1),
 ('right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome', 2),
 ('right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome', 3),
@@ -218,66 +218,66 @@ INSERT INTO `cp1_design_static` (`name`, `file`, `class`, `position`, `type`, `t
 ('VarDump', 'modules/footer/var_dump/var_dump.php', 'Chrome_Controller_Footer_VarDump', 'footer', 'controller', 'chrome_one_sidebar', 2),
 ('jsIncluder', 'modules/html/bottom/jsIncluder/view.php', 'Chrome_View_HTML_Bottom_JsIncluder', 'postBodyIn', 'view', 'chrome_one_sidebar', 0);
 
-DROP TABLE IF EXISTS `cp1_rbac_group`;
-CREATE TABLE IF NOT EXISTS `cp1_rbac_group` (
+DROP TABLE IF EXISTS `cpp_rbac_group`;
+CREATE TABLE IF NOT EXISTS `cpp_rbac_group` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_rbac_group` (`id`, `name`) VALUES
+INSERT INTO `cpp_rbac_group` (`id`, `name`) VALUES
 (1, 'guest'),
 (2, 'user'),
 (3, 'superUser'),
 (4, 'admin');
 
-DROP TABLE IF EXISTS `cp1_rbac_group_role`;
-CREATE TABLE IF NOT EXISTS `cp1_rbac_group_role` (
+DROP TABLE IF EXISTS `cpp_rbac_group_role`;
+CREATE TABLE IF NOT EXISTS `cpp_rbac_group_role` (
   `group_id` INTEGER NOT NULL,
   `role_id` INTEGER NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_rbac_group_role` (`group_id`, `role_id`) VALUES
+INSERT INTO `cpp_rbac_group_role` (`group_id`, `role_id`) VALUES
 (1, 1),
 (4, 3);
 
-DROP TABLE IF EXISTS `cp1_rbac_role`;
-CREATE TABLE IF NOT EXISTS `cp1_rbac_role` (
+DROP TABLE IF EXISTS `cpp_rbac_role`;
+CREATE TABLE IF NOT EXISTS `cpp_rbac_role` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_rbac_role` (`id`, `name`) VALUES
+INSERT INTO `cpp_rbac_role` (`id`, `name`) VALUES
 (1, 'news'),
 (2, 'news_comment'),
 (3, 'news_moderator'),
 (4, 'news_special');
 
-DROP TABLE IF EXISTS `cp1_rbac_role_transaction`;
-CREATE TABLE IF NOT EXISTS `cp1_rbac_role_transaction` (
+DROP TABLE IF EXISTS `cpp_rbac_role_transaction`;
+CREATE TABLE IF NOT EXISTS `cpp_rbac_role_transaction` (
   `role_id` INTEGER NOT NULL,
   `transaction_id` INTEGER NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_rbac_role_transaction` (`role_id`, `transaction_id`) VALUES
+INSERT INTO `cpp_rbac_role_transaction` (`role_id`, `transaction_id`) VALUES
 (1, 1),
 (3, 2);
 
-DROP TABLE IF EXISTS `cp1_rbac_transaction`;
-CREATE TABLE IF NOT EXISTS `cp1_rbac_transaction` (
+DROP TABLE IF EXISTS `cpp_rbac_transaction`;
+CREATE TABLE IF NOT EXISTS `cpp_rbac_transaction` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(256) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_rbac_transaction` (`id`, `name`) VALUES
+INSERT INTO `cpp_rbac_transaction` (`id`, `name`) VALUES
 (1, 'news'),
 (2, 'news_modify'),
 (3, 'news_mark');
 
-DROP TABLE IF EXISTS `cp1_rbac_transformation`;
-CREATE TABLE IF NOT EXISTS `cp1_rbac_transformation` (
+DROP TABLE IF EXISTS `cpp_rbac_transformation`;
+CREATE TABLE IF NOT EXISTS `cpp_rbac_transformation` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `transaction_id` INTEGER NOT NULL,
   `transformation` VARCHAR(256) NOT NULL,
@@ -285,33 +285,33 @@ CREATE TABLE IF NOT EXISTS `cp1_rbac_transformation` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_rbac_transformation` (`id`, `transaction_id`, `transformation`, `right`) VALUES
+INSERT INTO `cpp_rbac_transformation` (`id`, `transaction_id`, `transformation`, `right`) VALUES
 (1, 1, 'read', 1),
 (2, 1, 'write', 0),
 (3, 2, 'read', 1),
 (4, 2, 'write', 1),
 (5, 3, 'mark', 1);
 
-DROP TABLE IF EXISTS `cp1_rbac_user_group`;
-CREATE TABLE IF NOT EXISTS `cp1_rbac_user_group` (
+DROP TABLE IF EXISTS `cpp_rbac_user_group`;
+CREATE TABLE IF NOT EXISTS `cpp_rbac_user_group` (
   `user_id` INTEGER NOT NULL,
   `group_id` INTEGER NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_rbac_user_group` (`user_id`, `group_id`) VALUES
+INSERT INTO `cpp_rbac_user_group` (`user_id`, `group_id`) VALUES
 (1, 4);
 
-DROP TABLE IF EXISTS `cp1_rbac_user_role`;
-CREATE TABLE IF NOT EXISTS `cp1_rbac_user_role` (
+DROP TABLE IF EXISTS `cpp_rbac_user_role`;
+CREATE TABLE IF NOT EXISTS `cpp_rbac_user_role` (
   `user_id` INTEGER NOT NULL,
   `role_id` INTEGER NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_rbac_user_role` (`user_id`, `role_id`) VALUES
+INSERT INTO `cpp_rbac_user_role` (`user_id`, `role_id`) VALUES
 (1, 4);
 
-DROP TABLE IF EXISTS `cp1_autoload`;
-CREATE TABLE IF NOT EXISTS `cp1_autoload` (
+DROP TABLE IF EXISTS `cpp_autoload`;
+CREATE TABLE IF NOT EXISTS `cpp_autoload` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(256) NOT NULL,
   `path` VARCHAR(256) NOT NULL,
@@ -321,7 +321,7 @@ CREATE TABLE IF NOT EXISTS `cp1_autoload` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_autoload` (`name`, `path`, `activated`, `priority`, `is_class_resolver`) VALUES
+INSERT INTO `cpp_autoload` (`name`, `path`, `activated`, `priority`, `is_class_resolver`) VALUES
 ('\\Chrome\\Classloader\\Resolver_Filter', 'plugins/classloader/filter.php', TRUE, 4, TRUE),
 ('\\Chrome\\Classloader\\Resolver_Exception', 'plugins/classloader/exception.php', TRUE, 4, TRUE),
 ('\\Chrome\\Classloader\\Resolver_Validator', 'plugins/classloader/validator.php', TRUE, 4, TRUE),
@@ -348,8 +348,8 @@ INSERT INTO `cp1_autoload` (`name`, `path`, `activated`, `priority`, `is_class_r
 ('\\Chrome_Response_Handler_Console', 'lib/core/response/response/console.php', TRUE, 6, FALSE),
 ('\\Chrome_Controller_Module_Abstract', 'lib/core/controller/module.php', TRUE, 6, FALSE);
 
-DROP TABLE IF EXISTS `cp1_route_administration`;
-CREATE TABLE IF NOT EXISTS `cp1_route_administration` (
+DROP TABLE IF EXISTS `cpp_route_administration`;
+CREATE TABLE IF NOT EXISTS `cpp_route_administration` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(256) NOT NULL,
   `class` VARCHAR(256) NOT NULL,
@@ -359,8 +359,8 @@ CREATE TABLE IF NOT EXISTS `cp1_route_administration` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `cp1_route_dynamic`;
-CREATE TABLE IF NOT EXISTS `cp1_route_dynamic` (
+DROP TABLE IF EXISTS `cpp_route_dynamic`;
+CREATE TABLE IF NOT EXISTS `cpp_route_dynamic` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(256) NOT NULL,
   `class` VARCHAR(256) NOT NULL,
@@ -369,8 +369,8 @@ CREATE TABLE IF NOT EXISTS `cp1_route_dynamic` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `cp1_resource`;
-CREATE TABLE IF NOT EXISTS `cp1_resource` (
+DROP TABLE IF EXISTS `cpp_resource`;
+CREATE TABLE IF NOT EXISTS `cpp_resource` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
   `parameter` varchar(130) NOT NULL,
@@ -379,49 +379,48 @@ CREATE TABLE IF NOT EXISTS `cp1_resource` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
--- Daten für Tabelle `cp1_resource`
+-- Daten für Tabelle `cpp_resource`
 --
 
-INSERT INTO `cp1_resource` (`id`, `name`, `parameter`) VALUES (0, '', '');
-UPDATE `cp1_resource` SET `id` = 0;
-ALTER TABLE `cp1_resource` AUTO_INCREMENT = 1;
+INSERT INTO `cpp_resource` (`id`, `name`, `parameter`) VALUES (0, '', '');
+UPDATE `cpp_resource` SET `id` = 0;
+ALTER TABLE `cpp_resource` AUTO_INCREMENT = 1;
 
-INSERT INTO `cp1_resource` (`name`, `parameter`) VALUES
-('index', ''),
-('login', ''),
-('register', ''),
-('logout', ''),
-('siteNotFound', ''),
-('registrationConfirm', ''),
-('testCaptcha', '');
+INSERT INTO `cpp_resource` (`id`, `name`, `parameter`) VALUES
+(1, 'index', ''),
+(2, 'login', ''),
+(3, 'register', ''),
+(4, 'logout', ''),
+(5, 'siteNotFound', ''),
+(6, 'registrationConfirm', ''),
+(7, 'testCaptcha', '');
 
-INSERT INTO `cp1_route_dynamic` (`id`, `name`, `class`, `GET`, `POST`) VALUES
+INSERT INTO `cpp_route_dynamic` (`id`, `name`, `class`, `GET`, `POST`) VALUES
 (1, 'news_show', 'Chrome_Controller_News', 'action=show', '');
 
-DROP TABLE IF EXISTS `cp1_route_static`;
-CREATE TABLE IF NOT EXISTS `cp1_route_static` (
-  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(256) NOT NULL,
-  `search` VARCHAR(256) NOT NULL,
-  `class` VARCHAR(256) NOT NULL,
-  `POST` VARCHAR(512) NOT NULL,
-  `GET` VARCHAR(512) NOT NULL,
+DROP TABLE IF EXISTS `cpp_route_static`;
+CREATE TABLE IF NOT EXISTS `cpp_route_static` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `resource_id` int(11) NOT NULL,
+  `search` varchar(256) NOT NULL,
+  `class` varchar(256) NOT NULL,
+  `POST` varchar(512) NOT NULL,
+  `GET` varchar(512) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+);
 
-INSERT INTO `cp1_route_static` (`name`, `search`, `class`, `POST`, `GET`) VALUES
-('index', '', 'Chrome_Controller_Index', '', ''),
-('index', 'index', 'Chrome_Controller_Index', '', ''),
-('login', 'login', 'Chrome_Controller_Content_Login', '', ''),
-('site_not_found', '404', 'Chrome_Controller_SiteNotFound', '', ''),
-('register', 'registrieren', 'Chrome_Controller_Register', '', 'action=register'),
-('news', 'news', 'Chrome_Controller_News', '', 'action=show'),
-('logout', 'logout', 'Chrome_Controller_Content_Logout', '', ''),
-('register_confirm', 'registrierung_bestaetigen', 'Chrome_Controller_Register', '', 'action=confirm_registration'),
-('captcha', 'captcha', 'Chrome_Controller_Captcha', '', '');
+INSERT INTO `cpp_route_static` (`resource_id`, `search`, `class`, `POST`, `GET`) VALUES
+(1, '', 'Chrome_Controller_Index', '', ''),
+(1, 'index.html', 'Chrome_Controller_Index', '', ''),
+(2, 'login.html', 'Chrome_Controller_Content_Login', '', ''),
+(5, '404.html', 'Chrome_Controller_SiteNotFound', '', ''),
+(3, 'registrieren.html', 'Chrome_Controller_Register', '', 'action=register'),
+(4, 'logout.html', 'Chrome_Controller_Content_Logout', '', ''),
+(6, 'registrierung_bestaetigen.html', 'Chrome_Controller_Register', '', 'action=confirm_registration'),
+(7, 'captcha.html', 'Chrome_Controller_Captcha', '', '');
 
-DROP TABLE IF EXISTS `cp1_user`;
-CREATE TABLE IF NOT EXISTS `cp1_user` (
+DROP TABLE IF EXISTS `cpp_user`;
+CREATE TABLE IF NOT EXISTS `cpp_user` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
@@ -434,11 +433,11 @@ CREATE TABLE IF NOT EXISTS `cp1_user` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cp1_user` (`id`, `name`, `email`, `time`, `avatar`, `address`, `design`) VALUES
+INSERT INTO `cpp_user` (`id`, `name`, `email`, `time`, `avatar`, `address`, `design`) VALUES
 (1, 'Alex', 'redchrome@gmx.de', 1349179579, '', '', 'default');
 
-DROP TABLE IF EXISTS `cp1_user_regist`;
-CREATE TABLE IF NOT EXISTS `cp1_user_regist` (
+DROP TABLE IF EXISTS `cpp_user_regist`;
+CREATE TABLE IF NOT EXISTS `cpp_user_regist` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
   `pass` VARCHAR(100) NOT NULL,
@@ -451,11 +450,11 @@ CREATE TABLE IF NOT EXISTS `cp1_user_regist` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
-ALTER TABLE `cp1_authorisation_user_default`
-  ADD CONSTRAINT `authIdUserDefault` FOREIGN KEY (`user_id`) REFERENCES `cp1_authenticate` (`id`) ON UPDATE CASCADE;
+ALTER TABLE `cpp_authorisation_user_default`
+  ADD CONSTRAINT `authIdUserDefault` FOREIGN KEY (`user_id`) REFERENCES `cpp_authenticate` (`id`) ON UPDATE CASCADE;
 
-ALTER TABLE `cp1_user`
-  ADD CONSTRAINT `authId` FOREIGN KEY (`id`) REFERENCES `cp1_authenticate` (`id`) ON UPDATE CASCADE;
+ALTER TABLE `cpp_user`
+  ADD CONSTRAINT `authId` FOREIGN KEY (`id`) REFERENCES `cpp_authenticate` (`id`) ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

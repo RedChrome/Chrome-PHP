@@ -3,8 +3,6 @@
 /**
  * CHROME-PHP CMS
  *
- * PHP version 5
- *
  * LICENSE
  *
  * This source file is subject to the Creative Commons license that is bundled
@@ -15,12 +13,14 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
- * @subpackage Chrome.Database
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
+ * @package CHROME-PHP
+ * @subpackage Chrome.Linker
  */
+namespace Chrome\Linker\HTTP\Helper\Model;
 
-class Chrome_Database_Interface_Simple extends Chrome_Database_Interface_Abstract
+use \Chrome\Resource\Resource_Interface;
+
+interface Static_Interface
 {
-
+    public function getLinkByResource(Resource_Interface $resource);
 }

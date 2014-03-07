@@ -20,8 +20,6 @@
  * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 17:59:18] --> $
  * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * Form for an user login
@@ -64,7 +62,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $this->setAttribute(self::ATTRIBUTE_NAME, $this->_id);
         $this->setAttribute(self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST);
         $this->setAttribute(self::ATTRIBUTE_ID, $this->_id);
-        $this->setAttribute(self::ATTRIBUTE_ACTION, 'login.html');
+        $this->setAttribute(self::ATTRIBUTE_ACTION, new \Chrome\Resource\Resource('rel:login.html'));
 
         // create an boolean converter, cause 'stay_loggedin' only accepts true or false
         $boolConverter = new Chrome_Converter_List();

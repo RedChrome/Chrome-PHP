@@ -18,15 +18,36 @@
  */
 namespace Chrome\Linker\HTTP\Helper;
 
-use \Chrome\Resource\Resource_Interface;
+require_once 'staticInterface.php';
 
-class UrlHelper implements Helper_Interface
+use \Chrome\Resource\Resource_Interface;
+use \Chrome\Linker\HTTP\Helper\Model\Static_Interface;
+
+class StaticHelper implements Helper_Interface
 {
+    protected $_resourceModel = null;
+
+    public function __construct(Static_Interface $resourceModel) {
+        $this->_resourceModel = $resourceModel;
+    }
+
     public function linkByResource(Resource_Interface $resource)
     {
-        if(strpos($resource->getResourceName(), 'url:') === 0) {
-            // strlen("url:") = 4
-            return array('link' => substr($resource->getResourceName(), 4), 'skip' => true);
+        if(strpos($resource->getResourceName(), 'static:') === 0) {
+
+            $resourceClone = clone $resource;
+
+            // remove "static:"
+            $resourceClone->setResourceName(substr($resourceClone->getResourceName(), 7));
+
+            $link = $this->_resourceModel->getLinkByResource($resourceClone);
+
+            if(is_string($link)) {
+                return array('link' => $link);
+            }
+
+            return false;
+
         } else {
             return false;
         }

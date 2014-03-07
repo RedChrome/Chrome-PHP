@@ -24,20 +24,15 @@
  */
 class Chrome_View_Form_Element_Captcha_Default extends Chrome_View_Form_Element_Abstract
 {
-
     protected function _render()
     {
         $lang = $this->_getTranslate();
-        // $lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_GENERAL);
-
-        /*
-         * $label = ''; if(($label = $this->getOption(self::CHROME_FORM_DECORATOR_LABEL)) !== null) { $label = '<label for="'.$this->_formElement->getID().'">'.$label.'</label>'; }
-         */
 
         $captchaName = $this->_formElement->getOption()->getCaptcha()->getFrontendOption(Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME);
 
+        $linker = $this->_formElement->getForm()->getApplicationContext()->getDiContainer()->get('\Chrome\Linker\Linker_Interface');
+
         $img = '<img src="' . _PUBLIC . 'captcha/default/?name=' . $captchaName . '" id="captcha_' . $this->_formElement->getForm()->getID() . '"/>';
-        // eturn $img;
 
         return '<fieldset style="text-align:center">' . "\n\t\t" . '<legend>'.$lang->get('captcha_verification').'</legend>' . "\n\t\t" .
              '<p>'.$lang->get('captcha_manual').'</p>' . "\n\t\t" . '<p>' . $img . '<br><a onclick="javascript:document.getElementById(\'captcha_' .

@@ -163,6 +163,7 @@ class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
 
     protected function _initFactories()
     {
+        // TODO: let this get injected.
         $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Yaml');
         parent::_initFactories();
     }

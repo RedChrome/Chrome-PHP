@@ -293,15 +293,14 @@ CREATE TABLE IF NOT EXISTS "chrome"."cp1_resource" (
 INSERT INTO "cp1_resource" ("id", "name", "parameter") VALUES
 (0, '', '');
 
-INSERT INTO "cp1_resource" ("name", "parameter") VALUES
-('', ''),
-('index', ''),
-('login', ''),
-('register', ''),
-('logout', ''),
-('siteNotFound', ''),
-('registrationConfirm', ''),
-('testCaptcha', '');
+INSERT INTO "cp1_resource" ("id", "name", "parameter") VALUES
+(1, 'index', ''),
+(2, 'login', ''),
+(3, 'register', ''),
+(4, 'logout', ''),
+(5, 'siteNotFound', ''),
+(6, 'registrationConfirm', ''),
+(7, 'testCaptcha', '');
 
 INSERT INTO "chrome"."cp1_rbac_user_group" ("user_id", "group_id") VALUES
 (1, 4);
@@ -380,7 +379,7 @@ INSERT INTO "chrome"."cp1_route_dynamic" ("id", "name", "class", "GET", "POST") 
 DROP TABLE IF EXISTS "chrome"."cp1_route_static";
 CREATE TABLE IF NOT EXISTS "chrome"."cp1_route_static" (
   "id" SERIAL NOT NULL,
-  "name" VARCHAR(256) NOT NULL,
+  "resource_id" INTEGER(11) NOT NULL,
   "search" VARCHAR(256) NOT NULL,
   "class" VARCHAR(256) NOT NULL,
   "POST" VARCHAR(512) NOT NULL,
@@ -388,16 +387,16 @@ CREATE TABLE IF NOT EXISTS "chrome"."cp1_route_static" (
   PRIMARY KEY ("id")
 );
 
-INSERT INTO "chrome"."cp1_route_static" ("id", "name", "search", "class", "POST", "GET") VALUES
-(DEFAULT, 'index', '', 'Chrome_Controller_Index', '', ''),
-(DEFAULT, 'index', 'index', 'Chrome_Controller_Index', '', ''),
-(DEFAULT, 'login', 'login', 'Chrome_Controller_Content_Login', '', ''),
-(DEFAULT, 'site_not_found', '404', 'Chrome_Controller_SiteNotFound', '', ''),
-(DEFAULT, 'register', 'registrieren', 'Chrome_Controller_Register', '', 'action=register'),
-(DEFAULT, 'news', 'news', 'Chrome_Controller_News', '', 'action=show'),
-(DEFAULT, 'logout', 'logout', 'Chrome_Controller_Content_Logout', '', ''),
-(DEFAULT, 'register_confirm', 'registrierung_bestaetigen', 'Chrome_Controller_Register', '', 'action=confirm_registration'),
-(DEFAULT, 'captcha', 'captcha', 'Chrome_Controller_Captcha', '', '');
+INSERT INTO "chrome"."cp1_route_static" ("id", "resource_id", "name", "search", "class", "POST", "GET") VALUES
+(DEFAULT, 1, '', 'Chrome_Controller_Index', '', ''),
+(DEFAULT, 1, 'index', 'Chrome_Controller_Index', '', ''),
+(DEFAULT, 2, 'login', 'Chrome_Controller_Content_Login', '', ''),
+(DEFAULT, 5, '404', 'Chrome_Controller_SiteNotFound', '', ''),
+(DEFAULT, 3, 'registrieren', 'Chrome_Controller_Register', '', 'action=register'),
+(DEFAULT, 4, 'logout', 'Chrome_Controller_Content_Logout', '', ''),
+(DEFAULT, 6, 'registrierung_bestaetigen', 'Chrome_Controller_Register', '', 'action=confirm_registration'),
+(DEFAULT, 7, 'captcha', 'Chrome_Controller_Captcha', '', '');
+
 
 DROP TABLE IF EXISTS "chrome"."cp1_user";
 CREATE TABLE IF NOT EXISTS "chrome"."cp1_user" (

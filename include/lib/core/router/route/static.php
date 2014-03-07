@@ -28,12 +28,12 @@ class Chrome_Route_Static extends Chrome_Router_Route_Abstract
     {
         $path = trim($url->getPath());
 
-        $pos = strripos($path, '.html');
+        /*$pos = strripos($path, '.html');
 
         if($pos !== false)
         {
             $path = substr($path, 0, $pos);
-        }
+        }*/
 
         $row = $this->_model->getRoute($path);
 
@@ -102,12 +102,24 @@ class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
 }
 
 /**
+ * load \Chrome\Linker\HTTP\Helper\Model\Static_Interface interface
+ */
+require_once LIB.'core/linker/http/staticInterface.php';
+
+/**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Statement_Abstract
+class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Statement_Abstract implements \Chrome\Linker\HTTP\Helper\Model\Static_Interface
 {
+    protected $_resourceModel = null;
+
+    public function setResourceModel(\Chrome\Resource\Model_Interface $resourceModel)
+    {
+        $this->_resourceModel = $resourceModel;
+    }
+
     public function getRoute($search)
     {
         $db = $this->_getDBInterface();
@@ -163,6 +175,20 @@ class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Statement_Abstr
         return $row;
     }
 
-    // TODO:
-    //public function findRouteForResource()
+    public function getLinkByResource(\Chrome\Resource\Resource_Interface $resource)
+    {
+        $resourceId = $this->_resourceModel->getResourceId($resource);
+
+        $db = $this->_getDBInterface();
+
+        $result = $db->loadQuery('routeStaticFindResource')->execute(array($resourceId));
+
+        if(!$result->isEmpty()) {
+            $row = $result->getNext();
+
+            return $row['link'];
+        }
+
+        return false;
+    }
 }

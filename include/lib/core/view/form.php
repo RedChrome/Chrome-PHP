@@ -243,6 +243,8 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     }
 }
 
+// TODO: create a new element factory which decides for the right captcha view.
+
 /**
  * Factory to create view form elements.
  *

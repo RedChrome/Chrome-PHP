@@ -2,6 +2,7 @@ include/tmp/
 .settings/
 .project
 .buildpath
+.metadata
 composer.lock
 include/lib/composer
 include/lib/psr

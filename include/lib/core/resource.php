@@ -158,14 +158,12 @@ interface Model_Interface
     public function deleteResource(Resource_Interface $resource);
 }
 
-// TODO: namespace should be \Chrome\Model\Resource
 namespace Chrome\Model\Resource;
 
 use Chrome\Resource\Model_Interface;
 use Chrome\Resource\Resource_Interface;
 use Chrome\Resource\Resource;
 
-// TODO: add the queries to postgresql
 class Database extends \Chrome_Model_Database_Statement_Abstract implements Model_Interface
 {
     protected function _convertArrayParamsToString(array $params)
