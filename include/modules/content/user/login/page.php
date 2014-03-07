@@ -15,13 +15,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.User
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 19:03:44] --> $
- * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -42,7 +36,5 @@ class Chrome_Controller_User_Login_Page extends Chrome_Controller_Module_Abstrac
 
         // the login form, will be the first one in Content
         $this->_view = new Chrome_View_Form_Renderer_Template_Login_Content(Chrome_View_Form_Login::getInstance($this->_form, $this->_applicationContext->getViewContext()));
-
-        #$this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_User_Default_ShowForm', $this);
     }
 }

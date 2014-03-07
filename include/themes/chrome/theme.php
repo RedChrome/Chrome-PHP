@@ -15,12 +15,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Design
- * @copyright Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license http://chrome-php.de/license/new-bsd New BSD License
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [31.05.2013 20:06:10] --> $
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -29,7 +24,7 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Design_Theme_Chrome extends Chrome_Design_Theme_Abstract
 {
-    public function initDesign(Chrome_Design_Interface $design, Chrome_Controller_Interface $controller)
+    public function initDesign(Chrome_Design_Interface $design, Chrome_Controller_Interface $controller, \Chrome\DI\Container_Interface $diContainer)
     {
         require_once LIB . 'core/design/options/static.php';
         require_once LIB . 'core/design/loader/static.php';
@@ -39,6 +34,7 @@ class Chrome_Design_Theme_Chrome extends Chrome_Design_Theme_Abstract
 
         $template = new Chrome_Template();
         $template->assignTemplate('design/chrome/design.tpl');
+        $template->assign('LINKER', $diContainer->get('\Chrome\Linker\Linker_Interface'));
 
         // this list needs 7 renderables
         $htmlList = new Chrome_Renderable_List();
@@ -79,6 +75,7 @@ class Chrome_Design_Theme_Chrome extends Chrome_Design_Theme_Abstract
             $composition->setOption($option);
 
             $loader = $diContainer->get('\Chrome_Design_Loader_Interface');
+            $loader->setTheme('chrome');
             $loader->addComposition($composition);
             $loader->load();
 

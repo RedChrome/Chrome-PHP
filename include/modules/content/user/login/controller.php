@@ -29,6 +29,12 @@ class Chrome_Controller_Content_Login extends Chrome_Controller_Module_Abstract
 {
     protected $_controller;
 
+    public function __construct(Chrome_Context_Application_Interface $appContext, \Chrome\Interactor\User\Login $interactor)
+    {
+        parent::__construct($appContext);
+        $this->_interactor = $interactor;
+    }
+
     protected function _initialize()
     {
     }
@@ -37,11 +43,11 @@ class Chrome_Controller_Content_Login extends Chrome_Controller_Module_Abstract
     {
         if($this->_applicationContext->getResponse() instanceof Chrome_Response_JSON) {
             require_once 'controller/ajax.php';
-            $this->_controller = new Chrome_Controller_Content_Login_AJAX($this->_applicationContext);
+            $this->_controller = new Chrome_Controller_Content_Login_AJAX($this->_applicationContext, $this->_interactor);
             $this->_controller->setExceptionHandler(new Chrome_Exception_Handler_JSON());
         } else {
             require_once 'controller/default.php';
-            $this->_controller = new Chrome_Controller_Content_Login_Default($this->_applicationContext);
+            $this->_controller = new Chrome_Controller_Content_Login_Default($this->_applicationContext, $this->_interactor);
             $this->_controller->setExceptionHandler($this->_exceptionHandler);
         }
 

@@ -96,9 +96,9 @@ INSERT INTO "chrome"."cp1_class" ("id", "name", "file") VALUES
 (DEFAULT, 'Chrome_Authentication_Chain_Session', 'lib/core/authentication/chain/session.php'),
 (DEFAULT, 'Chrome_Authentication_Chain_Cookie', 'lib/core/authentication/chain/cookie.php'),
 (DEFAULT, 'Chrome_Authentication', 'lib/core/authentication/authentication.php'),
-(DEFAULT, '\\Chrome\\Authorisation\\Authorisation', 'lib/core/authorisation/authorisation.php'),
-(DEFAULT, '\\Chrome\\Authorisation\\Adapter\\Adapter_Interface', 'lib/core/authorisation/authorisation.php'),
-(DEFAULT, '\\Chrome\\Authorisation\\Adapter\\Simple', 'lib/core/authorisation/adapter/simple.php'),
+(DEFAULT, 'Chrome\\Authorisation\\Authorisation', 'lib/core/authorisation/authorisation.php'),
+(DEFAULT, 'Chrome\\Authorisation\\Adapter\\Adapter_Interface', 'lib/core/authorisation/authorisation.php'),
+(DEFAULT, 'Chrome\\Authorisation\\Adapter\\Simple', 'lib/core/authorisation/adapter/simple.php'),
 (DEFAULT, 'Chrome_Redirection', 'lib/core/redirection.php'),
 (DEFAULT, 'Chrome_Controller_User_Login_Page', 'modules/content/user/login/page.php'),
 (DEFAULT, 'Chrome_Model_User_Database', 'lib/classes/user/model.php'),
@@ -113,7 +113,8 @@ INSERT INTO "chrome"."cp1_class" ("id", "name", "file") VALUES
 (DEFAULT, 'Chrome_Controller_Content_Login', 'modules/content/user/login/controller.php'),
 (DEFAULT, 'Chrome_Controller_Captcha', 'modules/content/captcha/controller.php'),
 (DEFAULT, 'Chrome_Controller_SiteNotFound', 'modules/content/SiteNotFound/controller.php'),
-(DEFAULT, '\\Chrome\\Interactor\\User\\Registration', 'lib/modules/user/interactors/registration.php');
+(DEFAULT, 'Chrome\\Interactor\\User\\Registration', 'lib/modules/user/interactors/registration.php'),
+(DEFAULT, 'Chrome\\Interactor\\User\\Login', 'lib/modules/user/interactors/login.php');
 
 DROP TABLE IF EXISTS "chrome"."cp1_config";
 CREATE TABLE IF NOT EXISTS "chrome"."cp1_config" (

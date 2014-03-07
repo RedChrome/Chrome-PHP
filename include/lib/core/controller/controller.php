@@ -86,8 +86,9 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
     protected $_require = array();
 
     /**
-     * @todo doc comment.
-     * @var unknown
+     * An instance of an interactor
+     *
+     * @var \Chrome\Interactor\Interactor_Interface
      */
     protected $_interactor = null;
 
@@ -99,7 +100,6 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
     protected $_model = array();
 
     /**
-     *
      * @var Chrome_View_Interface
      */
     protected $_view = null;

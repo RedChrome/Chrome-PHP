@@ -28,7 +28,7 @@ use \Chrome\Model\User\User_Interface;
 use \Chrome\Model\User\Registration_Interface;
 use \Chrome\Hash\Hash_Interface;
 
-class Registration
+class Registration implements \Chrome\Interactor\Interactor_Interface
 {
     const MAX_RETRIES_FOR_ACTIVATIONKEY = 10;
 

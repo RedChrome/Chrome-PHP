@@ -134,12 +134,7 @@ if(!defined('CHROME_CLASSLOADER_ABSOLUTE_FILE_LOADING')) {
 // change the working dir to the ROOT
 chdir(ROOT);
 
-// TODO: remove this const since this will be available in a appropriate class
-if(isset($_SERVER['REQUEST_URI'])) {
-    define('_PUBLIC', str_repeat('../', substr_count(substr($_SERVER['REQUEST_URI'], (strlen(ROOT_URL))+2), '/')) .'public/');
-} else {
-    define('_PUBLIC', 'Tests/');
-}
+define('_PUBLIC', FILE_LEVEL.'public/');
 define('IMAGE', _PUBLIC.'image/');
 define('VIEW', FILE_LEVEL . 'include/modules/');
 define('MODULE', VIEW);

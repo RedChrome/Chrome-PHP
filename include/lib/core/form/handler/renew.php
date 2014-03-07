@@ -17,9 +17,6 @@
  * @subpackage Chrome.Form
  */
 
-if(CHROME_PHP !== true)
-    die();
-
 /**
  * This should be set as ReceivingHandler. It renews the form, if isSent() returns false.
  * This should be used to renew the form token. In order to be consistent with the form, it should only
@@ -44,7 +41,8 @@ class Chrome_Form_Handler_Renew implements Chrome_Form_Handler_Interface
      * @param mixed $renewProbability [optional] given as double[0.0-1.0]: in percentage, given as int[0-100]: number of hits within 100 requests
      * @return Chrome_Form_Handler_Renew
      */
-    public function __construct($renewProbability = null) {
+    public function __construct($renewProbability = null)
+    {
         if($renewProbability !== null) {
             if(is_double($renewProbability)) {
                 $this->_renewProbability = (int) ($renewProbability*100);
@@ -54,11 +52,13 @@ class Chrome_Form_Handler_Renew implements Chrome_Form_Handler_Interface
         }
     }
 
-    public function is(Chrome_Form_Interface $form) {
+    public function is(Chrome_Form_Interface $form)
+    {
         // do nothing
     }
 
-    public function isNot(Chrome_Form_Interface $form) {
+    public function isNot(Chrome_Form_Interface $form)
+    {
 
         if(mt_rand(1, 100) <= $this->_renewProbability) {
             // renew, if isSent() returns false

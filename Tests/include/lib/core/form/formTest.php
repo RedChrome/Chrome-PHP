@@ -57,12 +57,6 @@ class GeneralFormTest extends Chrome_TestCase
         $this->assertFalse($this->_form->hasValidationErrors('notExisting'));
         $this->assertFalse($this->_form->hasErrors('notExisting'));
         $this->assertTrue(is_array($this->_form->getAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE)));
-
-        // test action attribute
-        $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_ACTION, '/test.html');
-        $firstAction = $this->_form->getAttribute(Chrome_Form_Interface::ATTRIBUTE_ACTION);
-        $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_ACTION, 'test.html');
-        $this->assertSame($firstAction, $this->_form->getAttribute(Chrome_Form_Interface::ATTRIBUTE_ACTION), 'action attribute should trim /');
     }
 
     public function testSetAttributeStoreHandler()

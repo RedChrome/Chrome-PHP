@@ -14,17 +14,13 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:40:55] --> $
+ * @subpackage Chrome.View
  */
-
-if(CHROME_PHP !== true)
-    die();
 
 class Chrome_View_Header_Header extends Chrome_View
 {
-    public function render() {
+    public function render()
+    {
         return '<header><div class="ym-col3"><div class="ym-wbox"><h1>Chrome-PHP Preview</h1></div></div></header>';
     }
 }

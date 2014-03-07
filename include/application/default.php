@@ -171,6 +171,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $registryHandler->add('\Chrome_Context_Model_Interface', $this->_modelContext);
         $registryHandler->add('\Chrome_Context_Application_Interface', $this->_applicationContext);
 
+        // TODO: remove view factory
         $viewFactory = new Chrome_View_Factory($viewContext);
         $viewContext->setFactory($viewFactory);
         $registryHandler->add('\Chrome_View_Factory_Interface', $viewFactory);
@@ -199,14 +200,15 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_postprocessor = new Chrome_Filter_Chain_Postprocessor();
 
         $this->_initAuthenticationAndAuthorisation();
+        $registryHandler->add('\Chrome_Authentication_Interface', $this->_applicationContext->getAuthentication());
 
         $this->_initRouter();
 
         $pluginFacade = new Chrome_View_Plugin_Facade();
         $viewContext->setPluginFacade($pluginFacade);
+        $viewContext->setLinker($this->_diContainer->get('\Chrome\Linker\Linker_Interface'));
 
         /**
-         *
          * @todo remove them from here
          */
         $pluginFacade->registerPlugin(new Chrome_View_Plugin_HTML($this->_applicationContext));
@@ -230,7 +232,6 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $this->_classloader->load($resource->getClass());
             $this->_controller = $this->_diContainer->get($resource->getClass());
 
-            #$this->_controller = $controllerFactory->build($resource->getClass());
             $this->_controller->setExceptionHandler(new Chrome_Exception_Handler_Default());
 
             $this->_preprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
@@ -509,7 +510,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             return new \Chrome_Model_Route_Static_Cache($c->get('\Chrome_Model_Route_Static_Database'), $cache);
         }, true);
 
-        $closure->add('\Chrome_Model_Route_Static_Database', function($c) {
+        $closure->add('\Chrome_Model_Route_Static_Database', function ($c) {
             return $c->get('\Chrome_Model_Route_Static_DB');
         }, true);
 
@@ -562,6 +563,10 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             return new Chrome_Controller_Register($c->get('\Chrome_Context_Application_Interface'), $c->get('\Chrome\Interactor\User\Registration_Interface'), new Chrome_View_Register($c->get('\Chrome_Context_View_Interface')));
         });
 
+        $closure->add('Chrome_Controller_Content_Login', function ($c) {
+            return new Chrome_Controller_Content_Login($c->get('\Chrome_Context_Application_Interface'), $c->get('\Chrome\Interactor\User\Login_Interface'));
+        });
+
         $closure->add('\Chrome\Interactor\User\Registration_Interface', function ($c) {
             require_once LIB.'modules/user/interactors/registration.php';
 
@@ -610,7 +615,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             return $c->get('\Chrome\Model\Resource\Database');
         }, true);
 
-        $closure->add('\Chrome\Linker\HTTP\Helper\Model\Static_Interface', function($c) {
+        $closure->add('\Chrome\Linker\HTTP\Helper\Model\Static_Interface', function ($c) {
             $model = $c->get('\Chrome_Model_Route_Static_Database');
             $model->setResourceModel($c->get('\Chrome\Resource\Model_Interface'));
             return $model;
@@ -629,6 +634,12 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
             return $linker;
         }, true);
+
+        $closure->add('\Chrome\Interactor\User\Login_Interface', function ($c) {
+            #require_once LIB.'modules/user/interactors/login.php';
+            #$c->get('\Chrome_Context_Application_Interface')->getClassloader()->load('\Chrome\Interactor\User\Login');
+            return new \Chrome\Interactor\User\Login($c->get('\Chrome_Authentication_Interface'));
+        });
     }
 
     /**

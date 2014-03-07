@@ -154,6 +154,11 @@ require_once 'classloader/classloader.php';
 require_once 'application.php';
 
 /**
+ * load interactor interface
+ */
+require_once 'interactor/result.php';
+
+/**
  * load resource interface
  */
 require_once 'resource.php';

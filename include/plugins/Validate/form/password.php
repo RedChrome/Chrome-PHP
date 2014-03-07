@@ -15,13 +15,7 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Validator
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.07.2013 18:09:05] --> $
  */
-
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * Chrome_Validator_Password
@@ -43,7 +37,8 @@ class Chrome_Validator_Form_Password extends Chrome_Validator
 
     protected $_options = array(self::CHROME_VALIDATOR_PASSWORD_MAX_LENGTH => 32, self::CHROME_VALIDATOR_PASSWORD_MIN_LENGTH => 5);
 
-    public function setData($data) {
+    public function setData($data)
+    {
         if($this->_password1 === null) {
             $this->_password1 = $data;
         } else {

@@ -110,6 +110,20 @@ interface Chrome_Context_View_Interface
     public function getPluginFacade();
 
     /**
+     * Returns a linker
+     *
+     * @return \Chrome\Linker\Linker_Interface
+     */
+    public function getLinker();
+
+    /**
+     * Sets a linker
+     *
+     * @param \Chrome\Linker\Linker_Interface $linker
+     */
+    public function setLinker(\Chrome\Linker\Linker_Interface $linker);
+
+    /**
      * Sets the view factory.
      *
      * A view factory is used to create views by only passing it's class name.
@@ -622,6 +636,17 @@ class Chrome_Context_View implements Chrome_Context_View_Interface
     protected $_loggerRegistry = null;
 
     protected $_localization = null;
+    protected $_linker = null;
+
+    public function getLinker()
+    {
+        return $this->_linker;
+    }
+
+    public function setLinker(\Chrome\Linker\Linker_Interface $linker)
+    {
+        $this->_linker = $linker;
+    }
 
     public function setLocalization(\Chrome\Localization\Localization_Interface $localization)
     {

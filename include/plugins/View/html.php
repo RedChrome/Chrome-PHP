@@ -84,10 +84,9 @@ class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
         return $this->_JS;
     }
 
-    public function addCSS(Chrome_View_Interface $obj, $filename, $directory = '')
+    public function addCSS(Chrome_View_Interface $obj, Resource_Interface $resource)
     {
-        // TODO: use linker
-        $this->_CSS[] = _PUBLIC . $directory . $filename;
+        $this->_CSS[] =  $this->_applicationContext->getDiContainer()->get('\Chrome\Linker\Linker_Interface')->get($resource);
     }
 
     public function setCSS(Chrome_View_Interface $obj, array $css)

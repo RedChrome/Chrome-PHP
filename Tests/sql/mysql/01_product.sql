@@ -110,9 +110,9 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome_Authentication_Chain_Session', 'lib/core/authentication/chain/session.php'),
 ('Chrome_Authentication_Chain_Cookie', 'lib/core/authentication/chain/cookie.php'),
 ('Chrome_Authentication', 'lib/core/authentication/authentication.php'),
-('\\Chrome\\Authorisation\\Authorisation', 'lib/core/authorisation/authorisation.php'),
-('\\Chrome\\Authorisation\\Adapter\\Adapter_Interface', 'lib/core/authorisation/authorisation.php'),
-('\\Chrome\\Authorisation\\Adapter\\Simple', 'lib/core/authorisation/adapter/simple.php'),
+('Chrome\\Authorisation\\Authorisation', 'lib/core/authorisation/authorisation.php'),
+('Chrome\\Authorisation\\Adapter\\Adapter_Interface', 'lib/core/authorisation/authorisation.php'),
+('Chrome\\Authorisation\\Adapter\\Simple', 'lib/core/authorisation/adapter/simple.php'),
 ('Chrome_Redirection', 'lib/core/redirection.php'),
 ('Chrome_Controller_User_Login_Page', 'modules/content/user/login/page.php'),
 ('Chrome_Model_User_Database', 'lib/classes/user/model.php'),
@@ -127,7 +127,8 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome_Controller_Content_Login', 'modules/content/user/login/controller.php'),
 ('Chrome_Controller_Captcha', 'modules/content/captcha/controller.php'),
 ('Chrome_Controller_SiteNotFound', 'modules/content/SiteNotFound/controller.php'),
-('\\Chrome\\Interactor\\User\\Registration',  'lib/modules/user/interactors/registration.php');
+('Chrome\\Interactor\\User\\Registration',  'lib/modules/user/interactors/registration.php'),
+('Chrome\\Interactor\\User\\Login', 'lib/modules/user/interactors/login.php');
 
 
 DROP TABLE IF EXISTS `cpp_config`;

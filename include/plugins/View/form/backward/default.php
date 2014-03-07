@@ -34,7 +34,6 @@ class Chrome_View_Form_Element_Backward_Default extends Chrome_View_Form_Element
         $this->_attribute->setAttribute('value', $lang->get('backward'));
         $this->_attribute->remove('required');
 
-
         $formId = $this->_viewForm->getViewElements($this->_formElement->getForm()->getID())->getId();#->getFlag('id');
         $this->_attribute->setAttribute('onclick', 'javascript:truncate_form_input(\'' . $formId . '\');return true');
 

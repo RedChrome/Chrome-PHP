@@ -69,9 +69,7 @@ abstract class Chrome_Model_Abstract implements Chrome_Model_Interface
 }
 
 /**
- * #@!
  * load some specific model classes
  */
 require_once 'decorator.php';
 require_once 'database.php';
-/**#@!*/

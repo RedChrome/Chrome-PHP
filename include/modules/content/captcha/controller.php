@@ -24,7 +24,6 @@ class Chrome_Controller_Captcha extends Chrome_Controller_Module_Abstract
            $this->_view->formValid();
         }
 
-
         $this->_view->test();
     }
 }

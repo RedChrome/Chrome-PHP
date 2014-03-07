@@ -24,6 +24,11 @@
  */
 class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Module_Abstract
 {
+    public function __construct(Chrome_Context_Application_Interface $appContext, \Chrome\Interactor\User\Login $interactor)
+    {
+        parent::__construct($appContext);
+        $this->_interactor = $interactor;
+    }
 
     protected function _initialize()
     {
@@ -43,10 +48,9 @@ class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Module_A
                 {
                     if($this->_form->isValid())
                     {
-                        // try to log in
-                        $this->_model->login();
+                        $this->_interactor->login($this->_form->getSentData('identity'), $this->_form->getSentData('password'), $this->_form->getSentData('stay_loggedin'));
 
-                        if($this->_model->successfullyLoggedIn() === true)
+                        if($this->_interactor->isLoggedIn() === true)
                         {
                             $this->_view->successfullyLoggedIn();
                         } else

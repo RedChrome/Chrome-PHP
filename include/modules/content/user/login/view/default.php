@@ -17,7 +17,6 @@
  * @subpackage Chrome.Content.User
  */
 
-
 /**
  *
  * @package CHROME-PHP
@@ -56,14 +55,17 @@ class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract
 
     public function render()
     {
+        $lang = $this->_viewContext->getLocalization()->getTranslate();
+
         $template = new Chrome_Template();
         $template->assignTemplate('modules/content/user/login/already_logged_in');
-        $template->assign('LANG', new Chrome_Language('modules/content/user/login'));
+        $template->assign('LANG', $lang);
+        #new Chrome_Language('modules/content/user/login'));
         $template->assign('FORM', $this->_controller->getForm());
         return $template->render();
-        // return 'you`re already logged in!';
     }
 }
+
 class Chrome_View_User_Default_SuccessfullyLoggedIn extends Chrome_View_Abstract
 {
 

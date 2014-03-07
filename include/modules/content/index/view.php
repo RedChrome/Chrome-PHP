@@ -96,14 +96,16 @@ class Chrome_View_Index_TODO extends Chrome_View_Abstract
 
     public function render()
     {
+        $linker = $this->_viewContext->getLinker();
+
         return '<br><br>
                 <h4>Working modules so far:</h4>
                 <ul>
-                    <li><a href="">Index</a></li>
-                    <li><a href="login.html">Login</a></li>
-                    <li><a href="logout.html">Logout</a></li>
-                    <li><a href="registrieren.html">Register</a></li>
-                    <li><a href="captcha.html">Captcha</a></li>
+                    <li><a href="'.$linker->get(new \Chrome\Resource\Resource('static:index')).'">Index</a></li>
+                    <li><a href="'.$linker->get(new \Chrome\Resource\Resource('static:login')).'">Login</a></li>
+                    <li><a href="'.$linker->get(new \Chrome\Resource\Resource('static:logout')).'">Logout</a></li>
+                    <li><a href="'.$linker->get(new \Chrome\Resource\Resource('static:register')).'">Register</a></li>
+                    <li><a href="'.$linker->get(new \Chrome\Resource\Resource('static:testCaptcha')).'">Captcha</a></li>
                 </ul>
                 <br>
                 <div align="left">TODO LIST:<br>

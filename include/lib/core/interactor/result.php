@@ -18,6 +18,11 @@
  */
 namespace Chrome\Interactor;
 
+interface Interactor_Interface
+{
+
+}
+
 interface Status_Interface
 {
     public function failed();
@@ -41,7 +46,7 @@ interface Error_Interface
 
     /**
      *
-     * @param unknown $key
+     * @param string $key
      * @return \Iterator
      */
     public function getError($key);
@@ -113,7 +118,7 @@ class Result implements Result_Interface
 
     /**
      *
-     * @param unknown $key
+     * @param string $key
      * @return \Iterator
     */
     public function getError($key)
@@ -140,6 +145,12 @@ class Result implements Result_Interface
         }
 
         return new \ArrayIterator($array);
+    }
+
+    public function reset()
+    {
+        $this->_status = null;
+        $this->_errors = array();
     }
 }
 
