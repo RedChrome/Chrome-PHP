@@ -111,7 +111,7 @@ require_once LIB.'core/linker/http/staticInterface.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Statement_Abstract implements \Chrome\Linker\HTTP\Helper\Model\Static_Interface
+class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Statement_Abstract implements \Chrome\Linker\HTTP\Model\Static_Interface
 {
     protected $_resourceModel = null;
 

@@ -16,12 +16,12 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Linker
  */
-namespace Chrome\Linker\HTTP\Helper;
+namespace Chrome\Linker\HTTP;
 
 require_once 'staticInterface.php';
 
 use \Chrome\Resource\Resource_Interface;
-use \Chrome\Linker\HTTP\Helper\Model\Static_Interface;
+use \Chrome\Linker\HTTP\Model\Static_Interface;
 
 class StaticHelper implements Helper_Interface
 {

@@ -16,7 +16,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Linker
  */
-namespace Chrome\Linker\HTTP\Helper\Model;
+namespace Chrome\Linker\HTTP\Model;
 
 use \Chrome\Resource\Resource_Interface;
 

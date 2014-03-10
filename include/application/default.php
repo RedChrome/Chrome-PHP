@@ -101,7 +101,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @var \Chrome\DI\Container_Interface
      */
-    private $_diContainer = null;
+    protected $_diContainer = null;
 
     /**
      * Chrome_Front_Controller::getController()
@@ -622,15 +622,15 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         }, true);
 
         $closure->add('\Chrome\Linker\Linker_Interface', function ($c) {
-            require_once LIB.'core/linker/linker.php';
+            $linker = new \Chrome\Linker\HTTP\Linker(new \Chrome_URI($c->get('\Chrome_Context_Application_Interface')->getRequestHandler()->getRequestData(), true), $c->get('\Chrome\Resource\Model_Interface'));
+
             require_once LIB.'core/linker/http/relative.php';
             require_once LIB.'core/linker/http/url.php';
             require_once LIB.'core/linker/http/static.php';
 
-            $linker = new \Chrome\Linker\HTTP\Linker(new \Chrome_URI($c->get('\Chrome_Context_Application_Interface')->getRequestHandler()->getRequestData(), true), $c->get('\Chrome\Resource\Model_Interface'));
-            $linker->addResourceHelper(new \Chrome\Linker\HTTP\Helper\RelativeHelper());
-            $linker->addResourceHelper(new \Chrome\Linker\HTTP\Helper\StaticHelper($c->get('\Chrome\Linker\HTTP\Helper\Model\Static_Interface')));
-            $linker->addResourceHelper(new \Chrome\Linker\HTTP\Helper\UrlHelper());
+            $linker->addResourceHelper(new \Chrome\Linker\HTTP\RelativeHelper());
+            $linker->addResourceHelper(new \Chrome\Linker\HTTP\StaticHelper($c->get('\Chrome\Linker\HTTP\Helper\Model\Static_Interface')));
+            $linker->addResourceHelper(new \Chrome\Linker\HTTP\UrlHelper());
 
             return $linker;
         }, true);

@@ -129,25 +129,14 @@ class Linker implements Linker_Interface
         }
 
         return $this->_noLinkFound($resource, $relative);
-
-        /*
-        if(strstr($resourceId, 'public/') !== false) {
-            return $this->_processUrl($resourceId, $relative);
-        }
-
-        throw new \Chrome_Exception('Could not link to '.$resourceId);
-        */
-        #return $this->get($resource, $relative);
-
-        // TODO: Auto-generated method stub
     }
 
-    public function addResourceHelper(\Chrome\Linker\HTTP\Helper\Helper_Interface $helper)
+    public function addResourceHelper(\Chrome\Linker\HTTP\Helper_Interface $helper)
     {
         $this->_resourceHelper[] = $helper;
     }
 
-    public function addResourceIdHelper(\Chrome\Linker\HTTP\Helper\Helper_Interface $helper)
+    public function addResourceIdHelper(\Chrome\Linker\HTTP\Helper_Interface $helper)
     {
         $this->_resourceIdHelper[] = $helper;
     }
@@ -171,20 +160,11 @@ class Linker implements Linker_Interface
         }
 
         return $this->_noLinkFound($resource, $relative);
-
-        /*
-        if(strstr($resource->getResourceName(), 'public/') !== false) {
-            return $this->_processUrl($resource->getResourceName(), $relative);
-        }
-
-        throw new \Chrome_Exception('Could not link to '.var_export($resource, true));
-
-        #return $this->getLink($resourceId, true);*/
     }
 }
 
 
-namespace Chrome\Linker\HTTP\Helper;
+namespace Chrome\Linker\HTTP;
 
 use \Chrome\Resource\Resource_Interface;
 

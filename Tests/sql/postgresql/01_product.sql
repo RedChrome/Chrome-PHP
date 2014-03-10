@@ -114,7 +114,10 @@ INSERT INTO "chrome"."cp1_class" ("id", "name", "file") VALUES
 (DEFAULT, 'Chrome_Controller_Captcha', 'modules/content/captcha/controller.php'),
 (DEFAULT, 'Chrome_Controller_SiteNotFound', 'modules/content/SiteNotFound/controller.php'),
 (DEFAULT, 'Chrome\\Interactor\\User\\Registration', 'lib/modules/user/interactors/registration.php'),
-(DEFAULT, 'Chrome\\Interactor\\User\\Login', 'lib/modules/user/interactors/login.php');
+(DEFAULT, 'Chrome\\Interactor\\User\\Login', 'lib/modules/user/interactors/login.php')
+(DEFAULT, 'Chrome\\Linker\\Linker_Interface', 'lib/core/linker/linker.php'),
+(DEFAULT, 'Chrome\\Linker\\HTTP\\Linker', 'lib/core/linker/linker.php'),
+(DEFAULT, 'Chrome\\Linker\\Console\\Linker', 'lib/core/linker/console.php');
 
 DROP TABLE IF EXISTS "chrome"."cp1_config";
 CREATE TABLE IF NOT EXISTS "chrome"."cp1_config" (

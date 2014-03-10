@@ -55,4 +55,12 @@ class Chrome_Application_Test extends Chrome_Application_Default
         $response = $responseFactory->getResponse();
         $this->_applicationContext->setResponse($response);
     }
+
+    protected function _initDiContainer()
+    {
+        parent::_initDiContainer();
+        $this->_diContainer->getHandler('closure')->add('\Chrome\Linker\Linker_Interface', function ($c) {
+            return new \Chrome\Linker\Console\Linker($c->get('\Chrome\Resource\Model_Interface'));
+        });
+    }
 }
