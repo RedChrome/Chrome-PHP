@@ -127,13 +127,7 @@ if(!defined('ROOT')) {
     define('ROOT', dirname(dirname(__file__)));
 }
 
-if(!defined('CHROME_CLASSLOADER_ABSOLUTE_FILE_LOADING')) {
-    define('CHROME_CLASSLOADER_ABSOLUTE_FILE_LOADING', true);
-}
-
-// change the working dir to the ROOT
-chdir(ROOT);
-
+define('CHROME_WD', ROOT);
 define('_PUBLIC', FILE_LEVEL.'public/');
 define('IMAGE', _PUBLIC.'image/');
 define('VIEW', FILE_LEVEL . 'include/modules/');
@@ -150,6 +144,9 @@ define('PLUGIN', BASEDIR . 'plugins/');
 define('RESOURCE', BASEDIR.'resources/');
 define('THEME', BASEDIR.'themes/');
 define('APPLICATION', BASEDIR.'application/');
+
+// change the working dir to the CHROME_WD
+chdir(CHROME_WD);
 
 // SET SOME .INI VARS
 // @codingStandardsIgnoreStart

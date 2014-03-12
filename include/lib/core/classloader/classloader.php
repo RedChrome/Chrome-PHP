@@ -179,6 +179,12 @@ class Classloader implements Classloader_Interface
 
     /**
      *
+     * @var string
+     */
+    protected $_currentWorkingDir = '';
+
+    /**
+     *
      * @var \Psr\Log\LoggerInterface
      */
     protected $_logger = null;
@@ -203,17 +209,20 @@ class Classloader implements Classloader_Interface
      */
     protected function _doLoadClassByFile($class, $fileName)
     {
-        // use an absolute path:
-        // sometimes, the classloader is called in the shutdown phase. php.net says that
-        // the working dir may change in this phase. To aviod that, use an absolute path
-        // see http://www.php.net/manual/de/function.register-shutdown-function.php
-        if(CHROME_CLASSLOADER_ABSOLUTE_FILE_LOADING === true) {
-            $this->_loadFile(ROOT.DIRECTORY_SEPARATOR.$fileName);
-        } else {
-            $this->_loadFile($fileName);
-        }
-
+        $this->_checkWorkingDir();
+        $this->_loadFile($fileName);
         $this->_addClass($class);
+    }
+
+    protected function _checkWorkingDir()
+    {
+        // sometimes, the classloader is called in the shutdown phase. php.net says that
+        // the working dir may change in this phase. To avoid that, change it.
+        // see http://www.php.net/manual/de/function.register-shutdown-function.php
+        if(getcwd() !== $this->_currentWorkingDir) {
+            chdir(CHROME_WD);
+            $this->_currentWorkingDir = getcwd();
+        }
     }
 
     protected function _resolve($class)
