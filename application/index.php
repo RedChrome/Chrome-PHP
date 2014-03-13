@@ -36,4 +36,3 @@ $application->init();
 $application->execute();
 //TODO: set up Zend_Mail properly
 //TODO: add recpatcha error messages to translate
-//TODO: errors in shutdown phase... remove them

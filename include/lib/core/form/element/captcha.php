@@ -16,8 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-if(CHROME_PHP !== true)
-    die();
 
 interface Chrome_Form_Option_Element_Captcha_Interface extends Chrome_Form_Option_Element_Interface
 {

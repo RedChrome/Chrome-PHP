@@ -82,6 +82,13 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
     protected $_appenders = array();
 
     /**
+     * Contains all types of added appenders
+     *
+     * @var array of strings
+     */
+    protected $_appenderTypes = array();
+
+    /**
      * Containing all manipulators
      *
      * @var array of Chrome_View_Form_Element_Manipulator_Interface
@@ -252,6 +259,15 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
      */
     public function addAppender(Chrome_View_Form_Element_Appender_Interface $appender)
     {
+        if($appender instanceof Chrome_View_Form_Element_Appender_Type_Interface) {
+            $type = $appender->getType();
+            if(in_array($type, $this->_appenderTypes) === true) {
+                return;
+            } else {
+                $this->_appenderTypes[] = $type;
+            }
+        }
+
         $this->_appenders[] = $appender;
     }
 

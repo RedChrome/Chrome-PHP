@@ -293,6 +293,8 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $localization = new \Chrome\Localization\Localization();
             $localization->setLocale($locale);
             $translate = new \Chrome\Localization\Translate_Simple($localization);
+            // load default validate messages
+            $translate->load('validate');
             #require_once 'Tests/dummies/localization/translate/test.php';
             #$translate = new \Chrome\Localization\Translate_Test_XX($localization);
             $localization->setTranslate($translate);

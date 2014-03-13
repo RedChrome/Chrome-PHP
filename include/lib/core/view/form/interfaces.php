@@ -485,6 +485,24 @@ interface Chrome_View_Form_Element_Appender_Interface extends Chrome_Renderable
 }
 
 /**
+ * This interface associates every appender with a specific type.
+ *
+ * An appendable object can only have one appender of each type!
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
+interface Chrome_View_Form_Element_Appender_Type_Interface
+{
+    /**
+     * Returns the type of the appender
+     *
+     * @return string
+     */
+    public function getType();
+}
+
+/**
  * Interface for a form element, which can get manipulated
  *
  * @package CHROME-PHP

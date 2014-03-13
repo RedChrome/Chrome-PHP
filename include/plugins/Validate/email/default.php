@@ -26,7 +26,9 @@
 class Chrome_Validator_Email_Default extends Chrome_Validator
 {
     const CHROME_VALIDATOR_EMAIL_DEFAULT_MAX_LENGTH = 'EMAILMAXLENGTH', CHROME_VALIDATOR_EMAIL_DEFAULT_MIN_LENGTH = 'EMAILMINLENGTH';
-    const CHROME_VALIDATOR_EMAIL_DEFAULT_TOO_SHORT = 'EMAILTOOSHORT', CHROME_VALIDATOR_EMAIL_DEFAULT_TOO_LONG = 'EMAILTOOLONG', CHROME_VALIDATOR_EMAIL_DEFAULT_NOT_VALID = 'EMAILNOTVALID';
+    const CHROME_VALIDATOR_EMAIL_DEFAULT_TOO_SHORT = 'email_too_short',
+          CHROME_VALIDATOR_EMAIL_DEFAULT_TOO_LONG = 'email_too_long',
+          CHROME_VALIDATOR_EMAIL_DEFAULT_NOT_VALID = 'email_not_valid';
 
     /**
      * Actually an email address cannot be larger than 254 byte by RFC 5321
@@ -47,14 +49,12 @@ class Chrome_Validator_Email_Default extends Chrome_Validator
         if($len < $this->_options[self::CHROME_VALIDATOR_EMAIL_DEFAULT_MIN_LENGTH])
         {
             $this->_setError(self::CHROME_VALIDATOR_EMAIL_DEFAULT_TOO_SHORT);
-            return false;
         }
 
         // email too long
         if($len > $this->_options[self::CHROME_VALIDATOR_EMAIL_DEFAULT_MAX_LENGTH])
         {
             $this->_setError(self::CHROME_VALIDATOR_EMAIL_DEFAULT_TOO_LONG);
-            return false;
         }
 
         // email not valid
@@ -62,9 +62,6 @@ class Chrome_Validator_Email_Default extends Chrome_Validator
         if(!preg_match($regex, $this->_data))
         {
             $this->_setError(self::CHROME_VALIDATOR_EMAIL_DEFAULT_NOT_VALID);
-            return false;
         }
-
-        return true;
     }
 }

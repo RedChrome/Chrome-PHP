@@ -8,7 +8,7 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
         $this->setAttribute(self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST);
         $this->setAttribute(self::ATTRIBUTE_ID, $this->_id);
 
-        $lang = $this->getApplicationContext()->getViewContext()->getLocalization()->getTranslate();
+        #$lang = $this->getApplicationContext()->getViewContext()->getLocalization()->getTranslate();
         //$lang = new Chrome_Language('modules/content/user/registration');
 
         $storageSession = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
@@ -28,7 +28,7 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
         $this->_addElement($acceptElement);
 
         $submitOption = new Chrome_Form_Option_Element();
-        $submitOption->setAllowedValue($lang->get('register'));
+        #$submitOption->setAllowedValue($lang->get('register'));
 
         $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
 
@@ -47,7 +47,8 @@ class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
 
     protected function _initFactories()
     {
-        $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Yaml');
+        // TODO: inject this class
+        $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Yaml();
         parent::_initFactories();
     }
 
@@ -61,7 +62,12 @@ class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
             case 'accept':
                 {
                     $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $lang->get('rules_agree'))));
+                    break;
                     // viewOption->setLabelPosition($viewOption::LABEL_POSITION_BEHIND);
+                }
+            case 'submit':
+                {
+                    $formElement->getOption()->setAllowedValue($lang->get('register'));
                 }
         }
 
@@ -78,7 +84,7 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
         $this->setAttribute(self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST);
         $this->setAttribute(self::ATTRIBUTE_ID, $this->_id);
 
-        $lang = $this->_applicationContext->getViewContext()->getLocalization()->getTranslate();
+        #$lang = $this->_applicationContext->getViewContext()->getLocalization()->getTranslate();
         //$lang = new Chrome_Language('modules/content/user/registration');
 
         $emailValidatorDefault = new Chrome_Validator_Email_Default();
@@ -114,7 +120,7 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
         $backwardButton = new Chrome_Form_Element_Backward($this, 'backward', new Chrome_Form_Option_Element());
 
         $submitOption = new Chrome_Form_Option_Element();
-        $submitOption->setIsRequired(false)->setAllowedValue($lang->get('register'));
+        $submitOption->setIsRequired(false);#->setAllowedValue($lang->get('register'));
         $submitButton = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
 
         $buttonsOption = new Chrome_Form_Option_Element_Buttons();
@@ -143,10 +149,10 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
         $passwordOption->setIsRequired(true)->setValidator($passwordValidator);
 
         $passwordElement = new Chrome_Form_Element_Password($this, 'password', $passwordOption);
-        $passwordElement2 = new Chrome_Form_Element_Password($this, 'password2', $passwordOption);
+        $passwordElementSecond = new Chrome_Form_Element_Password($this, 'password2', $passwordOption);
 
         $this->_addElement($passwordElement);
-        $this->_addElement($passwordElement2);
+        $this->_addElement($passwordElementSecond);
 
         $nicknameOption = new Chrome_Form_Option_Element();
         $nicknameOption->setIsRequired(true)->setValidator($nicknameValidator)->setConversion($nameConverter);
@@ -164,7 +170,7 @@ class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
     protected function _initFactories()
     {
         // TODO: let this get injected.
-        $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Yaml');
+        $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Yaml();
         parent::_initFactories();
     }
 
@@ -177,8 +183,9 @@ class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
         {
             case 'submit':
                 {
-                    // viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $lang->get('rules_agree'))));
+                    $formElement->getOption()->setAllowedValue($lang->get('register'));
                     break;
+                    // viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $lang->get('rules_agree'))));
                 }
             case 'backward':
                 {

@@ -1,12 +1,11 @@
 <?php
-require_once 'model.php';
+
 require_once 'view.php';
 require_once 'include.php';
 
 class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
 {
     const CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE = 'REGISTER';
-    protected $_activationKey;
     protected $_session;
     protected $_authorisation = null;
 
@@ -123,8 +122,8 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
 
                     $registrationRequest = new \Chrome\Model\User\Registration\Request();
                     $registrationRequest->setEmail($this->_form->getSentData('email'))
-                    ->setName($this->_form->getSentData('nickname'))
-                    ->setPassword($this->_form->getSentData('password'));
+                                        ->setName($this->_form->getSentData('nickname'))
+                                        ->setPassword($this->_form->getSentData('password'));
 
                     $result = new \Chrome\Interactor\Result();
 
@@ -210,10 +209,5 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
         $array = $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE];
         $array['step'] = 4;
         $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = $array;
-    }
-
-    public function getActivationKey()
-    {
-        return $this->_activationKey;
     }
 }

@@ -235,7 +235,13 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      */
     public function validate()
     {
-        $this->_isValid = $this->_validate();
+        $boolean = $this->_validate();
+
+        if(is_bool($boolean)) {
+            $this->_isValid = $boolean;
+        } else {
+            $this->_isValid = (sizeof($this->_errorMsg) === 0);
+        }
     }
 
     /**
@@ -251,7 +257,10 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
     /**
      * Concrete implementation of validation logic
      *
-     * @return boolean
+     * If a boolean is returned, then isValid will return exactly this boolean
+     * If null is returned, then isValid will return true if no error was set.
+     *
+     * @return boolean|null
      */
     abstract protected function _validate();
 
