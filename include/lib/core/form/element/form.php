@@ -113,7 +113,7 @@ class Chrome_Form_Option_Element_Form extends Chrome_Form_Option_Element_Basic
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract
+class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract implements \Chrome\Form\Element\Interfaces\Form
 {
     /**
      * Options for this element:

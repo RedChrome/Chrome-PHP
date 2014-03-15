@@ -17,9 +17,6 @@
  * @subpackage Chrome.Form
  */
 
-if(CHROME_PHP !== true)
-    die();
-
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
@@ -60,7 +57,7 @@ class Chrome_Form_Option_Element_Buttons extends Chrome_Form_Option_Element impl
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract
+class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract implements \Chrome\Form\Element\Interfaces\Buttons
 {
     const CHROME_FORM_ELEMENT_ERROR_NO_BUTTON_PRESSED = 'NOBUTTONPRESSED';
 

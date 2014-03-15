@@ -19,6 +19,9 @@
 
 interface Chrome_Form_Option_Element_Captcha_Interface extends Chrome_Form_Option_Element_Interface
 {
+    /**
+     * @return Chrome_Captcha_Interface
+     */
     public function getCaptcha();
 }
 
@@ -68,7 +71,7 @@ class Chrome_Form_Option_Element_Captcha extends Chrome_Form_Option_Element impl
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract
+class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract implements \Chrome\Form\Element\Interfaces\Captcha
 {
     protected $_captcha = null;
 

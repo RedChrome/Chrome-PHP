@@ -20,6 +20,11 @@
  */
 
 /**
+ * load interfaces for elements
+ */
+require_once 'interfaces.php';
+
+/**
  * load interface and classes for form options
  */
 require_once 'options.php';

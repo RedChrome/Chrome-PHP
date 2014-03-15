@@ -16,15 +16,13 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Password extends Chrome_Form_Element_Abstract
+class Chrome_Form_Element_Password extends Chrome_Form_Element_Abstract implements \Chrome\Form\Element\Interfaces\Password
 {
     public function isCreated()
     {

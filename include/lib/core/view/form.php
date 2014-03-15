@@ -22,6 +22,7 @@ require_once 'form/manipulators.php';
 require_once 'form/renderer.php';
 require_once 'form/option.php';
 require_once 'form/element.php';
+require_once 'form/factory.php';
 
 /**
  * Default implementation of Chrome_View_Form_Interface
@@ -141,12 +142,6 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
      */
     protected function _initFactories()
     {
-        if($this->_formElementFactory === null)
-        {
-            $class = 'Chrome_View_Form_Element_Factory_' . ucfirst($this->_formElementFactoryDefault);
-            $this->_formElementFactory = new $class();
-        }
-
         if($this->_formElementOptionFactory === null)
         {
             $class = 'Chrome_View_Form_Element_Option_Factory_' . ucfirst($this->_formElementOptionFactoryDefault);
@@ -165,8 +160,16 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         {
             return;
         }
-
+        // todo: remove this method
         $this->_initFactories();
+
+        if($this->_formElementOptionFactory === null) {
+            throw new Chrome_Exception('No view form element option factory set');
+        }
+
+        if($this->_formElementFactory === null) {
+            throw new Chrome_Exception('No view form element factory set');
+        }
 
         foreach($this->_form->getElements() as $formElement)
         {
@@ -210,6 +213,12 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         }
 
         $element = $this->_formElementFactory->getElement($formElement, $formOption);
+
+        // the factory might also return null...
+        if(!($element instanceof Chrome_View_Form_Element_Basic_Interface)) {
+            throw new Chrome_Exception('ViewFormFactory has not returned a proper view element');
+        }
+
         $element->setViewForm($this);
 
         return $element;
@@ -243,182 +252,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     }
 }
 
-// TODO: create a new element factory which decides for the right captcha view.
-// TODO: create a factory delegator
-/**
- * Factory to create view form elements.
- *
- * This factory creates view form elements using the class name of the form element, and appending a suffix.
- *
- * @package CHROME-PHP
- * @subpackage Chrome.View
- */
-class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Element_Factory_Interface
-{
-    /**
-     * A suffix for creating a view form element
-     *
-     * @var string
-     */
-    protected $_suffix = '';
 
-    /**
-     * Constructor, needs a suffix.
-     *
-     * @param string $formElementSuffix
-     */
-    public function __construct($formElementSuffix = 'default')
-    {
-        $this->_suffix = ucfirst($formElementSuffix);
-
-        if($this->_suffix !== '' and $this->_suffix{0} !== '_')
-        {
-            $this->_suffix = '_' . $this->_suffix;
-        }
-    }
-
-    protected function _getClass(Chrome_Form_Element_Basic_Interface $formElement)
-    {
-        // default class name, without suffix
-        $class = 'Chrome_View_Form_Element_';
-
-        // format: Chrome_Form_Element_*
-        $formClass = get_class($formElement);
-
-        $formSuffix = str_replace('Chrome_Form_Element_', '', $formClass);
-
-        // append suffixes
-        return $class . $formSuffix . $this->_suffix;
-    }
-
-    protected function _addAppenders(Chrome_View_Form_Element_Appendable_Interface $viewFormElement)
-    {
-        // add label and error appender, if object is appendable
-
-        $error = new Chrome_View_Form_Element_Appender_Error($viewFormElement);
-        $viewFormElement->addAppender($error);
-
-        $label = new Chrome_View_Form_Element_Appender_Label($viewFormElement);
-        $viewFormElement->addAppender($label);
-
-        #$error = new Chrome_View_Form_Element_Appender_Error($viewFormElement);
-    }
-
-    protected function _addManipulateables(Chrome_View_Form_Element_Manipulateable_Interface $viewFormElement)
-    {
-        if($viewFormElement instanceof Chrome_View_Form_Element_Multiple_Abstract)
-        {
-            $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_IdPrefixForMultipleElement());
-            $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForMultipleElement());
-
-        } else if($viewFormElement instanceof Chrome_View_Form_Element_Interface) {
-
-            $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_IdPrefix());
-
-            // exclude the basic form elements, like Chrome_Form_Element_Form
-            if( ($viewFormElement->getFormElement() instanceof Chrome_Form_Element_Interface) ) {
-                $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements());
-            }
-        }
-    }
-
-    /**
-     * @see Chrome_View_Form_Element_Factory_Interface::getElement()
-     */
-    public function getElement(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $formOption)
-    {
-        $class = $this->_getClass($formElement);
-
-        // create object
-        $object = new $class($formElement, $formOption);
-
-        // add appenders
-        if($object instanceof Chrome_View_Form_Element_Appendable_Interface)
-        {
-            $this->_addAppenders($object);
-        }
-
-        // if object is manipulateable, add appropriate manipulators for adding attributes, and id-prefixes
-        if($object instanceof Chrome_View_Form_Element_Manipulateable_Interface)
-        {
-            $this->_addManipulateables($object);
-        }
-
-        return $object;
-    }
-}
-
-/**
- * Simple factory for yaml form elements
- *
- * @package CHROME-PHP
- * @subpackage Chrome.View
- */
-class Chrome_View_Form_Element_Factory_Yaml extends Chrome_View_Form_Element_Factory_Suffix
-{
-    public function __construct()
-    {
-        $this->_suffix = '_Yaml';
-    }
-
-    protected function _addAppenders(Chrome_View_Form_Element_Appendable_Interface $viewFormElement)
-    {
-        // add label and error appender, if object is appendable
-
-        $error = new Chrome_View_Form_Element_Appender_Error_Yaml($viewFormElement);
-        $viewFormElement->addAppender($error);
-
-        $label = new Chrome_View_Form_Element_Appender_Label($viewFormElement);
-        $viewFormElement->addAppender($label);
-    }
-}
-
-/**
- * A view form element option factory, uses the form object instance to retrieve the
- * appropriate view form element option instance.
- *
- * @package CHROME-PHP
- * @subpackage Chrome.View
- */
-class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_Form_Element_Option_Factory_Interface
-{
-    /**
-     * @see Chrome_View_Form_Element_Option_Factory_Interface::getElementOption()
-     */
-    public function getElementOption(Chrome_Form_Element_Basic_Interface $formElement)
-    {
-        if($formElement instanceof Chrome_Form_Element_Multiple_Interface)
-        {
-            $viewElementOption = new Chrome_View_Form_Element_Option_Multiple();
-        } else if($formElement->getOption() instanceof Chrome_Form_Option_Element_Attachable_Interface)
-        {
-            $viewElementOption = new Chrome_View_Form_Element_Option_Attachable();
-        } else
-        {
-            $viewElementOption = new Chrome_View_Form_Element_Option();
-        }
-
-        $this->_setDefaultOptions($formElement, $viewElementOption);
-        return $viewElementOption;
-    }
-
-    /**
-     * Sets default options, like adding a storage if needed
-     *
-     * @param Chrome_Form_Element_Basic_Interface $formElement
-     * @param Chrome_View_Form_Element_Option_Basic_Interface $viewElementOption
-     */
-    protected function _setDefaultOptions(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewElementOption)
-    {
-        foreach(($formElement->getForm()->getAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE)) as $handler)
-        {
-            if($handler->hasStored($formElement))
-            {
-                $viewElementOption->setStoredData($handler->getStored($formElement));
-            }
-        }
-    }
-}
 
 /**
  * @todo add doc
@@ -529,7 +363,7 @@ class Chrome_View_Form_Element_Appender_Error_Yaml extends Chrome_View_Form_Elem
 
             $translate->load(self::TRANSLATE_MODULE);
 
-            foreach ( $form->getValidationErrors($elementId) as $error )
+            foreach($form->getValidationErrors($elementId) as $error)
             {
                 $errors .= '<p class="ym-message">' . $translate->get($error) . '</p>';
             }

@@ -16,8 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *

@@ -15,24 +15,14 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category CHROME-PHP
  * @package CHROME-PHP
- * @author Alexander Book <alexander.book@gmx.de>
- * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:51:22] --> $
- * @link http://chrome-php.de
+ * @subpackage Chrome.Captcha
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
- * @category CHROME-PHP
  * @package CHROME-PHP
  * @subpackage Chrome.Captcha
- * @author Alexander Book <alexander.book@gmx.de>
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
  */
 interface Chrome_Captcha_Interface
 {
@@ -91,8 +81,7 @@ interface Chrome_Captcha_Engine_Interface
  */
 class Chrome_Captcha implements Chrome_Captcha_Interface
 {
-    protected $_frontendOptions = array(
-                                        self::CHROME_CAPTCHA_ENGINE => 'default');
+    protected $_frontendOptions = array(self::CHROME_CAPTCHA_ENGINE => 'Default');
     protected $_backendOptions = array();
     protected $_engine = null;
     protected $_appContext = null;

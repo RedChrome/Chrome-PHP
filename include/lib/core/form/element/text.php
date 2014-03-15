@@ -17,15 +17,13 @@
  * @subpackage Chrome.Form
  */
 
-if( CHROME_PHP !== true ) die();
-
 /**
  * Chrome_Form_Element_Text
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Text extends Chrome_Form_Element_Abstract implements Chrome_Form_Element_Storable
+class Chrome_Form_Element_Text extends Chrome_Form_Element_Abstract implements Chrome_Form_Element_Storable, \Chrome\Form\Element\Interfaces\Text
 {
     public function isCreated()
     {

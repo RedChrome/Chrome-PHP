@@ -40,16 +40,21 @@ class Chrome_View_User_Login_Default extends Chrome_View_Strategy_Abstract
         $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Default_FormNotValid', $this->_controller);
     }
 
-    public function showForm()
+    public function showForm(Chrome_View_Form_Element_Factory_Interface $viewFormElementFactory)
     {
-        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content(Chrome_View_Form_Login::getInstance($this->_controller->getForm(), $this->_viewContext));
+        $viewForm = Chrome_View_Form_Login::getInstance($this->_controller->getForm(), $this->_viewContext);
+        $viewForm->setElementFactory($viewFormElementFactory);
+        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content($viewForm);
     }
 
     public function errorWhileLoggingIn()
     {
-        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content(Chrome_View_Form_Login::getInstance($this->_controller->getForm(), $this->_viewContext));
+        $viewForm = Chrome_View_Form_Login::getInstance($this->_controller->getForm(), $this->_viewContext);
+        $viewForm->setElementFactory($viewFormElementFactory);
+        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content($viewForm);
     }
 }
+
 class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract
 {
 
@@ -86,11 +91,6 @@ class Chrome_View_User_Default_FormNotValid extends Chrome_View_Abstract
 
 class Chrome_View_Form_Renderer_Template_Login_Content extends Chrome_View_Form_Renderer_Template_Abstract
 {
-    protected function _setUp()
-    {
-        $this->_viewForm->setElementFactory(new Chrome_View_Form_Element_Factory_Suffix('Yaml'));
-    }
-
     protected function _getTemplate()
     {
         $template = new Chrome_Template();

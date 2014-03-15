@@ -21,7 +21,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Submit extends Chrome_Form_Element_Abstract
+class Chrome_Form_Element_Submit extends Chrome_Form_Element_Abstract implements \Chrome\Form\Element\Interfaces\Submit
 {
     public function isCreated()
     {

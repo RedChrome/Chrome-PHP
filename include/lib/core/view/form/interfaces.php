@@ -112,7 +112,7 @@ interface Chrome_View_Form_Element_Factory_Interface
      *
      * @param Chrome_Form_Element_Basic_Interface $formElement
      * @param Chrome_View_Form_Element_Option_Basic_Interface $formOption
-     * @return Chrome_View_Form_Element_Interface
+     * @return Chrome_View_Form_Element_Interface|null
      */
     public function getElement(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewFormElementOption);
 }

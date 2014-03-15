@@ -121,14 +121,13 @@ class Chrome_View_Index_TODO extends Chrome_View_Abstract
 }
 class Chrome_View_Form_Index extends Chrome_View_Form_Abstract
 {
-
-    protected function _init()
+    protected function _initFactories()
     {
         $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Default');
         $this->_formElementOptionFactory = new Chrome_View_Form_Element_Option_Factory_Default();
         $this->_renderer = new Chrome_View_Form_Index_Renderer($this);
 
-        parent::_init();
+        #parent::_init();
     }
 
     protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)

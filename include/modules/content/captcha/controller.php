@@ -24,6 +24,6 @@ class Chrome_Controller_Captcha extends Chrome_Controller_Module_Abstract
            $this->_view->formValid();
         }
 
-        $this->_view->test();
+        $this->_view->test($this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Default'));
     }
 }

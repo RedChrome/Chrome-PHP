@@ -27,7 +27,7 @@ class Chrome_View_Form_Element_Captcha_Recaptcha extends Chrome_View_Form_Elemen
 {
     protected function _render()
     {
-        $this->_formElement->getForm()->getApplicationContext()->getConfig();
+        $config = $this->_formElement->getForm()->getApplicationContext()->getConfig();
 
         $publickey = $config->getConfig('Captcha/Recaptcha', 'public_key');
         $server = $config->getConfig('Captcha/Recaptcha', 'server_api');

@@ -130,6 +130,7 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
         $this->_addElement($buttonsElement);
 
         $captchaOption = new Chrome_Form_Option_Element_Captcha($this);
+        #$captchaOption->setFrontendOptions(array(Chrome_Captcha_Interface::CHROME_CAPTCHA_ENGINE => 'reCaptcha'));
         $captchaElement = new Chrome_Form_Element_Captcha($this, 'captcha', $captchaOption);
         $this->_addElement($captchaElement);
 
@@ -166,14 +167,6 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 }
 class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
 {
-
-    protected function _initFactories()
-    {
-        // TODO: let this get injected.
-        $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Yaml();
-        parent::_initFactories();
-    }
-
     protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
     {
         $lang = $this->_viewContext->getLocalization()->getTranslate();
@@ -220,6 +213,7 @@ class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
                 }
             case 'captcha':
                 {
+                    #$viewOption->setLabel(new Chrome_View_Form_Label_Default(array('captcha' => $lang->get('captcha'))));
                     break;
                 }
         }

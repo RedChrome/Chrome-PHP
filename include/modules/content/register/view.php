@@ -14,9 +14,10 @@ class Chrome_View_Register extends NEWChrome_View_Strategy_Abstract
         $this->_views[] = new Chrome_View_Register_StepOne_Renderer_Template_StepOne(new Chrome_View_Form_Register_StepOne($form, $this->_viewContext));
     }
 
-    public function setStepTwo(Chrome_Form_Interface $form)
+    public function setStepTwo(Chrome_Form_Interface $form, Chrome_View_Form_Element_Factory_Interface $viewFormElementFactory)
     {
         $formView = new Chrome_View_Form_Register_StepTwo($form, $this->_viewContext);
+        $formView->setElementFactory($viewFormElementFactory);
         $this->_views[] = new Chrome_View_Register_Form_Renderer_Template_StepTwo($formView);
         #$this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_StepTwo', $this->_controller);
     }

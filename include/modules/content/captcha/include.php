@@ -1,5 +1,4 @@
 <?php
-
 class Chrome_Form_Captcha extends Chrome_Form_Abstract
 {
     protected function _init()
@@ -28,7 +27,7 @@ class Chrome_Form_Captcha extends Chrome_Form_Abstract
         $this->_addElement($captchaElement);
     }
 }
-
 class Chrome_View_Form_Captcha extends Chrome_View_Form_Abstract
 {
+
 }

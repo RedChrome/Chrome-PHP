@@ -8,9 +8,11 @@ class Chrome_View_Captcha extends Chrome_View_Strategy_Abstract
         $this->addTitle('Captcha Test');
     }
 
-    public function test()
+    public function test(Chrome_View_Form_Element_Factory_Interface $elementFactory)
     {
-        $this->_views[] = new Chrome_View_Form_Renderer_Captcha(new Chrome_View_Form_Captcha($this->_controller->getForm(), $this->_viewContext));
+        $viewForm = new Chrome_View_Form_Captcha($this->_controller->getForm(), $this->_viewContext);
+        $viewForm->setElementFactory($elementFactory);
+        $this->_views[] = new Chrome_View_Form_Renderer_Captcha($viewForm);
         #$this->_views[] = new Chrome_View_Captcha_Template($this->_viewContext, $this->_controller);
     }
 

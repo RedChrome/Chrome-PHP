@@ -188,7 +188,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
 
         $this->_form->create();
 
-        $this->_view->setStepTwo($this->_form);
+        $this->_view->setStepTwo($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Default'));
 
         $array = $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE];
         $array['step'] = 3;

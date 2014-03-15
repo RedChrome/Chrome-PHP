@@ -642,6 +642,10 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             #$c->get('\Chrome_Context_Application_Interface')->getClassloader()->load('\Chrome\Interactor\User\Login');
             return new \Chrome\Interactor\User\Login($c->get('\Chrome_Authentication_Interface'));
         });
+
+        $closure->add('\Chrome\View\Form\Element\Factory\Default', function ($c) {
+            return new \Chrome_View_Form_Element_Factory_Yaml();
+        });
     }
 
     /**

@@ -139,17 +139,6 @@ class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
         return self::$_instance;
     }
 
-    protected function _initFactories()
-    {
-        if($this->_formElementFactory === null)
-        {
-            $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Default');
-        }
-        // $this->_renderer = new Chrome_View_Form_Index_Renderer();
-
-        parent::_initFactories();
-    }
-
     protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
     {
         $lang = $this->_viewContext->getLocalization()->getTranslate();

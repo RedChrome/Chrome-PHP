@@ -17,8 +17,6 @@
  * @subpackage Chrome.Form
  */
 
-if( CHROME_PHP !== true ) die();
-
 require_once 'text.php';
 
 /**
@@ -27,6 +25,6 @@ require_once 'text.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Textarea extends Chrome_Form_Element_Text
+class Chrome_Form_Element_Textarea extends Chrome_Form_Element_Text implements \Chrome\Form\Element\Interfaces\Textarea
 {
 }

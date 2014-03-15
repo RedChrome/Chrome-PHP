@@ -13,18 +13,46 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
- * @subpackage Chrome.View.Form
- */
-
-/**
  * @package CHROME-PHP
- * @subpackage Chrome.View.Form
+ * @subpackage Chrome.Form
  */
-class Chrome_View_Form_Element_Select_Yaml extends Chrome_View_Form_Element_Select_Default
+namespace Chrome\Form\Element\Interfaces;
+interface Backward
 {
-    public function render()
-    {
-        return '<div class="ym-fbox-select">'.parent::render() . '</div>';
-    }
+}
+interface Buttons
+{
+}
+interface Captcha
+{
+}
+interface Checkbox
+{
+}
+interface Date
+{
+}
+interface Form
+{
+}
+interface Hidden
+{
+}
+interface Password
+{
+}
+interface Radio
+{
+}
+interface Select
+{
+}
+interface Submit
+{
+}
+interface Text
+{
+}
+interface Textarea
+{
 }
