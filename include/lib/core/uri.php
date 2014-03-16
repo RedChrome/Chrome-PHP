@@ -18,12 +18,14 @@
  * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
  */
 
+namespace Chrome\URI;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.URI
  */
-interface Chrome_URI_Interface
+interface URI_Interface
 {
     const CHROME_URI_AUTHORITY_HOST = 'HOST', CHROME_URI_AUTHORITY_PORT = 'PORT', CHROME_URI_AUTHORITY_USER = 'USER', CHROME_URI_AUTHORITY_PASSWORD = 'PASSWORD';
 
@@ -55,14 +57,14 @@ interface Chrome_URI_Interface
 }
 
 /**
- * Chrome_URI
+ * URI
  *
  * Class to create URLs AND retrieve information from URLs
  *
  * @package CHROME-PHP
  * @subpackage Chrome.URI
  */
-class Chrome_URI implements Chrome_URI_Interface
+class URI implements URI_Interface
 {
     protected $_protocol = 'http';
     protected $_authority = array(self::CHROME_URI_AUTHORITY_HOST => null,
@@ -74,7 +76,7 @@ class Chrome_URI implements Chrome_URI_Interface
     protected $_fragment = '';
     protected $_url = null;
 
-    public function __construct(Chrome_Request_Data_Interface $requestData = null, $useCurrentURI = false)
+    public function __construct(\Chrome_Request_Data_Interface $requestData = null, $useCurrentURI = false)
     {
         if($useCurrentURI === true AND $requestData !== null)
         {
@@ -144,7 +146,7 @@ class Chrome_URI implements Chrome_URI_Interface
     {
         if(($data = parse_url($url)) === false)
         {
-            throw new Chrome_Exception('Invalid URL "' . $url . '" given in Chrome_URI::setURL()!');
+            throw new \Chrome_Exception('Invalid URL "' . $url . '" given in Chrome_URI::setURL()!');
         } else
         {
 
@@ -179,7 +181,7 @@ class Chrome_URI implements Chrome_URI_Interface
             $url .= $this->_protocol . '://';
         } else
         {
-            throw new Chrome_Exception('Cannot create url without a protocoll!');
+            throw new \Chrome_Exception('Cannot create url without a protocoll!');
         }
 
         if(!empty($this->_authority[self::CHROME_URI_AUTHORITY_HOST]))
@@ -202,7 +204,7 @@ class Chrome_URI implements Chrome_URI_Interface
             }
         } else
         {
-            throw new Chrome_Exception('Cannot create url without a host');
+            throw new \Chrome_Exception('Cannot create url without a host');
         }
 
         $url .= '/';
@@ -212,7 +214,7 @@ class Chrome_URI implements Chrome_URI_Interface
             $url .= $this->_path;
         } else
         {
-            throw new Chrome_Exception('Cannot create url without a path!');
+            throw new \Chrome_Exception('Cannot create url without a path!');
         }
 
         if(!empty($this->_query))

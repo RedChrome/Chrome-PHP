@@ -9,7 +9,7 @@ class URITest extends PHPUnit_Framework_TestCase
     }
 
     public function setUp() {
-        $this->uri = new Chrome_URI();
+        $this->uri = new \Chrome\URI\URI();
     }
 
     public function testIfNoPathSetThenThrowException() {
@@ -95,10 +95,10 @@ class URITest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Examplefragment', $this->uri->getFragment());
         $this->assertEquals(array('query' => 'true'), $this->uri->getQuery());
 
-        $auth = array(Chrome_URI_Interface::CHROME_URI_AUTHORITY_HOST => 'host.de',
-                      Chrome_URI_Interface::CHROME_URI_AUTHORITY_PORT => '1337',
-                      Chrome_URI_Interface::CHROME_URI_AUTHORITY_USER => 'l33t',
-                      Chrome_URI_Interface::CHROME_URI_AUTHORITY_PASSWORD => 'myP4ss'  );
+        $auth = array(\Chrome\URI\URI_Interface::CHROME_URI_AUTHORITY_HOST => 'host.de',
+                      \Chrome\URI\URI_Interface::CHROME_URI_AUTHORITY_PORT => '1337',
+                      \Chrome\URI\URI_Interface::CHROME_URI_AUTHORITY_USER => 'l33t',
+                      \Chrome\URI\URI_Interface::CHROME_URI_AUTHORITY_PASSWORD => 'myP4ss'  );
         $this->assertEquals($auth, $this->uri->getAuthority());
     }
 
@@ -107,12 +107,12 @@ class URITest extends PHPUnit_Framework_TestCase
         $reqData  = new Chrome_Request_Data_Dummy(new Chrome_Cookie_Dummy(), new Chrome_Session_Dummy());
         $reqData->_SERVER = array('SERVER_NAME' => 'localhost', 'REQUEST_URI' => '');
 
-        $uri = new Chrome_URI($reqData, true);
+        $uri = new \Chrome\URI\URI($reqData, true);
 
         $this->assertEquals('http://localhost', $uri->getURL());
 
         $reqData->_SERVER = array('SERVER_NAME' => 'anyAdress.exp', 'REQUEST_URI' => '/testSite/test?test=true');
-        $uri = new Chrome_URI($reqData, true);
+        $uri = new \Chrome\URI\URI($reqData, true);
 
         $this->assertEquals('http://anyAdress.exp/testSite/test?test=true', $uri->getURL());
 
@@ -120,7 +120,7 @@ class URITest extends PHPUnit_Framework_TestCase
 
     public function testGetURLWithNoProtocoll() {
 
-        $uri = new Chrome_URI();
+        $uri = new \Chrome\URI\URI();
 
         $uri->setProtocol(null);
 
@@ -140,7 +140,7 @@ class URITest extends PHPUnit_Framework_TestCase
             $exceptionCaught = false;
 
             try {
-                $uri = new Chrome_URI();
+                $uri = new \Chrome\URI\URI();
 
                 $uri->setURL($url);
             } catch(Chrome_Exception $e) {

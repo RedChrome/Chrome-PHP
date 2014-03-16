@@ -227,7 +227,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         try
         {
             // get the accessed resource by Router
-            $resource = $this->_router->route(new Chrome_URI($this->_applicationContext->getRequestHandler()->getRequestData(), true), $this->_applicationContext->getRequestHandler()->getRequestData());
+            $resource = $this->_router->route(new \Chrome\URI\URI($this->_applicationContext->getRequestHandler()->getRequestData(), true), $this->_applicationContext->getRequestHandler()->getRequestData());
 
             $this->_classloader->load($resource->getClass());
             $this->_controller = $this->_diContainer->get($resource->getClass());
@@ -624,7 +624,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         }, true);
 
         $closure->add('\Chrome\Linker\Linker_Interface', function ($c) {
-            $linker = new \Chrome\Linker\HTTP\Linker(new \Chrome_URI($c->get('\Chrome_Context_Application_Interface')->getRequestHandler()->getRequestData(), true), $c->get('\Chrome\Resource\Model_Interface'));
+            $linker = new \Chrome\Linker\HTTP\Linker(new \Chrome\URI\URI($c->get('\Chrome_Context_Application_Interface')->getRequestHandler()->getRequestData(), true), $c->get('\Chrome\Resource\Model_Interface'));
 
             require_once LIB.'core/linker/http/relative.php';
             require_once LIB.'core/linker/http/url.php';

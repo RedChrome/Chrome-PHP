@@ -24,7 +24,7 @@
  */
 class Chrome_Route_Static extends Chrome_Router_Route_Abstract
 {
-    public function match(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data)
+    public function match(\Chrome\URI\URI_Interface $url, Chrome_Request_Data_Interface $data)
     {
         $path = trim($url->getPath());
 

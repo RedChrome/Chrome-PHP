@@ -20,8 +20,6 @@
  * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 18:39:20] --> $
  * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 // TODO: Add a db scheme for Chrome_Model_Route_Dynamic_DB::getResourcesAsArray
 // TODO: Add regex support for single path, e.g. news/show/id/regex:|(\d)*?|/action/remove or something like that,
@@ -48,7 +46,7 @@ class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
 
     private $_resourceID = null;
 
-    public function match(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data)
+    public function match(\Chrome\URI\URI_Interface $url, Chrome_Request_Data_Interface $data)
     {
         $array = explode('/', $url->getPath(), self::CHROME_ROUTE_REGEX_MAX_LEVEL);
 

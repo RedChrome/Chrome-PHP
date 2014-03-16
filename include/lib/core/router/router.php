@@ -20,7 +20,7 @@
 
 use \Chrome\Logger\Loggable_Interface;
 use \Psr\Log\LoggerInterface;
-
+use \Chrome\URI\URI_Interface;
 /**
  *
  * @package CHROME-PHP
@@ -28,7 +28,7 @@ use \Psr\Log\LoggerInterface;
  */
 interface Chrome_Router_Route_Interface
 {
-    public function match(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data);
+    public function match(URI_Interface $url, Chrome_Request_Data_Interface $data);
 
     public function getResource();
 }
@@ -40,7 +40,7 @@ interface Chrome_Router_Route_Interface
  */
 interface Chrome_Router_Interface extends Chrome_Router_Route_Interface, Chrome_Exception_Processable_Interface
 {
-    public function route(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data);
+    public function route(URI_Interface $url, Chrome_Request_Data_Interface $data);
 
     public function addRoute(Chrome_Router_Route_Interface $obj);
 }
@@ -156,7 +156,7 @@ class Chrome_Router implements Chrome_Router_Interface
     {
     }
 
-    public function match(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data)
+    public function match(URI_Interface $url, Chrome_Request_Data_Interface $data)
     {
         try
         {
@@ -179,7 +179,8 @@ class Chrome_Router implements Chrome_Router_Interface
                     throw new Chrome_Exception('Could not found adequate controller class!', 2001);
                 }
 
-                $url = new Chrome_URI();
+                // todo: is this okay?
+                $url = new \Chrome\URI\URI();
                 $url->setPath('404.html');
                 $this->match($url, $data);
             }
@@ -189,7 +190,7 @@ class Chrome_Router implements Chrome_Router_Interface
         }
     }
 
-    public function route(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data)
+    public function route(URI_Interface $url, Chrome_Request_Data_Interface $data)
     {
         // replace ROOT,
         $path = ltrim(preg_replace('#\A' . ROOT_URL . '#', '', '/'.$url->getPath()), '/');

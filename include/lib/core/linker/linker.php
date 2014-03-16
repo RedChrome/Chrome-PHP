@@ -49,6 +49,7 @@ namespace Chrome\Linker\HTTP;
 use \Chrome\Linker\Linker_Interface;
 use \Chrome\Resource\Resource_Interface;
 use \Chrome\Resource\Model_Interface;
+use \Chrome\URI\URI_Interface;
 /**
  *
  * @package CHROME-PHP
@@ -71,23 +72,23 @@ class Linker implements Linker_Interface
 
     protected $_resourceIdHelper = array();
 
-    public function __construct(\Chrome_URI_Interface $requestedURL, Model_Interface $model)
+    public function __construct(URI_Interface $requestedURL, Model_Interface $model)
     {
         $this->setRelative($requestedURL);
         $this->setAbsolute($requestedURL);
         $this->_model = $model;
     }
 
-    public function setAbsolute(\Chrome_URI_Interface $currentURL)
+    public function setAbsolute(URI_Interface $currentURL)
     {
         $authority = $currentURL->getAuthority();
-        $host = $authority[\Chrome_URI_Interface::CHROME_URI_AUTHORITY_HOST];
+        $host = $authority[URI_Interface::CHROME_URI_AUTHORITY_HOST];
 
         // do not add http: or https:, since // is for both
         $this->_absolutePrefix = '//'.$host.'/'.trim(ROOT_URL, '/').'/';
     }
 
-    public function setRelative(\Chrome_URI_Interface $currentURL)
+    public function setRelative(URI_Interface $currentURL)
     {
         $remainingPath = ltrim(str_replace(ROOT_URL, '', '/'.$currentURL->getPath()), '/');
 

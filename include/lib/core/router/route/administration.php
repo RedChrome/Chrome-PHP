@@ -20,8 +20,6 @@
  * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [08.03.2013 15:41:11] --> $
  * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
     // TODO: finish this class
     // TODO: use Chrome_Request_Data_Interface $data
@@ -35,7 +33,7 @@ class Chrome_Route_Administration extends Chrome_Router_Route_Abstract
     protected $_GET = array();
 
     // TODO: check whether user is allowed to access...
-    public function match(Chrome_URI_Interface $url, Chrome_Request_Data_Interface $data)
+    public function match(\Chrome\URI\URI_Interface $url, Chrome_Request_Data_Interface $data)
     {
         $path = $url->getPath();
 
