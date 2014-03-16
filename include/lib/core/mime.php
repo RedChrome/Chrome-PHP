@@ -16,8 +16,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Mime
  */
-if(CHROME_PHP !== true)
-    die();
+namespace Chrome\MIME;
 
 /**
  * Chrome_Mime
@@ -25,7 +24,7 @@ if(CHROME_PHP !== true)
  * @package CHROME-PHP
  * @subpackage Chrome.Mime
  */
-class Chrome_Mime
+class MIME
 {
     private static $_instance = null;
     private $_mimeFunction = null;
@@ -38,7 +37,7 @@ class Chrome_Mime
     {
         if(class_exists('finfo', false))
         {
-            $this->_finfoHandler = new finfo(FILEINFO_MIME_TYPE);
+            $this->_finfoHandler = new \finfo(FILEINFO_MIME_TYPE);
         }
     }
 
@@ -95,7 +94,7 @@ class Chrome_Mime
                 }
 
             default:
-                throw new Chrome_Exception('Unknown mimeFunction("' . $this->_mimeFunction . '") given in switch statement in Chrome_Mime::getMIME()!');
+                throw new \Chrome_Exception('Unknown mimeFunction("' . $this->_mimeFunction . '") given in switch statement in Chrome_Mime::getMIME()!');
         }
     }
 

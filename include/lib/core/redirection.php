@@ -17,24 +17,28 @@
  * @subpackage Chrome.Session
  */
 
+namespace Chrome\Redirection;
+
+use \Chrome\Resource\Resource_Interface;
+// todo: add redirection to dependecy injector
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Misc
  */
-interface Chrome_Redirection_Interface
+interface Redirection_Interface
 {
     public function redirectToPreviousPage();
 
     public function redirectToWebsite($website);
 
-    public function redirectToResource(\Chrome\Resource\Resource_Interface $resource);
+    public function redirectToResource(Resource_Interface $resource);
 }
-class Chrome_Redirection implements Chrome_Redirection_Interface
+class Redirection implements Redirection_Interface
 {
     protected $_applicationContext = null;
 
-    public function __construct(Chrome_Context_Application_Interface $context)
+    public function __construct(\Chrome_Context_Application_Interface $context)
     {
         $this->_applicationContext = $context;
     }
@@ -71,9 +75,9 @@ class Chrome_Redirection implements Chrome_Redirection_Interface
         $this->_redirect($website);
     }
 
-    public function redirectToResource(\Chrome\Resource\Resource_Interface $resource)
+    public function redirectToResource(Resource_Interface $resource)
     {
-        throw new Chrome_Exception('Not implemented yet');
+        throw new \Chrome_Exception('Not implemented yet');
 
         $this->_redirect($url);
     }

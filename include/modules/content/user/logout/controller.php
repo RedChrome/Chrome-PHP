@@ -15,14 +15,7 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.User
- * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://chrome-php.de/license/new-bsd		New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.03.2013 16:07:57] --> $
- * @author     Alexander Book
  */
-
-if(CHROME_PHP !== true)
-    die();
 
 /**
  * @package CHROME-PHP
@@ -35,7 +28,8 @@ class Chrome_Controller_Content_Logout extends Chrome_Controller_Module_Abstract
         $this->_applicationContext->getAuthentication()->deAuthenticate();
 
         // redirect
-        $redirect = new Chrome_Redirection($this->_applicationContext);
+
+        $redirect = new \Chrome\Redirection\Redirection($this->_applicationContext);
        # $redirect->redirectToPreviousPage();
     }
 }
