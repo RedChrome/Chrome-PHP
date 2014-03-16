@@ -15,13 +15,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Session
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.03.2013 16:07:52] --> $
- * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -30,12 +24,11 @@ if(CHROME_PHP !== true)
  */
 interface Chrome_Redirection_Interface
 {
-
     public function redirectToPreviousPage();
 
     public function redirectToWebsite($website);
 
-    public function redirectToResource(Chrome_Router_Resource_Interface $resource);
+    public function redirectToResource(\Chrome\Resource\Resource_Interface $resource);
 }
 class Chrome_Redirection implements Chrome_Redirection_Interface
 {
@@ -78,7 +71,7 @@ class Chrome_Redirection implements Chrome_Redirection_Interface
         $this->_redirect($website);
     }
 
-    public function redirectToResource(Chrome_Router_Resource_Interface $resource)
+    public function redirectToResource(\Chrome\Resource\Resource_Interface $resource)
     {
         throw new Chrome_Exception('Not implemented yet');
 

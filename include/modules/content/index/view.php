@@ -10,7 +10,7 @@ class Chrome_View_Index extends Chrome_View_Strategy_Abstract
 
     public function doSth()
     {
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_TODO', $this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_TODO');
     }
 
     public function formIsValid()
@@ -39,7 +39,6 @@ class Chrome_View_Index extends Chrome_View_Strategy_Abstract
 }
 class Chrome_View_Index_Form_Is_Valid extends Chrome_View_Abstract
 {
-
     public function render()
     {
         return 'form is valid... getting data:<br>' . var_export($this->_controller->getForm()->getData(), true);
@@ -47,7 +46,6 @@ class Chrome_View_Index_Form_Is_Valid extends Chrome_View_Abstract
 }
 class Chrome_View_Index_Form_Is_Invalid extends Chrome_View_Abstract
 {
-
     public function render()
     {
         return 'form is invalid... getting errors:<br>' . var_export($this->_controller->getForm()->getValidationErrors(), true);
@@ -55,7 +53,6 @@ class Chrome_View_Index_Form_Is_Invalid extends Chrome_View_Abstract
 }
 class Chrome_View_Index_Form_Not_Sent extends Chrome_View_Abstract
 {
-
     public function render()
     {
         return 'user did not sent data to server...<br>re-creating form...' . var_export($this->_controller->getForm()->getReceivingErrors(), true);

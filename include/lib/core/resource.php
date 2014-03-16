@@ -37,7 +37,6 @@ interface Resource_Interface
     public function __toString();
 }
 
-// @TODO: configure sql create syntax for the cpp_resource table
 class Resource implements Resource_Interface
 {
     /**
@@ -115,7 +114,7 @@ class Resource implements Resource_Interface
         if($this->_resourceId !== null) {
             return $resource->getResourceId() === $this->_resourceId;
         } else {
-            return (($resource->getResourceName() === $this->getResourceName()) AND (sizeof(array_diff_assoc($resource->getResourceParameters(), $this->getResourceParameters()))) === 0);
+            return (($resource->getResourceName() === $this->getResourceName()) AND (count(array_diff_assoc($resource->getResourceParameters(), $this->getResourceParameters()))) === 0);
         }
     }
 

@@ -90,7 +90,6 @@ interface Chrome_View_Form_Interface
 
     /**
      * Returns the view context, set in __construct
-     *
      * @return Chrome_Context_View_Interface
      */
     public function getViewContext();

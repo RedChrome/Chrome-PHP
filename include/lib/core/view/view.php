@@ -131,42 +131,17 @@ abstract class Chrome_View_Abstract extends Chrome_View
 
     /**
      * Constructor
-     *
+     * @todo why controller?
      * @return Chrome_Controller_Interface
      */
     public function __construct(Chrome_Context_View_Interface $viewContext, Chrome_Controller_Interface $controller)
     {
         parent::__construct($viewContext);
-        $this->_controller = $controller;
+        #$this->_controller = $controller;
     }
 }
 
-abstract class Chrome_View_Strategy_Abstract extends Chrome_View_Abstract
-{
-    protected $_views = array();
-
-    public function render()
-    {
-        $return = '';
-
-        if(!is_array($this->_views)) {
-            $this->_views = array($this->_views);
-        }
-
-        foreach($this->_views as $view) {
-            $return .= $view->render();
-        }
-
-        return $return;
-    }
-
-    public function addRenderable(Chrome_Renderable $renderable)
-    {
-        $this->_views[] = $renderable;
-    }
-}
-
-abstract class NEWChrome_View_Strategy_Abstract extends Chrome_View
+abstract class Chrome_View_Strategy_Abstract extends Chrome_View
 {
     protected $_views = array();
 

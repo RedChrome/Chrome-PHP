@@ -1,6 +1,6 @@
 <?php
 
-class Chrome_View_Register extends NEWChrome_View_Strategy_Abstract
+class Chrome_View_Register extends Chrome_View_Strategy_Abstract
 {
     protected $_form = null;
 
@@ -11,7 +11,8 @@ class Chrome_View_Register extends NEWChrome_View_Strategy_Abstract
 
     public function setStepOne(Chrome_Form_Interface $form)
     {
-        $this->_views[] = new Chrome_View_Register_StepOne_Renderer_Template_StepOne(new Chrome_View_Form_Register_StepOne($form, $this->_viewContext));
+        $viewForm = new Chrome_View_Form_Register_StepOne($form, $this->_viewContext);
+        $this->_views[] = new Chrome_View_Register_StepOne_Renderer_Template_StepOne($viewForm);
     }
 
     public function setStepTwo(Chrome_Form_Interface $form, Chrome_View_Form_Element_Factory_Interface $viewFormElementFactory)

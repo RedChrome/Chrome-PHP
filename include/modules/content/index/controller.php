@@ -24,9 +24,9 @@ class Chrome_Controller_Index extends Chrome_Controller_Module_Abstract
         $obj->execute();
 
         $this->_view->addRenderable($obj->getView());
-
+        $this->_view->addRenderable(new Chrome_View_Index_TODO($this->_applicationContext->getViewContext(), $this));
         $view = new Chrome_View_Form_Index($this->_form, $this->_applicationContext->getViewContext());
-
+        return;
         $this->_view->addRenderable(new Chrome_View_Form_Index_Renderer($view));
 
         if( $this->_form->isCreated() ) {

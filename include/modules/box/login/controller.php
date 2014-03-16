@@ -62,7 +62,7 @@ class Chrome_Controller_Box_Login extends Chrome_Controller_Module_Abstract
                 // here we can do what we want
             }
 
-            $this->_view->showLoginForm($this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Default'));
+            $this->_view->showLoginForm($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Default'));
         }
 
     }

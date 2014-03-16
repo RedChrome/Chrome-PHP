@@ -39,18 +39,18 @@ class Chrome_View_Box_Login extends Chrome_View_Strategy_Abstract
     public function showUserMenu()
     {
         $this->setViewTitle('User Menu');
-        $this->_views = $this->_viewContext->getFactory()->build('Chrome_View_Box_LoggedIn', $this->_controller);
+        $this->_views = $this->_viewContext->getFactory()->build('Chrome_View_Box_LoggedIn');
     }
 
     /**
      *
      * @return void
      */
-    public function showLoginForm(Chrome_View_Form_Element_Factory_Interface $viewFormElementFactory)
+    public function showLoginForm(Chrome_Form_Interface $form, Chrome_View_Form_Element_Factory_Interface $viewFormElementFactory)
     {
         $this->setViewTitle('Login');
         #$viewForm = new Chrome_View_Form_Login($this->_controller->getForm());
-        $viewForm = Chrome_View_Form_Login::getInstance($this->_controller->getForm(), $this->_viewContext);
+        $viewForm = Chrome_View_Form_Login::getInstance($form, $this->_viewContext);
         $viewForm->setElementFactory($viewFormElementFactory);
         $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Box($viewForm, $this->_viewContext);
 
