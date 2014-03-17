@@ -18,26 +18,26 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
     public function setUp()
     {
         if($this->_model === null) {
-            $this->_model = new Chrome_Model_Authentication_Cookie($this->_appContext->getModelContext()->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface'));
+            $this->_model = new \Chrome\Model\Authentication\Cookie($this->_appContext->getModelContext()->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface'));
         }
 
-        if($this->_resetCookie === true OR !($this->_cookie instanceof Chrome_Cookie_Interface) ) {
+        if($this->_resetCookie === true OR !($this->_cookie instanceof \Chrome_Cookie_Interface) ) {
             $this->_cookie = new Chrome_Cookie_Dummy();
         }
 
         $this->_resetCookie = true;
 
 
-        $this->_chain = new Chrome_Authentication_Chain_Cookie($this->_model, $this->_cookie, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
+        $this->_chain = new \Chrome\Authentication\Chain\CookieChain($this->_model, $this->_cookie, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
         $this->_chain->setOptions($this->_options);
-        $this->_chain->setChain(new Chrome_Authentication_Chain_Null());
+        $this->_chain->setChain(new \Chrome\Authentication\Chain\NullChain());
     }
 
     public function testUpdate()
     {
         $id = mt_rand(1, 100);
 
-        $container = new Chrome_Authentication_Data_Container(__class__);
+        $container = new \Chrome\Authentication\Container(__class__);
         $container->setID($id);
         $container->setAutoLogin(true);
 
@@ -55,13 +55,13 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
      */
     public function testAuthenticateWithResource()
     {
-        $resource = new Chrome_Authentication_Resource_Dummy();
+        $resource = new \Test\Chrome\Authentication\Resource\Dummy();
         $resource->_id = mt_rand(1, 100);
 
         $authContainer = $this->_chain->authenticate($resource);
 
-        $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
-        $this->assertNotEquals('Chrome_Authentication_Chain_Cookie', $authContainer->getAuthenticatedBy());
+        $this->assertFalse($authContainer->hasStatus(\Chrome\Authentication\Container_Interface::STATUS_USER));
+        $this->assertNotEquals('Chrome\Authentication\Chain\CookieChain', $authContainer->getAuthenticatedBy());
     }
 
     /**
@@ -70,11 +70,11 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
     public function testAuthenticateWithoutResource()
     {
         $authContainer = $this->_chain->authenticate();
-        $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
+        $this->assertFalse($authContainer->hasStatus(\Chrome\Authentication\Container_Interface::STATUS_USER));
 
         $id = 1;
 
-        $container = new Chrome_Authentication_Data_Container(__class__);
+        $container = new \Chrome\Authentication\Container(__class__);
         $container->setID($id);
         $container->setAutoLogin(true);
 
@@ -82,9 +82,35 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
 
         $authContainer = $this->_chain->authenticate();
 
-        $this->assertTrue($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
-        $this->assertEquals('Chrome_Authentication_Chain_Cookie', $authContainer->getAuthenticatedBy());
+        $this->assertTrue($authContainer->hasStatus(\Chrome\Authentication\Container_Interface::STATUS_USER));
+        $this->assertEquals('Chrome\Authentication\Chain\CookieChain', $authContainer->getAuthenticatedBy());
         $this->assertEquals($id, $authContainer->getID());
+    }
+
+    public function testAuthenticateWithNotWorkingModel()
+    {
+        // since we're using a null model, the cookie chain cannot ensure whether the cookie is valid or not
+        // -> cannot authenticate
+
+        $this->_model = new \Test\Chrome\Model\NullModel();
+
+        $this->setUp();
+
+        $authContainer = $this->_chain->authenticate();
+        $this->assertFalse($authContainer->hasStatus(\Chrome\Authentication\Container_Interface::STATUS_USER));
+
+        $id = 1;
+
+        $container = new \Chrome\Authentication\Container(__class__);
+        $container->setID($id);
+        $container->setAutoLogin(true);
+
+        $this->_chain->update($container);
+
+        $authContainer = $this->_chain->authenticate();
+
+        $this->assertFalse($authContainer->hasStatus(\Chrome\Authentication\Container_Interface::STATUS_USER));
+        $this->assertEquals('Chrome\Authentication\Chain\CookieChain', $authContainer->getAuthenticatedBy());
     }
 
     /**
@@ -100,14 +126,14 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
         $this->_chain->deAuthenticate();
 
         $authContainer = $this->_chain->authenticate();
-        $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
+        $this->assertFalse($authContainer->hasStatus(\Chrome\Authentication\Container_Interface::STATUS_USER));
 
         $this->_cookie = $cookie;
         $this->_resetCookie = false;
         $this->setUp();
 
         $authContainer = $this->_chain->authenticate();
-        $this->assertTrue($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
+        $this->assertTrue($authContainer->hasStatus(\Chrome\Authentication\Container_Interface::STATUS_USER));
 
         // set the cookie string to something unexpected.
         $cookie2->_cookie[$this->_options['cookie_namespace']] = ')&%TBFEHFG&A/()QB§';
@@ -116,12 +142,12 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
         $this->_resetCookie = false;
         $this->setUp();
         $authContainer = $this->_chain->authenticate();
-        $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
+        $this->assertFalse($authContainer->hasStatus(\Chrome\Authentication\Container_Interface::STATUS_USER));
 
         // this id does NOT exist
         $id = 8312471782;
 
-        $container = new Chrome_Authentication_Data_Container(__class__);
+        $container = new \Chrome\Authentication\Container(__class__);
         $container->setID($id);
         $container->setAutoLogin(true);
 
@@ -129,7 +155,7 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
 
         $authContainer = $this->_chain->authenticate();
 
-        $this->assertFalse($authContainer->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
+        $this->assertFalse($authContainer->hasStatus(\Chrome\Authentication\Container_Interface::STATUS_USER));
     }
 
     /**
@@ -143,7 +169,7 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
     }
 
     public function testCreateAuthentication() {
-        $resource = new Chrome_Authentication_Create_Resource_Dummy();
+        $resource = new \Test\Chrome\Authentication\Resource\Create_Dummy();
 
         // does nothing
         $this->_chain->createAuthentication($resource);
@@ -151,9 +177,17 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
 
     public function testGetChain() {
 
-        $chain = new Chrome_Authentication_Chain_Null();
+        $chain = new \Chrome\Authentication\Chain\NullChain();
         $this->_chain->addChain($chain);
 
         $this->assertSame($chain, $this->_chain->getChain());
+    }
+
+    public function testCookieModel()
+    {
+        $this->_model->setOptions(array('dbTable' => 'authenticate_'.mt_rand(0, 1000)));
+
+        // if the string is not escaped, then the token is assumed to be invalid -> model returns null
+        $this->assertNull($this->_model->doesIdAndTokenExist(mt_rand(0, 100), 'nH/R=§NDA)Q"§?REH!QN'));
     }
 }

@@ -19,6 +19,193 @@
  * @subpackage Chrome.Authentication
  */
 
+namespace Chrome\Authentication\Chain;
+
+use \Chrome\Authentication\Resource_Interface;
+use \Chrome\Authentication\CreateResource_Interface;
+use \Chrome\Authentication\Container_Interface;
+
+/**
+ * Interface for a concrete authentication logic
+ *
+ * An authentication chain contains logic to authenticate a user.
+ * E.g. using a database:
+ * session -> database -> null|
+ *
+ * Every authentication request is handled by a uthentication_Interface implementation. This implementation delegates
+ * the request to a Chain_Interface instance (using {@see authenticate()}). If this chain could authenticate then
+ * it propagates the success of the authentication and updates its own status and the status of his sub-chain. If it was not able to authenticate,
+ * then is delegates the authentication request to its sub-chain. Every authentication will call a {@see update()} method to all chains.
+ *
+ * Note: If the last chain was reached in an authentication request, then it should be a Null-Chain, which authenticates every
+ * client as a guest.
+ *
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Authentication
+ */
+interface Chain_Interface
+{
+    /**
+     * Adds a chain to the current one, it can be only one
+     * This new chain will be pulled to the end of the chain
+     * Like a list in java
+     *
+     * @param \Chrome\Authentication\Chain\Chain_Interface $chain
+     * @return void
+     */
+    public function addChain(Chain_Interface $chain);
+
+    /**
+     * Get a chain
+     *
+     * @return \Chrome\Authentication\Chain\Chain_Interface
+    */
+    public function getChain();
+
+    /**
+     * The logic to authenticate
+     *
+     * @param Resource_Interface $resource
+     *        [optional]
+     * @return \Chrome\Authentication\Container_Interface
+    */
+    public function authenticate(Resource_Interface $resource = null);
+
+    /**
+     * This method gets called if any chain could authenticate the user.
+     * Here you should set up some things if you want e.g. in session. might be usefull ;)
+     *
+     * Please do not call this from outside, this might destroy the internal state!
+     *
+     * @param \Chrome\Authentication\Container_Interface $return
+     * @return void
+    */
+    public function update(Container_Interface $return);
+
+    /**
+     * Sets the first chain object, all other chains are getting lost.
+     * Like a list in java
+     *
+     * @param Chain_Interface $chain
+     * @return void
+    */
+    public function setChain(Chain_Interface $chain);
+
+    /**
+     * Creates a new authentication
+     *
+     * @param CreateResource_Interface $resource
+     * @return void
+    */
+    public function createAuthentication(CreateResource_Interface $resource);
+
+    /**
+     * Undos the authentication
+     *
+     * @return void
+    */
+    public function deAuthenticate();
+}
+
+/**
+ * Abstract class for authentication chains
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Authentication
+ */
+abstract class Chain_Abstract implements Chain_Interface
+{
+    /**
+     * Next chain object
+     *
+     * @var Chrome_Authentication_Chain_Interface
+     */
+    protected $_chain = null;
+
+    /**
+     * @see \Chrome\Authentication\Chain\Chain_Interface::update()
+     */
+    public function update(Container_Interface $container)
+    {
+        // update the own status
+        $this->_update($container);
+        // then update the status of the following chains if set
+        if($this->_chain !== null)
+        {
+            $this->_chain->update($container);
+        }
+    }
+
+    /**
+     * put here your "update" logic
+     *
+     * @param Data_Container_Interface $container
+     * @return void
+     */
+    abstract protected function _update(Container_Interface $container);
+
+    /**
+     * @see \Chrome\Authentication\Chain\Chain_Interface::addChain()
+    */
+    public function addChain(Chain_Interface $chain)
+    {
+        $this->_chain = $this->_chain->addChain($chain);
+        return $this;
+    }
+
+    /**
+     * @see \Chrome\Authentication\Chain\Chain_Interface::getChain()
+     */
+    public function getChain()
+    {
+        return $this->_chain;
+    }
+
+    /**
+     * @see \Chrome\Authentication\Chain\Chain_Interface::setChain()
+     */
+    public function setChain(Chain_Interface $chain)
+    {
+        $this->_chain = $chain;
+    }
+
+    /**
+     * Put here youre deAuthentication logic
+     *
+     * @return void
+     */
+    abstract protected function _deAuthenticate();
+
+    /**
+     * @see \Chrome\Authentication\Chain\Chain_Interface::deAuthenticate()
+    */
+    public function deAuthenticate()
+    {
+        $this->_deAuthenticate();
+        $this->_chain->deAuthenticate();
+    }
+
+    /**
+     * @see \Chrome\Authentication\Chain\Chain_Interface::createAuthentication()
+     */
+    public function createAuthentication(CreateResource_Interface $resource)
+    {
+        $this->_createAuthentication($resource);
+        $this->_chain->createAuthentication($resource);
+    }
+
+    /**
+     * Put here your authentication creation logic
+     *
+     * @param CreateResource_Interface $resource
+     * @return void
+     */
+    abstract protected function _createAuthentication(CreateResource_Interface $resource);
+}
+
+namespace Chrome\Authentication;
+
 require_once 'container.php';
 
 /**
@@ -30,9 +217,8 @@ require_once 'container.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-interface Chrome_Authentication_Resource_Interface
+interface Resource_Interface
 {
-
     /**
      * Returns the id you want to authenticate against
      *
@@ -52,7 +238,7 @@ interface Chrome_Authentication_Resource_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-interface Chrome_Authentication_Create_Resource_Interface
+interface CreateResource_Interface
 {
     /**
      *
@@ -61,18 +247,20 @@ interface Chrome_Authentication_Create_Resource_Interface
     public function getID();
 }
 
+use \Chrome\Authentication\Chain\Chain_Interface;
+
 /**
  * Interface for handling authentication requests
  *
  * This is an interface for handling authentication requests.
- * The actual authentication logic is located in Chrome_Authentication_Chain_Interface objects.
+ * The actual authentication logic is located in \Chrome\Authentication\Chain objects.
  *
  * If a chain could authenticate, then every chain will be informed about that using {@see update()}.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-interface Chrome_Authentication_Interface extends Chrome_Exception_Processable_Interface
+interface Authentication_Interface extends \Chrome_Exception_Processable_Interface
 {
     /**
      * The id for all guests
@@ -83,51 +271,20 @@ interface Chrome_Authentication_Interface extends Chrome_Exception_Processable_I
 
     /**
      *
-     * @param Chrome_Authentication_Resource_Interface $resource
+     * @param Resource_Interface $resource
      *        [optional] if we want to authenticate with special options then
      *        we use $resource. if we just want to authenticate using cookies or whatever then use no $resource (you could but
      *        its ignored in this case).
      * @throws Chrome_Exception if no exception handler is set
      * @return void
      */
-    public function authenticate(Chrome_Authentication_Resource_Interface $resource = null);
-
-    /**
-     * Adds a new Chrome_Authentication_Chain_Interface
-     *
-     * To use this properly mention this:
-     * the order of calling this method is important!
-     * The fastest chain should be the first one, the slowest the last
-     * It's the chain of responsibility pattern and at the end is the null-chain. this cant be changed
-     * and this class is a dummy element. This will authenticate the client as guest, if no other chain could authenticate the client before etc..
-     *
-     * @param Chrome_Authentication_Chain_Interface $chain
-     *        new authentication method
-     * @return Chrome_Authentication_Interface for fluent interface
-     */
-    public function addChain(Chrome_Authentication_Chain_Interface $chain);
-
-    /**
-     * Sets the first chain object, all other chains are getting lost.
-     * Like a list in java
-     *
-     * @param Chrome_Authentication_Chain_Interface $chain
-     * @return Chrome_Authentication_Interface
-     */
-    public function setChain(Chrome_Authentication_Chain_Interface $chain);
-
-    /**
-     * Returns a chain
-     *
-     * @return Chrome_Authentication_Chain_Interface
-     */
-    public function getChain();
+    public function authenticate(Resource_Interface $resource = null);
 
     /**
      * Undos the authentication
      *
      * @return void
-     */
+    */
     public function deAuthenticate();
 
     /**
@@ -138,7 +295,7 @@ interface Chrome_Authentication_Interface extends Chrome_Exception_Processable_I
      * Dont use this to determine whether the user is logged in or just a guest, use for this isUser()!
      *
      * @return boolean true if authenticated, false else
-     */
+        */
     public function isAuthenticated();
 
     /**
@@ -147,7 +304,7 @@ interface Chrome_Authentication_Interface extends Chrome_Exception_Processable_I
      * if authentication wasnt called before then null
      *
      * @return int authentication id, unique for every "authentication user"
-     */
+    */
     public function getAuthenticationID();
 
     /**
@@ -156,217 +313,26 @@ interface Chrome_Authentication_Interface extends Chrome_Exception_Processable_I
      * This can be used for questions like: is the user logged in
      *
      * @return boolean
-     */
+    */
     public function isUser();
 
     /**
      * This will create an authentication with the given information in $resource.
      * Every chain (which is added) gets the request to create the authentication.
-     * You should call this method with a child interface of Chrome_Authentication_Create_Resource_Interface, because
+     * You should call this method with a child interface of \Chrome\Authentication\Create\Resource_Interface, because
      * every new authentication needs special data (thus special resources).
      *
-     * @param Chrome_Authentication_Create_Resource_Interface $resource
+     * @param CreateResource_Interface $resource
      * @return void
-     */
-    public function createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource);
+    */
+    public function createAuthentication(CreateResource_Interface $resource);
 
     /**
      * Returns the data container created to authenticate
      *
-     * @return Chrome_Authentication_Data_Container_Interface
-     */
+     * @return \Chrome\Authentication\Container\Data_Container_Interface
+    */
     public function getAuthenticationDataContainer();
-}
-
-/**
- * Interface for a concrete authentication logic
- *
- * An authentication chain contains logic to authenticate a user.
- * E.g. using a database:
- * session -> database -> null|
- *
- * Every authentication request is handled by a Chrome_Authentication_Interface implementation. This implementation delegates
- * the request to a Chrome_Authentication_Chain_Interface instance (using {@see authenticate()}). If this chain could authenticate then
- * it propagates the success of the authentication and updates its own status and the status of his sub-chain. If it was not able to authenticate,
- * then is delegates the authentication request to its sub-chain. Every authentication will call a {@see update()} method to all chains.
- *
- * Note: If the last chain was reached in an authentication request, then it should be a Null-Chain, which authenticates every
- * client as a guest.
- *
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Authentication
- */
-interface Chrome_Authentication_Chain_Interface
-{
-
-    /**
-     * Adds a chain to the current one, it can be only one
-     * This new chain will be pulled to the end of the chain
-     * Like a list in java
-     *
-     * @param Chrome_Authentication_Chain_Interface $chain
-     * @return void
-     */
-    public function addChain(Chrome_Authentication_Chain_Interface $chain);
-
-    /**
-     * Get a chain
-     *
-     * @return Chrome_Authentication_Chain_Interface
-     */
-    public function getChain();
-
-    /**
-     * The logic to authenticate
-     *
-     * @param Chrome_Authentication_Resource_Interface $resource
-     *        [optional]
-     * @return Chrome_Authentication_Return_Interface
-     */
-    public function authenticate(Chrome_Authentication_Resource_Interface $resource = null);
-
-    /**
-     * This method gets called if any chain could authenticate the user.
-     * Here you should set up some things if you want e.g. in session. might be usefull ;)
-     *
-     * Please do not call this from outside, this might destroy the internal state!
-     *
-     * @param Chrome_Authentication_Data_Container_Interface $return
-     * @return void
-     */
-    public function update(Chrome_Authentication_Data_Container_Interface $return);
-
-    /**
-     * Sets the first chain object, all other chains are getting lost.
-     * Like a list in java
-     *
-     * @param Chrome_Authentication_Chain_Interface $chain
-     * @return void
-     */
-    public function setChain(Chrome_Authentication_Chain_Interface $chain);
-
-    /**
-     * Creates a new authentication
-     *
-     * @param Chrome_Authentication_Create_Resource_Interface $resource
-     * @return void
-     */
-    public function createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource);
-}
-
-/**
- * Abstract class for authentication chains
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Authentication
- */
-abstract class Chrome_Authentication_Chain_Abstract implements Chrome_Authentication_Chain_Interface
-{
-    /**
-     * Next chain object
-     *
-     * @var Chrome_Authentication_Chain_Interface
-     */
-    protected $_chain = null;
-
-    /**
-     * update state of this chain and updates the next chain
-     *
-     * if you use this abstract class, then put your update logic in _update
-     * This is only a little help to be sure every chain gets updated
-     *
-     * @param Chrome_Authentication_Data_Container_Interface $container
-     * @return void
-     */
-    public function update(Chrome_Authentication_Data_Container_Interface $container)
-    {
-        // update the own status
-        $this->_update($container);
-        // then update the status of the following chains if set
-        if($this->_chain !== null)
-        {
-            $this->_chain->update($container);
-        }
-    }
-
-    /**
-     * put here your "update" logic
-     *
-     * @param Chrome_Authentication_Data_Container_Interface $container
-     * @return void
-     */
-    abstract protected function _update(Chrome_Authentication_Data_Container_Interface $container);
-
-    /**
-     * Adds a chain at the end
-     *
-     * @param Chrome_Authentication_Chain_Interface $chain
-     * @return Chrome_Authentication_Chain_Interface
-     */
-    public function addChain(Chrome_Authentication_Chain_Interface $chain)
-    {
-        $this->_chain = $this->_chain->addChain($chain);
-        return $this;
-    }
-
-    /**
-     * Returns a chain
-     *
-     * @return Chrome_Authentication_Chain_Interface
-     */
-    public function getChain()
-    {
-        return $this->_chain;
-    }
-
-    /**
-     * Sets the first chain object, all other are deleted
-     *
-     * @param Chrome_Authentication_Chain_Interface $chain
-     */
-    public function setChain(Chrome_Authentication_Chain_Interface $chain)
-    {
-        $this->_chain = $chain;
-    }
-
-    /**
-     * Put here youre deAuthentication logic
-     *
-     * @return void
-     */
-    abstract protected function _deAuthenticate();
-
-    /**
-     * deauthenticates a user
-     *
-     * @return void
-     */
-    public function deAuthenticate()
-    {
-        $this->_deAuthenticate();
-        $this->_chain->deAuthenticate();
-    }
-
-    /**
-     * creates for the given resource an authentication
-     *
-     * @param Chrome_Authentication_Create_Resource_Interface $resource
-     * @return void
-     */
-    public function createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)
-    {
-        $this->_createAuthentication($resource);
-        $this->_chain->createAuthentication($resource);
-    }
-
-    /**
-     * Put here your authentication creation logic
-     *
-     * @param Chrome_Authentication_Create_Resource_Interface $resource
-     * @return void
-     */
-    abstract protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource);
 }
 
 /**
@@ -380,7 +346,7 @@ require_once 'chain/null.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Chrome_Authentication implements Chrome_Authentication_Interface
+class Authentication implements \Chrome\Authentication\Authentication_Interface
 {
     /**
      *
@@ -424,28 +390,36 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
      */
     public function __construct()
     {
-        $this->_chain = new Chrome_Authentication_Chain_Null();
+        $this->_chain = new \Chrome\Authentication\Chain\NullChain();
     }
 
     /**
-     * Chain-of-Responsability Pattern, fluent interface pattern
+     * Adds a new Chrome_Authentication_Chain_Interface
      *
-     * @param Chrome_Authentication_Chain_Interface $chain
-     * @return Chrome_Authentication
+     * To use this properly mention this:
+     * the order of calling this method is important!
+     * The fastest chain should be the first one, the slowest the last
+     * It's the chain of responsibility pattern and at the end is the null-chain. this cant be changed
+     * and this class is a dummy element. This will authenticate the client as guest, if no other chain could authenticate the client before etc..
+     *
+     * @param Chain_Interface $chain
+     *        new authentication method
+     * @return Authentication_Interface for fluent interface
      */
-    public function addChain(Chrome_Authentication_Chain_Interface $chain)
+    public function addChain(Chain_Interface $chain)
     {
         $this->_chain = $this->_chain->addChain($chain);
         return $this;
     }
 
     /**
-     * discards all other chains, and sets the given one as the first chain
+     * Sets the first chain object, all other chains are getting lost.
+     * Like a list in java
      *
-     * @param Chrome_Authentication_Chain_Interface $chain
-     * @return Chrome_Authentication
+     * @param Chain_Interface $chain
+     * @return Authentication_Interface
      */
-    public function setChain(Chrome_Authentication_Chain_Interface $chain)
+    public function setChain(Chain_Interface $chain)
     {
         $this->_chain = $chain;
         return $this;
@@ -454,7 +428,7 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
     /**
      * Returns a chain
      *
-     * @return Chrome_Authentication_Chain_Interface
+     * @return Chrome\Authentication\Chain\Chain_Interface
      */
     public function getChain()
     {
@@ -463,11 +437,11 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
 
     /**
      *
-     * @param Chrome_Authentication_Resource_Interface $resource
+     * @param Resource_Interface $resource
      *        [optional]
      * @return void
      */
-    public function authenticate(Chrome_Authentication_Resource_Interface $resource = null)
+    public function authenticate(Resource_Interface $resource = null)
     {
         try
         {
@@ -475,16 +449,16 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
             $this->_container = $this->_chain->authenticate($resource);
 
             // user could not authenticate or he should not authenticate
-            if(!($this->_container instanceof Chrome_Authentication_Data_Container_Interface) or !is_int(($id = $this->_container->getID())) or $id < 0)
+            if(!($this->_container instanceof Container_Interface) or !is_int(($id = $this->_container->getID())) or $id < 0)
             {
-                throw new Chrome_Exception_Authentication('Could not authenticate, authentication refused', 201);
+                throw new \Chrome_Exception_Authentication('Could not authenticate, authentication refused', 201);
             } else
             {
                 $this->_isAuthenticated = true;
             }
 
             // user should get authenticated as guest
-            if($id === self::GUEST_ID or $this->_container->getStatus() !== Chrome_Authentication_Data_Container_Interface::STATUS_USER)
+            if($id === self::GUEST_ID OR $this->_container->getStatus() !== Container_Interface::STATUS_USER)
             {
                 $this->_authenticationID = self::GUEST_ID;
                 $this->_isUser = false;
@@ -498,7 +472,7 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
                 // -> maybe any chain needs to update sth.?
                 $this->_chain->update($this->_container);
             }
-        } catch(Chrome_Exception_Authentication $e)
+        } catch(\Chrome_Exception_Authentication $e)
         {
             $this->_handleException($e);
         }
@@ -533,7 +507,7 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
      * @param Chrome_Exception_Handler_Interface $handler
      * @return void
      */
-    public function setExceptionHandler(Chrome_Exception_Handler_Interface $handler)
+    public function setExceptionHandler(\Chrome_Exception_Handler_Interface $handler)
     {
         $this->_exceptionHandler = $handler;
     }
@@ -567,7 +541,7 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
 
     /**
      *
-     * @return Chrome_Authentication_Data_Container_Interface
+     * @return \Chrome\Authentication\Container\Data_Container_Interface
      */
     public function getAuthenticationDataContainer()
     {
@@ -576,15 +550,15 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
 
     /**
      *
-     * @param Chrome_Authentication_Create_Resource_Interface $resource
+     * @param \Chrome\Authentication\CreateResource_Interface $resource
      * @return void
      */
-    public function createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)
+    public function createAuthentication(CreateResource_Interface $resource)
     {
         try
         {
             $this->_chain->createAuthentication($resource);
-        } catch(Chrome_Exception_Authentication $e)
+        } catch(\Chrome_Exception_Authentication $e)
         {
             $this->_handleException($e);
         }
@@ -596,7 +570,7 @@ class Chrome_Authentication implements Chrome_Authentication_Interface
      * @param Chrome_Exception_Authentication $e
      * @throws Chrome_Exception_Authentication
      */
-    protected function _handleException(Chrome_Exception_Authentication $e)
+    protected function _handleException(\Chrome_Exception_Authentication $e)
     {
         if($this->_exceptionHandler != null)
         {

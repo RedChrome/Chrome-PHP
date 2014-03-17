@@ -19,11 +19,18 @@
  * @subpackage Chrome.Authentication
  */
 
+namespace Chrome\Authentication\Chain;
+
+use \Chrome\Authentication\Container_Interface;
+use \Chrome\Authentication\Resource_Interface;
+use \Chrome\Authentication\CreateResource_Interface;
+use \Chrome\Authentication\Container;
+
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Chrome_Authentication_Chain_Session extends Chrome_Authentication_Chain_Abstract
+class SessionChain extends Chain_Abstract
 {
     protected $_options = array('session_namespace' => '_AUTH_SESSION');
 
@@ -35,21 +42,21 @@ class Chrome_Authentication_Chain_Session extends Chrome_Authentication_Chain_Ab
     protected $_session = null;
 
 
-    public function __construct(Chrome_Session_Interface $session, array $options = array())
+    public function __construct(\Chrome_Session_Interface $session, array $options = array())
     {
         $this->_session = $session;
 
         $this->_options = array_merge($this->_options, $options);
     }
 
-    protected function _update(Chrome_Authentication_Data_Container_Interface $return)
+    protected function _update(Container_Interface $return)
     {
         $array = array('id' => $return->getID());
 
         $this->_session->set($this->_options['session_namespace'], $array);
     }
 
-    public function authenticate(Chrome_Authentication_Resource_Interface $resource = null)
+    public function authenticate(Resource_Interface $resource = null)
     {
         if($resource !== null) {
             return $this->_chain->authenticate($resource);
@@ -61,11 +68,11 @@ class Chrome_Authentication_Chain_Session extends Chrome_Authentication_Chain_Ab
             return $this->_chain->authenticate($resource);
         }
 
-        $container = new Chrome_Authentication_Data_Container(__CLASS__);
+        $container = new Container(__CLASS__);
 
         $container->setID($data['id']);
 
-        $container->setStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER);
+        $container->setStatus(Container_Interface::STATUS_USER);
 
         return $container;
     }
@@ -75,7 +82,7 @@ class Chrome_Authentication_Chain_Session extends Chrome_Authentication_Chain_Ab
         $this->_session->set($this->_options['session_namespace'], null);
     }
 
-    protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)
+    protected function _createAuthentication(CreateResource_Interface $resource)
     {
         // do nothing
     }

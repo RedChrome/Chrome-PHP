@@ -1,13 +1,24 @@
 <?php
 
+namespace Test\Chrome\Authentication\Chain;
+
+use \Chrome\Authentication\Chain\Chain_Abstract;
+use \Chrome\Authentication\Chain\Chain_Interface;
+use \Chrome\Authentication\CreateResource_Interface;
+use \Chrome\Authentication\Container_Interface;
+use \Chrome\Authentication\Container;
+use \Chrome\Authentication\Resource_Interface;
+
 require_once LIB.'core/authentication/authentication.php';
 
-class Chrome_Authentication_Chain_Wrapper extends Chrome_Authentication_Chain_Abstract {
+class WrapperChain extends Chain_Abstract {
 
     public $_throwExceptionOnCreating = false;
+    public $_throwExceptionOnAuthentication = false;
 
-    public function __construct($booleanThrowExceptionOnCreating = false) {
+    public function __construct($booleanThrowExceptionOnCreating = false, $booleanThrowExceptionOnAuthentication = false) {
         $this->_throwExceptionOnCreating = $booleanThrowExceptionOnCreating;
+        $this->_throwExceptionOnAuthentication = $booleanThrowExceptionOnAuthentication;
     }
 
     protected function _deAuthenticate()
@@ -15,35 +26,39 @@ class Chrome_Authentication_Chain_Wrapper extends Chrome_Authentication_Chain_Ab
         // do nothing
     }
 
-    protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)
+    protected function _createAuthentication(CreateResource_Interface $resource)
     {
         if($this->_throwExceptionOnCreating === true) {
-            throw new Chrome_Exception_Authentication('Throwing testing exception ;)');
+            throw new \Chrome_Exception_Authentication('Throwing testing exception in _createAuthentication');
         }
 
         // do nothing
     }
 
-    protected function _update(Chrome_Authentication_Data_Container_Interface $return)
+    protected function _update(Container_Interface $return)
     {
         // do nothing
     }
 
-    public function authenticate(Chrome_Authentication_Resource_Interface $resource = null)
+    public function authenticate(Resource_Interface $resource = null)
     {
+        if($this->_throwExceptionOnAuthentication === true) {
+            throw new \Chrome_Exception_Authentication('Throwing testing exception in authenticate');
+        }
+
         if($this->_chain !== null) {
             return $this->_chain->authenticate($resource);
         } else {
-            $container = new Chrome_Authentication_Data_Container(__CLASS__);
+            $container = new Container(__CLASS__);
 
             $container->setID(0);
 
-            $container->setStatus(Chrome_Authentication_Data_Container_Interface::STATUS_GUEST);
+            $container->setStatus(Container_Interface::STATUS_GUEST);
         }
 
     }
 
-    public function addChain(Chrome_Authentication_Chain_Interface $chain)
+    public function addChain(Chain_Interface $chain)
     {
         if($this->_chain !== null) {
           $this->_chain = $this->_chain->addChain($chain);
@@ -53,7 +68,7 @@ class Chrome_Authentication_Chain_Wrapper extends Chrome_Authentication_Chain_Ab
         return $this;
     }
 
-    public function createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)
+    public function createAuthentication(CreateResource_Interface $resource)
     {
         $this->_createAuthentication($resource);
 

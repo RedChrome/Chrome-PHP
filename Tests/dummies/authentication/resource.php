@@ -1,8 +1,13 @@
 <?php
 
+namespace Test\Chrome\Authentication\Resource;
+
+use \Chrome\Authentication\CreateResource_Interface;
+use \Chrome\Authentication\Resource_Interface;
+
 require_once LIB.'core/authentication/authentication.php';
 
-class Chrome_Authentication_Resource_Dummy implements Chrome_Authentication_Resource_Interface
+class Dummy implements Resource_Interface
 {
     public $_id = 1;
 
@@ -13,7 +18,7 @@ class Chrome_Authentication_Resource_Dummy implements Chrome_Authentication_Reso
 
 }
 
-class Chrome_Authentication_Create_Resource_Dummy implements Chrome_Authentication_Create_Resource_Interface
+class Create_Dummy implements CreateResource_Interface
 {
     public $_id = 0;
 

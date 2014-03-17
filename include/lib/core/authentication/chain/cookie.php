@@ -19,11 +19,18 @@
  * @subpackage Chrome.Authentication
  */
 
+namespace Chrome\Authentication\Chain;
+
+use \Chrome\Authentication\Container_Interface;
+use \Chrome\Authentication\Resource_Interface;
+use \Chrome\Authentication\CreateResource_Interface;
+use \Chrome\Authentication\Container;
+
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abstract
+class CookieChain extends Chain_Abstract
 {
     protected $_options = array(
                            'cookie_namespace'         => '_AUTH',
@@ -47,7 +54,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
      *
      * @return Chrome_Authentication_Chain_Cookie
      */
-    public function __construct(Chrome_Model_Abstract $model, Chrome_Cookie_Interface $cookie, Chrome\Hash\Hash_Interface $hash)
+    public function __construct(\Chrome_Model_Abstract $model, \Chrome_Cookie_Interface $cookie, \Chrome\Hash\Hash_Interface $hash)
     {
         $this->_model         = $model;
         $this->_cookie        = $cookie;
@@ -59,7 +66,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
         $this->_options = array_merge($this->_options, $options);
     }
 
-    protected function _update(Chrome_Authentication_Data_Container_Interface $return)
+    protected function _update(Container_Interface $return)
     {
         $data = $this->_cookie->getCookie($this->_options['cookie_namespace']);
 
@@ -75,7 +82,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
             }
     }
 
-    public function authenticate(Chrome_Authentication_Resource_Interface $resource = null)
+    public function authenticate(Resource_Interface $resource = null)
     {
         if($resource !== null) {
             $this->_chain->authenticate($resource);
@@ -108,9 +115,9 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
             if($result->isEmpty()) {
                 return $this->_chain->authenticate($resource);
             } else {
-                $container = new Chrome_Authentication_Data_Container(__CLASS__);
+                $container = new Container(__CLASS__);
                 $container->setID($id)->setAutoLogin(true);
-                $container->setStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER);
+                $container->setStatus(Container_Interface::STATUS_USER);
 
                 return $container;
             }
@@ -126,7 +133,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
     {
         $this->_deAuthenticate();
 
-        return new Chrome_Authentication_Data_Container(__CLASS__);
+        return new Container(__CLASS__);
     }
 
     private function _renewCookie($id)
@@ -140,7 +147,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
         $this->_model->updateIdAndToken($id, $token);
     }
 
-    protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)
+    protected function _createAuthentication(CreateResource_Interface $resource)
     {
         // do nothing
     }
@@ -159,7 +166,7 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
         // data structure: ID.TOKEN
         $array = explode('.', $data, 2);
 
-        if(sizeof($array) !== 2) {
+        if(count($array) !== 2) {
             return array('id' => null, 'token' => null);
         }
 
@@ -175,7 +182,9 @@ class Chrome_Authentication_Chain_Cookie extends Chrome_Authentication_Chain_Abs
     }
 }
 
-class Chrome_Model_Authentication_Cookie extends Chrome_Model_Database_Statement_Abstract
+namespace Chrome\Model\Authentication;
+
+class Cookie extends \Chrome_Model_Database_Statement_Abstract
 {
     /**
      * @var array

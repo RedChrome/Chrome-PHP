@@ -8,7 +8,7 @@ class authenticationContainerTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
 
-        $this->_container = new Chrome_Authentication_Data_Container(__CLASS__);
+        $this->_container = new \Chrome\Authentication\Container(__CLASS__);
     }
 
     public function testSetId()
@@ -33,11 +33,11 @@ class authenticationContainerTest extends PHPUnit_Framework_TestCase
 
     public function testStatus()
     {
-        $this->_container->setStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER);
+        $this->_container->setStatus(\Chrome\Authentication\Container_Interface::STATUS_USER);
 
-        $this->assertEquals(Chrome_Authentication_Data_Container::STATUS_USER, $this->_container->getStatus());
-        $this->assertTrue($this->_container->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER));
-        $this->assertFalse($this->_container->hasStatus(Chrome_Authentication_Data_Container_Interface::STATUS_GUEST));
+        $this->assertEquals(\Chrome\Authentication\Container_Interface::STATUS_USER, $this->_container->getStatus());
+        $this->assertTrue($this->_container->hasStatus(\Chrome\Authentication\Container_Interface::STATUS_USER));
+        $this->assertFalse($this->_container->hasStatus(\Chrome\Authentication\Container_Interface::STATUS_GUEST));
     }
 
     public function testAuthenticatedBy()

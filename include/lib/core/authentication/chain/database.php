@@ -19,11 +19,17 @@
  * @subpackage Chrome.Authentication
  */
 
+namespace Chrome\Authentication\Chain;
+
+use \Chrome\Authentication\Container_Interface;
+use \Chrome\Authentication\Resource_Interface;
+use \Chrome\Authentication\CreateResource_Interface;
+use \Chrome\Authentication\Container;
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_Abstract
+class DatabaseChain extends Chain_Abstract
 {
     /**
      * object for manipulating data
@@ -46,7 +52,7 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
      */
     protected $_setTime = true;
 
-    public function __construct(Chrome_Model_Abstract $model, $updateTime = false, $setTime = true)
+    public function __construct(\Chrome_Model_Abstract $model, $updateTime = false, $setTime = true)
     {
         $this->_model      = $model;
         $this->_updateTime = (boolean) $updateTime;
@@ -54,7 +60,7 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
 
     }
 
-    protected function _update(Chrome_Authentication_Data_Container_Interface $return)
+    protected function _update(Container_Interface $return)
     {
         // here we could update the login time if we want
         if($this->_updateTime === true) {
@@ -63,7 +69,7 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
         }
     }
 
-    public function authenticate(Chrome_Authentication_Resource_Interface $resource = null)
+    public function authenticate(Resource_Interface $resource = null)
     {
         // if no data is given, then it cannot authenticate
         if($resource === null) {
@@ -71,7 +77,7 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
         }
 
         // cannot work with this resource
-        if(($resource instanceof Chrome_Authentication_Resource_Database_Interface) === false) {
+        if(($resource instanceof \Chrome\Authentication\Resource\Database_Interface) === false) {
             return $this->_chain->authenticate($resource);
         }
 
@@ -93,9 +99,9 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
             return $this->_chain->authenticate($resource);
         }
 
-        $container = new Chrome_Authentication_Data_Container(__CLASS__);
+        $container = new Container(__CLASS__);
         $container->setID($id)->setAutoLogin((boolean) $resource->getAutoLogin());
-        $container->setStatus(Chrome_Authentication_Data_Container_Interface::STATUS_USER);
+        $container->setStatus(Container_Interface::STATUS_USER);
 
         if($this->_setTime === true) {
             $this->_model->updateTimeById($id);
@@ -109,9 +115,9 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
         // nothing to do, because no data is persistently saved
     }
 
-    protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)
+    protected function _createAuthentication(CreateResource_Interface $resource)
     {
-        if($resource instanceof Chrome_Authentication_Create_Resource_Database_Interface) {
+        if($resource instanceof \Chrome\Authentication\Resource\Create_Database_Interface) {
 
             $id = $this->_model->createAuthentication($resource->getCredential(), $resource->getCredentialSalt());
 
@@ -120,11 +126,15 @@ class Chrome_Authentication_Chain_Database extends Chrome_Authentication_Chain_A
     }
 }
 
+namespace Chrome\Authentication\Resource;
+
+use \Chrome\Authentication\Resource_Interface;
+use \Chrome\Authentication\CreateResource_Interface;
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-interface Chrome_Authentication_Resource_Database_Interface extends Chrome_Authentication_Resource_Interface
+interface Database_Interface extends Resource_Interface
 {
     public function getCredential();
 
@@ -135,8 +145,7 @@ interface Chrome_Authentication_Resource_Database_Interface extends Chrome_Authe
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-interface Chrome_Authentication_Create_Resource_Database_Interface extends
-    Chrome_Authentication_Create_Resource_Interface
+interface Create_Database_Interface extends CreateResource_Interface
 {
     /**
      * @return string the password hashed
@@ -153,7 +162,7 @@ interface Chrome_Authentication_Create_Resource_Database_Interface extends
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Chrome_Authentication_Resource_Database implements Chrome_Authentication_Resource_Database_Interface
+class Database implements Database_Interface
 {
     protected $_id         = '';
     protected $_credential = '';
@@ -186,7 +195,7 @@ class Chrome_Authentication_Resource_Database implements Chrome_Authentication_R
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Chrome_Authentication_Create_Resource_Database implements Chrome_Authentication_Create_Resource_Database_Interface
+class Create_Database implements Create_Database_Interface
 {
     protected $_credential     = '';
     protected $_credentialSalt = '';
@@ -226,11 +235,13 @@ class Chrome_Authentication_Create_Resource_Database implements Chrome_Authentic
     }
 }
 
+namespace Chrome\Model\Authentication;
+
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Chrome_Model_Authentication_Database extends Chrome_Model_Database_Statement_Abstract
+class Database extends \Chrome_Model_Database_Statement_Abstract
 {
     protected $_options = array(
                            'dbTable'          => 'authenticate',

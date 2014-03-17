@@ -15,17 +15,11 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category   CHROME-PHP
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
- * @author     Alexander Book <alexander.book@gmx.de>
- * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.12.2012 15:40:09] --> $
- * @link       http://chrome-php.de
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Authentication;
 
 /**
  * This interface is used to set authentication data.
@@ -36,7 +30,7 @@ if(CHROME_PHP !== true) die();
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-interface Chrome_Authentication_Data_Container_Interface
+interface Container_Interface
 {
     /**
      * There are two states. One for a guest and one for a user (well it should be named client).
@@ -134,14 +128,14 @@ interface Chrome_Authentication_Data_Container_Interface
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Chrome_Authentication_Data_Container implements Chrome_Authentication_Data_Container_Interface
+class Container implements Container_Interface
 {
     /**
      * contains the id of the user
      *
      * @var int
      */
-    protected $_id = Chrome_Authentication_Interface::GUEST_ID;
+    protected $_id = Authentication_Interface::GUEST_ID;
 
     /**
      * contains whether the user gets automatically logged in or not
@@ -154,7 +148,7 @@ class Chrome_Authentication_Data_Container implements Chrome_Authentication_Data
      *
      * @var int
      */
-    protected $_status = Chrome_Authentication_Data_Container_Interface::STATUS_GUEST;
+    protected $_status = Container_Interface::STATUS_GUEST;
 
     /**
      * the class, which has authenticated the person

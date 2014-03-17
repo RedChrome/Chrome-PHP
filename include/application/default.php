@@ -369,12 +369,12 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         // setting up authentication, authorisation service
         $handler = new Chrome_Exception_Handler_Authentication();
 
-        $authentication = new Chrome_Authentication();
+        $authentication = new \Chrome\Authentication\Authentication();
         $authentication->setExceptionHandler($handler);
 
-        $dbAuth = new Chrome_Authentication_Chain_Database(new Chrome_Model_Authentication_Database($this->_modelContext->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface')));
-        $cookieAuth = new Chrome_Authentication_Chain_Cookie(new Chrome_Model_Authentication_Cookie($this->_modelContext->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface')), $cookie, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
-        $sessionAuth = new Chrome_Authentication_Chain_Session($session);
+        $dbAuth = new \Chrome\Authentication\Chain\DatabaseChain(new \Chrome\Model\Authentication\Database($this->_modelContext->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface')));
+        $cookieAuth = new \Chrome\Authentication\Chain\CookieChain(new \Chrome\Model\Authentication\Cookie($this->_modelContext->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface')), $cookie, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
+        $sessionAuth = new \Chrome\Authentication\Chain\SessionChain($session);
 
         // set authentication chains in the right order
         // the first chain should be session, because its the fastest one

@@ -275,14 +275,14 @@ interface Chrome_Context_Application_Interface
      *
      * The authentication service is able to authenticate a client. Mostly this is done in the application
      *
-     * @param Chrome_Authentication_Interface $auth
+     * @param \Chrome\Authentication\Authentication_Interface $auth
      */
-    public function setAuthentication(Chrome_Authentication_Interface $auth);
+    public function setAuthentication(\Chrome\Authentication\Authentication_Interface $auth);
 
     /**
      * Returns the authetication service
      *
-     * @return Chrome_Authentication_Interface
+     * @return \Chrome\Authentication\Authentication_Interface
      */
     public function getAuthentication();
 
@@ -520,7 +520,7 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
         return $this->_requestHandler;
     }
 
-    public function setAuthentication(Chrome_Authentication_Interface $auth)
+    public function setAuthentication(\Chrome\Authentication\Authentication_Interface $auth)
     {
         $this->_authentication = $auth;
     }

@@ -19,6 +19,13 @@
  * @subpackage Chrome.Authentication
  */
 
+namespace Chrome\Authentication\Chain;
+
+use \Chrome\Authentication\Container_Interface;
+use \Chrome\Authentication\Resource_Interface;
+use \Chrome\Authentication\CreateResource_Interface;
+use \Chrome\Authentication\Container;
+
 /**
  * The last chain element in every chain
  *
@@ -27,28 +34,28 @@
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Chrome_Authentication_Chain_Null extends Chrome_Authentication_Chain_Abstract
+class NullChain extends Chain_Abstract
 {
-    public function addChain(Chrome_Authentication_Chain_Interface $chain)
+    public function addChain(Chain_Interface $chain)
     {
         $chain->setChain($this);
 
         return $chain;
     }
 
-    protected function _update(Chrome_Authentication_Data_Container_Interface $return)
+    protected function _update(Container_Interface $return)
     {
         // do nothing
     }
 
-    public function authenticate(Chrome_Authentication_Resource_Interface $resource = null)
+    public function authenticate(Resource_Interface $resource = null)
     {
         // no chain matched before.. this is the last chain, so the user is a guest
-        $container = new Chrome_Authentication_Data_Container(__CLASS__);
+        $container = new Container(__CLASS__);
 
         // guest status
-        $container->setStatus(Chrome_Authentication_Data_Container_Interface::STATUS_GUEST);
-        $container->setID(Chrome_Authentication_Interface::GUEST_ID);
+        $container->setStatus(Container_Interface::STATUS_GUEST);
+        $container->setID(\Chrome\Authentication\Authentication_Interface::GUEST_ID);
 
         return $container;
     }
@@ -63,12 +70,12 @@ class Chrome_Authentication_Chain_Null extends Chrome_Authentication_Chain_Abstr
         // do nothing
     }
 
-    protected function _createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)
+    protected function _createAuthentication(CreateResource_Interface $resource)
     {
         // do nothing
     }
 
-    public function createAuthentication(Chrome_Authentication_Create_Resource_Interface $resource)
+    public function createAuthentication(CreateResource_Interface $resource)
     {
         // do nothing
     }
