@@ -45,7 +45,7 @@ abstract class Strategy implements \Chrome\Cache\Option\Option_Interface
     {
         if(!is_string($file))
         {
-            throw new \Chrome_InvalidArgumentException('Expected $file to be a string, given ' . gettype($file));
+            throw new \Chrome\InvalidArgumentException('Expected $file to be a string, given ' . gettype($file));
         }
 
         $this->_file = $file;
@@ -60,7 +60,7 @@ abstract class Strategy implements \Chrome\Cache\Option\Option_Interface
     {
         if(!is_int($time) or $time < 0)
         {
-            throw new \Chrome_InvalidArgumentException('Expected $time to be a non-negative integer, given ' . gettype($time));
+            throw new \Chrome\InvalidArgumentException('Expected $time to be a non-negative integer, given ' . gettype($time));
         }
 
         $this->_lifeTime = $time;
@@ -277,7 +277,7 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
     public function set($name, $data)
     {
         if(!$this->_isCacheable($data)) {
-            throw new \Chrome_InvalidArgumentException('Data is not encodeable!');
+            throw new \Chrome\InvalidArgumentException('Data is not encodeable!');
         }
 
         $this->_data[$name] = $data;
@@ -383,7 +383,7 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
 
         if(!is_resource($this->_filePointer))
         {
-            throw new \Chrome_Exception('Error, filepointer was no resource');
+            throw new \Chrome\Exception('Error, filepointer was no resource');
         }
 
         $this->_data[self::CHROME_CACHE_STRATEGY_TIMESTAMP_KEY] = CHROME_TIME;
@@ -399,7 +399,7 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
 
             rewind($this->_filePointer);
             fwrite($this->_filePointer, $encodedData);
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             return;
         }
@@ -422,7 +422,7 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
             $data = file_get_contents($this->_fileName);
 
             $this->_data = $this->_decode($data);
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             $this->_data = array();
         }

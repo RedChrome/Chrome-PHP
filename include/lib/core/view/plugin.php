@@ -192,7 +192,7 @@ class Chrome_View_Plugin_Facade implements Chrome_View_Plugin_Facade_Interface
         // check first whether the function is callable
         if(!$this->isCallable($function))
         {
-            throw new Chrome_Exception('Cannot call function ' . $function . '. Function is not defined!');
+            throw new \Chrome\Exception('Cannot call function ' . $function . '. Function is not defined!');
         }
 
         // call the function

@@ -32,7 +32,7 @@ class Linker implements Linker_Interface
     public function getLink($resourceId)
     {
         if(!is_int($resourceId)) {
-            throw new \Chrome_Exception('$resourceId must be of type integer, given '.$resourceId);
+            throw new \Chrome\Exception('$resourceId must be of type integer, given '.$resourceId);
         }
 
         // TODO: finish

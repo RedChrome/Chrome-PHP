@@ -110,7 +110,7 @@ interface Chrome_Validator_Composition_Interface extends Chrome_Validator_Interf
     /**
      * adds validators given in array (as values, key gets ignored) in the given order
      *
-     * Throws an Chrome_InvalidArgumentException if a value of the array does not contain a appropriate class
+     * Throws an \Chrome\InvalidArgumentException if a value of the array does not contain a appropriate class
      *
      * @param array $validators an array containing as values classes which implements Chrome_Validator_Interface
      * @return void
@@ -120,7 +120,7 @@ interface Chrome_Validator_Composition_Interface extends Chrome_Validator_Interf
     /**
      * Unsets the current validators and adds validators given in array (as values, key gets ignored) in the given order
      *
-     * Throws an Chrome_InvalidArgumentException if a value of the array does not contain a appropriate class
+     * Throws an \Chrome\InvalidArgumentException if a value of the array does not contain a appropriate class
      *
      * @param array $validators an array containing as values classes which implements Chrome_Validator_Interface
      * @return void
@@ -350,7 +350,7 @@ abstract class Chrome_Validator_Composition_Abstract extends Chrome_Validator im
             if($validator instanceof Chrome_Validator_Interface) {
                 $this->_validators[] = $validator;
             } else {
-                throw new Chrome_InvalidArgumentException('An element of the array was not a subclass of Chrome_Validator_Interface!');
+                throw new \Chrome\InvalidArgumentException('An element of the array was not a subclass of Chrome_Validator_Interface!');
             }
         }
     }

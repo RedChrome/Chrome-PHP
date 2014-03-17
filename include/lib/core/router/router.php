@@ -38,7 +38,7 @@ interface Chrome_Router_Route_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-interface Chrome_Router_Interface extends Chrome_Router_Route_Interface, Chrome_Exception_Processable_Interface
+interface Chrome_Router_Interface extends Chrome_Router_Route_Interface, \Chrome\Exception\Processable_Interface
 {
     public function route(URI_Interface $url, Chrome_Request_Data_Interface $data);
 
@@ -176,7 +176,7 @@ class Chrome_Router implements Chrome_Router_Interface
                 // already tried to route to 404.html and not found... there is smt. wrong!
                 if($url->getPath() === '404.html')
                 {
-                    throw new Chrome_Exception('Could not found adequate controller class!', 2001);
+                    throw new \Chrome\Exception('Could not found adequate controller class!', 2001);
                 }
 
                 // todo: is this okay?
@@ -184,7 +184,7 @@ class Chrome_Router implements Chrome_Router_Interface
                 $url->setPath('404.html');
                 $this->match($url, $data);
             }
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             $this->_exceptionHandler->exception($e);
         }
@@ -199,7 +199,7 @@ class Chrome_Router implements Chrome_Router_Interface
         try
         {
             $this->match($url, $data);
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             $this->_exceptionHandler->exception($e);
         }
@@ -217,7 +217,7 @@ class Chrome_Router implements Chrome_Router_Interface
         $this->_routerClasses[] = $obj;
     }
 
-    public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)
+    public function setExceptionHandler(\Chrome\Exception\Handler_Interface $obj)
     {
         $this->_exceptionHandler = $obj;
     }

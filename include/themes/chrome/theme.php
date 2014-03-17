@@ -30,7 +30,7 @@ class Chrome_Design_Theme_Chrome extends Chrome_Design_Theme_Abstract
         require_once LIB . 'core/design/loader/static.php';
 
         // @todo use another exception handler
-        $exceptionHandler = new Chrome_Exception_Handler_Default();
+        $exceptionHandler = new \Chrome\Exception\Handler\DefaultHandler();
 
         $template = new Chrome_Template();
         $template->assignTemplate('design/chrome/design.tpl');

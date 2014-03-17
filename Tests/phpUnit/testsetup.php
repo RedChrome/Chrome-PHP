@@ -52,9 +52,9 @@ class Chrome_TestSetup
     {
         require_once 'bootstrap.php';
 
-        $this->_errorConfig = new Chrome_Exception_Configuration();
-        $this->_errorConfig->setErrorHandler(new Chrome_Exception_Error_Handler_Default());
-        $this->_errorConfig->setExceptionHandler(new Chrome_Exception_Handler_Console());
+        $this->_errorConfig = new \Chrome\Exception\Configuration();
+        $this->_errorConfig->setErrorHandler(new Chrome\Exception\Handler\DefaultErrorHandler());
+        $this->_errorConfig->setExceptionHandler(new \Chrome\Exception\Handler\ConsoleHandler());
 
         $this->_applicationContext = new Chrome_Context_Application();
     }
@@ -138,7 +138,7 @@ class Chrome_TestSetup
 
         require_once 'Tests/include/application/test.php';
 
-        $application = new Chrome_Application_Test(new Chrome_Exception_Handler_Console());
+        $application = new Chrome_Application_Test(new \Chrome\Exception\Handler\ConsoleHandler());
         $application->setModelContext($this->_applicationContext->getModelContext());
         $application->init();
         $this->_diContainer = $application->getDiContainer();

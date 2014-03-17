@@ -14,20 +14,19 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.05.2013 20:34:46] --> $
- * @author     Alexander Book
+ * @subpackage Chrome.Exception
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Exception\Handler;
+
+use \Chrome\Exception\Handler_Interface;
 
 /**
  * @package CHROME-PHP
  */
-class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Interface
+class DefaultHandler implements Handler_Interface
 {
-    public function exception(Exception $e)
+    public function exception(\Exception $e)
     {
         echo '<h1>Uncaught Exception of type '.get_class($e).' </h1>';
         echo '<h3>'.$e->getMessage().'</h3>';
@@ -38,7 +37,7 @@ class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Inter
         die();
     }
 
-    protected function _printExceptionTrace(Exception $e)
+    protected function _printExceptionTrace(\Exception $e)
     {
 
         $trace = $e->getTrace();
@@ -68,11 +67,11 @@ class Chrome_Exception_Handler_Default implements Chrome_Exception_Handler_Inter
             $return .= '<br>'."\n";
         }
 
-        if($e instanceof Chrome_Exception) {
+        if($e instanceof \Chrome\Exception) {
 
             $prev = $e->getPrevious();
 
-            if( ($prev instanceof Exception) AND !($prev instanceof Chrome_Exception) ) {
+            if( ($prev instanceof Exception) AND !($prev instanceof \Chrome\Exception) ) {
 
                 $return .= '<h4>...caused by '.$prev->getFile().'('.$prev->getLine().')</h4>';
 

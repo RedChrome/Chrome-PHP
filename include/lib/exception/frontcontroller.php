@@ -14,27 +14,25 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.FrontController
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.04.2013 10:52:09] --> $
- * @author Alexander Book
+ * @subpackage Chrome.Exception
  */
+
+namespace Chrome\Exception\Handler;
 
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.FrontController
  */
-class Chrome_Exception_Handler_FrontController extends Chrome_Exception_Handler_Loggable_Abstract
+class FrontControllerHandler extends LoggableHandlerAbstract
 {
-    public function exception(Exception $e)
+    public function exception(\Exception $e)
     {
         $this->_logger->error($e);
 
         switch(get_class($e))
         {
-            case 'Chrome_Exception_Database':
+            case '\Chrome\DatabaseException':
                 {
                     die('There was an error with the database.');
                 }

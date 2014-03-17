@@ -41,7 +41,7 @@ class Dummy implements \Chrome\Authentication\Authentication_Interface
         return $this->dataContainer;
     }
 
-    public function setExceptionHandler(\Chrome_Exception_Handler_Interface $obj) {
+    public function setExceptionHandler(\Chrome\Exception\Handler_Interface $obj) {
 
     }
 

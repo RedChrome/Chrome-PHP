@@ -36,7 +36,7 @@ class Chrome_Validator_Form_Element_Inline extends Chrome_Validator
     public function __construct($callable)
     {
         if(!is_callable($callable)) {
-            throw new Chrome_Exception('Argument #1 must be a valid callback!');
+            throw new \Chrome\Exception('Argument #1 must be a valid callback!');
         }
 
         $this->_callback = $callable;

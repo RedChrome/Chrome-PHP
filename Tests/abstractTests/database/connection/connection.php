@@ -14,7 +14,7 @@ abstract class AbstractDatabaseConnectionTestCase extends PHPUnit_Framework_Test
 
     public function testThrowExceptionWhenCreatingConnectionWithoutAnyData()
     {
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
 
         $this->_connection->connect();
     }
@@ -32,7 +32,7 @@ abstract class AbstractDatabaseConnectionTestCase extends PHPUnit_Framework_Test
 
         $this->_connection->setConnectionOptions('notExistingHost', 'guest', '', 'chrome_2');
 
-        $this->setExpectedException('Chrome_Exception_Database');
+        $this->setExpectedException('\Chrome\DatabaseException');
         $this->_connection->connect();
     }
 
@@ -42,7 +42,7 @@ abstract class AbstractDatabaseConnectionTestCase extends PHPUnit_Framework_Test
 
         $this->_connection->setConnectionOptions($this->_databaseConnectionOptions['HOST'], $this->_databaseConnectionOptions['USER'], 'anythingWRONG', $this->_databaseConnectionOptions['DB']);
 
-        $this->setExpectedException('Chrome_Exception_Database');
+        $this->setExpectedException('\Chrome\DatabaseException');
         $this->_connection->connect();
     }
 

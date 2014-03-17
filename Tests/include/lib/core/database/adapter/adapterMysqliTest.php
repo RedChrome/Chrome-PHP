@@ -7,7 +7,7 @@ class DatabaseAdapterMysqliTest extends DatabaseAdapterMysqlTest
     {
         try {
             $this->_db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('simple', 'assoc', 'mysqli_test');
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             $this->_db = null;
         }
@@ -19,7 +19,7 @@ class DatabaseAdapterMysqliTest extends DatabaseAdapterMysqlTest
 
         $dummy = new Chrome_Database_Connection_Dummy('anytring but no mysqli connection');
 
-        $this->setExpectedException('Chrome_Exception_Database');
+        $this->setExpectedException('\Chrome\DatabaseException');
 
         $this->_db->getAdapter()->setConnection($dummy);
     }

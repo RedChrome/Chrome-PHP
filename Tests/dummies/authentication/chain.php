@@ -29,7 +29,7 @@ class WrapperChain extends Chain_Abstract {
     protected function _createAuthentication(CreateResource_Interface $resource)
     {
         if($this->_throwExceptionOnCreating === true) {
-            throw new \Chrome_Exception_Authentication('Throwing testing exception in _createAuthentication');
+            throw new \Chrome\AuthenticationException('Throwing testing exception in _createAuthentication');
         }
 
         // do nothing
@@ -43,7 +43,7 @@ class WrapperChain extends Chain_Abstract {
     public function authenticate(Resource_Interface $resource = null)
     {
         if($this->_throwExceptionOnAuthentication === true) {
-            throw new \Chrome_Exception_Authentication('Throwing testing exception in authenticate');
+            throw new \Chrome\AuthenticationException('Throwing testing exception in authenticate');
         }
 
         if($this->_chain !== null) {

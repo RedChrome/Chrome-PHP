@@ -81,13 +81,13 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
     /**
      *
-     * @var Chrome_Exception_Handler_Interface
+     * @var \Chrome\Exception\Handler_Interface
      */
     private $_exceptionHandler = null;
 
     /**
      *
-     * @var Chrome_Exception_Configuration_Interface
+     * @var \Chrome\Exception\Configuration_Interface
      */
     private $_exceptionConfiguration = null;
 
@@ -117,14 +117,14 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      *
      * @return Chrome_Front_Controller
      */
-    public function __construct(Chrome_Exception_Handler_Interface $exceptionHandler = null)
+    public function __construct(\Chrome\Exception\Handler_Interface $exceptionHandler = null)
     {
         $this->_initLoggers();
 
         if($exceptionHandler === null)
         {
             require_once LIB . 'exception/frontcontroller.php';
-            $exceptionHandler = new Chrome_Exception_Handler_FrontController($this->_loggerRegistry->get('application'));
+            $exceptionHandler = new \Chrome\Exception\Handler\FrontControllerHandler($this->_loggerRegistry->get('application'));
         }
 
         $this->_exceptionHandler = $exceptionHandler;
@@ -139,7 +139,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         try
         {
             $this->_init();
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             $this->_exceptionHandler->exception($e);
         }
@@ -152,9 +152,9 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      */
     protected function _init()
     {
-        $this->_exceptionConfiguration = new Chrome_Exception_Configuration();
+        $this->_exceptionConfiguration = new \Chrome\Exception\Configuration();
         $this->_exceptionConfiguration->setExceptionHandler($this->_exceptionHandler);
-        $this->_exceptionConfiguration->setErrorHandler(new Chrome_Exception_Error_Handler_Default());
+        $this->_exceptionConfiguration->setErrorHandler(new \Chrome\Exception\Handler\DefaultErrorHandler());
 
         $viewContext = new Chrome_Context_View();
         $this->_modelContext = new Chrome_Context_Model();
@@ -232,7 +232,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $this->_classloader->load($resource->getClass());
             $this->_controller = $this->_diContainer->get($resource->getClass());
 
-            $this->_controller->setExceptionHandler(new Chrome_Exception_Handler_Default());
+            $this->_controller->setExceptionHandler(new \Chrome\Exception\Handler\DefaultHandler());
 
             $this->_preprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
 
@@ -254,7 +254,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $this->_postprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
 
             $this->_applicationContext->getResponse()->flush();
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             $this->_exceptionHandler->exception($e);
         }
@@ -299,7 +299,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             #$translate = new \Chrome\Localization\Translate_Test_XX($localization);
             $localization->setTranslate($translate);
             $this->_applicationContext->getViewContext()->setLocalization($localization);
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             $this->_initLocalization(CHROME_LOCALE_DEFAULT);
         }
@@ -348,7 +348,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         // $this->_autoloader = new Chrome_Require_Autoloader();
         $this->_classloader->setLogger($this->_loggerRegistry->get('autoloader'));
-        $this->_classloader->setExceptionHandler(new Chrome_Exception_Handler_Default());
+        $this->_classloader->setExceptionHandler(new \Chrome\Exception\Handler\DefaultHandler());
 
         require_once PLUGIN . 'classloader/database.php';
         require_once PLUGIN . 'classloader/cache.php';
@@ -367,7 +367,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $session = $requestData->getSession();
 
         // setting up authentication, authorisation service
-        $handler = new Chrome_Exception_Handler_Authentication();
+        $handler = new Chrome\Exception\Handler\AuthenticationHandler();
 
         $authentication = new \Chrome\Authentication\Authentication();
         $authentication->setExceptionHandler($handler);
@@ -441,7 +441,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
     protected function _initRouter()
     {
         $this->_router = new Chrome_Router();
-        $this->_router->setExceptionHandler(new Chrome_Exception_Handler_Default());
+        $this->_router->setExceptionHandler(new \Chrome\Exception\Handler\DefaultHandler());
         // enable route matching
 
         $routerLogger = $this->_loggerRegistry->get('router');
@@ -654,7 +654,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
      * @param mixed $obj
      * @return void
      */
-    public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)
+    public function setExceptionHandler(\Chrome\Exception\Handler_Interface $obj)
     {
         $this->_exceptionHandler = $obj;
     }
@@ -662,7 +662,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
     /**
      * getExceptionHandler()
      *
-     * @return Chrome_Exception_Handler_Interface
+     * @return \Chrome\Exception\Handler_Interface
      */
     public function getExceptionHandler()
     {

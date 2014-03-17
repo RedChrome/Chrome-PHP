@@ -68,7 +68,7 @@ class Closure implements Handler_Interface
         $object = $this->_closures[$key]($container);
 
         if($object === null) {
-            throw new \Chrome_Exception('Closure function for key "'.$key.'" returns null');
+            throw new \Chrome\Exception('Closure function for key "'.$key.'" returns null');
         }
 
         if($this->isStatic($key)) {

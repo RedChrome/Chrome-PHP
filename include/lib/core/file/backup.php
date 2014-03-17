@@ -88,7 +88,7 @@ class Chrome_File_Backup
      *        filename of a new backup
      * @param string $dir
      *        dir (and all subdirs) which get saved. default= ../../../../, the whole Chrome-PHP folder get saved
-     * @throws Chrome_Exception
+     * @throws \Chrome\Exception
      * @return bool true on success
      */
     public function _new($file, $dir = '../../../../', $compression = 'zip')
@@ -107,7 +107,7 @@ class Chrome_File_Backup
                 return $this->_closeBzip2Archive();
 
             default:
-                throw new Chrome_Exception('Unknown compression: ' . $compression);
+                throw new \Chrome\Exception('Unknown compression: ' . $compression);
         }
         return true;
     }

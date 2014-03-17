@@ -263,7 +263,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
             }
 
             return $unserialized;
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             return array();
         }
@@ -441,7 +441,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
      * @param string $path
      * @param int $type
      *        see constants
-     * @throws Chrome_Exception on wrong $type
+     * @throws \Chrome\Exception on wrong $type
      * @return bool
      */
     private function _exists($path, $type = self::FILE_SYSTEM_READ_TYPE_FILE)
@@ -478,7 +478,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
                 }
 
             default:
-                throw new Chrome_Exception('Wrong type given in Chrome_File_System_Read::_exists()!');
+                throw new \Chrome\Exception('Wrong type given in Chrome_File_System_Read::_exists()!');
         }
     }
 
@@ -490,7 +490,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
      * @param string $path
      * @param int $type
      *        see constants
-     * @throws Chrome_Exception on wrong $type
+     * @throws \Chrome\Exception on wrong $type
      * @return void
      */
     private function _add($path, $type)
@@ -512,7 +512,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
                 }
 
             default:
-                throw new Chrome_Exception('Wrong type given in Chrome_File_System_Read::_add()!');
+                throw new \Chrome\Exception('Wrong type given in Chrome_File_System_Read::_add()!');
         }
     }
 
@@ -524,7 +524,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
      * @param string $path
      * @param int $type
      *        see constants
-     * @throws Chrome_Exception on wrong $type
+     * @throws \Chrome\Exception on wrong $type
      * @return void
      */
     private function _updateCache($path, $type)
@@ -568,7 +568,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
                 }
 
             default:
-                throw new Chrome_Exception('Wrong type given in Chrome_File_System_Read::_updateCache()!');
+                throw new \Chrome\Exception('Wrong type given in Chrome_File_System_Read::_updateCache()!');
         }
 
         $this->_cacheChanged();
@@ -657,7 +657,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
     {
         if(strpos($path, chr(0)) !== false)
         {
-            throw new Chrome_Exception('Path contains Null-Byte \\0. Not allowed in application!');
+            throw new \Chrome\Exception('Path contains Null-Byte \\0. Not allowed in application!');
         }
 
         return ltrim(trim($path, '/'), './');
@@ -679,7 +679,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 
         if(!$this->isDir($path))
         {
-            throw new Chrome_Exception('Cannot get information about a directory("' . $path . '") that does not exist in Chrome_File_System_Read::getDirInfo()!');
+            throw new \Chrome\Exception('Cannot get information about a directory("' . $path . '") that does not exist in Chrome_File_System_Read::getDirInfo()!');
         }
 
         if(isset($this->_cache[$path]) and $this->_cache[$path][self::FILE_SYSTEM_KEY_TYPE] === self::FILE_SYSTEM_READ_TYPE_DIR)
@@ -725,7 +725,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
         try
         {
             Chrome_File::delete($file);
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             return false;
         }
@@ -754,7 +754,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
         try
         {
             Chrome_Dir::delete($path);
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             return false;
         }
@@ -913,7 +913,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
             $path = self::_sanitizePath($path);
             $info = $this->getDirInfo($path, true);
             return $info[self::FILE_SYSTEM_KEY_FILE];
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             return array();
         }

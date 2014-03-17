@@ -163,11 +163,11 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         $this->_initFactories();
 
         if($this->_formElementOptionFactory === null) {
-            throw new Chrome_Exception('No view form element option factory set');
+            throw new \Chrome\Exception('No view form element option factory set');
         }
 
         if($this->_formElementFactory === null) {
-            throw new Chrome_Exception('No view form element factory set');
+            throw new \Chrome\Exception('No view form element factory set');
         }
 
         foreach($this->_form->getElements() as $formElement)
@@ -184,7 +184,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
      * It uses {@link _modifyElementOption} to modify the current view form element option.
      *
      * @param Chrome_Form_Element_Basic_Interface $formElement
-     * @throws Chrome_Exception
+     * @throws \Chrome\Exception
      * @return Chrome_View_Form_Element_Interface
      */
     protected function _setUpElement(Chrome_Form_Element_Basic_Interface $formElement)
@@ -197,7 +197,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         // if the modification was not properly executed, throw an exception
         if( !($formOption instanceof Chrome_View_Form_Element_Option_Basic_Interface) )
         {
-            throw new Chrome_Exception('Either option factory or _modifyElementOption returned NOT an instanceof Chrome_View_Form_Element_Option_Basic_Interface');
+            throw new \Chrome\Exception('Either option factory or _modifyElementOption returned NOT an instanceof Chrome_View_Form_Element_Option_Basic_Interface');
         }
 
         // if the form element option acceptes attachment, then create for every attach element
@@ -215,7 +215,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
 
         // the factory might also return null...
         if(!($element instanceof Chrome_View_Form_Element_Basic_Interface)) {
-            throw new Chrome_Exception('ViewFormFactory has not returned a proper view element');
+            throw new \Chrome\Exception('ViewFormFactory has not returned a proper view element');
         }
 
         $element->setViewForm($this);
@@ -462,7 +462,7 @@ class Chrome_View_Form_Element_Appender_Label extends Chrome_View_Form_Element_A
             default:
                 {
                     // maybe add this label position in this switch?
-                    throw new Chrome_Exception('Unsupported label position');
+                    throw new \Chrome\Exception('Unsupported label position');
                 }
         }
     }

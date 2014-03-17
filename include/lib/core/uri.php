@@ -146,7 +146,7 @@ class URI implements URI_Interface
     {
         if(($data = parse_url($url)) === false)
         {
-            throw new \Chrome_Exception('Invalid URL "' . $url . '" given in Chrome_URI::setURL()!');
+            throw new \Chrome\Exception('Invalid URL "' . $url . '" given in Chrome_URI::setURL()!');
         } else
         {
 
@@ -181,7 +181,7 @@ class URI implements URI_Interface
             $url .= $this->_protocol . '://';
         } else
         {
-            throw new \Chrome_Exception('Cannot create url without a protocoll!');
+            throw new \Chrome\Exception('Cannot create url without a protocoll!');
         }
 
         if(!empty($this->_authority[self::CHROME_URI_AUTHORITY_HOST]))
@@ -204,7 +204,7 @@ class URI implements URI_Interface
             }
         } else
         {
-            throw new \Chrome_Exception('Cannot create url without a host');
+            throw new \Chrome\Exception('Cannot create url without a host');
         }
 
         $url .= '/';
@@ -214,7 +214,7 @@ class URI implements URI_Interface
             $url .= $this->_path;
         } else
         {
-            throw new \Chrome_Exception('Cannot create url without a path!');
+            throw new \Chrome\Exception('Cannot create url without a path!');
         }
 
         if(!empty($this->_query))

@@ -80,7 +80,7 @@ abstract class Chrome_Template_Engine_Abstract implements Chrome_Template_Engine
     public function assignTemplate($name, $path = '')
     {
         if(empty($name)) {
-            throw new Chrome_Exception('No template file given!');
+            throw new \Chrome\Exception('No template file given!');
         }
 
         if(strstr($name, '.tpl') === false) {
@@ -97,7 +97,7 @@ abstract class Chrome_Template_Engine_Abstract implements Chrome_Template_Engine
         }
 
         if(!_isFile($file)) {
-            throw new Chrome_Exception('Cannot assign a template file("'.$file.'") that does not exist in Chrome_Tepmate_Engine_Abstract::assignTemplate()!');
+            throw new \Chrome\Exception('Cannot assign a template file("'.$file.'") that does not exist in Chrome_Tepmate_Engine_Abstract::assignTemplate()!');
         }
 
         $this->_file = $file;

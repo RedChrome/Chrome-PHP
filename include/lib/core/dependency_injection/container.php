@@ -71,7 +71,7 @@ class Container implements Container_Interface
     public function attachHandler($handlerName, Handler_Interface $handler)
     {
         if(!is_string($handlerName)) {
-            throw new \Chrome_InvalidArgumentException('Argument $handlerName must be of type string');
+            throw new \Chrome\InvalidArgumentException('Argument $handlerName must be of type string');
         }
 
         $this->_handlers[$this->_current] = $handler;
@@ -92,7 +92,7 @@ class Container implements Container_Interface
     public function getHandler($handlerName)
     {
         if(!$this->isAttached($handlerName)) {
-            throw new \Chrome_InvalidArgumentException('No handler with name "'.$handlerName.'" defined');
+            throw new \Chrome\InvalidArgumentException('No handler with name "'.$handlerName.'" defined');
         }
 
         return $this->_handlers[$this->_handlersNames[$handlerName]];
@@ -114,7 +114,7 @@ class Container implements Container_Interface
             }
         }
 
-        throw new \Chrome_Exception('Identifier "'.$key.'" is not defined');
+        throw new \Chrome\Exception('Identifier "'.$key.'" is not defined');
     }
 
     public function remove($key)

@@ -83,13 +83,13 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
 
     /**
      *
-     * @var Chrome_Exception_Handler_Interface
+     * @var \Chrome\Exception\Handler_Interface
      */
     private $_exceptionHandler = null;
 
     /**
      *
-     * @var Chrome_Exception_Configuration_Interface
+     * @var \Chrome\Exception\Configuration_Interface
      */
     private $_exceptionConfiguration = null;
 
@@ -103,11 +103,11 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
         return null;
     }
 
-    public function __construct(Chrome_Exception_Handler_Interface $handler = null)
+    public function __construct(\Chrome\Exception\Handler_Interface $handler = null)
     {
         if($handler === null) {
             require_once LIB.'exception/default.php';
-            $handler = new Chrome_Exception_Handler_Default();
+            $handler = new \Chrome\Exception\Handler\DefaultHandler();
         }
 
         $this->_exceptionHandler = $handler;
@@ -120,9 +120,9 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
      */
     public function init()
     {
-        $this->_exceptionConfiguration = new Chrome_Exception_Configuration();
+        $this->_exceptionConfiguration = new \Chrome\Exception\Configuration();
         $this->_exceptionConfiguration->setExceptionHandler($this->_exceptionHandler);
-        $this->_exceptionConfiguration->setErrorHandler(new Chrome_Exception_Error_Handler_Default());
+        $this->_exceptionConfiguration->setErrorHandler(new Chrome\Exception\Handler\DefaultErrorHandler());
 
         $viewContext = new Chrome_Context_View();
         $this->_modelContext = new Chrome_Context_Model();
@@ -164,14 +164,14 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
     {
         try {
             if(!class_exists($this->_appClass, false)) {
-                throw new Chrome_Exception('Could not find application class '.$this->_appClass);
+                throw new \Chrome\Exception('Could not find application class '.$this->_appClass);
             }
 
             $class = new $this->_appClass($this);
 
             $class->execute();
 
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             $this->_exceptionHandler->exception($e);
         }
@@ -183,7 +183,7 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
      * @param mixed $obj
      * @return void
      */
-    public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)
+    public function setExceptionHandler(\Chrome\Exception\Handler_Interface $obj)
     {
         $this->_exceptionHandler = $obj;
     }
@@ -191,7 +191,7 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
     /**
      * getExceptionHandler()
      *
-     * @return Chrome_Exception_Handler_Interface
+     * @return \Chrome\Exception\Handler_Interface
      */
     public function getExceptionHandler()
     {

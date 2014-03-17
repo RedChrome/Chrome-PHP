@@ -114,7 +114,7 @@ class Linker implements Linker_Interface
     public function getLink($resourceId, $relative = self::DEFAULT_LINK_TYPE)
     {
         if(!is_int($resourceId)) {
-            throw new \Chrome_Exception('$resourceId must be of type integer, given '.$resourceId);
+            throw new \Chrome\Exception('$resourceId must be of type integer, given '.$resourceId);
         }
 
         foreach($this->_resourceIdHelper as $helper)

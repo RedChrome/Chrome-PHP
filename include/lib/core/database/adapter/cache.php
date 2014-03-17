@@ -67,7 +67,7 @@ class Chrome_Database_Adapter_Cache implements Chrome_Database_Adapter_Interface
 
     private function _notSupportedMethod()
     {
-        throw new Chrome_Exception('Adapter is just a cache. You cannot use db functionality from a cached object!');
+        throw new \Chrome\Exception('Adapter is just a cache. You cannot use db functionality from a cached object!');
     }
 
     public function query($query)

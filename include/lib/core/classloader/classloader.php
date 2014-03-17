@@ -41,7 +41,7 @@ interface Autoloader_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-interface Classloader_Interface extends \Chrome_Exception_Processable_Interface, Loggable_Interface
+interface Classloader_Interface extends \Chrome\Exception\Processable_Interface, Loggable_Interface
 {
 
     /**
@@ -173,7 +173,7 @@ class Classloader implements Classloader_Interface
 {
     /**
      *
-     * @var Chrome_Exception_Handler_Interface
+     * @var \Chrome\Exception\Handler_Interface
      */
     protected $_exceptionHandler = null;
 
@@ -252,7 +252,7 @@ class Classloader implements Classloader_Interface
             require_once $file;
         } else
         {
-            throw new \Chrome_Exception('Could not load file "' . $file . '"');
+            throw new \Chrome\Exception('Could not load file "' . $file . '"');
         }
     }
 
@@ -280,7 +280,7 @@ class Classloader implements Classloader_Interface
             $this->_doLoadClassByFile($class, $fileName);
 
             return true;
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             $this->_exceptionHandler->exception($e);
         }
@@ -311,7 +311,7 @@ class Classloader implements Classloader_Interface
             }
 
             $this->_doLoadClassByFile($class, $fileName);
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             $this->_exceptionHandler->exception($e);
         }
@@ -358,14 +358,14 @@ class Classloader implements Classloader_Interface
         {
             if(!($resolver instanceof Resolver_Interface))
             {
-                throw new \Chrome_InvalidArgumentException('The array $resolvers may only contain instances of Resolver_Interface');
+                throw new \Chrome\InvalidArgumentException('The array $resolvers may only contain instances of Resolver_Interface');
             }
 
             $this->_resolvers[] = $resolver;
         }
     }
 
-    public function setExceptionHandler(\Chrome_Exception_Handler_Interface $handler)
+    public function setExceptionHandler(\Chrome\Exception\Handler_Interface $handler)
     {
         $this->_exceptionHandler = $handler;
     }

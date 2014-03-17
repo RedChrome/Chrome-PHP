@@ -41,7 +41,7 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
 
         $this->assertEquals('any string', $db->getQuery());
 
-        $this->setExpectedException('Chrome_Exception_Database');
+        $this->setExpectedException('\Chrome\DatabaseException');
         $db->loadQuery('anything else');
     }
 
@@ -52,7 +52,7 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
 
         $db = $this->_getDatabaseFactory()->buildInterface('model', 'dummy', $con);
 
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
 
         $db->loadQuery('notExisting');
     }
@@ -64,7 +64,7 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
             return 'any string';
 
         } else {
-            throw new Chrome_Exception('Just testing');
+            throw new \Chrome\Exception('Just testing');
         }
     }
 

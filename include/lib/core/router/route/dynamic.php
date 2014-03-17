@@ -65,7 +65,7 @@ class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
 
             if($resource === null or $resource == false)
             {
-                throw new Chrome_Exception('Path matched, but resource wasn\'t found!', 2004);
+                throw new \Chrome\Exception('Path matched, but resource wasn\'t found!', 2004);
             }
 
             $this->_resource = new Chrome_Router_Resource();

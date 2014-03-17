@@ -58,7 +58,7 @@ class Generic implements Generic_Interface
     public function __construct(\Chrome\Cache\Cache_Interface $cache, $decorateable)
     {
         if(!is_object($decorateable)) {
-            throw new \Chrome_InvalidArgumentException('The argument $decoratable must be an object');
+            throw new \Chrome\InvalidArgumentException('The argument $decoratable must be an object');
         }
 
         $this->_cache = $cache;
@@ -111,7 +111,7 @@ class Generic implements Cache_Interface
     public function __call($functionName, $arguments)
     {
         if(!method_exists($this->_decorator, $functionName)) {
-            throw new \Chrome_InvalidArgumentException('Decorateable does not support the method "'.$functionName.'"');
+            throw new \Chrome\InvalidArgumentException('Decorateable does not support the method "'.$functionName.'"');
         }
 
         if(!is_array($arguments)) {

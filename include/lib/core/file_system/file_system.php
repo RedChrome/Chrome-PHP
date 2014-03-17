@@ -77,7 +77,7 @@ class Chrome_File_System
                 return $this->_instanceRead;
 
             default:
-                throw new Chrome_Exception('Cannot find object of class("'.$class.'") in Chrome_File_System::getInstanceOf()!');
+                throw new \Chrome\Exception('Cannot find object of class("'.$class.'") in Chrome_File_System::getInstanceOf()!');
         }
     }
 

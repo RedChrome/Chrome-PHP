@@ -43,7 +43,7 @@ class Chrome_Form_Option_Element_Buttons extends Chrome_Form_Option_Element impl
 
         foreach($elements as $element) {
             if(!($element instanceof Chrome_Form_Element_Basic_Interface)) {
-                throw new Chrome_Exception('All elements in array have to be instances of Chrome_Form_Element_Basic_Interface');
+                throw new \Chrome\Exception('All elements in array have to be instances of Chrome_Form_Element_Basic_Interface');
             }
 
             $this->_buttons[] = $element;

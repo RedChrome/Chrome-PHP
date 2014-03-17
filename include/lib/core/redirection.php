@@ -77,7 +77,7 @@ class Redirection implements Redirection_Interface
 
     public function redirectToResource(Resource_Interface $resource)
     {
-        throw new \Chrome_Exception('Not implemented yet');
+        throw new \Chrome\Exception('Not implemented yet');
 
         $this->_redirect($url);
     }

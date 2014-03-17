@@ -14,33 +14,36 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 14:14:24] --> $
- * @author Alexander Book
+ * @subpackage Chrome.Test
  */
-if(CHROME_PHP !== true)
-    die();
+
+namespace Test\Chrome;
+
+use \Chrome\Exception;
 
 /**
- * Chrome_Exception_Dummy
+ * DummyException
  *
  * This is supposed to be a development code! You should not use this in production.
  *
  * @package CHROME-PHP
+ * @subpackage Chrome.Test
  */
-class Chrome_Exception_Dummy extends Chrome_Exception
+class DummyException extends Exception
 {
 }
 
+namespace Test\Chrome\Exception\Handler;
+
 /**
- * Chrome_Exception_Handler_Dummy
+ * DummyHandler
  *
  * This is supposed to be a development code! You should not use this in production.
  *
  * @package CHROME-PHP
+ * @subpackage Chrome.Test
  */
-class Chrome_Exception_Handler_Dummy implements Chrome_Exception_Handler_Interface
+class DummyHandler implements \Chrome\Exception\Handler_Interface
 {
     protected $_echoText = false;
 
@@ -49,7 +52,7 @@ class Chrome_Exception_Handler_Dummy implements Chrome_Exception_Handler_Interfa
         $this->_echoText = $echoText;
     }
 
-    public function exception(Exception $e)
+    public function exception(\Exception $e)
     {
         if($this->_echoText === true)
         {

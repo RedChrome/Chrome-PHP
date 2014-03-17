@@ -313,17 +313,17 @@ class Chrome_Converter implements Chrome_Converter_Delegator_Interface
             // conversion is unknown by this converter
             if(!isset($this->_conversions[$conversion]))
             {
-                throw new Chrome_Exception('Could not convert using conversion ' . $conversion);
+                throw new \Chrome\Exception('Could not convert using conversion ' . $conversion);
             }
 
             try
             {
                 // get the corressponding delegate and call the method $conversion to convert the data
                 $converted = $this->_converters[$this->_conversions[$conversion]]->$conversion($converted, $converterList->getParam($key));
-            } catch(Chrome_Exception $e)
+            } catch(\Chrome\Exception $e)
             {
                 // the method $conversion does not exist, or other weired errors occured
-                throw new Chrome_Exception('Exception thrown converting value using conversion ' . $conversion, 0, $e);
+                throw new \Chrome\Exception('Exception thrown converting value using conversion ' . $conversion, 0, $e);
             }
         }
 
@@ -363,12 +363,12 @@ abstract class Chrome_Converter_Delegate_Abstract implements Chrome_Converter_De
      *
      * @param string $methodName
      * @param array $parameters
-     * @throws Chrome_Exception
+     * @throws \Chrome\Exception
      */
     public function __call($methodName, $parameters)
     {
         // this is the desired behavior
-        throw new Chrome_Exception('No such method');
+        throw new \Chrome\Exception('No such method');
     }
 
     public function getConversions()

@@ -260,7 +260,7 @@ use \Chrome\Authentication\Chain\Chain_Interface;
  * @package CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-interface Authentication_Interface extends \Chrome_Exception_Processable_Interface
+interface Authentication_Interface extends \Chrome\Exception\Processable_Interface
 {
     /**
      * The id for all guests
@@ -275,7 +275,7 @@ interface Authentication_Interface extends \Chrome_Exception_Processable_Interfa
      *        [optional] if we want to authenticate with special options then
      *        we use $resource. if we just want to authenticate using cookies or whatever then use no $resource (you could but
      *        its ignored in this case).
-     * @throws Chrome_Exception if no exception handler is set
+     * @throws \Chrome\Exception if no exception handler is set
      * @return void
      */
     public function authenticate(Resource_Interface $resource = null);
@@ -356,7 +356,7 @@ class Authentication implements \Chrome\Authentication\Authentication_Interface
 
     /**
      *
-     * @var Chrome_Exception_Handler_Interface
+     * @var \Chrome\Exception\Handler_Interface
      */
     protected $_exceptionHandler = null;
 
@@ -451,7 +451,7 @@ class Authentication implements \Chrome\Authentication\Authentication_Interface
             // user could not authenticate or he should not authenticate
             if(!($this->_container instanceof Container_Interface) or !is_int(($id = $this->_container->getID())) or $id < 0)
             {
-                throw new \Chrome_Exception_Authentication('Could not authenticate, authentication refused', 201);
+                throw new \Chrome\AuthenticationException('Could not authenticate, authentication refused', 201);
             } else
             {
                 $this->_isAuthenticated = true;
@@ -472,7 +472,7 @@ class Authentication implements \Chrome\Authentication\Authentication_Interface
                 // -> maybe any chain needs to update sth.?
                 $this->_chain->update($this->_container);
             }
-        } catch(\Chrome_Exception_Authentication $e)
+        } catch(\Chrome\AuthenticationException $e)
         {
             $this->_handleException($e);
         }
@@ -504,17 +504,17 @@ class Authentication implements \Chrome\Authentication\Authentication_Interface
 
     /**
      *
-     * @param Chrome_Exception_Handler_Interface $handler
+     * @param \Chrome\Exception\Handler_Interface $handler
      * @return void
      */
-    public function setExceptionHandler(\Chrome_Exception_Handler_Interface $handler)
+    public function setExceptionHandler(\Chrome\Exception\Handler_Interface $handler)
     {
         $this->_exceptionHandler = $handler;
     }
 
     /**
      *
-     * @return Chrome_Exception_Handler_Interface
+     * @return \Chrome\Exception\Handler_Interface
      */
     public function getExceptionHandler()
     {
@@ -558,7 +558,7 @@ class Authentication implements \Chrome\Authentication\Authentication_Interface
         try
         {
             $this->_chain->createAuthentication($resource);
-        } catch(\Chrome_Exception_Authentication $e)
+        } catch(\Chrome\AuthenticationException $e)
         {
             $this->_handleException($e);
         }
@@ -567,10 +567,10 @@ class Authentication implements \Chrome\Authentication\Authentication_Interface
     /**
      * Handles an exception, using the exception handler (if set)
      *
-     * @param Chrome_Exception_Authentication $e
-     * @throws Chrome_Exception_Authentication
+     * @param \Chrome\AuthenticationException $e
+     * @throws \Chrome\AuthenticationException
      */
-    protected function _handleException(\Chrome_Exception_Authentication $e)
+    protected function _handleException(\Chrome\AuthenticationException $e)
     {
         if($this->_exceptionHandler != null)
         {

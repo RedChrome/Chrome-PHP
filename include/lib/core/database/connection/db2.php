@@ -43,7 +43,7 @@ class Chrome_Database_Connection_DB2 extends Chrome_Database_Connection_Abstract
     public function setConnectionOptions($host, $username, $password, $database, $port = 50000, $connectionString = null, $options = array())
     {
         if(!extension_loaded('db2')) {
-            throw new Chrome_Exception('Extension DB2 not loaded! Cannot use this adapter');
+            throw new \Chrome\Exception('Extension DB2 not loaded! Cannot use this adapter');
         }
 
         $this->_host        = $host;
@@ -74,11 +74,11 @@ class Chrome_Database_Connection_DB2 extends Chrome_Database_Connection_Abstract
         }
 
         if($this->_isSetConnectionOptions === false) {
-            throw new Chrome_Exception('Cannot connect with no information! Call setConnectionOptions() before!');
+            throw new \Chrome\Exception('Cannot connect with no information! Call setConnectionOptions() before!');
         }
         try {
             $this->_connection = db2_pconnect($this->_connectionString, $this->_username, $this->_password, $this->_options);
-        } catch(Chrome_Exception $e) {
+        } catch(\Chrome\Exception $e) {
            // TODO: handle errors
            throw $e;
         }

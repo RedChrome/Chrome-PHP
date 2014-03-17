@@ -105,7 +105,7 @@ class Config implements Config_Interface
     public function getConfig($subclass, $name = '')
     {
         if(!isset($this->_config[$subclass]) or ($name != '' and !isset($this->_config[$subclass][$name]))) {
-            throw new \Chrome_Exception('Wrong input given in getConfig("'.$subclass.'", "'.$name.'")! Config-Data doesn\'t exist!');
+            throw new \Chrome\Exception('Wrong input given in getConfig("'.$subclass.'", "'.$name.'")! Config-Data doesn\'t exist!');
         }
 
         if($name != '') {

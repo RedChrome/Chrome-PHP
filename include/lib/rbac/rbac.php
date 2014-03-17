@@ -139,7 +139,7 @@ class Chrome_RBAC implements Chrome_RBAC_Interface
 
     /**
      *
-     * @todo isAllowed unabhängig von $role, $transformation machen! nurnoch abhängigkeit von $id
+     * @todo isAllowed unabhï¿½ngig von $role, $transformation machen! nurnoch abhï¿½ngigkeit von $id
      */
     public function isAllowed(Chrome_Authorisation_Resource_Interface $resource)
     {
@@ -215,7 +215,7 @@ class Chrome_RBAC implements Chrome_RBAC_Interface
     {
         if(!isset($this->_roles[$roleID]))
         {
-            throw new Chrome_Exception('Role "' . $roleID . '" is not added to Chrome_RBAC!');
+            throw new \Chrome\Exception('Role "' . $roleID . '" is not added to Chrome_RBAC!');
         }
 
         return $this->_roles[$roleID];
@@ -225,7 +225,7 @@ class Chrome_RBAC implements Chrome_RBAC_Interface
     {
         if(!isset($this->_groups[$groupID]))
         {
-            throw new Chrome_Exception('Role "' . $groupID . '" is not added to Chrome_RBAC!');
+            throw new \Chrome\Exception('Role "' . $groupID . '" is not added to Chrome_RBAC!');
         }
 
         return $this->_groups[$groupID];

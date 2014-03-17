@@ -27,11 +27,11 @@ if(CHROME_PHP !== true) die();
  *
  * Mit dieser Klasse kann man Dateien verwalten!
  *
- * Hiermit kann man die Endung einer Datei erfahren oder prüfen ob diese Datei existiert
- * Diese Klasse enthält außerdem das Kopieren, Löschen und Verschieben einer Datei, dabei wird jedesmal geprüft ob diese Datei exisitiert,
+ * Hiermit kann man die Endung einer Datei erfahren oder prï¿½fen ob diese Datei existiert
+ * Diese Klasse enthï¿½lt auï¿½erdem das Kopieren, Lï¿½schen und Verschieben einer Datei, dabei wird jedesmal geprï¿½ft ob diese Datei exisitiert,
  * damit keine Fehlermeldungen auf der Webseite angezeigt werden!
- * Zusätzlich kann man mit dieser Klasse in einer Datei eine Zeile kommentieren oder auskommentieren, // und # kann man hierführ benutzen
- * Aber man kann auch mehrere Zeilen einer Datei mit einem Text austauschen oder löschen! In Verbindung mit der Chrome_Dir Klasse kann man somit Ordner sichern und anschließen
+ * Zusï¿½tzlich kann man mit dieser Klasse in einer Datei eine Zeile kommentieren oder auskommentieren, // und # kann man hierfï¿½hr benutzen
+ * Aber man kann auch mehrere Zeilen einer Datei mit einem Text austauschen oder lï¿½schen! In Verbindung mit der Chrome_Dir Klasse kann man somit Ordner sichern und anschlieï¿½en
  * einige Dateien updaten! Somit spart man dem Admin neue Dateien per FTP auf seinen Server hochzuladen.
  *
  * <code>
@@ -110,7 +110,7 @@ class Chrome_File
     {
         try {
             $fp = fopen($file, $openingMode);
-        } catch(Chrome_Exception $e) {
+        } catch(\Chrome\Exception $e) {
             return false;
         }
 
@@ -175,7 +175,7 @@ class Chrome_File
         }
 
         if(!@copy($src.$file, $dest.$file)) {
-            throw new Chrome_Exception('The File: '.$file.' coudn\'t be copied from '.$src.' to '.$dest.'!');
+            throw new \Chrome\Exception('The File: '.$file.' coudn\'t be copied from '.$src.' to '.$dest.'!');
         } else {
             // Sets permission
             if(self::_chper($dest.$file, $chmod)) return true;
@@ -193,11 +193,11 @@ class Chrome_File
      */
     public static function chper($file, $chmod)
     {
-        if(!self::exists($file)) throw new Chrome_Exception('Cannot change permission to '.$chmod.' because file '.$file.' doesn\'t exist!');
+        if(!self::exists($file)) throw new \Chrome\Exception('Cannot change permission to '.$chmod.' because file '.$file.' doesn\'t exist!');
 
         if(strlen($chmod) == '3') $chmod = '0'.$chmod;
 
-        if(!@chmod($file, $chmod)) throw new Chrome_Exception('Coudn\'t change permission to '.$chmod.'!');
+        if(!@chmod($file, $chmod)) throw new \Chrome\Exception('Coudn\'t change permission to '.$chmod.'!');
         else  return true;
     }
 
@@ -205,7 +205,7 @@ class Chrome_File
     {
         if(strlen($chmod) == '3') $chmod = '0'.$chmod;
 
-        if(!@chmod($file, $chmod)) throw new Chrome_Exception('Coudn\'t change permission to '.$chmod.'!');
+        if(!@chmod($file, $chmod)) throw new \Chrome\Exception('Coudn\'t change permission to '.$chmod.'!');
         else  return true;
     }
 
@@ -235,7 +235,7 @@ class Chrome_File
         }
 
         if(!@copy($src.$file, $dest.$file)) {
-            throw new Chrome_Exception('The File: '.$file.' coudn\'t be moved from '.$src.' to '.$dest.'!');
+            throw new \Chrome\Exception('The File: '.$file.' coudn\'t be moved from '.$src.' to '.$dest.'!');
         } else {
             @unlink($src.$file);
 
@@ -259,7 +259,7 @@ class Chrome_File
 
         try {
             $fp = fopen($file, $openingMode);
-        } catch(Chrome_Exception $e) {
+        } catch(\Chrome\Exception $e) {
             $fp = fopen($file, 'x+b');
         }
 
@@ -268,7 +268,7 @@ class Chrome_File
         }
 
         if(!is_resource($fp)) {
-            throw new Chrome_Exception('File handle is not a resource');
+            throw new \Chrome\Exception('File handle is not a resource');
         }
 
         return $fp;
@@ -291,7 +291,7 @@ class Chrome_File
         if(!self::exists($file)) {
             try {
               $fp = fopen($file, 'xb');
-            } catch(Chrome_Exception $e) {
+            } catch(\Chrome\Exception $e) {
                 return false;
             }
 
@@ -314,7 +314,7 @@ class Chrome_File
 
         try {
           $fp = fopen($file, $openingMode);
-        } catch(Chrome_Exception $e) {
+        } catch(\Chrome\Exception $e) {
             return false;
         }
 
@@ -402,7 +402,7 @@ class Chrome_File
         foreach($files as $file) {
             // sets permission to 777 to delete file
             @chmod($file, 0777);
-            if(!@unlink($file)) throw new Chrome_Exception('The File '.$file.' coudn\'t be deleted!');
+            if(!@unlink($file)) throw new \Chrome\Exception('The File '.$file.' coudn\'t be deleted!');
         }
 
         return true;
@@ -602,7 +602,7 @@ class Chrome_File
 
     public static function unCommentLines($lineNr, $srcFile)
     {
-        throw new Chrome_Exception('not implemented jet');
+        throw new \Chrome\Exception('not implemented jet');
     }
 
     /**
@@ -611,19 +611,19 @@ class Chrome_File
      * @param string $file file path
      * @param string $type return AS array OR string, default: array
      * @param string $mode where to start file, start OR end? default: start
-     * @throws Chrome_Exception
+     * @throws \Chrome\Exception
      * @return mixed
      */
     public static function getContent($file, $type = 'array', $mode = 'start')
     {
-        if(!self::exists($file)) throw new Chrome_Exception('Cannot read file("'.$file.'")! File does not exist!');
+        if(!self::exists($file)) throw new \Chrome\Exception('Cannot read file("'.$file.'")! File does not exist!');
 
-        if($mode !== 'start' and $mode !== 'end') throw new Chrome_Exception('Unexpected mode: '.$mode.'! Available modes are \'start\' OR \'end\'!');
+        if($mode !== 'start' and $mode !== 'end') throw new \Chrome\Exception('Unexpected mode: '.$mode.'! Available modes are \'start\' OR \'end\'!');
 
-        if($type !== 'array' and $type !== 'string') throw new Chrome_Exception('Unexpected return type: '.$type.'! Available types are \'array\' OR \'string\'!');
+        if($type !== 'array' and $type !== 'string') throw new \Chrome\Exception('Unexpected return type: '.$type.'! Available types are \'array\' OR \'string\'!');
 
         if(CHROME_MEMORY_LIMIT * 1000000 <= ($size = self::size($file))) // not a good method, but it works
-                 throw new Chrome_Exception('Cannot get content of file: '.$file.'! Not enough memory available! File: '.$size.', Available: '.CHROME_MEMORY_LIMIT);
+                 throw new \Chrome\Exception('Cannot get content of file: '.$file.'! Not enough memory available! File: '.$size.', Available: '.CHROME_MEMORY_LIMIT);
 
         $fileArray = file($file);
 
@@ -631,7 +631,7 @@ class Chrome_File
         elseif($type === 'array' and $mode === 'end') return array_reverse($fileArray, true);
         elseif($type === 'string' and $mode === 'start') return implode("\n", $fileArray);
         elseif($type === 'string' and $mode === 'end') return implode("\n", array_reverse($fileArray));
-        else  throw new Chrome_Exception('Unknown Error with file: '.$file.', type: '.$type.', mode: '.$mode.'!');
+        else  throw new \Chrome\Exception('Unknown Error with file: '.$file.', type: '.$type.', mode: '.$mode.'!');
     }
 
     /**
@@ -640,7 +640,7 @@ class Chrome_File
      * @param string $file file path
      * @param string $text search string
      * @param string $mode search from start OR end of file? use: start OR end for a faster search
-     * @throws Chrome_Exception
+     * @throws \Chrome\Exception
      * @return int 0 if haven't found, else line number
      */
     public static function search($file, $text, $mode = 'start')
@@ -662,14 +662,14 @@ class Chrome_File
      * @param array $array values you want to write into the file
      * @param boolean $processSections if you got a second-level array, set it true:
      * 					this will create a .ini file with [section] @see parse_ini_file
-     * @throws Chrome_Exception if file already exists
+     * @throws \Chrome\Exception if file already exists
      * @return boolean true on success
      */
     public static function write_ini_file($file, $array, $processSections = false)
     {
         if(self::hasExt($file) === false) $file .= '.ini';
 
-        if(self::exists($file)) throw new Chrome_Exception('File: '.$file.' already exists!');
+        if(self::exists($file)) throw new \Chrome\Exception('File: '.$file.' already exists!');
 
         $write = '';
 

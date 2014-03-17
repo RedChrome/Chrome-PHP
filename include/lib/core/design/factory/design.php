@@ -36,7 +36,7 @@ class Chrome_Design_Factory_Design extends Chrome_Design_Factory_Abstract
         $design = strtolower(trim($design));
 
         if(!_isFile(LIB.'core/design/design/'.$design.'.php')) {
-            throw new Chrome_Exception('Cannot load design "'.$design.'"! Design file does not exist');
+            throw new \Chrome\Exception('Cannot load design "'.$design.'"! Design file does not exist');
         }
 
         require_once LIB.'core/design/design/'.$design.'.php';

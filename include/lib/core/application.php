@@ -23,7 +23,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Application
  */
-interface Chrome_Application_Interface extends Chrome_Exception_Processable_Interface
+interface Chrome_Application_Interface extends \Chrome\Exception\Processable_Interface
 {
     /**
      * getController()
@@ -57,7 +57,7 @@ interface Chrome_Application_Interface extends Chrome_Exception_Processable_Inte
     /**
      * Returns the exception configuration for this application
      *
-     * @return Chrome_Exception_Configuration_Interface
+     * @return \Chrome\Exception\Configuration_Interface
      */
     public function getExceptionConfiguration();
 

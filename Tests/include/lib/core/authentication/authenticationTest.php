@@ -83,8 +83,8 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $resource = new \Test\Chrome\Authentication\Resource\Create_Dummy();
 
 
-        $this->_auth->setExceptionHandler(new Chrome_Exception_Handler_Dummy());
-        $exceptionHandler = new Chrome_Exception_Handler_Dummy();
+        $this->_auth->setExceptionHandler(new \Test\Chrome\Exception\Handler\DummyHandler());
+        $exceptionHandler = new \Test\Chrome\Exception\Handler\DummyHandler();
         $this->_auth->setExceptionHandler($exceptionHandler);
         $this->assertSame($exceptionHandler, $this->_auth->getExceptionHandler());
 
@@ -101,7 +101,7 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
     {
         $chain = $this->_auth->getChain();
         $resource = new \Test\Chrome\Authentication\Resource\Dummy();
-        $this->_auth->setExceptionHandler(new Chrome_Exception_Handler_Dummy());
+        $this->_auth->setExceptionHandler(new \Test\Chrome\Exception\Handler\DummyHandler());
 
         $this->_auth->setChain(new \Test\Chrome\Authentication\Chain\WrapperChain(false, true))->authenticate($resource);
     }
@@ -115,8 +115,8 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $resource = new \Test\Chrome\Authentication\Resource\Dummy();
 
         // do not set an exception handler, this will give us the exception
-        //$this->_auth->setExceptionHandler(new Chrome_Exception_Handler_Dummy());
-        $this->setExpectedException('\Chrome_Exception_Authentication');
+        //$this->_auth->setExceptionHandler(new \Test\Chrome\Exception\Handler\DummyHandler());
+        $this->setExpectedException('\Chrome\AuthenticationException');
         $this->_auth->setChain(new \Test\Chrome\Authentication\Chain\WrapperChain(false, true))->authenticate($resource);
     }
 
@@ -125,7 +125,7 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $chain = new \Test\Chrome\Authentication\Chain\FailChain();
         $this->_auth->addChain($chain);
 
-        $this->setExpectedException('\Chrome_Exception_Authentication');
+        $this->setExpectedException('\Chrome\AuthenticationException');
 
         $this->_auth->authenticate();
     }
@@ -136,7 +136,7 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $this->_auth->addChain($chain);
         $chain->_id = '1f921';
 
-        $this->setExpectedException('\Chrome_Exception_Authentication');
+        $this->setExpectedException('\Chrome\AuthenticationException');
 
         $this->_auth->authenticate();
     }

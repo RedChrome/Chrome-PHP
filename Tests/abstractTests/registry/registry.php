@@ -88,7 +88,7 @@ abstract class AbstractRegistryTestCase extends Chrome_TestCase
     {
         $registry = $this->_createRegistry();
 
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
         $registry->get('AnyNotExistingKey'.mt_rand(0, 1));
     }
 }

@@ -14,19 +14,17 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Database
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [29.11.2012 20:24:56] --> $
- * @author Alexander Book
+ * @subpackage Chrome.Exception
  */
+
+namespace Chrome;
 
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Exception_Database extends Chrome_Exception
+class DatabaseException extends Exception
 {
     const DATABASE_EXCEPTION_MODUL_NOT_AVAILABLE = 0;
     const DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER = 1;
@@ -52,10 +50,10 @@ class Chrome_Exception_Database extends Chrome_Exception
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Exception_Database_Query extends Chrome_Exception_Database
+class DatabaseQueryException extends DatabaseException
 {
     protected $_executedQuery = '';
-    public function __construct($message = '', $executedQuery = '', $code = self::DATABASE_EXCEPTION_ERROR_IN_QUERY, Exception $prevException = null)
+    public function __construct($message = '', $executedQuery = '', $code = self::DATABASE_EXCEPTION_ERROR_IN_QUERY, \Exception $prevException = null)
     {
         $this->_executedQuery = ( string ) $executedQuery;
         parent::__construct($message, $code, $prevException);
@@ -66,18 +64,26 @@ class Chrome_Exception_Database_Query extends Chrome_Exception_Database
     }
 }
 
+class DatabaseTransactionException extends DatabaseException
+{
+}
+
+namespace Chrome\Exception\Handler;
+
+use \Chrome\DatabaseException;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Exception_Database_Handler extends Chrome_Exception_Handler_Loggable_Abstract
+class DatabaseHandler extends LoggableHandlerAbstract
 {
-    public function exception(Exception $e)
+    public function exception(\Exception $e)
     {
         switch ($e->getCode())
         {
-            case Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER :
+            case DatabaseException::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER :
                 {
                     $trace = $e->getTrace();
 
@@ -86,7 +92,7 @@ class Chrome_Exception_Database_Handler extends Chrome_Exception_Handler_Loggabl
                     die('Could not connect to database-server! See log files for more information.');
                 }
 
-            case Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD :
+            case DatabaseException::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD :
                 {
                     $trace = $e->getTrace();
 
@@ -95,7 +101,7 @@ class Chrome_Exception_Database_Handler extends Chrome_Exception_Handler_Loggabl
                     die('Could not access database-server! See log files for more information.');
                 }
 
-            case Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE :
+            case DatabaseException::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE :
                 {
                     $trace = $e->getTrace();
 
@@ -104,7 +110,7 @@ class Chrome_Exception_Database_Handler extends Chrome_Exception_Handler_Loggabl
                     die('Could not select database! See log files for more information.');
                 }
 
-            case Chrome_Exception_Database::DATABASE_EXCEPTION_ERROR_IN_QUERY :
+            case DatabaseException::DATABASE_EXCEPTION_ERROR_IN_QUERY :
                 {
                     $trace = $e->getTrace();
                     $query = $trace[0]['args'][1];
@@ -113,7 +119,7 @@ class Chrome_Exception_Database_Handler extends Chrome_Exception_Handler_Loggabl
                     die('There is an error in a query! See log files for more information.');
                 }
 
-            case Chrome_Exception_Database::UNKNOWN :
+            case DatabaseException::UNKNOWN :
             default :
                 {
                     $this->_logger->error('There was an error in the database: ' . $e->getMessage() . "\n" . $e->_getTraceAsString() . "\n");

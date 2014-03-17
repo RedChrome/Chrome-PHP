@@ -76,7 +76,7 @@ abstract class Chrome_View_Form_Renderer_Template_Abstract extends Chrome_View_F
 
         if(!($this->_template instanceof Chrome_Template_Interface))
         {
-            throw new Chrome_Exception('_getTemplate must return an object, instance of Chrome_Template_Interface');
+            throw new \Chrome\Exception('_getTemplate must return an object, instance of Chrome_Template_Interface');
         }
 
         $this->_template->assign($this->_formNamespace, $this->_viewForm->getViewElements());

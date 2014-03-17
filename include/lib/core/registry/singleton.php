@@ -47,7 +47,7 @@ interface Chrome_Registry_Singleton_Interface extends Chrome_Registry_Abstract_I
      *        Name of the class
      * @param object $instance
      *        Instance of the class
-     * @throws Chrome_Exception if $instance is not an object, OR $class is already set
+     * @throws \Chrome\Exception if $instance is not an object, OR $class is already set
      * @return bool
      */
     public function set($class, $instance);
@@ -80,9 +80,9 @@ interface Chrome_Registry_Singleton_Interface extends Chrome_Registry_Abstract_I
      * Chrome_Registry_Singleton::_unset()
      *
      * Cannot unset a singleton class!
-     * Always throws Chrome_Exception
+     * Always throws \Chrome\Exception
      *
-     * @throws Chrome_Exception
+     * @throws \Chrome\Exception
      * @param string $class
      *        [ignored]
      * @return void
@@ -137,19 +137,19 @@ class Chrome_Registry_Singleton extends Chrome_Registry_Abstract implements Chro
      *        Name of the class
      * @param object $instance
      *        Instance of the class
-     * @throws Chrome_Exception if $instance is not an object, OR $class is already set
+     * @throws \Chrome\Exception if $instance is not an object, OR $class is already set
      * @return bool
      */
     public function set($class, $instance)
     {
         if(!is_object($instance))
         {
-            throw new Chrome_Exception('Cannot set class! $instance is not an object in Chrome_Registry_Singleton::set()!');
+            throw new \Chrome\Exception('Cannot set class! $instance is not an object in Chrome_Registry_Singleton::set()!');
         }
 
         if($this->_isset($class))
         {
-            throw new Chrome_Exception('Cannot reset class ' . $class . '! Use reset() instead!');
+            throw new \Chrome\Exception('Cannot reset class ' . $class . '! Use reset() instead!');
         }
 
         $this->_registry[self::CHROME_REGISTRY_SINGLETON_NAMESPACE][$class] = array('value' => $instance, 'readOnly' => true);
@@ -193,7 +193,7 @@ class Chrome_Registry_Singleton extends Chrome_Registry_Abstract implements Chro
      * Chrome_Registry_Singleton::_unset()
      *
      * Cannot unset a singleton class!
-     * Always throws Chrome_Exception
+     * Always throws \Chrome\Exception
      *
      * @param string $class
      *        [ignored]
@@ -201,6 +201,6 @@ class Chrome_Registry_Singleton extends Chrome_Registry_Abstract implements Chro
      */
     public function _unset($class)
     {
-        throw new Chrome_Exception('Cannot unset a class!');
+        throw new \Chrome\Exception('Cannot unset a class!');
     }
 }

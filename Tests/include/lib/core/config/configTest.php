@@ -28,14 +28,14 @@ class ConfigTest extends Chrome_TestCase
 
     public function testGetConfigThrowsException()
     {
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
 
         $this->_config->getConfig('notExistingSubClass');
     }
 
     public function testGetConfigThrowsException2()
     {
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
 
         $this->_config->getConfig('subclass', 'notExistingName');
     }

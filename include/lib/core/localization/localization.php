@@ -134,7 +134,7 @@ class Translate_Simple implements Translate_Interface
 
         if(!_isFile($file))
         {
-            throw new \Chrome_Exception('Could not load module '.$module.'/'.$submodule.'. File "'.$file.'" does not exist');
+            throw new \Chrome\Exception('Could not load module '.$module.'/'.$submodule.'. File "'.$file.'" does not exist');
         }
 
         $parsed = parse_ini_file($file, true);
@@ -198,7 +198,7 @@ class Locale implements Locale_Interface
     {
         if(++$this->_localeParseTries >= self::MAX_PARSE_TRIES)
         {
-            throw new \Chrome_Exception('The maximum number of tries to parse a locale string was reached');
+            throw new \Chrome\Exception('The maximum number of tries to parse a locale string was reached');
         }
 
         // only use the first 5 chars: e.g. de-DE, en-US

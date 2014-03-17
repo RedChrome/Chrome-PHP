@@ -166,7 +166,7 @@ class Attribute_Secure implements Attribute_Secure_Interface
     {
         if(isset($this->_notOverwriteableAttributes[$key]))
         {
-            throw new \Chrome_Exception('Cannot reset a non-overwriteable attribute');
+            throw new \Chrome\Exception('Cannot reset a non-overwriteable attribute');
         }
     }
 

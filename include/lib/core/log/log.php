@@ -87,7 +87,7 @@ class Registry extends \Chrome\Registry\Object_Abstract implements Registry_Inte
 
     protected function _objectNotFound($key)
     {
-        throw new \Chrome_Exception('Logger with name "' . $key . '" not set!');
+        throw new \Chrome\Exception('Logger with name "' . $key . '" not set!');
     }
 }
 
@@ -106,7 +106,7 @@ class Registry_Single extends \Chrome\Registry\Object_Single_Abstract implements
 
     protected function _objectNotFound($key)
     {
-        throw new \Chrome_Exception('No Logger set!');
+        throw new \Chrome\Exception('No Logger set!');
     }
 }
 

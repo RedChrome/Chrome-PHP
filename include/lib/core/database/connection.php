@@ -201,7 +201,7 @@ class Chrome_Database_Registry_Connection implements Chrome_Database_Registry_Co
     public function addConnection($name, Chrome_Database_Connection_Interface $connection, $overwrite = false)
     {
         if(isset($this->_connections[$name]) AND $overwrite !== true) {
-            throw new Chrome_Exception_Database('Cannot re-set an existing database connection with name "' . $name . '"!');
+            throw new \Chrome\DatabaseException('Cannot re-set an existing database connection with name "' . $name . '"!');
         }
 
         $this->_connections[$name] = $connection;
@@ -210,11 +210,11 @@ class Chrome_Database_Registry_Connection implements Chrome_Database_Registry_Co
     public function getConnection($name)
     {
         if(!isset($this->_connections[$name])) {
-            throw new Chrome_Exception_Database('Could not find connection with name "' . $name . '"!');
+            throw new \Chrome\DatabaseException('Could not find connection with name "' . $name . '"!');
         }
 
         if($this->_connections[$name]->isConnected() === false) {
-            throw new Chrome_Exception_Database('Cannot get connection, if connection is not established!');
+            throw new \Chrome\DatabaseException('Cannot get connection, if connection is not established!');
         }
 
         return $this->_connections[$name]->getConnection();
@@ -223,7 +223,7 @@ class Chrome_Database_Registry_Connection implements Chrome_Database_Registry_Co
     public function getConnectionObject($name)
     {
         if(!isset($this->_connections[$name])) {
-            throw new Chrome_Exception_Database('Could not find connection object with name "' . $name . '"!');
+            throw new \Chrome\DatabaseException('Could not find connection object with name "' . $name . '"!');
         }
 
         return $this->_connections[$name];

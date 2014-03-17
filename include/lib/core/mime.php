@@ -94,7 +94,7 @@ class MIME
                 }
 
             default:
-                throw new \Chrome_Exception('Unknown mimeFunction("' . $this->_mimeFunction . '") given in switch statement in Chrome_Mime::getMIME()!');
+                throw new \Chrome\Exception('Unknown mimeFunction("' . $this->_mimeFunction . '") given in switch statement in Chrome_Mime::getMIME()!');
         }
     }
 

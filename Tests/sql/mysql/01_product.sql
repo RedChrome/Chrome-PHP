@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `cpp_class` (
 INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome_Converter', 'lib/core/converter/converter.php'),
 ('Chrome_Converter_List', 'lib/core/converter/converter.php'),
-('Chrome_Exception_Handler_Authentication', 'lib/exception/authentication.php'),
+('Chrome\\Exception\\Handler\\AuthenticationHandler', 'lib/exception/authentication.php'),
 ('Chrome_Validator', 'lib/core/validator/validator.php'),
 ('Chrome_View_Helper_HTML', 'plugins/View/html.php'),
 ('Chrome_Language', 'lib/core/language.php'),
@@ -336,7 +336,7 @@ INSERT INTO `cpp_autoload` (`name`, `path`, `activated`, `priority`, `is_class_r
 ('\\Chrome_View_Plugin_Decorator', 'plugins/View/decorator.php', TRUE, 6, FALSE),
 ('\\Chrome_Filter_Chain_Preprocessor', 'plugins/Filter/chain/preprocessor.php', TRUE, 6, FALSE),
 ('\\Chrome_Filter_Chain_Postprocessor', 'plugins/Filter/chain/postprocessor.php', TRUE, 6, FALSE),
-('\\Chrome_Exception_Handler_Authentication', 'lib/exception/authentication.php', TRUE, 6, FALSE),
+('\\Chrome\\AuthenticationException', 'lib/exception/authentication.php', TRUE, 6, FALSE),
 ('\\Chrome_Authentication', 'lib/core/authentication/authentication.php', TRUE, 6, FALSE),
 ('\\Chrome_Authentication_Chain_Database', 'lib/core/authentication/chain/database.php', TRUE, 6, FALSE),
 ('\\Chrome_Authentication_Chain_Cookie', 'lib/core/authentication/chain/cookie.php', TRUE, 6, FALSE),

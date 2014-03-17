@@ -29,7 +29,7 @@ class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstrac
         require_once LIB . 'core/design/options/static.php';
         require_once LIB . 'core/design/loader/static.php';
 
-        $exceptionHandler = new Chrome_Exception_Handler_Default();
+        $exceptionHandler = new \Chrome\Exception\Handler\DefaultHandler();
 
         $template = new Chrome_Template();
         $template->assignTemplate('design/chrome_one_sidebar/layout.tpl');

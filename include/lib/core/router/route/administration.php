@@ -81,7 +81,7 @@ class Chrome_Route_Administration extends Chrome_Router_Route_Abstract
         if(empty($result['file']) or empty($result['class']))
         {
             $this->_logger->error('Error in Route_Administration. The db returned obviosly wrong values: {result}', array('result' => var_export($result, true)));
-            throw new Chrome_Exception('Could not route to administration! Either the requested file or class is empty');
+            throw new \Chrome\Exception('Could not route to administration! Either the requested file or class is empty');
         }
 
         $this->_resource = new Chrome_Router_Resource_Administration();
@@ -98,10 +98,10 @@ class Chrome_Router_Resource_Administration extends Chrome_Router_Resource
     {
         if(empty($this->_class))
         {
-            throw new Chrome_Exception('Cannot instantiate a class with an empty class name!');
+            throw new \Chrome\Exception('Cannot instantiate a class with an empty class name!');
         }
 
-        throw new Chrome_Exception('Administration access is not finished');
+        throw new \Chrome\Exception('Administration access is not finished');
     }
 }
 class Chrome_Model_Route_Administration extends Chrome_Model_Abstract

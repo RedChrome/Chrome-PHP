@@ -40,7 +40,7 @@ class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
 
         if($this->_result === false)
         {
-            throw new Chrome_Exception_Database('Error while sending "' . $query . '" to database! MySQL Error:' . mysql_error($this->_connection));
+            throw new \Chrome\DatabaseException('Error while sending "' . $query . '" to database! MySQL Error:' . mysql_error($this->_connection));
         }
 
         if(is_resource($this->_result) === true)

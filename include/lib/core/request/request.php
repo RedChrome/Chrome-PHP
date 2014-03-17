@@ -342,13 +342,13 @@ class Chrome_Request_Factory implements Chrome_Request_Factory_Interface
         }
 
         if($this->_request === null) {
-            throw new Chrome_Exception('No appropriate request handler found');
+            throw new \Chrome\Exception('No appropriate request handler found');
         }
 
         // well that should never happen. every Chrome_Request_Handler_Interface has to return an object of Chrome_Request_Data_Interface
         // null is also not allowed!
         if(!($this->_requestData instanceof Chrome_Request_Data_Interface) or $this->_requestData === null) {
-            throw new Chrome_Exception('Unexpected return value of "'.get_class($this->_request).'" in method getRequestData(). Expected an object of interface Chrome_Request_Data_Interface, actual="'.get_class($this->_requestData).'". Violation of interface declaration');
+            throw new \Chrome\Exception('Unexpected return value of "'.get_class($this->_request).'" in method getRequestData(). Expected an object of interface Chrome_Request_Data_Interface, actual="'.get_class($this->_requestData).'". Violation of interface declaration');
         }
 
         // unset all global data, but DO NOT UNSET SESSION!!! http://php.net/manual/de/function.unset.php#77926

@@ -14,7 +14,7 @@ class URITest extends PHPUnit_Framework_TestCase
 
     public function testIfNoPathSetThenThrowException() {
 
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
 
         $this->uri->setProtocol('http');
         $this->uri->setAuthority('test');
@@ -23,14 +23,14 @@ class URITest extends PHPUnit_Framework_TestCase
     }
 
     public function testIfNotHostSetThenThrowException() {
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
 
         $this->uri->setProtocol('http');
         $this->uri->getURL();
     }
 
     public function testIfNoProtocolSetThenThrowException() {
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
         $this->uri->getURL();
     }
 
@@ -124,14 +124,14 @@ class URITest extends PHPUnit_Framework_TestCase
 
         $uri->setProtocol(null);
 
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
 
         $uri->getURL();
     }
 
     public function testSetURLWithException() {
 
-        #$this->setExpectedException('Chrome_Exception');
+        #$this->setExpectedException('\Chrome\Exception');
 
         $wrongURLs = array('http:///example.com', 'http://:80', 'http://user@:80');
 
@@ -143,7 +143,7 @@ class URITest extends PHPUnit_Framework_TestCase
                 $uri = new \Chrome\URI\URI();
 
                 $uri->setURL($url);
-            } catch(Chrome_Exception $e) {
+            } catch(\Chrome\Exception $e) {
                 $exceptionCaught = true;
             }
 

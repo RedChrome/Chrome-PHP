@@ -80,7 +80,7 @@ class Chrome_Template_Engine_Factory
     public function create(Chrome_Template_Abstract $obj, $engine)
     {
         if(!_isFile(BASEDIR.self::CHROME_TEMPLATE_FACTORY_INCLUDE_PATH.$engine.'.php')) {
-            throw new Chrome_Exception('Cannot create template engine ("'.$engine.'")! File '.BASEDIR.self::CHROME_TEMPLATE_FACTORY_INCLUDE_PATH.$engine.'.php does not exist in Chrome_Template_Factory::create()!');
+            throw new \Chrome\Exception('Cannot create template engine ("'.$engine.'")! File '.BASEDIR.self::CHROME_TEMPLATE_FACTORY_INCLUDE_PATH.$engine.'.php does not exist in Chrome_Template_Factory::create()!');
         }
 
         // load engine file

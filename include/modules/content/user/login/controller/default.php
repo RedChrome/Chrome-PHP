@@ -67,7 +67,7 @@ class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Module_A
                 {
                     $this->_view->showForm($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Default'));
                 }
-            } catch(Chrome_Exception $e)
+            } catch(\Chrome\Exception $e)
             {
                 $this->_exceptionHandler->exception($e);
             }

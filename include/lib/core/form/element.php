@@ -290,7 +290,7 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
     protected function _isCreated()
     {
         // overwrite this method, or isCreated()
-        throw new Chrome_Exception('Method not overwritten!');
+        throw new \Chrome\Exception('Method not overwritten!');
     }
 
     /**
@@ -412,7 +412,7 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
     protected function _getValidator()
     {
         // Either this method, or isValid must get overwritten!
-        throw new Chrome_Exception('Method not overwritten');
+        throw new \Chrome\Exception('Method not overwritten');
     }
 
     public function getData()

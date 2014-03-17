@@ -29,11 +29,11 @@ class Registry implements Handler_Interface
     public function add($key, $object)
     {
         if(!is_string($key)) {
-            throw new \Chrome_InvalidArgumentException('Argument $key must be of type string');
+            throw new \Chrome\InvalidArgumentException('Argument $key must be of type string');
         }
 
         if(!is_object($object)) {
-            throw new \Chrome_InvalidArgumentException('Argument $object must be of type object');
+            throw new \Chrome\InvalidArgumentException('Argument $object must be of type object');
         }
 
         $this->_objects[$key] = $object;

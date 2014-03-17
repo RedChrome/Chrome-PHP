@@ -19,7 +19,7 @@ class Test_Chrome_Request_Data_Form extends Chrome_Request_Data_Abstract
 
     public function getData()
     {
-        throw new Chrome_Exception('I was called!!!', 1);
+        throw new \Chrome\Exception('I was called!!!', 1);
     }
 }
 
@@ -75,40 +75,40 @@ class GeneralFormTest extends Chrome_TestCase
 
     public function testSetAttributeStoreHandlerThrowsExcpetionOnWrongStoreHandler()
     {
-        $this->setExpectedException('Chrome_InvalidArgumentException');
+        $this->setExpectedException('\Chrome\InvalidArgumentException');
         $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE, 'string');
     }
 
     public function testSetAttributeStoreHandlerThrowsExcpetionOnWrongStoreHandler2()
     {
-        $this->setExpectedException('Chrome_InvalidArgumentException');
+        $this->setExpectedException('\Chrome\InvalidArgumentException');
         $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE, $this);
     }
 
     public function testExceptionIfElementDoesNotExistInisSent()
     {
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
 
         $this->_form->isSent('doesNotExist');
     }
 
     public function testExceptionIfElementDoesNotExistInisCreated()
     {
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
 
         $this->_form->isCreated('doesNotExist');
     }
 
     public function testExceptionIfElementDoesNotExistInisValid()
     {
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
 
         $this->_form->isValid('doesNotExist');
     }
 
     public function testExceptionIfNoIdIsSet()
     {
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
 
         $this->_form->getID();
     }
@@ -133,7 +133,7 @@ class GeneralFormTest extends Chrome_TestCase
         $this->assertTrue($this->_form->issetSentData('GET'));
         $this->_form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, Chrome_Form_Abstract::CHROME_FORM_METHOD_POST);
         $this->assertTrue($this->_form->issetSentData('POST'));
-        $this->setExpectedException('Chrome_Exception', '', 1);
+        $this->setExpectedException('\Chrome\Exception', '', 1);
         $this->_form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, 'anyMethod...');
     }
 }

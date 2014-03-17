@@ -164,7 +164,7 @@ class Hash implements Hash_Interface
     /**
      * Initializes the hash class
      *
-     * @throws \Chrome_Exception
+     * @throws \Chrome\Exception
      */
     protected function _init()
     {
@@ -174,7 +174,7 @@ class Hash implements Hash_Interface
 
         if(!$this->isAlgorithmAvailable($this->_defaultHashAlgorithm))
         {
-            throw new \Chrome_Exception('Cannot set default has algorithm "' . $this->_defaultHashAlgorithm . '" since it not supported by your php version');
+            throw new \Chrome\Exception('Cannot set default has algorithm "' . $this->_defaultHashAlgorithm . '" since it not supported by your php version');
         }
     }
 
@@ -201,7 +201,7 @@ class Hash implements Hash_Interface
     {
         if(!$this->isAlgorithmAvailable($algorithm))
         {
-            throw new \Chrome_InvalidArgumentException('Unsupported hash algorithm given');
+            throw new \Chrome\InvalidArgumentException('Unsupported hash algorithm given');
         }
 
         $hash = hash($algorithm, $salt . $string);
@@ -212,7 +212,7 @@ class Hash implements Hash_Interface
 
             if($length === 40)
             {
-                throw new \Chrome_Exception('Do not use Tiger160 with php<5.4! You might not be able to migrate to php>=5.4!');
+                throw new \Chrome\Exception('Do not use Tiger160 with php<5.4! You might not be able to migrate to php>=5.4!');
             }
 
             if($length === 48 OR $length === 32) {
@@ -362,11 +362,11 @@ class Hash implements Hash_Interface
     public function hashFile($file, $algorithm = self::DEFAULT_HASH_ALGORITHM)
     {
         if(!_isFile($file)) {
-            throw new \Chrome_InvalidArgumentException('The given $file does not exist');
+            throw new \Chrome\InvalidArgumentException('The given $file does not exist');
         }
 
         if(!$this->isAlgorithmAvailable($algorithm)) {
-            throw new \Chrome_InvalidArgumentException('The given algorithm is not supported by your php version');
+            throw new \Chrome\InvalidArgumentException('The given algorithm is not supported by your php version');
         }
 
         return hash_file($algorithm, $file);
@@ -378,7 +378,7 @@ class Hash implements Hash_Interface
     public function hashStream(\Chrome\Hash\Stream\Stream_Interface $stream, $algorithm = self::DEFAULT_HASH_ALGORITHM, $rawOutput = false)
     {
         if(!$this->isAlgorithmAvailable($algorithm)) {
-            throw new \Chrome_InvalidArgumentException('The given algorithm is not supported by your php version');
+            throw new \Chrome\InvalidArgumentException('The given algorithm is not supported by your php version');
         }
 
         $hashContext = hash_init($algorithm);
@@ -394,7 +394,7 @@ class Hash implements Hash_Interface
     public function createKey($length = self::DEFAULT_KEY_LENGTH)
     {
         if($length <= 0) {
-            throw new \Chrome_InvalidArgumentException('Given $length must be greater than 0');
+            throw new \Chrome\InvalidArgumentException('Given $length must be greater than 0');
         }
 
         // we're using md4 since it is one of the fastest which much length.

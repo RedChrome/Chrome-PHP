@@ -60,8 +60,8 @@ class Chrome_Database_Interface_Transaction extends Chrome_Database_Interface_De
         try {
             $this->_adapter->query('COMMIT');
             $this->_transactionInitialized = false;
-        } catch(Chrome_Exception_Database $e) {
-            throw new Chrome_Exception_Database_Transaction($e->getMessage(), $e->getCode(), $e, $e->handleException());
+        } catch(\Chrome\DatabaseException $e) {
+            throw new \Chrome\DatabaseException_Transaction($e->getMessage(), $e->getCode(), $e, $e->handleException());
         }
     }
 
@@ -75,7 +75,7 @@ class Chrome_Database_Interface_Transaction extends Chrome_Database_Interface_De
     {
         try {
             if($query === null OR empty($query)) {
-                throw new Chrome_Exception_Database('Cannot execute an sql statement if no statement was set!');
+                throw new \Chrome\DatabaseException('Cannot execute an sql statement if no statement was set!');
             }
 
             $this->_query = $query;
@@ -92,8 +92,8 @@ class Chrome_Database_Interface_Transaction extends Chrome_Database_Interface_De
 
             $this->_sentQuery = $query;
 
-        } catch(Chrome_Exception_Database $e) {
-            throw new Chrome_Exception_Database_Transaction($e->getMessage(), $e->getCode(), $e, $e->handleException());
+        } catch(\Chrome\DatabaseException $e) {
+            throw new \Chrome\DatabaseException_Transaction($e->getMessage(), $e->getCode(), $e, $e->handleException());
         }
     }
 }

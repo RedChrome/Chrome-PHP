@@ -178,7 +178,7 @@ interface Chrome_Form_Interface
      *
      * @param mixed $key
      *        key for the data
-     * @throws Chrome_Exception
+     * @throws \Chrome\Exception
      * @return mixed
      */
     public function get($key);
@@ -629,7 +629,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
 
             if($elementObj === null)
             {
-                throw new Chrome_Exception('Cannot check whether the element "' . $elementName . '" is created, if it does not exist!');
+                throw new \Chrome\Exception('Cannot check whether the element "' . $elementName . '" is created, if it does not exist!');
             }
 
             return $elementObj->isCreated();
@@ -879,7 +879,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * @param mixed $key
      *        key for the data
-     * @throws Chrome_Exception
+     * @throws \Chrome\Exception
      * @return mixed
      */
     public function get($key)
@@ -889,7 +889,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
             return $this->_sentData[$key];
         } else
         {
-            throw new Chrome_Exception('Trying to access not set data in Chrome_Form_Abstract::get()!');
+            throw new \Chrome\Exception('Trying to access not set data in Chrome_Form_Abstract::get()!');
         }
     }
 
@@ -953,7 +953,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     {
         if($this->_id === null)
         {
-            throw new Chrome_Exception('No ID set in Chrome_Form_Abstract::getID()!');
+            throw new \Chrome\Exception('No ID set in Chrome_Form_Abstract::getID()!');
         }
 
         return $this->_id;
@@ -1115,7 +1115,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
                         $exceptionString = 'Every store handler must be an instance of Chrome_Form_Handler_Store_Interface, given ';
                         $exceptionString .= (is_object($value)) ? get_class($value) : gettype($value);
 
-                        throw new Chrome_InvalidArgumentException($exceptionString);
+                        throw new \Chrome\InvalidArgumentException($exceptionString);
                     }
 
                     $this->_attribts[$key][] = $value;

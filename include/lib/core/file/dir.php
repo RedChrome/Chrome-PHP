@@ -165,7 +165,7 @@ class Chrome_Dir
             else @unlink($path . '/' . $file);
         }
 
-        if(!rmdir($path)) throw new Chrome_Exception('Unknown Error: Coudn\'t delete path: ' . $path);
+        if(!rmdir($path)) throw new \Chrome\Exception('Unknown Error: Coudn\'t delete path: ' . $path);
         else  return true;
     }
 
@@ -252,7 +252,7 @@ class Chrome_Dir
      */
     public static function copy($srcPath, $destPath)
     {
-        throw new Chrome_Exception('Function isn\'t finished!');
+        throw new \Chrome\Exception('Function isn\'t finished!');
 
         if(!is_dir($srcPath)) return false;
 

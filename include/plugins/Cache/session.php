@@ -76,7 +76,7 @@ class Session implements Session_Interface
     {
         if(!is_string($namespace) and !empty($namespace))
         {
-            throw new \Chrome_InvalidArgumentException('Argument $namespace must be a non-empty string');
+            throw new \Chrome\InvalidArgumentException('Argument $namespace must be a non-empty string');
         }
 
         $this->_namespace = $namespace;

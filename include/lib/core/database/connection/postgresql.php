@@ -40,7 +40,7 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
     public function setConnectionOptions($host, $username, $password, $database, $port = 3306, $schema = null, $clientFlags = 0)
     {
         if(!extension_loaded('pgsql')) {
-            throw new Chrome_Exception('Extension PostgreSQL not loaded! Cannot use this adapter');
+            throw new \Chrome\Exception('Extension PostgreSQL not loaded! Cannot use this adapter');
         }
 
         $this->_host        = $host;
@@ -62,7 +62,7 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
         }
 
         if($this->_isSetConnectionOptions === false) {
-            throw new Chrome_Exception('Cannot connect with no information! Call setConnectionOptions() before!');
+            throw new \Chrome\Exception('Cannot connect with no information! Call setConnectionOptions() before!');
         }
 
         try {
@@ -75,10 +75,10 @@ class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_A
             $this->_connection = pg_connect($hostString.' port=' . $this->_port . ' user=' . $this->_username . ' password=' . $this->_password . ' dbname=' . $this->_database. ' connect_timeout=1');
 
             if($this->_connection === false) {
-                throw new Chrome_Exception_Database('Could not connect to PostgreSQL server!');
+                throw new \Chrome\DatabaseException('Could not connect to PostgreSQL server!');
             }
 
-        } catch(Chrome_Exception $e) {
+        } catch(\Chrome\Exception $e) {
             //todo: finish
             throw $e;
         }

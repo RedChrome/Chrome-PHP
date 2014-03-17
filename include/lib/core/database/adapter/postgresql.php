@@ -44,11 +44,11 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
 
             if($this->_result === false)
             {
-                throw new Chrome_Exception_Database('Error while sending a query to database');
+                throw new \Chrome\DatabaseException('Error while sending a query to database');
             }
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
-            throw new Chrome_Exception_Database_Query($e->getMessage(), $query, Chrome_Exception_Database_Query::ERROR_WHILE_EXECUTING_QUERY, $e);
+            throw new \Chrome\DatabaseQueryException($e->getMessage(), $query, \Chrome\DatabaseQueryException::ERROR_WHILE_EXECUTING_QUERY, $e);
         }
 
         if(is_resource($this->_result) === true)
@@ -168,13 +168,13 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
                         return $resultArray[0];
                     }
                 }
-            } catch(Chrome_Exception $e)
+            } catch(\Chrome\Exception $e)
             {
                 $e = null;
                 // do nothing, exception will be thrown outside.
             }
         }
 
-        throw new Chrome_Exception_Database('Could not retrieve last insert id');
+        throw new \Chrome\DatabaseException('Could not retrieve last insert id');
     }
 }

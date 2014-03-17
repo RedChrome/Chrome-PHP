@@ -182,7 +182,7 @@ class Chrome_Renderable_List implements Chrome_Renderable_List_Interface
         {
             if(!($renderable instanceof Chrome_Renderable))
             {
-                throw new Chrome_InvalidArgumentException('All renderables have to implement interface Chrome_Renderable! Renderable was ' . get_class($renderable));
+                throw new \Chrome\InvalidArgumentException('All renderables have to implement interface Chrome_Renderable! Renderable was ' . get_class($renderable));
             }
             $this->_list[] = $renderable;
         }

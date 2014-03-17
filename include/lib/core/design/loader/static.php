@@ -84,7 +84,7 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 
             if(!_isFile(BASEDIR . $row['file']))
             {
-                throw new Chrome_Exception('Cannot load file ' . BASEDIR . $row['file'] . ' containing required class for rendering');
+                throw new \Chrome\Exception('Cannot load file ' . BASEDIR . $row['file'] . ' containing required class for rendering');
             }
 
             require_once BASEDIR . $row['file'];
@@ -121,7 +121,7 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 
                 default:
                     {
-                        throw new Chrome_Exception('Unknown type ' . $row['type'] . '. Available types are: controller, view');
+                        throw new \Chrome\Exception('Unknown type ' . $row['type'] . '. Available types are: controller, view');
                     }
             }
 

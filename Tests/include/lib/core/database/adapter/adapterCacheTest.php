@@ -90,49 +90,49 @@ class DatabaseAdapterCacheTest extends Chrome_TestCase
     public function testQuery()
     {
         $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
         $cacheAdapter->query(null);
     }
 
     public function testEscape()
     {
         $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
         $cacheAdapter->escape('Data to escape');
     }
 
     public function testSetConnection()
     {
         $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
         $cacheAdapter->setConnection(new Chrome_Database_Connection_Dummy('not null'));
     }
 
     public function testGetConnection()
     {
         $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
         $cacheAdapter->getConnection();
     }
 
     public function testGetErrorMessage()
     {
         $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
         $cacheAdapter->getErrorMessage();
     }
 
     public function testGetErrorCode()
     {
         $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
         $cacheAdapter->getErrorCode();
     }
 
     public function testGetLastInsertId()
     {
         $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
-        $this->setExpectedException('Chrome_Exception');
+        $this->setExpectedException('\Chrome\Exception');
         $cacheAdapter->getLastInsertId();
     }
 }

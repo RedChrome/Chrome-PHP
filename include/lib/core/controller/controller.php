@@ -22,7 +22,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
-interface Chrome_Controller_Interface extends Chrome_Exception_Processable_Interface
+interface Chrome_Controller_Interface extends \Chrome\Exception\Processable_Interface
 {
     /**
      * execute()
@@ -66,12 +66,12 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      * exceptionHandler class which takes care of thrown exceptions
      * <code>
      * ...
-     * catch(Chrome_Exception $e) {
+     * catch(\Chrome\Exception $e) {
      *  $this->_exceptionHandler->exception($e);
      * }
      * </code>
      *
-     * @var Chrome_Exception_Handler_Interface
+     * @var \Chrome\Exception\Handler_Interface
      */
     protected $_exceptionHandler = null;
 
@@ -176,7 +176,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
                     require_once $file;
                 } else
                 {
-                    throw new Chrome_Exception('Could not require file ' . $file . '! The file does not exist in Chrome_Controller_Abstract::_require()!');
+                    throw new \Chrome\Exception('Could not require file ' . $file . '! The file does not exist in Chrome_Controller_Abstract::_require()!');
                 }
             }
         }
@@ -211,7 +211,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         $this->_requestData = $obj->getRequestData();
     }
 
-    public function setExceptionHandler(Chrome_Exception_Handler_Interface $obj)
+    public function setExceptionHandler(\Chrome\Exception\Handler_Interface $obj)
     {
         $this->_exceptionHandler = $obj;
     }

@@ -14,22 +14,20 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.FrontController
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.04.2013 12:07:31] --> $
- * @author     Alexander Book
+ * @subpackage Chrome.Exception
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Exception\Handler;
+
+use \Chrome\Exception\Handler_Interface;
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.FrontController
  */
-class Chrome_Exception_Handler_Console implements Chrome_Exception_Handler_Interface
+class ConsoleHandler implements Handler_Interface
 {
-	public function exception(Exception $e)
+	public function exception(\Exception $e)
 	{
         echo 'Uncaught ';
 		$this->_doPrintException($e);
@@ -37,7 +35,7 @@ class Chrome_Exception_Handler_Console implements Chrome_Exception_Handler_Inter
 		exit(1);
 	}
 
-	protected function _doPrintException(Exception $e)
+	protected function _doPrintException(\Exception $e)
 	{
 	    echo 'exception of type '.get_class($e).' with message:'.PHP_EOL.PHP_EOL;
 	    echo '"'.$e->getMessage().'"';

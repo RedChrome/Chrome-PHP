@@ -153,7 +153,7 @@ class DatabaseInterfaceSimpleTest extends Chrome_TestCase
 
     public function testEscapingThrowsExceptionWhenUsingBothTypesOfParameterReplacement()
     {
-        $this->setExpectedException('Chrome_Exception_Database');
+        $this->setExpectedException('\Chrome\DatabaseException');
 
         $this->_interface->query('? ?{1}', array('param1', 'param2'));
     }
@@ -167,21 +167,21 @@ class DatabaseInterfaceSimpleTest extends Chrome_TestCase
     {
         $this->_interface->query('Any query');
 
-        $this->setExpectedException('Chrome_Exception_Database');
+        $this->setExpectedException('\Chrome\DatabaseException');
 
         $this->_interface->query('this should throw an exception, cause clear() wasnt called');
     }
 
     public function testExceptionIsThrownIfNoQueryWasGiven()
     {
-        $this->setExpectedException('Chrome_Exception_Database');
+        $this->setExpectedException('\Chrome\DatabaseException');
 
         $this->_interface->query(null);
     }
 
     public function testExceptionIsThrownIfEmptyQueryWasGiven()
     {
-        $this->setExpectedException('Chrome_Exception_Database');
+        $this->setExpectedException('\Chrome\DatabaseException');
 
         $this->_interface->query('');
     }

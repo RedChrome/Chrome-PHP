@@ -160,13 +160,13 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
         {
             if(_isFile(PLUGIN . 'Captcha/' . $engine . '.php') === false)
             {
-                throw new Chrome_Exception('Cannot include captcha engine file, because it does not exist in include/plugins/captcha for engine ' . $engine);
+                throw new \Chrome\Exception('Cannot include captcha engine file, because it does not exist in include/plugins/captcha for engine ' . $engine);
             } else
             {
                 require_once PLUGIN . 'Captcha/' . $engine . '.php';
                 if(class_exists('Chrome_Captcha_Engine_' . $_engine, false) === false)
                 {
-                    throw new Chrome_Exception('Loaded captcha engine file does not contain proper class Chrome_Captcha_Engine_' . $_engine);
+                    throw new \Chrome\Exception('Loaded captcha engine file does not contain proper class Chrome_Captcha_Engine_' . $_engine);
                 }
             }
         }

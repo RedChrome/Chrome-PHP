@@ -46,14 +46,14 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
         try
         {
             $exists = $this->userExists($id, $username, $email);
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             return false;
         }
 
         if($exists === true)
         {
-            throw new Chrome_Exception('Cannot add user if he already exists!');
+            throw new \Chrome\Exception('Cannot add user if he already exists!');
         }
 
         $group = (int) $group;
@@ -68,7 +68,7 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
             $db->loadQuery('userCreateNewUser')->execute($values);
 
             return true;
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             $this->getLogger()->error($e);
             return false;
@@ -92,10 +92,10 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
             {
                 return false;
             }
-        } catch(Chrome_Exception_Database $e)
+        } catch(\Chrome\DatabaseException $e)
         {
             $this->getLogger()->error($e);
-            throw new Chrome_Exception('Error while checking whether user exists with name or email', 0, $e);
+            throw new \Chrome\Exception('Error while checking whether user exists with name or email', 0, $e);
         }
     }
 

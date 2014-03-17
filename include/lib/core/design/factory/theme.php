@@ -44,7 +44,7 @@ class Chrome_Design_Factory_Theme extends Chrome_Design_Factory_Abstract
         $themeLowered = strtolower(trim($theme));
 
         if(!_isFile(THEME.$themeLowered.'/theme.php')) {
-            throw new Chrome_Exception('Cannot load theme "'.$themeLowered.'"! Theme is not valid. Corresponding theme.php missing');
+            throw new \Chrome\Exception('Cannot load theme "'.$themeLowered.'"! Theme is not valid. Corresponding theme.php missing');
         }
 
         require_once THEME.$theme.'/theme.php';

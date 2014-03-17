@@ -106,7 +106,7 @@ class Chrome_Model_Classloader_Model_Database extends Chrome_Model_Database_Stat
 
             if(!$resultObj->isEmpty())
             {
-                throw new Chrome_Exception('There is already a class ' . $name . ' defined in database! Override set to false in Chrome_Require::addClass()!');
+                throw new \Chrome\Exception('There is already a class ' . $name . ' defined in database! Override set to false in Chrome_Require::addClass()!');
             }
         }
 

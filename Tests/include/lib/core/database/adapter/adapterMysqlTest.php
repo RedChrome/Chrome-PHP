@@ -9,7 +9,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         try {
             $this->_db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('simple', 'assoc', 'mysql_test');
         }
-        catch (Chrome_Exception $e) {
+        catch (\Chrome\Exception $e) {
             $this->_db = null;
         }
     }
@@ -59,7 +59,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
     {
         $this->doSkipTestsIfNeeded();
 
-        $this->setExpectedException('Chrome_Exception_Database');
+        $this->setExpectedException('\Chrome\DatabaseException');
 
         $this->_db->query('SELECT * FROM cpp_autoload LIgMIT 0,1');
     }
@@ -74,7 +74,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         try {
             $this->_db->query('SELECT * FROM cpp_autoload LIgMIT 0,1');
         }
-        catch (Chrome_Exception_Database $e) {
+        catch (\Chrome\DatabaseException $e) {
             // do nothing
         }
 
@@ -92,7 +92,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         try {
             $this->_db->query('SELEC * FROM cpp_autoload LIMIT 0,1'); // this will result in an exception
         }
-        catch (Chrome_Exception_Database $e) {
+        catch (\Chrome\DatabaseException $e) {
             // do nothing
         }
 
@@ -109,7 +109,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
             '\'test\'' => '\\\'test\\\'',
             '"test"' => '\"test\"',
             'query---' => 'query---',
-            '!"§$%&/()=?\\' => '!\"§$%&/()=?\\\\');
+            '!"ï¿½$%&/()=?\\' => '!\"ï¿½$%&/()=?\\\\');
 
         foreach($array as $key => $value) {
             $this->assertEquals($value, $this->_db->getAdapter()->escape($key));
@@ -161,7 +161,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         $connection = new Chrome_Database_Connection_Dummy();
         $connection->_isConnected = false;
 
-        $this->setExpectedException('Chrome_Exception_Database');
+        $this->setExpectedException('\Chrome\DatabaseException');
 
         $this->_db->getAdapter()->setConnection($connection);
     }
@@ -174,7 +174,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         $connection->_isConnected = true;
         $connection->_connection = null;
 
-        $this->setExpectedException('Chrome_Exception_Database');
+        $this->setExpectedException('\Chrome\DatabaseException');
         $this->_db->getAdapter()->setConnection($connection);
     }
 

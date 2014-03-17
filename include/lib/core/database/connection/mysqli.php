@@ -35,7 +35,7 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
     {
         if(!extension_loaded('mysqli'))
         {
-            throw new Chrome_Exception('Extension MySQLi not loaded! Cannot use this adapter');
+            throw new \Chrome\Exception('Extension MySQLi not loaded! Cannot use this adapter');
         }
 
         $this->_host = $host;
@@ -64,7 +64,7 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
 
         if($this->_isSetConnectionOptions === false)
         {
-            throw new Chrome_Exception('Cannot connect to MySQL Server without any information about the server! Call setConnectionOptions() before!');
+            throw new \Chrome\Exception('Cannot connect to MySQL Server without any information about the server! Call setConnectionOptions() before!');
         }
 
         $this->_doConnect();
@@ -82,7 +82,7 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
         {
             $this->_connection = new mysqli($this->_host, $this->_username, $this->_password, $this->_database, $this->_port, $this->_socket);
             $this->_connection->set_charset('utf8');
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
             switch(mysqli_connect_errno())
             {
@@ -94,21 +94,21 @@ class Chrome_Database_Connection_Mysqli extends Chrome_Database_Connection_Abstr
                 case 2004: // cannot create tcp soccet.
                 case 2005:
                     {
-                        throw new Chrome_Exception_Database('Could not establish connection to server on "' . $this->_host . ':' . $this->_port . '"!', Chrome_Exception_Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER, $e);
+                        throw new \Chrome\DatabaseException('Could not establish connection to server on "' . $this->_host . ':' . $this->_port . '"!', \Chrome\DatabaseException::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER, $e);
                     }
 
                 case 1044: // no rights to access the database
                     {
-                        throw new Chrome_Exception_Database('User is not allowed to access the provided database "'.$this->_database.'"', Chrome_Exception_Database::NO_SUFFICIENT_RIGHTS, $e);
+                        throw new \Chrome\DatabaseException('User is not allowed to access the provided database "'.$this->_database.'"', \Chrome\DatabaseException::NO_SUFFICIENT_RIGHTS, $e);
                     }
 
                 case 1045: // wrong password
                     {
-                        throw new Chrome_Exception_Database('Could not connect to MySQL Server. Wrong Username and/or password', Chrome_Exception_Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD, $e);
+                        throw new \Chrome\DatabaseException('Could not connect to MySQL Server. Wrong Username and/or password', \Chrome\DatabaseException::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD, $e);
                     }
                 default:
                     {
-                        throw new Chrome_Exception_Database($e->getMessage(), Chrome_Exception_Database::UNKNOWN, $e);
+                        throw new \Chrome\DatabaseException($e->getMessage(), \Chrome\DatabaseException::UNKNOWN, $e);
                     }
             }
         }

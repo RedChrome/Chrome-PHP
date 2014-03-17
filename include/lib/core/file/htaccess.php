@@ -45,14 +45,14 @@ class Chrome_Htaccess
     public function read($path)
     {
         if(!is_file($path))
-            throw new Chrome_Exception('Cannot read file('.$path.')! Maybe file doesn\'t exist OR path is wrong!');
+            throw new \Chrome\Exception('Cannot read file('.$path.')! Maybe file doesn\'t exist OR path is wrong!');
 
         $this->file = $path;
 
         $this->fp = @fopen($path, 'r', true);
 
         if(!$this->fp)
-            throw new Chrome_Exception('Cannot read file('.$path.')! Unknown error!');
+            throw new \Chrome\Exception('Cannot read file('.$path.')! Unknown error!');
 
         $this->content = fread($this->fp, filesize($this->path));
 
@@ -71,7 +71,7 @@ class Chrome_Htaccess
 
     private function _parse($content)
     {
-        throw new Chrome_Exception('Method NOT Finished & Tested!');
+        throw new \Chrome\Exception('Method NOT Finished & Tested!');
 
         // remove comments
         $content = preg_replace('"(.*)#(.*)\n(.*)"', '\1\3', $content);

@@ -14,32 +14,31 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.Authentication
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 14:07:15] --> $
- * @author     Alexander Book
+ * @subpackage Chrome.Exception
  */
 
-if(CHROME_PHP !== true)
-    die();
+namespace Chrome;
 
-class Chrome_Exception_Authentication extends Chrome_Exception
+use \Chrome\Exception;
+
+class AuthenticationException extends Exception
 {
 
 }
+
+namespace Chrome\Exception\Handler;
+
+use \Chrome\Exception\Handler_Interface;
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Chrome_Exception_Handler_Authentication implements Chrome_Exception_Handler_Interface
+class AuthenticationHandler implements Handler_Interface
 {
-
-
-    public function exception(Exception $e)
+    public function exception(\Exception $e)
     {
-        if(!($e instanceof Chrome_Exception_Authentication)) {
+        if(!($e instanceof \Chrome\AuthenticationException)) {
             $e->show($e);
         }
 

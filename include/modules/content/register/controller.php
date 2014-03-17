@@ -157,7 +157,7 @@ class Chrome_Controller_Register extends Chrome_Controller_Module_Abstract
                 {
                     // should never happen
                     $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = array('step' => 2);
-                    throw new Chrome_Exception('Undefined step in registration!');
+                    throw new \Chrome\Exception('Undefined step in registration!');
                 }
         }
     }

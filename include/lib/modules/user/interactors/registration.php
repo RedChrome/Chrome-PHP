@@ -65,7 +65,7 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
     {
         if($this->_validatorsForAddingRegistrationRequestSet !== true)
         {
-            throw new \Chrome_IllegalStateException('No validators set');
+            throw new \Chrome\IllegalStateException('No validators set');
         }
 
         $requestAdded = false;
@@ -110,7 +110,7 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
 
             $result->succeeded();
 
-        } catch(Chrome_Exception $e) {
+        } catch(\Chrome\Exception $e) {
 
             // got an error while sending email, so delte the request, such that
             // the user can register again with the same email.
@@ -131,7 +131,7 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
     protected function _generateActivationKey($retryTimes = 0)
     {
         if($retryTimes > self::MAX_RETRIES_FOR_ACTIVATIONKEY) {
-            throw new \Chrome_Exception('Maximum of retries to generate an activation-key exceeded');
+            throw new \Chrome\Exception('Maximum of retries to generate an activation-key exceeded');
         }
 
         $key = $this->_hash->createKey();
@@ -172,7 +172,7 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
 
         try {
             $userModel->addUser($request->getName(), $request->getEmail());
-        } catch(Chrome_Exception $e) {
+        } catch(\Chrome\Exception $e) {
             $result->failed();
             $result->setError('action', 'unknown_error');
             return;
@@ -222,7 +222,7 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
     {
         try {
             $this->_model->discardRegistrationRequestByActivationKey($activationKey);
-        } catch(\Chrome_Exception $e) {
+        } catch(\Chrome\Exception $e) {
             $result->failed();
             $result->setError('action', 'could_not_discard_registration_request');
         }

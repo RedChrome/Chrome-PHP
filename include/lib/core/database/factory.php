@@ -246,7 +246,7 @@ class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
             }
 
             return $interface;
-        } catch(Chrome_Exception $e) {
+        } catch(\Chrome\Exception $e) {
             if($this->_logger !== null) {
                 $this->_logger->error($e);
             }

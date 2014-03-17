@@ -28,19 +28,19 @@ namespace Chrome\Classloader;
 class Resolver_Exception extends Resolver_Abstract
 {
     /**
-     * resolves a class, if $class beginns with 'Chrome_Exception_'
+     * resolves a class, if $class beginns with '\Chrome\Exception_'
      *
      * @param string $class
      * @return file name, or false if not found
      */
     public function resolve($class)
     {
-        if(preg_match('#Chrome_Exception_Handler_(.{1,})#i', $class, $matches)) {
+        if(preg_match('#\Chrome\Exception_Handler_(.{1,})#i', $class, $matches)) {
             return LIB.'exception/'.strtolower($matches[1]).'.php';
         }
 
-        // does the class contain 'Chrome_Exception_'?
-        if(preg_match('#Chrome_Exception_(.{1,})#i', $class, $matches)) {
+        // does the class contain '\Chrome\Exception_'?
+        if(preg_match('#\Chrome\Exception_(.{1,})#i', $class, $matches)) {
             return LIB.'exception/'.strtolower($matches[1]).'.php';
         }
 

@@ -38,7 +38,7 @@ interface Chrome_Model_Database_Statement_Interface
      * If there was no statement found with the given $key, then a Exception is thrown.
      * If namespace or database name were not set, another Exception is thrown
      *
-     * @throws Chrome_Exception
+     * @throws \Chrome\Exception
      * @param string $key
      * @return string
      */
@@ -79,7 +79,7 @@ interface Chrome_Database_Interface_Model_Interface
      *
      * Throws an exception if the statement could not get loaded by the model
      *
-     * @throws Chrome_Exception
+     * @throws \Chrome\Exception
      * @param string $key
      * @return void
      */
@@ -133,7 +133,7 @@ class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract
     {
         if($this->_model === null)
         {
-            throw new Chrome_Exception('No model set, which contains the stored queries');
+            throw new \Chrome\Exception('No model set, which contains the stored queries');
         }
 
         // only clear, if there was a query sent before..
@@ -148,9 +148,9 @@ class Chrome_Database_Interface_Model extends Chrome_Database_Interface_Abstract
         try
         {
             $this->_query = $this->_model->getStatement($key);
-        } catch(Chrome_Exception $e)
+        } catch(\Chrome\Exception $e)
         {
-            throw new Chrome_Exception_Database('Exception while getting sql statement for key "' . $key . '"!', null, $e);
+            throw new \Chrome\DatabaseException('Exception while getting sql statement for key "' . $key . '"!', null, $e);
         }
         return $this;
     }
@@ -207,7 +207,7 @@ class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implem
     public function setDatabaseName($databaseName)
     {
         if(!is_string($databaseName)) {
-            throw new Chrome_InvalidArgumentException('Argument $databaseName must be of type string');
+            throw new \Chrome\InvalidArgumentException('Argument $databaseName must be of type string');
         }
 
         $this->_database = $databaseName;
@@ -218,7 +218,7 @@ class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implem
     public function setNamespace($namespace)
     {
         if(!is_string($namespace)) {
-            throw new Chrome_InvalidArgumentException('Argument $namspace must be of type string');
+            throw new \Chrome\InvalidArgumentException('Argument $namspace must be of type string');
         }
 
         $this->_namespace = $namespace;
@@ -234,7 +234,7 @@ class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implem
     public function getStatement($key)
     {
         if($this->_cache === null) {
-            throw new Chrome_Exception('No database select. Use setDatabaseName before calling getStatement');
+            throw new \Chrome\Exception('No database select. Use setDatabaseName before calling getStatement');
         }
 
         $statement = $this->_cache->get($key);
@@ -242,7 +242,7 @@ class Chrome_Model_Database_Statement extends Chrome_Model_Cache_Abstract implem
         // could not get statement
         if($statement === null)
         {
-            throw new Chrome_Exception('Could not retrieve sql statement for key "' . $key . '" for database "'.$this->_database.'" and namespace "'.$this->_namespace.'"!');
+            throw new \Chrome\Exception('Could not retrieve sql statement for key "' . $key . '" for database "'.$this->_database.'" and namespace "'.$this->_namespace.'"!');
         }
 
         return $statement;
