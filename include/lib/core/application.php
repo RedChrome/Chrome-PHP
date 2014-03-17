@@ -150,7 +150,7 @@ interface Chrome_Context_View_Interface
      * There is no setConfig(), because this object contains only a reference of config from application_context
      * So to change $_config, you need to be in application_context scope and use setConfig there.
      *
-     * @return Chrome_Config_Interface
+     * @return \Chrome\Config\Config_Interface
      */
     public function getConfig();
 
@@ -189,7 +189,7 @@ interface Chrome_Context_Model_Interface
     /**
      * Returns a config instance
      *
-     * @return Chrome_Config_Interface
+     * @return \Chrome\Config\Config_Interface
      */
     public function getConfig();
 
@@ -356,14 +356,14 @@ interface Chrome_Context_Application_Interface
      *
      * The config object contains all configuration
      *
-     * @param Chrome_Config_Interface $config
+     * @param \Chrome\Config\Config_Interface $config
      */
-    public function setConfig(Chrome_Config_Interface $config);
+    public function setConfig(\Chrome\Config\Config_Interface $config);
 
     /**
      * Returns the config object
      *
-     * @return Chrome_Config_Interface
+     * @return \Chrome\Config\Config_Interface
      */
     public function getConfig();
 
@@ -478,7 +478,7 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
         return $this->_diContainer;
     }
 
-    public function setConfig(Chrome_Config_Interface $config)
+    public function setConfig(\Chrome\Config\Config_Interface $config)
     {
         $this->_config = $config;
     }

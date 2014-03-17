@@ -191,7 +191,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_classloader->prependResolver($this->_diContainer->get('\Chrome\Classloader\Resolver_Model_Interface'));
 
         $this->_initConfig();
-        $registryHandler->add('\Chrome_Config_Interface', $this->_applicationContext->getConfig());
+        $registryHandler->add('\Chrome\Config\Config_Interface', $this->_applicationContext->getConfig());
 
         $this->_initRequestAndResponse();
 
@@ -200,7 +200,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_postprocessor = new Chrome_Filter_Chain_Postprocessor();
 
         $this->_initAuthenticationAndAuthorisation();
-        $registryHandler->add('\Chrome_Authentication_Interface', $this->_applicationContext->getAuthentication());
+        $registryHandler->add('\Chrome\Authentication\Authentication_Interface', $this->_applicationContext->getAuthentication());
 
         $this->_initRouter();
 
@@ -434,7 +434,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         // configuration
         $closure = $this->_diContainer->getHandler('closure');
 
-        $config = new Chrome_Config($this->_diContainer->get('\Chrome_Model_Config_Interface'));
+        $config = new \Chrome\Config\Config($this->_diContainer->get('\Chrome\Model\Config'));
         $this->_applicationContext->setConfig($config);
     }
 
@@ -491,13 +491,13 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_diContainer->attachHandler('model', $model);
         $this->_diContainer->attachHandler('validator', $validator);
 
-        $closure->add('\Chrome_Model_Config_Interface', function ($c) {
+        $closure->add('\Chrome\Model\Config', function ($c) {
 
             $cacheOption = new \Chrome\Cache\Option\File\Serialization();
             $cacheOption->setCacheFile(CACHE . '_config.cache');
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
-            return new Chrome_Model_Config_Cache($c->get('\Chrome_Model_Config_Database'), $cache);
+            return new \Chrome\Model\Config\Cache($c->get('\Chrome\Model\Config\Database'), $cache);
         }, true);
 
         $closure->add('\Chrome_Model_Database_Statement_Interface', function ($c) {
@@ -558,7 +558,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         });
 
         $closure->add('\Chrome_Model_Register', function ($c) {
-            return new Chrome_Model_Register($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'), $c->get('\Chrome_Config_Interface'));
+            return new Chrome_Model_Register($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'), $c->get('\Chrome\Config\Config_Interface'));
         });
 
         $closure->add('Chrome_Controller_Register', function ($c) {
@@ -572,7 +572,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $closure->add('\Chrome\Interactor\User\Registration_Interface', function ($c) {
             require_once LIB.'modules/user/interactors/registration.php';
 
-            $return = new \Chrome\Interactor\User\Registration($c->get('\Chrome_Config_Interface'), $c->get('\Chrome\Model\User\Registration_Interface'), $c->get('\Chrome\Hash\Hash_Interface'));
+            $return = new \Chrome\Interactor\User\Registration($c->get('\Chrome\Config\Config_Interface'), $c->get('\Chrome\Model\User\Registration_Interface'), $c->get('\Chrome\Hash\Hash_Interface'));
             $emailValidator = $c->get('\Chrome\Validator\User\Registration\Email');
             $nameValidator = $c->get('\Chrome_Validator_Name');
             $passwordValidator = $c->get('\Chrome_Validator_Password');
@@ -583,7 +583,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $closure->add('\Chrome\Validator\User\Registration\Email', function ($c) {
             require_once LIB.'modules/user/validators/email.php';
 
-            return new \Chrome\Validator\User\Registration\Email($c->get('\Chrome_Config_Interface'), $c->get('\Chrome\Helper\User\Email_Interface'));
+            return new \Chrome\Validator\User\Registration\Email($c->get('\Chrome\Config\Config_Interface'), $c->get('\Chrome\Helper\User\Email_Interface'));
         });
 
         $closure->add('\Chrome\Helper\User\Email_Interface', function ($c) {
@@ -640,7 +640,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $closure->add('\Chrome\Interactor\User\Login_Interface', function ($c) {
             #require_once LIB.'modules/user/interactors/login.php';
             #$c->get('\Chrome_Context_Application_Interface')->getClassloader()->load('\Chrome\Interactor\User\Login');
-            return new \Chrome\Interactor\User\Login($c->get('\Chrome_Authentication_Interface'));
+            return new \Chrome\Interactor\User\Login($c->get('\Chrome\Authentication\Authentication_Interface'));
         });
 
         $closure->add('\Chrome\View\Form\Element\Factory\Default', function ($c) {

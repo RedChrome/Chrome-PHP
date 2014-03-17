@@ -17,12 +17,14 @@
  * @subpackage Chrome.Config
  */
 
+namespace Chrome\Model\Config;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Config
  */
-class Chrome_Model_Config_Database extends Chrome_Model_Database_Statement_Abstract
+class Database extends \Chrome_Model_Database_Statement_Abstract
 {
     const TYPE_INT = 'integer', TYPE_STRING = 'string', TYPE_DOUBLE = 'double', TYPE_BOOL = 'boolean';
 
@@ -81,7 +83,7 @@ class Chrome_Model_Config_Database extends Chrome_Model_Database_Statement_Abstr
  * @package CHROME-PHP
  * @subpackage Chrome.Config
  */
-class Chrome_Model_Config_Cache extends Chrome_Model_Cache_Abstract
+class Cache extends \Chrome_Model_Cache_Abstract
 {
     public function loadConfig()
     {

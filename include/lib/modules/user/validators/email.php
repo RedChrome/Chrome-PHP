@@ -24,7 +24,7 @@ class Email extends \Chrome_Validator_Composer_Abstract
 {
     protected $_config = null;
 
-    public function __construct(\Chrome_Config_Interface $config)
+    public function __construct(\Chrome\Config\Config_Interface $config)
     {
         $this->_config = $config;
     }
@@ -50,7 +50,7 @@ class Email extends \Chrome_Validator_Composer_Abstract
 
     protected $_helper = null;
 
-    public function __construct(\Chrome_Config_Interface $config, \Chrome\Helper\User\Email_Interface $emailHelper)
+    public function __construct(\Chrome\Config\Config_Interface $config, \Chrome\Helper\User\Email_Interface $emailHelper)
     {
         $this->_config = $config;
         $this->_helper = $emailHelper;

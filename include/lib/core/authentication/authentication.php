@@ -341,7 +341,7 @@ interface Authentication_Interface extends \Chrome_Exception_Processable_Interfa
 require_once 'chain/null.php';
 
 /**
- * Implementation of Chrome_Authentication_Interface
+ * Implementation of Chrome\Authentication\Authentication_Interface
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Authentication

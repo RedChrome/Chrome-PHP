@@ -24,7 +24,7 @@ class Name extends \Chrome_Validator_Composer_Abstract
 {
     protected $_config = null;
 
-    public function __construct(\Chrome_Config_Interface $config)
+    public function __construct(\Chrome\Config\Config_Interface $config)
     {
         $this->_config = $config;
     }

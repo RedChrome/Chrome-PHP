@@ -46,7 +46,7 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
 
     private $_validatorsForAddingRegistrationRequestSet = false;
 
-    public function __construct(\Chrome_Config_Interface $config, Registration_Interface $registrationModel, Hash_Interface $hash)
+    public function __construct(\Chrome\Config\Config_Interface $config, Registration_Interface $registrationModel, Hash_Interface $hash)
     {
         $this->_hash   = $hash;
         $this->_config = $config;

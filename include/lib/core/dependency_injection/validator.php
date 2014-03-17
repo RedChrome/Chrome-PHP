@@ -35,6 +35,6 @@ class Validator implements Handler_Interface
             return null;
         }
 
-        return new $key($container->get('\Chrome_Config_Interface'));
+        return new $key($container->get('\Chrome\Config\Config_Interface'));
     }
 }

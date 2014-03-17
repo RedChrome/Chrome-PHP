@@ -25,14 +25,14 @@ class Login implements \Chrome\Interactor\Interactor_Interface
 {
     protected $_auth = null;
 
-    public function __construct(\Chrome_Authentication_Interface $auth)
+    public function __construct(\Chrome\Authentication\Authentication_Interface $auth)
     {
         $this->_auth = $auth;
     }
 
     public function login($userName, $credential, $autologin)
     {
-        $authResource = new \Chrome_Authentication_Resource_Database($userName, $credential, $autologin);
+        $authResource = new \Chrome\Authentication\Resource\Database($userName, $credential, $autologin);
 
         $this->_auth->authenticate($authResource);
     }
@@ -49,7 +49,7 @@ class Login implements \Chrome\Interactor\Interactor_Interface
         if($authContainer === null) {
             return false;
         } else {
-            return $authContainer->hasStatus(\Chrome_Authentication_Data_Container_Interface::STATUS_USER);
+            return $authContainer->hasStatus(\Chrome\Authentication\Container_Interface::STATUS_USER);
         }
     }
 }

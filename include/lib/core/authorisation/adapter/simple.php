@@ -60,7 +60,6 @@ class Simple implements Adapter_Interface
     /**
      * __construct()
      *
-     * @param Chrome_Authentication_Interface $auth
      * @return Chrome_Authorisation_Adapter_Default
      */
     public function __construct(Model_Interface $model)

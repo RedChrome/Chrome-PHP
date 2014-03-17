@@ -15,13 +15,10 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Config
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:42:48] --> $
- * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Config;
+
 
 /**
  * load model class for Chrome_Config
@@ -32,7 +29,7 @@ require_once 'model.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Config
  */
-interface Chrome_Config_Interface
+interface Config_Interface
 {
     /**
      * Returns the configuration for the subclass $subclass
@@ -49,7 +46,7 @@ interface Chrome_Config_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Config
  */
-class Chrome_Config implements Chrome_Config_Interface
+class Config implements Config_Interface
 {
     /**
      * Contains all configurations
@@ -74,7 +71,7 @@ class Chrome_Config implements Chrome_Config_Interface
      * loads config
      *
      */
-    public function __construct(Chrome_Model_Interface $model)
+    public function __construct(\Chrome_Model_Interface $model)
     {
         $this->_model = $model;
 
@@ -108,7 +105,7 @@ class Chrome_Config implements Chrome_Config_Interface
     public function getConfig($subclass, $name = '')
     {
         if(!isset($this->_config[$subclass]) or ($name != '' and !isset($this->_config[$subclass][$name]))) {
-            throw new Chrome_Exception('Wrong input given in getConfig("'.$subclass.'", "'.$name.'")! Config-Data doesn\'t exist!');
+            throw new \Chrome_Exception('Wrong input given in getConfig("'.$subclass.'", "'.$name.'")! Config-Data doesn\'t exist!');
         }
 
         if($name != '') {

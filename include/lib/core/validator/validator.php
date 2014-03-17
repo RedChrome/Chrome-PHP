@@ -419,11 +419,11 @@ abstract class Chrome_Validator_Configurable extends Chrome_Validator
     /**
      * The configurations
      *
-     * @var \Chrome_Config_Interface
+     * @var \Chrome\Config\Config_Interface
      */
     protected $_config = null;
 
-    public function __construct(\Chrome_Config_Interface $config)
+    public function __construct(\Chrome\Config\Config_Interface $config)
     {
         $this->_config = $config;
     }
