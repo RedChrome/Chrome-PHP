@@ -8,11 +8,11 @@ class ConfigTest extends Chrome_TestCase
 
     protected function setUp()
     {
-        $this->_model = new Test_Chrome_Model_Dummy();
+        $this->_model = new \Test\Chrome\Model\Dummy();
 
         $this->_model->data = array('loadConfig' => array('subclass' => array('name1' => 'value1', 'name2' => 'value2')));
 
-        $this->_config = new Chrome_Config($this->_model);
+        $this->_config = new \Chrome\Config\Config($this->_model);
     }
 
     public function testGetModel()

@@ -1,6 +1,8 @@
 <?php
 
-class Test_Chrome_Model_Dummy extends Chrome_Model_Abstract
+namespace Test\Chrome\Model;
+
+class Dummy extends \Chrome_Model_Abstract
 {
     public $data = array();
     public $defaultData = null;

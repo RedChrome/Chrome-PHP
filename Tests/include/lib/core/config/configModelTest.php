@@ -6,7 +6,7 @@ class ConfigModelTest extends Chrome_TestCase
 
     protected function setUp()
     {
-        $this->_config = new Chrome_Model_Config_Database($this->_diContainer->get('\Chrome_Database_Factory_Interface'), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface'));
+        $this->_config = new \Chrome\Model\Config\Database($this->_diContainer->get('\Chrome_Database_Factory_Interface'), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface'));
     }
 
     public function testLoadConfig()

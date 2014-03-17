@@ -12,9 +12,9 @@ class ConfigCacheTest extends Chrome_TestCase
     {
         $this->_cache = new \Chrome\Cache\Memory();
 
-        $this->_model = new Test_Chrome_Model_Dummy();
+        $this->_model = new \Test\Chrome\Model\Dummy();
 
-        $this->_config = new Chrome_Model_Config_Cache($this->_model, $this->_cache);
+        $this->_config = new \Chrome\Model\Config\Cache($this->_model, $this->_cache);
 
         $this->_config->setCache($this->_cache);
     }
