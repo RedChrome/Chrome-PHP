@@ -17,18 +17,24 @@
  * @subpackage Chrome.Request
  */
 
+namespace Chrome\Request\Handler;
+
+use \Chrome\Request\Handler_Interface;
+use \Chrome\Hash\Hash_Interface;
+use Chrome\Request\DataAbstract;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Request
  */
-class Chrome_Request_Handler_Console implements Chrome_Request_Handler_Interface
+class ConsoleHandler implements Handler_Interface
 {
     protected $_requestData = null;
 
     protected $_hash = null;
 
-    public function __construct(\Chrome\Hash\Hash_Interface $hash)
+    public function __construct(Hash_Interface $hash)
     {
         $this->_hash = $hash;
     }
@@ -42,13 +48,14 @@ class Chrome_Request_Handler_Console implements Chrome_Request_Handler_Interface
     {
         if($this->_requestData === null)
         {
-            $this->_requestData = new Chrome_Request_Data_Console($this->_hash);
+            $this->_requestData = new ConsoleData($this->_hash);
         }
 
         return $this->_requestData;
     }
 }
-class Chrome_Request_Data_Console extends Chrome_Request_Data_Abstract
+
+class ConsoleData extends DataAbstract
 {
     // TODO: finish request data console
 }

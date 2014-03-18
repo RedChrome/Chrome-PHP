@@ -1,6 +1,6 @@
 <?php
 
-class Test_Chrome_Request_Data_Form extends Chrome_Request_Data_Abstract
+class Test_Chrome_Request_Data_Form extends \Chrome\Request\DataAbstract
 {
 
     public function __construct()
@@ -51,7 +51,7 @@ class GeneralFormTest extends Chrome_TestCase
         $this->assertEquals($this->_form->getValidationErrors('notExisting'), array());
         $this->assertEquals($this->_form->getErrors(), array());
         $this->assertEquals($this->_form->getAttribute('doesNotExist'), null);
-        $this->assertInstanceOf('Chrome_Request_Data_Interface', $this->_form->getRequestData());
+        $this->assertInstanceOf('\Chrome\Request\Data_Interface', $this->_form->getRequestData());
         $this->assertFalse($this->_form->hasReceivingErrors('notExisting'));
         $this->assertFalse($this->_form->hasCreationErrors('notExisting'));
         $this->assertFalse($this->_form->hasValidationErrors('notExisting'));

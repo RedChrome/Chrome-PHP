@@ -30,7 +30,7 @@ class Chrome_Form_Storage_Session implements Chrome_Form_Storage_Interface
 
     protected $_formId = null;
 
-    public function __construct(Chrome_Session_Interface $session, $formId)
+    public function __construct(\Chrome\Request\Session_Interface $session, $formId)
     {
         $this->_session = $session;
         $this->_formId = $formId;

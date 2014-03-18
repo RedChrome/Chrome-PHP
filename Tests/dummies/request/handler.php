@@ -2,7 +2,7 @@
 
 require_once 'data.php';
 
-class Chrome_Request_Handler_Dummy implements Chrome_Request_Handler_Interface
+class Chrome_Request_Handler_Dummy implements \Chrome\Request\Handler_Interface
 {
     private $_reqData;
 
@@ -18,7 +18,7 @@ class Chrome_Request_Handler_Dummy implements Chrome_Request_Handler_Interface
         return $this->_reqData;
     }
 
-    public function setRequestData(Chrome_Request_Data_Interface $data) {
+    public function setRequestData(\Chrome\Request\Data_Interface $data) {
         $this->_reqData = $data;
     }
 }

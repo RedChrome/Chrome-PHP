@@ -46,7 +46,7 @@ class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
 
     private $_resourceID = null;
 
-    public function match(\Chrome\URI\URI_Interface $url, Chrome_Request_Data_Interface $data)
+    public function match(\Chrome\URI\URI_Interface $url, \Chrome\Request\Data_Interface $data)
     {
         $array = explode('/', $url->getPath(), self::CHROME_ROUTE_REGEX_MAX_LEVEL);
 

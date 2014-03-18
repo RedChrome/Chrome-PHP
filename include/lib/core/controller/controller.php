@@ -122,13 +122,13 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
 
     /**
      *
-     * @var Chrome_Request_Handler_Interface
+     * @var \Chrome\Request\Handler_Interface
      */
     protected $_requestHandler = null;
 
     /**
      *
-     * @var Chrome_Request_Data_Interface
+     * @var \Chrome\Request\Data_Interface
      */
     protected $_requestData = null;
 
@@ -205,7 +205,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         return $this->_view;
     }
 
-    protected function _setRequestHandler(Chrome_Request_Handler_Interface $obj)
+    protected function _setRequestHandler(\Chrome\Request\Handler_Interface $obj)
     {
         $this->_requestHandler = $obj;
         $this->_requestData = $obj->getRequestData();

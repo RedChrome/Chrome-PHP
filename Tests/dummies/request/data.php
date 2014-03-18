@@ -1,19 +1,19 @@
 <?php
 
-class Chrome_Request_Data_Dummy implements Chrome_Request_Data_Interface
+class Chrome_Request_Data_Dummy implements \Chrome\Request\Data_Interface
 {
     public $_GET, $_POST, $_SERVER, $_REQUEST, $_ENV, $_FILES, $_COOKIEData;
 
     public $_session, $_cookie;
 
-    public function __construct(Chrome_Cookie_Interface $cookie = null, Chrome_Session_Interface $session = null)
+    public function __construct(\Chrome\Request\Cookie_Interface $cookie = null, \Chrome\Request\Session_Interface $session = null)
     {
         if($cookie === null) {
-           $cookie = new Chrome_Cookie_Dummy();
+           $cookie = new \Test\Chrome\Request\Cookie\Dummy();
         }
 
         if($session === null) {
-            $session = new Chrome_Session_Dummy();
+            $session = new \Test\Chrome\Request\Session\Dummy();
         }
 
          $this->_cookie = $cookie;
@@ -122,14 +122,14 @@ class Chrome_Request_Data_Dummy implements Chrome_Request_Data_Interface
     }
 
     /**
-     * @return Chrome_Session_Interface
+     * @return \Chrome\Request\Session_Interface
      */
     public function getSession() {
        return $this->_session;
     }
 
     /**
-     * @return Chrome_Cookie_Interface
+     * @return \Chrome\Request\Cookie_Interface
      */
     public function getCookie() {
        return $this->_cookie;

@@ -132,13 +132,13 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
         $this->_applicationContext->setModelContext($this->_modelContext);
 
         // distinct which request is sent
-        $requestFactory = new Chrome_Request_Factory();
+        $requestFactory = new \Chrome\Request\Factory();
         // set up the available request handler
 
         require_once LIB . 'core/request/request/http.php';
         require_once LIB . 'core/response/response/http.php';
 
-        $requestFactory->addRequestObject(new Chrome_Request_Handler_HTTP(new Chrome\Hash\Hash()));
+        $requestFactory->addRequestObject(new \Chrome\Request\Handler\HTTPHandler(new Chrome\Hash\Hash()));
 
         $reqHandler = $requestFactory->getRequest();
         $requestData = $requestFactory->getRequestDataObject();

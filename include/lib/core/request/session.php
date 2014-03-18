@@ -17,11 +17,13 @@
  * @subpackage Chrome.Session
  */
 
+namespace Chrome\Request;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Session
  */
-interface Chrome_Session_Interface extends ArrayAccess
+interface Session_Interface extends \ArrayAccess
 {
     /**
      * _get()
@@ -99,12 +101,18 @@ interface Chrome_Session_Interface extends ArrayAccess
      public function isClosed();
 }
 
+namespace Chrome\Request\Session;
+
+use \Chrome\Request\Session_Interface;
+use \Chrome\Hash\Hash_Interface;
+use \Chrome\Request\Data_Interface;
+use \Chrome\Request\Cookie_Interface;
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Session
  */
-class Chrome_Session implements Chrome_Session_Interface
+class Session implements Session_Interface
 {
     /**
      * Path where all sessions get saved
@@ -164,9 +172,9 @@ class Chrome_Session implements Chrome_Session_Interface
     protected $_isClosed = false;
 
     /**
-     * Instance of a Chrome_Cookie_Interface, to send and receive cookies
+     * Instance of a \Chrome\Request\Cookie_Interface, to send and receive cookies
      *
-     * @var Chrome_Cookie_Interface
+     * @var \Chrome\Request\Cookie_Interface
      */
     protected $_cookie   = null;
 
@@ -180,7 +188,7 @@ class Chrome_Session implements Chrome_Session_Interface
     /**
      * The request data
      *
-     * @var Chrome_Request_Data_Interface
+     * @var \Chrome\Request\Data_Interface
      */
     protected $_requestData = null;
 
@@ -189,7 +197,7 @@ class Chrome_Session implements Chrome_Session_Interface
      *
      * @return Chrome_Session
      */
-    public function __construct(Chrome_Cookie_Interface $cookie, Chrome_Request_Data_Interface $requestData, \Chrome\Hash\Hash_Interface $hash)
+    public function __construct(Cookie_Interface $cookie, Data_Interface $requestData, Hash_Interface $hash)
     {
         $this->_cookie = $cookie;
         $this->_hash   = $hash;
@@ -205,7 +213,7 @@ class Chrome_Session implements Chrome_Session_Interface
         if(self::CHROME_SESSION_SESSION_SAVE_PATH !== null) {
 
             if(!_isDir(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH)) {
-                Chrome_Dir::createDir(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH);
+                \Chrome_Dir::createDir(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH);
             }
             // specific path to session, protection against hijacking
             @ini_set('session.save_path', TMP.self::CHROME_SESSION_SESSION_SAVE_PATH);

@@ -1,6 +1,10 @@
 <?php
 
-class Chrome_Session_Dummy extends Chrome_Session
+namespace Test\Chrome\Request\Session;
+
+use \Chrome\Request\Session\Session;
+
+class Dummy extends Session
 {
     public function __construct() {
 

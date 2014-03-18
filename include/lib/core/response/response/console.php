@@ -32,14 +32,14 @@ class Chrome_Response_Handler_Console implements Chrome_Response_Handler_Interfa
 {
     protected $_request = null;
 
-    public function __construct(Chrome_Request_Handler_Interface $requestHandler)
+    public function __construct(\Chrome\Request\Handler_Interface $requestHandler)
     {
         $this->_request = $requestHandler;
     }
 
     public function canHandle()
     {
-        return ($this->_request instanceof Chrome_Request_Handler_Console);
+        return ($this->_request instanceof \Chrome\Request\Handler\ConsoleHandler);
     }
 
     public function getResponse()

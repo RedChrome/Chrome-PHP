@@ -415,15 +415,15 @@ interface Chrome_Form_Interface
     /**
      * Sets a request data object, to get sent data from it
      *
-     * @param Chrome_Request_Data_Interface $obj
+     * @param \Chrome\Request\Data_Interface $obj
      * @return void
      */
-    public function setRequestData(Chrome_Request_Data_Interface $obj);
+    public function setRequestData(\Chrome\Request\Data_Interface $obj);
 
     /**
      * Returns the request data
      *
-     * @return Chrome_Request_Data_Interface
+     * @return \Chrome\Request\Data_Interface
      */
     public function getRequestData();
 
@@ -554,7 +554,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     /**
      * Request data object, contains the sent data from user
      *
-     * @var Chrome_Request_Data_Interface
+     * @var \Chrome\Request\Data_Interface
      */
     protected $_requestDataObject = null;
 
@@ -573,7 +573,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      * be displayed again. So the user must only fill the invalid data
      * and not the whole form.
      *
-     * @var Chrome_Session_Interface
+     * @var \Chrome\Request\Session_Interface
      */
     protected $_storage = null;
 
@@ -1347,9 +1347,9 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      * Chrome_Form_Abstract::setRequestData
      *
      * @param
-     *        Chrome_Request_Data_Interface
+     *        \Chrome\Request\Data_Interface
      */
-    public function setRequestData(Chrome_Request_Data_Interface $obj)
+    public function setRequestData(\Chrome\Request\Data_Interface $obj)
     {
         $this->_requestDataObject = $obj;
     }

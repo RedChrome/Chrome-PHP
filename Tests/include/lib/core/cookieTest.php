@@ -5,16 +5,16 @@
 class CookieTest extends Chrome_TestCase
 {
     public function setUp() {
-        $this->_cookie = new Chrome_Cookie(new Chrome_Request_Data_Dummy(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
+        $this->_cookie = new \Chrome\Request\Cookie\Cookie(new Chrome_Request_Data_Dummy(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
     }
 
     public function testConstruct() {
 
-        $this->_cookie = new Chrome_Cookie(new Chrome_Request_Data_Dummy(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
+        $this->_cookie = new \Chrome\Request\Cookie\Cookie(new Chrome_Request_Data_Dummy(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
 
-        $this->assertTrue($this->_cookie instanceof Chrome_Cookie_Interface);
+        $this->assertTrue($this->_cookie instanceof \Chrome\Request\Cookie_Interface);
 
-        $this->assertNotNull($this->_cookie->getCookie(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY));
+        $this->assertNotNull($this->_cookie->getCookie(\Chrome\Request\Cookie\Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY));
         $this->assertNull($this->_cookie->getCookie('anyKey-shouldNotExist'));
     }
 
@@ -69,13 +69,13 @@ class CookieTest extends Chrome_TestCase
         $all = $this->_cookie->getAllCookies();
 
         $this->assertTrue(is_array($all));
-        $this->assertArrayHasKey(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY, $all);
+        $this->assertArrayHasKey(\Chrome\Request\Cookie\Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY, $all);
         $this->assertArrayNotHasKey('testKey-notExisting', $all);
 
         $this->_cookie->setCookie('testKey-notExisting', 'anyValue');
         $all2 = $this->_cookie->getAllCookies();
         $this->assertTrue(is_array($all2));
-        $this->assertEquals($all[Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY], $all2[Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY]);
+        $this->assertEquals($all[\Chrome\Request\Cookie\Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY], $all2[\Chrome\Request\Cookie\Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY]);
         $this->assertArrayHasKey('testKey-notExisting', $all2);
 
         $this->_cookie->unsetAllCookies();
@@ -86,7 +86,7 @@ class CookieTest extends Chrome_TestCase
     public function testUnsetAllCookies() {
 
         $this->_cookie->setCookie('anyKey', 'anyValue');
-        $valCode = $this->_cookie->getCookie(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY);
+        $valCode = $this->_cookie->getCookie(\Chrome\Request\Cookie\Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY);
         $this->assertNotNull($valCode);
         $this->assertEquals('anyValue', $this->_cookie->getCookie('anyKey'));
 
@@ -97,16 +97,16 @@ class CookieTest extends Chrome_TestCase
         $this->assertNull($this->_cookie->getCookie('anyKey'));
 
         // validation key is always set and gets not deleted everything else gets deleted...
-        $this->assertEquals($valCode, $this->_cookie->getCookie(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY));
+        $this->assertEquals($valCode, $this->_cookie->getCookie(\Chrome\Request\Cookie\Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY));
         $this->assertTrue(count($this->_cookie->getAllCookies()) === 1);
     }
 
     public function testValidationWithWrongValues() {
 
         $requestData = new Chrome_Request_Data_Dummy();
-        $requestData->_COOKIEData = array(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY => 'anInvalidKey',
+        $requestData->_COOKIEData = array(\Chrome\Request\Cookie\Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY => 'anInvalidKey',
                'anotherKey' => 'anyValue' );
-        $this->_cookie = new Chrome_Cookie($requestData, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
+        $this->_cookie = new \Chrome\Request\Cookie\Cookie($requestData, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
 
         $this->assertNull($this->_cookie->getCookie('anotherKey') );
 
@@ -119,10 +119,10 @@ class CookieTest extends Chrome_TestCase
 
         // the environment for the cookie class is set up properly
         $requestData = new Chrome_Request_Data_Dummy();
-        $requestData->_COOKIEData = array(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY => $this->_cookie->getCookie(Chrome_Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY),
+        $requestData->_COOKIEData = array(\Chrome\Request\Cookie\Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY => $this->_cookie->getCookie(\Chrome\Request\Cookie\Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY),
                'testKey' => 'anyTestValue' );
 
-        $this->_cookie = new Chrome_Cookie($requestData, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
+        $this->_cookie = new \Chrome\Request\Cookie\Cookie($requestData, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
 
         $this->assertEquals('anyTestValue', $this->_cookie->getCookie('testKey'));
 

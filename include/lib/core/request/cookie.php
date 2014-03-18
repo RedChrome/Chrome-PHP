@@ -17,11 +17,13 @@
  * @subpackage Chrome.Cookie
  */
 
+namespace Chrome\Request;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Cookie
  */
-interface Chrome_Cookie_Interface extends ArrayAccess
+interface Cookie_Interface extends \ArrayAccess
 {
     /**
      * Gets the value of a cookie
@@ -90,12 +92,16 @@ interface Chrome_Cookie_Interface extends ArrayAccess
     public function unsetCookie($name, $path = self::DEFAULT_PATH, $domain = '', $secure = false, $httponly = false);
 }
 
+namespace Chrome\Request\Cookie;
 
+use \Chrome\Request\Cookie_Interface;
+use \Chrome\Request\Data_Interface;
+use \Chrome\Hash\Hash_Interface;
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Cookie
  */
-class Chrome_Cookie implements Chrome_Cookie_Interface
+class Cookie implements Cookie_Interface
 {
     /**
      * Maximum time accepted by a browser
@@ -136,7 +142,7 @@ class Chrome_Cookie implements Chrome_Cookie_Interface
     /**
      * The request data
      *
-     * @var Chrome_Request_Data_Interface
+     * @var \Chrome\Request\Data_Interface
      */
     protected $_requestData = null;
 
@@ -145,7 +151,7 @@ class Chrome_Cookie implements Chrome_Cookie_Interface
      *
      * @return Chrome_cookie
      */
-    public function __construct(Chrome_Request_Data_Interface $requestData, \Chrome\Hash\Hash_Interface $hash)
+    public function __construct(Data_Interface $requestData, Hash_Interface $hash)
     {
         $this->_hash = $hash;
         $this->_requestData = $requestData;

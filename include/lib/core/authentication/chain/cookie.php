@@ -45,7 +45,7 @@ class CookieChain extends Chain_Abstract
 
     /**
      * @param Chrome_Model_Abstract $model model which implements the methods of Chrome_Model_Authentication_Cookie
-     * @param Chrome_Cookie_Interface $cookie
+     * @param \Chrome\Request\Cookie_Interface $cookie
      * @param Chrome\Hash\Hash_Interface $hash
      * @param array $options:
      *                  - cookie_namespace: (string) Namespace of the cookie, default: _AUTH
@@ -54,7 +54,7 @@ class CookieChain extends Chain_Abstract
      *
      * @return Chrome_Authentication_Chain_Cookie
      */
-    public function __construct(\Chrome_Model_Abstract $model, \Chrome_Cookie_Interface $cookie, \Chrome\Hash\Hash_Interface $hash)
+    public function __construct(\Chrome_Model_Abstract $model, \Chrome\Request\Cookie_Interface $cookie, \Chrome\Hash\Hash_Interface $hash)
     {
         $this->_model         = $model;
         $this->_cookie        = $cookie;

@@ -2,7 +2,11 @@
 
 #require_once LIB.'core/cookie.php';
 
-class Chrome_Cookie_Dummy extends Chrome_Cookie
+namespace Test\Chrome\Request\Cookie;
+
+use \Chrome\Request\Cookie\Cookie;
+
+class Dummy extends Cookie
 {
     public $_cookie = array();
 

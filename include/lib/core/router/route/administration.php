@@ -22,7 +22,7 @@
  */
 
     // TODO: finish this class
-    // TODO: use Chrome_Request_Data_Interface $data
+    // TODO: use \Chrome\Request\Data_Interface $data
 /**
  *
  * @package CHROME-PHP
@@ -33,7 +33,7 @@ class Chrome_Route_Administration extends Chrome_Router_Route_Abstract
     protected $_GET = array();
 
     // TODO: check whether user is allowed to access...
-    public function match(\Chrome\URI\URI_Interface $url, Chrome_Request_Data_Interface $data)
+    public function match(\Chrome\URI\URI_Interface $url, \Chrome\Request\Data_Interface $data)
     {
         $path = $url->getPath();
 
@@ -94,7 +94,7 @@ class Chrome_Route_Administration extends Chrome_Router_Route_Abstract
 class Chrome_Router_Resource_Administration extends Chrome_Router_Resource
 {
 
-    public function initClass(Chrome_Request_Handler_Interface $requestHandler)
+    public function initClass(\Chrome\Request\Handler_Interface $requestHandler)
     {
         if(empty($this->_class))
         {

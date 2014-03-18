@@ -402,7 +402,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
     protected function _initRequestAndResponse()
     {
         // distinct which request is sent
-        $requestFactory = new Chrome_Request_Factory();
+        $requestFactory = new \Chrome\Request\Factory();
         // set up the available request handler
 
         // watch out for the right order you add those handlers,
@@ -411,7 +411,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         // $request->addRequestObject();
         // this handler is always capable of handling a request, so it always returns true in canHandleRequest
         $hash = $this->_diContainer->get('\Chrome\Hash\Hash_Interface');
-        $requestFactory->addRequestObject(new Chrome_Request_Handler_HTTP($hash));
+        $requestFactory->addRequestObject(new \Chrome\Request\Handler\HTTPHandler($hash));
         #$requestFactory->addRequestObject(new Chrome_Request_Handler_Console($hash));
 
         $reqHandler = $requestFactory->getRequest();

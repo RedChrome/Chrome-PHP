@@ -39,11 +39,11 @@ class Chrome_Application_Test extends Chrome_Application_Default
     protected function _initRequestAndResponse()
     {
         // distinct which request is sent
-        $requestFactory = new Chrome_Request_Factory();
+        $requestFactory = new \Chrome\Request\Factory();
         // set up the available request handler
 
         $hash = new \Chrome\Hash\Hash();
-        $requestFactory->addRequestObject(new Chrome_Request_Handler_Console($hash));
+        $requestFactory->addRequestObject(new \Chrome\Request\Handler\ConsoleHandler($hash));
 
         $reqHandler = $requestFactory->getRequest();
         $this->_applicationContext->setRequestHandler($requestFactory->getRequest());

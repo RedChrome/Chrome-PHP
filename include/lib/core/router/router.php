@@ -28,7 +28,7 @@ use \Chrome\URI\URI_Interface;
  */
 interface Chrome_Router_Route_Interface
 {
-    public function match(URI_Interface $url, Chrome_Request_Data_Interface $data);
+    public function match(URI_Interface $url, \Chrome\Request\Data_Interface $data);
 
     public function getResource();
 }
@@ -40,7 +40,7 @@ interface Chrome_Router_Route_Interface
  */
 interface Chrome_Router_Interface extends Chrome_Router_Route_Interface, \Chrome\Exception\Processable_Interface
 {
-    public function route(URI_Interface $url, Chrome_Request_Data_Interface $data);
+    public function route(URI_Interface $url, \Chrome\Request\Data_Interface $data);
 
     public function addRoute(Chrome_Router_Route_Interface $obj);
 }
@@ -156,7 +156,7 @@ class Chrome_Router implements Chrome_Router_Interface
     {
     }
 
-    public function match(URI_Interface $url, Chrome_Request_Data_Interface $data)
+    public function match(URI_Interface $url, \Chrome\Request\Data_Interface $data)
     {
         try
         {
@@ -190,7 +190,7 @@ class Chrome_Router implements Chrome_Router_Interface
         }
     }
 
-    public function route(URI_Interface $url, Chrome_Request_Data_Interface $data)
+    public function route(URI_Interface $url, \Chrome\Request\Data_Interface $data)
     {
         // replace ROOT,
         $path = ltrim(preg_replace('#\A' . ROOT_URL . '#', '', '/'.$url->getPath()), '/');

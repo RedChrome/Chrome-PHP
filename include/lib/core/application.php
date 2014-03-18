@@ -259,14 +259,14 @@ interface Chrome_Context_Application_Interface
      * The request handler handles a request (e.g. http, json, console) and provides a
      * request data object, which contains all parameters from the client
      *
-     * @param Chrome_Request_Handler_Interface $reqHandler
+     * @param \Chrome\Request\Handler_Interface $reqHandler
      */
-    public function setRequestHandler(Chrome_Request_Handler_Interface $reqHandler);
+    public function setRequestHandler(\Chrome\Request\Handler_Interface $reqHandler);
 
     /**
      * Returns the request handler
      *
-     * @return Chrome_Request_Handler_Interface
+     * @return \Chrome\Request\Handler_Interface
      */
     public function getRequestHandler();
 
@@ -510,7 +510,7 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
         return $this->_modelContext;
     }
 
-    public function setRequestHandler(Chrome_Request_Handler_Interface $reqHandler)
+    public function setRequestHandler(\Chrome\Request\Handler_Interface $reqHandler)
     {
         $this->_requestHandler = $reqHandler;
     }

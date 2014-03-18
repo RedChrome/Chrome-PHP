@@ -35,14 +35,14 @@ class SessionChain extends Chain_Abstract
     protected $_options = array('session_namespace' => '_AUTH_SESSION');
 
     /**
-     * Implementation of Chrome_Session_Interface
+     * Implementation of \Chrome\Request\Session_Interface
      *
-     * @var Chrome_Session_Interface
+     * @var \Chrome\Request\Session_Interface
      */
     protected $_session = null;
 
 
-    public function __construct(\Chrome_Session_Interface $session, array $options = array())
+    public function __construct(\Chrome\Request\Session_Interface $session, array $options = array())
     {
         $this->_session = $session;
 

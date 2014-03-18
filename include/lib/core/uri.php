@@ -20,6 +20,8 @@
 
 namespace Chrome\URI;
 
+use \Chrome\Request\Data_Interface;
+
 /**
  *
  * @package CHROME-PHP
@@ -76,7 +78,7 @@ class URI implements URI_Interface
     protected $_fragment = '';
     protected $_url = null;
 
-    public function __construct(\Chrome_Request_Data_Interface $requestData = null, $useCurrentURI = false)
+    public function __construct(Data_Interface $requestData = null, $useCurrentURI = false)
     {
         if($useCurrentURI === true AND $requestData !== null)
         {

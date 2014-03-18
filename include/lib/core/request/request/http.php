@@ -17,14 +17,18 @@
  * @subpackage Chrome.Request
  */
 
+namespace Chrome\Request\Handler;
+
 use \Chrome\Hash\Hash_Interface;
+use \Chrome\Request\Handler_Interface;
+use \Chrome\Request\DataAbstract;
 
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Request
  */
-class Chrome_Request_Handler_HTTP implements Chrome_Request_Handler_Interface
+class HTTPHandler implements Handler_Interface
 {
     protected $_requestData = null;
 
@@ -44,12 +48,12 @@ class Chrome_Request_Handler_HTTP implements Chrome_Request_Handler_Interface
     {
         if($this->_requestData === null)
         {
-            $this->_requestData = new Chrome_Request_Data_HTTP($this->_hash);
+            $this->_requestData = new HTTPData($this->_hash);
         }
 
         return $this->_requestData;
     }
 }
-class Chrome_Request_Data_HTTP extends Chrome_Request_Data_Abstract
+class HTTPData extends DataAbstract
 {
 }

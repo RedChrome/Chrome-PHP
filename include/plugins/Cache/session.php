@@ -42,14 +42,14 @@ interface Session_Interface extends Option_Interface
     /**
      * Sets the session instance
      *
-     * @param Chrome_Session_Interface $session
+     * @param \Chrome\Request\Session_Interface $session
      */
-    public function setSession(\Chrome_Session_Interface $session);
+    public function setSession(\Chrome\Request\Session_Interface $session);
 
     /**
      * Returns the session instance
      *
-     * @return Chrome_Session_Interface
+     * @return \Chrome\Request\Session_Interface
      */
     public function getSession();
 }
@@ -66,7 +66,7 @@ class Session implements Session_Interface
 
     protected $_session = null;
 
-    public function __construct(\Chrome_Session_Interface $session, $namespace)
+    public function __construct(\Chrome\Request\Session_Interface $session, $namespace)
     {
         $this->setSession($session);
         $this->setNamespace($namespace);
@@ -87,7 +87,7 @@ class Session implements Session_Interface
         return $this->_namespace;
     }
 
-    public function setSession(\Chrome_Session_Interface $session)
+    public function setSession(\Chrome\Request\Session_Interface $session)
     {
         $this->_session = $session;
     }

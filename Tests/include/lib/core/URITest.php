@@ -104,7 +104,7 @@ class URITest extends PHPUnit_Framework_TestCase
 
     public function testConstructor() {
 
-        $reqData  = new Chrome_Request_Data_Dummy(new Chrome_Cookie_Dummy(), new Chrome_Session_Dummy());
+        $reqData  = new Chrome_Request_Data_Dummy(new \Test\Chrome\Request\Cookie\Dummy(), new \Test\Chrome\Request\Session\Dummy());
         $reqData->_SERVER = array('SERVER_NAME' => 'localhost', 'REQUEST_URI' => '');
 
         $uri = new \Chrome\URI\URI($reqData, true);

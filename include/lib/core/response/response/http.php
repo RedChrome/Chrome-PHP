@@ -21,8 +21,6 @@
  * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true) die();
-
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Response
@@ -31,14 +29,14 @@ class Chrome_Response_Handler_HTTP implements Chrome_Response_Handler_Interface
 {
     protected $_request = null;
 
-    public function __construct(Chrome_Request_Handler_Interface $requestHandler)
+    public function __construct(\Chrome\Request\Handler_Interface $requestHandler)
     {
         $this->_request = $requestHandler;
     }
 
     public function canHandle()
     {
-        return ($this->_request instanceof Chrome_Request_Handler_HTTP);
+        return ($this->_request instanceof \Chrome\Request\Handler\HTTPHandler);
     }
 
     public function getResponse()

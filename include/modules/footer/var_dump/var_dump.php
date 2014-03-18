@@ -56,7 +56,7 @@ class Chrome_View_Footer_VarDump extends Chrome_View_Abstract
 
     protected $_cookie, $_session;
 
-    public function setData($data, Chrome_Cookie_Interface $cookie, Chrome_Session_Interface $session)
+    public function setData($data, \Chrome\Request\Cookie_Interface $cookie, \Chrome\Request\Session_Interface $session)
     {
         $this->_data = $data;
         $this->_cookie = $cookie;
