@@ -104,10 +104,10 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 
         $nicknameValidator = new Chrome_Validator_Form_NicknameRegister();
 
-        $emailConverter = new Chrome_Converter_List();
+        $emailConverter = new \Chrome\Converter\ConverterList();
         $emailConverter->setConversion(array('charToHtml', 'stripHtml', 'strToLower', 'trim'));
 
-        $nameConverter = new Chrome_Converter_List();
+        $nameConverter = new \Chrome\Converter\ConverterList();
         $nameConverter->setConversion(array('charToHtml', 'stripHtml'));
 
         $storageSession = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);

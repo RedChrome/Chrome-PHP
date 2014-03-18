@@ -65,7 +65,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $this->setAttribute(self::ATTRIBUTE_ACTION, new \Chrome\Resource\Resource('rel:login.html'));
 
         // create an boolean converter, cause 'stay_loggedin' only accepts true or false
-        $boolConverter = new Chrome_Converter_List();
+        $boolConverter = new \Chrome\Converter\ConverterList();
         $boolConverter->addConversion('bool');
 
         // this element has to be set in every form!

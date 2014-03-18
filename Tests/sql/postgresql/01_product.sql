@@ -74,8 +74,8 @@ CREATE TABLE IF NOT EXISTS "chrome"."cp1_class" (
 );
 
 INSERT INTO "chrome"."cp1_class" ("id", "name", "file") VALUES
-(DEFAULT, 'Chrome_Converter', 'lib/core/converter/converter.php'),
-(DEFAULT, 'Chrome_Converter_List', 'lib/core/converter/converter.php'),
+(DEFAULT, 'Chrome\\Converter\\', 'lib/core/converter/converter.php'),
+(DEFAULT, 'Chrome\\Converter\\ConverterList', 'lib/core/converter/converter.php'),
 (DEFAULT, 'Chrome\\Exception\\Handler\\AuthenticationHandler', 'lib/exception/authentication.php'),
 (DEFAULT, 'Chrome_Validator', 'lib/core/validator/validator.php'),
 (DEFAULT, 'Chrome_View_Helper_HTML', 'plugins/View/html.php'),

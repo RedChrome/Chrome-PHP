@@ -15,18 +15,18 @@ class Chrome_View_Captcha extends Chrome_View_Strategy_Abstract
         #$this->_views[] = new Chrome_View_Captcha_Template($this->_viewContext, $this->_controller);
     }
 
-    public function formValid()
+    public function formValid(Chrome_Form_Interface $form)
     {
         // this is needed, because even if the captcha was valid, we want to display a new captcha!
         // normaly, after the captcha is valid, we do not display a captcha again.
-        $captcha = $this->_controller->getForm()->getElements('captcha')->getOption()->getCaptcha();
+        $captcha = $form->getElements('captcha')->getOption()->getCaptcha();
         $captcha->create();
 
-        $this->_views[] = new Chrome_View_Captcha_Template_Success($this->_viewContext, $this->_controller);
+        $this->_views[] = new Chrome_View_Captcha_Template_Success($this->_viewContext);
     }
 }
 
-class Chrome_View_Captcha_Template_Success extends Chrome_View_Abstract
+class Chrome_View_Captcha_Template_Success extends Chrome_View
 {
     public function render()
     {

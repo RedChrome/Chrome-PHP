@@ -418,14 +418,14 @@ interface Chrome_Context_Application_Interface
     /**
      * Sets a converter instance
      *
-     * @param Chrome_Converter_Delegator_Interface $converter
+     * @param \Chrome\Converter\Converter_Interface $converter
      */
-    public function setConverter(Chrome_Converter_Delegator_Interface $converter);
+    public function setConverter(\Chrome\Converter\Converter_Interface $converter);
 
     /**
      * Returns a converter instance
      *
-     * @return Chrome_Converter_Delegator_Interface
+     * @return \Chrome\Converter\Converter_Interface
      */
     public function getConverter();
 }
@@ -550,7 +550,7 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
         return $this->_response;
     }
 
-    public function setConverter(Chrome_Converter_Delegator_Interface $converter)
+    public function setConverter(\Chrome\Converter\Converter_Interface $converter)
     {
         $this->_converter = $converter;
     }

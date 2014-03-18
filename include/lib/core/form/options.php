@@ -63,14 +63,14 @@ interface Chrome_Form_Option_Element_Basic_Interface
      *
      * This conversion is used in the corresponding form element to convert the input
      *
-     * @param Chrome_Converter_List_Interface $conversion
+     * @param \Chrome\Converter\List_Interface $conversion
      */
-    public function setConversion(Chrome_Converter_List_Interface $conversion);
+    public function setConversion(\Chrome\Converter\List_Interface $conversion);
 
     /**
      * Returns the conversion, set via setConversion
      *
-     * @return Chrome_Converter_List_Interface
+     * @return \Chrome\Converter\List_Interface
      */
     public function getConversion();
 }
@@ -150,7 +150,7 @@ class Chrome_Form_Option_Element_Basic implements Chrome_Form_Option_Element_Bas
         return $this->_validator;
     }
 
-    public function setConversion(Chrome_Converter_List_Interface $conversion)
+    public function setConversion(\Chrome\Converter\List_Interface $conversion)
     {
         $this->_converter = $conversion;
 

@@ -88,8 +88,8 @@ CREATE TABLE IF NOT EXISTS `cpp_class` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 INSERT INTO `cpp_class` (`name`, `file`) VALUES
-('Chrome_Converter', 'lib/core/converter/converter.php'),
-('Chrome_Converter_List', 'lib/core/converter/converter.php'),
+('Chrome\\Converter\\Converter', 'lib/core/converter/converter.php'),
+('Chrome\\Converter\\ConverterList', 'lib/core/converter/converter.php'),
 ('Chrome\\Exception\\Handler\\AuthenticationHandler', 'lib/exception/authentication.php'),
 ('Chrome_Validator', 'lib/core/validator/validator.php'),
 ('Chrome_View_Helper_HTML', 'plugins/View/html.php'),

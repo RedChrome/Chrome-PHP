@@ -457,15 +457,15 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
     protected function _initConverter()
     {
-        $converter = new Chrome_Converter();
+        $converter = new \Chrome\Converter\Converter();
 
         /**
          *
          * @todo remove them from here
          * @todo maybe delte autloader for converters? and create a factory?
          */
-        $converter->addConverterDelegate(new Chrome_Converter_Delegate_String());
-        $converter->addConverterDelegate(new Chrome_Converter_Delegate_TypeCastingAndStripping());
+        $converter->addConverterDelegate(new \Chrome\Converter\Delegate\StringDelegate());
+        $converter->addConverterDelegate(new \Chrome\Converter\Delegate\TypeCastingAndStrippingDelegate());
 
         $this->_applicationContext->setConverter($converter);
     }

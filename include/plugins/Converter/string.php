@@ -15,20 +15,18 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Converter
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 16:41:22] --> $
- * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
+
+namespace Chrome\Converter\Delegate;
+
+use \Chrome\Converter\DelegateAbstract;
 
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Converter
  */
-class Chrome_Converter_Delegate_String extends Chrome_Converter_Delegate_Abstract
+class StringDelegate extends DelegateAbstract
 {
     protected $_conversions = array('strToLower', 'strToUpper', 'strUcFirst', 'strUcWords', 'strLcFirst');
 

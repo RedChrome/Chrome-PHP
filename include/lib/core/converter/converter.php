@@ -16,33 +16,33 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Converter
  */
-if(CHROME_PHP !== true)
-    die();
+
+namespace Chrome\Converter;
 
 /**
  * Interface to store which converters (and with which parameters) should get applied to the data
  *
  * This is a container/list to store which converters shall be applied to the data. Note that the order of the
- * converters are crucial. Either you set the order using {@link Chrome_Converter_List_Interface::setConversion()}, then the order of the array will be used.
- * If you use {@link Chrome_Converter_List_Interface::addConversion()}, then the order is of a natural nature, which means, that the first conversion set via
- * {@link Chrome_Converter_List_Interface::addConversion} will be the first conversion which gets applied.
+ * converters are crucial. Either you set the order using {@link \Chrome\Converter\List_Interface::setConversion()}, then the order of the array will be used.
+ * If you use {@link \Chrome\Converter\List_Interface::addConversion()}, then the order is of a natural nature, which means, that the first conversion set via
+ * {@link \Chrome\Converter\List_Interface::addConversion} will be the first conversion which gets applied.
  *
  *
- * Some conversions may support additional parameters. They can be set directly in {@link Chrome_Converter_List_Interface::addConversion} with the corresponding conversion.
- * Or if you use {@link Chrome_Converter_List_Interface::setConversion}, the parameters' key should be the same as the conversion ones. E.g. $filters = array(0 => $conversion) then
+ * Some conversions may support additional parameters. They can be set directly in {@link \Chrome\Converter\List_Interface::addConversion} with the corresponding conversion.
+ * Or if you use {@link \Chrome\Converter\List_Interface::setConversion}, the parameters' key should be the same as the conversion ones. E.g. $filters = array(0 => $conversion) then
  * the parameter should be like $params = array(0 => $parameter). Because we ignore the keys of $filters, you should start indexing $filters and $params
  * with the int 0. (Otherwise the $params will not get dispatched correctly). The best usage is $filters = array($conversion1, $conversion2),
  * $params = array($parameterForConversion1, $parametersForConversion2)
  *
- * The values in $filters (or the argument $filter in {@link Chrome_Converter_List_Interface::addConversion}) may be strings or an instance of Chrome_Converter_List_Interface.
- * If it's an instance of Chrome_Converter_List_Interface, then every conversion in this list will be applied in the correct order.
+ * The values in $filters (or the argument $filter in {@link \Chrome\Converter\List_Interface::addConversion}) may be strings or an instance of \Chrome\Converter\List_Interface.
+ * If it's an instance of \Chrome\Converter\List_Interface, then every conversion in this list will be applied in the correct order.
  *
- * If $filter contains a Chrome_Converter_List_Interface, then the corresponding parameters will get ignored!
+ * If $filter contains a \Chrome\Converter\List_Interface, then the corresponding parameters will get ignored!
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Converter
  */
-interface Chrome_Converter_List_Interface extends Iterator
+interface List_Interface extends \Iterator
 {
 
     /**
@@ -56,7 +56,7 @@ interface Chrome_Converter_List_Interface extends Iterator
      * Caution: This may overwrite previous set conversions.
      *
      * @param $filters array
-     *        contains either a string (identifier for a filter) or a Chrome_Converter_List_Interface instance, numerically indexed.
+     *        contains either a string (identifier for a filter) or a \Chrome\Converter\List_Interface instance, numerically indexed.
      * @param $params array
      *        [optional] contains parameters for filters (for Converter_List_Interface the parameters are ignored). Structure:
      *        #1Filter => array(Options), #2Filter => array(Options2), #3Converter => array(), #4Filter => array(Options2), ...
@@ -70,7 +70,7 @@ interface Chrome_Converter_List_Interface extends Iterator
      * The order is FIFO (first in, first out). So the first conversion, which was set via this method, will be the first
      * conversion which gets applied to the data.
      *
-     * @param string/Chrome_Converter_List_Interface $filter
+     * @param string/\Chrome\Converter\List_Interface $filter
      *        either a string which identifies a conversion or a list instance which contains conversions (all of them are getting applied)
      * @param array $params
      *        optional parameters for the conversion.
@@ -78,14 +78,14 @@ interface Chrome_Converter_List_Interface extends Iterator
     public function addConversion($filter, array $params = null);
 
     /**
-     * Wrapper for {@link Chrome_Converter_List_Interface::addConversion}
+     * Wrapper for {@link \Chrome\Converter\List_Interface::addConversion}
      *
-     * This adds a converter list, it's just a shortcut for {@link Chrome_Converter_List_Interface::addConversion} and it should symbolize, that
+     * This adds a converter list, it's just a shortcut for {@link \Chrome\Converter\List_Interface::addConversion} and it should symbolize, that
      * you can also add other converter lists.
      *
-     * @param Chrome_Converter_List_Interface $list a list of conversions to add
+     * @param \Chrome\Converter\List_Interface $list a list of conversions to add
      */
-    public function addConverterList(Chrome_Converter_List_Interface $list);
+    public function addConverterList(List_Interface $list);
 
     /**
      * Returns all conversions
@@ -98,7 +98,7 @@ interface Chrome_Converter_List_Interface extends Iterator
      * Returns the parameters for the $key.th conversion
      *
      * Typically, you shouldn't need this...
-     * This returns for the $key.th conversion {@link Chrome_Converter_List_Interface::getAllConversions()} the corresponding parameter
+     * This returns for the $key.th conversion {@link \Chrome\Converter\List_Interface::getAllConversions()} the corresponding parameter
      *
      * @param int $key index of a conversion
      * @return array containing the parameters for the corresponding conversion
@@ -109,15 +109,15 @@ interface Chrome_Converter_List_Interface extends Iterator
 /**
  * Stores conversions and their parameters
  *
- * Canonical implementation of {@link Chrome_Converter_List_Interface}
+ * Canonical implementation of {@link \Chrome\Converter\List_Interface}
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Converter
  */
-class Chrome_Converter_List implements Chrome_Converter_List_Interface
+class ConverterList implements List_Interface
 {
     /**
-     * Stores the conversions. Values might be strings or Chrome_Converter_List_Interface instances
+     * Stores the conversions. Values might be strings or \Chrome\Converter\List_Interface instances
      *
      * @var array
      */
@@ -184,7 +184,7 @@ class Chrome_Converter_List implements Chrome_Converter_List_Interface
         return $this;
     }
 
-    public function addConverterList(Chrome_Converter_List_Interface $list)
+    public function addConverterList(List_Interface $list)
     {
         $this->addConversion($list, array());
     }
@@ -199,6 +199,24 @@ class Chrome_Converter_List implements Chrome_Converter_List_Interface
         return (isset($this->_params[$key])) ? $this->_params[$key] : array();
     }
 }
+
+/**
+ * Interface to convert values
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Converter
+ */
+interface Converter_Interface
+{
+    /**
+     * Converts $toBeConverted using the conversion list $converterList
+     *
+     * @param \Chrome\Converter\List_Interface $converterList contains the conversions
+     * @param mixed $toBeConverted the data which should get converted
+     */
+    public function convert(List_Interface $converterList, $toBeConverted);
+}
+
 /**
  * Interface to delegate all conversions to delegates.
  *
@@ -212,16 +230,8 @@ class Chrome_Converter_List implements Chrome_Converter_List_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Converter
  */
-interface Chrome_Converter_Delegator_Interface
+interface Delegator_Interface extends Converter_Interface
 {
-    /**
-     * Converts $toBeConverted using the conversion list $converterList
-     *
-     * @param Chrome_Converter_List_Interface $converterList contains the conversions
-     * @param mixed $toBeConverted the data which should get converted
-     */
-    public function convert(Chrome_Converter_List_Interface $converterList, $toBeConverted);
-
     /**
      * Adds a new converter delegate
      *
@@ -230,7 +240,7 @@ interface Chrome_Converter_Delegator_Interface
      *
      * @param Chrome_Converter_Delegate_Interface $delegate a new delegate with new conversions
      */
-    public function addConverterDelegate(Chrome_Converter_Delegate_Interface $delegate);
+    public function addConverterDelegate(Delegate_Interface $delegate);
 }
 
 /**
@@ -256,7 +266,7 @@ interface Chrome_Converter_Delegator_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Converter
  */
-interface Chrome_Converter_Delegate_Interface
+interface Delegate_Interface
 {
     /**
      * Returns an array containing every conversion this class is able to execute
@@ -274,7 +284,7 @@ interface Chrome_Converter_Delegate_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Converter
  */
-class Chrome_Converter implements Chrome_Converter_Delegator_Interface
+class Converter implements Delegator_Interface
 {
     /**
      * Contains all delegates
@@ -295,7 +305,7 @@ class Chrome_Converter implements Chrome_Converter_Delegator_Interface
      */
     protected $_conversions = array();
 
-    public function convert(Chrome_Converter_List_Interface $converterList, $toBeConverted)
+    public function convert(List_Interface $converterList, $toBeConverted)
     {
         $converted = $toBeConverted;
 
@@ -304,7 +314,7 @@ class Chrome_Converter implements Chrome_Converter_Delegator_Interface
         {
 
             // if the conversion is a converter list, then use this list to convert the data.
-            if($conversion instanceof Chrome_Converter_List_Interface)
+            if($conversion instanceof \Chrome\Converter\List_Interface)
             {
                 $converted = $this->convert($conversion, $converted);
                 continue;
@@ -330,7 +340,7 @@ class Chrome_Converter implements Chrome_Converter_Delegator_Interface
         return $converted;
     }
 
-    public function addConverterDelegate(Chrome_Converter_Delegate_Interface $delegate)
+    public function addConverterDelegate(Delegate_Interface $delegate)
     {
         $key = count($this->_converters);
         $this->_converters[$key] = $delegate;
@@ -352,7 +362,7 @@ class Chrome_Converter implements Chrome_Converter_Delegator_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Converter
  */
-abstract class Chrome_Converter_Delegate_Abstract implements Chrome_Converter_Delegate_Interface
+abstract class DelegateAbstract implements Delegate_Interface
 {
     protected $_conversions = array();
 

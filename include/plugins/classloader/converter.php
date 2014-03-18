@@ -35,7 +35,7 @@ class Resolver_Converter extends Resolver_Abstract
      */
     public function resolve($class)
     {
-        if(preg_match('#Chrome_Converter_Delegate_(.{1,})#i', $class, $matches)) {
+        if(preg_match('#Chrome\\\\Converter\\\\Delegate\\\\(.{1,})Delegate#iu', $class, $matches)) {
             return PLUGIN.'Converter/'.lcfirst($matches[1]).'.php';
         }
 
