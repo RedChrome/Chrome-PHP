@@ -15,11 +15,12 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Response
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 17:51:12] --> $
- * @author     Alexander Book
  */
+
+namespace Chrome\Response\Handler;
+
+use \Chrome\Response\Handler_Interface;
+use \Chrome\Response\Response_Interface;
 
 require_once 'http.php';
 
@@ -27,7 +28,7 @@ require_once 'http.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Response
  */
-class Chrome_Response_Handler_JSON extends Chrome_Response_Handler_HTTP
+class JSONHandler extends HTTPHandler
 {
     public function canHandle()
     {
@@ -42,7 +43,7 @@ class Chrome_Response_Handler_JSON extends Chrome_Response_Handler_HTTP
 
     public function getResponse()
     {
-        return new Chrome_Response_JSON($this->_request->getRequestData()->getSERVERData('HTTP_PROTOCOL'));
+        return new JSON($this->_request->getRequestData()->getSERVERData('HTTP_PROTOCOL'));
     }
 }
 
@@ -50,7 +51,7 @@ class Chrome_Response_Handler_JSON extends Chrome_Response_Handler_HTTP
  * @package CHROME-PHP
  * @subpackage Chrome.Response
  */
-class Chrome_Response_JSON extends Chrome_Response_HTTP
+class JSON extends HTTP
 {
     protected $_body = array();
 

@@ -418,11 +418,11 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_applicationContext->setRequestHandler($requestFactory->getRequest());
 
         // distinct which response gets send
-        $responseFactory = new Chrome_Response_Factory();
+        $responseFactory = new \Chrome\Response\Factory();
         // set up the available response handlers
 
-        $responseFactory->addResponseHandler(new Chrome_Response_Handler_JSON($reqHandler));
-        $responseFactory->addResponseHandler(new Chrome_Response_Handler_HTTP($reqHandler));
+        $responseFactory->addResponseHandler(new \Chrome\Response\Handler\JSONHandler($reqHandler));
+        $responseFactory->addResponseHandler(new \Chrome\Response\Handler\HTTPHandler($reqHandler));
         #$responseFactory->addResponseHandler(new Chrome_Response_Handler_Console($reqHandler));
 
         $response = $responseFactory->getResponse();

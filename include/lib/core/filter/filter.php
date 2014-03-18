@@ -51,10 +51,10 @@ abstract class Chrome_Filter_Chain_Abstract
      * run through all filters
      *
      * @param \Chrome\Request\Data_Interface $req
-     * @param Chrome_Response_Interface $res
+     * @param \Chrome\Response\Response_Interface $res
      * @return void
      */
-    public function processFilters(\Chrome\Request\Data_Interface $req, Chrome_Response_Interface $res)
+    public function processFilters(\Chrome\Request\Data_Interface $req, \Chrome\Response\Response_Interface $res)
     {
         // loop through every filter
         foreach($this->_filters as $filter) {
@@ -76,5 +76,5 @@ interface Chrome_Filter_Interface
      * @param Chrome_Response_Abstract $res
      * @return void
      */
-    public function execute(\Chrome\Request\Data_Interface $req, Chrome_Response_Interface $res);
+    public function execute(\Chrome\Request\Data_Interface $req, \Chrome\Response\Response_Interface $res);
 }

@@ -15,16 +15,15 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Response
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @author     Alexander Book
  */
+
+namespace Chrome\Response;
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Response
  */
-interface Chrome_Response_Interface
+interface Response_Interface
 {
     public function write($mixed);
 
@@ -41,7 +40,7 @@ interface Chrome_Response_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Response
  */
-interface Chrome_Response_Handler_Interface
+interface Handler_Interface
 {
     public function canHandle();
 
@@ -52,22 +51,22 @@ interface Chrome_Response_Handler_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Response
  */
-interface Chrome_Response_Factory_Interface
+interface Factory_Interface
 {
     public function getResponse();
 
-    public function addResponseHandler(Chrome_Response_Handler_Interface $responseHandler);
+    public function addResponseHandler(Handler_Interface $responseHandler);
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Response
  */
-class Chrome_Response_Factory implements Chrome_Response_Factory_Interface
+class Factory implements Factory_Interface
 {
     protected $_responseHanlders = array();
 
-    public function addResponseHandler(Chrome_Response_Handler_Interface $responseHandler)
+    public function addResponseHandler(Handler_Interface $responseHandler)
     {
         $this->_responseHanlders[] = $responseHandler;
     }

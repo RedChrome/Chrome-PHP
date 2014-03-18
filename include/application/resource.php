@@ -147,9 +147,9 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
         $session = $requestData->getSession();
         $cookie = $requestData->getCookie();
 
-        $responseFactory = new Chrome_Response_Factory();
+        $responseFactory = new \Chrome\Response\Factory();
 
-        $responseFactory->addResponseHandler(new Chrome_Response_Handler_HTTP($reqHandler));
+        $responseFactory->addResponseHandler(new \Chrome\Response\Handler\HTTPHandler($reqHandler));
 
         $response = $responseFactory->getResponse();
         $this->_applicationContext->setResponse($response);

@@ -324,14 +324,14 @@ interface Chrome_Context_Application_Interface
      *
      * The response object handles every content, which gets send to the client
      *
-     * @param Chrome_Response_Interface $response
+     * @param \Chrome\Response\Response_Interface $response
      */
-    public function setResponse(Chrome_Response_Interface $response);
+    public function setResponse(\Chrome\Response\Response_Interface $response);
 
     /**
      * Returns the response object
      *
-     * @return Chrome_Response_Interface
+     * @return \Chrome\Response\Response_Interface
      */
     public function getResponse();
 
@@ -540,7 +540,7 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
         return $this->_authorisation;
     }
 
-    public function setResponse(Chrome_Response_Interface $response)
+    public function setResponse(\Chrome\Response\Response_Interface $response)
     {
         $this->_response = $response;
     }

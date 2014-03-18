@@ -20,7 +20,7 @@ class Application
         $image = $renderer->getImage($this->_appContext);
 
         $response = $this->_appContext->getResponse();
-        if(!($response instanceof \Chrome_Response_HTTP_Interface) ) {
+        if(!($response instanceof \Chrome\Response\Handler\HTTPResponse_Interface) ) {
             exit();
         }
 

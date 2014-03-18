@@ -48,9 +48,9 @@ class Chrome_Application_Test extends Chrome_Application_Default
         $reqHandler = $requestFactory->getRequest();
         $this->_applicationContext->setRequestHandler($requestFactory->getRequest());
 
-        $responseFactory = new Chrome_Response_Factory();
+        $responseFactory = new \Chrome\Response\Factory();
 
-        $responseFactory->addResponseHandler(new Chrome_Response_Handler_Console($reqHandler));
+        $responseFactory->addResponseHandler(new \Chrome\Response\Handler\ConsoleHandler($reqHandler));
 
         $response = $responseFactory->getResponse();
         $this->_applicationContext->setResponse($response);

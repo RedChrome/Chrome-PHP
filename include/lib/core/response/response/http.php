@@ -15,17 +15,19 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Response
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 13:09:30] --> $
- * @author     Alexander Book
  */
+
+namespace Chrome\Response\Handler;
+
+use \Chrome\Response\Handler_Interface;
+use \Chrome\Response\Response_Interface;
+
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Response
  */
-class Chrome_Response_Handler_HTTP implements Chrome_Response_Handler_Interface
+class HTTPHandler implements Handler_Interface
 {
     protected $_request = null;
 
@@ -41,7 +43,7 @@ class Chrome_Response_Handler_HTTP implements Chrome_Response_Handler_Interface
 
     public function getResponse()
     {
-        return new Chrome_Response_HTTP($this->_request->getRequestData()->getSERVERData('HTTP_PROTOCOL'));
+        return new HTTP($this->_request->getRequestData()->getSERVERData('HTTP_PROTOCOL'));
     }
 }
 
@@ -49,7 +51,7 @@ class Chrome_Response_Handler_HTTP implements Chrome_Response_Handler_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Response
  */
-interface Chrome_Response_HTTP_Interface extends Chrome_Response_Interface
+interface HTTPResponse_Interface extends Response_Interface
 {
     public function setStatus($status);
 
@@ -64,7 +66,7 @@ interface Chrome_Response_HTTP_Interface extends Chrome_Response_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Response
  */
-class Chrome_Response_HTTP implements Chrome_Response_HTTP_Interface
+class HTTP implements HTTPResponse_Interface
 {
     protected $_status = '200 OK';
     protected $_headers = array('Content-Type' => 'text/html');

@@ -30,7 +30,7 @@ if(CHROME_PHP !== true)
  */
 class Chrome_Filter_JSON implements Chrome_Filter_Interface
 {
-    public function execute(\Chrome\Request\Data_Interface $req, Chrome_Response_Interface $res)
+    public function execute(\Chrome\Request\Data_Interface $req, \Chrome\Response\Response_Interface $res)
     {
         $res->setBody(json_encode($res->getBody()));
     }

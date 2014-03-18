@@ -12,7 +12,7 @@ class Chrome_Request_Handler_Dummy implements \Chrome\Request\Handler_Interface
 
     public function getRequestData() {
         if($this->_reqData === null) {
-           $this->_reqData = new Chrome_Request_Data_Dummy();
+           $this->_reqData = new \Test\Chrome\Request\DummyData();
         }
 
         return $this->_reqData;

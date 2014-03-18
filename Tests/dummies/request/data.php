@@ -1,6 +1,8 @@
 <?php
 
-class Chrome_Request_Data_Dummy implements \Chrome\Request\Data_Interface
+namespace Test\Chrome\Request;
+
+class DummyData implements \Chrome\Request\Data_Interface
 {
     public $_GET, $_POST, $_SERVER, $_REQUEST, $_ENV, $_FILES, $_COOKIEData;
 
