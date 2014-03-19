@@ -22,7 +22,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Chrome_Controller_Content_Login_Default extends Chrome_Controller_Module_Abstract
+class Chrome_Controller_Content_Login_Default extends \Chrome\Controller\ModuleAbstract
 {
     public function __construct(Chrome_Context_Application_Interface $appContext, \Chrome\Interactor\User\Login $interactor)
     {

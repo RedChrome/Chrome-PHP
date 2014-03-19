@@ -125,16 +125,16 @@ abstract class Chrome_View_Abstract extends Chrome_View
     /**
      * Contains the controller
      *
-     * @var Chrome_Controller_Abstract
+     * @var \Chrome\Controller\ControllerAbstract
      */
     protected $_controller = null;
 
     /**
      * Constructor
      * @todo why controller?
-     * @return Chrome_Controller_Interface
+     * @return \Chrome\Controller\Controller_Interface
      */
-    public function __construct(Chrome_Context_View_Interface $viewContext, Chrome_Controller_Interface $controller)
+    public function __construct(Chrome_Context_View_Interface $viewContext, \Chrome\Controller\Controller_Interface $controller)
     {
         parent::__construct($viewContext);
         #$this->_controller = $controller;

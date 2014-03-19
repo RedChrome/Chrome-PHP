@@ -39,7 +39,7 @@ class Chrome_View_Factory implements Chrome_View_Factory_Interface
         $this->_viewContext = $viewContext;
     }
 
-    public function build($viewClass, Chrome_Controller_Interface $controller = null)
+    public function build($viewClass, \Chrome\Controller\Controller_Interface $controller = null)
     {
         if($controller === null) {
             return new $viewClass($this->_viewContext);

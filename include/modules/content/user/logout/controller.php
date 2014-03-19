@@ -21,7 +21,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Chrome_Controller_Content_Logout extends Chrome_Controller_Module_Abstract
+class Chrome_Controller_Content_Logout extends \Chrome\Controller\ModuleAbstract
 {
     protected function _execute() {
 

@@ -15,4 +15,4 @@ require_once LIB.'core/core.php';
  * additional, non-core files
  */
 require_once LIB.'exception/console.php';
-require_once 'Tests/dummies/bootstrap.php';
+#require_once 'Tests/dummies/bootstrap.php';

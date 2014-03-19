@@ -6,7 +6,7 @@ require_once 'view.php';
 require_once 'include.php';
 
 
-class Chrome_Controller_Index extends Chrome_Controller_Module_Abstract
+class Chrome_Controller_Index extends \Chrome\Controller\ModuleAbstract
 {
     protected function _initialize()
     {

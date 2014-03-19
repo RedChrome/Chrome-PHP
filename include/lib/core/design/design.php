@@ -118,7 +118,7 @@ interface Chrome_Design_Theme_Interface
     public function setApplicationContext(Chrome_Context_Application_Interface $appContext);
 
     // TODO: refine this method
-    public function initDesign(Chrome_Design_Interface $design, Chrome_Controller_Interface $controller, \Chrome\DI\Container_Interface $container);
+    public function initDesign(Chrome_Design_Interface $design, \Chrome\Controller\Controller_Interface $controller, \Chrome\DI\Container_Interface $container);
 }
 
 abstract class Chrome_Design_Theme_Abstract implements Chrome_Design_Theme_Interface

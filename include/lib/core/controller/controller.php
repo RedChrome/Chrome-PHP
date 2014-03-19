@@ -17,12 +17,16 @@
  * @subpackage Chrome.Controller
  */
 
+namespace Chrome\Controller;
+
+use \Chrome\Exception\Processable_Interface;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
-interface Chrome_Controller_Interface extends \Chrome\Exception\Processable_Interface
+interface Controller_Interface extends Processable_Interface
 {
     /**
      * execute()
@@ -37,7 +41,7 @@ interface Chrome_Controller_Interface extends \Chrome\Exception\Processable_Inte
      * @param Chrome_Context_Application_Interface $appContext
      * @return void
      */
-    public function setApplicationContext(Chrome_Context_Application_Interface $appContext);
+    public function setApplicationContext(\Chrome_Context_Application_Interface $appContext);
 
     /**
      * Returns the application context
@@ -52,7 +56,7 @@ interface Chrome_Controller_Interface extends \Chrome\Exception\Processable_Inte
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
-abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
+abstract class ControllerAbstract implements Controller_Interface
 {
 
     /**
@@ -153,7 +157,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
      */
     abstract protected function _shutdown();
 
-    public function __construct(Chrome_Context_Application_Interface $appContext)
+    public function __construct(\Chrome_Context_Application_Interface $appContext)
     {
         $this->setApplicationContext($appContext);
 
@@ -176,7 +180,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
                     require_once $file;
                 } else
                 {
-                    throw new \Chrome\Exception('Could not require file ' . $file . '! The file does not exist in Chrome_Controller_Abstract::_require()!');
+                    throw new \Chrome\Exception('Could not require file ' . $file . '! The file does not exist in \Chrome\Controller\ControllerAbstract::_require()!');
                 }
             }
         }
@@ -221,7 +225,7 @@ abstract class Chrome_Controller_Abstract implements Chrome_Controller_Interface
         return $this->_exceptionHandler;
     }
 
-    public function setApplicationContext(Chrome_Context_Application_Interface $appContext)
+    public function setApplicationContext(\Chrome_Context_Application_Interface $appContext)
     {
         $this->_applicationContext = $appContext;
     }

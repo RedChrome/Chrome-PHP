@@ -17,13 +17,17 @@
  * @subpackage Chrome.Controller
  */
 
+namespace Chrome\Controller;
+
+use Chrome\Controller\ControllerAbstract;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
-abstract class Chrome_Controller_Module_Abstract extends Chrome_Controller_Abstract
+abstract class ModuleAbstract extends ControllerAbstract
 {
-    public function __construct(Chrome_Context_Application_Interface $appContext)
+    public function __construct(\Chrome_Context_Application_Interface $appContext)
     {
         parent::__construct($appContext);
 

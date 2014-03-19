@@ -30,6 +30,7 @@ require_once 'config.php';
  * load chrome-php initializing file
  */
 require_once 'include/chrome.php';
+
 class Chrome_TestSetup
 {
     protected $_errorConfig = null;
@@ -48,6 +49,21 @@ class Chrome_TestSetup
         return $this->_diContainer;
     }
 
+    protected function _initClassloader()
+    {
+        require_once PLUGIN . 'classloader/database.php';
+        $classloader = new \Chrome\Classloader\Classloader();
+        $classloader->setExceptionHandler($this->_errorConfig->getExceptionHandler());
+        $classloader->setLogger(new \Psr\Log\NullLogger());
+        $classloader->appendResolver(new \Chrome\Classloader\Resolver_Database());
+
+        $autoloader = new \Chrome\Classloader\Autoloader($classloader);
+
+        if($this->_applicationContext !== null) {
+            $this->_applicationContext->setClassloader($classloader);
+        }
+    }
+
     public function __construct()
     {
         require_once 'bootstrap.php';
@@ -57,6 +73,7 @@ class Chrome_TestSetup
         $this->_errorConfig->setExceptionHandler(new \Chrome\Exception\Handler\ConsoleHandler());
 
         $this->_applicationContext = new Chrome_Context_Application();
+        $this->_initClassloader();
     }
 
     public function testDb()
@@ -67,13 +84,6 @@ class Chrome_TestSetup
         }
 
         $this->_databaseInitialized = true;
-
-        require_once PLUGIN . 'classloader/database.php';
-        $classloader = new \Chrome\Classloader\Classloader();
-        $classloader->setExceptionHandler($this->_errorConfig->getExceptionHandler());
-        $classloader->setLogger(new \Psr\Log\NullLogger());
-        $classloader->appendResolver(new \Chrome\Classloader\Resolver_Database());
-        $autoloader = new \Chrome\Classloader\Autoloader($classloader);
 
         require_once LIB . 'core/database/database.php';
 
@@ -123,9 +133,7 @@ class Chrome_TestSetup
 
         $modelContext = new Chrome_Context_Model();
         $modelContext->setDatabaseFactory($databaseFactory);
-        $this->_applicationContext = new Chrome_Context_Application();
         $this->_applicationContext->setModelContext($modelContext);
-        $this->_applicationContext->setClassloader($classloader);
     }
 
     public function testModules()
@@ -135,6 +143,8 @@ class Chrome_TestSetup
         $_tempServer = $_SERVER;
         $_tempGlobals = $GLOBALS;
         $_tempCookie = $_COOKIE;
+
+        require_once 'Tests/dummies/bootstrap.php';
 
         require_once 'Tests/include/application/test.php';
 

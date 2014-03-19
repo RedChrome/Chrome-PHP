@@ -31,11 +31,11 @@ class Controller implements Handler_Interface
 
     public function get($key, Container_Interface $container)
     {
-        if(!is_subclass_of($key, 'Chrome_Controller_Interface')) {
+        if(!is_subclass_of($key, '\Chrome\Controller\Controller_Interface')) {
             return null;
         }
 
-        #if(is_subclass_of($key, 'Chrome_Controller_Module_Abstract')) {
+        #if(is_subclass_of($key, '\Chrome\Controller\ModuleAbstract')) {
             return new $key($container->get('\Chrome_Context_Application_Interface'));
         #}
     }

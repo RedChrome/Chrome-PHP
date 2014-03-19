@@ -96,7 +96,7 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
     /**
      * Chrome_Front_Controller::getController()
      *
-     * @return Chrome_Controller_Abstract
+     * @return \Chrome\Controller\ControllerAbstract
      */
     public function getController()
     {

@@ -28,7 +28,7 @@ if(CHROME_PHP !== true) die();
  */
 class Chrome_Design_Theme_Console extends Chrome_Design_Theme_Abstract
 {
-    public function initDesign(Chrome_Design_Interface $design, Chrome_Controller_Interface $controller)
+    public function initDesign(Chrome_Design_Interface $design, \Chrome\Controller\Controller_Interface $controller)
     {
         $htmlList = new Chrome_Renderable_List();
         $html = new Chrome_Renderable_Composition();

@@ -69,7 +69,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
     /**
      *
-     * @var Chrome_Controller_Interface
+     * @var \Chrome\Controller\Controller_Interface
      */
     private $_controller = null;
 
@@ -106,7 +106,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
     /**
      * Chrome_Front_Controller::getController()
      *
-     * @return Chrome_Controller_Abstract
+     * @return \Chrome\Controller\ControllerAbstract
      */
     public function getController()
     {

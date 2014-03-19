@@ -24,7 +24,7 @@
  */
 class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstract
 {
-    public function initDesign(Chrome_Design_Interface $design, Chrome_Controller_Interface $controller, \Chrome\DI\Container_Interface $diContainer)
+    public function initDesign(Chrome_Design_Interface $design, \Chrome\Controller\Controller_Interface $controller, \Chrome\DI\Container_Interface $diContainer)
     {
         require_once LIB . 'core/design/options/static.php';
         require_once LIB . 'core/design/loader/static.php';

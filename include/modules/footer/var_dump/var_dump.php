@@ -32,7 +32,7 @@ if(CHROME_PHP !== true)
  * @version 2010
  * @access public
  */
-class Chrome_Controller_Footer_VarDump extends Chrome_Controller_Module_Abstract
+class Chrome_Controller_Footer_VarDump extends \Chrome\Controller\ModuleAbstract
 {
     protected function _execute()
     {

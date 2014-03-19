@@ -1,5 +1,5 @@
 <?php
-class Chrome_Controller_SiteNotFound extends Chrome_Controller_Module_Abstract
+class Chrome_Controller_SiteNotFound extends \Chrome\Controller\ModuleAbstract
 {
 
     protected function _initialize()
