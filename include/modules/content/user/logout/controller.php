@@ -14,16 +14,21 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.User
+ * @subpackage Chrome.Controller
  */
+
+namespace Chrome\Controller\User;
+
+use \Chrome\Controller\ModuleAbstract;
 
 /**
  * @package CHROME-PHP
- * @subpackage Chrome.User
+ * @subpackage Chrome.Controller
  */
-class Chrome_Controller_Content_Logout extends \Chrome\Controller\ModuleAbstract
+class Logout extends ModuleAbstract
 {
-    protected function _execute() {
+    protected function _execute()
+    {
 
         $this->_applicationContext->getAuthentication()->deAuthenticate();
 

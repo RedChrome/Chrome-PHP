@@ -62,7 +62,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
         $this->setAttribute(self::ATTRIBUTE_NAME, $this->_id);
         $this->setAttribute(self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST);
         $this->setAttribute(self::ATTRIBUTE_ID, $this->_id);
-        $this->setAttribute(self::ATTRIBUTE_ACTION, new \Chrome\Resource\Resource('rel:login.html'));
+        //$this->setAttribute(self::ATTRIBUTE_ACTION, new \Chrome\Resource\Resource('rel:')); // has no effect
 
         // create an boolean converter, cause 'stay_loggedin' only accepts true or false
         $boolConverter = new \Chrome\Converter\ConverterList();

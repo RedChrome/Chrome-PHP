@@ -22,7 +22,7 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
     protected $_dbAdapter = Chrome_Database_Factory_Interface::DEFAULT_ADAPTER;
     protected $_dbInterface = Chrome_Database_Factory_Interface::DEFAULT_INTERFACE;
     protected $_dbResult = Chrome_Database_Factory_Interface::DEFAULT_RESULT;
-    protected $_dbConnection = Chrome_Database_Registry_Connection_Interface::DEFAULT_CONNECTION;
+    protected $_dbConnection = \Chrome\Database\Registry\Connection_Interface::DEFAULT_CONNECTION;
 
     private $_dbInterfaceInstance = null;
 

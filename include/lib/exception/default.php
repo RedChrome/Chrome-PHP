@@ -26,27 +26,58 @@ use \Chrome\Exception\Handler_Interface;
  */
 class DefaultHandler implements Handler_Interface
 {
+    protected $_methodCount = 1;
+
     public function exception(\Exception $e)
     {
         echo '<h1>Uncaught Exception of type '.get_class($e).' </h1>';
         echo '<h3>'.$e->getMessage().'</h3>';
-        echo '<h4>Caused by '.$e->getFile().'('.$e->getLine().')<br></h4>Call Stack<br>';
+        echo '<h4>Caused by '.$e->getFile().'('.$e->getLine().')<br></h4>';
 
-        echo $this->_printExceptionTrace($e);
+        echo $this->_printExceptionTrace($e, false);
 
         die();
     }
 
-    protected function _printExceptionTrace(\Exception $e)
+    protected function _printExceptionTrace(\Exception $e, $comesFromExtendedException = false)
     {
-
         $trace = $e->getTrace();
 
         $return = '';
 
         foreach($trace as $key => $value) {
 
-            $return .= sprintf('#%1$02d: ', $key+1);
+            // some exceptions may be thrown as an error.
+            // To display that better, we ignore those two method calls and
+            // highlight the errors message
+            if($value['function'] === 'error' and isset($value['class']))
+            {
+                $interfaces = class_implements($value['class'], false);
+                if(isset($interfaces['Chrome\Exception\ErrorHandler_Interface']))
+                {
+                    continue;
+                }
+            }
+
+            // $value['args'][1] is the error message given as second parameter to handleError
+            if($value['function'] === 'handleError' and isset($value['args'][1]))
+            {
+                $interfaces = class_implements($value['class'], false);
+                if(isset($interfaces['Chrome\Exception\Configuration_Interface']))
+                {
+                    // only highlight/show the error message if there was
+                    // another exception before.
+                    // if not, then we would just display the error twice.
+                    if($comesFromExtendedException === true)
+                    {
+                        $return .= '<h3>' . $value['args'][1] . '</h3>';
+                    }
+                    continue;
+                }
+            }
+
+
+            $return .= sprintf('#%1$02d: ', $this->_methodCount);
 
             if(isset($value['file'])) {
                 if(isset($value['line'])) {
@@ -65,17 +96,20 @@ class DefaultHandler implements Handler_Interface
                 $return .= $this->_getArgs($value['args']);
             }
             $return .= '<br>'."\n";
+
+            ++$this->_methodCount;
         }
 
         if($e instanceof \Chrome\Exception) {
 
             $prev = $e->getPrevious();
 
-            if( ($prev instanceof Exception) AND !($prev instanceof \Chrome\Exception) ) {
+            // this might reveal connection parameters to your database if its not a \Chrome\Exception
+            if( ($prev instanceof \Exception) AND (!($prev instanceof \Chrome\Exception) OR CHROME_DEVELOPER_STATUS === true)) {
 
-                $return .= '<h4>...caused by '.$prev->getFile().'('.$prev->getLine().')</h4>';
+                $return .= '<h4>Caused by '.$prev->getFile().'('.$prev->getLine().')</h4>';
 
-                $return .= $this->_printExceptionTrace($prev);
+                $return .= $this->_printExceptionTrace($prev, true);
             }
         }
 

@@ -35,8 +35,12 @@ class Controller implements Handler_Interface
             return null;
         }
 
+        try {
         #if(is_subclass_of($key, '\Chrome\Controller\ModuleAbstract')) {
             return new $key($container->get('\Chrome_Context_Application_Interface'));
         #}
+        } catch(\Chrome\InvalidArgumentException $exception) {
+            throw new \Chrome\Exception('Could not create object '.$key.' with default parameters', 0, $exception);
+        }
     }
 }

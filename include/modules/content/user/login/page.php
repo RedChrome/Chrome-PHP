@@ -14,13 +14,19 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.User
+ * @subpackage Chrome.Controller
  */
+
+#namespace Chrome\Controller;
+
+use \Chrome\Controller\ModuleAbstract;
+
+// TODO: is this class needed?
 
 /**
  *
  * @package CHROME-PHP
- * @subpackage Chrome.User
+ * @subpackage Chrome.Controller
  */
 class Chrome_Controller_User_Login_Page extends \Chrome\Controller\ModuleAbstract
 {
@@ -32,11 +38,11 @@ class Chrome_Controller_User_Login_Page extends \Chrome\Controller\ModuleAbstrac
 
     protected function _execute()
     {
-        $this->_form = Chrome_Form_Login::getInstance($this->_applicationContext);
+        $this->_form = \Chrome_Form_Login::getInstance($this->_applicationContext);
 
         // the login form, will be the first one in Content
-        $viewForm = Chrome_View_Form_Login::getInstance($this->_form, $this->_applicationContext->getViewContext());
+        $viewForm = \Chrome_View_Form_Login::getInstance($this->_form, $this->_applicationContext->getViewContext());
         $viewForm->setElementFactory($this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Default'));
-        $this->_view = new Chrome_View_Form_Renderer_Template_Login_Content($viewForm);
+        $this->_view = new \Chrome_View_Form_Renderer_Template_Login_Content($viewForm);
     }
 }

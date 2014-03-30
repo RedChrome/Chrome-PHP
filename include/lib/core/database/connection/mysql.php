@@ -19,7 +19,7 @@
  * @subpackage Chrome.Database
  */
 
-class Chrome_Database_Connection_Mysql extends Chrome_Database_Connection_Abstract
+class Chrome_Database_Connection_Mysql extends \Chrome\Database\Connection\AbstractConnection
 {
     protected $_isSetConnectionOptions = false;
     protected $_host;

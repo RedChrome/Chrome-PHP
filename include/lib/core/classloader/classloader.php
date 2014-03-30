@@ -28,7 +28,6 @@ use \Psr\Log\LoggerInterface;
  */
 interface Autoloader_Interface
 {
-
     public function setClassloader(Classloader_Interface $classloader);
 
     public function getClassloader();
@@ -43,12 +42,15 @@ interface Autoloader_Interface
  */
 interface Classloader_Interface extends \Chrome\Exception\Processable_Interface, Loggable_Interface
 {
-
     /**
      * Tries to load a file containing the class $className
      *
      * Returns true if file could get loaded, false else
      *
+     * Note that if you try to load classes in namespaces, that the trailing \ should get
+     * removed.
+     *
+     * @param string a class name
      * @return boolean
      */
     public function load($class);

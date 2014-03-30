@@ -20,7 +20,7 @@ class DatabaseInterfaceSimpleTest extends Chrome_TestCase
         $this->_result = new Chrome_Database_Result_Dummy();
         $this->_result->setAdapter($this->_adapter);
 
-        $this->_interface = new Chrome_Database_Interface_Simple($this->_adapter, $this->_result, new Chrome_Database_Registry_Statement());
+        $this->_interface = new Chrome_Database_Interface_Simple($this->_adapter, $this->_result, new \Chrome\Database\Registry\Statement());
 
         $this->_interface->setLogger($this->_appContext->getLoggerRegistry()->get('database'));
     }
@@ -195,7 +195,7 @@ class DatabaseInterfaceSimpleTest extends Chrome_TestCase
 
     public function testGetStatementRegistry()
     {
-        $this->assertTrue($this->_interface->getStatementRegistry() instanceof Chrome_Database_Registry_Statement, 'getStatementRegistry has to return a subclass of Registry_Statement');
+        $this->assertTrue($this->_interface->getStatementRegistry() instanceof \Chrome\Database\Registry\Statement, 'getStatementRegistry has to return a subclass of Registry_Statement');
     }
 
     public function testGetLogger()

@@ -43,11 +43,11 @@ interface Chrome_Database_Interface_Interface extends Loggable_Interface
      *
      * @param Chrome_Database_Adapter_Interface $adapter
      * @param Chrome_Database_Result_Interface $result
-     * @param Chrome_Database_Registry_Statement_Interface $statementRegistry
+     * @param \Chrome\Database\Registry\Statement_Interface $statementRegistry
      *
      * @return Chrome_Database_Interface_Interface
      */
-    public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result, Chrome_Database_Registry_Statement_Interface $statementRegistry);
+    public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result, \Chrome\Database\Registry\Statement_Interface $statementRegistry);
 
     /**
      * Returns the result class, set in constructor
@@ -66,7 +66,7 @@ interface Chrome_Database_Interface_Interface extends Loggable_Interface
     /**
      * Returns the statement registry, set in constructor
      *
-     * @return Chrome_Database_Registry_Statement_Interface
+     * @return \Chrome\Database\Registry\Statement_Interface
      */
     public function getStatementRegistry();
 
@@ -208,7 +208,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
     protected $_logger = null;
 
-    public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result, Chrome_Database_Registry_Statement_Interface $statementRegistry)
+    public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result, \Chrome\Database\Registry\Statement_Interface $statementRegistry)
     {
         $this->_statementRegistry = $statementRegistry;
         $this->_adapter = $adapter;

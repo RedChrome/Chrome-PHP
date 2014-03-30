@@ -27,7 +27,7 @@
 
 if(CHROME_PHP !== true) die();
 
-class Chrome_Database_Connection_DB2 extends Chrome_Database_Connection_Abstract
+class Chrome_Database_Connection_DB2 extends \Chrome\Database\Connection\AbstractConnection
 {
     protected $_isSetConnectionOptions = false;
 

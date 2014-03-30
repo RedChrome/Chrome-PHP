@@ -19,10 +19,12 @@
  * @subpackage Chrome.Database
  */
 
+namespace Chrome\Database;
+
 // TODO: remove setInterface and setResult
-interface Chrome_Database_Composition_Interface
+interface Composition_Interface
 {
-    public function merge(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null);
+    public function merge(Composition_Interface $requiredComp, Composition_Interface $comp = null);
 
     public function setAdapter($adapter);
 
@@ -42,7 +44,7 @@ interface Chrome_Database_Composition_Interface
 }
 
 // TODO: proper ucfirst: model_test -> Model_Test
-class Chrome_Database_Composition implements Chrome_Database_Composition_Interface
+class Composition implements Composition_Interface
 {
     protected $_result = null;
 
@@ -60,7 +62,7 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
         $this->setConnection($connection);
     }
 
-    public function merge(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null)
+    public function merge(Composition_Interface $requiredComp, Composition_Interface $comp = null)
     {
 
         if($comp === null) {
@@ -105,7 +107,7 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
         $this->_result = $this->_empty($result);
     }
 
-    protected function _getMergedInterface(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null)
+    protected function _getMergedInterface(Composition_Interface $requiredComp, Composition_Interface $comp = null)
     {
         // check interface
         $interface = '';
@@ -126,7 +128,7 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
         return $interface;
     }
 
-    protected function _getMergedAdapter(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null)
+    protected function _getMergedAdapter(Composition_Interface $requiredComp, Composition_Interface $comp = null)
     {
         // check adapter
         $adapter = '';
@@ -148,7 +150,7 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
         return $adapter;
     }
 
-    protected function _getMergedResult(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null)
+    protected function _getMergedResult(Composition_Interface $requiredComp, Composition_Interface $comp = null)
     {
         // check result
         $result = '';
@@ -170,7 +172,7 @@ class Chrome_Database_Composition implements Chrome_Database_Composition_Interfa
         return $result;
     }
 
-    protected function _getMergedConnection(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null)
+    protected function _getMergedConnection(Composition_Interface $requiredComp, Composition_Interface $comp = null)
     {
         if($requiredComp->getConnection() !== null) {
             return $requiredComp->getConnection();

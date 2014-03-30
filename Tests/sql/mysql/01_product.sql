@@ -123,12 +123,12 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome_User_Registration', 'lib/View/content/user/registration.class.php'),
 ('Chrome_User_EMail', 'lib/User/user_email.php'),
 ('Chrome_User_Login', 'lib/classes/user/user.php'),
-('Chrome_Controller_Index', 'modules/content/index/controller.php'),
-('Chrome_Controller_Register', 'modules/content/register/controller.php'),
-('Chrome_Controller_Content_Logout', 'modules/content/user/logout/controller.php'),
-('Chrome_Controller_Content_Login', 'modules/content/user/login/controller.php'),
-('Chrome_Controller_Captcha', 'modules/content/captcha/controller.php'),
-('Chrome_Controller_SiteNotFound', 'modules/content/SiteNotFound/controller.php'),
+('Chrome\\Controller\\Index', 'modules/content/index/controller.php'),
+('Chrome\\Controller\\User\\Register', 'modules/content/register/controller.php'),
+('Chrome\\Controller\\User\\Logout', 'modules/content/user/logout/controller.php'),
+('Chrome\\Controller\\User\\Login', 'modules/content/user/login/controller.php'),
+('Chrome\\Controller\\Captcha', 'modules/content/captcha/controller.php'),
+('Chrome\\Controller\\SiteNotFound', 'modules/content/SiteNotFound/controller.php'),
 ('Chrome\\Interactor\\User\\Registration',  'lib/modules/user/interactors/registration.php'),
 ('Chrome\\Interactor\\User\\Login', 'lib/modules/user/interactors/login.php'),
 ('Chrome\\Linker\\Linker_Interface', 'lib/core/linker/linker.php'),
@@ -209,9 +209,9 @@ INSERT INTO `cpp_design_static` (`name`, `file`, `class`, `position`, `type`, `t
 ('left_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'leftBox', 'view', 'chrome', 1),
 ('Benchmark', 'modules/footer/benchmark/benchmark.php', 'Chrome_View_Footer_Benchmark', 'footer', 'view', 'chrome', 1),
 ('Header', 'modules/header/header/header.php', 'Chrome_View_Header_Header', 'preBodyIn', 'view', 'chrome', 1),
-('Login', 'modules/box/login/controller.php', 'Chrome_Controller_Box_Login', 'leftBox', 'controller', 'chrome', 0),
+('Login', 'modules/box/login/controller.php', '\\Chrome\\Controller\\Box\\Login', 'leftBox', 'controller', 'chrome', 0),
 ('cssIncluder', 'modules/html/head/cssIncluder/view.php', 'Chrome_View_Html_Head_CssIncluder', 'head', 'view', 'chrome', 0),
-('VarDump', 'modules/footer/var_dump/var_dump.php', 'Chrome_Controller_Footer_VarDump', 'footer', 'controller', 'chrome', 2),
+('VarDump', 'modules/footer/var_dump/controller.php', '\\Chrome\\Controller\\Footer\\VarDump', 'footer', 'controller', 'chrome', 2),
 ('jsIncluder', 'modules/html/bottom/jsIncluder/view.php', 'Chrome_View_HTML_Bottom_JsIncluder', 'postBodyIn', 'view', 'chrome', 0),
 ('right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome_one_sidebar', 1),
 ('right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome_one_sidebar', 2),
@@ -219,9 +219,9 @@ INSERT INTO `cpp_design_static` (`name`, `file`, `class`, `position`, `type`, `t
 ('left_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome_one_sidebar', 1),
 ('Benchmark', 'modules/footer/benchmark/benchmark.php', 'Chrome_View_Footer_Benchmark', 'footer', 'view', 'chrome_one_sidebar', 1),
 ('Header', 'modules/header/header/header.php', 'Chrome_View_Header_Header', 'preBodyIn', 'view', 'chrome_one_sidebar', 1),
-('Login', 'modules/box/login/controller.php', 'Chrome_Controller_Box_Login', 'rightBox', 'controller', 'chrome_one_sidebar', 0),
+('Login', 'modules/box/login/controller.php', '\\Chrome\\Controller\\Box\\Login', 'rightBox', 'controller', 'chrome_one_sidebar', 0),
 ('cssIncluder', 'modules/html/head/cssIncluder/view.php', 'Chrome_View_Html_Head_CssIncluder', 'head', 'view', 'chrome_one_sidebar', 0),
-('VarDump', 'modules/footer/var_dump/var_dump.php', 'Chrome_Controller_Footer_VarDump', 'footer', 'controller', 'chrome_one_sidebar', 2),
+('VarDump', 'modules/footer/var_dump/controller.php', '\\Chrome\\Controller\\Footer\\VarDump', 'footer', 'controller', 'chrome_one_sidebar', 2),
 ('jsIncluder', 'modules/html/bottom/jsIncluder/view.php', 'Chrome_View_HTML_Bottom_JsIncluder', 'postBodyIn', 'view', 'chrome_one_sidebar', 0);
 
 DROP TABLE IF EXISTS `cpp_rbac_group`;
@@ -416,14 +416,14 @@ CREATE TABLE IF NOT EXISTS `cpp_route_static` (
 );
 
 INSERT INTO `cpp_route_static` (`resource_id`, `search`, `class`, `POST`, `GET`) VALUES
-(1, '', 'Chrome_Controller_Index', '', ''),
-(1, 'index.html', 'Chrome_Controller_Index', '', ''),
-(2, 'login.html', 'Chrome_Controller_Content_Login', '', ''),
-(5, '404.html', 'Chrome_Controller_SiteNotFound', '', ''),
-(3, 'registrieren.html', 'Chrome_Controller_Register', '', 'action=register'),
-(4, 'logout.html', 'Chrome_Controller_Content_Logout', '', ''),
-(6, 'registrierung_bestaetigen.html', 'Chrome_Controller_Register', '', 'action=confirm_registration'),
-(7, 'captcha.html', 'Chrome_Controller_Captcha', '', '');
+(1, '', '\\Chrome\\Controller\\Index', '', ''),
+(1, 'index.html', '\\Chrome\\Controller\\Index', '', ''),
+(2, 'login.html', '\\Chrome\\Controller\\User\\Login', '', ''),
+(5, '404.html', '\\Chrome\\Controller\\SiteNotFound', '', ''),
+(3, 'registrieren.html', '\\Chrome\\Controller\\User\\Register', '', 'action=register'),
+(4, 'logout.html', '\\Chrome\\Controller\\User\\Logout', '', ''),
+(6, 'registrierung_bestaetigen.html', '\\Chrome\\Controller\\User\\Register', '', 'action=confirm_registration'),
+(7, 'captcha.html', '\\Chrome\\Controller\\Captcha', '', '');
 
 DROP TABLE IF EXISTS `cpp_user`;
 CREATE TABLE IF NOT EXISTS `cpp_user` (

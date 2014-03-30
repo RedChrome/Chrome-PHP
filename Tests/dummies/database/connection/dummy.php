@@ -1,6 +1,6 @@
 <?php
 
-class Chrome_Database_Connection_Dummy implements Chrome_Database_Connection_Interface
+class Chrome_Database_Connection_Dummy implements \Chrome\Database\Connection\Connection_Interface
 {
     public $_connection = null;
 

@@ -43,7 +43,7 @@ class Chrome_Database_Adapter_Mysqli extends Chrome_Database_Adapter_Abstract
         return $this->_isEmpty;
     }
 
-    public function setConnection(Chrome_Database_Connection_Interface $connection)
+    public function setConnection(\Chrome\Database\Connection\Connection_Interface $connection)
     {
         parent::setConnection($connection);
 

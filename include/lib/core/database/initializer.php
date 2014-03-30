@@ -19,13 +19,15 @@
  * @subpackage Chrome.Database
  */
 
+namespace Chrome\Database\Initializer;
+
 /**
  * Interface for initializing the database
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Initializer_Interface
+interface Initializer_Interface
 {
 
     /**
@@ -49,7 +51,7 @@ interface Chrome_Database_Initializer_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Database_Initializer implements Chrome_Database_Initializer_Interface
+class Initializer implements Initializer_Interface
 {
     /**
      *
@@ -59,7 +61,7 @@ class Chrome_Database_Initializer implements Chrome_Database_Initializer_Interfa
 
     /**
      *
-     * @see Chrome_Database_Initializer_Interface::initialize()
+     * @see \Chrome\Database\Initializer\Initializer_Interface::initialize()
      */
     public function initialize()
     {
@@ -69,17 +71,17 @@ class Chrome_Database_Initializer implements Chrome_Database_Initializer_Interfa
         $defaultConnection->setConnectionOptions(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
         // create new connection registry
-        $connectionRegistry = new Chrome_Database_Registry_Connection();
+        $connectionRegistry = new \Chrome\Database\Registry\Connection();
         // add default connection
-        $connectionRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection);
+        $connectionRegistry->addConnection(\Chrome\Database\Registry\Connection::DEFAULT_CONNECTION, $defaultConnection);
 
         // create new database factory with connection registry and statement registry
-        $this->_databaseFactory = new Chrome_Database_Factory($connectionRegistry, new Chrome_Database_Registry_Statement());
+        $this->_databaseFactory = new \Chrome_Database_Factory($connectionRegistry, new \Chrome\Database\Registry\Statement());
     }
 
     /**
      *
-     * @see Chrome_Database_Initializer_Interface::getFactory()
+     * @see \Chrome\Database\Initializer\Initializer_Interface::getFactory()
      */
     public function getFactory()
     {

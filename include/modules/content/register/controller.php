@@ -1,15 +1,19 @@
 <?php
 
+namespace Chrome\Controller\User;
+
+use \Chrome\Controller\ModuleAbstract;
+
 require_once 'view.php';
 require_once 'include.php';
 
-class Chrome_Controller_Register extends \Chrome\Controller\ModuleAbstract
+class Register extends ModuleAbstract
 {
     const CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE = 'REGISTER';
     protected $_session;
     protected $_authorisation = null;
 
-    public function __construct(Chrome_Context_Application_Interface $appContext, Chrome\Interactor\User\Registration $interactor, Chrome_View_Register $view)
+    public function __construct(\Chrome_Context_Application_Interface $appContext, \Chrome\Interactor\User\Registration $interactor, \Chrome_View_Register $view)
     {
         $this->_applicationContext = $appContext;
         $this->_setRequestHandler($appContext->getRequestHandler());
@@ -80,7 +84,7 @@ class Chrome_Controller_Register extends \Chrome\Controller\ModuleAbstract
         {
             case 2:
                 {
-                    $this->_form = new Chrome_Form_Register_StepOne($this->_applicationContext);
+                    $this->_form = new \Chrome_Form_Register_StepOne($this->_applicationContext);
 
                     if(!$this->_form->isCreated() or !$this->_form->isSent() or !$this->_form->isValid())
                     {
@@ -100,14 +104,14 @@ class Chrome_Controller_Register extends \Chrome\Controller\ModuleAbstract
 
             case 3:
                 {
-                    $this->_form = new Chrome_Form_Register_StepTwo($this->_applicationContext);
+                    $this->_form = new \Chrome_Form_Register_StepTwo($this->_applicationContext);
 
                     $data = $this->_form->getData();
 
                     // go one step back
                     if($this->_form->isSent('buttons') and isset($data['buttons']['backward']))
                     {
-                        $this->_form = new Chrome_Form_Register_StepOne($this->_applicationContext);
+                        $this->_form = new \Chrome_Form_Register_StepOne($this->_applicationContext);
                         $this->_form->create();
                         $this->_stepOne();
                         break;
@@ -166,7 +170,7 @@ class Chrome_Controller_Register extends \Chrome\Controller\ModuleAbstract
     {
         if($this->_form == null)
         {
-            $this->_form = new Chrome_Form_Register_StepOne($this->_applicationContext);
+            $this->_form = new \Chrome_Form_Register_StepOne($this->_applicationContext);
         }
 
         if(!$this->_form->isCreated())
@@ -183,7 +187,7 @@ class Chrome_Controller_Register extends \Chrome\Controller\ModuleAbstract
     {
         if(!($this->_form instanceof Chrome_Form_Register_StepTwo))
         {
-            $this->_form = new Chrome_Form_Register_StepTwo($this->_applicationContext);
+            $this->_form = new \Chrome_Form_Register_StepTwo($this->_applicationContext);
         }
 
         $this->_form->create();

@@ -68,7 +68,7 @@ class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstrac
     public function prepareStatement($statement)
     {
         // TODO: escape it properly
-        if($this->_connectionObject instanceof Chrome_Database_Connection_SchemaProvider_Interface)
+        if($this->_connectionObject instanceof \Chrome\Database\Connection\SchemaProvider_Interface)
         {
             $statement = str_replace('cpp_', $this->_connectionObject->getSchema() . '.' . DB_PREFIX . '_', $statement);
         } else

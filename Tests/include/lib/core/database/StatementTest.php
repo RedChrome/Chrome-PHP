@@ -11,7 +11,7 @@ class DatabaseStatementTest extends PHPUnit_Framework_TestCase
     protected $_random;
 
     public function setUp() {
-        $this->_statementRegistry = new Chrome_Database_Registry_Statement();
+        $this->_statementRegistry = new \Chrome\Database\Registry\Statement();
         $this->_random = 0;
     }
 

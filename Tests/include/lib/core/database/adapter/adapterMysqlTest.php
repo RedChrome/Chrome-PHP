@@ -192,7 +192,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         $this->assertEquals($connection, $this->_db->getAdapter()->getConnection());
     }
 
-    public function handleConnection(Chrome_Database_Connection_Interface $con)
+    public function handleConnection(\Chrome\Database\Connection\Connection_Interface $con)
     {
         $con->_isConnected = true;
     }

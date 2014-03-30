@@ -15,17 +15,9 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category   CHROME-PHP
  * @package    CHROME-PHP
  * @subpackage Chrome.Database
- * @author     Alexander Book <alexander.book@gmx.de>
- * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 18:59:39] --> $
- * @link       http://chrome-php.de
  */
-
-if(CHROME_PHP !== true) die();
 
 use \Chrome\Logger\Loggable_Interface;
 use \Psr\Log\LoggerInterface;
@@ -54,11 +46,11 @@ interface Chrome_Database_Factory_Interface extends Loggable_Interface
     /**
      * Constructor
      *
-     * @param Chrome_Database_Registry_Connection_Interface $connectionRegistry used to retrieve database connections
-     * @param Chrome_Database_Registry_Statement_Interface $statementRegistry used to save sent statements/queries
+     * @param \Chrome\Database\Registry\Connection_Interface $connectionRegistry used to retrieve database connections
+     * @param \Chrome\Database\Registry\Statement_Interface $statementRegistry used to save sent statements/queries
      * @return Chrome_Database_Factory_Interface
      */
-    public function __construct(Chrome_Database_Registry_Connection_Interface $connectionRegistry, Chrome_Database_Registry_Statement_Interface $statementRegistry);
+    public function __construct(\Chrome\Database\Registry\Connection_Interface $connectionRegistry, \Chrome\Database\Registry\Statement_Interface $statementRegistry);
 
     /**
      * Creates a new database interface instance using the given parameters
@@ -72,15 +64,15 @@ interface Chrome_Database_Factory_Interface extends Loggable_Interface
      *      string: suffix of a database result class or {@link DEFAULT_RESULT} to use the default result class
      *
      * @param mixed $connectionName
-     *      string: connection name stored in $connectionRegistry, given in constructor or {@link Chrome_Database_Registry_Connection_Interface::DEFAULT_CONNECTION} for the default connection
-     *      Chrome_Database_Connection_Interface: an existing connection
+     *      string: connection name stored in $connectionRegistry, given in constructor or {@link \Chrome\Database\Registry\Connection_Interface::DEFAULT_CONNECTION} for the default connection
+     *      \Chrome\Database\Connection\Connection_Interface: an existing connection
      *
      * @param string $adapterName an adapter suffix, compatible with the given connectionName. The compatibility is not getting tested! If you dont know what you should
      *               choose as adapter suffix, take {@link DEFAULT_ADAPTER}
      *
      * @return Chrome_Database_Interface_Interface initialized with the given parameters
      */
-    public function buildInterface($interfaceName, $resultName, $connectionName = Chrome_Database_Registry_Connection_Interface::DEFAULT_CONNECTION, $adapterName = self::DEFAULT_ADAPTER);
+    public function buildInterface($interfaceName, $resultName, $connectionName = \Chrome\Database\Registry\Connection_Interface::DEFAULT_CONNECTION, $adapterName = self::DEFAULT_ADAPTER);
 
     /**
      * Creates a new database interface instance using the given database composition
@@ -88,40 +80,40 @@ interface Chrome_Database_Factory_Interface extends Loggable_Interface
      * This returns an interface instance initialized with the required functionality. If $comp is not null, then the interface instance might
      * have more functionality than required in $requiredComp
      *
-     * @param Chrome_Database_Composition_Interface $requiredComp containing information about the required functionality of interface/result/connection/adapter
-     * @param Chrome_Database_Composition_Interface $comp [optional] containing information about which interface/adapter... should get used
+     * @param \Chrome\Database\Composition_Interface $requiredComp containing information about the required functionality of interface/result/connection/adapter
+     * @param \Chrome\Database\Composition_Interface $comp [optional] containing information about which interface/adapter... should get used
      *
      * @return Chrome_Database_Interface_Interface initialized with the given parameters
      */
-    public function buildInterfaceViaComposition(Chrome_Database_Composition_Interface $requiredComp, Chrome_Database_Composition_Interface $comp = null);
+    public function buildInterfaceViaComposition(\Chrome\Database\Composition_Interface $requiredComp, \Chrome\Database\Composition_Interface $comp = null);
 
     /**
      * Returns the connection registry which is used by this factory
      *
-     * @return Chrome_Database_Registry_Connection_Interface
+     * @return \Chrome\Database\Registry\Connection_Interface
      */
     public function getConnectionRegistry();
 
     /**
      * Sets a new connection registry
      *
-     * @param Chrome_Database_Registry_Connection_Interface $connectionRegistry
+     * @param \Chrome\Database\Registry\Connection_Interface $connectionRegistry
      * @return void
      */
-    public function setConnectionRegistry(Chrome_Database_Registry_Connection_Interface $connectionRegistry);
+    public function setConnectionRegistry(\Chrome\Database\Registry\Connection_Interface $connectionRegistry);
 
     /**
      * Sets a new statement registry
      *
-     * @param Chrome_Database_Registry_Statement_Interface $statementRegistry
+     * @param \Chrome\Database\Registry\Statement_Interface $statementRegistry
      * @return void
      */
-    public function setStatementRegistry(Chrome_Database_Registry_Statement_Interface $statementRegistry);
+    public function setStatementRegistry(\Chrome\Database\Registry\Statement_Interface $statementRegistry);
 
     /**
      * Returns the statement registry which is used by this factory
      *
-     * @return Chrome_Database_Registry_Statement_Interface
+     * @return \Chrome\Database\Registry\Statement_Interface
      */
     public function getStatementRegistry();
 
@@ -178,13 +170,13 @@ abstract class Chrome_Database_Factory_Abstract implements Chrome_Database_Facto
 
     protected $_logger = null;
 
-    public function __construct(Chrome_Database_Registry_Connection_Interface $connectionRegistry, Chrome_Database_Registry_Statement_Interface $statementRegistry)
+    public function __construct(\Chrome\Database\Registry\Connection_Interface $connectionRegistry, \Chrome\Database\Registry\Statement_Interface $statementRegistry)
     {
         $this->setConnectionRegistry($connectionRegistry);
         $this->setStatementRegistry($statementRegistry);
     }
 
-    public function setConnectionRegistry(Chrome_Database_Registry_Connection_Interface $connectionRegistry)
+    public function setConnectionRegistry(\Chrome\Database\Registry\Connection_Interface $connectionRegistry)
     {
         $this->_connectionRegistry = $connectionRegistry;
     }
@@ -194,7 +186,7 @@ abstract class Chrome_Database_Factory_Abstract implements Chrome_Database_Facto
         return $this->_connectionRegistry;
     }
 
-    public function setStatementRegistry(Chrome_Database_Registry_Statement_Interface $statementRegistry)
+    public function setStatementRegistry(\Chrome\Database\Registry\Statement_Interface $statementRegistry)
     {
         $this->_statementRegistry = $statementRegistry;
     }
@@ -227,7 +219,7 @@ class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
 
     protected $_defaultResult    = 'assoc';
 
-    public function buildInterface($interfaceName, $resultName, $connectionName = Chrome_Database_Registry_Connection_Interface::DEFAULT_CONNECTION, $adapterName = self::DEFAULT_ADAPTER)
+    public function buildInterface($interfaceName, $resultName, $connectionName = \Chrome\Database\Registry\Connection_Interface::DEFAULT_CONNECTION, $adapterName = self::DEFAULT_ADAPTER)
     {
         try {
             $connection = $this->_getConnection($connectionName);
@@ -254,7 +246,7 @@ class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
         }
     }
 
-    protected function _createAdapter($adapterName, Chrome_Database_Connection_Interface $connection)
+    protected function _createAdapter($adapterName, \Chrome\Database\Connection\Connection_Interface $connection)
     {
         if($adapterName === self::DEFAULT_ADAPTER or $adapterName === null) {
             $adapterName = $connection->getDefaultAdapterSuffix();
@@ -299,18 +291,18 @@ class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
 
     protected function _getConnection($connectionName)
     {
-        if($connectionName instanceof Chrome_Database_Connection_Interface) {
+        if($connectionName instanceof \Chrome\Database\Connection\Connection_Interface) {
             return $connectionName;
         }
 
         if($connectionName === null) {
-            $connectionName = Chrome_Database_Registry_Connection_Interface::DEFAULT_CONNECTION;
+            $connectionName = \Chrome\Database\Registry\Connection_Interface::DEFAULT_CONNECTION;
         }
 
         return $this->_connectionRegistry->getConnectionObject($connectionName);
     }
 
-    public function buildInterfaceViaComposition(Chrome_Database_Composition_Interface $requiredcomp, Chrome_Database_Composition_Interface $comp = null)
+    public function buildInterfaceViaComposition(\Chrome\Database\Composition_Interface $requiredcomp, \Chrome\Database\Composition_Interface $comp = null)
     {
         if($comp === null) {
             $composition = $requiredcomp;
@@ -318,7 +310,7 @@ class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
             $composition = $requiredcomp->merge($requiredcomp, $comp);
         }
 
-        $connection = ($composition->getConnection() === null) ? Chrome_Database_Registry_Connection_Interface::DEFAULT_CONNECTION : $composition->getConnection();
+        $connection = ($composition->getConnection() === null) ? \Chrome\Database\Registry\Connection_Interface::DEFAULT_CONNECTION : $composition->getConnection();
 
         return $this->buildInterface($composition->getInterface(), $composition->getResult(), $connection, $composition->getAdapter());
     }

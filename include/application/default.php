@@ -124,7 +124,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         if($exceptionHandler === null)
         {
             require_once LIB . 'exception/frontcontroller.php';
-            $exceptionHandler = new \Chrome\Exception\Handler\FrontControllerHandler($this->_loggerRegistry->get('application'));
+            $exceptionHandler = new \Chrome\Exception\Handler\DefaultHandler($this->_loggerRegistry->get('application'));
         }
 
         $this->_exceptionHandler = $exceptionHandler;
@@ -262,7 +262,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
     protected function _initDatabase()
     {
-        $datbaseInitializer = new Chrome_Database_Initializer();
+        $datbaseInitializer = new \Chrome\Database\Initializer\Initializer();
         $datbaseInitializer->initialize();
 
         $factory = $datbaseInitializer->getFactory();
@@ -276,7 +276,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
          * $postgresqlTestConnection = new Chrome_Database_Connection_Postgresql();
          * $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
          * $postgresqlTestConnection->connect(); $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
-         * $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true); #
+         * $dbRegistry->addConnection(Chrome\Database\Registry\Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true); #
          */
     }
 
@@ -557,17 +557,10 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             return new Chrome_Model_Route_Dynamic_Cache($c->get('\Chrome_Model_Route_Dynamic_DB'), $cache);
         });
 
-        $closure->add('\Chrome_Model_Register', function ($c) {
-            return new Chrome_Model_Register($c->get('\Chrome_Database_Factory_Interface'), $c->get('\Chrome_Model_Database_Statement_Interface'), $c->get('\Chrome\Config\Config_Interface'));
+        $closure->add('\Chrome\Controller\User\Register', function ($c) {
+            return new \Chrome\Controller\User\Register($c->get('\Chrome_Context_Application_Interface'), $c->get('\Chrome\Interactor\User\Registration_Interface'), new Chrome_View_Register($c->get('\Chrome_Context_View_Interface')));
         });
 
-        $closure->add('Chrome_Controller_Register', function ($c) {
-            return new Chrome_Controller_Register($c->get('\Chrome_Context_Application_Interface'), $c->get('\Chrome\Interactor\User\Registration_Interface'), new Chrome_View_Register($c->get('\Chrome_Context_View_Interface')));
-        });
-
-        $closure->add('Chrome_Controller_Content_Login', function ($c) {
-            return new Chrome_Controller_Content_Login($c->get('\Chrome_Context_Application_Interface'), $c->get('\Chrome\Interactor\User\Login_Interface'));
-        });
 
         $closure->add('\Chrome\Interactor\User\Registration_Interface', function ($c) {
             require_once LIB.'modules/user/interactors/registration.php';
@@ -645,6 +638,10 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $closure->add('\Chrome\View\Form\Element\Factory\Default', function ($c) {
             return new \Chrome_View_Form_Element_Factory_Yaml();
+        });
+
+        $closure->add('\Chrome\Controller\User\Login', function ($c) {
+            return new \Chrome\Controller\User\Login($c->get('\Chrome_Context_Application_Interface'), $c->get('\Chrome\Interactor\User\Login_Interface'));
         });
     }
 

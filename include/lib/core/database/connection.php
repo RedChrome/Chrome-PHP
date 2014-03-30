@@ -15,10 +15,10 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category   CHROME-PHP
  * @package    CHROME-PHP
  * @subpackage Chrome.Database
  */
+namespace Chrome\Database\Connection;
 
 /**
  * Interface for a database connection
@@ -26,7 +26,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Connection_Interface
+interface Connection_Interface
 {
     /**
      * Returns the database connection
@@ -83,7 +83,7 @@ interface Chrome_Database_Connection_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Connection_SchemaProvider_Interface
+interface SchemaProvider_Interface
 {
     /**
      * Returns the schema for the current connection
@@ -94,6 +94,31 @@ interface Chrome_Database_Connection_SchemaProvider_Interface
 }
 
 /**
+ * An implementation of the basic methods for a database connection holder
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
+abstract class AbstractConnection implements \Chrome\Database\Connection\Connection_Interface
+{
+    protected $_connection  = null;
+
+    protected $_isConnected = false;
+
+    public function getConnection()
+    {
+        return $this->_connection;
+    }
+
+    public function isConnected()
+    {
+        return $this->_isConnected;
+    }
+}
+
+namespace Chrome\Database\Registry;
+
+/**
  * Interface for a connection registry
  *
  * These classes are storing the connection, associated with a connection name
@@ -101,7 +126,7 @@ interface Chrome_Database_Connection_SchemaProvider_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Registry_Connection_Interface
+interface Connection_Interface
 {
     /**
      * name of the default connection
@@ -116,10 +141,10 @@ interface Chrome_Database_Registry_Connection_Interface
      * This method will throw an exception if $overwrite = false and the conenction name already exists.
      *
      * @param string $name name of the connection
-     * @param Chrome_Database_Connection_Interface connection object containing the actual database connection
+     * @param \Chrome\Database\Connection\Connection_Interface connection object containing the actual database connection
      * @param bool $overwrite [optional] true if you want to overwrite an existing connection name
      */
-    public function addConnection($name, Chrome_Database_Connection_Interface $connection, $overwrite = false);
+    public function addConnection($name, \Chrome\Database\Connection\Connection_Interface $connection, $overwrite = false);
 
     /**
      * Returns the connection inside the connection object
@@ -142,7 +167,7 @@ interface Chrome_Database_Registry_Connection_Interface
      * Returns the connection object (set by addConnection) with the given name
      *
      * @param string $name name of the connection
-     * @return Chrome_Database_Connection_Interface the connection object associated by $name
+     * @return \Chrome\Database\Connection\Connection_Interface the connection object associated by $name
      */
     public function getConnectionObject($name);
 
@@ -162,35 +187,12 @@ interface Chrome_Database_Registry_Connection_Interface
 }
 
 /**
- * An implementation of the basic methods for a database connection holder
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Database
- */
-abstract class Chrome_Database_Connection_Abstract implements Chrome_Database_Connection_Interface
-{
-    protected $_connection  = null;
-
-    protected $_isConnected = false;
-
-    public function getConnection()
-    {
-        return $this->_connection;
-    }
-
-    public function isConnected()
-    {
-        return $this->_isConnected;
-    }
-}
-
-/**
  * A complete implementation of a database connection registry
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Database_Registry_Connection implements Chrome_Database_Registry_Connection_Interface
+class Connection implements Connection_Interface
 {
     protected $_connections = array();
 
@@ -198,7 +200,7 @@ class Chrome_Database_Registry_Connection implements Chrome_Database_Registry_Co
     {
     }
 
-    public function addConnection($name, Chrome_Database_Connection_Interface $connection, $overwrite = false)
+    public function addConnection($name, \Chrome\Database\Connection\Connection_Interface $connection, $overwrite = false)
     {
         if(isset($this->_connections[$name]) AND $overwrite !== true) {
             throw new \Chrome\DatabaseException('Cannot re-set an existing database connection with name "' . $name . '"!');

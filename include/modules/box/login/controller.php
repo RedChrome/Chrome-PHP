@@ -17,13 +17,17 @@
  * @subpackage Chrome.Controller
  */
 
+namespace Chrome\Controller\Box;
+
+use \Chrome\Controller\ModuleAbstract;
+
 /**
  * Class for controlling login box
  *
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Chrome_Controller_Box_Login extends \Chrome\Controller\ModuleAbstract
+class Login extends ModuleAbstract
 {
     /**
      * initialize the controller
@@ -55,7 +59,7 @@ class Chrome_Controller_Box_Login extends \Chrome\Controller\ModuleAbstract
 
         // else create the form and display it
         } else {
-            $this->_form = Chrome_Form_Login::getInstance($this->_applicationContext);
+            $this->_form = \Chrome_Form_Login::getInstance($this->_applicationContext);
 
             // form was sent
             if($this->_form->isSent()) {

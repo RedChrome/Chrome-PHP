@@ -8,7 +8,7 @@ class DatabaseCompositionTest extends PHPUnit_Framework_TestCase
 {
     public function testMergeReturnsRequiredCompositionIfOptionsCompIsNull()
     {
-        $requiredComp = new Chrome_Database_Composition();
+        $requiredComp = new \Chrome\Database\Composition();
         $defaultComp = null;
 
         $this->assertSame($requiredComp, $requiredComp->merge($requiredComp, $defaultComp));
@@ -16,92 +16,92 @@ class DatabaseCompositionTest extends PHPUnit_Framework_TestCase
 
     public function testMergeInterfaceWithPreferredInterface()
     {
-        $requiredComp = new Chrome_Database_Composition();
-        $defaultComp = new Chrome_Database_Composition();
+        $requiredComp = new \Chrome\Database\Composition();
+        $defaultComp = new \Chrome\Database\Composition();
         $this->assertNull($requiredComp->merge($requiredComp, $defaultComp)->getInterface());
 
 
-        $requiredComp = new Chrome_Database_Composition('abstract');
-        $defaultComp = new Chrome_Database_Composition();
+        $requiredComp = new \Chrome\Database\Composition('abstract');
+        $defaultComp = new \Chrome\Database\Composition();
 
         $this->assertEquals('Abstract', $defaultComp->merge($requiredComp, $defaultComp)->getInterface());
 
 
-        $requiredComp = new Chrome_Database_Composition();
-        $defaultComp = new Chrome_Database_Composition('abstract');
+        $requiredComp = new \Chrome\Database\Composition();
+        $defaultComp = new \Chrome\Database\Composition('abstract');
 
         $this->assertEquals('Abstract', $defaultComp->merge($requiredComp, $defaultComp)->getInterface());
 
 
-        $requiredComp = new Chrome_Database_Composition('simple');
-        $defaultComp = new Chrome_Database_Composition('abstract');
+        $requiredComp = new \Chrome\Database\Composition('simple');
+        $defaultComp = new \Chrome\Database\Composition('abstract');
 
         $this->assertEquals('Simple', $defaultComp->merge($requiredComp, $defaultComp)->getInterface());
 
-        $requiredComp = new Chrome_Database_Composition('abstract');
-        $defaultComp = new Chrome_Database_Composition('simple');
+        $requiredComp = new \Chrome\Database\Composition('abstract');
+        $defaultComp = new \Chrome\Database\Composition('simple');
 
         $this->assertEquals('Simple', $defaultComp->merge($requiredComp, $defaultComp)->getInterface());
     }
 
     public function testMergeAdapterWithPreferredAdapter()
     {
-        $requiredComp = new Chrome_Database_Composition();
-        $defaultComp = new Chrome_Database_Composition();
+        $requiredComp = new \Chrome\Database\Composition();
+        $defaultComp = new \Chrome\Database\Composition();
         $this->assertNull($requiredComp->merge($requiredComp, $defaultComp)->getAdapter());
 
-        $requiredComp = new Chrome_Database_Composition(null, null, 'dummy');
-        $defaultComp = new Chrome_Database_Composition(null);
+        $requiredComp = new \Chrome\Database\Composition(null, null, 'dummy');
+        $defaultComp = new \Chrome\Database\Composition(null);
 
         $this->assertEquals('Dummy', $defaultComp->merge($requiredComp, $defaultComp)->getAdapter());
 
 
-        $requiredComp = new Chrome_Database_Composition(null, null, 'abstract');
-        $defaultComp = new Chrome_Database_Composition(null, null, 'dummy');
+        $requiredComp = new \Chrome\Database\Composition(null, null, 'abstract');
+        $defaultComp = new \Chrome\Database\Composition(null, null, 'dummy');
 
         $this->assertEquals('Dummy', $defaultComp->merge($requiredComp, $defaultComp)->getAdapter());
 
 
-        $requiredComp = new Chrome_Database_Composition(null, null, 'dummy');
-        $defaultComp = new Chrome_Database_Composition(null, null, 'abstract');
+        $requiredComp = new \Chrome\Database\Composition(null, null, 'dummy');
+        $defaultComp = new \Chrome\Database\Composition(null, null, 'abstract');
 
         $this->assertEquals('Dummy', $defaultComp->merge($requiredComp, $defaultComp)->getAdapter());
     }
 
     public function testMergeResultWithPreferredResult()
     {
-        $requiredComp = new Chrome_Database_Composition();
-        $defaultComp = new Chrome_Database_Composition();
+        $requiredComp = new \Chrome\Database\Composition();
+        $defaultComp = new \Chrome\Database\Composition();
         $this->assertNull($requiredComp->merge($requiredComp, $defaultComp)->getResult());
 
-        $requiredComp = new Chrome_Database_Composition(null, 'dummy');
-        $defaultComp = new Chrome_Database_Composition(null, null);
+        $requiredComp = new \Chrome\Database\Composition(null, 'dummy');
+        $defaultComp = new \Chrome\Database\Composition(null, null);
 
         $this->assertEquals('Dummy', $defaultComp->merge($requiredComp, $defaultComp)->getResult());
 
-        $requiredComp = new Chrome_Database_Composition(null, 'dummy');
-        $defaultComp = new Chrome_Database_Composition(null, 'abstract');
+        $requiredComp = new \Chrome\Database\Composition(null, 'dummy');
+        $defaultComp = new \Chrome\Database\Composition(null, 'abstract');
 
         $this->assertEquals('Dummy', $defaultComp->merge($requiredComp, $defaultComp)->getResult());
 
-        $requiredComp = new Chrome_Database_Composition(null, 'abstract');
-        $defaultComp = new Chrome_Database_Composition(null, 'dummy');
+        $requiredComp = new \Chrome\Database\Composition(null, 'abstract');
+        $defaultComp = new \Chrome\Database\Composition(null, 'dummy');
 
         $this->assertEquals('Dummy', $defaultComp->merge($requiredComp, $defaultComp)->getResult());
     }
 
     public function testMergeConnection() {
 
-        $requiredComp = new Chrome_Database_Composition(null, null, null, null);
-        $defaultComp = new Chrome_Database_Composition(null, null, null, 'null');
+        $requiredComp = new \Chrome\Database\Composition(null, null, null, null);
+        $defaultComp = new \Chrome\Database\Composition(null, null, null, 'null');
         $this->assertEquals('null', $requiredComp->merge($requiredComp, $defaultComp)->getConnection());
 
-        $requiredComp = new Chrome_Database_Composition(null, null, null, 'test');
-        $defaultComp = new Chrome_Database_Composition(null, null, null, 'null');
+        $requiredComp = new \Chrome\Database\Composition(null, null, null, 'test');
+        $defaultComp = new \Chrome\Database\Composition(null, null, null, 'null');
         $this->assertEquals('test', $requiredComp->merge($requiredComp, $defaultComp)->getConnection());
 
-        $requiredComp = new Chrome_Database_Composition(null, null, null, 'test2');
-        $defaultComp = new Chrome_Database_Composition(null, null, null, null);
+        $requiredComp = new \Chrome\Database\Composition(null, null, null, 'test2');
+        $defaultComp = new \Chrome\Database\Composition(null, null, null, null);
         $this->assertEquals('test2', $requiredComp->merge($requiredComp, $defaultComp)->getConnection());
 
     }

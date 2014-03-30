@@ -8,7 +8,7 @@ class DatabaseInitializeTest extends PHPUnit_Framework_TestCase
     protected $_init = null;
 
     public function setUp() {
-        $this->_init = new Chrome_Database_Initializer();
+        $this->_init = new \Chrome\Database\Initializer\Initializer();
     }
 
     public function testGetFactory() {

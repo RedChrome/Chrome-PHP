@@ -80,7 +80,7 @@ class Chrome_Database_Adapter_Cache implements Chrome_Database_Adapter_Interface
         $this->_notSupportedMethod();
     }
 
-    public function setConnection(Chrome_Database_Connection_Interface $connection)
+    public function setConnection(\Chrome\Database\Connection\Connection_Interface $connection)
     {
         $this->_notSupportedMethod();
     }

@@ -25,7 +25,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Database_Connection_Postgresql extends Chrome_Database_Connection_Abstract implements Chrome_Database_Connection_SchemaProvider_Interface
+class Chrome_Database_Connection_Postgresql extends \Chrome\Database\Connection\AbstractConnection implements \Chrome\Database\Connection\SchemaProvider_Interface
 {
     protected $_isSetConnectionOptions = false;
 

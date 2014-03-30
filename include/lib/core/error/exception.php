@@ -306,7 +306,15 @@ class DefaultErrorHandler implements ErrorHandler_Interface
      */
     public function error($errorType, $message, $file = null, $line = null, $context = null)
     {
-        // this is desired behavior
+        // This method is supposed to throw exceptions!
+        //
+        if($errorType === E_RECOVERABLE_ERROR) {
+            if(preg_match('|Argument \d{1,} passed to|i', $message) === 1) {
+                throw new \Chrome\InvalidArgumentException($message.' in file '.$file.'('.$line.')', $errorType);
+            }
+
+        }
+
         throw new \Chrome\Exception($message.' in file '.$file.'('.$line.')', $errorType);
     }
 }

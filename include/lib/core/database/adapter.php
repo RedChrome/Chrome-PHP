@@ -89,15 +89,15 @@ interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Resu
     /**
      * Sets for this adapter a connection
      *
-     * @param Chrome_Database_Connection_Interface $connection
+     * @param \Chrome\Database\Connection\Connection_Interface $connection
      * @return void
      */
-    public function setConnection(Chrome_Database_Connection_Interface $connection);
+    public function setConnection(\Chrome\Database\Connection\Connection_Interface $connection);
 
     /**
      * Returns the connection object. not the actual connection!
      *
-     * @return Chrome_Database_Connection_Interface
+     * @return \Chrome\Database\Connection\Connection_Interface
      */
     public function getConnection();
 
@@ -140,10 +140,10 @@ interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Resu
 interface Chrome_Database_Adapter_Constructor_Interface
 {
     /**
-     * @param Chrome_Database_Connection_Interface $connection
+     * @param \Chrome\Database\Connection\Connection_Interface $connection
      * @return Chrome_Database_Adapter_Interface
      */
-    public function __construct(Chrome_Database_Connection_Interface $connection);
+    public function __construct(\Chrome\Database\Connection\Connection_Interface $connection);
 }
 
 /**
@@ -164,12 +164,12 @@ abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapt
 
     protected $_cache   = null;
 
-    public function __construct(Chrome_Database_Connection_Interface $connection)
+    public function __construct(\Chrome\Database\Connection\Connection_Interface $connection)
     {
         $this->setConnection($connection);
     }
 
-    public function setConnection(Chrome_Database_Connection_Interface $connection)
+    public function setConnection(\Chrome\Database\Connection\Connection_Interface $connection)
     {
         if($connection->isConnected() === false) {
             $connection->connect();

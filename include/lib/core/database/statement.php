@@ -19,13 +19,15 @@
  * @subpackage Chrome.Database
  */
 
+namespace Chrome\Database\Registry;
+
 /**
  * Interface to store sent queries
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Registry_Statement_Interface
+interface Statement_Interface
 {
     /**
      * Adds a sent statement to registry
@@ -66,12 +68,12 @@ interface Chrome_Database_Registry_Statement_Interface
 }
 
 /**
- * Default implementation of interface Chrome_Database_Registry_Statement_Interface
+ * Default implementation of interface \Chrome\Database\Registry\Statement_Interface
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Database_Registry_Statement implements Chrome_Database_Registry_Statement_Interface
+class Statement implements Statement_Interface
 {
     /**
      * Stores all sent queries

@@ -87,7 +87,7 @@ class Chrome_TestSetup
 
         require_once LIB . 'core/database/database.php';
 
-        $dbRegistry = new Chrome_Database_Registry_Connection();
+        $dbRegistry = new Chrome\Database\Registry\Connection();
 
         // configure default database connection
         try
@@ -97,13 +97,13 @@ class Chrome_TestSetup
             $defaultConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
             //$defaultConnection->connect();
 
-            $dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $defaultConnection, true);
+            $dbRegistry->addConnection(Chrome\Database\Registry\Connection::DEFAULT_CONNECTION, $defaultConnection, true);
         } catch(Exception $e)
         {
             $this->_errorConfig->getExceptionHandler()->exception($e);
         }
 
-        $databaseFactory = new Chrome_Database_Factory($dbRegistry, new Chrome_Database_Registry_Statement());
+        $databaseFactory = new Chrome_Database_Factory($dbRegistry, new \Chrome\Database\Registry\Statement());
         $databaseFactory->setLogger(new \Psr\Log\NullLogger());
 
         if(TEST_DATABASE_CONNECTIONS == true)
@@ -127,7 +127,7 @@ class Chrome_TestSetup
                 $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
                 #$postgresqlTestConnection->connect();
                 $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
-                #$dbRegistry->addConnection(Chrome_Database_Registry_Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
+                #$dbRegistry->addConnection(Chrome\Database\Registry\Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
             }
         }
 
