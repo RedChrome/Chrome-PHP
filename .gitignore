@@ -3,6 +3,7 @@ include/tmp/
 .project
 .buildpath
 .metadata
+.externalToolBuilders
 composer.lock
 include/lib/composer
 include/lib/psr
