@@ -1,5 +1,4 @@
 <?php
-use Chrome\Authorisation\Adapter\Simple;
 /**
  * CHROME-PHP CMS
  *
@@ -19,6 +18,7 @@ use Chrome\Authorisation\Adapter\Simple;
  * @subpackage Chrome.Application
  */
 
+use Chrome\Authorisation\Adapter\Simple;
 /**
  * loads dependencies from composer
  */
@@ -182,10 +182,10 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_initLocalization();
 
         $this->_initDatabase();
-        $registryHandler->add('\Chrome_Database_Factory_Interface', $this->_modelContext->getDatabaseFactory());
+        $registryHandler->add('Chrome\Database\Factory\Factory_Interface', $this->_modelContext->getDatabaseFactory());
 
         require_once LIB . 'core/classloader/model.php';
-        require_once LIB.'core/database/interface/model.php';
+        require_once LIB.'core/database/facade/model.php';
 
         // init require-class, can be skipped if every class is defined
         $this->_classloader->prependResolver($this->_diContainer->get('\Chrome\Classloader\Resolver_Model_Interface'));
@@ -273,7 +273,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
          * Testing... define('POSTGRESQL_HOST', 'localhost'); define('POSTGRESQL_USER', 'test'); define('POSTGRESQL_PASS', 'chrome');
          * define('POSTGRESQL_DB', 'chrome_db'); define('POSTGRESQL_SCHEMA', 'chrome'); // 5433 -> 9.1, 5432 -> 9.2, 5434 -> 9.3
          * define('POSTGRESQL_PORT', 5433); $dbRegistry = $factory->getConnectionRegistry();
-         * $postgresqlTestConnection = new Chrome_Database_Connection_Postgresql();
+         * $postgresqlTestConnection = new \Chrome\Database\Connection\Postgresql();
          * $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
          * $postgresqlTestConnection->connect(); $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
          * $dbRegistry->addConnection(Chrome\Database\Registry\Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true); #
@@ -372,8 +372,8 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $authentication = new \Chrome\Authentication\Authentication();
         $authentication->setExceptionHandler($handler);
 
-        $dbAuth = new \Chrome\Authentication\Chain\DatabaseChain(new \Chrome\Model\Authentication\Database($this->_modelContext->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface')));
-        $cookieAuth = new \Chrome\Authentication\Chain\CookieChain(new \Chrome\Model\Authentication\Cookie($this->_modelContext->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface')), $cookie, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
+        $dbAuth = new \Chrome\Authentication\Chain\DatabaseChain(new \Chrome\Model\Authentication\Database($this->_modelContext->getDatabaseFactory(), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface')));
+        $cookieAuth = new \Chrome\Authentication\Chain\CookieChain(new \Chrome\Model\Authentication\Cookie($this->_modelContext->getDatabaseFactory(), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface')), $cookie, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
         $sessionAuth = new \Chrome\Authentication\Chain\SessionChain($session);
 
         // set authentication chains in the right order
@@ -500,8 +500,8 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             return new \Chrome\Model\Config\Cache($c->get('\Chrome\Model\Config\Database'), $cache);
         }, true);
 
-        $closure->add('\Chrome_Model_Database_Statement_Interface', function ($c) {
-            return new \Chrome_Model_Database_Statement($c->get('\Chrome\Cache\Memory\DBStatement'));
+        $closure->add('\Chrome\Model\Database\Statement_Interface', function ($c) {
+            return new \Chrome\Model\Database\Statement($c->get('\Chrome\Cache\Memory\DBStatement'));
         });
 
         $closure->add('\Chrome_Model_Route_Static_Interface', function ($c) {

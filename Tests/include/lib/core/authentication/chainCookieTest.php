@@ -18,7 +18,7 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
     public function setUp()
     {
         if($this->_model === null) {
-            $this->_model = new \Chrome\Model\Authentication\Cookie($this->_appContext->getModelContext()->getDatabaseFactory(), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface'));
+            $this->_model = new \Chrome\Model\Authentication\Cookie($this->_appContext->getModelContext()->getDatabaseFactory(), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface'));
         }
 
         if($this->_resetCookie === true OR !($this->_cookie instanceof \Chrome\Request\Cookie_Interface) ) {

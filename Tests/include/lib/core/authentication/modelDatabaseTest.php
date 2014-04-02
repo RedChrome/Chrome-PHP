@@ -6,7 +6,7 @@ class ModelDatabaseTest extends Chrome_TestCase
 
     public function setUp()
     {
-        $this->_model = new \Chrome\Model\Authentication\Database($this->_diContainer->get('\Chrome_Database_Factory_Interface'), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface'));
+        $this->_model = new \Chrome\Model\Authentication\Database($this->_diContainer->get('Chrome\Database\Factory\Factory_Interface'), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface'));
         $this->_model->setConnection(\Chrome\Database\Registry\Connection_Interface::DEFAULT_CONNECTION);
     }
 

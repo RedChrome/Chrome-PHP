@@ -23,7 +23,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Chrome_Model_Classloader_Model_Database extends Chrome_Model_Database_Statement_Abstract
+class Chrome_Model_Classloader_Model_Database extends \Chrome_Model_Database_Statement_Abstract
 {
 
     /**
@@ -31,7 +31,7 @@ class Chrome_Model_Classloader_Model_Database extends Chrome_Model_Database_Stat
      */
     protected function _setDatabaseOptions()
     {
-        $this->_dbResult = 'iterator';
+        $this->_dbResult = '\Chrome\Database\Result\Iterator';
     }
 
     /**

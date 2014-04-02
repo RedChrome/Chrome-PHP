@@ -28,7 +28,7 @@ interface Composition_Interface
 
     public function setAdapter($adapter);
 
-    public function setInterface($interface);
+    public function setFacade($facade);
 
     public function setConnection($connection);
 
@@ -36,7 +36,7 @@ interface Composition_Interface
 
     public function getAdapter();
 
-    public function getInterface();
+    public function getFacade();
 
     public function getConnection();
 
@@ -50,13 +50,13 @@ class Composition implements Composition_Interface
 
     protected $_adapter = null;
 
-    protected $_interface = null;
+    protected $_facade = null;
 
     protected $_connection = null;
 
-    public function __construct($interface = null, $result = null, $adapter = null, $connection = null)
+    public function __construct($facade = null, $result = null, $adapter = null, $connection = null)
     {
-        $this->setInterface($interface);
+        $this->setFacade($facade);
         $this->setResult($result);
         $this->setAdapter($adapter);
         $this->setConnection($connection);
@@ -69,12 +69,12 @@ class Composition implements Composition_Interface
             return $requiredComp;
         }
 
-        $interface = $this->_getMergedInterface($requiredComp, $comp);
+        $facade = $this->_getMergedFacade($requiredComp, $comp);
         $adapter = $this->_getMergedAdapter($requiredComp, $comp);
         $connection = $this->_getMergedConnection($requiredComp, $comp);
         $result = $this->_getMergedResult($requiredComp, $comp);
 
-        return new self($interface, $result, $adapter, $connection);
+        return new self($facade, $result, $adapter, $connection);
     }
 
     protected function _empty($string)
@@ -92,9 +92,9 @@ class Composition implements Composition_Interface
         $this->_adapter = $this->_empty($adapter);
     }
 
-    public function setInterface($interface)
+    public function setFacade($facade)
     {
-        $this->_interface = $this->_empty($interface);
+        $this->_facade = $this->_empty($facade);
     }
 
     public function setConnection($connection)
@@ -107,25 +107,24 @@ class Composition implements Composition_Interface
         $this->_result = $this->_empty($result);
     }
 
-    protected function _getMergedInterface(Composition_Interface $requiredComp, Composition_Interface $comp = null)
+    protected function _getMergedFacade(Composition_Interface $requiredComp, Composition_Interface $comp = null)
     {
-        // check interface
-        $interface = '';
-        if($requiredComp->getInterface() === null) {
-            $interface = $comp->getInterface();
+        // check facade
+        $facade = '';
+        if($requiredComp->getFacade() === null) {
+            $facade = $comp->getFacade();
         } else {
-            if($comp->getInterface() === null) {
-                $interface = $requiredComp->getInterface();
+            if($comp->getFacade() === null) {
+                $facade = $requiredComp->getFacade();
             } else {
-
-                if(is_subclass_of('Chrome_Database_Interface_' . $comp->getInterface(), 'Chrome_Database_Interface_' . $requiredComp->getInterface())) {
-                    $interface = $comp->getInterface();
+                if(is_subclass_of($comp->getFacade(), $requiredComp->getFacade())) {
+                    $facade = $comp->getFacade();
                 } else {
-                    $interface = $requiredComp->getInterface();
+                    $facade = $requiredComp->getFacade();
                 }
             }
         }
-        return $interface;
+        return $facade;
     }
 
     protected function _getMergedAdapter(Composition_Interface $requiredComp, Composition_Interface $comp = null)
@@ -139,7 +138,7 @@ class Composition implements Composition_Interface
                 $adapter = $requiredComp->getAdapter();
             } else {
 
-                if(is_subclass_of('Chrome_Database_Adapter_' . $comp->getAdapter(), 'Chrome_Database_Adapter_' . $requiredComp->getAdapter())) {
+                if(is_subclass_of($comp->getAdapter(), $requiredComp->getAdapter())) {
                     $adapter = $comp->getAdapter();
 
                 } else {
@@ -160,7 +159,7 @@ class Composition implements Composition_Interface
             if($comp->getResult() === null) {
                 $result = $requiredComp->getResult();
             } else {
-                if(is_subclass_of('Chrome_Database_Result_' . $comp->getResult(), 'Chrome_Database_Result_' . $requiredComp->getResult())) {
+                if(is_subclass_of($comp->getResult(), $requiredComp->getResult())) {
                     $result = $comp->getResult();
 
                 } else {
@@ -181,9 +180,9 @@ class Composition implements Composition_Interface
         }
     }
 
-    public function getInterface()
+    public function getFacade()
     {
-        return ($this->_interface === null) ? null : ucfirst($this->_interface);
+        return ($this->_facade === null) ? null : ucfirst($this->_facade);
     }
 
     public function getConnection()

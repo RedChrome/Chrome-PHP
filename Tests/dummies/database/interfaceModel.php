@@ -1,8 +1,10 @@
 <?php
 
-require_once LIB.'core/database/interface/model.php';
+namespace Test\Chrome\Model\Database;
 
-class Chrome_Model_Database_Statement_Dummy implements Chrome_Model_Database_Statement_Interface
+require_once LIB.'core/database/facade/model.php';
+
+class DummyStatement implements \Chrome\Model\Database\Statement_Interface
 {
     public $_handler = null;
 

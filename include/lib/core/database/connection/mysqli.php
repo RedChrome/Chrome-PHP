@@ -19,7 +19,10 @@
  * @subpackage Chrome.Database
  */
 
-class Chrome_Database_Connection_Mysqli extends \Chrome\Database\Connection\AbstractConnection
+namespace Chrome\Database\Connection;
+
+
+class Mysqli extends AbstractConnection
 {
     protected $_isSetConnectionOptions = false;
     protected $_host;
@@ -80,7 +83,7 @@ class Chrome_Database_Connection_Mysqli extends \Chrome\Database\Connection\Abst
     {
         try
         {
-            $this->_connection = new mysqli($this->_host, $this->_username, $this->_password, $this->_database, $this->_port, $this->_socket);
+            $this->_connection = new \mysqli($this->_host, $this->_username, $this->_password, $this->_database, $this->_port, $this->_socket);
             $this->_connection->set_charset('utf8');
         } catch(\Chrome\Exception $e)
         {
@@ -129,9 +132,9 @@ class Chrome_Database_Connection_Mysqli extends \Chrome\Database\Connection\Abst
         }
     }
 
-    public function getDefaultAdapterSuffix()
+    public function getDefaultAdapter()
     {
-        return 'Mysqli';
+        return '\Chrome\Database\Adapter\Mysqli';
     }
 
     public function getDatabaseName()

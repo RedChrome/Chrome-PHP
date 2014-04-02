@@ -1,137 +1,122 @@
 <?php
 class DatabaseAdapterCacheTest extends Chrome_TestCase
 {
-    protected $_data = array();
+    protected $_rewindableInterface = '\Chrome\Database\Result\Rewindable_Interface';
 
-    public function getNext()
+    public function testGetAffectedRows()
     {
-        return array_shift($this->_data);
-    }
+        $result = $this->getMock($this->_rewindableInterface);
+        $result->expects($this->exactly(6))->method('hasNext')->will($this->onConsecutiveCalls(true, true, true, true, true, false));
+        $result->expects($this->exactly(5))->method('getNext')->will($this->onConsecutiveCalls(3, 2, null, 0, "0"));
+        $result->expects($this->exactly(2))->method('rewind');
+        $cacheAdapter = new \Chrome\Database\Adapter\Cache($result);
 
-    protected function _getDatabaseFactory()
-    {
-        return $this->_appContext->getModelContext()->getDatabaseFactory();
-    }
+        $this->assertEquals(5, $cacheAdapter->getAffectedRows());
 
-    protected function _createDb()
-    {
-        $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
+        $result = $this->getMock($this->_rewindableInterface);
+        $result->expects($this->exactly(6))->method('hasNext')->will($this->onConsecutiveCalls(true, true, true, true, true, false));
+        $result->expects($this->exactly(2))->method('rewind');
+        $cacheAdapter = new \Chrome\Database\Adapter\Cache($result);
+        $this->assertEquals(5, $cacheAdapter->getAffectedRows());
 
-        // Dummy_Adapter gets used via connection_dummy as default adapter
-        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
-
-        // this will force the adapter to access this class using method getNext()
-        // and this will access the $_data
-        $db->getAdapter()->setDataResource($this);
-
-        return $db;
+        $result = $this->getMock($this->_rewindableInterface);
+        $result->expects($this->exactly(1))->method('hasNext')->will($this->onConsecutiveCalls(false, true, true, true, true, false));
+        $result->expects($this->exactly(2))->method('rewind');
+        $cacheAdapter = new \Chrome\Database\Adapter\Cache($result);
+        $this->assertEquals(0, $cacheAdapter->getAffectedRows());
     }
 
     public function testSerialize()
     {
-        $this->_data = array('asd', 1, 2.3, null, 'bla');
-        $data = $this->_data;
+        $data = array(3, 2, null, 0, "0");
 
-        $db = $this->_createDb();
+        $result = $this->getMock($this->_rewindableInterface);
+        $result->expects($this->exactly(6))->method('hasNext')->will($this->onConsecutiveCalls(true, true, true, true, true, false));
+        $result->expects($this->exactly(5))->method('getNext')->will($this->returnValues($data));
+        $result->expects($this->exactly(2))->method('rewind');
 
-        $this->assertTrue($db->getAdapter() instanceof Chrome_Database_Adapter_Dummy);
 
-        $db->getAdapter()->_affectedRows = 3;
-        // get one element, to see whether it works
-        $db->getResult()->getNext();
+        $cache = new \Chrome\Database\Adapter\Cache($result);
+        $cacheSerialized = serialize($cache);
+        $cacheUnserialized = unserialize($cacheSerialized);
 
-        // cache can get applied multiple times
-        for($j = 0; $j < 5; ++$j)
-        {
+        $this->assertEquals($cache->isEmpty(), $cacheUnserialized->isEmpty());
+        $this->assertEquals($cache->getAffectedRows(), $cacheUnserialized->getAffectedRows());
 
-            $cacheAdapter = new Chrome_Database_Adapter_Cache($db->getResult());
-            $this->assertFalse($cacheAdapter->isEmpty());
-            $this->assertEquals(3, $cacheAdapter->getAffectedRows());
-            $serialized = serialize($cacheAdapter);
-            $unserializedAdapter = unserialize($serialized);
+        for($i=0; $i<count($data)+3; ++$i) {
+            $getNext = $cacheUnserialized->getNext();
+            $this->assertEquals($cache->getNext(), $getNext);
 
-            $this->assertEquals(3, $unserializedAdapter->getAffectedRows());
-
-            for($i = 0; $i < 5; ++$i)
-            {
-                $result = $db->getResult()->getNext();
-                $this->assertEquals($data[$i], $result);
-                // the 4.th data element is null. so all values after this one should be null too
-                if($i <= 3)
-                {
-                    $this->assertEquals($result, $unserializedAdapter->getNext(), 'getNext did not match in ' . $j . '.th loop');
-                } else
-                {
-                    $this->assertEquals(null, $unserializedAdapter->getNext(), 'got one "null" as data, that indicates the end of the result stream. no other values should be after that');
-                }
-                $this->assertEquals($db->getAdapter()->getAffectedRows(), $unserializedAdapter->getAffectedRows());
+            if(isset($data[$i])) {
+                $this->assertSame($data[$i], $getNext);
             }
         }
     }
 
     public function testClear()
     {
-        $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
-        $cacheAdapter2 = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
+        $cacheAdapter = new \Chrome\Database\Adapter\Cache($this->getMock($this->_rewindableInterface));
+        $cacheAdapter2 = new \Chrome\Database\Adapter\Cache($this->getMock($this->_rewindableInterface));
         $cacheAdapter2->clear();
         $this->assertEquals($cacheAdapter, $cacheAdapter2);
     }
 
     public function testIsEmpty()
     {
-        $this->_data = array();
-
-        $db = $this->_createDb();
-
-        $cacheAdapter = new Chrome_Database_Adapter_Cache($db->getResult());
+        $result = $this->getMock($this->_rewindableInterface);
+        $cacheAdapter = new \Chrome\Database\Adapter\Cache($result);
         $this->assertTrue($cacheAdapter->isEmpty());
+
+        $result->expects($this->any())->method('hasNext')->will($this->onConsecutiveCalls(true, true, false));
+        $cacheAdapter = new \Chrome\Database\Adapter\Cache($result);
+        $this->assertFalse($cacheAdapter->isEmpty());
     }
 
     public function testQuery()
     {
-        $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
+        $cacheAdapter = new \Chrome\Database\Adapter\Cache($this->getMock($this->_rewindableInterface));
         $this->setExpectedException('\Chrome\Exception');
         $cacheAdapter->query(null);
     }
 
     public function testEscape()
     {
-        $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
+        $cacheAdapter = new \Chrome\Database\Adapter\Cache($this->getMock($this->_rewindableInterface));
         $this->setExpectedException('\Chrome\Exception');
         $cacheAdapter->escape('Data to escape');
     }
 
     public function testSetConnection()
     {
-        $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
+        $cacheAdapter = new \Chrome\Database\Adapter\Cache($this->getMock($this->_rewindableInterface));
         $this->setExpectedException('\Chrome\Exception');
-        $cacheAdapter->setConnection(new Chrome_Database_Connection_Dummy('not null'));
+        $cacheAdapter->setConnection($this->getMock('\Chrome\Database\Connection\Connection_Interface'));
     }
 
     public function testGetConnection()
     {
-        $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
+        $cacheAdapter = new \Chrome\Database\Adapter\Cache($this->getMock($this->_rewindableInterface));
         $this->setExpectedException('\Chrome\Exception');
         $cacheAdapter->getConnection();
     }
 
     public function testGetErrorMessage()
     {
-        $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
+        $cacheAdapter = new \Chrome\Database\Adapter\Cache($this->getMock($this->_rewindableInterface));
         $this->setExpectedException('\Chrome\Exception');
         $cacheAdapter->getErrorMessage();
     }
 
     public function testGetErrorCode()
     {
-        $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
+        $cacheAdapter = new \Chrome\Database\Adapter\Cache($this->getMock($this->_rewindableInterface));
         $this->setExpectedException('\Chrome\Exception');
         $cacheAdapter->getErrorCode();
     }
 
     public function testGetLastInsertId()
     {
-        $cacheAdapter = new Chrome_Database_Adapter_Cache($this->_createDb()->getResult());
+        $cacheAdapter = new \Chrome\Database\Adapter\Cache($this->getMock($this->_rewindableInterface));
         $this->setExpectedException('\Chrome\Exception');
         $cacheAdapter->getLastInsertId();
     }

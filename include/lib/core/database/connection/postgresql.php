@@ -19,13 +19,15 @@
  * @subpackage Chrome.Database
  */
 
+namespace Chrome\Database\Connection;
+
 /**
  * Class responsible to connect to postgresql servers
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Database_Connection_Postgresql extends \Chrome\Database\Connection\AbstractConnection implements \Chrome\Database\Connection\SchemaProvider_Interface
+class Postgresql extends AbstractConnection implements SchemaProvider_Interface
 {
     protected $_isSetConnectionOptions = false;
 
@@ -98,9 +100,9 @@ class Chrome_Database_Connection_Postgresql extends \Chrome\Database\Connection\
         pg_close($this->_connection);
     }
 
-    public function getDefaultAdapterSuffix()
+    public function getDefaultAdapter()
     {
-        return 'Postgresql';
+        return '\Chrome\Database\Adapter\Postgresql';
     }
 
     public function getDatabaseName()

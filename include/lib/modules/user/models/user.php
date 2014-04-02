@@ -27,7 +27,7 @@ class User extends \Chrome_Model_Database_Statement_Abstract implements User_Int
     protected function _setDatabaseOptions()
     {
         $this->_dbStatementModel->setNamespace('user');
-        $this->_dbResult = 'assoc';
+        $this->_dbResult = '\Chrome\Database\Result\Assoc';
     }
 
     public function hasEmail($email)

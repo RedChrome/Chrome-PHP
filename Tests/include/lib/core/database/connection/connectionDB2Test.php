@@ -4,7 +4,7 @@ class DatabaseConnectionDB2Test extends AbstractDatabaseConnectionTestCase
 {
     public function _getDatabaseConnection()
     {
-        return new Chrome_Database_Connection_DB2();
+        return new \Chrome\Database\Connection\DB2();
     }
 
     public function doSkipTestsIfNeeded()

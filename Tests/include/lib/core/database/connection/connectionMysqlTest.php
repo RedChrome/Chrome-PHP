@@ -3,7 +3,7 @@
 class DatabaseConnectionMysqlTest extends AbstractDatabaseConnectionTestCase
 {
     public function _getDatabaseConnection() {
-       return new Chrome_Database_Connection_Mysql();
+       return new \Chrome\Database\Connection\Mysql();
     }
 
     public function doSkipTestsIfNeeded()

@@ -27,13 +27,13 @@ class Chrome_Model_User_Database extends Chrome_Model_Database_Abstract
 
     protected function _setDatabaseOptions()
     {
-        $this->_dbInterface = 'model';
+        $this->_dbInterface = '\Chrome\Database\Facade\Model';
     }
 
     protected function _connect()
     {
         parent::_connect();
-        $this->_dbInterfaceInstance->setModel(Chrome_Model_Database_Statement::create($this->_modelContext->getDatabaseFactory(), 'user'));
+        $this->_dbInterfaceInstance->setModel(\Chrome\Model\Database\Statement::create($this->_modelContext->getDatabaseFactory(), 'user'));
     }
 
     public function addUser($id, $email, $username, $group = null)

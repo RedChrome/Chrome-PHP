@@ -28,7 +28,9 @@ class Chrome_Route_Static extends Chrome_Router_Route_Abstract
     {
         $path = trim($url->getPath());
 
-        /*$pos = strripos($path, '.html');
+        /*
+         * This enables/disabled, that urls may end with .html but still get mapped to the same resource
+         * $pos = strripos($path, '.html');
 
         if($pos !== false)
         {
@@ -111,7 +113,7 @@ require_once LIB.'core/linker/http/staticInterface.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Model_Route_Static_DB extends Chrome_Model_Database_Statement_Abstract implements \Chrome\Linker\HTTP\Model\Static_Interface
+class Chrome_Model_Route_Static_DB extends \Chrome_Model_Database_Statement_Abstract implements \Chrome\Linker\HTTP\Model\Static_Interface
 {
     protected $_resourceModel = null;
 

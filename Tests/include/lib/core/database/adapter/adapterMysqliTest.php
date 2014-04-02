@@ -6,7 +6,7 @@ class DatabaseAdapterMysqliTest extends DatabaseAdapterMysqlTest
     public function setUp()
     {
         try {
-            $this->_db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('simple', 'assoc', 'mysqli_test');
+            $this->_db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Assoc', 'mysqli_test');
         } catch(\Chrome\Exception $e)
         {
             $this->_db = null;

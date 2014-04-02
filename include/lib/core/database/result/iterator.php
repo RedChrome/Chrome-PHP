@@ -18,8 +18,9 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
+namespace Chrome\Database\Result;
 
-class Chrome_Database_Result_Iterator extends Chrome_Database_Result_Abstract implements Iterator, Serializable
+class Iterator extends AbstractResult implements \Iterator, \Serializable, Rewindable_Interface
 {
     protected $_adapter = null;
 
@@ -29,11 +30,11 @@ class Chrome_Database_Result_Iterator extends Chrome_Database_Result_Abstract im
 
     protected $_iteratorMaxPosition = -1;
 
-    protected $_rewinded = false;
+    protected $_rewound = false;
 
     public function serialize()
     {
-        $this->_adapter = new Chrome_Database_Adapter_Cache($this);
+        $this->_adapter = new \Chrome\Database\Adapter\Cache($this);
         return serialize($this->_adapter);
     }
 
@@ -54,19 +55,22 @@ class Chrome_Database_Result_Iterator extends Chrome_Database_Result_Abstract im
 
     public function rewind()
     {
-        $this->_rewinded = true;
-
         if($this->_iteratorMaxPosition === -1)
         {
             $this->_iteratorPointer = -1;
             $this->next();
         }
 
+        $this->_rewound = true;
         $this->_iteratorPointer = 0;
     }
 
     public function hasNext()
     {
+        if($this->_rewound === true AND $this->_iteratorPointer === 0) {
+            return $this->valid();
+        }
+
         if($this->_iteratorMaxPosition > $this->_iteratorPointer + 1) {
             return true;
         }
@@ -79,7 +83,7 @@ class Chrome_Database_Result_Iterator extends Chrome_Database_Result_Abstract im
 
     public function getNext()
     {
-        if($this->_rewinded === true AND $this->_iteratorPointer === 0) {
+        if($this->_rewound === true AND $this->_iteratorPointer === 0) {
             $this->_iteratorPointer = -1;
         }
 
@@ -103,7 +107,7 @@ class Chrome_Database_Result_Iterator extends Chrome_Database_Result_Abstract im
 
     public function next()
     {
-        $this->_rewinded = false;
+        $this->_rewound = false;
 
         if($this->_iteratorMaxPosition > $this->_iteratorPointer) {
             ++$this->_iteratorPointer;

@@ -15,21 +15,15 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category   CHROME-PHP
  * @package    CHROME-PHP
  * @subpackage Chrome.Database
- * @author     Alexander Book <alexander.book@gmx.de>
- * @copyright  2012 Chrome - PHP <alexander.book@gmx.de>
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [13.03.2013 20:15:14] --> $
- * @link       http://chrome-php.de
  */
-
-if(CHROME_PHP !== true) die();
+namespace Chrome\Database\Facade;
 
 require_once LIB.'exception/transaction.php';
 
-interface Chrome_Database_Interface_Transaction_Interface
+
+interface Transaction_Interface
 {
     public function begin();
 
@@ -38,7 +32,7 @@ interface Chrome_Database_Interface_Transaction_Interface
     public function rollback();
 }
 
-class Chrome_Database_Interface_Transaction extends Chrome_Database_Interface_Decorator_Abstract implements Chrome_Database_Interface_Transaction_Interface
+class Transaction extends AbstractDecorator implements Transaction_Interface
 {
     protected $_transactionInitialized = true;
 
@@ -61,7 +55,7 @@ class Chrome_Database_Interface_Transaction extends Chrome_Database_Interface_De
             $this->_adapter->query('COMMIT');
             $this->_transactionInitialized = false;
         } catch(\Chrome\DatabaseException $e) {
-            throw new \Chrome\DatabaseException_Transaction($e->getMessage(), $e->getCode(), $e, $e->handleException());
+            throw new \Chrome\DatabaseTransactionException($e->getMessage(), $e->getCode(), $e, $e->handleException());
         }
     }
 
@@ -93,7 +87,7 @@ class Chrome_Database_Interface_Transaction extends Chrome_Database_Interface_De
             $this->_sentQuery = $query;
 
         } catch(\Chrome\DatabaseException $e) {
-            throw new \Chrome\DatabaseException_Transaction($e->getMessage(), $e->getCode(), $e, $e->handleException());
+            throw new \Chrome\DatabaseTransactionException($e->getMessage(), $e->getCode(), $e, $e->handleException());
         }
     }
 }

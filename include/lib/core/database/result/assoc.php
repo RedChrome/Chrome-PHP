@@ -18,10 +18,9 @@
  * @package    CHROME-PHP
  * @subpackage Chrome.Database
  */
+namespace Chrome\Database\Result;
 
-if(CHROME_PHP !== true) die();
-
-class Chrome_Database_Result_Assoc extends Chrome_Database_Result_Abstract implements ArrayAccess
+class Assoc extends AbstractResult implements \ArrayAccess
 {
     protected $_adapter = null;
 

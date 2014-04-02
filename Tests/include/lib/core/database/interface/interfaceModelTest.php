@@ -15,11 +15,11 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
 
     public function testSetModel()
     {
-        $db = $this->_getDatabaseFactory()->buildInterface('model', 'dummy');
+        $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Model', '\Test\Chrome\Database\Result\Dummy');
 
         require_once 'Tests/dummies/database/interfaceModel.php';
 
-        $model = new Chrome_Model_Database_Statement_Dummy();
+        $model = new \Test\Chrome\Model\Database\DummyStatement();
         $model->_handler = $this;
         $this->assertSame($db, $db->setModel($model));
     }
@@ -28,9 +28,9 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
     {
         $con = new Chrome_Database_Connection_Dummy('not Null');
 
-        $db = $this->_getDatabaseFactory()->buildInterface('model', 'dummy', $con);
+        $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Model', '\Test\Chrome\Database\Result\Dummy', $con);
 
-        $model = new Chrome_Model_Database_Statement_Dummy();
+        $model = new \Test\Chrome\Model\Database\DummyStatement();
         $model->_handler = $this;
 
         $db->setModel($model);
@@ -47,14 +47,14 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
 
     public function testDefaultModelImplementation()
     {
+        $registry = $this->getMock('\Chrome\Database\Registry\Statement_Interface');
+        $adapter = $this->getMock('\Chrome\Database\Adapter\Adapter_Interface');
+        $result = $this->getMock('\Chrome\Database\Result\Result_Interface');
 
-        $con = new Chrome_Database_Connection_Dummy('not Null');
-
-        $db = $this->_getDatabaseFactory()->buildInterface('model', 'dummy', $con);
+        $interface = new \Chrome\Database\Facade\Model($adapter, $result, $registry);
 
         $this->setExpectedException('\Chrome\Exception');
-
-        $db->loadQuery('notExisting');
+        $interface->loadQuery('notExisting');
     }
 
     public function getStatement($key)
@@ -67,6 +67,5 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
             throw new \Chrome\Exception('Just testing');
         }
     }
-
 
 }

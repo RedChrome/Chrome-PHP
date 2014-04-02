@@ -19,7 +19,9 @@
  * @subpackage Chrome.Database
  */
 
-class Chrome_Database_Connection_Mysql extends \Chrome\Database\Connection\AbstractConnection
+namespace Chrome\Database\Connection;
+
+class Mysql extends AbstractConnection
 {
     protected $_isSetConnectionOptions = false;
     protected $_host;
@@ -125,9 +127,9 @@ class Chrome_Database_Connection_Mysql extends \Chrome\Database\Connection\Abstr
         // do nothing, we're using a persistent connection
     }
 
-    public function getDefaultAdapterSuffix()
+    public function getDefaultAdapter()
     {
-        return 'Mysql';
+        return '\Chrome\Database\Adapter\Mysql';
     }
 
     public function getDatabaseName()

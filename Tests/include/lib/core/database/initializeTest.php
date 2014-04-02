@@ -17,6 +17,6 @@ class DatabaseInitializeTest extends PHPUnit_Framework_TestCase
 
         $this->_init->initialize();
 
-        $this->assertTrue($this->_init->getFactory() instanceof Chrome_Database_Factory);
+        $this->assertTrue($this->_init->getFactory() instanceof \Chrome\Database\Factory\Factory);
     }
 }

@@ -30,7 +30,7 @@ $sqlScriptDir = 'Tests/sql/';
 $testsetup = new Chrome_TestSetup();
 $testsetup->testDb();
 
-function applySQLQueries($query, Chrome_Database_Interface_Interface $db)
+function applySQLQueries($query, \Chrome\Database\Facade\Facade_Interface $db)
 {
     if($query == false)
     {
@@ -95,7 +95,7 @@ if(isset($_SERVER['argv']) and isset($_SERVER['argv'][1]))
     }
 }
 
-$db = $databaseFactory->buildInterface('simple', 'assoc', $connection);
+$db = $databaseFactory->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Assoc', $connection);
 $suffix = $connectionRegistry->getConnectionObject($connection)->getDatabaseName();
 $scripts = getAvailableSQLScripts($sqlScriptDir.$suffix);
 $sqlScriptDir = $sqlScriptDir.$suffix.'/';

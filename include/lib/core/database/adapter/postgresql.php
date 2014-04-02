@@ -19,13 +19,15 @@
  * @subpackage Chrome.Database
  */
 
+namespace Chrome\Database\Adapter;
+
 /**
  * Adapter for postgresql server
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Database_Adapter_Postgresql extends Chrome_Database_Adapter_Abstract
+class Postgresql extends AbstractAdapter
 {
     protected $_lastExecutedQuery = '';
 

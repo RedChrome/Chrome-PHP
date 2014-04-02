@@ -19,12 +19,14 @@
  * @subpackage Chrome.Database
  */
 
+namespace Chrome\Database\Adapter;
+
 /**
  * Adapter to cache result sets using Chrome_Cache_Interface
  *
  * E.g.
  * <code>
- * $cacheAdapter = new Chrome_Database_Adapter_Cache($result);
+ * $cacheAdapter = new \Chrome\Database\Adapter\Cache($result);
  * $result->setAdapter($cacheAdapter);
  *
  * // this will work now
@@ -34,19 +36,19 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Database_Adapter_Cache implements Chrome_Database_Adapter_Interface, Serializable
+class Cache implements Adapter_Interface, \Serializable
 {
     protected $_data = array();
 
     protected $_numRows = 0;
 
-    public function __construct(Chrome_Database_Result_Iterator $result)
+    public function __construct(\Chrome\Database\Result\Rewindable_Interface $result)
     {
         $result->rewind();
 
-        foreach($result as $data)
+        while($result->hasNext())
         {
-            $this->_data[] = $data;
+            $this->_data[] = $result->getNext();
         }
 
         $result->rewind();

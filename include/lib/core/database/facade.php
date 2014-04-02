@@ -21,6 +21,7 @@
 
 //TODO: enable right_handler support
 
+namespace Chrome\Database\Facade;
 
 use \Chrome\Logger\Loggable_Interface;
 use \Psr\Log\LoggerInterface;
@@ -36,30 +37,30 @@ use \Psr\Log\LoggerInterface;
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Interface_Interface extends Loggable_Interface
+interface Facade_Interface extends Loggable_Interface
 {
     /**
      * Constructor
      *
-     * @param Chrome_Database_Adapter_Interface $adapter
-     * @param Chrome_Database_Result_Interface $result
+     * @param \Chrome\Database\Adapter\Adapter_Interface $adapter
+     * @param \Chrome\Database\Result\Result_Interface $result
      * @param \Chrome\Database\Registry\Statement_Interface $statementRegistry
      *
-     * @return Chrome_Database_Interface_Interface
+     * @return \Chrome\Database\Facade\Facade_Interface
      */
-    public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result, \Chrome\Database\Registry\Statement_Interface $statementRegistry);
+    public function __construct(\Chrome\Database\Adapter\Adapter_Interface $adapter, \Chrome\Database\Result\Result_Interface $result, \Chrome\Database\Registry\Statement_Interface $statementRegistry);
 
     /**
      * Returns the result class, set in constructor
      *
-     * @return Chrome_Database_Result_Interface
+     * @return \Chrome\Database\Result\Result_Interface
      */
     public function getResult();
 
     /**
      * Returns the adapter class, set in constructor
      *
-     * @return Chrome_Database_Adapter_Interface
+     * @return \Chrome\Database\Adapter\Adapter_Interface
      */
     public function getAdapter();
 
@@ -104,7 +105,7 @@ interface Chrome_Database_Interface_Interface extends Loggable_Interface
      *
      * @param string $query a query
      * @param array $parameters containing the parameters in numerical order to replace '?' in query string. every parameter get escaped
-     * @return Chrome_Database_Result_Interface the result class containing the answer for $query
+     * @return \Chrome\Database\Result\Result_Interface the result class containing the answer for $query
      */
     public function query($query, array $params = array());
 
@@ -160,7 +161,7 @@ interface Chrome_Database_Interface_Interface extends Loggable_Interface
      *
      * This is needed to execute another query. The result instance of the old query will still work.
      *
-     * @return Chrome_Database_Interface_Interface
+     * @return \Chrome\Database\Facade\Facade_Interface
      */
     public function clear();
 }
@@ -174,25 +175,25 @@ interface Chrome_Database_Interface_Interface extends Loggable_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Interface_Decorator_Interface extends Chrome_Database_Interface_Interface
+interface Decorator_Interface extends Facade_Interface
 {
     /**
      * Sets a database interface as an decorable to use its functionality
      *
-     * @param Chrome_Database_Interface_Interface $obj
+     * @param \Chrome\Database\Facade\Facade_Interface $obj
      * @return void
      */
-    public function setDecorable(Chrome_Database_Interface_Interface $obj);
+    public function setDecorable(Facade_Interface $obj);
 
     /**
      * Returns the database interface set by setDecorable
      *
-     * @return Chrome_Database_Interface_Interface
+     * @return \Chrome\Database\Facade\Facade_Interface
      */
     public function getDecorable();
 }
 
-abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Interface_Interface
+abstract class AbstractFacade implements Facade_Interface
 {
     protected $_query = null;
 
@@ -208,7 +209,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
 
     protected $_logger = null;
 
-    public function __construct(Chrome_Database_Adapter_Interface $adapter, Chrome_Database_Result_Interface $result, \Chrome\Database\Registry\Statement_Interface $statementRegistry)
+    public function __construct(\Chrome\Database\Adapter\Adapter_Interface $adapter, \Chrome\Database\Result\Result_Interface $result, \Chrome\Database\Registry\Statement_Interface $statementRegistry)
     {
         $this->_statementRegistry = $statementRegistry;
         $this->_adapter = $adapter;
@@ -351,7 +352,7 @@ abstract class Chrome_Database_Interface_Abstract implements Chrome_Database_Int
     }
 }
 
-abstract class Chrome_Database_Interface_Decorator_Abstract extends Chrome_Database_Interface_Abstract implements Chrome_Database_Interface_Decorator_Interface
+abstract class AbstractDecorator extends AbstractFacade implements \Chrome\Database\Facade\Decorator_Interface
 {
     protected $_decorable = null;
 
@@ -362,7 +363,7 @@ abstract class Chrome_Database_Interface_Decorator_Abstract extends Chrome_Datab
         }
     }
 
-    public function setDecorable(Chrome_Database_Interface_Interface $obj)
+    public function setDecorable(\Chrome\Database\Facade\Facade_Interface $obj)
     {
         $this->_decorable = $obj;
     }

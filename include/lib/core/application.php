@@ -175,14 +175,14 @@ interface Chrome_Context_Model_Interface
      * A database factory is able to create a new database interface. This database interface is able to
      * interact with the database. The required options are provided in buildInterface()
      *
-     * @param Chrome_Database_Factory_Interface $factory
+     * @param \Chrome\Database\Factory\Factory_Interface $factory
      */
-    public function setDatabaseFactory(Chrome_Database_Factory_Interface $factory);
+    public function setDatabaseFactory(\Chrome\Database\Factory\Factory_Interface $factory);
 
     /**
      * Returns a database factory
      *
-     * @return Chrome_Database_Factory_Interface
+     * @return \Chrome\Database\Factory\Factory_Interface
      */
     public function getDatabaseFactory();
 
@@ -604,7 +604,7 @@ class Chrome_Context_Model implements Chrome_Context_Model_Interface
         $this->_converter = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_CONVERTER);
     }
 
-    public function setDatabaseFactory(Chrome_Database_Factory_Interface $factory)
+    public function setDatabaseFactory(\Chrome\Database\Factory\Factory_Interface $factory)
     {
         $this->_databaseFactory = $factory;
     }

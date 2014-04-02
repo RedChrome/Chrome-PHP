@@ -15,18 +15,13 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @category CHROME-PHP
  * @package CHROME-PHP
  * @subpackage Chrome.Database
- * @author Alexander Book <alexander.book@gmx.de>
- * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.02.2013 12:57:52] --> $
- * @link http://chrome-php.de
  */
-if(CHROME_PHP !== true)
-    die();
-class Chrome_Database_Adapter_Mysql extends Chrome_Database_Adapter_Abstract
+
+namespace Chrome\Database\Adapter;
+
+class Mysql extends AbstractAdapter
 {
 
     public function isEmpty()

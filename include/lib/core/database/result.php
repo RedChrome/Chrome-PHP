@@ -19,30 +19,32 @@
  * @subpackage Chrome.Database
  */
 
+namespace Chrome\Database\Result;
+
 /**
  * Interface of a query result
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Result_Interface extends Chrome_Database_Adapter_Result_Interface
+interface Result_Interface extends \Chrome\Database\Adapter\AdapterResult_Interface
 {
     /**
      * Sets a adapter which executed a query.
-     * Note: the $adapter might not be an instance of Chrome_Database_Adapter_Abstract. So you
-     * can add as an adapter an instance of Chrome_Database_Result_Interface. So your result object
+     * Note: the $adapter might not be an instance of \Chrome\Database\Adapter\AbstractAdapter. So you
+     * can add as an adapter an instance of \Chrome\Database\Result\Result_Interface. So your result object
      * can have as an adapter another result object (might be usefull).
      *
      *
-     * @param Chrome_Database_Adapter_Result_Interface $adapter
+     * @param \Chrome\Database\Adapter\AdapterResult_Interface $adapter
      * @return void
      */
-    public function setAdapter(Chrome_Database_Adapter_Result_Interface $adapter);
+    public function setAdapter(\Chrome\Database\Adapter\AdapterResult_Interface $adapter);
 
     /**
      * Returns the adapter set by {@see setAdapter())}
      *
-     * @return Chrome_Database_Adapter_Result_Interface
+     * @return \Chrome\Database\Adapter\AdapterResult_Interface
      */
     public function getAdapter();
 
@@ -54,35 +56,54 @@ interface Chrome_Database_Result_Interface extends Chrome_Database_Adapter_Resul
     public function hasNext();
 
     /**
-     * This should return a new instance of Chrome_Database_Result_Interface and should NOT
+     * This should return a new instance of \Chrome\Database\Result\Result_Interface and should NOT
      * delete the current state of this object. So the user can still access data from this
      * result object while using the new one given by this method.
      *
-     * @return Chrome_Database_Result_Interface
+     * @return \Chrome\Database\Result\Result_Interface
      */
     public function clear();
+}
+
+/**
+ * Interface for results that can be rewound
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Database
+ */
+interface Rewindable_Interface extends Result_Interface
+{
+    /**
+     * Rewinds the internal position, such that every previous accessed value can get accessed again
+     * via getNext().
+     *
+     * A common class which implements this is \Iterator.
+     *
+     * @return void
+     */
+    public function rewind();
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-abstract class Chrome_Database_Result_Abstract implements Chrome_Database_Result_Interface
+abstract class AbstractResult implements Result_Interface
 {
     /**
      * instance of an adapter
      *
-     * @var Chrome_Database_Adapter_Result_Interface
+     * @var \Chrome\Database\Adapter\AdapterResult_Interface
      */
     protected $_adapter = null;
 
     /**
      * Sets an adapter
      *
-     * @param Chrome_Database_Adapter_Result_Interface $adapter
+     * @param \Chrome\Database\Adapter\AdapterResult_Interface $adapter
      * @return void
      */
-    public function setAdapter(Chrome_Database_Adapter_Result_Interface $adapter)
+    public function setAdapter(\Chrome\Database\Adapter\AdapterResult_Interface $adapter)
     {
         $this->_adapter = $adapter;
     }
@@ -90,7 +111,7 @@ abstract class Chrome_Database_Result_Abstract implements Chrome_Database_Result
     /**
      * Returns an adapter
      *
-     * @return Chrome_Database_Adapter_Result_Interface
+     * @return \Chrome\Database\Adapter\AdapterResult_Interface
      */
     public function getAdapter()
     {
@@ -111,7 +132,7 @@ abstract class Chrome_Database_Result_Abstract implements Chrome_Database_Result
      * Clears this result object by returning a new one. So the old one
      * can still be accessed.
      *
-     * @return Chrome_Database_Result_Abstract
+     * @return \Chrome\Database\Result\AbstractResult
      */
     public function clear()
     {

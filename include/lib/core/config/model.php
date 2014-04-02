@@ -30,7 +30,7 @@ class Database extends \Chrome_Model_Database_Statement_Abstract
 
     protected function _setDatabaseOptions()
     {
-        $this->_dbResult = 'iterator';
+        $this->_dbResult = '\Chrome\Database\Result\Iterator';
     }
 
     public function loadConfig()

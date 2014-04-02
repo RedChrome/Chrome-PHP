@@ -12,7 +12,7 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
     public function testInitResultIterator()
     {
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
-        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
+        $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Iterator', $connection);
         $this->assertTrue(is_subclass_of($db->getResult(), 'Iterator'));
     }
 
@@ -23,7 +23,7 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
         // Dummy_Adapter gets used via connection_dummy as default adapter
-        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
+        $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Iterator', $connection);
 
         // this will force the adapter to access this class using method getNext()
         // and this will access the $_dataArray
@@ -48,7 +48,7 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
 
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
-        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
+        $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Iterator', $connection);
 
         $db->getAdapter()->setDataResource($this);
         $this->assertFalse($db->getResult()->hasNext(), 'adapter has no elements, but hasNext indicates that there exist at least one element');
@@ -63,7 +63,7 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
 
     public function testAffectedRows()
     {
-        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', null, 'Dummy');
+        $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Iterator', null, '\Test\Chrome\Database\Adapter\Dummy');
         $db->getAdapter()->_affectedRows = 6;
         $this->assertEquals(6, $db->getResult()->getAffectedRows());
     }
@@ -75,12 +75,16 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
         // Dummy_Adapter gets used via connection_dummy as default adapter
-        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
+        $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Iterator', $connection);
 
         // this will force the adapter to access this class using method getNext()
         // and this will access the $_dataArray
         $db->getAdapter()->setDataResource($this);
         $result = $db->getResult();
+        // this assures that a rewind before the first hasNext has no effect.
+        $result->rewind();
+        $result->rewind();
+        $result->rewind();
         $i = 0;
         $this->assertFalse($result->isEmpty());
         while($result->hasNext() === true)
@@ -128,7 +132,7 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
         // Dummy_Adapter gets used via connection_dummy as default adapter
-        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Iterator', $connection);
+        $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Iterator', $connection);
 
         // this will force the adapter to access this class using method getNext()
         // and this will access the $_dataArray
@@ -142,7 +146,7 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
         $i = 0;
         while($resultUnserialized->hasNext() === true) {
             ++$i;
-            $this->assertSame($result->getNext(), $resultUnserialized->getNext());
+            $this->assertEquals($result->getNext(), $resultUnserialized->getNext());
 
             if($i >= 7) {
                 $this->assertTrue(false, 'accessed more than 7 elements in unserialized result');

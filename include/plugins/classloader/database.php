@@ -37,10 +37,10 @@ class Resolver_Database extends Resolver_Abstract
      */
     public function resolve($className)
     {
-        if(preg_match('#Chrome_Database_([a-z1-9]{1,})_(.{1,})#i', $className, $matches)) {
-
+        if(preg_match('#Chrome\\\\Database\\\\([a-z1-9]{1,})\\\\(.{1,})#i', $className, $matches)) {
             return LIB.'core/database/'.strtolower($matches[1]).'/'.strtolower($matches[2]).'.php';
         }
+
         return false;
     }
 }

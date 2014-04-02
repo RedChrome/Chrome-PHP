@@ -36,9 +36,9 @@ class Chrome_Database_Connection_Dummy implements \Chrome\Database\Connection\Co
         }
     }
 
-    public function getDefaultAdapterSuffix()
+    public function getDefaultAdapter()
     {
-        return 'Dummy';
+        return '\Test\Chrome\Database\Adapter\Dummy';
     }
 
     public function isConnected() {

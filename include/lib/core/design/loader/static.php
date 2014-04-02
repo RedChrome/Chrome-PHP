@@ -72,7 +72,7 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
     }
 
     // @todo: this should get moved to a model
-    protected function _loadViewsByPosition(Chrome_Renderable_Composition_Interface $composition, Chrome_Database_Result_Iterator $resultViewsWithPosition)
+    protected function _loadViewsByPosition(Chrome_Renderable_Composition_Interface $composition, \Chrome\Database\Result\Iterator $resultViewsWithPosition)
     {
         if($resultViewsWithPosition->isEmpty())
         {
@@ -143,11 +143,11 @@ class Chrome_Model_Design_Loader_Static_Cache extends Chrome_Model_Cache_Abstrac
         return $this->_cache->get($key);
     }
 }
-class Chrome_Model_Design_Loader_Static_DB extends Chrome_Model_Database_Statement_Abstract
+class Chrome_Model_Design_Loader_Static_DB extends \Chrome_Model_Database_Statement_Abstract
 {
     protected function _setDatabaseOptions()
     {
-        $this->_dbResult = array('Iterator', 'Assoc');
+        $this->_dbResult = array('\Chrome\Database\Result\Iterator', '\Chrome\Database\Result\Assoc');
     }
 
     public function getViewsByPosition($position, $theme)

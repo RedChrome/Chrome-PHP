@@ -40,7 +40,7 @@ interface Initializer_Interface
     /**
      * Returns a database factory
      *
-     * @return Chrome_Database_Factory_Interface
+     * @return \Chrome\Database\Factory\Factory_Interface
      */
     public function getFactory();
 }
@@ -55,7 +55,7 @@ class Initializer implements Initializer_Interface
 {
     /**
      *
-     * @var Chrome_Database_Factory_Interface
+     * @var \Chrome\Database\Factory\Factory_Interface
      */
     protected $_databaseFactory = null;
 
@@ -65,7 +65,7 @@ class Initializer implements Initializer_Interface
      */
     public function initialize()
     {
-        $connectionClass = 'Chrome_Database_Connection_' . ucfirst(CHROME_DATABASE);
+        $connectionClass = '\\Chrome\\Database\\Connection\\' . ucfirst(CHROME_DATABASE);
         $defaultConnection = new $connectionClass();
         // configure default database connection
         $defaultConnection->setConnectionOptions(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -76,7 +76,7 @@ class Initializer implements Initializer_Interface
         $connectionRegistry->addConnection(\Chrome\Database\Registry\Connection::DEFAULT_CONNECTION, $defaultConnection);
 
         // create new database factory with connection registry and statement registry
-        $this->_databaseFactory = new \Chrome_Database_Factory($connectionRegistry, new \Chrome\Database\Registry\Statement());
+        $this->_databaseFactory = new \Chrome\Database\Factory\Factory($connectionRegistry, new \Chrome\Database\Registry\Statement());
     }
 
     /**

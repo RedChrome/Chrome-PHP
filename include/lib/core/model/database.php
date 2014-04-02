@@ -19,9 +19,9 @@
 
 abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
 {
-    protected $_dbAdapter = Chrome_Database_Factory_Interface::DEFAULT_ADAPTER;
-    protected $_dbInterface = Chrome_Database_Factory_Interface::DEFAULT_INTERFACE;
-    protected $_dbResult = Chrome_Database_Factory_Interface::DEFAULT_RESULT;
+    protected $_dbAdapter = \Chrome\Database\Factory\Factory_Interface::DEFAULT_ADAPTER;
+    protected $_dbInterface = \Chrome\Database\Factory\Factory_Interface::DEFAULT_INTERFACE;
+    protected $_dbResult = \Chrome\Database\Factory\Factory_Interface::DEFAULT_RESULT;
     protected $_dbConnection = \Chrome\Database\Registry\Connection_Interface::DEFAULT_CONNECTION;
 
     private $_dbInterfaceInstance = null;
@@ -31,7 +31,7 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
     /**
      * @param Chrome_Context_Model_Interface $modelContext
      */
-    public function __construct(Chrome_Database_Factory_Interface $databaseFactory)
+    public function __construct(\Chrome\Database\Factory\Factory_Interface $databaseFactory)
     {
         $this->_dbFactory = $databaseFactory;
     }
@@ -61,7 +61,7 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
      * If $clear is set to true, then the interface will get cleared.
      *
      * @param string $clear
-     * @return Chrome_Database_Interface_Interface
+     * @return \Chrome\Database\Facade\Facade_Interface
      */
     protected function _getDBInterface($clear = true)
     {
@@ -91,9 +91,9 @@ abstract class Chrome_Model_Database_Statement_Abstract extends Chrome_Model_Dat
 {
     protected $_dbStatementModel = null;
 
-    protected $_dbInterface = 'model';
+    protected $_dbInterface = '\Chrome\Database\Facade\Model';
 
-    public function __construct(Chrome_Database_Factory_Interface $factory, Chrome_Model_Database_Statement_Interface $statementModel)
+    public function __construct(\Chrome\Database\Factory\Factory_Interface $factory, \Chrome\Model\Database\Statement_Interface $statementModel)
     {
         parent::__construct($factory);
         $this->_dbStatementModel = $statementModel;
@@ -103,7 +103,7 @@ abstract class Chrome_Model_Database_Statement_Abstract extends Chrome_Model_Dat
     {
         $interfaceInstance = parent::_connect();
 
-        if($interfaceInstance instanceof Chrome_Database_Interface_Model_Interface) {
+        if($interfaceInstance instanceof \Chrome\Database\Facade\Model_Interface) {
             $interfaceInstance->setModel($this->_dbStatementModel);
         }
     }

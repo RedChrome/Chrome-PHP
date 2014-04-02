@@ -19,6 +19,8 @@
  * @subpackage Chrome.Database
  */
 
+namespace Chrome\Database\Factory;
+
 use \Chrome\Logger\Loggable_Interface;
 use \Psr\Log\LoggerInterface;
 
@@ -28,7 +30,7 @@ use \Psr\Log\LoggerInterface;
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Factory_Interface extends Loggable_Interface
+interface Factory_Interface extends Loggable_Interface
 {
     /**
      * Use this if you want to build an interface with any default adapter/result/interface
@@ -48,7 +50,7 @@ interface Chrome_Database_Factory_Interface extends Loggable_Interface
      *
      * @param \Chrome\Database\Registry\Connection_Interface $connectionRegistry used to retrieve database connections
      * @param \Chrome\Database\Registry\Statement_Interface $statementRegistry used to save sent statements/queries
-     * @return Chrome_Database_Factory_Interface
+     * @return \Chrome\Database\Factory\Factory_Interface
      */
     public function __construct(\Chrome\Database\Registry\Connection_Interface $connectionRegistry, \Chrome\Database\Registry\Statement_Interface $statementRegistry);
 
@@ -70,7 +72,7 @@ interface Chrome_Database_Factory_Interface extends Loggable_Interface
      * @param string $adapterName an adapter suffix, compatible with the given connectionName. The compatibility is not getting tested! If you dont know what you should
      *               choose as adapter suffix, take {@link DEFAULT_ADAPTER}
      *
-     * @return Chrome_Database_Interface_Interface initialized with the given parameters
+     * @return \Chrome\Database\Facade\Facade_Interface initialized with the given parameters
      */
     public function buildInterface($interfaceName, $resultName, $connectionName = \Chrome\Database\Registry\Connection_Interface::DEFAULT_CONNECTION, $adapterName = self::DEFAULT_ADAPTER);
 
@@ -83,7 +85,7 @@ interface Chrome_Database_Factory_Interface extends Loggable_Interface
      * @param \Chrome\Database\Composition_Interface $requiredComp containing information about the required functionality of interface/result/connection/adapter
      * @param \Chrome\Database\Composition_Interface $comp [optional] containing information about which interface/adapter... should get used
      *
-     * @return Chrome_Database_Interface_Interface initialized with the given parameters
+     * @return \Chrome\Database\Facade\Facade_Interface initialized with the given parameters
      */
     public function buildInterfaceViaComposition(\Chrome\Database\Composition_Interface $requiredComp, \Chrome\Database\Composition_Interface $comp = null);
 
@@ -122,25 +124,25 @@ interface Chrome_Database_Factory_Interface extends Loggable_Interface
      *
      * This interface class will be used if you call buildInterface with {@link DEFAULT_INTERFACE}
      *
-     * @param string $interfaceNameSuffix the suffix of an interface class E.g. 'simple' for Chrome_Database_Interface_Simple
+     * @param string $interfaceName the name of an interface class E.g. \Chrome\Database\Facade\Simple
      * @return void
      */
-    public function setDefaultInterfaceSuffix($interfaceNameSuffix);
+    public function setDefaultInterface($interfaceName);
 
     /**
      * Sets the default result class.
      *
      * This interface class will be used if you call buildInterface with {@link DEFAULT_RESULT}
      *
-     * @param string $resultNameSuffix the suffix of an result class E.g. 'assoc' for Chrome_Database_Result_Assoc
+     * @param string $resultName the name of an result class E.g. \Chrome\Database\Result\Assoc
      * @return void
      */
-    public function setDefaultResultSuffix($resultNameSuffix);
+    public function setDefaultResult($resultName);
 
     /**
      * Returns the default interface class. NOT the suffix.
      *
-     * Returns for default suffix 'simple' the class name 'Chrome_Database_Interface_Simple'
+     * Returns for default class name E.g. \Chrome\Database\Facade\Simple
      *
      * @return string default interface class
      */
@@ -149,7 +151,7 @@ interface Chrome_Database_Factory_Interface extends Loggable_Interface
     /**
      * Returns the default result class. NOT the suffix.
      *
-     * Returns for default suffix 'assoc' the class name 'Chrome_Database_Result_Assoc'
+     * Returns for default class name E.g. \Chrome\Database\Result\Assoc
      *
      * @return string default result class
      */
@@ -162,7 +164,7 @@ interface Chrome_Database_Factory_Interface extends Loggable_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-abstract class Chrome_Database_Factory_Abstract implements Chrome_Database_Factory_Interface
+abstract class AbstractFactory implements Factory_Interface
 {
     protected $_connectionRegistry = null;
 
@@ -213,11 +215,11 @@ abstract class Chrome_Database_Factory_Abstract implements Chrome_Database_Facto
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
+class Factory extends AbstractFactory
 {
-    protected $_defaultInterface = 'simple';
+    protected $_defaultInterface = '\Chrome\Database\Facade\Simple';
 
-    protected $_defaultResult    = 'assoc';
+    protected $_defaultResult    = '\Chrome\Database\Result\Assoc';
 
     public function buildInterface($interfaceName, $resultName, $connectionName = \Chrome\Database\Registry\Connection_Interface::DEFAULT_CONNECTION, $adapterName = self::DEFAULT_ADAPTER)
     {
@@ -249,15 +251,13 @@ class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
     protected function _createAdapter($adapterName, \Chrome\Database\Connection\Connection_Interface $connection)
     {
         if($adapterName === self::DEFAULT_ADAPTER or $adapterName === null) {
-            $adapterName = $connection->getDefaultAdapterSuffix();
+            $adapterName = $connection->getDefaultAdapter();
         }
 
-        $adapterClass = 'Chrome_Database_Adapter_'.ucfirst($adapterName);
-
-        return new $adapterClass($connection);
+        return new $adapterName($connection);
     }
 
-    protected function _createResult($resultName, Chrome_Database_Adapter_Interface $adapter)
+    protected function _createResult($resultName, \Chrome\Database\Adapter\Adapter_Interface $adapter)
     {
         if($resultName === self::DEFAULT_RESULT or $resultName === null) {
             $resultName = array($this->_defaultResult);
@@ -267,9 +267,9 @@ class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
 
         $result = $adapter;
 
-        foreach(array_reverse($resultName) as $value) {
+        foreach(array_reverse($resultName) as $resultClass) {
             //$resultClass = self::requireClass('result', $value);
-            $resultClass = 'Chrome_Database_Result_'.ucfirst($value);
+            //$resultClass = 'Chrome_Database_Result_'.ucfirst($value);
             $newResult = new $resultClass();
             $newResult->setAdapter($result);
             $result = $newResult;
@@ -278,15 +278,13 @@ class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
         return $result;
     }
 
-    protected function _createInterface($interfaceName, Chrome_Database_Result_Interface $result, Chrome_Database_Adapter_Interface $adapter)
+    protected function _createInterface($interfaceName, \Chrome\Database\Result\Result_Interface $result, \Chrome\Database\Adapter\Adapter_Interface $adapter)
     {
         if($interfaceName === self::DEFAULT_INTERFACE or $interfaceName === null) {
             $interfaceName = $this->_defaultInterface;
         }
 
-        $interfaceClass = 'Chrome_Database_Interface_'.ucfirst($interfaceName);
-
-        return new $interfaceClass($adapter, $result, $this->_statementRegistry);
+        return new $interfaceName($adapter, $result, $this->_statementRegistry);
     }
 
     protected function _getConnection($connectionName)
@@ -315,23 +313,23 @@ class Chrome_Database_Factory extends Chrome_Database_Factory_Abstract
         return $this->buildInterface($composition->getInterface(), $composition->getResult(), $connection, $composition->getAdapter());
     }
 
-    public function setDefaultInterfaceSuffix($interfaceNameSuffix)
+    public function setDefaultInterface($interfaceName)
     {
-        $this->_defaultInterface = $interfaceNameSuffix;
+        $this->_defaultInterface = $interfaceName;
     }
 
-    public function setDefaultResultSuffix($resultNameSuffix)
+    public function setDefaultResult($resultName)
     {
-        $this->_defaultResult = $resultNameSuffix;
+        $this->_defaultResult = $resultName;
     }
 
     public function getDefaultInterfaceClass()
     {
-        return 'Chrome_Database_Interface_'.ucfirst($this->_defaultInterface);
+        return $this->_defaultInterface;
     }
 
     public function getDefaultResultClass()
     {
-        return 'Chrome_Database_Result_'.ucfirst($this->_defaultResult);
+        return $this->_defaultResult;
     }
 }

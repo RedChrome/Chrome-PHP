@@ -20,7 +20,9 @@
  * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
  */
 
-class Chrome_Database_Interface_Simple extends Chrome_Database_Interface_Abstract
+namespace Chrome\Database\Facade;
+
+class Simple extends AbstractFacade
 {
 
 }

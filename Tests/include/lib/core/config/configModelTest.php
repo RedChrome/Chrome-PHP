@@ -6,7 +6,7 @@ class ConfigModelTest extends Chrome_TestCase
 
     protected function setUp()
     {
-        $this->_config = new \Chrome\Model\Config\Database($this->_diContainer->get('\Chrome_Database_Factory_Interface'), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface'));
+        $this->_config = new \Chrome\Model\Config\Database($this->_diContainer->get('Chrome\Database\Factory\Factory_Interface'), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface'));
     }
 
     public function testLoadConfig()
@@ -26,7 +26,7 @@ class ConfigModelTest extends Chrome_TestCase
     public function testSetConfig()
     {
         // clean up the database
-        $db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('simple', 'assoc');
+        $db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Assoc');
         $db->query('DELETE FROM cpp_config WHERE name=\'testName\' AND subclass=\'testSubclass\'');
 
         $this->_config->setConfig('testName', 'testSubclass', true);
@@ -36,7 +36,7 @@ class ConfigModelTest extends Chrome_TestCase
         $this->assertSame(true, $config['testSubclass']['testName']);
 
         // clean up the database
-        $db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('simple', 'assoc');
+        $db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Assoc');
         $db->query('DELETE FROM cpp_config WHERE name=\'testName\' AND subclass=\'testSubclass\'');
 
         $this->_config->setConfig('testName', 'testSubclass', true, 'boolean');

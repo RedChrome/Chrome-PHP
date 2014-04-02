@@ -68,11 +68,11 @@ interface Connection_Interface
      * Returns the default adapter suffix.
      *
      * Every connection has a default adapter which is compatible with the connection. This method returns
-     * the suffix to identify the adapter class
+     * the class name to work properly with the database
      *
      * @return string default adapter suffix
      */
-    public function getDefaultAdapterSuffix();
+    public function getDefaultAdapter();
 }
 
 /**
@@ -99,7 +99,7 @@ interface SchemaProvider_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-abstract class AbstractConnection implements \Chrome\Database\Connection\Connection_Interface
+abstract class AbstractConnection implements Connection_Interface
 {
     protected $_connection  = null;
 

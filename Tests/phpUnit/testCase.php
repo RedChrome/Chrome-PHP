@@ -17,6 +17,10 @@ abstract class Chrome_TestCase extends PHPUnit_Framework_TestCase
         $this->_session = $this->_appContext->getRequestHandler()->getRequestData()->getSession();
         $this->_cookie = $this->_appContext->getRequestHandler()->getRequestData()->getCookie();
     }
+
+    public static function returnValues(array $values) {
+        return new PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls($values);
+    }
 }
 
 class PHPUnit_TextUI_Command_Chrome extends PHPUnit_TextUI_Command

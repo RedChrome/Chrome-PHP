@@ -22,7 +22,7 @@ class DatabaseResultAssocTest extends Chrome_TestCase
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
         // Dummy_Adapter gets used via connection_dummy as default adapter
-        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Assoc', $connection);
+        $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Assoc', $connection);
 
         // this will force the adapter to access this class using method getNext()
         // and this will access the $_dataArray
@@ -42,7 +42,7 @@ class DatabaseResultAssocTest extends Chrome_TestCase
     {
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
-        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Assoc', $connection);
+        $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Assoc', $connection);
 
         $db->getAdapter()->_affectedRows = 5;
         $this->assertEquals(5, $db->getResult()->getAffectedRows());
@@ -59,7 +59,7 @@ class DatabaseResultAssocTest extends Chrome_TestCase
 
         $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
 
-        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Assoc', $connection);
+        $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Assoc', $connection);
 
         $db->getAdapter()->setDataResource($this);
 
@@ -83,9 +83,9 @@ class DatabaseResultAssocTest extends Chrome_TestCase
 
     public function testGetAdapter() {
 
-        $db = $this->_getDatabaseFactory()->buildInterface('Simple', 'Assoc');
+        $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Assoc');
         $this->assertEquals($db->getAdapter(), $db->getResult()->getAdapter());
-        $this->assertTrue($db->getResult()->getAdapter() instanceof Chrome_Database_Adapter_Interface);
+        $this->assertTrue($db->getResult()->getAdapter() instanceof \Chrome\Database\Adapter\Adapter_Interface);
     }
 
 }

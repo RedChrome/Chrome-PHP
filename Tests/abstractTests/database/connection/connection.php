@@ -9,7 +9,7 @@ abstract class AbstractDatabaseConnectionTestCase extends PHPUnit_Framework_Test
     abstract protected function _getDatabaseConnection();
 
     public function setUp() {
-        $this->_connection = $this->_getDatabaseConnection();#new Chrome_Database_Connection_Mysql();
+        $this->_connection = $this->_getDatabaseConnection();#new \Chrome\Database\Connection\Mysql();
     }
 
     public function testThrowExceptionWhenCreatingConnectionWithoutAnyData()

@@ -19,13 +19,15 @@
  * @subpackage Chrome.Database
  */
 
+namespace Chrome\Database\Adapter;
+
 /**
  * Adapter for mysql servers
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Chrome_Database_Adapter_Mysqli extends Chrome_Database_Adapter_Abstract
+class Mysqli extends AbstractAdapter
 {
     protected $_rows;
 
@@ -47,7 +49,7 @@ class Chrome_Database_Adapter_Mysqli extends Chrome_Database_Adapter_Abstract
     {
         parent::setConnection($connection);
 
-        if(!($connection->getConnection() instanceof mysqli)) {
+        if(!($connection->getConnection() instanceof \mysqli)) {
             throw new \Chrome\DatabaseException('This adapter needs a mysqli connection!');
         }
     }
@@ -66,7 +68,7 @@ class Chrome_Database_Adapter_Mysqli extends Chrome_Database_Adapter_Abstract
             throw new \Chrome\DatabaseException('Error while sending "'.$query.'" to database! MySQL Error:'.$this->getErrorMessage());
         }
 
-        if(($this->_result instanceof mysqli_result)) {
+        if(($this->_result instanceof \mysqli_result)) {
             $this->_isEmpty = !($this->_result->num_rows > 0);
         } else {
             $this->_isEmpty = true;
@@ -75,7 +77,7 @@ class Chrome_Database_Adapter_Mysqli extends Chrome_Database_Adapter_Abstract
 
     public function getNext()
     {
-        if($this->_result instanceof mysqli_result) {
+        if($this->_result instanceof \mysqli_result) {
             $return = $this->_result->fetch_array(MYSQLI_ASSOC);
             if($return === null) {
                 return false;

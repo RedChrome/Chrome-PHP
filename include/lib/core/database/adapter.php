@@ -19,15 +19,17 @@
  * @subpackage Chrome.Database
  */
 
+namespace Chrome\Database\Adapter;
+
 /**
- * Interface between adapter and result. Both of Chrome_Database_Adapter_Interface and
- * Chrome_Database_Result_Interface extend this interface.
+ * Interface between adapter and result. Both of \Chrome\Database\Adapter\Adapter_Interface and
+ * \Chrome\Database\Result\Result_Interface extend this interface.
  * This 'interceptor' interface might be usefull cos a result can act like an adapter.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Adapter_Result_Interface
+interface AdapterResult_Interface
 {
     /**
      * Returns the next result row
@@ -68,7 +70,7 @@ interface Chrome_Database_Adapter_Result_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Result_Interface
+interface Adapter_Interface extends AdapterResult_Interface
 {
     /**
      * Sends a query to database
@@ -104,7 +106,7 @@ interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Resu
     /**
      * Clears the adapter to send a new query
      *
-     * @return Chrome_Database_Adapter_Interface the cleared adapter
+     * @return \Chrome\Database\Adapter\Adapter_Interface the cleared adapter
      */
     public function clear();
 
@@ -137,22 +139,22 @@ interface Chrome_Database_Adapter_Interface extends Chrome_Database_Adapter_Resu
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Chrome_Database_Adapter_Constructor_Interface
+interface Constructor_Interface
 {
     /**
      * @param \Chrome\Database\Connection\Connection_Interface $connection
-     * @return Chrome_Database_Adapter_Interface
+     * @return \Chrome\Database\Adapter\Adapter_Interface
      */
     public function __construct(\Chrome\Database\Connection\Connection_Interface $connection);
 }
 
 /**
- * An implementation of the basic methods of Chrome_Database_Adapter_Interface.
+ * An implementation of the basic methods of \Chrome\Database\Adapter\Adapter_Interface.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-abstract class Chrome_Database_Adapter_Abstract implements Chrome_Database_Adapter_Interface, Chrome_Database_Adapter_Constructor_Interface
+abstract class AbstractAdapter implements Adapter_Interface, Constructor_Interface
 {
     protected $_connectionObject = null;
 

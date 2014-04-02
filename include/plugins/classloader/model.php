@@ -100,6 +100,7 @@ class Resolver_Model implements Resolver_Model_Interface
             }
         }
 
+
         $this->_requiredFilesLoaded = true;
     }
 

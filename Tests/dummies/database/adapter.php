@@ -1,6 +1,8 @@
 <?php
 
-class Chrome_Database_Adapter_Dummy extends Chrome_Database_Adapter_Abstract
+namespace Test\Chrome\Database\Adapter;
+
+class Dummy extends \Chrome\Database\Adapter\AbstractAdapter
 {
     public $_affectedRows = 0;
 

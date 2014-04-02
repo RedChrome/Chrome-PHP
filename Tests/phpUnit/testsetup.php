@@ -92,7 +92,7 @@ class Chrome_TestSetup
         // configure default database connection
         try
         {
-            $defaultConnectionClass = 'Chrome_Database_Connection_' . ucfirst(CHROME_DATABASE);
+            $defaultConnectionClass = 'Chrome\\Database\\Connection\\' . ucfirst(CHROME_DATABASE);
             $defaultConnection = new $defaultConnectionClass();
             $defaultConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
             //$defaultConnection->connect();
@@ -103,7 +103,7 @@ class Chrome_TestSetup
             $this->_errorConfig->getExceptionHandler()->exception($e);
         }
 
-        $databaseFactory = new Chrome_Database_Factory($dbRegistry, new \Chrome\Database\Registry\Statement());
+        $databaseFactory = new \Chrome\Database\Factory\Factory($dbRegistry, new \Chrome\Database\Registry\Statement());
         $databaseFactory->setLogger(new \Psr\Log\NullLogger());
 
         if(TEST_DATABASE_CONNECTIONS == true)
@@ -111,19 +111,19 @@ class Chrome_TestSetup
 
             // configure default database connection
             // remove comment in those lines, to connect to db at once. Now it will only connect if needed
-            $mysqlTestConnection = new Chrome_Database_Connection_Mysql();
+            $mysqlTestConnection = new \Chrome\Database\Connection\Mysql();
             $mysqlTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
             // mysqlTestConnection->connect();
             $dbRegistry->addConnection('mysql_test', $mysqlTestConnection, true);
 
-            $mysqliTestConnection = new Chrome_Database_Connection_Mysqli();
+            $mysqliTestConnection = new \Chrome\Database\Connection\Mysqli();
             $mysqliTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
             // mysqliTestConnection->connect();
             $dbRegistry->addConnection('mysqli_test', $mysqliTestConnection, true);
 
             if(defined('POSTGRESQL_HOST'))
             {
-                $postgresqlTestConnection = new Chrome_Database_Connection_Postgresql();
+                $postgresqlTestConnection = new \Chrome\Database\Connection\Postgresql();
                 $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
                 #$postgresqlTestConnection->connect();
                 $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
@@ -154,8 +154,8 @@ class Chrome_TestSetup
         $this->_diContainer = $application->getDiContainer();
 
         require_once 'Tests/dummies/database/interface/model.php';
-        $this->_diContainer->getHandler('closure')->add('\Chrome_Model_Database_Statement_Test_Interface', function ($c) {
-            return new \Test_Chrome_Model_Database_Statement($c->get('\Chrome\Cache\Memory'));
+        $this->_diContainer->getHandler('closure')->add('\Chrome\Model\Database\Statement_Test_Interface', function ($c) {
+            return new \Test_\Chrome\Model\Database\Statement($c->get('\Chrome\Cache\Memory'));
         });
 
         $modelContext = $this->_applicationContext->getModelContext();

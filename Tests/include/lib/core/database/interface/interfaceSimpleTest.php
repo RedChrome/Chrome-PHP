@@ -16,11 +16,11 @@ class DatabaseInterfaceSimpleTest extends Chrome_TestCase
     {
         $this->_connection = new Chrome_Database_Connection_Dummy('connection resource');
 
-        $this->_adapter = new Chrome_Database_Adapter_Dummy($this->_connection);
-        $this->_result = new Chrome_Database_Result_Dummy();
+        $this->_adapter = new \Test\Chrome\Database\Adapter\Dummy($this->_connection);
+        $this->_result = new \Test\Chrome\Database\Result\Dummy();
         $this->_result->setAdapter($this->_adapter);
 
-        $this->_interface = new Chrome_Database_Interface_Simple($this->_adapter, $this->_result, new \Chrome\Database\Registry\Statement());
+        $this->_interface = new \Chrome\Database\Facade\Simple($this->_adapter, $this->_result, new \Chrome\Database\Registry\Statement());
 
         $this->_interface->setLogger($this->_appContext->getLoggerRegistry()->get('database'));
     }

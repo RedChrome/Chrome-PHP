@@ -35,6 +35,6 @@ class Model implements Handler_Interface
             return null;
         }
 
-        return new $key($container->get('\Chrome_Database_Factory_Interface'), $container->get('\Chrome_Model_Database_Statement_Interface'));
+        return new $key($container->get('Chrome\Database\Factory\Factory_Interface'), $container->get('\Chrome\Model\Database\Statement_Interface'));
     }
 }

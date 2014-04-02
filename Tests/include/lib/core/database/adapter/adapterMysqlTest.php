@@ -7,7 +7,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
     public function setUp()
     {
         try {
-            $this->_db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('simple', 'assoc', 'mysql_test');
+            $this->_db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Assoc', 'mysql_test');
         }
         catch (\Chrome\Exception $e) {
             $this->_db = null;

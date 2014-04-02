@@ -1,6 +1,8 @@
 <?php
 
-class Test_Chrome_Model_Database_Statement extends Chrome_Model_Database_Statement
+namespace Test\Chrome\Model\Database;
+
+class Statement extends \Chrome\Model\Database\Statement
 {
     protected function _createCache($database, $namespace)
     {

@@ -1,7 +1,8 @@
 <?php
 
+namespace Test\Chrome\Database\Result;
 
-class Chrome_Database_Result_Dummy extends Chrome_Database_Result_Abstract
+class Dummy extends \Chrome\Database\Result\AbstractResult
 {
     public function hasNext() {
         return true;

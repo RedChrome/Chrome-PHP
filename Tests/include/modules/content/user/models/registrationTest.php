@@ -23,7 +23,7 @@ class RegistrationTest extends AbstractModelTestCase
         ++self::$_count;
 
         $this->_db = $this->_appContext->getModelContext()->getDatabaseFactory()->buildInterface('model', 'assoc');
-        $model = $this->_diContainer->get('\Chrome_Model_Database_Statement_Test_Interface');
+        $model = $this->_diContainer->get('\Chrome\Model\Database\Statement_Test_Interface');
         $model->setNamespace('register');
         $this->_db->setModel($model);
 
@@ -34,7 +34,7 @@ class RegistrationTest extends AbstractModelTestCase
 
     public function _getModel()
     {
-        return new Registration($this->_diContainer->get('\Chrome_Database_Factory_Interface'), $this->_diContainer->get('\Chrome_Model_Database_Statement_Interface'));
+        return new Registration($this->_diContainer->get('Chrome\Database\Factory\Factory_Interface'), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface'));
     }
 
     public function hasEmailProvider()
