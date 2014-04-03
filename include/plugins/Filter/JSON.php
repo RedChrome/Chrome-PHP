@@ -15,20 +15,15 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Filter
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [15.09.2012 14:55:31] --> $
- * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+namespace Chrome\Filter;
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Filter
  */
-class Chrome_Filter_JSON implements Chrome_Filter_Interface
+class JSON implements Filter_Interface
 {
     public function execute(\Chrome\Request\Data_Interface $req, \Chrome\Response\Response_Interface $res)
     {

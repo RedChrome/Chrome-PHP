@@ -18,31 +18,19 @@
  * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
  */
 
-use \Chrome\Logger\Loggable_Interface;
-use \Psr\Log\LoggerInterface;
+namespace Chrome\Router;
+
 use \Chrome\URI\URI_Interface;
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-interface Chrome_Router_Route_Interface
-{
-    public function match(URI_Interface $url, \Chrome\Request\Data_Interface $data);
-
-    public function getResource();
-}
-
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Router
- */
-interface Chrome_Router_Interface extends Chrome_Router_Route_Interface, \Chrome\Exception\Processable_Interface
+interface Router_Interface extends \Chrome\Router\Route\Route_Interface, \Chrome\Exception\Processable_Interface
 {
     public function route(URI_Interface $url, \Chrome\Request\Data_Interface $data);
 
-    public function addRoute(Chrome_Router_Route_Interface $obj);
+    public function addRoute(\Chrome\Router\Route\Route_Interface $obj);
 }
 
 
@@ -51,7 +39,7 @@ interface Chrome_Router_Interface extends Chrome_Router_Route_Interface, \Chrome
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-interface Chrome_Router_Result_Interface
+interface Result_Interface
 {
     public function setFile($file);
 
@@ -66,40 +54,13 @@ interface Chrome_Router_Result_Interface
     public function getName();
 }
 
-abstract class Chrome_Router_Route_Abstract implements Chrome_Router_Route_Interface, Loggable_Interface
-{
-    protected $_logger = null;
-    protected $_model = null;
-    protected $_resource = null;
-
-    public function __construct(Chrome_Model_Abstract $model, LoggerInterface $logger)
-    {
-        $this->_model = $model;
-        $this->setLogger($logger);
-    }
-
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->_logger = $logger;
-    }
-
-    public function getLogger()
-    {
-        return $this->_logger;
-    }
-
-    public function getResource()
-    {
-        return $this->_resource;
-    }
-}
 
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Router_Resource implements Chrome_Router_Result_Interface
+class Result implements Result_Interface
 {
     protected $_file = null;
     protected $_class = null;
@@ -140,16 +101,17 @@ class Chrome_Router_Resource implements Chrome_Router_Result_Interface
     }
 }
 
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Router implements Chrome_Router_Interface
+class Router implements Router_Interface
 {
     protected $_routeInstance = null;
     protected $_routerClasses = array();
-    protected $_resource = null;
+    protected $_result = null;
     protected $_exceptionHandler = null;
 
     public function __construct()
@@ -164,13 +126,13 @@ class Chrome_Router implements Chrome_Router_Interface
             {
                 if($router->match($url, $data) === true)
                 {
-                    $this->_resource = $router->getResource();
+                    $this->_result = $router->getResult();
 
                     break;
                 }
             }
 
-            if($this->_resource == null or !($this->_resource instanceof Chrome_Router_Result_Interface))
+            if($this->_result == null or !($this->_result instanceof \Chrome\Router\Result_Interface))
             {
 
                 // already tried to route to 404.html and not found... there is smt. wrong!
@@ -204,15 +166,15 @@ class Chrome_Router implements Chrome_Router_Interface
             $this->_exceptionHandler->exception($e);
         }
 
-        return $this->_resource;
+        return $this->_result;
     }
 
-    public function getResource()
+    public function getResult()
     {
-        return $this->_resource;
+        return $this->_result;
     }
 
-    public function addRoute(Chrome_Router_Route_Interface $obj)
+    public function addRoute(\Chrome\Router\Route\Route_Interface $obj)
     {
         $this->_routerClasses[] = $obj;
     }
@@ -225,5 +187,53 @@ class Chrome_Router implements Chrome_Router_Interface
     public function getExceptionHandler()
     {
         return $this->_exceptionHandler;
+    }
+}
+
+
+namespace Chrome\Router\Route;
+
+use \Chrome\Logger\Loggable_Interface;
+use \Psr\Log\LoggerInterface;
+use \Chrome\URI\URI_Interface;
+
+/**
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Router
+ */
+interface Route_Interface
+{
+    public function match(URI_Interface $url, \Chrome\Request\Data_Interface $data);
+
+    public function getResult();
+}
+
+
+abstract class AbstractRoute implements Route_Interface, Loggable_Interface
+{
+    protected $_logger = null;
+    protected $_model = null;
+    protected $_result = null;
+
+    public function __construct(\Chrome_Model_Abstract $model, LoggerInterface $logger)
+    {
+        $this->_model = $model;
+        $this->setLogger($logger);
+    }
+
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->_logger = $logger;
+    }
+
+    public function getLogger()
+    {
+        return $this->_logger;
+    }
+
+    public function getResult()
+    {
+        return $this->_result;
     }
 }

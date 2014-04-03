@@ -32,7 +32,7 @@ class Chrome_Controller_Content_Login_AJAX extends Chrome_Controller_Content_Log
     protected function _initialize()
     {
         // this is important!! This encodes the rendered data from the views with json
-        // $this->_filter['postprocessor'][] = new Chrome_Filter_JSON();
+        // $this->_filter['postprocessor'][] = new \Chrome\Filter\JSON();
         $this->_require = array('file' => array(CONTENT . 'user/login/include.php', CONTENT . 'user/login/view/ajax.php', CONTENT . 'user/login/model.php'));
     }
 

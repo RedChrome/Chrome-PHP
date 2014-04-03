@@ -42,10 +42,10 @@ CORE - SUB
 
 
 ROUTER - 2000
-2001    -   "Could not find adequat controller class!"  -   include/lib/core/router/router.php  -   "Kein Controller gefunden, der den Request bearbeiten kann. Möglicherweise URL falsch, oder keine routes vorhanden, die den Request zuweisen würden."   -
-2002    -   "No Class set in Chrome_Router_Resource!"   -   include/lib/core/router/router.php  -   "Es wurde keine Controller klasse gesetzt, die den Request verarbeitet. Programm kann somit nicht fortgesetzt werden."
-2003    -   "No file found AND could no find the corresponding file!"   -   include/lib/core/router/router.php  -   "Konnte die Datei für den Controller nicht finden, konnte ihn ebenfalls nicht ermitteln. Möglicherweise falsche Angaben im Route?"
-2004    -   "Path matched, but resource wasn\'t found!"    -   include/lib/core/router/route/dynamic.php   -   "Route gefunden, allerdings fehlt der Eintrag zur Controller Klasse und zur Datei. Möglicherweise falsche, oder nicht vorhanden Angaben zur Route"
+2001    -   "Could not find adequat controller class!"  -   include/lib/core/router/router.php  -   "Kein Controller gefunden, der den Request bearbeiten kann. Mï¿½glicherweise URL falsch, oder keine routes vorhanden, die den Request zuweisen wï¿½rden."   -
+2002    -   "No Class set in \Chrome\Router\Result!"   -   include/lib/core/router/router.php  -   "Es wurde keine Controller klasse gesetzt, die den Request verarbeitet. Programm kann somit nicht fortgesetzt werden."
+2003    -   "No file found AND could no find the corresponding file!"   -   include/lib/core/router/router.php  -   "Konnte die Datei fï¿½r den Controller nicht finden, konnte ihn ebenfalls nicht ermitteln. Mï¿½glicherweise falsche Angaben im Route?"
+2004    -   "Path matched, but resource wasn\'t found!"    -   include/lib/core/router/route/dynamic.php   -   "Route gefunden, allerdings fehlt der Eintrag zur Controller Klasse und zur Datei. Mï¿½glicherweise falsche, oder nicht vorhanden Angaben zur Route"
 
 
 

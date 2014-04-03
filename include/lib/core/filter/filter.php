@@ -15,38 +15,32 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Filter
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [03.03.2013 17:28:13] --> $
- * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
-
+namespace Chrome\Filter\Chain;
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Filter
  */
-abstract class Chrome_Filter_Chain_Abstract
+abstract class AbstractChain
 {
     protected $_filters = array();
 
     /**
-     * Chrome_Filter_Chain_Abstract::addFilter()
+     * \Chrome\Filter\Chain\AbstractChain::addFilter()
      *
      * Adds a filter to filter chain
      *
      * @param Chrome_Filter_Abstract $filter
      * @return void
      */
-    public function addFilter(Chrome_Filter_Interface $filter)
+    public function addFilter(\Chrome\Filter\Filter_Interface $filter)
     {
         $this->_filters[] = $filter;
     }
 
     /**
-     * Chrome_Filter_Chain_Abstract::processFilters()
+     * \Chrome\Filter\Chain\AbstractChain::processFilters()
      *
      * run through all filters
      *
@@ -63,11 +57,14 @@ abstract class Chrome_Filter_Chain_Abstract
     }
 }
 
+namespace Chrome\Filter;
+
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Filter
  */
-interface Chrome_Filter_Interface
+interface Filter_Interface
 {
     /**
      * execute()

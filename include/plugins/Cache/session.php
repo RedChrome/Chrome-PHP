@@ -106,7 +106,7 @@ namespace Chrome\Cache;
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
  */
-class Chrome_Cache_Session implements Cache_Interface
+class Session implements Cache_Interface
 {
     protected $_session;
 

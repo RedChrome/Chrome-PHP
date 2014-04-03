@@ -57,13 +57,13 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
     /**
      *
-     * @var Chrome_Filter_Chain_Preprocessor
+     * @var \Chrome\Filter\Chain\Preprocessor
      */
     private $_preprocessor = null;
 
     /**
      *
-     * @var Chrome_Filter_Chain_Postprocessor
+     * @var \Chrome\Filter\Chain\Postprocessor
      */
     private $_postprocessor = null;
 
@@ -75,7 +75,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
     /**
      *
-     * @var Chrome_Router_Interface
+     * @var \Chrome\Router\Router_Interface
      */
     private $_router = null;
 
@@ -196,8 +196,8 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_initRequestAndResponse();
 
         // startup filters
-        $this->_preprocessor = new Chrome_Filter_Chain_Preprocessor();
-        $this->_postprocessor = new Chrome_Filter_Chain_Postprocessor();
+        $this->_preprocessor = new \Chrome\Filter\Chain\Preprocessor();
+        $this->_postprocessor = new \Chrome\Filter\Chain\Postprocessor();
 
         $this->_initAuthenticationAndAuthorisation();
         $registryHandler->add('\Chrome\Authentication\Authentication_Interface', $this->_applicationContext->getAuthentication());
@@ -440,19 +440,19 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
     protected function _initRouter()
     {
-        $this->_router = new Chrome_Router();
+        $this->_router = new \Chrome\Router\Router();
         $this->_router->setExceptionHandler(new \Chrome\Exception\Handler\DefaultHandler());
         // enable route matching
 
         $routerLogger = $this->_loggerRegistry->get('router');
-        // import(array('Chrome_Route_Static', 'Chrome_Route_Dynamic') );
+        // import(array('\Chrome\Router\Route\StaticRoute', '\Chrome\Router\Route\DynamicRoute') );
         // matches static routes
 
-        $this->_router->addRoute(new Chrome_Route_Static($this->_diContainer->get('\Chrome_Model_Route_Static_Interface'), $routerLogger));
+        $this->_router->addRoute(new \Chrome\Router\Route\StaticRoute($this->_diContainer->get('\Chrome_Model_Route_Static_Interface'), $routerLogger));
         // matches dynamic created routes
-        $this->_router->addRoute(new Chrome_Route_Dynamic($this->_diContainer->get('\Chrome_Model_Route_Dynamic_Interface'), $routerLogger));
+        $this->_router->addRoute(new \Chrome\Router\Route\DynamicRoute($this->_diContainer->get('\Chrome_Model_Route_Dynamic_Interface'), $routerLogger));
         // matches routes to administration site
-        $this->_router->addRoute(new Chrome_Route_Administration(new Chrome_Model_Route_Administration($this->_modelContext), $routerLogger));
+        //$this->_router->addRoute(new Chrome_Route_Administration(new Chrome_Model_Route_Administration($this->_modelContext), $routerLogger));
     }
 
     protected function _initConverter()
@@ -509,11 +509,11 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $cacheOption->setCacheFile(CACHE.'router/_static.cache');
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
-            return new \Chrome_Model_Route_Static_Cache($c->get('\Chrome_Model_Route_Static_Database'), $cache);
+            return new \Chrome\Model\Route\StaticRoute\Cache($c->get('\Chrome_Model_Route_Static_Database'), $cache);
         }, true);
 
         $closure->add('\Chrome_Model_Route_Static_Database', function ($c) {
-            return $c->get('\Chrome_Model_Route_Static_DB');
+            return $c->get('\Chrome\Model\Route\StaticRoute\Database');
         }, true);
 
         $closure->add('\Chrome_Design_Loader_Interface', function ($c) {
@@ -554,7 +554,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $cacheOption->setCacheFile(CACHE.'router/_dynamic.cache');
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
-            return new Chrome_Model_Route_Dynamic_Cache($c->get('\Chrome_Model_Route_Dynamic_DB'), $cache);
+            return new \Chrome\Model\Route\DynamicRoute\Cache($c->get('\Chrome\Model\Route\DynamicRoute\Database'), $cache);
         });
 
         $closure->add('\Chrome\Controller\User\Register', function ($c) {

@@ -21,15 +21,17 @@
  * @author Alexander Book
  */
 
-// TODO: Add a db scheme for Chrome_Model_Route_Dynamic_DB::getResourcesAsArray
+// TODO: Add a db scheme for \Chrome\Model\Route\DynamicRoute\Database::getResourcesAsArray
 // TODO: Add regex support for single path, e.g. news/show/id/regex:|(\d)*?|/action/remove or something like that,
 //          but in fact, thats some kind of input validation... dont know if needed
+
+namespace Chrome\Router\Route;
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
+class DynamicRoute extends AbstractRoute
 {
     /**
      * How much slashes "/" are allowed in a url?
@@ -68,8 +70,8 @@ class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
                 throw new \Chrome\Exception('Path matched, but resource wasn\'t found!', 2004);
             }
 
-            $this->_resource = new Chrome_Router_Resource();
-            $this->_resource->setClass($resource['class']);
+            $this->_result = new \Chrome\Router\Result();
+            $this->_result->setClass($resource['class']);
 
             /*
             if(count($resource['GET']) > 0)
@@ -166,18 +168,20 @@ class Chrome_Route_Dynamic extends Chrome_Router_Route_Abstract
     }
 }
 
+namespace Chrome\Model\Route\DynamicRoute;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Model_Route_Dynamic_Cache extends Chrome_Model_Cache_Abstract
+class Cache extends \Chrome_Model_Cache_Abstract
 {
     const CHROME_MODEL_ROUTER_DYNAMIC_CACHE_CACHE_FILE = 'tmp/cache/router/_dynamic.cache';
 
     protected function _setUpCache()
     {
-        $this->_cacheOption = new Chrome_Cache_Option_Serialization();
+        $this->_cacheOption = new \Chrome\Cache\Option\File\Serialization();
         $this->_cacheOption->setCacheFile(CACHE.'router/_dynamic.cache');
         $this->_cacheInterface = 'serialization';
     }
@@ -204,7 +208,7 @@ class Chrome_Model_Route_Dynamic_Cache extends Chrome_Model_Cache_Abstract
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Model_Route_Dynamic_DB extends \Chrome_Model_Database_Statement_Abstract
+class Database extends \Chrome_Model_Database_Statement_Abstract
 {
     public function getResourcesAsArray()
     {

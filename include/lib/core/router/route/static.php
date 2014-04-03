@@ -17,12 +17,14 @@
  * @subpackage Chrome.Router
  */
 
+namespace Chrome\Router\Route;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Route_Static extends Chrome_Router_Route_Abstract
+class StaticRoute extends AbstractRoute
 {
     public function match(\Chrome\URI\URI_Interface $url, \Chrome\Request\Data_Interface $data)
     {
@@ -44,8 +46,8 @@ class Chrome_Route_Static extends Chrome_Router_Route_Abstract
             return false;
         }
 
-        $this->_resource = new Chrome_Router_Resource();
-        $this->_resource->setClass($row['class']);
+        $this->_result = new \Chrome\Router\Result();
+        $this->_result->setClass($row['class']);
 
         if(count($row['GET']) > 0)
         {
@@ -61,12 +63,14 @@ class Chrome_Route_Static extends Chrome_Router_Route_Abstract
     }
 }
 
+namespace Chrome\Model\Route\StaticRoute;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Model_Route_Static_Cache extends Chrome_Model_Cache_Abstract
+class Cache extends \Chrome_Model_Cache_Abstract
 {
     const CACHE_NAMESPACE_GET_ROUTE = 1;
     const CACHE_NAMESPACE_FINDE_ROUTE = 2;
@@ -113,7 +117,7 @@ require_once LIB.'core/linker/http/staticInterface.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Chrome_Model_Route_Static_DB extends \Chrome_Model_Database_Statement_Abstract implements \Chrome\Linker\HTTP\Model\Static_Interface
+class Database extends \Chrome_Model_Database_Statement_Abstract implements \Chrome\Linker\HTTP\Model\Static_Interface
 {
     protected $_resourceModel = null;
 

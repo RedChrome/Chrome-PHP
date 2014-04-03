@@ -15,19 +15,14 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Filter
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [10.08.2011 15:32:32] --> $
- * @author     Alexander Book
  */
 
-if(CHROME_PHP !== true)
-    die();
+namespace Chrome\Filter\Chain;
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Filter
  */
-class Chrome_Filter_Chain_Postprocessor extends Chrome_Filter_Chain_Abstract
+class Postprocessor extends AbstractChain
 {
 }
