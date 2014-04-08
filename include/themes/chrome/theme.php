@@ -32,7 +32,7 @@ class Chrome_Design_Theme_Chrome extends Chrome_Design_Theme_Abstract
         // @todo use another exception handler
         $exceptionHandler = new \Chrome\Exception\Handler\DefaultHandler();
 
-        $template = new Chrome_Template();
+        $template = new \Chrome\Template\PHP();
         $template->assignTemplate('design/chrome/design.tpl');
         $template->assign('LINKER', $diContainer->get('\Chrome\Linker\Linker_Interface'));
 

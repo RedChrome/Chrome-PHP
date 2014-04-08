@@ -17,39 +17,107 @@
  * @subpackage Chrome.Template
  */
 
-/**
- * load needed template core files
- */
-require_once LIB.'core/template/factory.php';
-require_once LIB.'core/template/engine.php';
-require_once LIB.'core/template/engine/plain.php';
+namespace Chrome\Template;
 
+
+ // TODO: add template to DI, make static member vars un-static
+ // but let the functionality working
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Template
  */
-interface Chrome_Template_Interface extends Chrome_Renderable
+interface Template_Interface extends \Chrome_Renderable
 {
-    public function setEngine(Chrome_Template_Engine_Abstract $engine);
+    public function assign($name, $value);
+
+    public function assignArray(array $array);
+
+    public function assignGlobal($name, $value);
+
+    public function assignArrayGlobal(array $array);
+
+    public function assignTemplate($name, $path = '');
+
+    public function _isset($name);
+
+    public function get($name, $global = true);
+
+    public function render();
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Template
  */
-abstract class Chrome_Template_Abstract implements Chrome_Template_Interface
+abstract class AbstractTemplate implements Template_Interface
 {
-    protected $_engine = null;
+    protected $_var = array();
 
-    public function setEngine(Chrome_Template_Engine_Abstract $engine)
+    protected static $_globalVar = array('ROOT' => ROOT, '_PUBLIC' => _PUBLIC, 'IMAGE' => IMAGE, 'CONTENT' => CONTENT,
+            'BASEDIR' => BASEDIR, 'BASE' => BASE, 'ADMIN' => ADMIN, 'LIB' => LIB, 'TEMPLATE' => TEMPLATE, 'TMP' => TMP,
+            'CACHE' => CACHE);
+
+    protected $_file = null;
+
+    public function assign($name, $value)
     {
-        $this->_engine = $engine;
+        $this->_var[$name] = $value;
     }
 
-    public function __call($func, $args)
+    public function assignArray(array $array)
     {
-        if(method_exists($this->_engine, $func)) {
-            return call_user_func_array(array($this->_engine, $func), $args);
+        $this->_var += $array;
+    }
+
+    public function assignGlobal($name, $value)
+    {
+        self::$_globalVar[$name] = $value;
+    }
+
+    public function assignArrayGlobal(array $array)
+    {
+        self::$_globalVar += $array;
+    }
+
+    public function assignTemplate($name, $path = '')
+    {
+        if(empty($name)) {
+            throw new \Chrome\Exception('No template file given!');
+        }
+
+        if(strstr($name, '.tpl') === false) {
+            $name .= '.tpl';
+        }
+
+        if($path !== '') {
+            // add a "/" at the end of the path
+            $path .= ($path{strlen($path)-1} !== '/') ? '/' : '';
+
+            $file = $path.$name;
+        } else {
+            $file = TEMPLATE.$name;
+        }
+
+        if(!_isFile($file)) {
+            throw new \Chrome\Exception('Cannot assign a template file("'.$file.'") that does not exist in Chrome_Tepmate_Engine_Abstract::assignTemplate()!');
+        }
+
+        $this->_file = $file;
+    }
+
+    public function _isset($name)
+    {
+        return (isset($this->_var[$name]) OR isset(self::$_globalVar[$name]));
+    }
+
+    public function get($name, $global = true)
+    {
+        if(isset($this->_var[$name])) {
+            return $this->_var[$name];
+        } elseif($global === true AND isset(self::$_globalVar[$name])) {
+            return self::$_globalVar[$name];
+        } else {
+            return null;
         }
     }
 }
@@ -58,15 +126,30 @@ abstract class Chrome_Template_Abstract implements Chrome_Template_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Template
  */
-class Chrome_Template extends Chrome_Template_Abstract
+class PHP extends AbstractTemplate
 {
-    public function __construct($engine = null)
-    {
-        $this->setEngine(Chrome_Template_Engine_Factory::factory($this, $engine));
-    }
-
     public function render()
     {
-        return $this->_engine->render();
+        if($this->_file === null) {
+            throw new \Chrome\IllegalStateException('Did not call assignTemplate');
+        }
+
+        // here we need to set vars, so that php knows the content of the tmpl-vars!!
+        foreach($this->_var as $key => $value)
+        {
+            $$key = $value;
+        }
+
+        ob_start();
+
+        include($this->_file);
+
+        $return = ob_get_contents();
+
+        ob_end_clean();
+
+        // all assigned vars get destroyed automatically
+
+        return $return;
     }
 }

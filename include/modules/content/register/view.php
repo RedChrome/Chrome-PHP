@@ -85,7 +85,7 @@ class Chrome_View_Register_StepEmailNotSent extends Chrome_View_Abstract
 {
     public function render()
     {
-        $template = new Chrome_Template();
+        $template = new \Chrome\Template\PHP();
         $template->assignTemplate('modules/content/register/emailNotSent');
         $template->assign('activationKey', $this->_controller->getActivationKey());
         return $template->render();

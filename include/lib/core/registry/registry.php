@@ -15,42 +15,22 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Registry
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.01beta <!-- phpDesigner :: Timestamp [11.08.2011 10:59:04] --> $
  */
-if(CHROME_PHP !== true)
-    die();
+
+namespace Chrome\Registry;
 
 /**
- * Interface for Chrome_Registry_Abstract
+ * Interface for a protected registry.
+ *
+ * A protected registry can save values which cannot get overwritten.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Registry
  */
-interface Chrome_Registry_Abstract_Interface
+interface ProtectedRegistry_Interface
 {
 
     /**
-     * Singleton-pattern
-     *
-     * @return Chrome_Registry_Abstract
-     */
-    public static function getInstance();
-}
-
-/**
- * Interface for Chrome_Registry
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Registry
- */
-interface Chrome_Registry_Interface extends Chrome_Registry_Abstract_Interface
-{
-
-    /**
-     * Chrome_Registry::set()
-     *
      * Adds a value to the registry
      *
      * @param string $namespace
@@ -67,8 +47,6 @@ interface Chrome_Registry_Interface extends Chrome_Registry_Abstract_Interface
     public function set($namespace, $key, $value, $readOnly = false);
 
     /**
-     * Chrome_Registry::get()
-     *
      * Retrieves a value from the registry.
      *
      * @param mixed $namespace
@@ -80,8 +58,6 @@ interface Chrome_Registry_Interface extends Chrome_Registry_Abstract_Interface
     public function get($namespace, $key);
 
     /**
-     * Chrome_Registry::isProtected()
-     *
      * Returns the protection for an entry
      *
      * @param mixed $namespace
@@ -93,8 +69,6 @@ interface Chrome_Registry_Interface extends Chrome_Registry_Abstract_Interface
     public function isProtected($namespace, $key);
 
     /**
-     * Chrome_Registry::_isset()
-     *
      * Determines whether the registry entry is set
      *
      * @param mixed $namespace
@@ -106,8 +80,6 @@ interface Chrome_Registry_Interface extends Chrome_Registry_Abstract_Interface
     public function _isset($namespace, $key);
 
     /**
-     * Chrome_Registry::_unset()
-     *
      * Unsets a registry entry
      * if entry is protected, then it throws a \Chrome\Exception
      *
@@ -126,7 +98,7 @@ interface Chrome_Registry_Interface extends Chrome_Registry_Abstract_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Registry
  */
-abstract class Chrome_Registry_Abstract implements Chrome_Registry_Abstract_Interface
+abstract class AbstractProtectedRegistry implements ProtectedRegistry_Interface
 {
     /**
      * Contains the registry storage
@@ -157,14 +129,7 @@ abstract class Chrome_Registry_Abstract implements Chrome_Registry_Abstract_Inte
 }
 
 /**
- * Load Chrome_Registry_Singleton
- */
-require_once 'singleton.php';
-
-/**
- * Chrome_Registry_Singleton
- *
- * Registry class to pass global variables between classes.
+ * Implementation of a protected registry
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Registry
@@ -173,29 +138,8 @@ require_once 'singleton.php';
  * @version 2009
  * @access public
  */
-class Chrome_Registry extends Chrome_Registry_Abstract implements Chrome_Registry_Interface
+class ProtectedRegistry extends AbstractProtectedRegistry
 {
-    /**
-     * Contains an instance of this class
-     *
-     * @var Chrome_Registry instance
-     */
-    private static $_instance = null;
-
-    /**
-     * Chrome_Registry::getInstance()
-     *
-     * @return Chrome_Registry
-     */
-    public static function getInstance()
-    {
-        if(self::$_instance === null)
-        {
-            self::$_instance = new self();
-        }
-        return self::$_instance;
-    }
-
     /**
      * Chrome_Registry::set()
      *

@@ -98,7 +98,7 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\Database\\Connection\\Mysql', 'lib/core/database/connection/mysql.php'),
 ('Chrome\\Database\\Connection\\Postgresql', 'lib/core/database/connection/postgresql.php'),
 ('Chrome_Form_Abstract', 'lib/core/form/form.php'),
-('Chrome_Template', 'lib/core/template/template.php'),
+('Chrome\\Template\\PHP', 'lib/core/template/template.php'),
 ('Chrome\\Router\\Route\\StaticRoute', 'lib/core/router/route/static.php'),
 ('Chrome\\Router\\Route\\DynamicRoute', 'lib/core/router/route/dynamic.php'),
 ('Chrome_Captcha_Interface', 'lib/captcha/captcha.php'),

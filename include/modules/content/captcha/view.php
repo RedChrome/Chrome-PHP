@@ -38,7 +38,7 @@ class Chrome_View_Form_Renderer_Captcha extends Chrome_View_Form_Renderer_Templa
 {
     protected function _getTemplate()
     {
-        $template = new Chrome_Template();
+        $template = new \Chrome\Template\PHP();
         $template->assignTemplate('modules/content/captcha/captcha_test');
         return $template;
     }

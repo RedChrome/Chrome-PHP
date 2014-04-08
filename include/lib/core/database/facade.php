@@ -27,7 +27,7 @@ use \Chrome\Logger\Loggable_Interface;
 use \Psr\Log\LoggerInterface;
 
 /**
- * Interface for all database interfaces
+ * Interface for all database faca
  *
  * Do not use setParameter/s() and query($query, array('containsParams')) or execute(array('containingParams')) together. Just
  * use one at the same time, because the merging of the parameters might return an unexpected numerical order.
@@ -157,7 +157,7 @@ interface Facade_Interface extends Loggable_Interface
     public function getQuery();
 
     /**
-     * Clears the interface to sent another query.
+     * Clears the facade to sent another query.
      *
      * This is needed to execute another query. The result instance of the old query will still work.
      *
@@ -167,30 +167,18 @@ interface Facade_Interface extends Loggable_Interface
 }
 
 /**
- * Interface for all database interface classes which shall allow to set another database interface class
+ * Interface for all database facade classes which shall allow to set another database facade class
  * as dercorable.
- * Usefull to combine multiple database interfaces to a single one and use all the functionality from those
- * database interfaces.
+ * Usefull to combine multiple database facades to a single one and use all the functionality from those
+ * database facades.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
 interface Decorator_Interface extends Facade_Interface
 {
-    /**
-     * Sets a database interface as an decorable to use its functionality
-     *
-     * @param \Chrome\Database\Facade\Facade_Interface $obj
-     * @return void
-     */
-    public function setDecorable(Facade_Interface $obj);
-
-    /**
-     * Returns the database interface set by setDecorable
-     *
-     * @return \Chrome\Database\Facade\Facade_Interface
-     */
-    public function getDecorable();
+    // TODO: who to implement?
+    //public function __construct(Facade_Interface $facade);
 }
 
 abstract class AbstractFacade implements Facade_Interface
@@ -248,8 +236,12 @@ abstract class AbstractFacade implements Facade_Interface
                 $this->_logger->error($e);
             }
 
-            throw $e;
+            $this->_handleException($e);
         }
+    }
+
+    protected function _handleException(\Chrome\DatabaseException $e) {
+        throw $e;
     }
 
     public function setParameters(array $array, $escape = true)
@@ -352,7 +344,7 @@ abstract class AbstractFacade implements Facade_Interface
     }
 }
 
-abstract class AbstractDecorator extends AbstractFacade implements \Chrome\Database\Facade\Decorator_Interface
+abstract class AbstractDecorator implements \Chrome\Database\Facade\Decorator_Interface
 {
     protected $_decorable = null;
 

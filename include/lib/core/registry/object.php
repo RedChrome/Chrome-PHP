@@ -65,7 +65,7 @@ abstract class Object_Abstract implements Object
 
     protected function _objectNotFound($key)
     {
-        throw new \Chrome\Exception('No Object found with key "'.$key."");
+        throw new \Chrome\Exception('No Object found with key "'.$key.'"');
     }
 
     protected function _set($key, $value)
@@ -102,7 +102,7 @@ abstract class Object_Single_Abstract implements Object
 
     protected function _objectNotFound($key)
     {
-        throw new \Chrome\Exception('No Object found with key "'.$key."");
+        throw new \Chrome\Exception('No Object found with key "'.$key.'"');
     }
 
     protected function _set($value)

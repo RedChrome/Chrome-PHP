@@ -89,7 +89,7 @@ class Chrome_View_Box_Form_Login extends Chrome_View_Abstract
     public function render()
     {
         // create template with the form
-        $template = new Chrome_Template();
+        $template = new \Chrome\Template\PHP();
         $template->assignTemplate('modules/box/login/form_log_in');
         // assigning form and language
         $template->assign('FORM', $this->_controller->getForm());
@@ -109,11 +109,11 @@ class Chrome_View_Form_Renderer_Template_Login_Box extends Chrome_View_Form_Rend
 {
     protected function _getTemplate()
     {
-        $template = new Chrome_Template();
+        $template = new \Chrome\Template\PHP();
 
         //$lang = new Chrome_Language('modules/content/user/login');
 
-        $template = new Chrome_Template();
+        $template = new \Chrome\Template\PHP();
         $template->assignTemplate('modules/box/login/form_log_in');
         $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate());
 

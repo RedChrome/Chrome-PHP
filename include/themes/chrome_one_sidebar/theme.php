@@ -31,7 +31,7 @@ class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstrac
 
         $exceptionHandler = new \Chrome\Exception\Handler\DefaultHandler();
 
-        $template = new Chrome_Template();
+        $template = new \Chrome\Template\PHP();
         $template->assignTemplate('design/chrome_one_sidebar/layout.tpl');
         $template->assign('LINKER', $diContainer->get('\Chrome\Linker\Linker_Interface'));
 

@@ -28,7 +28,7 @@ class Chrome_View_SiteNotFound extends Chrome_View
 
     public function render()
     {
-        $tpl = new Chrome_Template();
+        $tpl = new \Chrome\Template\PHP();
 
         $tpl->assignTemplate('modules/content/SiteNotFound/SiteNotFound.tpl');
 

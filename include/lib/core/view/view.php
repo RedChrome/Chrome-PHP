@@ -172,7 +172,7 @@ class Chrome_View_Template_Simple_Abstract extends Chrome_View
 
     public function render()
     {
-        $template = new Chrome_Template();
+        $template = new \Chrome\Template\PHP();
         $template->assignTemplate($this->_templateFile);
         return $template->render();
     }

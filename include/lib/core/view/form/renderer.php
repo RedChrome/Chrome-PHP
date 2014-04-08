@@ -74,9 +74,9 @@ abstract class Chrome_View_Form_Renderer_Template_Abstract extends Chrome_View_F
     {
         $this->_template = $this->_getTemplate();
 
-        if(!($this->_template instanceof Chrome_Template_Interface))
+        if(!($this->_template instanceof \Chrome\Template\Template_Interface))
         {
-            throw new \Chrome\Exception('_getTemplate must return an object, instance of Chrome_Template_Interface');
+            throw new \Chrome\Exception('_getTemplate must return an object, instance of \Chrome\Template\Template_Interface');
         }
 
         $this->_template->assign($this->_formNamespace, $this->_viewForm->getViewElements());
@@ -96,7 +96,7 @@ abstract class Chrome_View_Form_Renderer_Template_Simple_Abstract extends Chrome
 
     protected function _getTemplate()
     {
-        $template = new Chrome_Template();
+        $template = new \Chrome\Template\PHP();
         $template->assignTemplate($this->_templateFile);
         $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate());
         return $template;

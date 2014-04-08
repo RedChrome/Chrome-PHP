@@ -34,11 +34,12 @@ interface Transaction_Interface
 
 class Transaction extends AbstractDecorator implements Transaction_Interface
 {
-    protected $_transactionInitialized = true;
+    protected $_transactionInitialized = false;
 
     public function begin()
     {
         $this->_adapter->query('BEGIN');
+        $this->_transactionInitialized = true;
     }
 
     public function __destruct()
@@ -65,29 +66,7 @@ class Transaction extends AbstractDecorator implements Transaction_Interface
         $this->_transactionInitialized = false;
     }
 
-    public function query($query, array $params = array())
-    {
-        try {
-            if($query === null OR empty($query)) {
-                throw new \Chrome\DatabaseException('Cannot execute an sql statement if no statement was set!');
-            }
-
-            $this->_query = $query;
-
-            if(count($params) > 0) {
-                $this->setParameters($params, true);
-            }
-
-            $query = $this->_prepareStatement($query);
-
-            $this->_statementRegistry->addStatement($query);
-
-            $this->_adapter->query($query);
-
-            $this->_sentQuery = $query;
-
-        } catch(\Chrome\DatabaseException $e) {
-            throw new \Chrome\DatabaseTransactionException($e->getMessage(), $e->getCode(), $e, $e->handleException());
-        }
+    protected function _handleException(\Chrome\DatabaseException $e){
+        throw new \Chrome\DatabaseTransactionException($e->getMessage(), $e->getCode(), $e, $e->handleException());
     }
 }

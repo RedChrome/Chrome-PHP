@@ -19,6 +19,7 @@
  */
 
 use Chrome\Authorisation\Adapter\Simple;
+
 /**
  * loads dependencies from composer
  */

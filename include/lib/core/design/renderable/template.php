@@ -32,7 +32,7 @@ class Chrome_Renderable_Template extends Chrome_Renderable_Composition
 
     protected $_exceptionHandler = null;
 
-    public function __construct(Chrome_Template_Interface $template, \Chrome\Exception\Handler_Interface $exceptionHandler)
+    public function __construct(\Chrome\Template\Template_Interface $template, \Chrome\Exception\Handler_Interface $exceptionHandler)
     {
         $this->_template = $template;
         $this->_exceptionHandler = $exceptionHandler;

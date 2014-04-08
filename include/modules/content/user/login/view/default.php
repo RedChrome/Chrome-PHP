@@ -62,7 +62,7 @@ class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract
     {
         $lang = $this->_viewContext->getLocalization()->getTranslate();
 
-        $template = new Chrome_Template();
+        $template = new \Chrome\Template\PHP();
         $template->assignTemplate('modules/content/user/login/already_logged_in');
         $template->assign('LANG', $lang);
         #new Chrome_Language('modules/content/user/login'));
@@ -76,7 +76,7 @@ class Chrome_View_User_Default_SuccessfullyLoggedIn extends Chrome_View_Abstract
 
     public function render()
     {
-        $template = new Chrome_Template();
+        $template = new \Chrome\Template\PHP();
         $template->assignTemplate('modules/content/user/login/already_logged_in');
         return $template->render();
     }
@@ -93,11 +93,11 @@ class Chrome_View_Form_Renderer_Template_Login_Content extends Chrome_View_Form_
 {
     protected function _getTemplate()
     {
-        $template = new Chrome_Template();
+        $template = new \Chrome\Template\PHP();
 
         $lang = $this->_viewContext->getLocalization()->getTranslate();
 
-        $template = new Chrome_Template();
+        $template = new \Chrome\Template\PHP();
         $template->assignTemplate('modules/content/user/login/form_log_in');
         $template->assign('LANG', $lang);
 
