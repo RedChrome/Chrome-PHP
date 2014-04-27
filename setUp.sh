@@ -1,7 +1,7 @@
 ## CONFIG
 # use "git tag -l" to list all available versions
 YAML_VERSION=v4.1.2
-# use "php Tests/setuptestdb.php" to list all available connections
+# use "php tests/setuptestdb.php" to list all available connections
 DATABASE_CONNECTION=default
 
 
@@ -29,7 +29,7 @@ composer update
 
 ## INIT DATABASE
 mysql -e 'create database chrome_2_test;'
-php Tests/setuptestdb.php $DATABASE_CONNECTION
+php tests/setuptestdb.php $DATABASE_CONNECTION
 
 ## clean tmp dir
 rm -rf include/tmp

@@ -25,7 +25,7 @@ error_reporting(E_ALL);
 
 require_once 'phpUnit/testsetup.php';
 
-$sqlScriptDir = 'Tests/sql/';
+$sqlScriptDir = 'tests/sql/';
 
 $testsetup = new Chrome_TestSetup();
 $testsetup->testDb();
@@ -62,11 +62,12 @@ function getAvailableSQLScripts($databaseName)
     $files = scandir($databaseName, 0);
     $sqlScripts = array();
 
-    foreach($files as $file)
+    foreach($files as $fileName)
     {
-        if(Chrome_File::getExt($file) === 'sql')
+        $file = new \Chrome\File($fileName);
+        if($file->hasExtension('sql'))
         {
-            $sqlScripts[] = $file;
+            $sqlScripts[] = $fileName;
         }
     }
 

@@ -87,6 +87,10 @@ interface File_Interface
     public function getContext();
 
     public function getUseIncludePath();
+
+    public function getExtension();
+
+    public function hasExtension($extension);
 }
 
 
@@ -273,6 +277,22 @@ class File implements File_Interface
         return $this->_useIncludePath;
     }
 
+    public function getExtension()
+    {
+        $dot = strrpos($this->_fileName, '.');
+
+        if($dot === false) {
+            return '';
+        }
+
+        return substr($this->_fileName, $dot+1);
+    }
+
+    public function hasExtension($extension)
+    {
+        return strcasecmp($this->getExtension(), $extension) === 0;
+    }
+
     public function __toString()
     {
         return '['.$this->_fileName.']';
@@ -321,10 +341,6 @@ interface Information_Interface
      * @return array
      */
     public function getFileInformation();
-
-    public function getExtension();
-
-    public function hasExtension($extension);
 }
 
 interface Modifier_Interface
@@ -426,24 +442,6 @@ class Information implements Information_Interface
         } catch (\Chrome\Exception $e) {
             throw new \Chrome\FileException('Could not read file information for file '.$this->_file->getFileName());
         }
-    }
-
-    public function getExtension()
-    {
-        $fileName = $this->_file->getFileName();
-
-        $dot = strrpos($fileName, '.');
-
-        if($dot === false) {
-            return '';
-        }
-
-        return substr($fileName, $dot+1);
-    }
-
-    public function hasExtension($extension)
-    {
-        return $this->getExtension() === $extension;
     }
 }
 
