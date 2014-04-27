@@ -6,7 +6,8 @@ class Chrome_View_Register extends Chrome_View_Strategy_Abstract
 
     protected function _setUp()
     {
-        $this->addTitle('Registrieren');
+        $translate = $this->_viewContext->getLocalization()->getTranslate();
+        $this->addTitle($translate->get('modules/content/user/register/title'));
     }
 
     public function setStepOne(Chrome_Form_Interface $form)

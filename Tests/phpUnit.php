@@ -25,6 +25,15 @@ if(!defined('CHROME_PHP')) {
     define('CHROME_PHP', true);
 }
 
+if(in_array('--setCWD', $_SERVER['argv'])) {
+    chdir(dirname(dirname(__FILE__)));
+    foreach($_SERVER['argv'] as $key => $value) {
+        if($value === '--setCWD') {
+            unset($_SERVER['argv'][$key]);
+        }
+    }
+}
+
 // load phpUnit
 require 'PHPUnit/Autoload.php';
 // load test setup

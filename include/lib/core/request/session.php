@@ -212,7 +212,7 @@ class Session implements Session_Interface
 
         if(self::CHROME_SESSION_SESSION_SAVE_PATH !== null) {
 
-            if(!_isDir(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH)) {
+            if(!\Chrome_Dir::exists(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH)) {
                 \Chrome_Dir::createDir(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH);
             }
             // specific path to session, protection against hijacking

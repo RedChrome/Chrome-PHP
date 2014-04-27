@@ -119,9 +119,10 @@ class Chrome_Dir
             ++$i;
         }
 
+        /*
         if($doUpdateFileSystemCache === true) {
             Chrome_File_System_Read::getInstance()->forceCacheUpdate($dest, false);
-        }
+        }*/
 
         return true;
     }

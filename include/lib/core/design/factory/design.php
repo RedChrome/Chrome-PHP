@@ -15,19 +15,15 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Design
- * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [28.03.2013 12:45:34] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
 
 class Chrome_Design_Factory_Design extends Chrome_Design_Factory_Abstract
 {
     const DEFAULT_DESIGN = '';
 
-    public function build($design = self::DEFAUDEFAULT_DESIGNLT_THEME) {
+    public function build($design = self::DEFAUDEFAULT_DESIGNLT_THEME)
+    {
 
         if($design === self::DEFAULT_THEME) {
             $design = 'default';
@@ -35,11 +31,13 @@ class Chrome_Design_Factory_Design extends Chrome_Design_Factory_Abstract
 
         $design = strtolower(trim($design));
 
-        if(!_isFile(LIB.'core/design/design/'.$design.'.php')) {
+        $file = new \Chrome\File(LIB.'core/design/design/'.$design.'.php');
+
+        if(!$file->exists()) {
             throw new \Chrome\Exception('Cannot load design "'.$design.'"! Design file does not exist');
         }
 
-        require_once LIB.'core/design/design/'.$design.'.php';
+        require_once $file->getFileName();
 
         $designClass = 'Chrome_Design_'.ucfirst($design);
 

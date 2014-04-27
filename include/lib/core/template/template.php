@@ -98,8 +98,10 @@ abstract class AbstractTemplate implements Template_Interface
             $file = TEMPLATE.$name;
         }
 
-        if(!_isFile($file)) {
-            throw new \Chrome\Exception('Cannot assign a template file("'.$file.'") that does not exist in Chrome_Tepmate_Engine_Abstract::assignTemplate()!');
+        $file = new \Chrome\File($file);
+
+        if(!$file->exists()) {
+            throw new \Chrome\Exception('Cannot assign a template file '.$file.' that does not exist in Chrome_Tepmate_Engine_Abstract::assignTemplate()!');
         }
 
         $this->_file = $file;
@@ -142,7 +144,7 @@ class PHP extends AbstractTemplate
 
         ob_start();
 
-        include($this->_file);
+        include($this->_file->getFileName());
 
         $return = ob_get_contents();
 

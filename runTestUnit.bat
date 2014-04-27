@@ -1,7 +1,7 @@
 @Echo Off
 call tidyUp.bat
 if %1!==! goto noDirGiven
-php Tests\phpUnit.php --configuration Tests\phpUnit\config.xml %1
+php tests\phpUnit.php --configuration tests\phpUnit\config.xml %1
 pause
 goto nothingToDo
 

@@ -129,6 +129,10 @@ interface Cache_Interface
 
 namespace Chrome\Cache\File;
 
+use Chrome\File;
+use Chrome\File_Interface;
+use Chrome\File\Modifier;
+
 /**
  * File_Strategy
  *
@@ -149,20 +153,6 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
     const CHROME_CACHE_STRATEGY_TIMESTAMP_KEY = '_time_';
 
     /**
-     * File pointer to the cache file
-     *
-     * @var resource
-     */
-    protected $_filePointer = null;
-
-    /**
-     * Name of the cache file
-     *
-     * @var string
-     */
-    protected $_fileName = null;
-
-    /**
      * Contains cached data
      *
      * @var array
@@ -175,6 +165,13 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
      * @var bool
     */
     protected $_dataChanged = false;
+
+    /**
+     * The cache file
+     *
+     * @var \Chrome\File_Interface
+     */
+    protected $_file = null;
 
     /**
      * Lifetime for a cache,<br>
@@ -215,13 +212,13 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
     {
         // set lifetime for the cache
         $this->_lifetime = $options->getLifeTime();
-        // be lazy! open the file, if we really change the cache. See _dataChanged()
-        $this->_fileName = $options->getCacheFile();
+
+        $this->_file = new File($options->getCacheFile());
 
         $fileIsEmpty = false;
 
         // does the cache file already exist?
-        if(!_isFile($this->_fileName))
+        if(!$this->_file->exists())
         {
             // this actually creates the file if it does not exist
             $this->_openFile();
@@ -361,15 +358,10 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
      */
     protected function _closeFile()
     {
-        if(is_resource($this->_filePointer))
-        {
-            fclose($this->_filePointer);
-        }
+        $this->_file->close();
     }
 
     /**
-     * Chrome_Cache_Strategy::_applyChanges()
-     *
      * If the data changed, rewrite the cache
      *
      * @return void
@@ -381,24 +373,20 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
             return;
         }
 
-        if(!is_resource($this->_filePointer))
-        {
-            throw new \Chrome\Exception('Error, filepointer was no resource');
-        }
-
         $this->_data[self::CHROME_CACHE_STRATEGY_TIMESTAMP_KEY] = CHROME_TIME;
 
         // truncate file and seek to position 0
         // ftruncate($this->_filePointer, 0);
         // fseek($this->_filePointer, 0);
         // write the serialized data
-
         try
         {
             $encodedData = $this->_encode($this->_data);
 
-            rewind($this->_filePointer);
-            fwrite($this->_filePointer, $encodedData);
+            $modifier = new Modifier($this->_file);
+            $modifier->rewind();
+            $modifier->write($encodedData);
+
         } catch(\Chrome\Exception $e)
         {
             return;
@@ -419,7 +407,7 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
         */
         try
         {
-            $data = file_get_contents($this->_fileName);
+            $data = file_get_contents($this->_file->getFileName());
 
             $this->_data = $this->_decode($data);
         } catch(\Chrome\Exception $e)
@@ -451,14 +439,19 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
      */
     protected function _openFile()
     {
-        if($this->_filePointer !== null)
+        if($this->_file->isOpen())
         {
             return;
         }
 
+        if(!\Chrome_Dir::exists($this->_file->getFileName())) {
+            \Chrome_Dir::createDir($this->_file->getFileName());
+        }
+
         // load Chrome_File class and create the file
-        require_once LIB . 'core/file/file.php';
-        $this->_filePointer = \Chrome_File::openFile($this->_fileName, 'wb');
+        $this->_file->open(File_Interface::FILE_OPEN_TRUNCATE_WRITE_ONLY);
+
+        #$this->_filePointer = \Chrome_File::openFile($this->_fileName, 'wb');
     }
 
     /**

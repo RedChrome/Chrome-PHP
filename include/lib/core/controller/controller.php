@@ -173,14 +173,16 @@ abstract class ControllerAbstract implements Controller_Interface
     {
         if(isset($this->_require['file']))
         {
-            foreach($this->_require['file'] as $file)
+            foreach($this->_require['file'] as $fileName)
             {
-                if(_isFile($file))
+                $file = new \Chrome\File($fileName);
+
+                if($file->exists())
                 {
-                    require_once $file;
+                    require_once $file->getFileName();
                 } else
                 {
-                    throw new \Chrome\Exception('Could not require file ' . $file . '! The file does not exist in \Chrome\Controller\ControllerAbstract::_require()!');
+                    throw new \Chrome\Exception('Could not require file '.$file.'! The file does not exist in \Chrome\Controller\ControllerAbstract::_require()!');
                 }
             }
         }

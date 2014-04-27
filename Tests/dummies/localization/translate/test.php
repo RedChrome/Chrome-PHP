@@ -18,6 +18,6 @@ class Translate_Test_XX extends Translate_Simple
 
     public function get($key, array $params = array())
     {
-        return 'XXXXXXXX';
+        return 'XX_'.$key.':{'.implode(';', $params).'}_XX';
     }
 }

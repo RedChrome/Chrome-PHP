@@ -361,8 +361,13 @@ class Hash implements Hash_Interface
      */
     public function hashFile($file, $algorithm = self::DEFAULT_HASH_ALGORITHM)
     {
-        if(!_isFile($file)) {
-            throw new \Chrome\InvalidArgumentException('The given $file does not exist');
+        if(!($file instanceof \Chrome\File)) {
+            $file = new \Chrome\File($file);
+        }
+
+        if(!$file->exists())
+        {
+            throw new \Chrome\InvalidArgumentException('The given file '.$file.' does not exist');
         }
 
         if(!$this->isAlgorithmAvailable($algorithm)) {

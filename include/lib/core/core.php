@@ -61,7 +61,7 @@ require_once 'file/dir.php';
 /**
  * load file_system class for fast isFile & isDir functions
  */
-require_once 'file_system/file_system.php';
+#require_once 'file_system/file_system.php';
 
 /**
  * load Chrome_Hash for easy hashing

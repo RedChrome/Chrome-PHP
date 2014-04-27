@@ -43,11 +43,13 @@ class Chrome_Design_Factory_Theme extends Chrome_Design_Factory_Abstract
 
         $themeLowered = strtolower(trim($theme));
 
-        if(!_isFile(THEME.$themeLowered.'/theme.php')) {
+        $file = new \Chrome\File(THEME.$themeLowered.'/theme.php');
+
+        if(!$file->exists()) {
             throw new \Chrome\Exception('Cannot load theme "'.$themeLowered.'"! Theme is not valid. Corresponding theme.php missing');
         }
 
-        require_once THEME.$theme.'/theme.php';
+        require_once $file->getFileName();
 
         $themeClass = 'Chrome_Design_Theme_'.$theme;
 

@@ -30,7 +30,7 @@ if(CHROME_PHP !== true)
 require_once 'read.php';
 
 /**
- * define most used methods, AS functions
+ * define most used methods, as functions
  */
 require_once 'functions.php';
 

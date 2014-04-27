@@ -3,7 +3,7 @@
 /**
  * loads dependencies from composer
  */
-require_once LIB.'autoload.php';
+require_once LIB.'vendor/autoload.php';
 
 
 /**

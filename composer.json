@@ -2,9 +2,13 @@
     "require": {
         "monolog/monolog": "1.6.*"
     },
+    
+    "require-dev": {
+        "codeception/codeception": "1.8.*@dev"
+    },
         
     "config": {
-    	"vendor-dir": "include/lib"
+    	"vendor-dir": "include/lib/vendor"
     }
     
     

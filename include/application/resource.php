@@ -26,9 +26,10 @@
 require_once LIB.'core/error/error.php';
 
 /**
- * load file_system class for fast isFile & isDir functions
+ * load file functions
  */
-require_once LIB.'core/file_system/file_system.php';
+require_once LIB.'core/file/file.php';
+require_once LIB.'core/file/dir.php';
 
 /**
  * load Chrome_Hash for easy hashing

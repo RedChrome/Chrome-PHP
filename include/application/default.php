@@ -23,7 +23,7 @@ use Chrome\Authorisation\Adapter\Simple;
 /**
  * loads dependencies from composer
  */
-require_once LIB . 'autoload.php';
+require_once LIB . 'vendor/autoload.php';
 
 /**
  * load chrome-php core
@@ -293,7 +293,15 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $locale = new \Chrome\Localization\Locale($locale);
             $localization = new \Chrome\Localization\Localization();
             $localization->setLocale($locale);
-            $translate = new \Chrome\Localization\Translate_Simple($localization);
+
+            // for testing
+            if($locale->getPrimaryLanguage() == 'xx' AND $locale->getRegion() == 'XX') {
+                require_once 'Tests/dummies/localization/translate/test.php';
+                $translate = new \Chrome\Localization\Translate_Test_XX($localization);
+            } else {
+                $translate = new \Chrome\Localization\Translate_Simple($localization);
+            }
+
             // load default validate messages
             $translate->load('validate');
             #require_once 'Tests/dummies/localization/translate/test.php';
@@ -561,7 +569,6 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $closure->add('\Chrome\Controller\User\Register', function ($c) {
             return new \Chrome\Controller\User\Register($c->get('\Chrome_Context_Application_Interface'), $c->get('\Chrome\Interactor\User\Registration_Interface'), new Chrome_View_Register($c->get('\Chrome_Context_View_Interface')));
         });
-
 
         $closure->add('\Chrome\Interactor\User\Registration_Interface', function ($c) {
             require_once LIB.'modules/user/interactors/registration.php';

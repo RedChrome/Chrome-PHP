@@ -15,13 +15,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.File_System
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.05.2013 20:37:24] --> $
- * @author Alexander Book
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
@@ -306,7 +300,6 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
         // entry in cache AND file exists
         if(isset($this->_cache[$path]))
         {
-
             if($this->_cache[$path][self::FILE_SYSTEM_KEY_TYPE] === self::FILE_SYSTEM_READ_TYPE_FILE)
                 return true;
             else return false;
@@ -451,6 +444,7 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
             case self::FILE_SYSTEM_READ_TYPE_FILE:
                 {
                     if(is_file($path))
+                    //if(stream_resolve_include_path($path) !== false)
                     { // AND file_exists($path)) {
                         return true;
                     } else

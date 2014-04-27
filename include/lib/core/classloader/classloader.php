@@ -247,14 +247,16 @@ class Classloader implements Classloader_Interface
      * @param string $file
      *        file to include
      */
-    protected function _loadFile($file)
+    protected function _loadFile($fileName)
     {
-        if(_isFile($file))
+        $file = new \Chrome\File($fileName);
+
+        if($file->exists())
         {
-            require_once $file;
+            require_once $fileName;
         } else
         {
-            throw new \Chrome\Exception('Could not load file "' . $file . '"');
+            throw new \Chrome\Exception('Could not load file '.$file);
         }
     }
 

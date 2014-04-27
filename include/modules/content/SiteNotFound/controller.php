@@ -1,37 +1,21 @@
 <?php
-class Chrome_Controller_SiteNotFound extends \Chrome\Controller\ModuleAbstract
+
+namespace Chrome\Controller;
+
+require_once 'view.php';
+
+class SiteNotFound extends \Chrome\Controller\ModuleAbstract
 {
 
     protected function _initialize()
     {
         $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Content_SiteNotFound');
     }
-}
-class Chrome_View_Content_SiteNotFound extends Chrome_View
-{
 
-    public function _setUp()
+    protected function _execute()
     {
-        $this->_view = $this->_viewContext->getFactory()->build('Chrome_View_SiteNotFound');
-        // $lang = new Chrome_Language('modules/content/SiteNotFound.ini');
-        $lang = $this->_viewContext->getLocalization()->getTranslate();
-        $this->addTitle($lang->get('modules/content/SiteNotFound/title'));
-    }
-
-    public function render()
-    {
-        return $this->_view->render();
-    }
-}
-class Chrome_View_SiteNotFound extends Chrome_View
-{
-
-    public function render()
-    {
-        $tpl = new \Chrome\Template\PHP();
-
-        $tpl->assignTemplate('modules/content/SiteNotFound/SiteNotFound.tpl');
-
-        return $tpl->render();
+        if($this->_applicationContext->getResponse() instanceof \Chrome\Response\Handler\HTTPResponse_Interface) {
+            $this->_applicationContext->getResponse()->setStatus('404 Not Found');
+        }
     }
 }

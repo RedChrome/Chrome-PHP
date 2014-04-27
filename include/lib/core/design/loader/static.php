@@ -81,13 +81,15 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 
         foreach($resultViewsWithPosition as $row)
         {
+            $file = new \Chrome\File(BASEDIR . $row['file']);
 
-            if(!_isFile(BASEDIR . $row['file']))
+
+            if(!$file->exists())
             {
-                throw new \Chrome\Exception('Cannot load file ' . BASEDIR . $row['file'] . ' containing required class for rendering');
+                throw new \Chrome\Exception('Cannot load file '.$file.' containing required class for rendering');
             }
 
-            require_once BASEDIR . $row['file'];
+            require_once $file->getFileName();
 
             $view = null;
 

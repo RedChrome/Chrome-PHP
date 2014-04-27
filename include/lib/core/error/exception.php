@@ -25,20 +25,11 @@ namespace Chrome;
  *
  * Default exception class for Chrome-PHP
  *
- * Use _getPreviousException instead of getPreviousException to ensure code compatibility with php version lower than 5.3.0
- * getPreviousException was introduced in PHP 5.3.0...
- *
  * @package CHROME-PHP
  * @subpackage Chrome-Exception
  */
 class Exception extends \Exception
 {
-    /**
-     * previous exception, used for php version < 5.3.0
-     *
-     * @var Exception
-     */
-    protected $_prevException = null;
 
     /**
      * \Chrome\Exception::__construct()
@@ -51,8 +42,6 @@ class Exception extends \Exception
      */
     public function __construct($msg = '', $code = 0, \Exception $prevException = null)
     {
-        $this->_prevException = $prevException;
-
         parent::__construct((string) $msg, (double) $code, $prevException);
     }
 }

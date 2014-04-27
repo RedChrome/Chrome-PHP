@@ -43,7 +43,7 @@ class HTTPHandler implements Handler_Interface
 
     public function getResponse()
     {
-        return new HTTP($this->_request->getRequestData()->getSERVERData('HTTP_PROTOCOL'));
+        return new HTTP($this->_request->getRequestData()->getSERVERData('SERVER_PROTOCOL'));
     }
 }
 
@@ -69,13 +69,20 @@ interface HTTPResponse_Interface extends Response_Interface
 class HTTP implements HTTPResponse_Interface
 {
     protected $_status = '200 OK';
-    protected $_headers = array('Content-Type' => 'text/html');
+    protected $_headers = array('Content-Type' => 'text/html', 'X-Powered-By' => 'PHP');
     protected $_body = '';
     protected $_serverProtocol = '';
 
+    protected $_supportedProtocols = array('HTTP/1.1', 'HTTP/1.0');
+
     public function __construct($serverProtocol)
     {
-        $this->_serverProtocol = $serverProtocol;
+        if(!in_array($serverProtocol, $this->_supportedProtocols)) {
+            $this->_status = '505 HTTP Version not supported';
+            $this->_serverProtocol = $this->_supportedProtocols[0];
+        } else {
+            $this->_serverProtocol = $serverProtocol;
+        }
     }
 
     public function __destruct()

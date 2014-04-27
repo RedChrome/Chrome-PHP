@@ -20,7 +20,6 @@ namespace Chrome\Converter\Delegate;
 
 use \Chrome\Converter\DelegateAbstract;
 
-
 /**
  *
  * @package CHROME-PHP

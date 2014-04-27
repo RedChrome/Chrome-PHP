@@ -1,4 +1,4 @@
 @Echo Off
 call tidyUp.bat
-php Tests\phpUnit.php --configuration Tests\phpUnit\config.xml Tests\
+php tests\phpUnit.php --configuration tests\phpUnit\config.xml tests\
 pause

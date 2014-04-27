@@ -87,7 +87,8 @@ class Files implements Cache_Interface
 
     public function has($file)
     {
-        return _isFile($this->_dir.$file.$this->_extension);
+        $file = new \Chrome\File($this->_dir.$file.$this->_extension);
+        return $file->exists();
     }
 
     public function get($file)

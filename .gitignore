@@ -5,9 +5,6 @@ include/tmp/
 .metadata
 .externalToolBuilders
 composer.lock
-include/lib/composer
-include/lib/psr
-include/lib/monolog
-include/lib/autoload.php
+include/lib/vendor
 public/css/yaml
-
+tests/_log/*

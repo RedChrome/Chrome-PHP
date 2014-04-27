@@ -130,14 +130,15 @@ class Translate_Simple implements Translate_Interface
         {
             return;
         }
-        $file = RESOURCE.self::INCLUDE_DIR.$this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/'.$submodule.'.ini';
 
-        if(!_isFile($file))
+        $file = new \Chrome\File(RESOURCE.self::INCLUDE_DIR.$this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/'.$submodule.'.ini');
+
+        if(!$file->exists())
         {
-            throw new \Chrome\Exception('Could not load module '.$module.'/'.$submodule.'. File "'.$file.'" does not exist');
+            throw new \Chrome\Exception('Could not load module '.$module.'/'.$submodule.'. File '.$file.' does not exist');
         }
 
-        $parsed = parse_ini_file($file, true);
+        $parsed = parse_ini_file($file->getFileName(), true);
 
         foreach($parsed as $section => $translations)
         {
@@ -212,7 +213,7 @@ class Locale implements Locale_Interface
             $this->_region = strtoupper($matches[3]);
             $this->_localeParseTries = 0;
         } else {
-            $this->_parseLocaleString(CHROME_DEFAULT_LOCALE);
+            $this->_parseLocaleString(CHROME_LOCALE_DEFAULT);
         }
     }
 

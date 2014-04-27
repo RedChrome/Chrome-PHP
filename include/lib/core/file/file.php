@@ -13,677 +13,562 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- *
  * @package    CHROME-PHP
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.04.2013 18:07:23] --> $
+ * @subpackage Chrome.Cache
  */
+namespace Chrome;
 
-if(CHROME_PHP !== true) die();
+class FileException extends Exception {
+}
 
-/**
- * Chrome_File Klasse
- *
- * Mit dieser Klasse kann man Dateien verwalten!
- *
- * Hiermit kann man die Endung einer Datei erfahren oder pr�fen ob diese Datei existiert
- * Diese Klasse enth�lt au�erdem das Kopieren, L�schen und Verschieben einer Datei, dabei wird jedesmal gepr�ft ob diese Datei exisitiert,
- * damit keine Fehlermeldungen auf der Webseite angezeigt werden!
- * Zus�tzlich kann man mit dieser Klasse in einer Datei eine Zeile kommentieren oder auskommentieren, // und # kann man hierf�hr benutzen
- * Aber man kann auch mehrere Zeilen einer Datei mit einem Text austauschen oder l�schen! In Verbindung mit der Chrome_Dir Klasse kann man somit Ordner sichern und anschlie�en
- * einige Dateien updaten! Somit spart man dem Admin neue Dateien per FTP auf seinen Server hochzuladen.
- *
- * <code>
- * <?php
- * require_once 'file.php';
- *
- * $FILE = new Chrome_File();
- * $FILE->createFile('include/library/chrome/filesystem/new_file.php','<?php echo\'new file\';');
- * $FILE->rename('include/library/chrome/filesystem/new_file.php','file2.php');
- * $ext = $FILE->getExt('include/library/chrome/filesystem/file2.php'); // this would be .php :D
- * $FILE->commentLine(0,'include/library/chrome/filesystem/file2.php','#');	//comment line 0 with #
- * $FILE->insertLine(1,'include/library/chrome/filesystem/file2.php',"// echo'...this is commented...');
- * $FILE->uncommentLine(1,'include/library/chrome/filesystem/file2.php');	//uncomment this Line
- * $FILE->replaceLines(array(1),'include/library/chrome/filesystem/file2.php',array('echo\'...this is uncommented...\';) );
- *  .
- *  ..
- *  ...
- *
- * ?>
- * </code>
- *
- * @author		Alexander Book
- * @package		CHROME-PHP
- * @copyright   Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- */
-class Chrome_File
+interface File_Interface
 {
-
-    const FILE_MODE_BEGINNING_READ_ONLY = 'rb';
-    const FILE_MODE_BEGINNING_WRITE = 'r+b';
-
-    const FILE_MODE_TRUNCATE_WRITE_ONLY = 'wb';
-    const FILE_MODE_TRUNCATE_WRITE = 'w+b';
-
-    const FILE_MODE_ENDING_WRITE_ONLY = 'ab';
-    const FILE_MODE_ENDING_WRITE = 'a+b';
-
-    /**
-     * Get Extension of a file name
-     *
-     *	@param string $file File name
-     *	@return string File extension
-     *	@since 1.0
-     */
-    public static function getExt($file)
-    {
-        $dot = strrpos($file, '.') + 1;
-        return substr($file, $dot);
-    }
+    const FILE_OPEN_BEGINNING_READ = 'rb',
+          FILE_OPEN_BEGINNING_READ_AND_WRITE = 'r+b',
+          FILE_OPEN_TRUNCATE_WRITE_ONLY = 'wb',
+          FILE_OPEN_TRUNCATE_READ_AND_WRITE = 'w+b',
+          FILE_OPEN_ENDING_WRITE_ONLY = 'ab',
+          FILE_OPEN_ENDING_READ_AND_WRITE = 'a+b',
+          FILE_OPEN_WRITE_FAIL_ON_EXISTENCE = 'xb',
+          FILE_OPEN_READ_AND_WRITE_FAIL_ON_EXISTENCE = 'x+b',
+          FILE_OPEN_CREATE_WRITE = 'cb',
+          FILE_OPEN_CREATE_READ_AND_WRITE = 'c+b';
 
     /**
-     * Checks wheter $file has an extension OR not
+     * Returns true iff the file was opened with a mode allowing to write to the file
      *
-     * @param string $file file
-     * @return boolean true if file has an extension, else false
+     * @return boolean
      */
-    public static function hasExt($file)
-    {
-        if(strpos($file, '.') === false) return false;
-        else  return true;
-    }
+    public function isOpenedForWriting();
 
     /**
-     * Wrapper for the standard file_exists function
+     * Returns true iff the file was opened with a mode allowing to read from the file
      *
-     * @param string $file File path
-     * @return boolean True if path is a file
-     * @since 1.0
+     * @return boolean
      */
-    public static function exists($file)
-    {
-        return (is_file($file) && self::hasExt($file)) ? true : false;
-    }
-
-    public static function existsUsingFilePointer($file, $openingMode = self::FILE_MODE_ENDING_WRITE_ONLY)
-    {
-        try {
-            $fp = fopen($file, $openingMode);
-        } catch(\Chrome\Exception $e) {
-            return false;
-        }
-
-        return $fp;
-    }
+    public function isOpenedForReading();
 
     /**
-     * Wrapper for is_file function
+     * Returns true iff the file was opened at the start of the file
      *
-     * @param string $file filename
-     * @return bool true if it's a filename, false else
+     * Note that !isOpenedAtEnd() == isOpendAtStart is not true in every case
+     *
+     * @return boolean
      */
-    public static function _isFile($file)
-    {
-        return is_file($file);
-    }
+    public function isOpenedAtStart();
 
     /**
-     * Checks wheter the dir exists
+     * Returns true iff the file was opened at the end of the file
      *
-     * @param string $dir dir OR dir to a file
-     * @return bool true if dir exists, OR false
+     * Note that !isOpenedAtEnd() == isOpendAtStart is not true in every case
+     *
+     * @return boolean
      */
-    public static function dirExists($dir)
+    public function isOpenedAtEnd();
+
+    public function exists();
+
+    public function getFileHandle();
+
+    public function getFileName();
+
+    public function open($openMode = self::FILE_OPEN_CREATE_READ_AND_WRITE);
+
+    public function getOpenMode();
+
+    public function isOpen();
+
+    public function close();
+
+    public function setUseIncludePath($useIncludePath);
+
+    public function setContext($context);
+
+    public function getContext();
+
+    public function getUseIncludePath();
+}
+
+
+class File implements File_Interface
+{
+    protected $_fileName = '';
+
+    protected $_fileHandle = null;
+
+    protected $_openMode = null;
+
+    protected $_exists = null;
+
+    protected $_useIncludePath = false;
+
+    protected $_context = null;
+
+    public function __construct($fileName)
     {
-        return Chrome_Dir::exists($dir);
+        $this->_fileName = $fileName;
     }
 
-    /**
-     * Wrapper for filesize
-     *
-     * @param string $file File path
-     * @return int file size
-     */
-    public static function size($file)
+    public function __destruct()
     {
-        if(self::exists($file)) return filesize($file);
-        else  return 0;
+        $this->close();
     }
 
-    /** Copy a file
-     *
-     *	@param string $src Dir to file
-     *	@param string $file File name
-     *	@param string $dest The path to the destination file
-     *	@param string $chmod permission to file
-     *	@return boolen True on success
-     *	@since 1.0
-     */
-    public static function copy($src, $file, $dest, $chmod = 0777)
+    public function exists()
     {
-        // Check src path
-        if(!is_dir($src) or !is_readable($src)) return false;
-
-        // Check file
-        if(self::exists($file)) return false;
-
-        // Check path to destination
-        if(!is_dir($dest)) {
-            // Create destination path
-            self::createDir($dest);
-        }
-
-        if(!@copy($src.$file, $dest.$file)) {
-            throw new \Chrome\Exception('The File: '.$file.' coudn\'t be copied from '.$src.' to '.$dest.'!');
-        } else {
-            // Sets permission
-            if(self::_chper($dest.$file, $chmod)) return true;
-            else  return false;
-        }
-
-    }
-
-    /**	Sets permission for a file
-     *
-     *	@param string $file Path to file
-     *	@param string $chmod Permission for file in Unix
-     *	@return boolean True on success
-     *	@since 1.0
-     */
-    public static function chper($file, $chmod)
-    {
-        if(!self::exists($file)) throw new \Chrome\Exception('Cannot change permission to '.$chmod.' because file '.$file.' doesn\'t exist!');
-
-        if(strlen($chmod) == '3') $chmod = '0'.$chmod;
-
-        if(!@chmod($file, $chmod)) throw new \Chrome\Exception('Coudn\'t change permission to '.$chmod.'!');
-        else  return true;
-    }
-
-    protected static function _chper($file, $chmod)
-    {
-        if(strlen($chmod) == '3') $chmod = '0'.$chmod;
-
-        if(!@chmod($file, $chmod)) throw new \Chrome\Exception('Coudn\'t change permission to '.$chmod.'!');
-        else  return true;
-    }
-
-    /** Moves a file
-     *
-     *	@param string $src Path to file
-     *	@param string $file File name
-     *	@param string $dest Path to destination
-     *	@param string $chmod Permission for file in Unix
-     *	@return boolean True on success
-     *	@since 1.0
-     */
-    public static function move($src, $file, $dest, $chmod = 0777)
-    {
-        // Check src path
-        if(!is_dir($src) or !is_readable($src)) return false;
-
-        if($src{strlen($src) - 1} !== '/') $src .= '/';
-
-        // Check file
-        if(!self::exists($src.$file)) return false;
-
-        // Check path to destination
-        if(!is_dir($dest)) {
-            // Create destination path
-            self::createDir($dest);
-        }
-
-        if(!@copy($src.$file, $dest.$file)) {
-            throw new \Chrome\Exception('The File: '.$file.' coudn\'t be moved from '.$src.' to '.$dest.'!');
-        } else {
-            @unlink($src.$file);
-
-            // Sets permission
-            if(self::_chper($dest.$file, $chmod)) return true;
-            else  return false;
-        }
-    }
-
-    /**
-     * Opens a file using $openingMode. If the file does not exists, it gets created
-     *
-     *
-     *
-     */
-    public static function openFile($file, $openingMode = self::FILE_MODE_ENDING_WRITE_ONLY, $doUpdateFileSystemCache = true)
-    {
-        if(!self::dirExists($file)) {
-            Chrome_Dir::createDir($file, 0777, $doUpdateFileSystemCache);
-        }
-
-        try {
-            $fp = fopen($file, $openingMode);
-        } catch(\Chrome\Exception $e) {
-            $fp = fopen($file, 'x+b');
-        }
-
-        if($doUpdateFileSystemCache === true) {
-            Chrome_File_System_Read::getInstance()->forceCacheUpdate($file, true);
-        }
-
-        if(!is_resource($fp)) {
-            throw new \Chrome\Exception('File handle is not a resource');
-        }
-
-        return $fp;
-    }
-
-    /**
-     * Creates a file
-     *
-     * Creates automatically path to file
-     *
-     * @param string $file file
-     * @param bool true on success, false else
-     */
-    public static function mkFile($file, $chmod = 0777, $doUpdateFileSystemCache = true)
-    {
-        if(!self::dirExists($file)) {
-            Chrome_Dir::createDir($file, $chmod, $doUpdateFileSystemCache);
-        }
-
-        if(!self::exists($file)) {
+        if($this->_exists === null) {
             try {
-              $fp = fopen($file, 'xb');
-            } catch(\Chrome\Exception $e) {
+                $this->_exists = is_file($this->_fileName);
+            } catch(\Chrome\Exception $exp) {
+                $this->_exists = false;
+            }
+        }
+
+        return $this->_exists;
+    }
+
+    public function getFileHandle()
+    {
+        return $this->_fileHandle;
+    }
+
+    public function getFileName()
+    {
+        return $this->_fileName;
+    }
+
+    public function open($openMode = self::FILE_OPEN_CREATE_READ_AND_WRITE)
+    {
+        if($this->isOpen()) {
+            $this->close();
+        }
+
+        try {
+            $this->_openMode = $openMode;
+
+            if($this->_context != null) {
+                $this->_fileHandle = fopen($this->_fileName, $openMode, $this->_useIncludePath, $this->_context);
+            } else {
+                $this->_fileHandle = fopen($this->_fileName, $openMode, $this->_useIncludePath);
+            }
+
+            $this->_exists = true;
+
+        } catch(\Chrome\Exception $e) {
+            $this->_exists = false;
+            throw new \Chrome\FileException('Could not open file '.$this->_fileName, 0, $e);
+        }
+    }
+
+    public function getOpenMode()
+    {
+        return $this->_openMode;
+    }
+
+    /**
+     * @see \Chrome\File\File_Interface::isOpenedForReading()
+     */
+    public function isOpenedForReading()
+    {
+        switch($this->_openMode) {
+
+            case self::FILE_OPEN_BEGINNING_READ:
+            case self::FILE_OPEN_BEGINNING_READ_AND_WRITE:
+            case self::FILE_OPEN_TRUNCATE_READ_AND_WRITE:
+            case self::FILE_OPEN_ENDING_READ_AND_WRITE:
+            case self::FILE_OPEN_READ_AND_WRITE_FAIL_ON_EXISTENCE:
+            case self::FILE_OPEN_CREATE_READ_AND_WRITE: {
+                return true;
+            }
+
+            default: {
+                return false;
+            }
+        }
+    }
+
+    public function isOpenedForWriting()
+    {
+        switch($this->_openMode) {
+
+            case null:
+            case self::FILE_OPEN_BEGINNING_READ: {
+                    return false;
+                }
+
+            default: {
+                    return true;
+                }
+        }
+    }
+
+    public function isOpenedAtEnd()
+    {
+        switch($this->_openMode) {
+
+            case null:
+            case self::FILE_OPEN_BEGINNING_READ:
+            case self:FILE_OPEN_BEGINNING_READ_AND_WRITE: {
                 return false;
             }
 
-            fclose($fp);
-            self::_chper($file, $chmod);
+            default: {
+                return true;
+            }
+        }
+    }
 
-            if($doUpdateFileSystemCache === true) {
-                Chrome_File_System_Read::getInstance()->forceCacheUpdate($file, true);
+    public function isOpenedAtStart()
+    {
+        switch($this->_openMode) {
+
+            case null:
+            case self::FILE_OPEN_ENDING_WRITE_ONLY:
+            case self::FILE_OPEN_ENDING_READ_AND_WRITE: {
+                return false;
             }
 
-            return true;
-        } else  return false;
+            default: {
+                return true;
+            }
+        }
     }
 
-    public static function mkFileUsingFilePointer($file, $chmod = 0777, $openingMode = self::FILE_MODE_ENDING_WRITE_ONLY, $doUpdateFileSystemCache = true)
+    public function isOpen()
     {
-        if(!self::dirExists($file)) {
-            Chrome_Dir::createDir($file, $chmod, $doUpdateFileSystemCache);
+        return $this->_fileHandle != null;
+    }
+
+    public function close()
+    {
+        if($this->isOpen()) {
+            fclose($this->_fileHandle);
+            $this->_fileHandle = null;
+            $this->_openMode = null;
+        }
+    }
+
+    public function setUseIncludePath($boolean)
+    {
+        $this->_useIncludePath = (bool) $boolean;
+    }
+
+    public function setContext($context)
+    {
+        // $context might be null..
+        if(!is_resource($context) && $context !== null) {
+            throw new \Chrome\InvalidArgumentException('Given $context must be a resource');
         }
 
+        $this->_context = $context;
+    }
+
+    public function getContext()
+    {
+        return $this->_context;
+    }
+
+    public function getUseIncludePath()
+    {
+        return $this->_useIncludePath;
+    }
+
+    public function __toString()
+    {
+        return '['.$this->_fileName.']';
+    }
+}
+
+namespace Chrome\File;
+
+use \Chrome\File_Interface;
+
+interface Information_Interface
+{
+    const FILE_INFO_DEVICE = 0,
+          FILE_INFO_INODE = 1,
+          FILE_INFO_INODE_MODE = 2,
+          FILE_INFO_LINKS = 3,
+          FILE_INFO_USER_ID = 4,
+          FILE_INFO_GROUP_ID = 5,
+          FILE_INFO_REDVICE = 6,
+          FILE_INFO_SIZE = 7,
+          FILE_INFO_ACCESS_TIME = 8,
+          FILE_INFO_MODIFICATION_TIME = 9,
+          FILE_INFO_CHANGE_TIME = 10,
+          FILE_INFO_BLOCK_SIZE = 11,
+          FILE_INFO_BLOCKS = 12;
+
+    public function isFile();
+
+    public function isExecutable();
+
+    public function isLink();
+
+    public function getChangeTime();
+
+    public function getAccessTime();
+
+    public function getModificationTime();
+
+    public function getSize();
+
+    public function getType();
+
+    public function getPermissions();
+
+    /**
+     * @return array
+     */
+    public function getFileInformation();
+
+    public function getExtension();
+
+    public function hasExtension($extension);
+}
+
+interface Modifier_Interface
+{
+    const FILE_PERMISSION_EXECUTE = 1,
+          FILE_PERMISSION_WRITE = 2,
+          FILE_PERMISSION_READ = 4;
+
+    /**
+     *
+     * @param octal $chmod
+     */
+    public function changePermission($chmod);
+
+    public function changePermissionWith($owner, $group, $other);
+
+    public function truncate($size);
+
+    public function write($toBeWritten, $length = null);
+
+    public function rename($newName);
+
+    public function copy($destination);
+
+    public function move($destination);
+
+    public function delete();
+
+    public function seek($position, $whence = SEEK_SET);
+
+    public function rewind();
+}
+
+class Information implements Information_Interface
+{
+    /**
+     * @var File_Interface
+     */
+    protected $_file = null;
+
+    public function __construct(File_Interface $file)
+    {
+        $this->_file = $file;
+    }
+
+    public function isFile()
+    {
+        return is_file($this->_file->getFileName());
+    }
+
+    public function isExecutable()
+    {
+        return is_executable($this->_file->getFileName());
+    }
+
+    public function isLink()
+    {
+        return is_link($this->_file->getFileName());
+    }
+
+    public function getChangeTime()
+    {
+       return filectime($this->_file->getFileName());
+    }
+
+    public function getAccessTime()
+    {
+        return fileatime($this->_file->getFileName());
+    }
+
+    public function getModificationTime()
+    {
+        return filemtime($this->_file->getFileName());
+    }
+
+    public function getSize()
+    {
+        return filesize($this->_file->getFileName());
+    }
+
+    public function getType()
+    {
+        return filetype($this->_file->getFileName());
+    }
+
+    public function getPermissions()
+    {
+        return fileperms($this->_file->getFileName());
+    }
+
+    public function getFileInformation()
+    {
         try {
-          $fp = fopen($file, $openingMode);
-        } catch(\Chrome\Exception $e) {
-            return false;
+            if ($this->_file->isOpen()) {
+                return fstat($this->_file->getFileHandle());
+            } else {
+                return stat($this->_file->getFileName());
+            }
+        } catch (\Chrome\Exception $e) {
+            throw new \Chrome\FileException('Could not read file information for file '.$this->_file->getFileName());
         }
-
-        self::_chper($file, $chmod);
-
-        if($doUpdateFileSystemCache === true) {
-            Chrome_File_System_Read::getInstance()->forceCacheUpdate($file, true);
-        }
-
-        return $fp;
-
     }
 
+    public function getExtension()
+    {
+        $fileName = $this->_file->getFileName();
+
+        $dot = strrpos($fileName, '.');
+
+        if($dot === false) {
+            return '';
+        }
+
+        return substr($fileName, $dot+1);
+    }
+
+    public function hasExtension($extension)
+    {
+        return $this->getExtension() === $extension;
+    }
+}
+
+class Modifier implements Modifier_Interface
+{
     /**
-     * Creates a new File
-     *
-     *	@param string $file name with path
-     *	@param string $text writes this into the new file
-     *  @param string $fmode specifies the type of access aou require {@see fopen}
-     *	@return boolean true if file was created
-     *	@since 1.0
-     *
+     * @var File_Interface
      */
-    public static function createFile($file, $text = '', $fmode = self::FILE_MODE_ENDING_WRITE_ONLY)
+    protected $_file = null;
+
+    public function __construct(File_Interface $file)
     {
-        if(!self::dirExists($file)) {
-            self::mkFile($file);
-        }
-        $fp = fopen($file, $fmode);
-
-        fwrite($fp, $text);
-
-        fclose($fp);
-
-        return true;
+        $this->_file = $file;
     }
 
-    /**
-     * Writes a text into a file
-     *
-     * @param string $file file
-     * @param string $text text
-     * @param string $fmode specifies the type of access aou require {@see fopen}
-     * @return bool true on success, false else
-     */
-    public static function write($file, $text, $fmode = self::FILE_MODE_ENDING_WRITE_ONLY)
+    public function changePermission($chmod)
     {
-        if(!self::exists($file)) return false;
-
-        $fp = fopen($file, $fmode);
-
-        fwrite($fp, $text);
-
-        fclose($fp);
-
-        return true;
+        if(!chmod($this->_file->getFileName(), $chmod)) {
+            throw new \Chrome\FileException('Could not change permission for file '.$this->_file->getFileName());
+        }
     }
 
-    /**
-     * Truncates a file
-     *
-     * @param string $file name with path
-     * @return bool true
-     */
-    public static function truncate($file)
+    public function changePermissionWith($owner, $group, $other)
     {
-        if(!self::exists($file)) return false;
+        $permission = $this->_calculateIntegerForPermission($owner) * 100 + $this->_calculateIntegerForPermission($group) * 10 + $this->_calculateIntegerForPermission($other);
 
-        fclose(fopen($file, self::FILE_MODE_TRUNCATE_WRITE_ONLY));
-
-        return true;
+        $this->changePermission(octdec($permission));
     }
 
-    /** Delete a file OR array of files
-     *
-     *	@param mixed $file File name OR an array of files
-     *	@return boolean True on success
-     *	@since 1.0
-     */
-    public static function delete($file)
+    protected function _calculateIntegerForPermission($permission)
     {
-        if(is_array($file)) $files = $file;
-        else  $files[] = $file;
+        $integer = 0;
 
-        foreach($files as $file) {
-            // sets permission to 777 to delete file
-            @chmod($file, 0777);
-            if(!@unlink($file)) throw new \Chrome\Exception('The File '.$file.' coudn\'t be deleted!');
+        if($permission & self::FILE_PERMISSION_EXECUTE) {
+            $integer += 1;
         }
 
-        return true;
+        if($permission & self::FILE_PERMISSION_WRITE) {
+            $integer += 2;
+        }
+
+        if($permission & self::FILE_PERMISSION_READ) {
+            $integer += 4;
+        }
+
+        return $integer;
     }
 
-    /**
-     * Alias for rename
-     *
-     *	@param string $file path to file
-     *	@param string $newName new File name
-     *	@return boolean true on success
-     *	@since 1.0
-     *
-     */
-    public static function rename($file, $newName)
+    public function truncate($size)
     {
-        if(!self::exists($file)) return false;
+        if(!$this->_file->isOpenedForWriting()) {
+            $this->_file->open(File_Interface::FILE_OPEN_TRUNCATE_READ_AND_WRITE);
+            return;
+        }
 
-        return @rename($file, $newName);
+        if(!ftruncate($this->_file->getFileHandle(), $size)) {
+            throw new \Chrome\FileException('Could not truncate file');
+        }
     }
 
-    /** Cleans a filename for secure use
-     *
-     *	@param string $file File name[not the folder path]
-     *	@return string cleaned filename
-     *	@since 1.0
-     */
-    public static function clean($file)
+    public function write($toBeWritten, $length = null)
     {
-        $regex = array(
-            '#(\.){2,}#',
-            '#[^A-Za-z0-9\.\_\- ]#',
-            '#^\.#');
-        return preg_replace($regex, '', $file);
+        if(!$this->_file->isOpenedForWriting()) {
+            throw new \Chrome\IllegalStateException('File was not opened for writing, thus cannot write to it');
+        }
+
+        $error = false;
+
+        if($length === null) {
+            $error = fwrite($this->_file->getFileHandle(), $toBeWritten);
+        } else {
+            $error = fwrite($this->_file->getFileHandle(), $toBeWritten, $length);
+        }
+
+        if(!$error) {
+            throw new \Chrome\FileException('Could not write to file');
+        }
     }
 
-    /**
-     *	Inserts a line into a file
-     *
-     *	@param integer $line number of the line
-     *	@param string $srcFile path to the file
-     *	@param string $text text you want to add at line $line
-     *  @param string $mode read file from start OR end of file
-     *	@return boolean true on success
-     *	@since 1.0
-     *
-     */
-    public static function insertLine($line, $srcFile, $text, $mode = 'start')
+    public function rename($newName)
     {
-        if(!self::exists($file)) return false;
-
-        $line = (int) $line - 1;
-
-        $file = file($srcFile);
-
-        if($mode === 'end') $line = count($file) - $line;
-
-        $file[$line] = $file[$line]."\n".$text;
-
-        $fp = fopen($srcFile.'.tmp', 'w+');
-
-        foreach($file as $value) {
-            fwrite($fp, $value);
+        if(!rename($this->_file->getFileName(), $newName, $this->_file->getContext())) {
+            throw new \Chrome\FileException('Could not rename file');
         }
-
-        fclose($fp);
-
-        if(self::delete($srcFile) == false) {
-            #	$this->delete($srcFile.'.tmp');		// delete temp file
-            return false;
-        }
-
-        return rename($srcFile.'.tmp', $srcFile);
     }
 
-    /**
-     *	Replaces all lines with the text
-     *
-     *	This function replaces all $lines with the $texts in the $srcFile
-     *	To replace f.e. line 23 with "hello" AND line 25 with "test" AND line 53 with ";)"
-     *	you call the function like this:
-     *
-     *	replaceLines(array(23,25,53),"test_file.txt",array("hello","test",";)") );
-     *
-     *	So the key of the line must be the same AS the key of text you want to be replaced!
-     *
-     *	@param array $lines all lines you want to replace
-     *	@param string $srcFile the file you want to edit
-     *	@param array $texts replaces the lines with the texts
-     *	@return boolean true on success
-     *
-     */
-    public static function replaceLines($lines, $srcFile, $texts)
+    public function copy($destination)
     {
-        if(!self::exists($file)) return false;
-
-        if(!is_array($lines)) $lines[] = $lines;
-
-        if(!is_array($texts)) $texts[] = $texts;
-
-        if(count($texts) != count($lines)) return false;
-
-        $file = file($srcFile);
-
-        foreach($lines as $key => $value) {
-            $file[$value] = $texts[$key];
+        if(!copy($this->_file->getFileName(), $destination, $this->_file->getContext())) {
+            throw new \Chrome\FileException('Could not copy file');
         }
-
-        $fp = fopen($srcFile.'.tmp', 'w+');
-
-        foreach($file as $value) {
-            fwrite($fp, $value);
-        }
-
-        fclose($fp);
-
-        if(self::delete($srcFile) == false) {
-            #	$this->delete($srcFile.'.tmp');		// delete temp file
-            return false;
-        }
-
-        return rename($srcFile.'.tmp', $srcFile);
     }
 
-    /**
-     *	Comments a line
-     *
-     *	@param integer $lineNr line you want to comment
-     *	@param string $srcFile file path
-     *	@param string $comment='//' how you want to comment the line. available: '//' AND '#' ';'
-     *	@return boolean true on success
-     */
-    public static function commentLine($lineNr, $srcFile, $comment = '//')
+    public function move($destination)
     {
-        if(self::exists($srcFile)) return false;
-
-        $lineNr = (int) $lineNr;
-        $file = file($srcFile);
-
-        if($comment != '//' and $comment != '#' and $commecnt != ';') //php AND ini comments
-
-            $comment = '//';
-
-        $file[$lineNr] = $comment.$file[$lineNr];
-
-        $fp = fopen($srcFile.'.tmp', 'w+');
-
-        foreach($file as $value) {
-            fwrite($fp, $value);
-        }
-
-        fclose($fp);
-
-        if(self::delete($srcFile) == false) {
-            #	$this->delete($srcFile.'.tmp');		// delete temp file
-            return false;
-        }
-
-        return rename($srcFile.'.tmp', $srcFile);
+        // TODO: what if windows and php version < 5.3.1
+        $this->rename($destination);
     }
 
-    /**
-     * Uncomments a line( only //, # AND ; are supported)
-     *
-     *	@param integer $line line you want to uncomment
-     *	@param string $srcFile path to file
-     *	@param boolean true on success
-     *
-     */
-    public static function unCommentLine($lineNr, $srcFile)
+    public function delete()
     {
-        if(!self::exists($srcFile)) return false;
-
-        $lineNr = (int) $lineNr;
-        $file = file($srcFile);
-
-        if(preg_match('$\A\s(//|#|;)$', $file[$lineNr])) //checks wheter a ' ' OR a \t OR a \n is at the front of the string
-
-            $file[$lineNr] = preg_replace('$\A(\s)(//|#|;)$', '\1', $file[$lineNr]); //replaces the # AND // but not the ' ' OR \t
-        else  $file[$lineNr] = preg_replace('$\A(//|#|;)$', '', $file[$lineNr]); //replaces # AND // if its at the front of the string
-
-        $fp = fopen($srcFile.'.tmp', 'w+');
-
-        foreach($file as $value) {
-            fwrite($fp, $value);
+        if(!unlink($this->_file->getFileName(), $this->_file->getContext())) {
+            throw new \Chrome\FileException('Could not delte file');
         }
-
-        fclose($fp);
-
-        if(self::delete($srcFile) == false) {
-            #	$this->delete($srcFile.'.tmp');		// delete temp file
-            return false;
-        }
-
-        return rename($srcFile.'.tmp', $srcFile);
     }
 
-    public static function unCommentLines($lineNr, $srcFile)
+    public function seek($position, $whence = SEEK_SET)
     {
-        throw new \Chrome\Exception('not implemented jet');
-    }
-
-    /**
-     * Get content of a file
-     *
-     * @param string $file file path
-     * @param string $type return AS array OR string, default: array
-     * @param string $mode where to start file, start OR end? default: start
-     * @throws \Chrome\Exception
-     * @return mixed
-     */
-    public static function getContent($file, $type = 'array', $mode = 'start')
-    {
-        if(!self::exists($file)) throw new \Chrome\Exception('Cannot read file("'.$file.'")! File does not exist!');
-
-        if($mode !== 'start' and $mode !== 'end') throw new \Chrome\Exception('Unexpected mode: '.$mode.'! Available modes are \'start\' OR \'end\'!');
-
-        if($type !== 'array' and $type !== 'string') throw new \Chrome\Exception('Unexpected return type: '.$type.'! Available types are \'array\' OR \'string\'!');
-
-        if(CHROME_MEMORY_LIMIT * 1000000 <= ($size = self::size($file))) // not a good method, but it works
-                 throw new \Chrome\Exception('Cannot get content of file: '.$file.'! Not enough memory available! File: '.$size.', Available: '.CHROME_MEMORY_LIMIT);
-
-        $fileArray = file($file);
-
-        if($type === 'array' and $mode === 'start') return $fileArray;
-        elseif($type === 'array' and $mode === 'end') return array_reverse($fileArray, true);
-        elseif($type === 'string' and $mode === 'start') return implode("\n", $fileArray);
-        elseif($type === 'string' and $mode === 'end') return implode("\n", array_reverse($fileArray));
-        else  throw new \Chrome\Exception('Unknown Error with file: '.$file.', type: '.$type.', mode: '.$mode.'!');
-    }
-
-    /**
-     * Search sth. in a file
-     *
-     * @param string $file file path
-     * @param string $text search string
-     * @param string $mode search from start OR end of file? use: start OR end for a faster search
-     * @throws \Chrome\Exception
-     * @return int 0 if haven't found, else line number
-     */
-    public static function search($file, $text, $mode = 'start')
-    {
-        $content = self::getContent($file, 'array', $mode);
-        if(!is_array($content)) return 0;
-
-        foreach($content as $key => $array) {
-            if(preg_match('#'.$text.'#i', $array)) return $key + 1;
+        if(!$this->_file->isOpen()) {
+            throw new \Chrome\IllegalStateException('File is not opened, cannot seek');
         }
 
-        return 0;
+        if(fseek($this->_file->getFileHandle(), $position, $whence) === -1) {
+            throw new \Chrome\FileException('Could not seek to position');
+        }
     }
 
-    /**
-     * Writes a .ini file by an array
-     *
-     * @param string $file file you want to create, with path!
-     * @param array $array values you want to write into the file
-     * @param boolean $processSections if you got a second-level array, set it true:
-     * 					this will create a .ini file with [section] @see parse_ini_file
-     * @throws \Chrome\Exception if file already exists
-     * @return boolean true on success
-     */
-    public static function write_ini_file($file, $array, $processSections = false)
+    public function rewind()
     {
-        if(self::hasExt($file) === false) $file .= '.ini';
-
-        if(self::exists($file)) throw new \Chrome\Exception('File: '.$file.' already exists!');
-
-        $write = '';
-
-        foreach($array as $key => $value) {
-            if($processSections === true and is_array($value)) {
-                $write .= '['.$key.']'.PHP_EOL;
-                foreach($value as $_key => $_value) {
-                    $write .= $_key."\t\t\t\t=\t\t".$_value.PHP_EOL;
-                }
-            } else  $write .= $key."\t\t\t\t=\t\t".$value.PHP_EOL;
+        if(!$this->_file->isOpen()) {
+            throw new \Chrome\IllegalStateException('File is not opened, cannot seek');
         }
 
-        if(empty($write)) return false;
-
-        return self::createFile($file, $write);
+        if(!rewind($this->_file->getFileHandle())) {
+            throw new \Chrome\FileException('Could not rewind file');
+        }
     }
 }

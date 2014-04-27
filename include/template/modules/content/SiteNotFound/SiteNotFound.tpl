@@ -1,1 +1,1 @@
-Seite konnte nicht gefunden werden!
+<?php echo $LANG->get('modules/content/SiteNotFound/message'); ?>
