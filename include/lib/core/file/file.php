@@ -550,9 +550,7 @@ class Modifier implements Modifier_Interface
 
     public function seek($position, $whence = SEEK_SET)
     {
-        if(!$this->_file->isOpen()) {
-            throw new \Chrome\IllegalStateException('File is not opened, cannot seek');
-        }
+        $this->_checkFileIsOpen();
 
         if(fseek($this->_file->getFileHandle(), $position, $whence) === -1) {
             throw new \Chrome\FileException('Could not seek to position');
@@ -561,12 +559,17 @@ class Modifier implements Modifier_Interface
 
     public function rewind()
     {
-        if(!$this->_file->isOpen()) {
-            throw new \Chrome\IllegalStateException('File is not opened, cannot seek');
-        }
+        $this->_checkFileIsOpen();
 
         if(!rewind($this->_file->getFileHandle())) {
             throw new \Chrome\FileException('Could not rewind file');
         }
     }
+
+	protected function _checkFileIsOpen()
+	{
+        if(!$this->_file->isOpen()) {
+            throw new \Chrome\IllegalStateException('File is not opened, cannot do operation');
+        }
+	}
 }
