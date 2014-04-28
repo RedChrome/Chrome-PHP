@@ -6,7 +6,7 @@ pause
 goto nothingToDo
 
 :noDirGiven
-echo Please give as first argument a directory in Tests\ to test a particular module
+echo Please give as first argument a directory in tests\ to test a particular module
 pause
 
 :nothingToDo

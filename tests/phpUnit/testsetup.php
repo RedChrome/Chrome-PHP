@@ -144,16 +144,16 @@ class Chrome_TestSetup
         $_tempGlobals = $GLOBALS;
         $_tempCookie = $_COOKIE;
 
-        require_once 'Tests/dummies/bootstrap.php';
+        require_once 'tests/dummies/bootstrap.php';
 
-        require_once 'Tests/include/application/test.php';
+        require_once 'tests/include/application/test.php';
 
         $application = new Chrome_Application_Test(new \Chrome\Exception\Handler\ConsoleHandler());
         $application->setModelContext($this->_applicationContext->getModelContext());
         $application->init();
         $this->_diContainer = $application->getDiContainer();
 
-        require_once 'Tests/dummies/database/interface/model.php';
+        require_once 'tests/dummies/database/interface/model.php';
         $this->_diContainer->getHandler('closure')->add('\Chrome\Model\Database\Statement_Test_Interface', function ($c) {
             return new \Test\Chrome\Model\Database\Statement($c->get('\Chrome\Cache\Memory'));
         });

@@ -2,9 +2,9 @@
 
 ;
 require_once LIB . 'core/database/database.php';
-require_once 'Tests/dummies/database/connection/dummy.php';
-require_once 'Tests/dummies/database/adapter.php';
-require_once 'Tests/dummies/database/result.php';
+require_once 'tests/dummies/database/connection/dummy.php';
+require_once 'tests/dummies/database/adapter.php';
+require_once 'tests/dummies/database/result.php';
 
 
 class DatabaseInterfaceModelTest extends Chrome_TestCase
@@ -17,7 +17,7 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
     {
         $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Model', '\Test\Chrome\Database\Result\Dummy');
 
-        require_once 'Tests/dummies/database/interfaceModel.php';
+        require_once 'tests/dummies/database/interfaceModel.php';
 
         $model = new \Test\Chrome\Model\Database\DummyStatement();
         $model->_handler = $this;

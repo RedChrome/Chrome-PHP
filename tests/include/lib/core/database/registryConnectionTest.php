@@ -3,7 +3,7 @@
 ;
 
 require_once LIB . 'core/database/database.php';
-require_once 'Tests/dummies/database/connection/dummy.php';
+require_once 'tests/dummies/database/connection/dummy.php';
 
 class DatabaseRegistryConnectionTest extends PHPUnit_Framework_TestCase
 {

@@ -296,7 +296,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
             // for testing
             if($locale->getPrimaryLanguage() == 'xx' AND $locale->getRegion() == 'XX') {
-                require_once 'Tests/dummies/localization/translate/test.php';
+                require_once 'tests/dummies/localization/translate/test.php';
                 $translate = new \Chrome\Localization\Translate_Test_XX($localization);
             } else {
                 $translate = new \Chrome\Localization\Translate_Simple($localization);
@@ -304,7 +304,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
             // load default validate messages
             $translate->load('validate');
-            #require_once 'Tests/dummies/localization/translate/test.php';
+            #require_once 'tests/dummies/localization/translate/test.php';
             #$translate = new \Chrome\Localization\Translate_Test_XX($localization);
             $localization->setTranslate($translate);
             $this->_applicationContext->getViewContext()->setLocalization($localization);

@@ -1,8 +1,8 @@
 <?php
 
-require_once 'Tests/dummies/authentication/resource.php';
-require_once 'Tests/dummies/authentication/chain.php';
-require_once 'Tests/dummies/cookie.php';
+require_once 'tests/dummies/authentication/resource.php';
+require_once 'tests/dummies/authentication/chain.php';
+require_once 'tests/dummies/cookie.php';
 
 class AuthenticationTest extends PHPUnit_Framework_TestCase
 {

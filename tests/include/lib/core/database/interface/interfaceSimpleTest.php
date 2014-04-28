@@ -2,9 +2,9 @@
 ;
 
 require_once LIB . 'core/database/database.php';
-require_once 'Tests/dummies/database/connection/dummy.php';
-require_once 'Tests/dummies/database/adapter.php';
-require_once 'Tests/dummies/database/result.php';
+require_once 'tests/dummies/database/connection/dummy.php';
+require_once 'tests/dummies/database/adapter.php';
+require_once 'tests/dummies/database/result.php';
 class DatabaseInterfaceSimpleTest extends Chrome_TestCase
 {
     protected $_connection;

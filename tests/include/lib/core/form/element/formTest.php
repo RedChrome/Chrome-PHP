@@ -1,6 +1,6 @@
 <?php
 
-require_once 'Tests/dummies/form/form.php';
+require_once 'tests/dummies/form/form.php';
 
 class Test_Chrome_Form_Element_Form extends Test_Chrome_Form
 {

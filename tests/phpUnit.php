@@ -39,9 +39,9 @@ require 'PHPUnit/Autoload.php';
 // load test setup
 require_once 'phpUnit/testsetup.php';
 // load custom phpUnit command
-require_once 'Tests/phpUnit/testCase.php';
+require_once 'tests/phpUnit/testCase.php';
 // load abstract tests
-require_once 'Tests/abstractTests/bootstrap.php';
+require_once 'tests/abstractTests/bootstrap.php';
 
 $command = new PHPUnit_TextUI_Command_Chrome();
 $command->run($_SERVER['argv'], true);

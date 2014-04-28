@@ -1,6 +1,6 @@
 <?php
-require_once 'Tests/dummies/form/form.php';
-require_once 'Tests/dummies/form/element/isValid.php';
+require_once 'tests/dummies/form/form.php';
+require_once 'tests/dummies/form/element/isValid.php';
 
 class FormIsValidTest extends Chrome_TestCase
 {
