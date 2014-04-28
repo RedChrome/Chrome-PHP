@@ -6,5 +6,5 @@ php:
 before_script:
   - chmod -R 777 ./setUp.sh
   - ./setUp.sh
-script: 'php Tests/phpUnit.php --configuration Tests/phpUnit/config.xml Tests/'
+script: 'php tests/phpUnit.php --configuration tests/phpUnit/config.xml tests/'
   
