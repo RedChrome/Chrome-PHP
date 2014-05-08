@@ -33,7 +33,7 @@ class Resolver_Validator extends Resolver_Abstract
         // match classes like Chrome\Validator\My\Sub\Namespace\MyClassNameValidator
         if(preg_match('#Chrome\\\\Validator((?:\\\\[a-zA-Z0-9]{1,})*)\\\\([a-zA-Z0-9]{1,})(Validator|Composition|Composer)#AD', $class, $matches))
         {
-            return BASEDIR.'plugins/Validate'.strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php'));
+            return BASEDIR.'plugins/validate'.strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php'));
         }
 
         return false;
