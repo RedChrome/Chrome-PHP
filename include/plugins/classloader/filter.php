@@ -20,32 +20,24 @@
 namespace Chrome\Classloader;
 
 /**
- * Resolves all classes beginning with 'Chrome_Filter_Chain_'
+ * Resolves all classes of type \Chrome\Filter\*\ClassName
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
 class Resolver_Filter extends Resolver_Abstract
 {
-    // TODO: change this, filter has now a namespace.
-
     /**
-     * Resolves a class, if $class is of Chrome_Filter_* type
+     * Resolves a class, if $class is of Chrome\Filter\*\ type
      *
      * @param stinrg $class name of the class
      * @return file name, or false if not found
      */
     public function resolve($class)
     {
-        // beginn with 'Chrome_Filter_Chain_'
-        if(preg_match('#Chrome_Filter_Chain_(.{1,})#i', $class, $matches)) {
-            return BASEDIR.'plugins/Filter/chain/'.strtolower($matches[1]).'.php';
-
-            // beginn with 'Chrome_Filter_'
-        } else
-            if(preg_match('#Chrome_Filter_(.{1,})#i', $class, $matches)) {
-                return BASEDIR.'plugins/Filter/'.strtolower($matches[1]).'.php';
-            }
+        if(preg_match('#Chrome\\\\Validator((?:\\\\[a-zA-Z0-9]{1,})*)\\\\([a-zA-Z0-9]{1,})#AD')) {
+            return BASEDIR.'plugins/Filter'.strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php'));
+        }
 
         return false;
     }
