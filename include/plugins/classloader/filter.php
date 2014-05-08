@@ -27,6 +27,8 @@ namespace Chrome\Classloader;
  */
 class Resolver_Filter extends Resolver_Abstract
 {
+    // TODO: change this, filter has now a namespace.
+
     /**
      * Resolves a class, if $class is of Chrome_Filter_* type
      *

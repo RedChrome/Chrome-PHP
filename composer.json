@@ -4,7 +4,8 @@
     },
     
     "require-dev": {
-        "codeception/codeception": "1.8.*@dev"
+        "codeception/codeception": "1.8.*@dev",
+        "phpunit/phpunit": "3.7.*"
     },
         
     "config": {

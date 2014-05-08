@@ -300,7 +300,7 @@ abstract class AbstractValidator implements Validator_Interface
      */
     public function isValid()
     {
-        return $this->_isValid;
+        return ($this->_isValid !== null) ? $this->_isValid : false;
     }
 
     /**

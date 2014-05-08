@@ -18,7 +18,8 @@ abstract class Chrome_TestCase extends PHPUnit_Framework_TestCase
         $this->_cookie = $this->_appContext->getRequestHandler()->getRequestData()->getCookie();
     }
 
-    public static function returnValues(array $values) {
+    public static function returnValues(array $values)
+    {
         return new PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls($values);
     }
 }

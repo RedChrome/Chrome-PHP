@@ -18,6 +18,7 @@
  */
 
 namespace Chrome\Filter\Chain;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Filter
@@ -58,7 +59,6 @@ abstract class AbstractChain
 }
 
 namespace Chrome\Filter;
-
 
 /**
  * @package CHROME-PHP

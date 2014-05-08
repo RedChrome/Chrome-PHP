@@ -8,11 +8,13 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
 {
     protected $_auth = null;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->_auth = new \Chrome\Authentication\Authentication();
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
 
     }
 
@@ -26,8 +28,8 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $this->assertSame($chain, $this->_auth->getChain());
     }
 
-    public function testAddChain() {
-
+    public function testAddChain()
+    {
         $firstChain  = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
         $secondChain = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
 
@@ -41,19 +43,18 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testAuthenticateWithNoInfo() {
-
+    public function testAuthenticateWithNoInfo()
+    {
         $this->_auth->authenticate();
 
         $this->assertFalse($this->_auth->isUser());
         $this->assertTrue($this->_auth->isAuthenticated());
     }
 
-    public function testCreateAuthentication() {
-
+    public function testCreateAuthentication()
+    {
         $chain = $this->_auth->getChain();
         $resource = $this->getMock('\Chrome\Authentication\CreateResource_Interface');
-
 
         $this->_auth->setExceptionHandler($this->getMock('\Chrome\Exception\Handler_Interface'));
         $exceptionHandler = $this->getMock('\Chrome\Exception\Handler_Interface');
@@ -114,7 +115,6 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $chain = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
         $chain->expects($this->any())->method('authenticate')->will($this->returnValue('1f921'));
         $this->_auth->addChain($chain);
-
 
         $this->setExpectedException('\Chrome\AuthenticationException');
 
