@@ -53,7 +53,7 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
         $this->_model  = $registrationModel;
     }
 
-    public function setValidators(\Chrome_Validator_Interface $emailValidator, \Chrome_Validator_Interface $nameValidator, \Chrome_Validator_Interface $passwordValidator)
+    public function setValidators(\Chrome\Validator\Validator_Interface $emailValidator, \Chrome\Validator\Validator_Interface $nameValidator, \Chrome\Validator\Validator_Interface $passwordValidator)
     {
         $this->_emailValidator = $emailValidator;
         $this->_nameValidator  = $nameValidator;

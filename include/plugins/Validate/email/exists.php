@@ -17,7 +17,10 @@
  * @subpackage Chrome.Validator
  */
 
-use Chrome\Helper\User\Email_Interface;
+namespace Chrome\Validator\Email;
+
+use \Chrome\Helper\User\Email_Interface;
+use \Chrome\Validator\AbstractValidator;
 
 /**
  * A Validator that checks whether the email exists or not.
@@ -31,28 +34,27 @@ use Chrome\Helper\User\Email_Interface;
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */
-class Chrome_Validator_Email_Exists extends Chrome_Validator
+class ExistsValidator extends AbstractValidator
 {
     protected $_helper = null;
 
     protected $_returnConverter = true;
 
-    public function __construct(Email_Interface $emailHelper, $returnTrueIfExists)
+    const OPTION_RETURN_TRUE_IF_EXISTS = 'RETURNTRUEIFEXISTS';
+
+    public function __construct(Email_Interface $emailHelper, $returnTrueIfExists = true)
     {
         $this->_helper = $emailHelper;
-        $this->_returnConverter = $returnTrueIfExists;
-    }
-
-    protected function _getDBInterface()
-    {
-        return $this->_dbInterface;
+        $this->_options[self::OPTION_RETURN_TRUE_IF_EXISTS] = $returnTrueIfExists;
     }
 
     protected function _validate()
     {
+        $this->_namespace = 'plugins/validator/email';
+
         $emailIsUsed = (bool) $this->_helper->emailIsUsed($this->_data);
 
-        if($this->_returnConverter === true) {
+        if($this->_options[self::OPTION_RETURN_TRUE_IF_EXISTS] === true) {
             $return = $emailIsUsed;
         } else {
             $return = !$emailIsUsed;

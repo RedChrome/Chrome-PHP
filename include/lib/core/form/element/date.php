@@ -16,6 +16,8 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
+use \Chrome\Validator\Composition\AndComposition;
+use Chrome\Validator\Form\Element\CallbackValidator;
 
 /**
  *
@@ -38,8 +40,8 @@ class Chrome_Form_Element_Date extends Chrome_Form_Element_Abstract implements C
 
     protected function _getValidator()
     {
-        $andValidator = new Chrome_Validator_Composition_And();
-        $andValidator->addValidator(new Chrome_Validator_Form_Element_Inline(array($this, 'inlineValidation')));
+        $andValidator = new AndComposition();
+        $andValidator->addValidator(new CallbackValidator(array($this, 'inlineValidation')));
 
         $this->_addUserValidator($andValidator);
 

@@ -13,14 +13,14 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $this->setAttribute(self::ATTRIBUTE_ID, 'Index');
         $this->setAttribute(self::ATTRIBUTE_ACTION, new \Chrome\Resource\Resource('static:index'));
 
-        $lengthValidator = new Chrome_Validator_Form_Length();
-        $lengthValidator->setOptions(array(Chrome_Validator_Form_Length::CHROME_VALIDATOR_FORM_LENGTH_MAX => 35,
-                                            Chrome_Validator_Form_Length::CHROME_VALIDATOR_FORM_LENGTH_MIN => 1));
+        $lengthValidator = new \Chrome\Validator\String\LengthValidator();
+        $lengthValidator->setOptions(array(\Chrome\Validator\String\LengthValidator::OPTION_MAX_LENGTH => 35,
+                                            \Chrome\Validator\String\LengthValidator::OPTION_MIN_LENGTH => 1));
 
-        $emptyValidator = new Chrome_Validator_Form_Empty();
+        $emptyValidator = new \Chrome\Validator\General\NotEmptyValidator();
         // $textValidators = array( $emptyValidator, $lengthValidator );
 
-        $textValidators = new Chrome_Validator_Composition_And();
+        $textValidators = new \Chrome\Validator\Composition\AndComposition();
         $textValidators->addValidators(array($emptyValidator, $lengthValidator));
 
         // form

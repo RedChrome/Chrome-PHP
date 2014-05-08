@@ -15,21 +15,18 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Validator
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [23.07.2013 13:21:27] --> $
  */
+namespace Chrome\Validator\Form\Element;
 
-if(CHROME_PHP !== true)
-    die();
+use Chrome\Validator\AbstractValidator;
 
 /**
- * Chrome_Validator_Form_Element_Inline
+ * A validator which uses a callback to validate.
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */
-class Chrome_Validator_Form_Element_Inline extends Chrome_Validator
+class CallbackValidator extends AbstractValidator
 {
     protected $_callback = null;
 
@@ -44,7 +41,26 @@ class Chrome_Validator_Form_Element_Inline extends Chrome_Validator
 
     protected function _validate()
     {
-        $returnValue = call_user_func($this->_callback, $this->_data);
+        $this->_namespace = 'plugins/validate/form/element';
+
+        $returnValue;
+
+        try {
+
+            if(is_array($this->_callback) ) {
+                $returnValue = call_user_func($this->_callback, $this->_data);
+            } else {
+                // Note that $this->_callback($this->_data) will get interpreted
+                // from php by calling the method _callback of this class.
+                // Thats why, we use a local variable ...
+                $callback = $this->_callback;
+                $returnValue = $callback($this->_data);
+            }
+
+        } catch(\Chrome\Exception $e) {
+            $this->_setError('exception_while_validating');
+            return false;
+        }
 
         if($returnValue === true) {
             return true;

@@ -374,11 +374,11 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
      *
      * This will add the validator given by the option instance to the given $validator.
      *
-     * @param Chrome_Validator_Composition_Interface $validator
+     * @param Chrome\Validator\Composition_Interface $validator
      *        Validator which will get the user validator added.
      * @return void
      */
-    protected function _addUserValidator(Chrome_Validator_Composition_Interface $validator)
+    protected function _addUserValidator(\Chrome\Validator\Composition_Interface $validator)
     {
         $userValidator = $this->_option->getValidator();
 
@@ -406,12 +406,13 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
     }
 
     /**
+     * Returns a validator which contains the validation logic (used in isValid)
      *
-     * @return Chrome_Validator_Interface
+     * @return Validator_Interface
      */
     protected function _getValidator()
     {
-        // Either this method, or isValid must get overwritten!
+        // Either this method or isValid must get overwritten!
         throw new \Chrome\Exception('Method not overwritten');
     }
 
@@ -502,6 +503,15 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
     }
 }
 
+use \Chrome\Validator\Composition\OrComposition;
+use \Chrome\Validator\Composition\AndComposition;
+use \Chrome\Validator\Form\Element\ReadonlyValidator;
+use \Chrome\Validator\Form\Element\RequiredValidator;
+use \Chrome\Validator\Form\Element\ContainsValidator;
+use \Chrome\Validator\Form\Element\AttachmentValidator;
+use \Chrome\Validator\Form\Element\SentReadonlyValidator;
+use \Chrome\Validator\Form\Element\CallbackValidator;
+
 /**
  * Chrome_Form_Element_Abstract
  *
@@ -527,26 +537,26 @@ abstract class Chrome_Form_Element_Abstract extends Chrome_Form_Element_Basic_Ab
     /**
      * Gets the validator from $_options and may append/prepend additional validators to it
      *
-     * @return Chrome_Validator_Interface
+     * @return Validator_Interface
      */
     protected function _getValidator()
     {
-        $composition = new Chrome_Validator_Composition_Or();
-        $composition->addValidator(new Chrome_Validator_Form_Element_Readonly($this->_option));
+        $composition = new OrComposition();
+        $composition->addValidator(new ReadonlyValidator($this->_option));
 
-        $andComposition = new Chrome_Validator_Composition_And();
+        $andComposition = new AndComposition();
         $composition->addValidator($andComposition);
 
-        $andComposition->addValidator(new Chrome_Validator_Form_Element_Required($this->_option));
+        $andComposition->addValidator(new RequiredValidator($this->_option));
 
         if(($allowedValue = $this->_option->getAllowedValue()) !== null)
         {
-            $andComposition->addValidator(new Chrome_Validator_Form_Element_Contains(array($allowedValue)));
+            $andComposition->addValidator(new ContainsValidator(array($allowedValue)));
         }
 
         if($this->_option instanceof Chrome_Form_Option_Element_Attachable_Interface)
         {
-            $andComposition->addValidator(new Chrome_Validator_Form_Element_Attachment($this->_option));
+            $andComposition->addValidator(new AttachmentValidator($this->_option));
         }
 
         $this->_addUserValidator($andComposition);
@@ -645,16 +655,16 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
     /**
      * Returns a validator composition and may append user validators
      *
-     * @return Chrome_Validator_Composition_Interface
+     * @return Chrome\Validator\Composition_Interface
      */
     protected function _getValidator()
     {
-        $and = new Chrome_Validator_Composition_And();
+        $and = new AndComposition();
 
-        $and->addValidator(new Chrome_Validator_Form_Element_Inline(array($this, 'inlineValidation')));
-        $and->addValidator(new Chrome_Validator_Form_Element_SentReadonly($this->_option));
-        $and->addValidator(new Chrome_Validator_Form_Element_Required($this->_option));
-        $and->addValidator(new Chrome_Validator_Form_Element_Contains($this->_option->getAllowedValues()));
+        $and->addValidator(new CallbackValidator(array($this, 'inlineValidation')));
+        $and->addValidator(new SentReadonlyValidator($this->_option));
+        $and->addValidator(new RequiredValidator($this->_option));
+        $and->addValidator(new ContainsValidator($this->_option->getAllowedValues()));
 
         if(($validator = $this->_option->getValidator()) !== null)
         {
@@ -663,7 +673,7 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
 
         if($this->_option instanceof Chrome_Form_Option_Element_Attachable_Interface)
         {
-            $and->addValidator(new Chrome_Validator_Form_Element_Attachment($this->_option));
+            $and->addValidator(new AttachmentValidator($this->_option));
         }
 
         $this->_addUserValidator($and);

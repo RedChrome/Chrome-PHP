@@ -17,25 +17,24 @@
  * @subpackage Chrome.Validator
  */
 
+namespace Chrome\Validator;
+
+use Chrome\Localization\Message;
+
 /**
  * Interface for validator classes
  *
  * The validation logic should be inside validate().
  *
+ * A Validator can get autoloaded if the class name has the following structure:
+ *
+ * Chrome\Validator\Any\Sub\Element\MyClassNameValidator -> file: include/plugins/Validate/any/sub/element/myclassname.php
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Validator
  */
-interface Chrome_Validator_Interface
+interface Validator_Interface
 {
-    /**
-     * Resets all previously done configurations, validations or other customizations.
-     *
-     * The previously set options will not be modified. Use this, if you want to validate other data
-     *
-     * @return void
-     */
-    public function reset();
-
     /**
      * Sets the data to validate
      *
@@ -79,14 +78,16 @@ interface Chrome_Validator_Interface
     /**
      * Returns one error while validating or an error with the data
      *
-     * @return string
+     * @return \Chrome\Localization\Message_Interface
      */
     public function getError();
 
     /**
-     * Returns all errors
+     * Returns all errors.
      *
-     * @return array numerically indexed
+     * Returns an array of \Chrome\Localization\Message_Interface
+     *
+     * @return array
      */
     public function getAllErrors();
 }
@@ -94,25 +95,29 @@ interface Chrome_Validator_Interface
 /**
  * Interface for validator classes which can append other validators
  *
+ * A Validator composition can also get autoloaded if it has the structure
+ *
+ * Chrome\Validator\Any\Sub\Element\MyClassNameComposition -> file: include/plugins/Validate/any/sub/element/myclassname.php
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.Validator
  */
-interface Chrome_Validator_Composition_Interface extends Chrome_Validator_Interface
+interface Composition_Interface extends Validator_Interface
 {
     /**
      * Adds a validator
      *
-     * @param Chrome_Validator_Interface $validator validator to add
+     * @param Validator_Interface $validator validator to add
      * @return void
      */
-    public function addValidator(Chrome_Validator_Interface $validator);
+    public function addValidator(Validator_Interface $validator);
 
     /**
      * adds validators given in array (as values, key gets ignored) in the given order
      *
      * Throws an \Chrome\InvalidArgumentException if a value of the array does not contain a appropriate class
      *
-     * @param array $validators an array containing as values classes which implements Chrome_Validator_Interface
+     * @param array $validators an array containing as values classes which implements Validator_Interface
      * @return void
      */
     public function addValidators(array $validators);
@@ -122,7 +127,7 @@ interface Chrome_Validator_Composition_Interface extends Chrome_Validator_Interf
      *
      * Throws an \Chrome\InvalidArgumentException if a value of the array does not contain a appropriate class
      *
-     * @param array $validators an array containing as values classes which implements Chrome_Validator_Interface
+     * @param array $validators an array containing as values classes which implements Validator_Interface
      * @return void
      */
     public function setValidators(array $validators);
@@ -141,17 +146,19 @@ interface Chrome_Validator_Composition_Interface extends Chrome_Validator_Interf
      *
      * If $index is not set, then it returns null, otherwise the requested validator
      *
-     * @return Chrome_Validator_Interface or null
+     * @return Validator_Interface or null
      */
     public function getValidator($index);
 }
 
 /**
- * Chrome_Validator
+ * AbstractValidator
  *
  * Example:
  * <code>
- * class Chrome_Validator_Test extends Chrome_Validator {
+ * namespace Chrome\Validator;
+ *
+ * class TestValidator extends AbstractValidator {
  *
  *	private $_email;
  *
@@ -168,14 +175,14 @@ interface Chrome_Validator_Composition_Interface extends Chrome_Validator_Interf
  * 	}
  * }
  *
- * $v['e1'] = new Chrome_Validator_Test($_POST['email']);
- * $v['e2'] = new Chrome_Valiadtor_Test($_POST['email']);
- * // add here another Validator e.g. Chrome_Validator_User
+ * $v['e1'] = new TestValidator($_POST['email']);
+ * $v['e2'] = new TestValidator($_POST['email']);
+ * // add here another Validator e.g. UserValidator
  *
  * foreach($v AS $validator) {
  * 	if(!$validator->isValid()) {
- * 		while($error = $validator->getError())
- * 			$errorMsg .= $error;
+ * 		while( ($error = $validator->getError()) !== null)
+ * 			$errors[] = $error;
  * 	}
  * }
  *
@@ -186,7 +193,7 @@ interface Chrome_Validator_Composition_Interface extends Chrome_Validator_Interf
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */
-abstract class Chrome_Validator implements Chrome_Validator_Interface
+abstract class AbstractValidator implements Validator_Interface
 {
     /**
      * Stores options
@@ -200,7 +207,7 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      *
      * @var array
      */
-    protected $_errorMsg = array();
+    protected $_errors = array();
 
     /**
      * Says whether the last validate() call was valid or not
@@ -217,6 +224,20 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      * @var mixed
      */
     protected $_data = null;
+
+    /**
+     * The namespace for a error message, see {@link \Chrome\Localization\Message_Interface}
+     *
+     * @var string
+     */
+    protected $_namespace = '';
+
+    /**
+     * Indicating, whether namespaces are getting updated if merging error messages
+     *
+     * @var boolean
+     */
+    protected $_updateNamespace = true;
 
     /**
      * Sets additional options
@@ -240,7 +261,7 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
         if(is_bool($boolean)) {
             $this->_isValid = $boolean;
         } else {
-            $this->_isValid = (sizeof($this->_errorMsg) === 0);
+            $this->_isValid = (count($this->_errors) === 0);
         }
     }
 
@@ -264,38 +285,8 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      */
     abstract protected function _validate();
 
-    /**
-     * Adds a error message
-     *
-     * @param string $msg error message
-     */
-    protected function _setError($msg, array $params = null)
-    {
-        if($params !== null)
-        {
-            $this->_errorMsg[] = array($msg, $params);
-        } else
-        {
-            $this->_errorMsg[] = $msg;
-        }
-    }
-
-    /**
-     * @see Chrome_Validator_Interface::reset()
-     */
-    public function reset()
-    {
-        $this->_errorMsg = array();
-        $this->_data = null;
-        $this->_isValid = null;
-    }
-
-    /**
-     * @see Chrome_Validator_Interface::isValidData()
-     */
     public function isValidData($data)
     {
-        $this->_reset();
         $this->setData($data);
         $this->validate();
 
@@ -319,7 +310,7 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      */
     public function getError()
     {
-        return array_pop($this->_errorMsg);
+        return array_pop($this->_errors);
     }
 
     /**
@@ -329,29 +320,119 @@ abstract class Chrome_Validator implements Chrome_Validator_Interface
      */
     public function getAllErrors()
     {
-        $return = $this->_errorMsg;
-        $this->_errorMsg = array();
+        $return = $this->_errors;
+        $this->_errors = array();
         return $return;
+    }
+
+    /**
+     * Adds a error message
+     *
+     * @param string $msg error message
+     */
+    protected function _setError($msg, array $params = array(), $namespace = null)
+    {
+        if($namespace === null) {
+            $namespace = $this->_namespace;
+        }
+
+        $this->_errors[] = new Message($msg, $params, $namespace);
+    }
+
+    /**
+     * Validates a given validator, merges validations errors and returns it's validation state
+     *
+     * Note: No options are getting set
+     *
+     * @param Validator_Interface $validator
+     * @return boolean
+     */
+    protected function _validateWith(Validator_Interface $validator)
+    {
+        $validator->validate();
+
+        if(!$validator->isValid()) {
+            $this->_errors = $this->_mergeErrors($this->_errors, $validator->getAllErrors());
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Validates a given validator, merges validations errors and returns it's validation state using $data
+     * which is used as validation input
+     *
+     * Note: No options are getting set
+     *
+     * @param Validator_Interface $validator
+     * @param mixed $data
+     * @return boolean
+     */
+    protected function _validateWithUsingData(Validator_Interface $validator, $data)
+    {
+        if(!$validator->isValidData($data)) {
+            $this->_errors = $this->_mergeErrors($this->_errors, $validator->getAllErrors());
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Merges all $toBeMerged messages into $initialErrors and updating namespace of $toBeMerged
+     *
+     * @param array $initialErrors
+     * @param array $toBeMerged
+     * @return array
+     */
+    private function _mergeErrors(array $initialErrors, array $toBeMerged)
+    {
+        if($this->_updateNamespace === true) {
+            foreach($toBeMerged as $merge)
+            {
+                $merge->setNamespace($this->_namespace);
+                $initialErrors[] = $merge;
+            }
+        } else {
+            $initialErrors = array_merge($initialErrors, $toBeMerged);
+        }
+
+        return $initialErrors;
+    }
+
+    /**
+     * Sets the namespace for all subsequent set error messages.
+     *
+     * It is highly recommended to use this method, since otherwise
+     * all errors will polute the global error namespace and the
+     * translation of the error messages will probably not work.
+     *
+     * @param string $namespace the error message namespace
+     */
+    protected function _setNamespace($namespace)
+    {
+        $this->_namespace = $namespace;
     }
 }
 
-abstract class Chrome_Validator_Composition_Abstract extends Chrome_Validator implements Chrome_Validator_Composition_Interface
+abstract class AbstractComposition extends AbstractValidator implements Composition_Interface
 {
     protected $_validators = array();
 
-    public function addValidator(Chrome_Validator_Interface $validator)
+    public function addValidator(Validator_Interface $validator)
     {
+        if($validator === $this) {
+            throw new \Chrome\InvalidArgumentException('Tried to add this object to itself, causing circle dependencies.');
+        }
+
         $this->_validators[] = $validator;
     }
 
     public function addValidators(array $validators)
     {
         foreach($validators as $validator) {
-            if($validator instanceof Chrome_Validator_Interface) {
-                $this->_validators[] = $validator;
-            } else {
-                throw new \Chrome\InvalidArgumentException('An element of the array was not a subclass of Chrome_Validator_Interface!');
-            }
+            $this->addValidator($validator);
         }
     }
 
@@ -381,6 +462,10 @@ abstract class Chrome_Validator_Composition_Abstract extends Chrome_Validator im
     }
 }
 
+namespace Chrome\Validator\Composer;
+
+use \Chrome\Validator\AbstractValidator;
+
 /**
  * Use this validator if you want to compose a complex set of validators together
  *
@@ -389,12 +474,12 @@ abstract class Chrome_Validator_Composition_Abstract extends Chrome_Validator im
  * @package CHROME-PHP
  * @subpackage Chrome.Validator
  */
-abstract class Chrome_Validator_Composer_Abstract extends Chrome_Validator
+abstract class AbstractComposer extends AbstractValidator
 {
     /**
      * Composes multiple validators to one complex validator
      *
-     * @return Chrome_Validator_Interface
+     * @return \Chrome\Validator\Validator_Interface
      */
     abstract protected function _getValidator();
 
@@ -408,22 +493,27 @@ abstract class Chrome_Validator_Composer_Abstract extends Chrome_Validator
     }
 }
 
+namespace Chrome\Validator\Configurable;
+
+use \Chrome\Validator\AbstractValidator;
+use \Chrome\Config\Config_Interface;
+
 /**
  * An abstract validator, which needs a configuration
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Validator
  */
-abstract class Chrome_Validator_Configurable extends Chrome_Validator
+abstract class AbstractConfigurable extends AbstractValidator
 {
     /**
      * The configurations
      *
-     * @var \Chrome\Config\Config_Interface
+     * @var Config_Interface
      */
     protected $_config = null;
 
-    public function __construct(\Chrome\Config\Config_Interface $config)
+    public function __construct(Config_Interface $config)
     {
         $this->_config = $config;
     }

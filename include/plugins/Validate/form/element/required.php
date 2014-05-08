@@ -15,30 +15,31 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Validator
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [20.07.2013 16:02:57] --> $
  */
-if(CHROME_PHP !== true)
-    die();
+
+namespace Chrome\Validator\Form\Element;
+
+use Chrome\Validator\AbstractValidator;
 
 /**
- * Chrome_Validator_Form_Element_Required
+ * A validator which ensures that all required input fields are sent.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Validator
  */
-class Chrome_Validator_Form_Element_Required extends Chrome_Validator
+class RequiredValidator extends AbstractValidator
 {
     protected $_option = null;
 
-    public function __construct(Chrome_Form_Option_Element_Basic_Interface $option)
+    public function __construct(\Chrome_Form_Option_Element_Basic_Interface $option)
     {
         $this->_option = $option;
     }
 
     protected function _validate()
     {
+        $this->_namespace = 'plugins/validate/form/element';
+
         if($this->_option instanceof Chrome_Form_Option_Element_Multiple_Interface)
         {
 
@@ -49,6 +50,7 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
 
             if($this->_compareArraysToSubset($this->_option->getRequired(), $this->_data) === false)
             {
+                // TODO: add error message
                 return false;
             }
 
@@ -59,6 +61,7 @@ class Chrome_Validator_Form_Element_Required extends Chrome_Validator
         {
             if($this->_option->getIsRequired() === true and $this->_data === null)
             {
+                // TODO: add error message
                 return false;
             }
 

@@ -46,6 +46,68 @@ interface Localization_Interface
     public function getTimeZone();
 }
 
+interface Message_Interface
+{
+    /**
+     * @return string
+     */
+    public function getMessage();
+
+    /**
+     * @return array
+     */
+    public function getParameters();
+
+    /**
+     * @return string
+     */
+    public function getNamespace();
+
+    /**
+     * @param string $string
+     */
+    public function setNamespace($string);
+}
+
+class Message implements Message_Interface
+{
+    protected $_message = '';
+    protected $_params = array();
+    protected $_namespace = '';
+    public function __construct($message, array $params = array(), $namespace = '')
+    {
+        $this->_message = $message;
+        $this->_params = $params;
+        $this->_namespace = $namespace;
+    }
+
+    // TODO/FIXME: returning also the namespace?
+    public function getMessage()
+    {
+        return $this->_message;
+    }
+
+    public function getParameters()
+    {
+        return $this->_params;
+    }
+
+    public function getNamespace()
+    {
+        return $this->_namespace;
+    }
+
+    public function setNamespace($namespace)
+    {
+        $this->_namespace = (string) $namespace;
+    }
+
+    public function __toString()
+    {
+        return $this->_namespace.':'.$this->_message.'{'.implode(',', $this->_params).'}';
+    }
+}
+
 /**
  *
  * @package CHROME-PHP
@@ -56,6 +118,8 @@ interface Translate_Interface
     public function __construct(Localization_Interface $localization);
 
     public function get($key, array $params = array());
+
+    public function getByMessage(Message_Interface $message);
 
     public function load($module, $submodule = null);
 
@@ -98,6 +162,10 @@ class Translate_Simple implements Translate_Interface
 
     public function get($key, array $params = array())
     {
+        if(!is_string($key)) {
+            throw new \Chrome\InvalidArgumentException('The argument $key must be of type string');
+        }
+
         // assume that 1. key is $key and 2. key is $params
         if(is_array($key) AND isset($key[0]) AND is_string($key[0]) AND isset($key[1]) AND is_array($key[1])) {
             $params = $key[1];
@@ -116,6 +184,11 @@ class Translate_Simple implements Translate_Interface
         }
 
         return strtr($this->_translations[$key], $replacements);
+    }
+
+    public function getByMessage(Message_Interface $message)
+    {
+        return $this->get($message->getMessage(), $message->getParameters());
     }
 
     public function load($module, $submodule = null)

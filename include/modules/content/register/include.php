@@ -1,4 +1,9 @@
 <?php
+
+use \Chrome\Validator\General\Password\PasswordValidator;
+use \Chrome\Validator\User\NicknameValidator;
+use \Chrome\Validator\Form\Element\YearBirthdayValidator;
+
 class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
 {
     protected function _init()
@@ -44,7 +49,6 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
 }
 class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
 {
-
     protected function _initFactories()
     {
         // TODO: inject this class
@@ -74,9 +78,9 @@ class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
         return $viewOption;
     }
 }
+
 class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
 {
-
     protected function _init()
     {
         $this->_id = 'Register_StepTwo';
@@ -87,22 +91,19 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
         #$lang = $this->_applicationContext->getViewContext()->getLocalization()->getTranslate();
         //$lang = new Chrome_Language('modules/content/user/registration');
 
-        $emailValidatorDefault = new Chrome_Validator_Email_Default();
-        //$emailExistsValidator = new Chrome_Validator_Email_Exists();
-        //$emailBlacklistValidator = new Chrome_Validator_Email_Blacklist();
-        //$emailExistsValidator->setOptions(array(Chrome_Validator_Email_Exists::CHROME_VALIDATOR_EMAIL_EXISTS_VALID_ON_SUCCESS => false));
+        $emailSyntaxValidator = new \Chrome\Validator\Email\SyntaxValidator();
 
-        $emailValidator = new Chrome_Validator_Composition_And();
-        $emailValidator->addValidators(array($emailValidatorDefault,
+        $emailValidator = new \Chrome\Validator\Composition\AndComposition();
+        $emailValidator->addValidators(array($emailSyntaxValidator,
                                                 //$emailExistsValidator,
                                                 //$emailBlacklistValidator
         ));
 
-        $birthdayValidator = new Chrome_Validator_Form_Element_Birthday();
+        $birthdayValidator = new YearBirthdayValidator();
 
-        $passwordValidator = new Chrome_Validator_Form_Password();
+        $passwordValidator = new PasswordValidator();
 
-        $nicknameValidator = new Chrome_Validator_Form_NicknameRegister();
+        $nicknameValidator = new NicknameValidator();
 
         $emailConverter = new \Chrome\Converter\ConverterList();
         $emailConverter->setConversion(array('charToHtml', 'stripHtml', 'strToLower', 'trim'));

@@ -15,20 +15,28 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Validator
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 18:45:05] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+namespace Chrome\Validator\Composition;
+
+use \Chrome\Validator\AbstractComposition;
 
 /**
+ * A composition of multiple validators combined via AND/&&
+ *
+ * What it actually does:
+ * $validator1->isValid() AND $val2->isValid() AND ...
+ *
+ * If only one validator returns false, so this class does. All subsequent validators are not processed
+ * (like php's AND does)
+ *
+ * If all validators return true, then this class returns true and forgets all error messages.
+ *
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */
-class Chrome_Validator_Composition_And extends Chrome_Validator_Composition_Abstract
+class AndComposition extends AbstractComposition
 {
     public function __construct()
     {
@@ -37,14 +45,14 @@ class Chrome_Validator_Composition_And extends Chrome_Validator_Composition_Abst
     protected function _validate()
     {
         foreach($this->_validators as $validator) {
-            $validator->validate();
-            if($validator->isValid() === false) {
-                $this->_errorMsg = $validator->getAllErrors();
+
+            if($this->_validateWith($validator) === false) {
                 return false;
             }
         }
 
-        $this->_errorMsg = array();
+        // forget all errors
+        $this->_errors = array();
 
         return true;
     }

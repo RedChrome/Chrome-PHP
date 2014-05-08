@@ -3,6 +3,8 @@
 /**
  * CHROME-PHP CMS
  *
+ * PHP version 5
+ *
  * LICENSE
  *
  * This source file is subject to the Creative Commons license that is bundled
@@ -14,27 +16,15 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.DependencyInjection
+ * @subpackage Chrome.Module.User
  */
+namespace Chrome\Validator\User;
 
-namespace Chrome\DI\Handler;
-
-use Chrome\DI\Handler_Interface;
-use Chrome\DI\Container_Interface;
-
-class Validator implements Handler_Interface
+class NameValidator extends \Chrome\Validator\Composer\AbstractComposer
 {
-    public function remove($key)
+    protected function _getValidator()
     {
-        // do nothing
-    }
-
-    public function get($key, Container_Interface $container)
-    {
-        if(!is_subclass_of($key, '\Chrome\Validator\Configurable\AbstractConfigurable')) {
-            return null;
-        }
-
-        return new $key($container->get('\Chrome\Config\Config_Interface'));
+        // TODO: maybe add a "name unique" validator
+        return new NicknameValidator();
     }
 }

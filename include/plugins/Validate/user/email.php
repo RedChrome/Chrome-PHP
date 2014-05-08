@@ -20,7 +20,11 @@
  */
 namespace Chrome\Validator\User;
 
-class Name extends \Chrome_Validator_Composer_Abstract
+use \Chrome\Validator\Email\SyntaxValidator;
+use \Chrome\Validator\Email\BlacklistValidator;
+use \Chrome\Validator\Composition\AndComposition;
+
+class EmailValidator extends \Chrome\Validator\Composer\AbstractComposer
 {
     protected $_config = null;
 
@@ -31,7 +35,13 @@ class Name extends \Chrome_Validator_Composer_Abstract
 
     protected function _getValidator()
     {
-        // TODO: maybe add a "name unique" validator
-        return new \Chrome_Validator_Name($this->_config);
+        $emailDefaultValidator = new SyntaxValidator();
+        $emailBlacklistValidator = new BlacklistValidator($this->_config);
+
+        $andComposition = new AndComposition();
+        $andComposition->addValidator($emailDefaultValidator);
+        $andComposition->addValidator($emailBlacklistValidator);
+
+        return $andComposition;
     }
 }

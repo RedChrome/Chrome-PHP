@@ -223,8 +223,12 @@ class Chrome_View_Form_Element_Factory_Yaml extends Chrome_View_Form_Element_Fac
     protected function _addAppenders(Chrome_View_Form_Element_Appendable_Interface $viewFormElement)
     {
         // add label and error appender, if object is appendable
+        if($viewFormElement instanceof Chrome_View_Form_Element_Form_Default) {
+            $error = new Chrome_View_Form_Element_Appender_Error($viewFormElement);
+        } else {
+            $error = new Chrome_View_Form_Element_Appender_Error_Yaml($viewFormElement);
+        }
 
-        $error = new Chrome_View_Form_Element_Appender_Error_Yaml($viewFormElement);
         $viewFormElement->addAppender($error);
 
         $yaml = new Chrome_View_Form_Element_Appender_Yaml($viewFormElement);

@@ -20,33 +20,35 @@
  * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.07.2013 18:13:56] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+namespace Chrome\Validator\String;
+
+use \Chrome\Validator\AbstractValidator;
 
 /**
- * Chrome_Validator_Form_Length
+ * Checks that a string has a correct length
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */
-class Chrome_Validator_Form_Length extends Chrome_Validator
+class LengthValidator extends AbstractValidator
 {
-    const CHROME_VALIDATOR_FORM_LENGTH_MAX = 'MAXLENGTH';
-    const CHROME_VALIDATOR_FORM_LENGTH_MIN = 'MINLENGTH';
+    const OPTION_MAX_LENGTH = 'MAX';
+    const OPTION_MIN_LENGTH = 'MIN';
 
-    protected $_options = array(self::CHROME_VALIDATOR_FORM_LENGTH_MAX => 1000,
-                                self::CHROME_VALIDATOR_FORM_LENGTH_MIN => 0);
+    protected $_options = array(self::OPTION_MAX_LENGTH => 1000,
+                                self::OPTION_MIN_LENGTH => 0);
 
     protected function _validate()
     {
+        $this->_namespace = 'plugins/validate/string';
         $length = strlen($this->_data);
 
-        if($length > $this->_options[self::CHROME_VALIDATOR_FORM_LENGTH_MAX]) {
-            $this->_setError('input_too_long', array('length' => $this->_options[self::CHROME_VALIDATOR_FORM_LENGTH_MAX]));
+        if($length > $this->_options[self::OPTION_MAX_LENGTH]) {
+            $this->_setError('input_too_long', array('length' => $this->_options[self::OPTION_MAX_LENGTH]));
         }
 
-        if($length < $this->_options[self::CHROME_VALIDATOR_FORM_LENGTH_MIN]) {
-            $this->_setError('input_too_short', array('length' => $this->_options[self::CHROME_VALIDATOR_FORM_LENGTH_MIN]));
+        if($length < $this->_options[self::OPTION_MIN_LENGTH]) {
+            $this->_setError('input_too_short', array('length' => $this->_options[self::OPTION_MIN_LENGTH]));
         }
     }
 }

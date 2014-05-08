@@ -17,13 +17,23 @@
  * @subpackage Chrome.Validator
  */
 
+namespace Chrome\Validator\Form\Element;
+
+use Chrome\Validator\AbstractValidator;
+
 /**
- * Chrome_Validator_Form_Element_Contains
+ * Checks that the given data contains a specified input
+ *
+ * If the given data is an array, then every value of this array must be contained in the specified input
+ *
+ * If the given data is not an array, then this value must be contained in the specified input.
+ *
+ * The specified input is an array, containing all allowed values for the given data.
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */
-class Chrome_Validator_Form_Element_Contains extends Chrome_Validator
+class ContainsValidator extends AbstractValidator
 {
     protected $_allowedValues = null;
 
@@ -34,6 +44,8 @@ class Chrome_Validator_Form_Element_Contains extends Chrome_Validator
 
     protected function _validate()
     {
+        $this->_namespace = 'plugins/validate/form/element';
+
         if($this->_data === null) {
             return true;
         }

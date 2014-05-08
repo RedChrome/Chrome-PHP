@@ -15,24 +15,24 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Validator
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [16.07.2013 18:08:20] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+namespace Chrome\Validator\General;
+
+use \Chrome\Validator\AbstractValidator;
 
 /**
- * Chrome_Validator_Form_Empty
+ * Checks whether the input is not empty
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */
-class Chrome_Validator_Form_Empty extends Chrome_Validator
+class NotEmptyValidator extends AbstractValidator
 {
     protected function _validate()
     {
+        $this->_namespace = 'plugins/validate/general';
+
         if(empty($this->_data) OR $this->_data == null OR $this->_data == '') {
             $this->_setError('input_is_empty');
         }

@@ -77,7 +77,7 @@ INSERT INTO "chrome"."cp1_class" ("id", "name", "file") VALUES
 (DEFAULT, 'Chrome\\Converter\\', 'lib/core/converter/converter.php'),
 (DEFAULT, 'Chrome\\Converter\\ConverterList', 'lib/core/converter/converter.php'),
 (DEFAULT, 'Chrome\\Exception\\Handler\\AuthenticationHandler', 'lib/exception/authentication.php'),
-(DEFAULT, 'Chrome_Validator', 'lib/core/validator/validator.php'),
+(DEFAULT, 'Chrome\\Validator\\AbstractValidator', 'lib/core/validator/validator.php'),
 (DEFAULT, 'Chrome_View_Helper_HTML', 'plugins/View/html.php'),
 (DEFAULT, 'Chrome_Language', 'lib/core/language.php'),
 (DEFAULT, 'Chrome_Database_Right_Handler_Interface', 'lib/core/database/right_handler.php'),

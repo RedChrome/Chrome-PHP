@@ -15,32 +15,35 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Validator
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [21.07.2013 18:46:09] --> $
  */
 
-if(CHROME_PHP !== true)
-    die();
+namespace Chrome\Validator\Form\Element;
+
+use Chrome\Validator\AbstractValidator;
 
 /**
- * Chrome_Validator_Form_Element_SentReadonly
+ * A validator which ensures that no readonly input was sent
+ *
+ * Since the input filed is marked as readonly the browser will not send this input.
+ * Well, the browser should not send that data. But if he does, we will not accept it.
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */
-class Chrome_Validator_Form_Element_SentReadonly extends Chrome_Validator
+class SentReadonlyValidator extends AbstractValidator
 {
     protected $_option = null;
 
-    public function __construct(Chrome_Form_Option_Element_Basic_Interface $option)
+    public function __construct(\Chrome_Form_Option_Element_Basic_Interface $option)
     {
         $this->_option = $option;
     }
 
     protected function _validate()
     {
-        if($this->_option instanceof Chrome_Form_Element_Interface)
+        $this->_namespace = 'plugins/validate/form/element';
+
+        if($this->_option instanceof \Chrome_Form_Element_Interface)
         {
             if($this->_option->getIsReadonly() === true) {
                 if($this->_data !== null) {
@@ -52,7 +55,7 @@ class Chrome_Validator_Form_Element_SentReadonly extends Chrome_Validator
             return true;
         }
 
-        if($this->_option instanceof Chrome_Form_Option_Element_Multiple_Interface) {
+        if($this->_option instanceof \Chrome_Form_Option_Element_Multiple_Interface) {
 
             foreach($this->_option->getReadonly() as $readonlyInput) {
                 if(in_array($readonlyInput, (array) $this->_data)) {

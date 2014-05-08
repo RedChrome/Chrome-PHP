@@ -445,6 +445,8 @@ interface Chrome_Form_Interface
 /**
  * Chrome_Form_Abstract
  *
+ * TODO: we only need to set the validators if we're callign isValid. create a new method _preIsValid(), _preIsSent(), _preIsCreated() as hooks
+ *
  * The order of is*() methods is: isCreated, isSent, isValid:
  * 1) isCreated checks whether the form was created (aka setting up vars and session)
  * 2) isSent checks whether every form element was sent, which means, every form element has

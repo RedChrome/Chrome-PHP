@@ -105,7 +105,7 @@ class Chrome_Form_Option_Element_Form extends Chrome_Form_Option_Element_Basic
  *
  * This element checks whether the user has sent a proper form, that means:
  * 1. The user has to send the right token. This token is created randomly and saved in session.
- * To retriev the token use getOptions(self::CHROME_FORM_ELEMENT_FORM_TOKEN)
+ * To retrieve the token use getOptions(self::CHROME_FORM_ELEMENT_FORM_TOKEN)
  * 2. The user has to send the form in a specific time intervall
  *
  * Any violation of these rules will cause the form to be invalid!
@@ -144,24 +144,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract implem
             CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME = 'MAXALLOWEDTIME',
             CHROME_FORM_ELEMENT_FORM_MIN_ALLOWED_TIME = 'MINALLOWEDTIME';
 
-    /**
-     * Errors of this element:
-     *
-     * CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME:
-     * Happens if the user waited more than $CHROME_FORM_ELEMENT_FORM_MAX_ALLOWED_TIME seconds
-     *
-     * CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME:
-     * Happens if the user was faster than $CHROME_FORM_ELEMENT_FORM_MIN_ALLOWED_TIME seconds
-     *
-     * CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN:
-     * Happens if the sent token didnt match the saved token -> Protection against XSRF
-     *
-     * @var unknown
-     */
-    const CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME = 'maximum_time_exceeded',
-             CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME = 'minimum_time_fall_short',
-             CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN = 'token_not_valid',
-             CHROME_FORM_ELEMENT_ERROR_NOT_CREATED = 'form_not_created';
+    const CHROME_FORM_ELEMENT_ERROR_NOT_CREATED = 'form_not_created';
 
     protected $_storage = null;
 
@@ -179,7 +162,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract implem
     {
         parent::__construct($form, $id, $option);
 
-        $this->setStorage($option->getStorage());
+        $this->setStorage($this->_option->getStorage());
         // this checks whether the form was created before, and if it was created, then we use the token from the last time
         // we have to renew the timer!
         if($this->_storage->has($this->_id) === true)
@@ -211,39 +194,45 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract implem
         return true;
     }
 
-    public function isValid()
+    protected function _getValidator()
     {
-        if($this->_isValid !== null)
-        {
-            return $this->_isValid;
-        }
-
-        $storedData = $storedData = $this->_storage->get($this->_id);
-
-        if($storedData[self::CHROME_FORM_ELEMENT_FORM_TOKEN] !== $this->getData())
-        {
-            $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN;
-            $this->_isValid = false;
-            return false;
-        }
-
-        if($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_option->getMaxAllowedTime() < $this->_option->getTime())
-        {
-            $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME;
-            $this->_isValid = false;
-            return false;
-        }
-
-        if($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_option->getMinAllowedTime() > $this->_option->getTime())
-        {
-            $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME;
-            $this->_isValid = false;
-            return false;
-        }
-
-        $this->_isValid = true;
-        return true;
+        return new \Chrome\Validator\Form\Element\ElementFormValidator($this->_id, $this->_option);
     }
+
+    /*
+        public function isValid()
+        {
+            if($this->_isValid !== null)
+            {
+                return $this->_isValid;
+            }
+
+            $storedData = $this->_storage->get($this->_id);
+
+            if($storedData[self::CHROME_FORM_ELEMENT_FORM_TOKEN] !== $this->getData())
+            {
+                $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN;
+                $this->_isValid = false;
+                return false;
+            }
+
+            if($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_option->getMaxAllowedTime() < $this->_option->getTime())
+            {
+                $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME;
+                $this->_isValid = false;
+                return false;
+            }
+
+            if($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_option->getMinAllowedTime() > $this->_option->getTime())
+            {
+                $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME;
+                $this->_isValid = false;
+                return false;
+            }
+
+            $this->_isValid = true;
+            return true;
+    }*/
 
     protected function _isSent()
     {
@@ -316,6 +305,11 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract implem
     protected function _getData()
     {
         return $this->_convert($this->_form->getSentData($this->_option->getTokenNamespace()));
+    }
+
+    protected function _getDataToValidate()
+    {
+        return $this->_form->getSentData($this->_option->getTokenNamespace());
     }
 
     /**

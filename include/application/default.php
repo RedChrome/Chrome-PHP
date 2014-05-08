@@ -575,16 +575,14 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
             $return = new \Chrome\Interactor\User\Registration($c->get('\Chrome\Config\Config_Interface'), $c->get('\Chrome\Model\User\Registration_Interface'), $c->get('\Chrome\Hash\Hash_Interface'));
             $emailValidator = $c->get('\Chrome\Validator\User\Registration\Email');
-            $nameValidator = $c->get('\Chrome_Validator_Name');
-            $passwordValidator = $c->get('\Chrome_Validator_Password');
+            $nameValidator = new \Chrome\Validator\User\NameValidator();
+            $passwordValidator = new \Chrome\Validator\General\Password\PasswordValidator();
             $return->setValidators($emailValidator, $nameValidator, $passwordValidator);
             return $return;
         });
 
         $closure->add('\Chrome\Validator\User\Registration\Email', function ($c) {
-            require_once LIB.'modules/user/validators/email.php';
-
-            return new \Chrome\Validator\User\Registration\Email($c->get('\Chrome\Config\Config_Interface'), $c->get('\Chrome\Helper\User\Email_Interface'));
+            return new \Chrome\Validator\User\Registration\EmailValidator($c->get('\Chrome\Config\Config_Interface'), $c->get('\Chrome\Helper\User\Email_Interface'));
         });
 
         $closure->add('\Chrome\Helper\User\Email_Interface', function ($c) {

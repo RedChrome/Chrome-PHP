@@ -17,29 +17,34 @@
  * @subpackage Chrome.Validator
  */
 
+namespace Chrome\Validator\User;
+
+use Chrome\Validator\AbstractValidator;
+use Chrome\Validator\String\LengthValidator;
+
 /**
- * Chrome_Validator_Name
+ * A validator which ensures that the given data suffices the conditions to
+ * be a valid nickname:
+ *
+ * Length in [3, 50]
+ * Uses only "a-z",  "_", "-", "0-9" case-insensitive.
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
- * @todo 		Check if nickname is forbidden? -> This will be an extra validator, see email_blacklist
  */
-class Chrome_Validator_Name extends Chrome_Validator_Configurable
+class NicknameValidator extends AbstractValidator
 {
     protected function _validate()
     {
+        $this->_namespace = 'plugins/validate/user/nickname';
+
+        $lengthValidator = new LengthValidator();
+        $lengthValidator->setOptions(array(LengthValidator::OPTION_MAX_LENGTH => 50, LengthValidator::OPTION_MIN_LENGTH => 3));
+        $this->_validateWithUsingData($lengthValidator, $this->_data);
+
         // nickname contains only a-z, 0-9 AND "-", "_"
         if(preg_match('#[^a-z_\-0-9]#i', $this->_data)) {
-            $this->_setError('name_contains_forbidden_chars');
-        }
-
-        $length = strlen($this->_data);
-
-        if($length < $this->_config->getConfig('user', 'name_min_length')) {
-            $this->_setError('name_too_short');
-        }
-        if($length > $this->_config->getConfig('user', 'name_max_length')) {
-            $this->_setError('name_too_long');
+            $this->_setError('nickname_contains_forbidden_chars');
         }
     }
 }

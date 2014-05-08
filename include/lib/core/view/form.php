@@ -336,7 +336,7 @@ class Chrome_View_Form_Element_Appender_Error extends Chrome_View_Form_Element_A
 
             foreach($form->getValidationErrors($elementId) as $error)
             {
-                $errors .= '<li>' . $translate->get($error) . '</li>';
+                $errors .= '<li>' . $translate->getByMessage($error) . '</li>';
             }
 
             return $errors . '</ul>' . $this->_result;
@@ -364,7 +364,11 @@ class Chrome_View_Form_Element_Appender_Error_Yaml extends Chrome_View_Form_Elem
 
             foreach($form->getValidationErrors($elementId) as $error)
             {
-                $errors .= '<p class="ym-message">' . $translate->get($error) . '</p>';
+                $errors .= '<p class="ym-message">' . $translate->getByMessage($error) . '</p>';
+            }
+
+            if($formElement instanceof Chrome_Form_Element_Form) {
+                return $this->_result.$errors.'</div>';
             }
 
             return $errors .$this->_result.'</div>';

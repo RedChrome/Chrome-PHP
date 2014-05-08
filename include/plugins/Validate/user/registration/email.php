@@ -18,33 +18,13 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Module.User
  */
-namespace Chrome\Validator\User;
-
-class Email extends \Chrome_Validator_Composer_Abstract
-{
-    protected $_config = null;
-
-    public function __construct(\Chrome\Config\Config_Interface $config)
-    {
-        $this->_config = $config;
-    }
-
-    protected function _getValidator()
-    {
-        $emailDefaultValidator = new \Chrome_Validator_Email_Default();
-        $emailBlacklistValidator = new \Chrome_Validator_Email_Blacklist($this->_config);
-
-        $andComposition = new \Chrome_Validator_Composition_And();
-        $andComposition->addValidator($emailDefaultValidator);
-        $andComposition->addValidator($emailBlacklistValidator);
-
-        return $andComposition;
-    }
-}
 
 namespace Chrome\Validator\User\Registration;
 
-class Email extends \Chrome_Validator_Composer_Abstract
+use \Chrome\Validator\Email\ExistsValidator;
+use \Chrome\Validator\Composition\AndComposition;
+
+class EmailValidator extends \Chrome\Validator\Composer\AbstractComposer
 {
     protected $_config = null;
 
@@ -59,9 +39,9 @@ class Email extends \Chrome_Validator_Composer_Abstract
     protected function _getValidator()
     {
         $userEmailValidator = new \Chrome\Validator\User\Email($this->_config);
-        $existsValidator = new \Chrome_Validator_Email_Exists($this->_helper, false);
+        $existsValidator = new ExistsValidator($this->_helper, false);
 
-        $andComposition = new \Chrome_Validator_Composition_And();
+        $andComposition = new AndComposition();
         $andComposition->addValidator($userEmailValidator);
         $andComposition->addValidator($existsValidator);
 

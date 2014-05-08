@@ -45,16 +45,16 @@ interface Chrome_Form_Option_Element_Basic_Interface
     /**
      * Sets a validator
      *
-     * @param Chrome_Validator_Interface $validator
+     * @param \Chrome\Validator\Validator_Interface $validator
      */
-    public function setValidator(Chrome_Validator_Interface $validator);
+    public function setValidator(\Chrome\Validator\Validator_Interface $validator);
 
     /**
      * Returns the validator, set via setValidator
      *
      * This validator is used in the corresponding form element to validate the input
      *
-     * @return Chrome_Validator_Interface
+     * @return \Chrome\Validator\Validator_Interface
      */
     public function getValidator();
 
@@ -138,7 +138,7 @@ class Chrome_Form_Option_Element_Basic implements Chrome_Form_Option_Element_Bas
 
     protected $_converter = null;
 
-    public function setValidator(Chrome_Validator_Interface $validator)
+    public function setValidator(\Chrome\Validator\Validator_Interface $validator)
     {
         $this->_validator = $validator;
 

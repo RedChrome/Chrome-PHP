@@ -17,17 +17,22 @@
  * @subpackage Chrome.Validator
  */
 
+namespace Chrome\Validator\Form\Element;
+
+use Chrome\Validator\AbstractValidator;
+
 /**
- * Chrome_Validator_Form_Element_Attachment
+ * a validator which validates all attachments of a form element. If only one attachment is valid, then
+ * the whole element is valid
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Validator
  */
-class Chrome_Validator_Form_Element_Attachment extends Chrome_Validator
+class AttachmentValidator extends AbstractValidator
 {
     protected $_option = null;
 
-    public function __construct(Chrome_Form_Option_Element_Attachable_Interface $option)
+    public function __construct(\Chrome_Form_Option_Element_Attachable_Interface $option)
     {
         $this->_option = $option;
     }
