@@ -44,18 +44,21 @@ class Chrome_RBAC_Resource extends Chrome_Authorisation_Resource implements Chro
 {
     protected $_role = null;
 
-    public function __construct($id, $role = null, $transformation = null, Chrome_Authorisation_Assert_Interface $obj = null) {
+    public function __construct($id, $role = null, $transformation = null, Chrome_Authorisation_Assert_Interface $obj = null)
+    {
         $this->_id = $id;
         $this->_role = $role;
         $this->_transformation = $transformation;
         $this->_assert = $obj;
     }
 
-    public function getRole() {
+    public function getRole()
+    {
         return $this->_role;
     }
 
-    public function setRole($role) {
+    public function setRole($role)
+    {
         $this->_role = $role;
     }
 }

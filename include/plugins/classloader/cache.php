@@ -39,7 +39,7 @@ class Resolver_Cache extends Resolver_Abstract
 
             $matches[2] = strtolower(str_replace('\\', '/', $matches[2]));
 
-            return PLUGIN.'Cache/'.$matches[2].'.php';
+            return PLUGIN.'cache/'.$matches[2].'.php';
         }
 
         return false;

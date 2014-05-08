@@ -183,7 +183,7 @@ class Database extends \Chrome_Model_Database_Statement_Abstract implements Mode
         foreach($keyValuePairs as $keyValuePair)
         {
             $keyValue = explode('=', $keyValuePair);
-            if(sizeof($keyValue) === 2) {
+            if(count($keyValue) === 2) {
                 $array[$keyValue[0]] = $keyValue[1];
             }
         }

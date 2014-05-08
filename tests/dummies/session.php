@@ -6,7 +6,8 @@ use \Chrome\Request\Session\Session;
 
 class Dummy extends Session
 {
-    public function __construct() {
+    public function __construct()
+    {
 
     }
 }

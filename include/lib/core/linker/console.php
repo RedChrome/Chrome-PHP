@@ -5,6 +5,7 @@ namespace Chrome\Linker\Console;
 use \Chrome\Linker\Linker_Interface;
 use \Chrome\Resource\Resource_Interface;
 use \Chrome\Resource\Model_Interface;
+
 /**
  *
  * @package CHROME-PHP
@@ -37,8 +38,6 @@ class Linker implements Linker_Interface
 
         // TODO: finish
 
-
-
         return $this->_noLinkFound($resource, $relative);
     }
 
@@ -46,8 +45,6 @@ class Linker implements Linker_Interface
     {
         // TODO: finish
         return $resource->getResourceName();
-
-
 
         if($resource->getResourceId() !== null) {
             return $this->getLink($resource->getResourceId(), $relative);

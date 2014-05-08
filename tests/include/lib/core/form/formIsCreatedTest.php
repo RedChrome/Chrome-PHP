@@ -26,7 +26,7 @@ class FormIsCreatedTest extends Chrome_TestCase
         $this->_addElement();
 
         $this->assertTrue($this->_form->isCreated('created'));
-        $this->assertSame($this->_form->isCreated('created'),$this->_form->isCreated('created'));
+        $this->assertSame($this->_form->isCreated('created'), $this->_form->isCreated('created'));
     }
 
     public function testIsCreated()
@@ -34,7 +34,7 @@ class FormIsCreatedTest extends Chrome_TestCase
         $this->_addElement();
 
         $this->assertTrue($this->_form->isCreated());
-        $this->assertSame($this->_form->isCreated(),$this->_form->isCreated());
+        $this->assertSame($this->_form->isCreated(), $this->_form->isCreated());
     }
 
     public function testFormElementGetsOverwrittenWithSameId()

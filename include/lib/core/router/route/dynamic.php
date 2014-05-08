@@ -26,6 +26,7 @@
 //          but in fact, thats some kind of input validation... dont know if needed
 
 namespace Chrome\Router\Route;
+
 /**
  *
  * @package CHROME-PHP

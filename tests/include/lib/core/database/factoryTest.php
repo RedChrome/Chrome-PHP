@@ -1,11 +1,9 @@
 <?php
 
-;
 require_once LIB.'core/database/database.php';
 
 class DatabaseFactoryTest extends PHPUnit_Framework_TestCase
 {
-
     public function testConstructor()
     {
         $connection = new Chrome\Database\Registry\Connection();

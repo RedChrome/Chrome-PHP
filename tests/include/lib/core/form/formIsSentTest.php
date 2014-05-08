@@ -37,7 +37,7 @@ class FormIsSentTest extends Chrome_TestCase
         $this->assertFalse($this->_form->isCreated('notCreated'), 'the element "notCreated" must not be created');
         $this->assertFalse($this->_form->isSent('notCreated'), 'elemnent "notCreated" cannot be sent, if its not created');
 
-        $this->assertSame($this->_form->isSent(),$this->_form->isSent(), 'form should always return the same result on isSent');
+        $this->assertSame($this->_form->isSent(), $this->_form->isSent(), 'form should always return the same result on isSent');
 
         $this->assertSame(array(), $this->_form->getReceivingErrors(), 'no receiving errors cause the form was not created');
     }

@@ -32,7 +32,7 @@
 
 /**
  *@ignore
- */  
+ */
 class XTEA
 {
 
@@ -63,7 +63,7 @@ class XTEA
         //Initialization vector: IV
         if($this->cbc == 1) {
             $cipher[0][0] = time();
-            $cipher[0][1] = (double)microtime() * 1000000;
+            $cipher[0][1] = (double) microtime() * 1000000;
         }
 
         $a = 1;
@@ -79,7 +79,7 @@ class XTEA
             $a++;
         }
 
-        $output = "";
+        $output = '';
         for($i = 0; $i < count($cipher); $i++) {
             $output .= $this->_long2str($cipher[$i][0]);
             $output .= $this->_long2str($cipher[$i][1]);
@@ -140,8 +140,7 @@ class XTEA
         $sum = 0;
         $delta = 0x9e3779b9;
 
-
-        /* start cycle */
+        // start cycle
         for($i = 0; $i < 32; $i++) {
             $y = $this->_add($y, $this->_add($z << 4 ^ $this->_rshift($z, 5), $z) ^ $this->_add($sum, $this->key[$sum & 3]));
 
@@ -151,7 +150,7 @@ class XTEA
 
         }
 
-        /* end cycle */
+        // end cycle
         $v[0] = $y;
         $v[1] = $z;
 
@@ -165,14 +164,14 @@ class XTEA
         $sum = 0xC6EF3720;
         $n = 32;
 
-        /* start cycle */
+        // start cycle
         for($i = 0; $i < 32; $i++) {
             $z = $this->_add($z, -($this->_add($y << 4 ^ $this->_rshift($y, 5), $y) ^ $this->_add($sum, $this->key[$this->_rshift($sum, 11) & 3])));
             $sum = $this->_add($sum, -$delta);
             $y = $this->_add($y, -($this->_add($z << 4 ^ $this->_rshift($z, 5), $z) ^ $this->_add($sum, $this->key[$sum & 3])));
 
         }
-        /* end cycle */
+        // end cycle
 
         return array($y, $z);
     }

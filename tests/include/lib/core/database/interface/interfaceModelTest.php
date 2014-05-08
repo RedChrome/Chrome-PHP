@@ -1,15 +1,14 @@
 <?php
 
-;
 require_once LIB . 'core/database/database.php';
 require_once 'tests/dummies/database/connection/dummy.php';
 require_once 'tests/dummies/database/adapter.php';
 require_once 'tests/dummies/database/result.php';
 
-
 class DatabaseInterfaceModelTest extends Chrome_TestCase
 {
-    protected function _getDatabaseFactory() {
+    protected function _getDatabaseFactory()
+    {
         return $this->_appContext->getModelContext()->getDatabaseFactory();
     }
 

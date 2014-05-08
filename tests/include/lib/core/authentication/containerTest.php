@@ -1,7 +1,6 @@
 <?php
 
-
-class authenticationContainerTest extends PHPUnit_Framework_TestCase
+class AuthenticationContainerTest extends PHPUnit_Framework_TestCase
 {
     protected $_container = null;
 

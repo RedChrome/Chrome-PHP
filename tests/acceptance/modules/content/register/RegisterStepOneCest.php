@@ -1,5 +1,4 @@
 <?php
-
 use \WebGuy;
 
 /**
@@ -8,8 +7,8 @@ use \WebGuy;
 class RegisterStepOneCest
 {
     // tests
-    public function tryToTestNotWaited(WebGuy\ChromeSteps $I) {
-
+    public function tryToTestNotWaited(WebGuy\ChromeSteps $I)
+    {
         $I->wantTo('test registration, first step, not waited');
 
         $I->speakLanguage();
@@ -25,8 +24,8 @@ class RegisterStepOneCest
     }
 
     // tests
-    public function tryToTest(WebGuy\ChromeSteps $I) {
-
+    public function tryToTest(WebGuy\ChromeSteps $I)
+    {
         $I->wantTo('test registration, first step');
 
         $I->speakLanguage();
@@ -43,8 +42,4 @@ class RegisterStepOneCest
         $I->see('XX_email:{}_XX', 'main');
         $I->see('XX_register:{}_XX', 'main');
     }
-
-
-
-
 }

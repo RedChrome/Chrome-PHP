@@ -50,6 +50,7 @@ use \Chrome\Linker\Linker_Interface;
 use \Chrome\Resource\Resource_Interface;
 use \Chrome\Resource\Model_Interface;
 use \Chrome\URI\URI_Interface;
+
 /**
  *
  * @package CHROME-PHP

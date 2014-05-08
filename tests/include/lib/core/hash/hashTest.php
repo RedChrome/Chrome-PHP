@@ -1,12 +1,11 @@
 <?php
 
-;
-
 class HashTest extends PHPUnit_Framework_TestCase
 {
     protected $_hashInstance = null;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->_hashInstance = new \Chrome\Hash\Hash();
     }
 

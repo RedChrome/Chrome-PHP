@@ -4,8 +4,8 @@ require_once LIB.'core/authorisation/authorisation.php';
 
 class AuthorisationResourceTest extends PHPUnit_Framework_TestCase
 {
-    public function testCreateResource() {
-
+    public function testCreateResource()
+    {
         $assert = new Chrome_Authorisation_Assert_Dummy();
 
         $resource = new \Chrome\Resource\Resource('test');

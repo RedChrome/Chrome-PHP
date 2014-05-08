@@ -240,7 +240,8 @@ abstract class AbstractFacade implements Facade_Interface
         }
     }
 
-    protected function _handleException(\Chrome\DatabaseException $e) {
+    protected function _handleException(\Chrome\DatabaseException $e)
+    {
         throw $e;
     }
 

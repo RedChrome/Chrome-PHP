@@ -10,7 +10,8 @@ class Dummy extends Cookie
 {
     public $_cookie = array();
 
-    public function __construct() {
+    public function __construct()
+    {
 
     }
 

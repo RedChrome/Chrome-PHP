@@ -76,7 +76,6 @@ class DefaultHandler implements Handler_Interface
                 }
             }
 
-
             $return .= sprintf('#%1$02d: ', $this->_methodCount);
 
             if(isset($value['file'])) {

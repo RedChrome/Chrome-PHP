@@ -6,7 +6,8 @@ class Test_Chrome_Form_Element_isValid extends Chrome_Form_Element_Abstract
 
     public $errors = array();
 
-    public function isValid() {
+    public function isValid()
+    {
 
         $this->_errors = $this->errors;
 
@@ -18,7 +19,8 @@ class Test_Chrome_Form_Element_isValid extends Chrome_Form_Element_Abstract
         return true;
     }
 
-    protected function _isSent() {
+    protected function _isSent()
+    {
         return true;
     }
 }

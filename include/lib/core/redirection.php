@@ -20,6 +20,7 @@
 namespace Chrome\Redirection;
 
 use \Chrome\Resource\Resource_Interface;
+
 // todo: add redirection to dependecy injector
 /**
  *

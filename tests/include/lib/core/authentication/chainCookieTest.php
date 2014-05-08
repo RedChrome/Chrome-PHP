@@ -27,7 +27,6 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
 
         $this->_resetCookie = true;
 
-
         $this->_chain = new \Chrome\Authentication\Chain\CookieChain($this->_model, $this->_cookie, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
         $this->_chain->setOptions($this->_options);
         $this->_chain->setChain(new \Chrome\Authentication\Chain\NullChain());
@@ -161,22 +160,24 @@ class AuthenticationChainCookieTest extends Chrome_TestCase
     /**
      * @depends testUpdate
      */
-    public function testAuthenticateWithDefaultCookieInterface() {
+    public function testAuthenticateWithDefaultCookieInterface()
+    {
         $this->_options['cookie_instance'] = $this->_appContext->getRequestHandler()->getRequestData()->getCookie();
         $this->_resetCookie = false;
         $this->setUp();
         $this->testUpdate();
     }
 
-    public function testCreateAuthentication() {
+    public function testCreateAuthentication()
+    {
         $resource = new \Test\Chrome\Authentication\Resource\Create_Dummy();
 
         // does nothing
         $this->_chain->createAuthentication($resource);
     }
 
-    public function testGetChain() {
-
+    public function testGetChain()
+    {
         $chain = new \Chrome\Authentication\Chain\NullChain();
         $this->_chain->addChain($chain);
 

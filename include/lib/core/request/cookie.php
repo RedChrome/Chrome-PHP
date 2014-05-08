@@ -97,6 +97,7 @@ namespace Chrome\Request\Cookie;
 use \Chrome\Request\Cookie_Interface;
 use \Chrome\Request\Data_Interface;
 use \Chrome\Hash\Hash_Interface;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Cookie

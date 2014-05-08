@@ -6,7 +6,8 @@ class Test_Chrome_Form_Element_isCreated extends Chrome_Form_Element_Abstract
 
     public $errors = array();
 
-    protected function _isCreated() {
+    protected function _isCreated()
+    {
 
         $this->_errors = $this->errors;
 

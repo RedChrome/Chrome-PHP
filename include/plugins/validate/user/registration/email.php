@@ -38,7 +38,7 @@ class EmailValidator extends \Chrome\Validator\Composer\AbstractComposer
 
     protected function _getValidator()
     {
-        $userEmailValidator = new \Chrome\Validator\User\Email($this->_config);
+        $userEmailValidator = new \Chrome\Validator\User\EmailValidator($this->_config);
         $existsValidator = new ExistsValidator($this->_helper, false);
 
         $andComposition = new AndComposition();

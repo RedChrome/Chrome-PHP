@@ -1,5 +1,4 @@
 <?php
-
 namespace Test\Chrome\Request;
 
 class DummyData implements \Chrome\Request\Data_Interface
@@ -10,15 +9,15 @@ class DummyData implements \Chrome\Request\Data_Interface
 
     public function __construct(\Chrome\Request\Cookie_Interface $cookie = null, \Chrome\Request\Session_Interface $session = null)
     {
-        if($cookie === null) {
-           $cookie = new \Test\Chrome\Request\Cookie\Dummy();
+        if ($cookie === null) {
+            $cookie = new \Test\Chrome\Request\Cookie\Dummy();
         }
 
-        if($session === null) {
+        if ($session === null) {
             $session = new \Test\Chrome\Request\Session\Dummy();
         }
 
-         $this->_cookie = $cookie;
+        $this->_cookie = $cookie;
         $this->_session = $session;
     }
 
@@ -31,111 +30,125 @@ class DummyData implements \Chrome\Request\Data_Interface
             'FILES' => $this->_FILES,
             'REQUEST' => $this->_REQUEST,
             'ENV' => $this->_ENV,
-            'COOKIE' => $this);
+            'COOKIE' => $this
+        );
     }
 
     public function getGETData($key = null)
     {
-        if($key === null) {
+        if ($key === null) {
             return $this->_GET;
         } else
-            if(isset($this->_GET[$key])) {
+            if (isset($this->_GET[$key])) {
                 return $this->_GET[$key];
             }
     }
 
-
-    public function getPOSTData($key = null) {
-       if($key === null) {
+    public function getPOSTData($key = null)
+    {
+        if ($key === null) {
             return $this->_POST;
         } else
-            if(isset($this->_POST[$key])) {
+            if (isset($this->_POST[$key])) {
                 return $this->_POST[$key];
             }
     }
 
-    public function getSERVERData($key = null) {
-       if($key === null) {
+    public function getSERVERData($key = null)
+    {
+        if ($key === null) {
             return $this->_SERVER;
         } else
-            if(isset($this->_SERVER[$key])) {
+            if (isset($this->_SERVER[$key])) {
                 return $this->_SERVER[$key];
             }
     }
 
-    public function getFILESData($key = null) {
-       if($key === null) {
+    public function getFILESData($key = null)
+    {
+        if ($key === null) {
             return $this->_FILES;
         } else
-            if(isset($this->_FILES[$key])) {
+            if (isset($this->_FILES[$key])) {
                 return $this->_FILES[$key];
             }
     }
 
-    public function getREQUESTData($key = null) {
-       if($key === null) {
+    public function getREQUESTData($key = null)
+    {
+        if ($key === null) {
             return $this->_REQUEST;
         } else
-            if(isset($this->_REQUEST[$key])) {
+            if (isset($this->_REQUEST[$key])) {
                 return $this->_REQUEST[$key];
             }
     }
 
-    public function getENVData($key = null) {
-       if($key === null) {
+    public function getENVData($key = null)
+    {
+        if ($key === null) {
             return $this->_ENV;
         } else
-            if(isset($this->_ENV[$key])) {
+            if (isset($this->_ENV[$key])) {
                 return $this->_ENV[$key];
             }
     }
 
-    public function getCOOKIEData($key = null) {
-        if($key === null) {
+    public function getCOOKIEData($key = null)
+    {
+        if ($key === null) {
             return $this->_COOKIEData;
         } else
-            if(isset($this->_COOKIEData[$key])) {
+            if (isset($this->_COOKIEData[$key])) {
                 return $this->_COOKIEData[$key];
             }
     }
 
-    public function setGETData(array $array) {
+    public function setGETData(array $array)
+    {
 
     }
 
-    public function setPOSTData(array $array) {
+    public function setPOSTData(array $array)
+    {
 
     }
 
-    public function setFILESData(array $array) {
+    public function setFILESData(array $array)
+    {
 
     }
 
-    public function setENVData(array $array) {
+    public function setENVData(array $array)
+    {
 
     }
 
-    public function setSERVERData(array $array) {
+    public function setSERVERData(array $array)
+    {
 
     }
 
-    public function setCOOKIEData(array $array) {
+    public function setCOOKIEData(array $array)
+    {
 
     }
 
     /**
+     *
      * @return \Chrome\Request\Session_Interface
      */
-    public function getSession() {
-       return $this->_session;
+    public function getSession()
+    {
+        return $this->_session;
     }
 
     /**
+     *
      * @return \Chrome\Request\Cookie_Interface
      */
-    public function getCookie() {
-       return $this->_cookie;
+    public function getCookie()
+    {
+        return $this->_cookie;
     }
-
-
 }

@@ -39,9 +39,8 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $this->_auth->addChain($secondChain);
 
         $this->_auth->setChain($secondChain);
-        $this->assertSame($secondChain,$this->_auth->getChain());
+        $this->assertSame($secondChain, $this->_auth->getChain());
     }
-
 
     public function testAuthenticateWithNoInfo()
     {

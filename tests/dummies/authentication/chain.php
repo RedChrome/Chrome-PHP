@@ -16,7 +16,8 @@ class WrapperChain extends Chain_Abstract {
     public $_throwExceptionOnCreating = false;
     public $_throwExceptionOnAuthentication = false;
 
-    public function __construct($booleanThrowExceptionOnCreating = false, $booleanThrowExceptionOnAuthentication = false) {
+    public function __construct($booleanThrowExceptionOnCreating = false, $booleanThrowExceptionOnAuthentication = false)
+    {
         $this->_throwExceptionOnCreating = $booleanThrowExceptionOnCreating;
         $this->_throwExceptionOnAuthentication = $booleanThrowExceptionOnAuthentication;
     }

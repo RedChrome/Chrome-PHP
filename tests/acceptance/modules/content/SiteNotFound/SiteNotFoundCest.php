@@ -8,8 +8,8 @@ use \WebGuy;
 class SiteNotFoundCest
 {
     // tests
-    public function tryToTest(WebGuy\ChromeSteps $I) {
-
+    public function tryToTest(WebGuy\ChromeSteps $I)
+    {
         $I->wantTo('browse to a not existing site');
 
         $I->speakLanguage();

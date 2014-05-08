@@ -1,7 +1,5 @@
 <?php
 
-;
-
 require_once LIB.'core/database/database.php';
 
 class DatabaseStatementTest extends PHPUnit_Framework_TestCase
@@ -10,7 +8,8 @@ class DatabaseStatementTest extends PHPUnit_Framework_TestCase
 
     protected $_random;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->_statementRegistry = new \Chrome\Database\Registry\Statement();
         $this->_random = 0;
     }

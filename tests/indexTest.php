@@ -2,7 +2,8 @@
 
 class IndexTest extends PHPUnit_Framework_TestCase
 {
-    public function testExample() {
+    public function testExample()
+    {
         $this->assertTrue(true, true);
     }
 }

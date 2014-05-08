@@ -1,14 +1,14 @@
 <?php
-
 namespace Test\Chrome\Model\Database;
 
-require_once LIB.'core/database/facade/model.php';
+require_once LIB . 'core/database/facade/model.php';
 
 class DummyStatement implements \Chrome\Model\Database\Statement_Interface
 {
     public $_handler = null;
 
     protected $_namespace;
+
     protected $_database;
 
     public function getStatement($key)
@@ -21,7 +21,8 @@ class DummyStatement implements \Chrome\Model\Database\Statement_Interface
         $this->_namespace = $namespace;
     }
 
-    public function setDatabaseName($databaseName) {
+    public function setDatabaseName($databaseName)
+    {
         $this->_database = $databaseName;
     }
 }

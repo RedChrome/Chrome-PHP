@@ -165,7 +165,7 @@ class Blowfish
         //Initialization vector: IV
         if($this->cbc == 1) {
             $cipher[0][0] = time();
-            $cipher[0][1] = (double)microtime() * 1000000;
+            $cipher[0][1] = (double) microtime() * 1000000;
         }
 
         $a = 1;
@@ -181,7 +181,7 @@ class Blowfish
             $a++;
         }
 
-        $output = "";
+        $output = '';
         for($i = 0; $i < count($cipher); $i++) {
             $output .= $this->_long2str($cipher[$i][0]);
             $output .= $this->_long2str($cipher[$i][1]);
@@ -244,7 +244,6 @@ class Blowfish
         for($i = 0; $i < count($this->pbox); $i++)
             $this->pbox[$i] ^= $key[$i % count($key)];
 
-
         $v[0] = 0x00000000;
         $v[1] = 0x00000000;
 
@@ -255,7 +254,6 @@ class Blowfish
             $this->pbox[$i] = $v[0];
             $this->pbox[$i + 1] = $v[1];
         }
-
 
         //S-Box [0 bis 3] durch verschloesselte Bloecke ersetzen
         //Replace S-Box [0 to 3] entries with encrypted blocks
@@ -298,7 +296,6 @@ class Blowfish
         if($v1 < 0)
             $v1 += 4294967296;
 
-
         for($i = 0; $i < 16; $i++) {
             $temp = $v0 ^ $this->pbox[$i];
             if($temp < 0)
@@ -313,7 +310,6 @@ class Blowfish
         $v1 = $this->_xor($v0, $this->pbox[16]);
         $v0 = $this->_xor($temp, $this->pbox[17]);
 
-
         return array($v0, $v1);
     }
 
@@ -325,12 +321,10 @@ class Blowfish
         if($v1 < 0)
             $v1 += 4294967296;
 
-
         for($i = 17; $i > 1; $i--) {
             $temp = $v0 ^ $this->pbox[$i];
             if($temp < 0)
                 $temp += 4294967296;
-
 
             $v0 = ((($this->sbox0[($temp >> 24) & 0xFF] + $this->sbox1[($temp >> 16) & 0xFF]) ^ $this->sbox2[($temp >> 8) & 0xFF]) + $this->sbox3[$temp & 0xFF]) ^
                 $v1;
@@ -345,9 +339,9 @@ class Blowfish
 
     function _xor($l, $r)
     {
-        $x = (($l < 0) ? (float)($l + 4294967296):(float)$l) ^ (($r < 0) ? (float)($r + 4294967296):(float)$r);
+        $x = (($l < 0) ? (float) ($l + 4294967296):(float) $l) ^ (($r < 0) ? (float) ($r + 4294967296):(float) $r);
 
-        return (float)(($x < 0) ? $x + 4294967296:$x);
+        return (float) (($x < 0) ? $x + 4294967296:$x);
     }
 
 

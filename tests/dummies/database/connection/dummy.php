@@ -41,7 +41,8 @@ class Chrome_Database_Connection_Dummy implements \Chrome\Database\Connection\Co
         return '\Test\Chrome\Database\Adapter\Dummy';
     }
 
-    public function isConnected() {
+    public function isConnected()
+    {
         return $this->_isConnected;
     }
 
@@ -50,7 +51,8 @@ class Chrome_Database_Connection_Dummy implements \Chrome\Database\Connection\Co
         $this->_isConnected = $connected;
     }
 
-    public function throwExceptionOnConnect($e) {
+    public function throwExceptionOnConnect($e)
+    {
         $this->_connectionException = $e;
     }
 

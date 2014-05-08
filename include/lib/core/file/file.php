@@ -182,12 +182,12 @@ class File implements File_Interface
             case self::FILE_OPEN_ENDING_READ_AND_WRITE:
             case self::FILE_OPEN_READ_AND_WRITE_FAIL_ON_EXISTENCE:
             case self::FILE_OPEN_CREATE_READ_AND_WRITE: {
-                return true;
-            }
+                    return true;
+                }
 
             default: {
-                return false;
-            }
+                    return false;
+                }
         }
     }
 
@@ -212,13 +212,13 @@ class File implements File_Interface
 
             case null:
             case self::FILE_OPEN_BEGINNING_READ:
-            case self:FILE_OPEN_BEGINNING_READ_AND_WRITE: {
-                return false;
-            }
+            case self::FILE_OPEN_BEGINNING_READ_AND_WRITE: {
+                    return false;
+                }
 
             default: {
-                return true;
-            }
+                    return true;
+                }
         }
     }
 
@@ -229,12 +229,12 @@ class File implements File_Interface
             case null:
             case self::FILE_OPEN_ENDING_WRITE_ONLY:
             case self::FILE_OPEN_ENDING_READ_AND_WRITE: {
-                return false;
-            }
+                    return false;
+                }
 
             default: {
-                return true;
-            }
+                    return true;
+                }
         }
     }
 

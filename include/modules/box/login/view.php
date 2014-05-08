@@ -53,8 +53,6 @@ class Chrome_View_Box_Login extends Chrome_View_Strategy_Abstract
         $viewForm = Chrome_View_Form_Login::getInstance($form, $this->_viewContext);
         $viewForm->setElementFactory($viewFormElementFactory);
         $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Box($viewForm, $this->_viewContext);
-
-
     }
 }
 

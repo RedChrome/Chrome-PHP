@@ -1,4 +1,5 @@
 <?php
+
 namespace WebGuy;
 
 class ChromeSteps extends \WebGuy

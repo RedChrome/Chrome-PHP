@@ -7,6 +7,7 @@ require_once LIB.'modules/user/interfaces/registration.php';
 require_once LIB.'modules/user/models/registration.php';
 
 use Chrome\Model\User\Registration;
+
 /*
 class RegistrationTest extends AbstractModelTestCase
 {

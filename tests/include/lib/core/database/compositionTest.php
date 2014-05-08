@@ -1,6 +1,5 @@
 <?php
 
-;
 require_once LIB . 'core/database/database.php';
 //require_once LIB . 'core/database/interface/simple.php';
 
@@ -20,18 +19,15 @@ class DatabaseCompositionTest extends PHPUnit_Framework_TestCase
         $defaultComp = new \Chrome\Database\Composition();
         $this->assertNull($requiredComp->merge($requiredComp, $defaultComp)->getFacade());
 
-
         $requiredComp = new \Chrome\Database\Composition('\\Chrome\\Database\\Facade\\AbstractFacade');
         $defaultComp = new \Chrome\Database\Composition();
 
         $this->assertEquals('\\Chrome\\Database\\Facade\\AbstractFacade', $defaultComp->merge($requiredComp, $defaultComp)->getFacade());
 
-
         $requiredComp = new \Chrome\Database\Composition();
         $defaultComp = new \Chrome\Database\Composition('\\Chrome\\Database\\Facade\\AbstractFacade');
 
         $this->assertEquals('\\Chrome\\Database\\Facade\\AbstractFacade', $defaultComp->merge($requiredComp, $defaultComp)->getFacade());
-
 
         $requiredComp = new \Chrome\Database\Composition('\\Chrome\\Database\\Facade\\Simple');
         $defaultComp = new \Chrome\Database\Composition('\\Chrome\\Database\\Facade\\AbstractFacade');
@@ -55,12 +51,10 @@ class DatabaseCompositionTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('\\Test\\Chrome\\Database\\Adapter\\Dummy', $defaultComp->merge($requiredComp, $defaultComp)->getAdapter());
 
-
         $requiredComp = new \Chrome\Database\Composition(null, null, '\\Chrome\\Database\\Adapter\\AbstractAdapter');
         $defaultComp = new \Chrome\Database\Composition(null, null, '\\Test\\Chrome\\Database\\Adapter\\Dummy');
 
         $this->assertEquals('\\Test\\Chrome\\Database\\Adapter\\Dummy', $defaultComp->merge($requiredComp, $defaultComp)->getAdapter());
-
 
         $requiredComp = new \Chrome\Database\Composition(null, null, '\\Test\\Chrome\\Database\\Adapter\\Dummy');
         $defaultComp = new \Chrome\Database\Composition(null, null, '\\Chrome\\Database\\Adapter\\AbstractAdapter');
@@ -90,8 +84,8 @@ class DatabaseCompositionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('\\Test\\Chrome\\Database\\Result\\Dummy', $defaultComp->merge($requiredComp, $defaultComp)->getResult());
     }
 
-    public function testMergeConnection() {
-
+    public function testMergeConnection()
+    {
         $requiredComp = new \Chrome\Database\Composition(null, null, null, null);
         $defaultComp = new \Chrome\Database\Composition(null, null, null, 'null');
         $this->assertEquals('null', $requiredComp->merge($requiredComp, $defaultComp)->getConnection());
@@ -103,8 +97,5 @@ class DatabaseCompositionTest extends PHPUnit_Framework_TestCase
         $requiredComp = new \Chrome\Database\Composition(null, null, null, 'test2');
         $defaultComp = new \Chrome\Database\Composition(null, null, null, null);
         $this->assertEquals('test2', $requiredComp->merge($requiredComp, $defaultComp)->getConnection());
-
     }
-
-
 }

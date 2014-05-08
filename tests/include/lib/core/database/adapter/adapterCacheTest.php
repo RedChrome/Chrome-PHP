@@ -7,7 +7,7 @@ class DatabaseAdapterCacheTest extends Chrome_TestCase
     {
         $result = $this->getMock($this->_rewindableInterface);
         $result->expects($this->exactly(6))->method('hasNext')->will($this->onConsecutiveCalls(true, true, true, true, true, false));
-        $result->expects($this->exactly(5))->method('getNext')->will($this->onConsecutiveCalls(3, 2, null, 0, "0"));
+        $result->expects($this->exactly(5))->method('getNext')->will($this->onConsecutiveCalls(3, 2, null, 0, '0'));
         $result->expects($this->exactly(2))->method('rewind');
         $cacheAdapter = new \Chrome\Database\Adapter\Cache($result);
 
@@ -28,13 +28,12 @@ class DatabaseAdapterCacheTest extends Chrome_TestCase
 
     public function testSerialize()
     {
-        $data = array(3, 2, null, 0, "0");
+        $data = array(3, 2, null, 0, '0');
 
         $result = $this->getMock($this->_rewindableInterface);
         $result->expects($this->exactly(6))->method('hasNext')->will($this->onConsecutiveCalls(true, true, true, true, true, false));
         $result->expects($this->exactly(5))->method('getNext')->will($this->returnValues($data));
         $result->expects($this->exactly(2))->method('rewind');
-
 
         $cache = new \Chrome\Database\Adapter\Cache($result);
         $cacheSerialized = serialize($cache);

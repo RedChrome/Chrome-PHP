@@ -25,7 +25,6 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
     {
         $this->doSkipTestsIfNeeded();
 
-
         $this->_db->query('SELECT * FROM cpp_autoload WHERE true = false');
 
         $this->assertTrue($this->_db->getAdapter()->isEmpty());

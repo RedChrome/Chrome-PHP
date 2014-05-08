@@ -4,19 +4,23 @@ namespace Test\Chrome\Database\Result;
 
 class Dummy extends \Chrome\Database\Result\AbstractResult
 {
-    public function hasNext() {
+    public function hasNext()
+    {
         return true;
     }
 
-    public function getNext() {
+    public function getNext()
+    {
         return mt_rand();
     }
 
-    public function getAffectedRows() {
+    public function getAffectedRows()
+    {
         return 0;
     }
 
-    public function isEmpty() {
+    public function isEmpty()
+    {
         return false;
     }
 }

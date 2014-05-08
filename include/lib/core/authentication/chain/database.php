@@ -130,6 +130,7 @@ namespace Chrome\Authentication\Resource;
 
 use \Chrome\Authentication\Resource_Interface;
 use \Chrome\Authentication\CreateResource_Interface;
+
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication

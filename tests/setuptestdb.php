@@ -30,7 +30,7 @@ $sqlScriptDir = 'tests/sql/';
 $testsetup = new Chrome_TestSetup();
 $testsetup->testDb();
 
-function applySQLQueries($query, \Chrome\Database\Facade\Facade_Interface $db)
+function applySqlQueries($query, \Chrome\Database\Facade\Facade_Interface $db)
 {
     if($query == false)
     {
@@ -39,21 +39,21 @@ function applySQLQueries($query, \Chrome\Database\Facade\Facade_Interface $db)
 
     $queries = explode(';' . PHP_EOL, $query);
 
-    foreach($queries as $_query)
+    foreach($queries as $singleQuery)
     {
-        if(trim($_query) == '')
+        if(trim($singleQuery) == '')
         {
             continue;
         }
 
-        $db->query($_query);
+        $db->query($singleQuery);
         $db->clear();
         echo '.';
     }
     echo PHP_EOL.PHP_EOL;
 }
 
-function getAvailableSQLScripts($databaseName)
+function getAvailableSqlScripts($databaseName)
 {
     if(!is_dir($databaseName)) {
         die('No sql scripts found in dir '.$databaseName);
@@ -98,11 +98,11 @@ if(isset($_SERVER['argv']) and isset($_SERVER['argv'][1]))
 
 $db = $databaseFactory->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Assoc', $connection);
 $suffix = $connectionRegistry->getConnectionObject($connection)->getDatabaseName();
-$scripts = getAvailableSQLScripts($sqlScriptDir.$suffix);
+$scripts = getAvailableSqlScripts($sqlScriptDir.$suffix);
 $sqlScriptDir = $sqlScriptDir.$suffix.'/';
 
 foreach($scripts as $sqlScript)
 {
     echo 'applying '.$sqlScriptDir.$sqlScript.' using connection "' . $connection . '"' . PHP_EOL;
-    applySQLQueries(file_get_contents($sqlScriptDir.$sqlScript), $db);
+    applySqlQueries(file_get_contents($sqlScriptDir.$sqlScript), $db);
 }

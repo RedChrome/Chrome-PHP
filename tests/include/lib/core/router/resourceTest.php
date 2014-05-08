@@ -2,7 +2,8 @@
 
 class RouterResourceTest extends PHPUnit_Framework_TestCase
 {
-    public function testSetterGetter() {
+    public function testSetterGetter()
+    {
 
         $resource = new \Chrome\Router\Result();
 

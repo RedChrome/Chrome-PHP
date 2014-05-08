@@ -207,6 +207,7 @@ namespace Chrome\Authorisation;
 
 use \Chrome\Authorisation\Adapter\Adapter_Interface;
 use \Chrome\Authorisation\Resource\Resource_Interface;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Authorisation

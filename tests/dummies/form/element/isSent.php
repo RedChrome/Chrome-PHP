@@ -6,7 +6,8 @@ class Test_Chrome_Form_Element_isSent extends Chrome_Form_Element_Abstract
 
     public $errors = array();
 
-    protected function _isSent() {
+    protected function _isSent()
+    {
 
         $this->_errors = $this->errors;
 

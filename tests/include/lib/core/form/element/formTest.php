@@ -105,8 +105,6 @@ class FormElementFormTest extends Chrome_TestCase
         $sentData = array($this->_option->getTokenNamespace() => $this->_option->getToken());
         $this->_form->setSentData($sentData);
 
-
-        //sleep($time);
         $this->_option->setTime(CHROME_TIME + $time);
 
         $this->assertTrue($this->_form->isValid());

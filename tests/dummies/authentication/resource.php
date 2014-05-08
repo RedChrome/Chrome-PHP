@@ -22,7 +22,8 @@ class Create_Dummy implements CreateResource_Interface
 {
     public $_id = 0;
 
-    public function getID() {
+    public function getID()
+    {
         return $this->_id;
     }
 

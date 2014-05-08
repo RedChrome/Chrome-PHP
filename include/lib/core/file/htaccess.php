@@ -76,16 +76,11 @@ class Chrome_Htaccess
         // remove comments
         $content = preg_replace('"(.*)#(.*)\n(.*)"', '\1\3', $content);
 
-
         $rewriteRules = preg_replace('#<IfModule mod_rewrite.c>(.*)</IfModule mod_rewrite.c>#s', '\1', $content);
         $rewriteRules = str_replace('RewriteEngine On', '', $rewriteRules);
         if(!empty($rewriteRule)) {
             $rewriteRule = explode('RewriteRule', $rewriteRules);
 
         }
-
-
     }
-
-
 }

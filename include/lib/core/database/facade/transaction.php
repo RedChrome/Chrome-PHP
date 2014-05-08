@@ -66,7 +66,8 @@ class Transaction extends AbstractDecorator implements Transaction_Interface
         $this->_transactionInitialized = false;
     }
 
-    protected function _handleException(\Chrome\DatabaseException $e){
+    protected function _handleException(\Chrome\DatabaseException $e)
+    {
         throw new \Chrome\DatabaseTransactionException($e->getMessage(), $e->getCode(), $e, $e->handleException());
     }
 }

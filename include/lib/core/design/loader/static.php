@@ -83,7 +83,6 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
         {
             $file = new \Chrome\File(BASEDIR . $row['file']);
 
-
             if(!$file->exists())
             {
                 throw new \Chrome\Exception('Cannot load file '.$file.' containing required class for rendering');

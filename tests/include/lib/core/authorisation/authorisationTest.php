@@ -15,8 +15,8 @@ class AuthorisationTest extends Chrome_TestCase
         $this->_auth = new \Chrome\Authorisation\Authorisation($this->_authAdapter);
     }
 
-    public function testGetAdapter() {
-
+    public function testGetAdapter()
+    {
         $this->assertTrue($this->_auth->getAuthorisationAdapter() instanceof \Chrome\Authorisation\Adapter\Adapter_Interface);
 
         $this->assertSame($this->_authAdapter, $this->_auth->getAuthorisationAdapter());

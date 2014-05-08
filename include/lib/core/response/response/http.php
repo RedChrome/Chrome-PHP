@@ -22,7 +22,6 @@ namespace Chrome\Response\Handler;
 use \Chrome\Response\Handler_Interface;
 use \Chrome\Response\Response_Interface;
 
-
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Response

@@ -48,7 +48,7 @@ define('RECAPTCHA_VERIFY_SERVER', 'www.google.com');
  */
 function _recaptcha_qsencode($data)
 {
-    $req = "";
+    $req = '';
     foreach($data as $key => $value)
         $req .= $key . '=' . urlencode(stripslashes($value)) . '&';
 
@@ -71,10 +71,10 @@ function _recaptcha_http_post($host, $path, $data, $port = 80)
 {
     $req = _recaptcha_qsencode($data);
 
-    $http_request = "POST $path HTTP/1.0\r\n";
-    $http_request .= "Host: $host\r\n";
+    $http_request = 'POST '.$path.' HTTP/1.0'."\r\n";
+    $http_request .= 'Host: '.$host."\r\n";
     $http_request .= "Content-Type: application/x-www-form-urlencoded;\r\n";
-    $http_request .= "Content-Length: " . strlen($req) . "\r\n";
+    $http_request .= 'Content-Length: ' . strlen($req) . "\r\n";
     $http_request .= "User-Agent: reCAPTCHA/PHP\r\n";
     $http_request .= "\r\n";
     $http_request .= $req;
@@ -124,7 +124,7 @@ function recaptcha_check_answer($privkey, $remoteip, $challenge, $response, $ext
 
     if($remoteip == null || $remoteip == '')
     {
-        return "For security reasons, you must pass the remote ip to reCAPTCHA";
+        return 'For security reasons, you must pass the remote ip to reCAPTCHA';
     }
 
     // discard spam submissions
@@ -136,7 +136,7 @@ function recaptcha_check_answer($privkey, $remoteip, $challenge, $response, $ext
         return $recaptcha_response;
     }
 
-    $response = _recaptcha_http_post(RECAPTCHA_VERIFY_SERVER, "/recaptcha/api/verify", array('privatekey' => $privkey,
+    $response = _recaptcha_http_post(RECAPTCHA_VERIFY_SERVER, '/recaptcha/api/verify', array('privatekey' => $privkey,
                                                                                             'remoteip' => $remoteip,
                                                                                             'challenge' => $challenge,
                                                                                             'response' => $response) + $extra_params);
@@ -168,5 +168,5 @@ function recaptcha_check_answer($privkey, $remoteip, $challenge, $response, $ext
  */
 function recaptcha_get_signup_url($domain = null, $appname = null)
 {
-    return "https://www.google.com/recaptcha/admin/create?" . _recaptcha_qsencode(array('domains' => $domain, 'app' => $appname));
+    return 'https://www.google.com/recaptcha/admin/create?' . _recaptcha_qsencode(array('domains' => $domain, 'app' => $appname));
 }

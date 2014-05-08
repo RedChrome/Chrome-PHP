@@ -1,7 +1,5 @@
 <?php
 
-;
-
 require_once LIB . 'core/database/database.php';
 require_once 'tests/dummies/database/connection/dummy.php';
 
@@ -71,7 +69,6 @@ class DatabaseRegistryConnectionTest extends PHPUnit_Framework_TestCase
         $connection->setIsConnected(false);
 
         $this->_registry->addConnection('DatabaseRegistryConnectionTest7', $connection);
-
 
         $this->setExpectedException('\Chrome\DatabaseException');
 

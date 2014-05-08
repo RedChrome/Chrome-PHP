@@ -1,12 +1,12 @@
 <?php
-
 namespace Test\Chrome\Database\Adapter;
 
 class Dummy extends \Chrome\Database\Adapter\AbstractAdapter
 {
     public $_affectedRows = 0;
 
-    public function setDataResource($object) {
+    public function setDataResource($object)
+    {
         $this->_object = $object;
     }
 
@@ -25,23 +25,28 @@ class Dummy extends \Chrome\Database\Adapter\AbstractAdapter
         return addcslashes($data, '\'');
     }
 
-    public function isEmpty() {
+    public function isEmpty()
+    {
         return false;
     }
 
-    public function getAffectedRows() {
+    public function getAffectedRows()
+    {
         return $this->_affectedRows;
     }
 
-    public function getErrorCode() {
+    public function getErrorCode()
+    {
         return 0;
     }
 
-    public function getErrorMessage() {
+    public function getErrorMessage()
+    {
         return '';
     }
 
-    public function getLastInsertId() {
+    public function getLastInsertId()
+    {
         return 0;
     }
 }

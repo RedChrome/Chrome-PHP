@@ -120,7 +120,6 @@ class DatabaseInterfaceSimpleTest extends Chrome_TestCase
 
     public function testEscapeingSpecialChars()
     {
-
         // $statement, $expected_statement, [array $params]
         $array = array(array('cpp_', DB_PREFIX . '_'),
                     array('\?', '?'),
@@ -130,8 +129,7 @@ class DatabaseInterfaceSimpleTest extends Chrome_TestCase
                     array('?{1} \\?{1} ?{2}', 'param1 ?{1} param2', array('param1', 'param2')),
                     array('?{1} \\? ?{2}', 'param1 ? param2', array('param1', 'param2')),
                     array('?{1} \\\\? ?{2}', 'param1 \\? param2', array('param1', 'param2')),
-                    array('?{1} ? ?{2}', '?{1} ? ?{2}'))        // should work, cause we given no parameters
-        ;
+                    array('?{1} ? ?{2}', '?{1} ? ?{2}'));// should work, cause we given no parameters
 
         foreach($array as $test)
         {
