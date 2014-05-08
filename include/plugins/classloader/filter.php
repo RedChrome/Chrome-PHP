@@ -35,8 +35,8 @@ class Resolver_Filter extends Resolver_Abstract
      */
     public function resolve($class)
     {
-        if(preg_match('#Chrome\\\\Validator((?:\\\\[a-zA-Z0-9]{1,})*)\\\\([a-zA-Z0-9]{1,})#AD')) {
-            return BASEDIR.'plugins/Filter'.strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php'));
+        if(preg_match('#Chrome\\\\Filter((?:\\\\[a-zA-Z0-9]{1,})*)\\\\([a-zA-Z0-9]{1,})#AD', $class, $matches)) {
+            return BASEDIR.'plugins/filter'.strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php'));
         }
 
         return false;
