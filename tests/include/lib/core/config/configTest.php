@@ -1,6 +1,8 @@
 <?php
 
-class ConfigTest extends Chrome_TestCase
+namespace Test\Chrome\Config;
+
+class ConfigTest extends \Chrome_TestCase
 {
     protected $_config = null;
 

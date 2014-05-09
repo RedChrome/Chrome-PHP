@@ -1,6 +1,8 @@
 <?php
 
-class OrCompositionTest extends PHPUnit_Framework_TestCase
+namespace Test\Chrome\Validator\Composition;
+
+class OrTest extends \PHPUnit_Framework_TestCase
 {
     protected $_validator = null;
 

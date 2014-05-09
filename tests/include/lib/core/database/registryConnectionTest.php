@@ -19,21 +19,21 @@ class DatabaseRegistryConnectionTest extends PHPUnit_Framework_TestCase
 
     public function testAddConnection()
     {
-        $this->_registry->addConnection('DatabaseRegistryConnectionTest1', new Chrome_Database_Connection_Dummy());
+        $this->_registry->addConnection('DatabaseRegistryConnectionTest1', new \Test\Chrome\Database\Connection\Dummy());
     }
 
     public function testAddConnectionTwice()
     {
         $this->setExpectedException('\Chrome\Exception');
 
-        $this->_registry->addConnection('DatabaseRegistryConnectionTest2', new Chrome_Database_Connection_Dummy());
-        $this->_registry->addConnection('DatabaseRegistryConnectionTest2', new Chrome_Database_Connection_Dummy());
+        $this->_registry->addConnection('DatabaseRegistryConnectionTest2', new \Test\Chrome\Database\Connection\Dummy());
+        $this->_registry->addConnection('DatabaseRegistryConnectionTest2', new \Test\Chrome\Database\Connection\Dummy());
     }
 
     public function testGetConnection()
     {
         $exampleConnection = 'thisShouldBeAConnection';
-        $obj = new Chrome_Database_Connection_Dummy($exampleConnection);
+        $obj = new \Test\Chrome\Database\Connection\Dummy($exampleConnection);
         $this->_registry->addConnection('DatabaseRegistryConnectionTest3', $obj);
 
         $this->assertEquals($exampleConnection, $this->_registry->getConnection('DatabaseRegistryConnectionTest3'));
@@ -43,7 +43,7 @@ class DatabaseRegistryConnectionTest extends PHPUnit_Framework_TestCase
     public function testIsConnected()
     {
 
-        $this->_registry->addConnection('DatabaseRegistryConnectionTest4', new Chrome_Database_Connection_Dummy());
+        $this->_registry->addConnection('DatabaseRegistryConnectionTest4', new \Test\Chrome\Database\Connection\Dummy());
 
         $this->assertTrue($this->_registry->isConnected('DatabaseRegistryConnectionTest4'));
     }
@@ -65,7 +65,7 @@ class DatabaseRegistryConnectionTest extends PHPUnit_Framework_TestCase
 
     public function testExceptionIfConnectionIsNotEstablished()
     {
-        $connection = new Chrome_Database_Connection_Dummy();
+        $connection = new \Test\Chrome\Database\Connection\Dummy();
         $connection->setIsConnected(false);
 
         $this->_registry->addConnection('DatabaseRegistryConnectionTest7', $connection);

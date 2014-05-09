@@ -14,7 +14,7 @@ class DatabaseInterfaceSimpleTest extends Chrome_TestCase
 
     public function setUp()
     {
-        $this->_connection = new Chrome_Database_Connection_Dummy('connection resource');
+        $this->_connection = new \Test\Chrome\Database\Connection\Dummy('connection resource');
 
         $this->_adapter = new \Test\Chrome\Database\Adapter\Dummy($this->_connection);
         $this->_result = new \Test\Chrome\Database\Result\Dummy();

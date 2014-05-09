@@ -85,7 +85,8 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
         if($formElement instanceof Chrome_Form_Element_Captcha)
         {
             $captcha = $formElement->getOption()->getCaptcha();
-            $captchaEngine = ucfirst(strtolower($captcha->getFrontendOption(Chrome_Captcha_Interface::CHROME_CAPTCHA_ENGINE)));
+            // TODO: class mappign of captcha to view form is not correct
+            $captchaEngine = ucfirst(strtolower($captcha->getFrontendOption(\Chrome\Captcha\Captcha_Interface::CHROME_CAPTCHA_ENGINE)));
             return 'Chrome_View_Form_Element_Captcha_' . $captchaEngine;
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Chrome\Models\User\Registration;
+namespace Test\Chrome\Models\User\Registration;
 
 abstract class AbstractModelTestCase extends \Chrome_TestCase
 {

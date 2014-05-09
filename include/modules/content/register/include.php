@@ -131,7 +131,7 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
         $this->_addElement($buttonsElement);
 
         $captchaOption = new Chrome_Form_Option_Element_Captcha($this);
-        #$captchaOption->setFrontendOptions(array(Chrome_Captcha_Interface::CHROME_CAPTCHA_ENGINE => 'reCaptcha'));
+        #$captchaOption->setFrontendOptions(array(\Chrome\Captcha\Captcha_Interface::CHROME_CAPTCHA_ENGINE => 'reCaptcha'));
         $captchaElement = new Chrome_Form_Element_Captcha($this, 'captcha', $captchaOption);
         $this->_addElement($captchaElement);
 

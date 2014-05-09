@@ -19,17 +19,19 @@
  * @subpackage Chrome.Captcha
  */
 
+namespace Chrome\Captcha;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Captcha
  */
-interface Chrome_Captcha_Interface
+interface Captcha_Interface
 {
     const CHROME_CAPTCHA_ENGINE = 'engine', CHROME_CAPTCHA_NAME = 'name';
     const CHROME_CAPTCHA_ENABLE_RENEW = 'enable_renew', CHROME_CAPTCHA_MAX_TIME = 'max_time';
 
-    public function __construct($name, Chrome_Context_Application_Interface $appContext, array $frontendOptions, array $backendOptions);
+    public function __construct($name, \Chrome_Context_Application_Interface $appContext, array $frontendOptions, array $backendOptions);
 
     public function create();
 
@@ -57,36 +59,14 @@ interface Chrome_Captcha_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Captcha
  */
-interface Chrome_Captcha_Engine_Interface
+class Captcha implements Captcha_Interface
 {
-    public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Context_Application_Interface $appContext, array $backendOptions);
-
-    public function getOption($name);
-
-    public function isValid($key);
-
-    public function create();
-
-    public function renew();
-
-    public function destroy();
-
-    public function getError();
-}
-
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Captcha
- */
-class Chrome_Captcha implements Chrome_Captcha_Interface
-{
-    protected $_frontendOptions = array(self::CHROME_CAPTCHA_ENGINE => 'Default');
+    protected $_frontendOptions = array(self::CHROME_CAPTCHA_ENGINE => 'GDCaptcha');
     protected $_backendOptions = array();
     protected $_engine = null;
     protected $_appContext = null;
 
-    public function __construct($name, Chrome_Context_Application_Interface $appContext, array $frontendOptions, array $backendOptions)
+    public function __construct($name, \Chrome_Context_Application_Interface $appContext, array $frontendOptions, array $backendOptions)
     {
         $this->_appContext = $appContext;
 
@@ -152,13 +132,16 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
             return;
         }
 
+        //TODO: this is really really ugly!
+        // Loading a class has nothign to do with this class..
+
         $engine = strtolower($this->_frontendOptions[self::CHROME_CAPTCHA_ENGINE]);
-        $_engine = ucfirst($engine);
+        $_engine = $this->_frontendOptions[self::CHROME_CAPTCHA_ENGINE];
 
         // if class is not loaded, then search in /include/plugins/captcha/
-        if(class_exists('Chrome_Captcha_Engine_' . $_engine, false) === false)
+        if(class_exists('Chrome\\Captcha\\Engine\\' . $_engine, false) === false)
         {
-            $file = new \Chrome\File(PLUGIN . 'Captcha/' . $engine . '.php');
+            $file = new \Chrome\File(PLUGIN . 'captcha/' . $engine . '.php');
 
             if($file->exists() === false)
             {
@@ -166,14 +149,14 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
             } else
             {
                 require_once $file->getFileName();
-                if(class_exists('Chrome_Captcha_Engine_' . $_engine, false) === false)
+                if(class_exists('Chrome\\Captcha\\Engine\\' . $_engine, false) === false)
                 {
-                    throw new \Chrome\Exception('Loaded captcha engine file does not contain proper class Chrome_Captcha_Engine_' . $_engine);
+                    throw new \Chrome\Exception('Loaded captcha engine file does not contain proper class Chrome\\Captcha\\Engine\\' . $_engine);
                 }
             }
         }
 
-        $engine = 'Chrome_Captcha_Engine_' . $engine;
+        $engine = 'Chrome\\Captcha\\Engine\\' . $engine;
 
         $this->_engine = new $engine($this->_frontendOptions[self::CHROME_CAPTCHA_NAME], $this, $this->_appContext, $this->_backendOptions);
     }
@@ -187,4 +170,31 @@ class Chrome_Captcha implements Chrome_Captcha_Interface
     {
         return $this->_engine->getError();
     }
+}
+
+
+namespace Chrome\Captcha\Engine;
+
+use \Chrome\Captcha\Captcha_Interface;
+
+/**
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.Captcha
+ */
+interface Engine_Interface
+{
+    public function __construct($name, Captcha_Interface $obj, \Chrome_Context_Application_Interface $appContext, array $backendOptions);
+
+    public function getOption($name);
+
+    public function isValid($key);
+
+    public function create();
+
+    public function renew();
+
+    public function destroy();
+
+    public function getError();
 }

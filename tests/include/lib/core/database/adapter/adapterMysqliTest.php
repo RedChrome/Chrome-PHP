@@ -17,7 +17,7 @@ class DatabaseAdapterMysqliTest extends DatabaseAdapterMysqlTest
     {
         $this->doSkipTestsIfNeeded();
 
-        $dummy = new Chrome_Database_Connection_Dummy('anytring but no mysqli connection');
+        $dummy = new \Test\Chrome\Database\Connection\Dummy('anytring but no mysqli connection');
 
         $this->setExpectedException('\Chrome\DatabaseException');
 
@@ -37,7 +37,7 @@ class DatabaseAdapterMysqliTest extends DatabaseAdapterMysqlTest
     {
         $this->doSkipTestsIfNeeded();
 
-        $connection = new Chrome_Database_Connection_Dummy();
+        $connection = new \Test\Chrome\Database\Connection\Dummy();
         $connection->_isConnected = false;
         $connection->_connection = new mysqli();
 

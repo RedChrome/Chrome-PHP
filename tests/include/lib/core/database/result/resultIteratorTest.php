@@ -11,7 +11,7 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
 
     public function testInitResultIterator()
     {
-        $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
+        $connection = new \Test\Chrome\Database\Connection\Dummy('exampleResource, not null');
         $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Iterator', $connection);
         $this->assertTrue(is_subclass_of($db->getResult(), 'Iterator'));
     }
@@ -20,7 +20,7 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
     {
         $this->_dataArray = array(1, 2, 3, 4, 5, 6);
 
-        $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
+        $connection = new \Test\Chrome\Database\Connection\Dummy('exampleResource, not null');
 
         // Dummy_Adapter gets used via connection_dummy as default adapter
         $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Iterator', $connection);
@@ -46,7 +46,7 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
     {
         $this->_dataArray = array();
 
-        $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
+        $connection = new \Test\Chrome\Database\Connection\Dummy('exampleResource, not null');
 
         $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Iterator', $connection);
 
@@ -72,7 +72,7 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
     {
         $this->_dataArray = array(1, 2, 3, 4, 5, 6);
 
-        $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
+        $connection = new \Test\Chrome\Database\Connection\Dummy('exampleResource, not null');
 
         // Dummy_Adapter gets used via connection_dummy as default adapter
         $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Iterator', $connection);
@@ -129,7 +129,7 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
     {
         $this->_dataArray = array(1, 2, 3, 4, 5, 6);
 
-        $connection = new Chrome_Database_Connection_Dummy('exampleResource, not null');
+        $connection = new \Test\Chrome\Database\Connection\Dummy('exampleResource, not null');
 
         // Dummy_Adapter gets used via connection_dummy as default adapter
         $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Simple', '\Chrome\Database\Result\Iterator', $connection);

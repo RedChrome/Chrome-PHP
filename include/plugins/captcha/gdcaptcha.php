@@ -15,18 +15,17 @@
  *
  * @package CHROME-PHP
  * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.07.2013 12:57:47] --> $
  */
-if(CHROME_PHP !== true)
-    die();
+
+namespace Chrome\Captcha\Engine;
+
+use Chrome\Captcha\Captcha_Interface;
 
 /**
- *
  * @package CHROME-PHP
  * @subpackage Chrome.Captcha
  */
-class Chrome_Captcha_Engine_Default implements Chrome_Captcha_Engine_Interface
+class GDCaptcha implements Engine_Interface
 {
     protected $_captchaObj = null;
     protected $_backendOptions = array();
@@ -35,9 +34,9 @@ class Chrome_Captcha_Engine_Default implements Chrome_Captcha_Engine_Interface
 
     const KEY_LENGTH = 6;
 
-    public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Context_Application_Interface $appContext, array $backendOptions)
+    public function __construct($name, Captcha_Interface $obj, \Chrome_Context_Application_Interface $appContext, array $backendOptions)
     {
-        $backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME] = $name;
+        $backendOptions[Captcha_Interface::CHROME_CAPTCHA_NAME] = $name;
         $this->_captchaObj = $obj;
         $this->_session = $appContext->getRequestHandler()->getRequestData()->getSession();
         $this->_backendOptions = array_merge($this->_backendOptions, $backendOptions);
@@ -50,7 +49,7 @@ class Chrome_Captcha_Engine_Default implements Chrome_Captcha_Engine_Interface
 
     public function isValid($key)
     {
-        $_key = $this->_session['CAPTCHA_' . $this->_backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME]];
+        $_key = $this->_session['CAPTCHA_' . $this->_backendOptions[Captcha_Interface::CHROME_CAPTCHA_NAME]];
 
         $this->destroy();
 
@@ -69,7 +68,7 @@ class Chrome_Captcha_Engine_Default implements Chrome_Captcha_Engine_Interface
 
     public function create()
     {
-        if($this->_session['CAPTCHA_' . $this->_backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME]] == null)
+        if($this->_session['CAPTCHA_' . $this->_backendOptions[Captcha_Interface::CHROME_CAPTCHA_NAME]] == null)
         {
             $this->_createKey();
 
@@ -103,11 +102,11 @@ class Chrome_Captcha_Engine_Default implements Chrome_Captcha_Engine_Interface
     {
         if($this->_key == null)
         {
-            $this->_session['CAPTCHA_' . $this->_backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME]] = null;
+            $this->_session['CAPTCHA_' . $this->_backendOptions[Captcha_Interface::CHROME_CAPTCHA_NAME]] = null;
             return;
         }
 
-        $this->_session['CAPTCHA_' . $this->_backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME]] = array('key' => $this->_key);
+        $this->_session['CAPTCHA_' . $this->_backendOptions[Captcha_Interface::CHROME_CAPTCHA_NAME]] = array('key' => $this->_key);
     }
 
     public function getError()

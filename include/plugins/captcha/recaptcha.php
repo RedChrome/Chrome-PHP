@@ -17,6 +17,10 @@
  * @subpackage Chrome.Captcha
  */
 
+namespace Chrome\Captcha\Engine;
+
+use Chrome\Captcha\Captcha_Interface;
+
 /**
  * load ReCaptcha lib
  */
@@ -28,19 +32,19 @@ require_once LIB . 'reCaptcha/recaptchalib.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Captcha
  */
-class Chrome_Captcha_Engine_Recaptcha implements Chrome_Captcha_Engine_Interface
+class Recaptcha implements Engine_Interface
 {
     protected $_reqData = null;
     protected $_backendOptions = array();
     protected $_error = '';
     protected $_appContext = null;
 
-    public function __construct($name, Chrome_Captcha_Interface $obj, Chrome_Context_Application_Interface $appContext, array $backendOptions)
+    public function __construct($name, Captcha_Interface $obj, \Chrome_Context_Application_Interface $appContext, array $backendOptions)
     {
         $this->_appContext = $appContext;
         $this->_reqData = $appContext->getRequestHandler()->getRequestData();
 
-        $backendOptions[Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME] = $name;
+        $backendOptions[Captcha_Interface::CHROME_CAPTCHA_NAME] = $name;
         $this->_backendOptions = array_merge($this->_backendOptions, $backendOptions);
     }
 

@@ -1,5 +1,9 @@
 <?php
 
+namespace Test\Chrome\Validator;
+
+use \PHPUnit_Framework_TestCase;
+
 class AbstractCompositionTest extends PHPUnit_Framework_TestCase
 {
     protected $_validator = null;

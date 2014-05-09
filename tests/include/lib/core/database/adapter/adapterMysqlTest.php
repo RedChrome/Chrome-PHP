@@ -157,7 +157,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
     {
         $this->doSkipTestsIfNeeded();
 
-        $connection = new Chrome_Database_Connection_Dummy();
+        $connection = new \Test\Chrome\Database\Connection\Dummy();
         $connection->_isConnected = false;
 
         $this->setExpectedException('\Chrome\DatabaseException');
@@ -169,7 +169,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
     {
         $this->doSkipTestsIfNeeded();
 
-        $connection = new Chrome_Database_Connection_Dummy();
+        $connection = new \Test\Chrome\Database\Connection\Dummy();
         $connection->_isConnected = true;
         $connection->_connection = null;
 
@@ -181,7 +181,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
     {
         $this->doSkipTestsIfNeeded();
 
-        $connection = new Chrome_Database_Connection_Dummy();
+        $connection = new \Test\Chrome\Database\Connection\Dummy();
         $connection->_isConnected = true;
         $connection->_connection = 'myConnectionTest';
         // call handleConnection on connect()

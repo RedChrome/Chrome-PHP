@@ -1,5 +1,7 @@
 <?php
 
+namespace Test\Chrome\Database\Connection;
+
 class DatabaseConnectionDB2Test extends AbstractDatabaseConnectionTestCase
 {
     public function _getDatabaseConnection()

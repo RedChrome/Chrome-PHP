@@ -1,12 +1,14 @@
 <?php
 
+namespace Test\Chrome\Authorisation\Resource;
+
 require_once LIB.'core/authorisation/authorisation.php';
 
-class AuthorisationResourceTest extends PHPUnit_Framework_TestCase
+class AuthorisationResourceTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateResource()
     {
-        $assert = new Chrome_Authorisation_Assert_Dummy();
+        $assert = $this->getMock('Chrome\Authorisation\Assert\Assert_Interface');
 
         $resource = new \Chrome\Resource\Resource('test');
         $authResource = new \Chrome\Authorisation\Resource\Resource($resource, 'create');

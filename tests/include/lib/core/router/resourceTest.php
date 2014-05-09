@@ -1,6 +1,8 @@
 <?php
 
-class RouterResourceTest extends PHPUnit_Framework_TestCase
+namespace Test\Chrome\Router;
+
+class ResourceTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetterGetter()
     {

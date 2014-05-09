@@ -25,7 +25,7 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
 
     public function testloadQuery()
     {
-        $con = new Chrome_Database_Connection_Dummy('not Null');
+        $con = new \Test\Chrome\Database\Connection\Dummy('not Null');
 
         $db = $this->_getDatabaseFactory()->buildInterface('\Chrome\Database\Facade\Model', '\Test\Chrome\Database\Result\Dummy', $con);
 

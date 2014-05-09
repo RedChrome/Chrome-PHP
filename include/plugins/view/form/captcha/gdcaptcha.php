@@ -22,13 +22,13 @@
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Captcha_Default extends Chrome_View_Form_Element_Abstract
+class Chrome_View_Form_Element_Captcha_Gdcaptcha extends Chrome_View_Form_Element_Abstract
 {
     protected function _render()
     {
         $lang = $this->_getTranslate();
 
-        $captchaName = $this->_formElement->getOption()->getCaptcha()->getFrontendOption(Chrome_Captcha_Interface::CHROME_CAPTCHA_NAME);
+        $captchaName = $this->_formElement->getOption()->getCaptcha()->getFrontendOption(\Chrome\Captcha\Captcha_Interface::CHROME_CAPTCHA_NAME);
 
         $linker = $this->_formElement->getForm()->getApplicationContext()->getDiContainer()->get('\Chrome\Linker\Linker_Interface');
 

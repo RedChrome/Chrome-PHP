@@ -31,7 +31,7 @@ class CaptchaValidator extends AbstractValidator
 {
     protected $_captcha = null;
 
-    public function __construct(\Chrome_Captcha_Interface $captchaObject)
+    public function __construct(\Chrome\Captcha\Captcha_Interface $captchaObject)
     {
         $this->_captcha = $captchaObject;
     }

@@ -1,6 +1,8 @@
 <?php
 
-class HashTest extends PHPUnit_Framework_TestCase
+namespace Test\Chrome\Hash;
+
+class HashTest extends \PHPUnit_Framework_TestCase
 {
     protected $_hashInstance = null;
 

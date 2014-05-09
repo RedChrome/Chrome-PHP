@@ -1,6 +1,8 @@
 <?php
 
-class Chrome_Database_Connection_Dummy implements \Chrome\Database\Connection\Connection_Interface
+namespace Test\Chrome\Database\Connection;
+
+class Dummy implements \Chrome\Database\Connection\Connection_Interface
 {
     public $_connection = null;
 

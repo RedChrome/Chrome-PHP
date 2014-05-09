@@ -20,7 +20,7 @@
 interface Chrome_Form_Option_Element_Captcha_Interface extends Chrome_Form_Option_Element_Interface
 {
     /**
-     * @return Chrome_Captcha_Interface
+     * @return \Chrome\Captcha\Captcha_Interface
      */
     public function getCaptcha();
 
@@ -59,7 +59,7 @@ class Chrome_Form_Option_Element_Captcha extends Chrome_Form_Option_Element impl
         $this->_backendOptions = $options;
     }
 
-    public function setCaptcha(Chrome_Captcha_Interface $captcha)
+    public function setCaptcha(\Chrome\Captcha\Captcha_Interface $captcha)
     {
         $this->_captcha = $captcha;
     }
@@ -68,7 +68,7 @@ class Chrome_Form_Option_Element_Captcha extends Chrome_Form_Option_Element impl
     {
         if($this->_captcha === null)
         {
-            $this->_captcha = new Chrome_Captcha($this->_form->getID(), $this->_form->getApplicationContext(), $this->_frontendOptions, $this->_backendOptions);
+            $this->_captcha = new \Chrome\Captcha\Captcha($this->_form->getID(), $this->_form->getApplicationContext(), $this->_frontendOptions, $this->_backendOptions);
         }
 
         return $this->_captcha;
@@ -105,7 +105,7 @@ class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract implement
 
     public function isCreated()
     {
-        if($this->_captcha instanceof Chrome_Captcha_Interface)
+        if($this->_captcha instanceof \Chrome\Captcha\Captcha_Interface)
         {
             $this->_captcha->create();
             return true;

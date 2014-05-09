@@ -1,6 +1,8 @@
 <?php
 
-abstract class AbstractRegistryTestCase extends Chrome_TestCase
+namespace Test\Chrome\Registry;
+
+abstract class AbstractTestCase extends \Chrome_TestCase
 {
     /**
      * Structure:

@@ -1,5 +1,9 @@
 <?php
 
+namespace Test\Chrome\Database\Connection;
+
+use \PHPUnit_Framework_TestCase;
+
 abstract class AbstractDatabaseConnectionTestCase extends PHPUnit_Framework_TestCase
 {
     protected $_databaseConnectionOptions = array('HOST' => MYSQL_HOST, 'USER' => MYSQL_USER, 'PASS' => MYSQL_PASS, 'DB' => MYSQL_DB);

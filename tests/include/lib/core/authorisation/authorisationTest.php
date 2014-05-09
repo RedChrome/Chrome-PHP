@@ -1,8 +1,10 @@
 <?php
 
+namespace Test\Chrome\Authorisation;
+
 require_once LIB.'core/authorisation/authorisation.php';
 
-class AuthorisationTest extends Chrome_TestCase
+class AuthorisationTest extends \Chrome_TestCase
 {
     protected $_authAdapter = null;
 

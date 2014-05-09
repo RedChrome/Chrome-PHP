@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Chrome\Models\User\Registration;
+namespace Test\Chrome\Models\User\Registration;
 
 require_once 'abstractRegistration.php';
 require_once LIB.'modules/user/interfaces/registration.php';

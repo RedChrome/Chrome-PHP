@@ -1,6 +1,8 @@
 <?php
 
-class URITest extends PHPUnit_Framework_TestCase
+namespace Test\Chrome\URI;
+
+class URITest extends \PHPUnit_Framework_TestCase
 {
     protected $_uri = null;
 
