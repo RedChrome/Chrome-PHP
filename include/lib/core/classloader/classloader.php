@@ -102,7 +102,7 @@ interface Resolver_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-abstract class Resolver_Abstract implements Resolver_Interface
+abstract class AbstractResolver implements Resolver_Interface
 {
 
     public function init(Classloader_Interface $classloader)
@@ -198,10 +198,28 @@ class Classloader implements Classloader_Interface
     protected $_resolvers = array();
 
     /**
+     * A prefix for the classloader to search in the proper directory
+     *
+     * The prefix should end with "/".
+     *
+     * A valid directory prefix would be
+     *
+     * "any/path/to/anything/"
+     *
+     * @var string
+     */
+    protected $_directoryPrefix = '';
+
+    /**
      *
      * @var array
      */
     protected $_loadedClasses = array();
+
+    public function __construct($directoryPrefix)
+    {
+        $this->_directoryPrefix = $directoryPrefix;
+    }
 
     /**
      * loades $class by loading $fileName
@@ -211,6 +229,8 @@ class Classloader implements Classloader_Interface
      */
     protected function _doLoadClassByFile($class, $fileName)
     {
+        $fileName = $this->_directoryPrefix.$fileName;
+
         $this->_checkWorkingDir();
         $this->_loadFile($fileName);
         $this->_addClass($class);

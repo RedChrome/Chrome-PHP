@@ -18,6 +18,8 @@
  * @subpackage Chrome.Application
  */
 
+namespace Chrome\Application;
+
 use Chrome\Authorisation\Adapter\Simple;
 
 /**
@@ -36,7 +38,7 @@ require_once LIB . 'core/core.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Application
  */
-class Chrome_Application_Default implements Chrome_Application_Interface
+class DefaultApplication implements Application_Interface
 {
     /**
      *
@@ -46,13 +48,13 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
     /**
      *
-     * @var Chrome_Context_Application_Interface
+     * @var \Chrome\Context\Application_Interface
      */
     protected $_applicationContext = null;
 
     /**
      *
-     * @var Chrome_Context_Model_Interface
+     * @var \Chrome\Context\Model_Interface
      */
     protected $_modelContext = null;
 
@@ -124,8 +126,8 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         if($exceptionHandler === null)
         {
-            require_once LIB . 'exception/frontcontroller.php';
-            $exceptionHandler = new \Chrome\Exception\Handler\DefaultHandler($this->_loggerRegistry->get('application'));
+            require_once LIB . 'exception/handler/frontcontroller.php';
+            $exceptionHandler = new \Chrome\Exception\Handler\HtmlStackTrace($this->_loggerRegistry->get('application'));
         }
 
         $this->_exceptionHandler = $exceptionHandler;
@@ -157,9 +159,9 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_exceptionConfiguration->setExceptionHandler($this->_exceptionHandler);
         $this->_exceptionConfiguration->setErrorHandler(new \Chrome\Exception\Handler\DefaultErrorHandler());
 
-        $viewContext = new Chrome_Context_View();
-        $this->_modelContext = new Chrome_Context_Model();
-        $this->_applicationContext = new Chrome_Context_Application();
+        $viewContext = new \Chrome\Context\View();
+        $this->_modelContext = new \Chrome\Context\Model();
+        $this->_applicationContext = new \Chrome\Context\Application();
 
         $this->_applicationContext->setLoggerRegistry($this->_loggerRegistry);
         $this->_applicationContext->setViewContext($viewContext);
@@ -168,12 +170,12 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $this->_initDiContainer();
         $closureHandler = $this->_diContainer->getHandler('closure');
         $registryHandler = $this->_diContainer->getHandler('registry');
-        $registryHandler->add('\Chrome_Context_View_Interface', $viewContext);
-        $registryHandler->add('\Chrome_Context_Model_Interface', $this->_modelContext);
-        $registryHandler->add('\Chrome_Context_Application_Interface', $this->_applicationContext);
+        $registryHandler->add('\Chrome\Context\View_Interface', $viewContext);
+        $registryHandler->add('\Chrome\Context\Model_Interface', $this->_modelContext);
+        $registryHandler->add('\Chrome\Context\Application_Interface', $this->_applicationContext);
 
         // TODO: remove view factory
-        $viewFactory = new Chrome_View_Factory($viewContext);
+        $viewFactory = new \Chrome_View_Factory($viewContext);
         $viewContext->setFactory($viewFactory);
         $registryHandler->add('\Chrome_View_Factory_Interface', $viewFactory);
         $registryHandler->add('\Chrome\Hash\Hash_Interface', new \Chrome\Hash\Hash());
@@ -205,15 +207,15 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $this->_initRouter();
 
-        $pluginFacade = new Chrome_View_Plugin_Facade();
+        $pluginFacade = new \Chrome_View_Plugin_Facade();
         $viewContext->setPluginFacade($pluginFacade);
         $viewContext->setLinker($this->_diContainer->get('\Chrome\Linker\Linker_Interface'));
 
         /**
          * @todo remove them from here
          */
-        $pluginFacade->registerPlugin(new Chrome_View_Plugin_HTML($this->_applicationContext));
-        $pluginFacade->registerPlugin(new Chrome_View_Plugin_Decorator($this->_applicationContext));
+        $pluginFacade->registerPlugin(new \Chrome_View_Plugin_HTML($this->_applicationContext));
+        $pluginFacade->registerPlugin(new \Chrome_View_Plugin_Decorator($this->_applicationContext));
 
         $this->_initConverter();
     }
@@ -233,7 +235,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $this->_classloader->load($resource->getClass());
             $this->_controller = $this->_diContainer->get($resource->getClass());
 
-            $this->_controller->setExceptionHandler(new \Chrome\Exception\Handler\DefaultHandler());
+            $this->_controller->setExceptionHandler(new \Chrome\Exception\Handler\HtmlStackTrace());
 
             $this->_preprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
 
@@ -242,10 +244,10 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             // use the design from the controller, but only if he set one design
             if(($design = $this->_applicationContext->getDesign()) === null)
             {
-                $design = new Chrome_Design();
+                $design = new \Chrome_Design();
                 $this->_applicationContext->setDesign($design);
 
-                $themeFactory = new Chrome_Design_Factory_Theme($this->_applicationContext);
+                $themeFactory = new \Chrome_Design_Factory_Theme($this->_applicationContext);
                 $theme = $themeFactory->build('chrome_one_sidebar');
                 $theme->initDesign($design, $this->_controller, $this->_diContainer);
             }
@@ -316,13 +318,13 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
     protected function _initLoggers()
     {
-        Chrome_Dir::createDir(TMP . CHROME_LOG_DIR, 0777, false);
+        \Chrome_Dir::createDir(TMP . CHROME_LOG_DIR, 0777, false);
 
         $dateFormat = 'Y-m-d H:i:s:u';
         $output = '[%datetime%] %channel%.%level_name%: %message%. %context% %extra%' . PHP_EOL;
 
         $formatter = new \Monolog\Formatter\LineFormatter($output, $dateFormat);
-        $processor = new Chrome\Logger\Processor\Psr();
+        $processor = new \Chrome\Logger\Processor\Psr();
         $stream = new \Monolog\Handler\StreamHandler(TMP . CHROME_LOG_DIR . 'log.log');
         $streamDatabase = new \Monolog\Handler\StreamHandler(TMP . CHROME_LOG_DIR . 'database.log');
         $stream->setFormatter($formatter);
@@ -352,19 +354,19 @@ class Chrome_Application_Default implements Chrome_Application_Interface
     protected function _initClassloader()
     {
         // autoloader
-        $this->_classloader = new \Chrome\Classloader\Classloader();
+        $this->_classloader = new \Chrome\Classloader\Classloader(BASEDIR);
         $this->_applicationContext->setClassloader($this->_classloader);
 
         // $this->_autoloader = new Chrome_Require_Autoloader();
         $this->_classloader->setLogger($this->_loggerRegistry->get('autoloader'));
-        $this->_classloader->setExceptionHandler(new \Chrome\Exception\Handler\DefaultHandler());
+        $this->_classloader->setExceptionHandler(new \Chrome\Exception\Handler\HtmlStackTrace());
 
         require_once PLUGIN . 'classloader/database.php';
         require_once PLUGIN . 'classloader/cache.php';
         require_once PLUGIN . 'classloader/model.php';
 
-        $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver_Database());
-        $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver_Cache());
+        $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver\Database());
+        $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver\Cache());
 
         $autoloader = new \Chrome\Classloader\Autoloader($this->_classloader);
     }
@@ -376,7 +378,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $session = $requestData->getSession();
 
         // setting up authentication, authorisation service
-        $handler = new Chrome\Exception\Handler\AuthenticationHandler();
+        $handler = new \Chrome\Exception\Handler\Authentication();
 
         $authentication = new \Chrome\Authentication\Authentication();
         $authentication->setExceptionHandler($handler);
@@ -450,7 +452,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
     protected function _initRouter()
     {
         $this->_router = new \Chrome\Router\Router();
-        $this->_router->setExceptionHandler(new \Chrome\Exception\Handler\DefaultHandler());
+        $this->_router->setExceptionHandler(new \Chrome\Exception\Handler\HtmlStackTrace());
         // enable route matching
 
         $routerLogger = $this->_loggerRegistry->get('router');
@@ -528,7 +530,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         $closure->add('\Chrome_Design_Loader_Interface', function ($c) {
             $viewFactory = $c->get('\Chrome_View_Factory_Interface');
             $model = $c->get('\Chrome_Model_Design_Loader_Static_Interface');
-            return new Chrome_Design_Loader_Static($c, $viewFactory, $model);
+            return new \Chrome_Design_Loader_Static($c, $viewFactory, $model);
         });
 
         $closure->add('\Chrome_Model_Design_Loader_Static_Interface', function ($c) {
@@ -536,11 +538,11 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $cacheOption->setCacheFile(CACHE.'_designLoaderStatic.cache');
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
-            return new Chrome_Model_Design_Loader_Static_Cache($c->get('\Chrome_Model_Design_Loader_Static_DB'), $cache);
+            return new \Chrome_Model_Design_Loader_Static_Cache($c->get('\Chrome_Model_Design_Loader_Static_DB'), $cache);
         }, true);
 
         $closure->add('\Chrome\Classloader\Resolver_Model_Interface', function ($c) {
-            return new \Chrome\Classloader\Resolver_Model($c->get('\Chrome_Model_Classloader_Model_Interface'));
+            return new \Chrome\Classloader\Resolver\Model($c->get('\Chrome_Model_Classloader_Model_Interface'));
         });
 
         $closure->add('\Chrome_Model_Classloader_Model_Interface', function ($c) {
@@ -549,7 +551,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
             $cacheOption->setCacheFile(CACHE.'_require.cache');
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
-            return new Chrome_Model_Classloader_Cache($c->get('\Chrome_Model_Classloader_Model_Database'), $cache);
+            return new \Chrome_Model_Classloader_Cache($c->get('\Chrome_Model_Classloader_Model_Database'), $cache);
         }, true);
 
         $closure->add('\Chrome\Model\Authorisation\Simple\Model_Interface', function ($c) {
@@ -567,7 +569,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         });
 
         $closure->add('\Chrome\Controller\User\Register', function ($c) {
-            return new \Chrome\Controller\User\Register($c->get('\Chrome_Context_Application_Interface'), $c->get('\Chrome\Interactor\User\Registration_Interface'), new Chrome_View_Register($c->get('\Chrome_Context_View_Interface')));
+            return new \Chrome\Controller\User\Register($c->get('\Chrome\Context\Application_Interface'), $c->get('\Chrome\Interactor\User\Registration_Interface'), new \Chrome_View_Register($c->get('\Chrome\Context\View_Interface')));
         });
 
         $closure->add('\Chrome\Interactor\User\Registration_Interface', function ($c) {
@@ -623,7 +625,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         }, true);
 
         $closure->add('\Chrome\Linker\Linker_Interface', function ($c) {
-            $linker = new \Chrome\Linker\HTTP\Linker(new \Chrome\URI\URI($c->get('\Chrome_Context_Application_Interface')->getRequestHandler()->getRequestData(), true), $c->get('\Chrome\Resource\Model_Interface'));
+            $linker = new \Chrome\Linker\HTTP\Linker(new \Chrome\URI\URI($c->get('\Chrome\Context\Application_Interface')->getRequestHandler()->getRequestData(), true), $c->get('\Chrome\Resource\Model_Interface'));
 
             require_once LIB.'core/linker/http/relative.php';
             require_once LIB.'core/linker/http/url.php';
@@ -638,7 +640,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
 
         $closure->add('\Chrome\Interactor\User\Login_Interface', function ($c) {
             #require_once LIB.'modules/user/interactors/login.php';
-            #$c->get('\Chrome_Context_Application_Interface')->getClassloader()->load('\Chrome\Interactor\User\Login');
+            #$c->get('\Chrome\Context\Application_Interface')->getClassloader()->load('\Chrome\Interactor\User\Login');
             return new \Chrome\Interactor\User\Login($c->get('\Chrome\Authentication\Authentication_Interface'));
         });
 
@@ -647,7 +649,7 @@ class Chrome_Application_Default implements Chrome_Application_Interface
         });
 
         $closure->add('\Chrome\Controller\User\Login', function ($c) {
-            return new \Chrome\Controller\User\Login($c->get('\Chrome_Context_Application_Interface'), $c->get('\Chrome\Interactor\User\Login_Interface'));
+            return new \Chrome\Controller\User\Login($c->get('\Chrome\Context\Application_Interface'), $c->get('\Chrome\Interactor\User\Login_Interface'));
         });
     }
 

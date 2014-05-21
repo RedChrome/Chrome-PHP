@@ -97,21 +97,21 @@ class Mysqli extends AbstractConnection
                 case 2004: // cannot create tcp soccet.
                 case 2005:
                     {
-                        throw new \Chrome\DatabaseException('Could not establish connection to server on "' . $this->_host . ':' . $this->_port . '"!', \Chrome\DatabaseException::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER, $e);
+                        throw new \Chrome\Exception\Database('Could not establish connection to server on "' . $this->_host . ':' . $this->_port . '"!', \Chrome\Exception\Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER, $e);
                     }
 
                 case 1044: // no rights to access the database
                     {
-                        throw new \Chrome\DatabaseException('User is not allowed to access the provided database "'.$this->_database.'"', \Chrome\DatabaseException::NO_SUFFICIENT_RIGHTS, $e);
+                        throw new \Chrome\Exception\Database('User is not allowed to access the provided database "'.$this->_database.'"', \Chrome\Exception\Database::NO_SUFFICIENT_RIGHTS, $e);
                     }
 
                 case 1045: // wrong password
                     {
-                        throw new \Chrome\DatabaseException('Could not connect to MySQL Server. Wrong Username and/or password', \Chrome\DatabaseException::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD, $e);
+                        throw new \Chrome\Exception\Database('Could not connect to MySQL Server. Wrong Username and/or password', \Chrome\Exception\Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD, $e);
                     }
                 default:
                     {
-                        throw new \Chrome\DatabaseException($e->getMessage(), \Chrome\DatabaseException::UNKNOWN, $e);
+                        throw new \Chrome\Exception\Database($e->getMessage(), \Chrome\Exception\Database::UNKNOWN, $e);
                     }
             }
         }

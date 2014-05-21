@@ -58,7 +58,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
     {
         $this->doSkipTestsIfNeeded();
 
-        $this->setExpectedException('\Chrome\DatabaseException');
+        $this->setExpectedException('\Chrome\Exception\Database');
 
         $this->_db->query('SELECT * FROM cpp_autoload LIgMIT 0,1');
     }
@@ -73,7 +73,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         try {
             $this->_db->query('SELECT * FROM cpp_autoload LIgMIT 0,1');
         }
-        catch (\Chrome\DatabaseException $e) {
+        catch (\Chrome\Exception\Database $e) {
             // do nothing
         }
 
@@ -91,7 +91,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         try {
             $this->_db->query('SELEC * FROM cpp_autoload LIMIT 0,1'); // this will result in an exception
         }
-        catch (\Chrome\DatabaseException $e) {
+        catch (\Chrome\Exception\Database $e) {
             // do nothing
         }
 
@@ -160,7 +160,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         $connection = new \Test\Chrome\Database\Connection\Dummy();
         $connection->_isConnected = false;
 
-        $this->setExpectedException('\Chrome\DatabaseException');
+        $this->setExpectedException('\Chrome\Exception\Database');
 
         $this->_db->getAdapter()->setConnection($connection);
     }
@@ -173,7 +173,7 @@ class DatabaseAdapterMysqlTest extends Chrome_TestCase
         $connection->_isConnected = true;
         $connection->_connection = null;
 
-        $this->setExpectedException('\Chrome\DatabaseException');
+        $this->setExpectedException('\Chrome\Exception\Database');
         $this->_db->getAdapter()->setConnection($connection);
     }
 

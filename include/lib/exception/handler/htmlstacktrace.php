@@ -24,7 +24,7 @@ use \Chrome\Exception\Handler_Interface;
 /**
  * @package CHROME-PHP
  */
-class DefaultHandler implements Handler_Interface
+class HtmlStackTrace implements Handler_Interface
 {
     protected $_methodCount = 1;
 

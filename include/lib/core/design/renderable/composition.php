@@ -16,21 +16,21 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
-if(CHROME_PHP !== true)
-    die();
+
+namespace Chrome\Renderable\Composition;
 
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
-abstract class Chrome_Renderable_Composition_Abstract implements Chrome_Renderable_Composition_Interface
+abstract class AbstractComposition implements \Chrome\Renderable\Composition\Composition_Interface
 {
     protected $_renderables = null;
 
     public function __construct()
     {
-        $this->_renderables = new Chrome_Renderable_List();
+        $this->_renderables = new \Chrome\Renderable\RenderableList();
     }
 
     public function getRenderableList()
@@ -38,7 +38,7 @@ abstract class Chrome_Renderable_Composition_Abstract implements Chrome_Renderab
         return $this->_renderables;
     }
 
-    public function setRenderableList(Chrome_Renderable_List_Interface $list)
+    public function setRenderableList(\Chrome\Renderable\List_Interface $list)
     {
         $this->_renderables = $list;
     }
@@ -61,11 +61,11 @@ abstract class Chrome_Renderable_Composition_Abstract implements Chrome_Renderab
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
-class Chrome_Renderable_Composition extends Chrome_Renderable_Composition_Abstract
+class Composition extends \Chrome\Renderable\Composition\AbstractComposition
 {
     protected $_option = null;
 
-    public function setOption(Chrome_Renderable_Options_Interface $option)
+    public function setOption(\Chrome\Renderable\Option_Interface $option)
     {
         $this->_option = $option;
     }
@@ -81,7 +81,7 @@ class Chrome_Renderable_Composition extends Chrome_Renderable_Composition_Abstra
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
-class Chrome_Renderable_Composition_Array extends Chrome_Renderable_Composition
+class ArrayComposition extends Composition
 {
 
     public function render()

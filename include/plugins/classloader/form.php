@@ -17,7 +17,9 @@
  * @subpackage Chrome.Classloader
  */
 
-namespace Chrome\Classloader;
+namespace Chrome\Classloader\Resolver;
+
+use \Chrome\Classloader\AbstractResolver;
 
 /**
  * Resolves all classes beginning with 'Chrome_Form_'
@@ -25,7 +27,7 @@ namespace Chrome\Classloader;
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Resolver_Form extends Resolver_Abstract
+class Form extends AbstractResolver
 {
     /**
      * Resolves a class, if $class is of Chrome_Form_* type
@@ -37,27 +39,27 @@ class Resolver_Form extends Resolver_Abstract
     {
         if(preg_match('#Chrome_Form_Element_(.{1,})#i', $class, $matches))
         {
-            return LIB . 'core/form/element/' . strtolower($matches[1]) . '.php';
+            return 'lib/core/form/element/' . strtolower($matches[1]) . '.php';
         }
 
         if(preg_match('#Chrome_Form_Option_Element_(.{1,})#i', $class, $matches))
         {
-            return LIB . 'core/form/element/' . strtolower($matches[1]) . '.php';
+            return 'lib/core/form/element/' . strtolower($matches[1]) . '.php';
         }
 
         if(preg_match('#Chrome_View_Form_Element_(.{1,})#i', $class, $matches))
         {
-            return PLUGIN . 'View/form/' . strtolower(str_replace('_', '/', $matches[1])) . '.php';
+            return 'plugins/View/form/' . strtolower(str_replace('_', '/', $matches[1])) . '.php';
         }
 
         if(preg_match('#Chrome_Form_Handler_(.{1,})#i', $class, $matches))
         {
-            return LIB . 'core/form/handler/' . strtolower($matches[1]) . '.php';
+            return 'lib/core/form/handler/' . strtolower($matches[1]) . '.php';
         }
 
         if(preg_match('#Chrome_Form_Storage_(.{1,})#i', $class, $matches))
         {
-            return LIB . 'core/form/storage/' . strtolower($matches[1]) . '.php';
+            return 'lib/core/form/storage/' . strtolower($matches[1]) . '.php';
         }
 
         return false;

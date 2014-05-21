@@ -15,18 +15,15 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Design
- * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 19:03:50] --> $
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Renderable\Option;
 
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Design
  */
-class Chrome_Renderable_Options_Static implements Chrome_Renderable_Options_Interface
+class StaticOption implements \Chrome\Renderable\Option_Interface
 {
     protected $_position = null;
 

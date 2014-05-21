@@ -33,7 +33,7 @@ abstract class Chrome_View_Form_Renderer_Abstract implements Chrome_View_Form_Re
         $this->_viewForm = $viewForm;
     }
 
-    public function setViewContext(Chrome_Context_View_Interface $viewContext)
+    public function setViewContext(\Chrome\Context\View_Interface $viewContext)
     {
         $this->_viewContext = $viewContext;
     }

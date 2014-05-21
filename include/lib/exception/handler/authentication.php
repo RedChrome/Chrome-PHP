@@ -13,34 +13,29 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package CHROME-PHP
+ * @package    CHROME-PHP
  * @subpackage Chrome.Exception
  */
 
 namespace Chrome\Exception\Handler;
 
+use \Chrome\Exception\Handler_Interface;
+
 /**
- *
  * @package CHROME-PHP
- * @subpackage Chrome.FrontController
+ * @subpackage Chrome.Authentication
  */
-class FrontControllerHandler extends LoggableHandlerAbstract
+class Authentication implements Handler_Interface
 {
     public function exception(\Exception $e)
     {
-        $this->_logger->error($e);
-
-        switch(get_class($e))
-        {
-            case '\Chrome\DatabaseException':
-                {
-                    die('There was an error with the database.');
-                }
-
-            default:
-                {
-                    die('There was an error in processing the request! Please try it again later!<br>');
-                }
+        if(!($e instanceof \Chrome\Exception\Authentication)) {
+            $e->show($e);
         }
+
+        $this->_logger->error('Exception in Chrome_Authentication! Error code: {code}. Message: "{msg}"', array('code' => $e->getCode(), 'msg' => $e->getMessage()));
+        $this->_logger->error($e->getTraceAsString());
+
+        die('Error in authentication! See log files for more information');
     }
 }

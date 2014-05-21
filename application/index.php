@@ -31,7 +31,7 @@ define('FILE_LEVEL', '');
 require_once '../include/chrome.php';
 require_once APPLICATION . 'default.php';
 
-$application = new Chrome_Application_Default();
+$application = new \Chrome\Application\DefaultApplication();
 $application->init();
 $application->execute();
 //TODO: set up Zend_Mail properly

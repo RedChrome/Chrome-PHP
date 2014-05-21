@@ -27,7 +27,7 @@ use Chrome\Controller\ControllerAbstract;
  */
 abstract class ModuleAbstract extends ControllerAbstract
 {
-    public function __construct(\Chrome_Context_Application_Interface $appContext)
+    public function __construct(\Chrome\Context\Application_Interface $appContext)
     {
         parent::__construct($appContext);
 

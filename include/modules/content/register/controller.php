@@ -13,7 +13,7 @@ class Register extends ModuleAbstract
     protected $_session;
     protected $_authorisation = null;
 
-    public function __construct(\Chrome_Context_Application_Interface $appContext, \Chrome\Interactor\User\Registration $interactor, \Chrome_View_Register $view)
+    public function __construct(\Chrome\Context\Application_Interface $appContext, \Chrome\Interactor\User\Registration $interactor, \Chrome_View_Register $view)
     {
         $this->_applicationContext = $appContext;
         $this->_setRequestHandler($appContext->getRequestHandler());

@@ -17,7 +17,9 @@
  * @subpackage Chrome.Classloader
  */
 
-namespace Chrome\Classloader;
+namespace Chrome\Classloader\Resolver;
+
+use \Chrome\Classloader\AbstractResolver;
 
 /**
  * Resolves all classes of type \Chrome\Filter\*\ClassName
@@ -25,7 +27,7 @@ namespace Chrome\Classloader;
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Resolver_Filter extends Resolver_Abstract
+class Filter extends AbstractResolver
 {
     /**
      * Resolves a class, if $class is of Chrome\Filter\*\ type
@@ -35,8 +37,8 @@ class Resolver_Filter extends Resolver_Abstract
      */
     public function resolve($class)
     {
-        if(preg_match('#Chrome\\\\Filter((?:\\\\[a-zA-Z0-9]{1,})*)\\\\([a-zA-Z0-9]{1,})#AD', $class, $matches)) {
-            return BASEDIR.'plugins/filter'.strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php'));
+        if(preg_match('#Chrome\\\\Filter((?:\\\\[a-z_A-Z0-9]{1,})*)\\\\([a-z_A-Z0-9]{1,})#AD', $class, $matches)) {
+            return 'plugins/filter'.strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php'));
         }
 
         return false;

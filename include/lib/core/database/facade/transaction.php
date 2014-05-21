@@ -55,8 +55,8 @@ class Transaction extends AbstractDecorator implements Transaction_Interface
         try {
             $this->_adapter->query('COMMIT');
             $this->_transactionInitialized = false;
-        } catch(\Chrome\DatabaseException $e) {
-            throw new \Chrome\DatabaseTransactionException($e->getMessage(), $e->getCode(), $e, $e->handleException());
+        } catch(\Chrome\Exception\Database $e) {
+            throw new \Chrome\Exception\DatabaseTransaction($e->getMessage(), $e->getCode(), $e, $e->handleException());
         }
     }
 
@@ -66,8 +66,8 @@ class Transaction extends AbstractDecorator implements Transaction_Interface
         $this->_transactionInitialized = false;
     }
 
-    protected function _handleException(\Chrome\DatabaseException $e)
+    protected function _handleException(\Chrome\Exception\Database $e)
     {
-        throw new \Chrome\DatabaseTransactionException($e->getMessage(), $e->getCode(), $e, $e->handleException());
+        throw new \Chrome\Exception\DatabaseTransaction($e->getMessage(), $e->getCode(), $e, $e->handleException());
     }
 }

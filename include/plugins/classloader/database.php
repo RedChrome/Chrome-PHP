@@ -17,7 +17,9 @@
  * @subpackage Chrome.Classloader
  */
 
-namespace Chrome\Classloader;
+namespace Chrome\Classloader\Resolver;
+
+use \Chrome\Classloader\AbstractResolver;
 
 /**
  * Resolver for database classes
@@ -25,7 +27,7 @@ namespace Chrome\Classloader;
  * @package    CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Resolver_Database extends Resolver_Abstract
+class Database extends AbstractResolver
 {
     /**
      * Resolves the corresponding file for $className
@@ -37,8 +39,8 @@ class Resolver_Database extends Resolver_Abstract
      */
     public function resolve($className)
     {
-        if(preg_match('#Chrome\\\\Database\\\\([a-z1-9]{1,})\\\\(.{1,})#i', $className, $matches)) {
-            return LIB.'core/database/'.strtolower($matches[1]).'/'.strtolower($matches[2]).'.php';
+        if(preg_match('#Chrome\\\\Database((?:\\\\[a-z_A-Z0-9]{1,})*)\\\\([a-z_A-Z0-9]{1,})#AD', $className, $matches)) {
+            return 'lib/core/database'.strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php'));
         }
 
         return false;

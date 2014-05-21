@@ -17,7 +17,10 @@
  * @subpackage Chrome.Require
  */
 
-namespace Chrome\Classloader;
+namespace Chrome\Classloader\Resolver;
+
+use Chrome\Classloader\AbstractResolver;
+use Chrome\Classloader\Classloader_Interface;
 
 die('readme file! Not supposed to run in script!');
 
@@ -29,7 +32,7 @@ die('readme file! Not supposed to run in script!');
  * @package CHROME-PHP
  * @subpackage Chrome.Require
  */
-class Resolver_Readme extends Resolver_Abstract
+class Readme extends AbstractResolver
 {
     // in this method you put your logic
     public function resolve($class)

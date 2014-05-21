@@ -24,7 +24,7 @@ use \Chrome\Exception\Handler_Interface;
 /**
  * @package CHROME-PHP
  */
-class JSONHandler implements Handler_Interface
+class Json implements Handler_Interface
 {
     public function exception(\Exception $e)
     {

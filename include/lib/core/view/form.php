@@ -77,7 +77,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     /**
      * The current view context
      *
-     * @var Chrome_Context_View_Interface
+     * @var \Chrome\Context\View_Interface
      */
     protected $_viewContext = null;
 
@@ -85,9 +85,9 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
      * Simple constructor
      *
      * @param Chrome_Form_Interface $form
-     * @param Chrome_Context_View_Interface $viewContext
+     * @param \Chrome\Context\View_Interface $viewContext
      */
-    public function __construct(Chrome_Form_Interface $form, Chrome_Context_View_Interface $viewContext)
+    public function __construct(Chrome_Form_Interface $form, \Chrome\Context\View_Interface $viewContext)
     {
         $this->_viewContext = $viewContext;
         $this->_form = $form;
@@ -95,7 +95,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
 
     /**
      * Returns the view context, set in __construct
-     * @return Chrome_Context_View_Interface
+     * @return \Chrome\Context\View_Interface
      */
     public function getViewContext()
     {

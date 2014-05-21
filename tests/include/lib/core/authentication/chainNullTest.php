@@ -1,8 +1,11 @@
 <?php
 
+namespace Test\Chrome\Authentication\Chain;
+
+
 require_once 'tests/dummies/authentication/resource.php';
 
-class AuthenticationChainNullTest extends PHPUnit_Framework_TestCase
+class NullTest extends \PHPUnit_Framework_TestCase
 {
     protected $_chain = null;
 

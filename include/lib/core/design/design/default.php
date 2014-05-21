@@ -15,12 +15,7 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Design
- * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:44:14] --> $
  */
-
-if(CHROME_PHP !== true) die();
 
 /**
  * @package    CHROME-PHP
@@ -30,7 +25,7 @@ class Chrome_Design implements Chrome_Design_Interface
 {
     protected $_renderable = null;
 
-    public function setRenderable(Chrome_Renderable $renderable)
+    public function setRenderable(\Chrome\Renderable $renderable)
     {
         $this->_renderable = $renderable;
     }

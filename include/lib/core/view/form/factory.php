@@ -31,7 +31,8 @@ class Chrome_View_Form_Element_Factory_Composition implements Chrome_View_Form_E
 
     protected $_fallback = null;
 
-    public function __construct(Chrome_View_Form_Element_Factory_Interface $delegate, Chrome_View_Form_Element_Factory_Interface $fallbackFactory) {
+    public function __construct(Chrome_View_Form_Element_Factory_Interface $delegate, Chrome_View_Form_Element_Factory_Interface $fallbackFactory)
+    {
         $this->_delegate = $delegate;
         $this->_fallback = $fallbackFactory;
     }

@@ -17,7 +17,9 @@
  * @subpackage Chrome.Classloader
  */
 
-namespace Chrome\Classloader;
+namespace Chrome\Classloader\Resolver;
+
+use \Chrome\Classloader\AbstractResolver;
 
 /**
  * resolves all classes which are contained in the namespace
@@ -26,14 +28,14 @@ namespace Chrome\Classloader;
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Resolver_Validator extends Resolver_Abstract
+class Validator extends AbstractResolver
 {
     public function resolve($class)
     {
         // match classes like Chrome\Validator\My\Sub\Namespace\MyClassNameValidator
-        if(preg_match('#Chrome\\\\Validator((?:\\\\[a-zA-Z0-9]{1,})*)\\\\([a-zA-Z0-9]{1,})(Validator|Composition|Composer)#AD', $class, $matches))
+        if(preg_match('#Chrome\\\\Validator((?:\\\\[a-z_A-Z0-9]{1,})*)\\\\([a-z_A-Z0-9]{1,})(Validator|Composition|Composer)#AD', $class, $matches))
         {
-            return BASEDIR.'plugins/validate'.strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php'));
+            return 'plugins/validate'.strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php'));
         }
 
         return false;

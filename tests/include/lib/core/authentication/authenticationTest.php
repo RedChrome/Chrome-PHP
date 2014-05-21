@@ -1,10 +1,12 @@
 <?php
 
+namespace Test\Chrome\Authentication;
+
 require_once 'tests/dummies/authentication/resource.php';
 require_once 'tests/dummies/authentication/chain.php';
 require_once 'tests/dummies/cookie.php';
 
-class AuthenticationTest extends PHPUnit_Framework_TestCase
+class AuthenticationTest extends \PHPUnit_Framework_TestCase
 {
     protected $_auth = null;
 
@@ -62,7 +64,7 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
 
         // throws a exception while creating authentication
         $chain = $this->getMock('Chrome\Authentication\Chain\Chain_Interface');
-        $chain->expects($this->any())->method('createAuthentication')->will($this->throwException(new \Chrome\AuthenticationException()));
+        $chain->expects($this->any())->method('createAuthentication')->will($this->throwException(new \Chrome\Exception\Authentication()));
         // this will throw an exception, but it is caught in the exception handler
         $this->_auth->setChain($chain)->createAuthentication($resource);
 
@@ -78,7 +80,7 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $this->_auth->setExceptionHandler($this->getMock('\Chrome\Exception\Handler_Interface'));
 
         $chain = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
-        $chain->expects($this->any())->method('authenticate')->will($this->throwException(new \Chrome\AuthenticationException()));
+        $chain->expects($this->any())->method('authenticate')->will($this->throwException(new \Chrome\Exception\Authentication()));
 
         $this->_auth->setChain($chain)->authenticate($resource);
     }
@@ -91,10 +93,10 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $resource = $this->getMock('\Chrome\Authentication\Resource_Interface');
 
         // do not set an exception handler, this will give us the exception
-        $this->setExpectedException('\Chrome\AuthenticationException');
+        $this->setExpectedException('\Chrome\Exception\Authentication');
 
         $chain = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
-        $chain->expects($this->any())->method('authenticate')->will($this->throwException(new \Chrome\AuthenticationException()));
+        $chain->expects($this->any())->method('authenticate')->will($this->throwException(new \Chrome\Exception\Authentication()));
 
         $this->_auth->setChain($chain)->authenticate($resource);
     }
@@ -104,7 +106,7 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $chain = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
         $this->_auth->addChain($chain);
 
-        $this->setExpectedException('\Chrome\AuthenticationException');
+        $this->setExpectedException('\Chrome\Exception\Authentication');
 
         $this->_auth->authenticate();
     }
@@ -115,7 +117,7 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $chain->expects($this->any())->method('authenticate')->will($this->returnValue('1f921'));
         $this->_auth->addChain($chain);
 
-        $this->setExpectedException('\Chrome\AuthenticationException');
+        $this->setExpectedException('\Chrome\Exception\Authentication');
 
         $this->_auth->authenticate();
     }

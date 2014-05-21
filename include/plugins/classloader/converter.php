@@ -17,7 +17,9 @@
  * @subpackage Chrome.Classloader
  */
 
-namespace Chrome\Classloader;
+namespace Chrome\Classloader\Resolver;
+
+use \Chrome\Classloader\AbstractResolver;
 
 /**
  * Resolves all classes beginning with 'Chrome_Converter_Delegate_'
@@ -25,7 +27,7 @@ namespace Chrome\Classloader;
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Resolver_Converter extends Resolver_Abstract
+class Converter extends AbstractResolver
 {
     /**
      * Resolves a class, if $class beginns with 'Chrome_Converter_Delegate_'
@@ -36,7 +38,7 @@ class Resolver_Converter extends Resolver_Abstract
     public function resolve($class)
     {
         if(preg_match('#Chrome\\\\Converter\\\\Delegate\\\\(.{1,})Delegate#iu', $class, $matches)) {
-            return PLUGIN.'converter/'.lcfirst($matches[1]).'.php';
+            return 'plugins/converter/'.lcfirst($matches[1]).'.php';
         }
 
         return false;

@@ -37,12 +37,11 @@ class Chrome_View_Form_Element_Backward_Default extends Chrome_View_Form_Element
         $formId = $this->_viewForm->getViewElements($this->_formElement->getForm()->getID())->getId();#->getFlag('id');
         $this->_attribute->setAttribute('onclick', 'javascript:truncate_form_input(\'' . $formId . '\');return true');
 
-        return '<input type="button" ' . $this->_renderFlags() . '/>';
+        return '<input type="submit" ' . $this->_renderFlags() . '/>';
 
         // f($this->_options[self::CHROME_FORM_DECORATOR_BACKWARD_DELETE_PASSWORDS] === true) {
         // $addOnclick = 'onclick="javascript:truncate_form_input(\''.$this->_formElement->getForm()->getID().'\');return true"';
         // else {
         // $addOnclick = '';
-        //
     }
 }

@@ -34,7 +34,7 @@ class Chrome_View_Factory implements Chrome_View_Factory_Interface
 {
     protected $_viewContext = null;
 
-    public function __construct(Chrome_Context_View_Interface $viewContext)
+    public function __construct(\Chrome\Context\View_Interface $viewContext)
     {
         $this->_viewContext = $viewContext;
     }

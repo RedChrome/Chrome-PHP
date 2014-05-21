@@ -19,6 +19,7 @@
  * @subpackage Chrome.Application
  */
 
+namespace Chrome\Application;
 
 /**
  * load error & exception classes
@@ -61,7 +62,7 @@ require_once LIB.'core/application.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Application
  */
-class Chrome_Application_Resource implements Chrome_Application_Interface
+class ResourceApplication implements \Chrome\Application\Application_Interface
 {
     /**
      * Contains the application class
@@ -72,13 +73,13 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
 
     /**
      *
-     * @var Chrome_Context_Application_Interface
+     * @var \Chrome\Context\Application_Interface
      */
     protected $_applicationContext = null;
 
     /**
      *
-     * @var Chrome_Context_Model_Interface
+     * @var \Chrome\Context\Model_Interface
      */
     protected $_modelContext = null;
 
@@ -107,8 +108,8 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
     public function __construct(\Chrome\Exception\Handler_Interface $handler = null)
     {
         if($handler === null) {
-            require_once LIB.'exception/default.php';
-            $handler = new \Chrome\Exception\Handler\DefaultHandler();
+            require_once LIB.'exception/handler/htmlstacktrace.php';
+            $handler = new \Chrome\Exception\Handler\HtmlStackTrace();
         }
 
         $this->_exceptionHandler = $handler;
@@ -123,11 +124,11 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
     {
         $this->_exceptionConfiguration = new \Chrome\Exception\Configuration();
         $this->_exceptionConfiguration->setExceptionHandler($this->_exceptionHandler);
-        $this->_exceptionConfiguration->setErrorHandler(new Chrome\Exception\Handler\DefaultErrorHandler());
+        $this->_exceptionConfiguration->setErrorHandler(new \Chrome\Exception\Handler\DefaultErrorHandler());
 
-        $viewContext = new Chrome_Context_View();
-        $this->_modelContext = new Chrome_Context_Model();
-        $this->_applicationContext = new Chrome_Context_Application();
+        $viewContext = new \Chrome\Context\View();
+        $this->_modelContext = new \Chrome\Context\Model();
+        $this->_applicationContext = new \Chrome\Context\Application();
 
         $this->_applicationContext->setViewContext($viewContext);
         $this->_applicationContext->setModelContext($this->_modelContext);
@@ -139,7 +140,7 @@ class Chrome_Application_Resource implements Chrome_Application_Interface
         require_once LIB . 'core/request/request/http.php';
         require_once LIB . 'core/response/response/http.php';
 
-        $requestFactory->addRequestObject(new \Chrome\Request\Handler\HTTPHandler(new Chrome\Hash\Hash()));
+        $requestFactory->addRequestObject(new \Chrome\Request\Handler\HTTPHandler(new \Chrome\Hash\Hash()));
 
         $reqHandler = $requestFactory->getRequest();
         $requestData = $requestFactory->getRequestDataObject();

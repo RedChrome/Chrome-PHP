@@ -17,7 +17,11 @@
  * @subpackage Chrome.Classloader
  */
 
-namespace Chrome\Classloader;
+namespace Chrome\Classloader\Resolver;
+
+use \Chrome\Classloader\AbstractResolver;
+use \Chrome\Classloader\Resolver_Interface;
+use \Chrome\Classloader\Classloader_Interface;
 
 /**
  * Interface for loading required files and loading classes
@@ -25,7 +29,7 @@ namespace Chrome\Classloader;
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-interface Resolver_Model_Interface extends Resolver_Interface
+interface Model_Interface extends Resolver_Interface
 {
     public function getClasses();
 
@@ -38,7 +42,7 @@ interface Resolver_Model_Interface extends Resolver_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Resolver_Model implements Resolver_Model_Interface
+class Model implements Model_Interface
 {
     /**
      * Contains Chrome_Model_Abstract instance
@@ -92,7 +96,7 @@ class Resolver_Model implements Resolver_Model_Interface
 
         foreach($this->_require as $value)
         {
-            $classloader->loadByFile($value['name'], BASEDIR . $value['path']);
+            $classloader->loadByFile($value['name'], $value['path']);
 
             if($value['is_class_resolver'] == true)
             {
@@ -129,7 +133,7 @@ class Resolver_Model implements Resolver_Model_Interface
     {
         if(isset($this->_class[$className]))
         {
-            return BASEDIR . $this->_class[$className];
+            return $this->_class[$className];
         }
 
         return false;

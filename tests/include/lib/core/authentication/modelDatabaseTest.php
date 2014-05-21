@@ -1,6 +1,10 @@
 <?php
+
+namespace Test\Chrome\Authentication\Model;
+
 require_once LIB . 'core/authentication/chain/database.php';
-class ModelDatabaseTest extends Chrome_TestCase
+
+class DatabaseTest extends \Chrome_TestCase
 {
     protected $_model;
 

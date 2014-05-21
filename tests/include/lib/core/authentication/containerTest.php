@@ -1,6 +1,8 @@
 <?php
 
-class AuthenticationContainerTest extends PHPUnit_Framework_TestCase
+namespace Test\Chrome\Authentication;
+
+class ContainerTest extends \PHPUnit_Framework_TestCase
 {
     protected $_container = null;
 

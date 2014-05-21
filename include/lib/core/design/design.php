@@ -15,75 +15,18 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Design
- * @copyright Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license http://chrome-php.de/license/new-bsd New BSD License
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 20:15:08] --> $
  */
+
+require_once 'renderable.php';
 
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
-interface Chrome_Renderable_List_Interface extends Iterator
+interface Chrome_Design_Interface extends \Chrome\Renderable
 {
-    public function addRenderable(Chrome_Renderable $obj);
-
-    public function getRenderables();
-
-    public function setRenderables(array $renderables);
-
-    public function getRenderable($index);
-
-    public function isLast();
-
-    public function isFirst();
-
-    public function count();
-}
-
-/**
- * Interface for all renaderable objects. Those objects are supposed to be responsible for displaying.
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Design
- */
-interface Chrome_Renderable
-{
-    /**
-     * Renders the object
-     *
-     * @return mixed
-     */
-    public function render();
-}
-
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Design
- */
-interface Chrome_Renderable_Composition_Interface extends Chrome_Renderable
-{
-    /**
-     *
-     * @return Chrome_Renderable_Options_Interface
-     */
-    public function getRequiredRenderables();
-
-    public function getRenderableList();
-
-    public function setRenderableList(Chrome_Renderable_List_Interface $list);
-}
-
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Design
- */
-interface Chrome_Design_Interface extends Chrome_Renderable
-{
-    public function setRenderable(Chrome_Renderable $renderable);
+    public function setRenderable(\Chrome\Renderable $renderable);
 
     public function getRenderable();
 }
@@ -96,17 +39,13 @@ interface Chrome_Design_Loader_Interface
 {
     public function setTheme($theme);
 
-    public function addComposition(Chrome_Renderable_Composition_Interface $composition);
+    public function addComposition(\Chrome\Renderable\Composition\Composition_Interface $composition);
 
     public function getCompositions();
 
     public function load();
 }
 
-// todo: finish interface
-interface Chrome_Renderable_Options_Interface
-{
-}
 
 /**
  *
@@ -115,7 +54,7 @@ interface Chrome_Renderable_Options_Interface
  */
 interface Chrome_Design_Theme_Interface
 {
-    public function setApplicationContext(Chrome_Context_Application_Interface $appContext);
+    public function setApplicationContext(\Chrome\Context\Application_Interface $appContext);
 
     // TODO: refine this method
     public function initDesign(Chrome_Design_Interface $design, \Chrome\Controller\Controller_Interface $controller, \Chrome\DI\Container_Interface $container);
@@ -125,7 +64,7 @@ abstract class Chrome_Design_Theme_Abstract implements Chrome_Design_Theme_Inter
 {
     protected $_appContext = null;
 
-    public function setApplicationContext(Chrome_Context_Application_Interface $appContext)
+    public function setApplicationContext(\Chrome\Context\Application_Interface $appContext)
     {
         $this->_appContext = $appContext;
     }
@@ -137,7 +76,7 @@ abstract class Chrome_Design_Theme_Abstract implements Chrome_Design_Theme_Inter
  */
 interface Chrome_Design_Factory_Interface
 {
-    public function __construct(Chrome_Context_Application_Interface $appContext);
+    public function __construct(\Chrome\Context\Application_Interface $appContext);
 
     public function build();
 }
@@ -146,7 +85,7 @@ abstract class Chrome_Design_Factory_Abstract implements Chrome_Design_Factory_I
 {
     protected $_applicationContext = null;
 
-    public function __construct(Chrome_Context_Application_Interface $appContext)
+    public function __construct(\Chrome\Context\Application_Interface $appContext)
     {
         $this->_applicationContext = $appContext;
     }
@@ -158,81 +97,3 @@ require_once 'renderable/template.php';
 require_once 'design/default.php';
 require_once 'factory/design.php';
 require_once 'factory/theme.php';
-class Chrome_Renderable_List implements Chrome_Renderable_List_Interface
-{
-    protected $_list = array();
-
-    protected $_position = 0;
-
-    public function addRenderable(Chrome_Renderable $obj)
-    {
-        $this->_list[] = $obj;
-    }
-
-    public function getRenderables()
-    {
-        return $this->_list;
-    }
-
-    public function setRenderables(array $renderables)
-    {
-        $this->_list = array();
-
-        foreach($renderables as $renderable)
-        {
-            if(!($renderable instanceof Chrome_Renderable))
-            {
-                throw new \Chrome\InvalidArgumentException('All renderables have to implement interface Chrome_Renderable! Renderable was ' . get_class($renderable));
-            }
-            $this->_list[] = $renderable;
-        }
-    }
-
-    public function getRenderable($index)
-    {
-        return isset($this->_list[$index]) ? $this->_list[$index] : null;
-    }
-
-    public function isLast()
-    {
-        return $this->_position + 1 === $this->count();
-    }
-
-    public function isFirst()
-    {
-        return $this->_position === 0;
-    }
-
-    public function count()
-    {
-        return count($this->_list);
-    }
-
-    /*
-     * Iterator interface methods
-     */
-    public function rewind()
-    {
-        $this->_position = 0;
-    }
-
-    public function current()
-    {
-        return $this->_list[$this->_position];
-    }
-
-    public function key()
-    {
-        return $this->_position;
-    }
-
-    public function next()
-    {
-        ++$this->_position;
-    }
-
-    public function valid()
-    {
-        return isset($this->_list[$this->_position]);
-    }
-}

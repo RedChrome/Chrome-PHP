@@ -77,7 +77,7 @@ class Postgresql extends AbstractConnection implements SchemaProvider_Interface
             $this->_connection = pg_connect($hostString.' port=' . $this->_port . ' user=' . $this->_username . ' password=' . $this->_password . ' dbname=' . $this->_database. ' connect_timeout=1');
 
             if($this->_connection === false) {
-                throw new \Chrome\DatabaseException('Could not connect to PostgreSQL server!');
+                throw new \Chrome\Exception\Database('Could not connect to PostgreSQL server!');
             }
 
         } catch(\Chrome\Exception $e) {

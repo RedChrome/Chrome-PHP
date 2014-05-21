@@ -24,7 +24,7 @@ require_once 'form.php';
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-interface Chrome_View_Interface extends Chrome_Renderable
+interface Chrome_View_Interface extends \Chrome\Renderable
 {
     /**
      * Sets a var
@@ -52,11 +52,11 @@ abstract class Chrome_View implements Chrome_View_Interface
     /**
      * Contains the context of this view
      *
-     * @var Chrome_Context_View_Interface
+     * @var \Chrome\Context\View_Interface
      */
     protected $_viewContext = null;
 
-    public function __construct(Chrome_Context_View_Interface $viewContext)
+    public function __construct(\Chrome\Context\View_Interface $viewContext)
     {
         $this->_viewContext = $viewContext;
         $this->_pluginFacade = $viewContext->getPluginFacade();
@@ -134,7 +134,7 @@ abstract class Chrome_View_Abstract extends Chrome_View
      * @todo why controller?
      * @return \Chrome\Controller\Controller_Interface
      */
-    public function __construct(Chrome_Context_View_Interface $viewContext, \Chrome\Controller\Controller_Interface $controller)
+    public function __construct(\Chrome\Context\View_Interface $viewContext, \Chrome\Controller\Controller_Interface $controller)
     {
         parent::__construct($viewContext);
         #$this->_controller = $controller;
@@ -160,7 +160,7 @@ abstract class Chrome_View_Strategy_Abstract extends Chrome_View
         return $return;
     }
 
-    public function addRenderable(Chrome_Renderable $renderable)
+    public function addRenderable(\Chrome\Renderable $renderable)
     {
         $this->_views[] = $renderable;
     }

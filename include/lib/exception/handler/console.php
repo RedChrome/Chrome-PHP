@@ -25,7 +25,7 @@ use \Chrome\Exception\Handler_Interface;
  * @package CHROME-PHP
  * @subpackage Chrome.FrontController
  */
-class ConsoleHandler implements Handler_Interface
+class Console implements Handler_Interface
 {
 	public function exception(\Exception $e)
 	{

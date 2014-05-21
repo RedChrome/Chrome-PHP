@@ -451,7 +451,7 @@ class Authentication implements \Chrome\Authentication\Authentication_Interface
             // user could not authenticate or he should not authenticate
             if(!($this->_container instanceof Container_Interface) or !is_int(($id = $this->_container->getID())) or $id < 0)
             {
-                throw new \Chrome\AuthenticationException('Could not authenticate, authentication refused', 201);
+                throw new \Chrome\Exception\Authentication('Could not authenticate, authentication refused', 201);
             } else
             {
                 $this->_isAuthenticated = true;
@@ -472,7 +472,7 @@ class Authentication implements \Chrome\Authentication\Authentication_Interface
                 // -> maybe any chain needs to update sth.?
                 $this->_chain->update($this->_container);
             }
-        } catch(\Chrome\AuthenticationException $e)
+        } catch(\Chrome\Exception\Authentication $e)
         {
             $this->_handleException($e);
         }
@@ -558,7 +558,7 @@ class Authentication implements \Chrome\Authentication\Authentication_Interface
         try
         {
             $this->_chain->createAuthentication($resource);
-        } catch(\Chrome\AuthenticationException $e)
+        } catch(\Chrome\Exception\Authentication $e)
         {
             $this->_handleException($e);
         }
@@ -567,10 +567,10 @@ class Authentication implements \Chrome\Authentication\Authentication_Interface
     /**
      * Handles an exception, using the exception handler (if set)
      *
-     * @param \Chrome\AuthenticationException $e
-     * @throws \Chrome\AuthenticationException
+     * @param \Chrome\Exception\Authentication $e
+     * @throws \Chrome\Exception\Authentication
      */
-    protected function _handleException(\Chrome\AuthenticationException $e)
+    protected function _handleException(\Chrome\Exception\Authentication $e)
     {
         if($this->_exceptionHandler != null)
         {

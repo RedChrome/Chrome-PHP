@@ -40,7 +40,7 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
 
         $this->assertEquals('any string', $db->getQuery());
 
-        $this->setExpectedException('\Chrome\DatabaseException');
+        $this->setExpectedException('\Chrome\Exception\Database');
         $db->loadQuery('anything else');
     }
 

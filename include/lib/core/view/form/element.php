@@ -121,7 +121,7 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
     /**
      * Renderes the view form element.
      *
-     * @see Chrome_Renderable::render()
+     * @see \Chrome\Renderable::render()
      * @return string
      */
     public function render()

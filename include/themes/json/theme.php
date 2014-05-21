@@ -30,10 +30,10 @@ class Chrome_Design_Theme_Json extends Chrome_Design_Theme_Abstract
 {
     public function initDesign(Chrome_Design_Interface $design, \Chrome\Controller\Controller_Interface $controller)
     {
-        $html = new Chrome_Renderable_Composition_Array();
+        $html = new \Chrome\Renderable\Composition\ArrayComposition();
         $design->setRenderable($html);
 
-        $htmlList = new Chrome_Renderable_List();
+        $htmlList = new \Chrome\Renderable\RenderableList();
         $html->setRenderableList($htmlList);
         $html->getRenderableList()->addRenderable($controller->getView());
     }

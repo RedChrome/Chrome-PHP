@@ -35,7 +35,7 @@ class Mysql extends AbstractAdapter
 
         if($this->_result === false)
         {
-            throw new \Chrome\DatabaseException('Error while sending "' . $query . '" to database! MySQL Error:' . mysql_error($this->_connection));
+            throw new \Chrome\Exception\Database('Error while sending "' . $query . '" to database! MySQL Error:' . mysql_error($this->_connection));
         }
 
         if(is_resource($this->_result) === true)

@@ -52,12 +52,12 @@ class Chrome_TestSetup
     protected function _initClassloader()
     {
         require_once PLUGIN . 'classloader/database.php';
-        $classloader = new \Chrome\Classloader\Classloader();
+        $classloader = new \Chrome\Classloader\Classloader(BASEDIR);
         $classloader->setExceptionHandler($this->_errorConfig->getExceptionHandler());
         $classloader->setLogger(new \Psr\Log\NullLogger());
-        $classloader->appendResolver(new \Chrome\Classloader\Resolver_Database());
+        $classloader->appendResolver(new \Chrome\Classloader\Resolver\Database());
 
-        $autoloader = new \Chrome\Classloader\Autoloader($classloader);
+        new \Chrome\Classloader\Autoloader($classloader);
 
         if($this->_applicationContext !== null) {
             $this->_applicationContext->setClassloader($classloader);
@@ -70,9 +70,9 @@ class Chrome_TestSetup
 
         $this->_errorConfig = new \Chrome\Exception\Configuration();
         $this->_errorConfig->setErrorHandler(new Chrome\Exception\Handler\DefaultErrorHandler());
-        $this->_errorConfig->setExceptionHandler(new \Chrome\Exception\Handler\ConsoleHandler());
+        $this->_errorConfig->setExceptionHandler(new \Chrome\Exception\Handler\Console());
 
-        $this->_applicationContext = new Chrome_Context_Application();
+        $this->_applicationContext = new \Chrome\Context\Application();
         $this->_initClassloader();
     }
 
@@ -131,7 +131,7 @@ class Chrome_TestSetup
             }
         }
 
-        $modelContext = new Chrome_Context_Model();
+        $modelContext = new \Chrome\Context\Model();
         $modelContext->setDatabaseFactory($databaseFactory);
         $this->_applicationContext->setModelContext($modelContext);
     }
@@ -148,7 +148,7 @@ class Chrome_TestSetup
 
         require_once 'tests/include/application/test.php';
 
-        $application = new Chrome_Application_Test(new \Chrome\Exception\Handler\ConsoleHandler());
+        $application = new Chrome_Application_Test(new \Chrome\Exception\Handler\Console());
         $application->setModelContext($this->_applicationContext->getModelContext());
         $application->init();
         $this->_diContainer = $application->getDiContainer();

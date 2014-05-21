@@ -46,11 +46,11 @@ class Postgresql extends AbstractAdapter
 
             if($this->_result === false)
             {
-                throw new \Chrome\DatabaseException('Error while sending a query to database');
+                throw new \Chrome\Exception\Database('Error while sending a query to database');
             }
         } catch(\Chrome\Exception $e)
         {
-            throw new \Chrome\DatabaseQueryException($e->getMessage(), $query, \Chrome\DatabaseQueryException::ERROR_WHILE_EXECUTING_QUERY, $e);
+            throw new \Chrome\Exception\DatabaseQuery($e->getMessage(), $query, \Chrome\Exception\DatabaseQuery::ERROR_WHILE_EXECUTING_QUERY, $e);
         }
 
         if(is_resource($this->_result) === true)
@@ -177,6 +177,6 @@ class Postgresql extends AbstractAdapter
             }
         }
 
-        throw new \Chrome\DatabaseException('Could not retrieve last insert id');
+        throw new \Chrome\Exception\Database('Could not retrieve last insert id');
     }
 }

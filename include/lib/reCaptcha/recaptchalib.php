@@ -71,13 +71,13 @@ function _recaptcha_http_post($host, $path, $data, $port = 80)
 {
     $req = _recaptcha_qsencode($data);
 
-    $http_request = 'POST '.$path.' HTTP/1.0'."\r\n";
-    $http_request .= 'Host: '.$host."\r\n";
-    $http_request .= "Content-Type: application/x-www-form-urlencoded;\r\n";
-    $http_request .= 'Content-Length: ' . strlen($req) . "\r\n";
-    $http_request .= "User-Agent: reCAPTCHA/PHP\r\n";
-    $http_request .= "\r\n";
-    $http_request .= $req;
+    $httpRequest = 'POST '.$path.' HTTP/1.0'."\r\n";
+    $httpRequest .= 'Host: '.$host."\r\n";
+    $httpRequest .= "Content-Type: application/x-www-form-urlencoded;\r\n";
+    $httpRequest .= 'Content-Length: ' . strlen($req) . "\r\n";
+    $httpRequest .= "User-Agent: reCAPTCHA/PHP\r\n";
+    $httpRequest .= "\r\n";
+    $httpRequest .= $req;
 
     $response = '';
     if(false == ($fs = @fsockopen($host, $port, $errno, $errstr, 10)))
@@ -85,7 +85,7 @@ function _recaptcha_http_post($host, $path, $data, $port = 80)
         die('Could not open socket');
     }
 
-    fwrite($fs, $http_request);
+    fwrite($fs, $httpRequest);
 
     while(!feof($fs))
         $response .= fgets($fs, 1160); // One TCP-IP packet
@@ -130,10 +130,10 @@ function recaptcha_check_answer($privkey, $remoteip, $challenge, $response, $ext
     // discard spam submissions
     if($challenge == null || strlen($challenge) == 0 || $response == null || strlen($response) == 0)
     {
-        $recaptcha_response = new ReCaptchaResponse();
-        $recaptcha_response->isValid = false;
-        $recaptcha_response->error = 'incorrect-captcha-sol';
-        return $recaptcha_response;
+        $recaptchaResponse = new ReCaptchaResponse();
+        $recaptchaResponse->isValid = false;
+        $recaptchaResponse->error = 'incorrect-captcha-sol';
+        return $recaptchaResponse;
     }
 
     $response = _recaptcha_http_post(RECAPTCHA_VERIFY_SERVER, '/recaptcha/api/verify', array('privatekey' => $privkey,
@@ -142,17 +142,17 @@ function recaptcha_check_answer($privkey, $remoteip, $challenge, $response, $ext
                                                                                             'response' => $response) + $extra_params);
 
     $answers = explode("\n", $response[1]);
-    $recaptcha_response = new ReCaptchaResponse();
+    $recaptchaResponse = new ReCaptchaResponse();
 
     if(trim($answers[0]) == 'true')
     {
-        $recaptcha_response->isValid = true;
+        $recaptchaResponse->isValid = true;
     } else
     {
-        $recaptcha_response->isValid = false;
-        $recaptcha_response->error = $answers[1];
+        $recaptchaResponse->isValid = false;
+        $recaptchaResponse->error = $answers[1];
     }
-    return $recaptcha_response;
+    return $recaptchaResponse;
 }
 
 /**

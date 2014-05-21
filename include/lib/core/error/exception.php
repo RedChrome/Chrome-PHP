@@ -259,7 +259,7 @@ use Psr\Log\LoggerInterface;
 /**
  * load default exception class
  */
-require_once LIB.'exception/default.php';
+require_once LIB.'exception/handler/htmlstacktrace.php';
 
 /**
  * Default implementation of an error handler

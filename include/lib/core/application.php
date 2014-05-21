@@ -19,11 +19,13 @@
  * @subpackage Chrome.Application
  */
 
+namespace Chrome\Application;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Application
  */
-interface Chrome_Application_Interface extends \Chrome\Exception\Processable_Interface
+interface Application_Interface extends \Chrome\Exception\Processable_Interface
 {
     /**
      * getController()
@@ -50,7 +52,7 @@ interface Chrome_Application_Interface extends \Chrome\Exception\Processable_Int
     /**
      * Returns the current application context instance
      *
-     * @return Chrome_Context_Application_Interface
+     * @return \Chrome\Context\Application_Interface
      */
     public function getApplicationContext();
 
@@ -69,12 +71,14 @@ interface Chrome_Application_Interface extends \Chrome\Exception\Processable_Int
     public function getDiContainer();
 }
 
+namespace Chrome\Context;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Application.Context
  */
-interface Chrome_Context_View_Interface
+interface View_Interface
 {
     /**
      * Sets the localization
@@ -100,7 +104,7 @@ interface Chrome_Context_View_Interface
      *
      * @param Chrome_View_Plugin_Facade_Interface $pluginFacade
      */
-    public function setPluginFacade(Chrome_View_Plugin_Facade_Interface $pluginFacade);
+    public function setPluginFacade(\Chrome_View_Plugin_Facade_Interface $pluginFacade);
 
     /**
      * Returns the plugin facade, set via setPluginFacade
@@ -130,7 +134,7 @@ interface Chrome_Context_View_Interface
      *
      * @param Chrome_View_Factory_Interface $factory
      */
-    public function setFactory(Chrome_View_Factory_Interface $factory);
+    public function setFactory(\Chrome_View_Factory_Interface $factory);
 
     /**
      * Returns a view factory
@@ -140,7 +144,7 @@ interface Chrome_Context_View_Interface
     public function getFactory();
 
     /**
-     * See {@link Chrome_Context_View_Interface::getConfig()}, why there is no setLoggerRegistry
+     * See {@link \Chrome\Context\View_Interface::getConfig()}, why there is no setLoggerRegistry
      *
      * @return Chrome\Registry\Logger\Registry_Interface
      */
@@ -159,7 +163,7 @@ interface Chrome_Context_View_Interface
      * E.g.
      * this method links the config object from app context with view context.
      */
-    public function linkApplicationContext(Chrome_Context_Application_Interface $app);
+    public function linkApplicationContext(Application_Interface $app);
 }
 
 /**
@@ -167,7 +171,7 @@ interface Chrome_Context_View_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Application.Context
  */
-interface Chrome_Context_Model_Interface
+interface Model_Interface
 {
     /**
      * Sets a database factory
@@ -211,9 +215,9 @@ interface Chrome_Context_Model_Interface
      * Links objects, which need to be accessed from view/model context with the application context.
      * Thus the needed objects are the same (e.g. config, loggerRegistry, ..)
      *
-     * @param Chrome_Context_Application_Interface $app
+     * @param \Chrome\Context\Application_Interface $app
      */
-    public function linkApplicationContext(Chrome_Context_Application_Interface $app);
+    public function linkApplicationContext(Application_Interface $app);
 }
 
 /**
@@ -221,7 +225,7 @@ interface Chrome_Context_Model_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Application.Context
  */
-interface Chrome_Context_Application_Interface
+interface Application_Interface
 {
     /**
      * available objects to link, via getReference()
@@ -291,14 +295,14 @@ interface Chrome_Context_Application_Interface
      *
      * The model context contains context information/objects for each Model object
      *
-     * @param Chrome_Context_Model_Interface $modelContext
+     * @param \Chrome\Context\Model_Interface $modelContext
      */
-    public function setModelContext(Chrome_Context_Model_Interface $modelContext);
+    public function setModelContext(\Chrome\Context\Model_Interface $modelContext);
 
     /**
      * Returns the model context
      *
-     * @return Chrome_Context_Model_Interface
+     * @return \Chrome\Context\Model_Interface
      */
     public function getModelContext();
 
@@ -340,14 +344,14 @@ interface Chrome_Context_Application_Interface
      *
      * The view context contains all information/objects for each View object
      *
-     * @param Chrome_Context_View_Interface $viewContext
+     * @param \Chrome\Context\View_Interface $viewContext
      */
-    public function setViewContext(Chrome_Context_View_Interface $viewContext);
+    public function setViewContext(\Chrome\Context\View_Interface $viewContext);
 
     /**
      * Returns the view context
      *
-     * @return Chrome_Context_View_Interface
+     * @return \Chrome\Context\View_Interface
      */
     public function getViewContext();
 
@@ -390,7 +394,7 @@ interface Chrome_Context_Application_Interface
      *
      * @param Chrome_Design_Interface $design
      */
-    public function setDesign(Chrome_Design_Interface $design);
+    public function setDesign(\Chrome_Design_Interface $design);
 
     /**
      * Returns a design object
@@ -430,7 +434,7 @@ interface Chrome_Context_Application_Interface
     public function getConverter();
 }
 
-class Chrome_Context_Application implements Chrome_Context_Application_Interface
+class Application implements Application_Interface
 {
     protected $_requestHandler = null;
     protected $_authentication = null;
@@ -488,7 +492,7 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
         return $this->_config;
     }
 
-    public function setViewContext(Chrome_Context_View_Interface $viewContext)
+    public function setViewContext(\Chrome\Context\View_Interface $viewContext)
     {
         $this->_viewContext = $viewContext;
         $viewContext->linkApplicationContext($this);
@@ -499,7 +503,7 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
         return $this->_viewContext;
     }
 
-    public function setModelContext(Chrome_Context_Model_Interface $modelContext)
+    public function setModelContext(\Chrome\Context\Model_Interface $modelContext)
     {
         $this->_modelContext = $modelContext;
         $modelContext->linkApplicationContext($this);
@@ -570,7 +574,7 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
         return $this->_loggerRegistry;
     }
 
-    public function setDesign(Chrome_Design_Interface $design)
+    public function setDesign(\Chrome_Design_Interface $design)
     {
         $this->_design = $design;
     }
@@ -590,18 +594,18 @@ class Chrome_Context_Application implements Chrome_Context_Application_Interface
         $this->_classloader = $classloader;
     }
 }
-class Chrome_Context_Model implements Chrome_Context_Model_Interface
+class Model implements Model_Interface
 {
     protected $_databaseFactory = null;
     protected $_config = null;
     protected $_loggerRegistry = null;
     protected $_converter = null;
 
-    public function linkApplicationContext(Chrome_Context_Application_Interface $app)
+    public function linkApplicationContext(Application_Interface $app)
     {
-        $this->_config = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_CONFIG);
-        $this->_loggerRegistry = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_LOGGER_REGISTRY);
-        $this->_converter = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_CONVERTER);
+        $this->_config = &$app->getReference(Application_Interface::VARIABLE_CONFIG);
+        $this->_loggerRegistry = &$app->getReference(Application_Interface::VARIABLE_LOGGER_REGISTRY);
+        $this->_converter = &$app->getReference(Application_Interface::VARIABLE_CONVERTER);
     }
 
     public function setDatabaseFactory(\Chrome\Database\Factory\Factory_Interface $factory)
@@ -629,7 +633,7 @@ class Chrome_Context_Model implements Chrome_Context_Model_Interface
         return $this->_converter;
     }
 }
-class Chrome_Context_View implements Chrome_Context_View_Interface
+class View implements \Chrome\Context\View_Interface
 {
     protected $_pluginFacade = null;
     protected $_factory = null;
@@ -658,10 +662,10 @@ class Chrome_Context_View implements Chrome_Context_View_Interface
         return $this->_localization;
     }
 
-    public function linkApplicationContext(Chrome_Context_Application_Interface $app)
+    public function linkApplicationContext(Application_Interface $app)
     {
-        $this->_config = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_CONFIG);
-        $this->_loggerRegistry = &$app->getReference(Chrome_Context_Application_Interface::VARIABLE_LOGGER_REGISTRY);
+        $this->_config = &$app->getReference(Application_Interface::VARIABLE_CONFIG);
+        $this->_loggerRegistry = &$app->getReference(Application_Interface::VARIABLE_LOGGER_REGISTRY);
     }
 
     public function getConfig()
@@ -669,7 +673,7 @@ class Chrome_Context_View implements Chrome_Context_View_Interface
         return $this->_config;
     }
 
-    public function setPluginFacade(Chrome_View_Plugin_Facade_Interface $pluginFacade)
+    public function setPluginFacade(\Chrome_View_Plugin_Facade_Interface $pluginFacade)
     {
         $this->_pluginFacade = $pluginFacade;
     }
@@ -679,7 +683,7 @@ class Chrome_Context_View implements Chrome_Context_View_Interface
         return $this->_pluginFacade;
     }
 
-    public function setFactory(Chrome_View_Factory_Interface $factory)
+    public function setFactory(\Chrome_View_Factory_Interface $factory)
     {
         $this->_factory = $factory;
     }

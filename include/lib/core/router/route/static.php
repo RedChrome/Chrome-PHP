@@ -32,12 +32,15 @@ class StaticRoute extends AbstractRoute
 
         /*
          * This enables/disabled, that urls may end with .html but still get mapped to the same resource
-         * $pos = strripos($path, '.html');
+         */
 
-        if($pos !== false)
-        {
-            $path = substr($path, 0, $pos);
-        }*/
+        /*
+            $pos = strripos($path, '.html');
+
+            if($pos !== false) {
+                $path = substr($path, 0, $pos);
+            }
+        */
 
         $row = $this->_model->getRoute($path);
 

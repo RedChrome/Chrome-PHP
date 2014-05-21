@@ -6,7 +6,7 @@ class Application
 {
     protected $_appContext = null;
 
-    public function __construct(\Chrome_Application_Interface $app)
+    public function __construct(\Chrome\Application\Application_Interface $app)
     {
         $this->_appContext = $app->getApplicationContext();
     }

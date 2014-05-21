@@ -84,17 +84,17 @@ class Mysql extends AbstractConnection
                 case 2003: // no break
                 case 2005:
                     {
-                        throw new \Chrome\DatabaseException('Could not establish connection to server  on "' . $this->_host . '"! Server is not responding!', \Chrome\DatabaseException::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER);
+                        throw new \Chrome\Exception\Database('Could not establish connection to server  on "' . $this->_host . '"! Server is not responding!', \Chrome\Exception\Database::DATABASE_EXCEPTION_CANNOT_CONNECT_TO_SERVER);
                     }
 
                 case 1045:
                     {
-                        throw new \Chrome\DatabaseException('Could not establish connection to server  on "' . $this->_host . '"! Username and/or password is wrong', \Chrome\DatabaseException::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD);
+                        throw new \Chrome\Exception\Database('Could not establish connection to server  on "' . $this->_host . '"! Username and/or password is wrong', \Chrome\Exception\Database::DATABASE_EXCEPTION_WRONG_USER_OR_PASSWORD);
                     }
 
                 default:
                     {
-                        throw new \Chrome\DatabaseException('(' . mysql_errno() . ') ' . mysql_error(), \Chrome\DatabaseException::UNKNOWN);
+                        throw new \Chrome\Exception\Database('(' . mysql_errno() . ') ' . mysql_error(), \Chrome\Exception\Database::UNKNOWN);
                     }
             }
         }
@@ -111,12 +111,12 @@ class Mysql extends AbstractConnection
             {
                 case 1049:
                     {
-                        throw new \Chrome\DatabaseException('Could not select database ' . $this->_database . '!', \Chrome\DatabaseException::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE);
+                        throw new \Chrome\Exception\Database('Could not select database ' . $this->_database . '!', \Chrome\Exception\Database::DATABASE_EXCEPTION_CANNOT_SELECT_DATABASE);
                     }
 
                 default:
                     {
-                        throw new \Chrome\DatabaseException('(' . mysql_errno() . ') ' . mysql_error(), \Chrome\DatabaseException::UNKNOWN, $e);
+                        throw new \Chrome\Exception\Database('(' . mysql_errno() . ') ' . mysql_error(), \Chrome\Exception\Database::UNKNOWN, $e);
                     }
             }
         }

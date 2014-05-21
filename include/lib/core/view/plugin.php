@@ -65,7 +65,7 @@ abstract class Chrome_View_Plugin_Abstract implements Chrome_View_Plugin_Interfa
      *
      * @return Chrome_View_Helper_Abstract
      */
-    public function __construct(Chrome_Context_Application_Interface $appContext)
+    public function __construct(\Chrome\Context\Application_Interface $appContext)
     {
         $this->_applicationContext = $appContext;
     }

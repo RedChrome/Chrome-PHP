@@ -1,4 +1,5 @@
 <?php
+
 class CaptchaTest extends PHPUnit_Extensions_SeleniumTestCase
 {
 

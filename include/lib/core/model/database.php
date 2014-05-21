@@ -29,7 +29,7 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
     protected $_dbFactory = null;
 
     /**
-     * @param Chrome_Context_Model_Interface $modelContext
+     * @param \Chrome\Context\Model_Interface $modelContext
      */
     public function __construct(\Chrome\Database\Factory\Factory_Interface $databaseFactory)
     {

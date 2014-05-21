@@ -29,29 +29,29 @@ class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstrac
         require_once LIB . 'core/design/options/static.php';
         require_once LIB . 'core/design/loader/static.php';
 
-        $exceptionHandler = new \Chrome\Exception\Handler\DefaultHandler();
+        $exceptionHandler = new \Chrome\Exception\Handler\HtmlStackTrace();
 
         $template = new \Chrome\Template\PHP();
         $template->assignTemplate('design/chrome_one_sidebar/layout.tpl');
         $template->assign('LINKER', $diContainer->get('\Chrome\Linker\Linker_Interface'));
 
         // this list needs 7 renderables
-        $htmlList = new Chrome_Renderable_List();
-        $html = new Chrome_Renderable_Template($template, $exceptionHandler);
+        $htmlList = new \Chrome\Renderable\RenderableList();
+        $html = new Chrome\Renderable\Composition\TemplateComposition($template, $exceptionHandler);
         $html->setRenderableList($htmlList);
 
         $design->setRenderable($html);
 
-        $head = new Chrome_Renderable_Composition();
-        $preBodyIn = new Chrome_Renderable_Composition();
-        $rightBox = new Chrome_Renderable_Composition();
-        $body = new Chrome_Renderable_Composition();
-        $footer = new Chrome_Renderable_Composition();
-        $postBodyIn = new Chrome_Renderable_Composition();
+        $head = new \Chrome\Renderable\Composition\Composition();
+        $preBodyIn = new \Chrome\Renderable\Composition\Composition();
+        $rightBox = new \Chrome\Renderable\Composition\Composition();
+        $body = new \Chrome\Renderable\Composition\Composition();
+        $footer = new \Chrome\Renderable\Composition\Composition();
+        $postBodyIn = new \Chrome\Renderable\Composition\Composition();
 
         $view = $controller->getView();
 
-        if($view instanceof Chrome_Renderable)
+        if($view instanceof \Chrome\Renderable)
         {
             $body->getRenderableList()->addRenderable($view);
         }
@@ -63,7 +63,7 @@ class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstrac
                             'footer' => $footer,
                             'postBodyIn' => $postBodyIn);
 
-        $option = new Chrome_Renderable_Options_Static();
+        $option = new \Chrome\Renderable\Option\StaticOption();
 
         // apply loaders
         foreach($compositions as $key => $composition)

@@ -177,12 +177,12 @@ abstract class AbstractAdapter implements Adapter_Interface, Constructor_Interfa
             $connection->connect();
 
             if($connection->isConnected() === false) {
-                throw new \Chrome\DatabaseException('Given connection object could not connect to database');
+                throw new \Chrome\Exception\Database('Given connection object could not connect to database');
             }
         }
 
         if(($resource = $connection->getConnection()) === null ) {
-             throw new \Chrome\DatabaseException('Given database connection is null');
+             throw new \Chrome\Exception\Database('Given database connection is null');
         }
 
         $this->_connectionObject = $connection;

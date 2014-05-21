@@ -27,7 +27,8 @@ class StaticHelper implements Helper_Interface
 {
     protected $_resourceModel = null;
 
-    public function __construct(Static_Interface $resourceModel) {
+    public function __construct(Static_Interface $resourceModel)
+    {
         $this->_resourceModel = $resourceModel;
     }
 

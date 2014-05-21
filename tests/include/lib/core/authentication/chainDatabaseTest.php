@@ -1,6 +1,8 @@
 <?php
 
-class AuthenticationChainDatabaseTest extends Chrome_TestCase
+namespace Test\Chrome\Authentication\Chain;
+
+class DatabaseTest extends \Chrome_TestCase
 {
     protected $_chain = null;
 

@@ -50,7 +50,7 @@ class Mysqli extends AbstractAdapter
         parent::setConnection($connection);
 
         if(!($connection->getConnection() instanceof \mysqli)) {
-            throw new \Chrome\DatabaseException('This adapter needs a mysqli connection!');
+            throw new \Chrome\Exception\Database('This adapter needs a mysqli connection!');
         }
     }
 
@@ -60,12 +60,12 @@ class Mysqli extends AbstractAdapter
             $this->_result = $this->_connection->query($query);
         } catch(\Chrome\Exception $e)
         {
-            throw new \Chrome\DatabaseQueryException($e->getMessage(), $query, \Chrome\DatabaseQueryException::ERROR_WHILE_EXECUTING_QUERY, $e);
+            throw new \Chrome\Exception\DatabaseQuery($e->getMessage(), $query, \Chrome\Exception\DatabaseQuery::ERROR_WHILE_EXECUTING_QUERY, $e);
         }
 
         if($this->_result === false) {
             $this->_isEmpty = true;
-            throw new \Chrome\DatabaseException('Error while sending "'.$query.'" to database! MySQL Error:'.$this->getErrorMessage());
+            throw new \Chrome\Exception\Database('Error while sending "'.$query.'" to database! MySQL Error:'.$this->getErrorMessage());
         }
 
         if(($this->_result instanceof \mysqli_result)) {

@@ -249,7 +249,7 @@ class Model extends AbstractFacade implements Model_Interface
             $this->_query = $this->_model->getStatement($key);
         } catch(\Chrome\Exception $e)
         {
-            throw new \Chrome\DatabaseException('Exception while getting sql statement for key "' . $key . '"!', null, $e);
+            throw new \Chrome\Exception\Database('Exception while getting sql statement for key "' . $key . '"!', null, $e);
         }
         return $this;
     }

@@ -74,16 +74,6 @@ class DynamicRoute extends AbstractRoute
             $this->_result = new \Chrome\Router\Result();
             $this->_result->setClass($resource['class']);
 
-            /*
-            if(count($resource['GET']) > 0)
-            {
-                $data->setGET($resource['GET']);
-            }
-            if(count($resource['POST']) > 0)
-            {
-                $data->setPOST($resource['POST']);
-            }*/
-
             return true;
         } else
         {

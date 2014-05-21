@@ -46,7 +46,7 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
         $this->_theme = $theme;
     }
 
-    public function addComposition(Chrome_Renderable_Composition_Interface $composition)
+    public function addComposition(\Chrome\Renderable\Composition\Composition_Interface $composition)
     {
         $this->_compositions[] = $composition;
     }
@@ -62,7 +62,7 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
         {
             $option = $composition->getRequiredRenderables();
 
-            if(!($option instanceof Chrome_Renderable_Options_Static))
+            if(!($option instanceof \Chrome\Renderable\Option\StaticOption))
             {
                 continue;
             }
@@ -72,7 +72,7 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
     }
 
     // @todo: this should get moved to a model
-    protected function _loadViewsByPosition(Chrome_Renderable_Composition_Interface $composition, \Chrome\Database\Result\Iterator $resultViewsWithPosition)
+    protected function _loadViewsByPosition(\Chrome\Renderable\Composition\Composition_Interface $composition, \Chrome\Database\Result\Iterator $resultViewsWithPosition)
     {
         if($resultViewsWithPosition->isEmpty())
         {
@@ -112,7 +112,7 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
                         $view = $controller->getView();
 
                         // discard view
-                        if(!($view instanceof Chrome_Renderable))
+                        if(!($view instanceof \Chrome\Renderable))
                         {
                             return;
                         }

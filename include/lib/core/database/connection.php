@@ -203,7 +203,7 @@ class Connection implements Connection_Interface
     public function addConnection($name, \Chrome\Database\Connection\Connection_Interface $connection, $overwrite = false)
     {
         if(isset($this->_connections[$name]) AND $overwrite !== true) {
-            throw new \Chrome\DatabaseException('Cannot re-set an existing database connection with name "' . $name . '"!');
+            throw new \Chrome\Exception\Database('Cannot re-set an existing database connection with name "' . $name . '"!');
         }
 
         $this->_connections[$name] = $connection;
@@ -212,11 +212,11 @@ class Connection implements Connection_Interface
     public function getConnection($name)
     {
         if(!isset($this->_connections[$name])) {
-            throw new \Chrome\DatabaseException('Could not find connection with name "' . $name . '"!');
+            throw new \Chrome\Exception\Database('Could not find connection with name "' . $name . '"!');
         }
 
         if($this->_connections[$name]->isConnected() === false) {
-            throw new \Chrome\DatabaseException('Cannot get connection, if connection is not established!');
+            throw new \Chrome\Exception\Database('Cannot get connection, if connection is not established!');
         }
 
         return $this->_connections[$name]->getConnection();
@@ -225,7 +225,7 @@ class Connection implements Connection_Interface
     public function getConnectionObject($name)
     {
         if(!isset($this->_connections[$name])) {
-            throw new \Chrome\DatabaseException('Could not find connection object with name "' . $name . '"!');
+            throw new \Chrome\Exception\Database('Could not find connection object with name "' . $name . '"!');
         }
 
         return $this->_connections[$name];

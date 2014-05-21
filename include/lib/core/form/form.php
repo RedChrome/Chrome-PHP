@@ -99,10 +99,10 @@ interface Chrome_Form_Interface
     /**
      * Creates a new form
      *
-     * @param Chrome_Context_Application_Interface $appContext
+     * @param \Chrome\Context\Application_Interface $appContext
      * @return Chrome_Form_Interface
      */
-    public function __construct(Chrome_Context_Application_Interface $appContext);
+    public function __construct(\Chrome\Context\Application_Interface $appContext);
 
     /**
      * isCreated()
@@ -430,7 +430,7 @@ interface Chrome_Form_Interface
     /**
      * Returns the current application context
      *
-     * @return Chrome_Context_Application_Interface
+     * @return \Chrome\Context\Application_Interface
      */
     public function getApplicationContext();
 
@@ -563,7 +563,7 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
     /**
      * Contains the current application context
      *
-     * @var Chrome_Context_Application_Interface
+     * @var \Chrome\Context\Application_Interface
      */
     protected $_applicationContext = null;
 
@@ -584,9 +584,9 @@ abstract class Chrome_Form_Abstract implements Chrome_Form_Interface
      *
      * The application context is needed because the form needs some request data.
      *
-     * @param Chrome_Context_Application_Interface $appContext
+     * @param \Chrome\Context\Application_Interface $appContext
      */
-    public function __construct(Chrome_Context_Application_Interface $appContext)
+    public function __construct(\Chrome\Context\Application_Interface $appContext)
     {
         $this->_applicationContext = $appContext;
         $this->_requestDataObject = $appContext->getRequestHandler()->getRequestData();

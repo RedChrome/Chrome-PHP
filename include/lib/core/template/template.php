@@ -26,7 +26,7 @@ namespace Chrome\Template;
  * @package CHROME-PHP
  * @subpackage Chrome.Template
  */
-interface Template_Interface extends \Chrome_Renderable
+interface Template_Interface extends \Chrome\Renderable
 {
     public function assign($name, $value);
 

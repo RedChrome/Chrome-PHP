@@ -10,7 +10,7 @@ abstract class Chrome_TestCase extends PHPUnit_Framework_TestCase
         $this->_diContainer = $diContainer;
     }
 
-    public function setApplicationContext(Chrome_Context_Application_Interface $appContext)
+    public function setApplicationContext(\Chrome\Context\Application_Interface $appContext)
     {
         $this->_appContext = $appContext;
 

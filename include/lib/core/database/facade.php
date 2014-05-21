@@ -208,11 +208,11 @@ abstract class AbstractFacade implements Facade_Interface
     {
         try {
             if($this->_sentQuery !== null) {
-                throw new \Chrome\DatabaseException('Did not called clear() before executing another query!');
+                throw new \Chrome\Exception\Database('Did not called clear() before executing another query!');
             }
 
             if($query === null OR empty($query)) {
-                throw new \Chrome\DatabaseException('Cannot execute an sql statement if no statement was set!');
+                throw new \Chrome\Exception\Database('Cannot execute an sql statement if no statement was set!');
             }
 
             $this->_query = $query;
@@ -230,7 +230,7 @@ abstract class AbstractFacade implements Facade_Interface
             $this->_sentQuery = $query;
 
             return $this->_result;
-        } catch(\Chrome\DatabaseException $e) {
+        } catch(\Chrome\Exception\Database $e) {
 
             if($this->_logger !== null) {
                 $this->_logger->error($e);
@@ -240,7 +240,7 @@ abstract class AbstractFacade implements Facade_Interface
         }
     }
 
-    protected function _handleException(\Chrome\DatabaseException $e)
+    protected function _handleException(\Chrome\Exception\Database $e)
     {
         throw $e;
     }
@@ -328,7 +328,7 @@ abstract class AbstractFacade implements Facade_Interface
 
         // vsprintf cant handle that..
         if($countFirst > 0 AND $countSecond > 0) {
-            throw new \Chrome\DatabaseException('Cannot mix "?" with "?{int*}". Do not use them at the same time');
+            throw new \Chrome\Exception\Database('Cannot mix "?" with "?{int*}". Do not use them at the same time');
         }
 
         return vsprintf($statement, $this->_params);

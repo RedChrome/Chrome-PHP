@@ -28,7 +28,7 @@ require_once APPLICATION.'resource.php';
 
 require_once MODULE.'misc/captcha/application.php';
 
-$application = new Chrome_Application_Resource();
+$application = new \Chrome\Application\ResourceApplication();
 $application->setApplication('Chrome\Application\Captcha\Application');
 $application->init();
 $application->execute();

@@ -17,7 +17,9 @@
  * @subpackage Chrome.Classloader
  */
 
-namespace Chrome\Classloader;
+namespace Chrome\Classloader\Resolver;
+
+use \Chrome\Classloader\AbstractResolver;
 
 /**
  * resolves all classes beginning with 'Chrome_Require_'
@@ -25,7 +27,7 @@ namespace Chrome\Classloader;
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Resolver_Exception extends Resolver_Abstract
+class Exception extends AbstractResolver
 {
     /**
      * resolves a class, if $class beginns with '\Chrome\Exception\'
@@ -35,13 +37,9 @@ class Resolver_Exception extends Resolver_Abstract
      */
     public function resolve($class)
     {
-        if(preg_match('#Chrome\\\\Exception\\\\Handler\\\\(.{1,})Handler#iu', $class, $matches)) {
-            return LIB.'exception/'.strtolower($matches[1]).'.php';
-        }
-
-        // does the class contain '\Chrome\Exception\'?
-        if(preg_match('#Chrome\\\\Exception\\\\(.{1,})#i', $class, $matches)) {
-            return LIB.'exception/'.strtolower($matches[1]).'.php';
+        // does the class contain 'Chrome\Exception\'?
+        if(preg_match('#Chrome\\\\Exception((?:\\\\[a-z_A-Z0-9]{1,})*)\\\\([a-z_A-Z0-9]{1,})#AD', $class, $matches)) {
+            return 'lib/exception'.strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php'));
         }
 
         return false;

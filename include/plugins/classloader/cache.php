@@ -17,7 +17,9 @@
  * @subpackage Chrome.Classloader
  */
 
-namespace Chrome\Classloader;
+namespace Chrome\Classloader\Resolver;
+
+use Chrome\Classloader\AbstractResolver;
 
 /**
  * Resolves all classes beginning with '\Chrome\Cache\'
@@ -25,7 +27,7 @@ namespace Chrome\Classloader;
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Resolver_Cache extends Resolver_Abstract
+class Cache extends AbstractResolver
 {
     /**
      * Resolves a class, if $class beginns with 'Chrome_Cache_'
@@ -39,7 +41,7 @@ class Resolver_Cache extends Resolver_Abstract
 
             $matches[2] = strtolower(str_replace('\\', '/', $matches[2]));
 
-            return PLUGIN.'cache/'.$matches[2].'.php';
+            return 'plugins/cache/'.$matches[2].'.php';
         }
 
         return false;

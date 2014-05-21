@@ -34,7 +34,7 @@ class GDCaptcha implements Engine_Interface
 
     const KEY_LENGTH = 6;
 
-    public function __construct($name, Captcha_Interface $obj, \Chrome_Context_Application_Interface $appContext, array $backendOptions)
+    public function __construct($name, Captcha_Interface $obj, \Chrome\Context\Application_Interface $appContext, array $backendOptions)
     {
         $backendOptions[Captcha_Interface::CHROME_CAPTCHA_NAME] = $name;
         $this->_captchaObj = $obj;

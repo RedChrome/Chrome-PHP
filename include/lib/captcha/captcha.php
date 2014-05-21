@@ -31,7 +31,7 @@ interface Captcha_Interface
     const CHROME_CAPTCHA_ENGINE = 'engine', CHROME_CAPTCHA_NAME = 'name';
     const CHROME_CAPTCHA_ENABLE_RENEW = 'enable_renew', CHROME_CAPTCHA_MAX_TIME = 'max_time';
 
-    public function __construct($name, \Chrome_Context_Application_Interface $appContext, array $frontendOptions, array $backendOptions);
+    public function __construct($name, \Chrome\Context\Application_Interface $appContext, array $frontendOptions, array $backendOptions);
 
     public function create();
 
@@ -66,7 +66,7 @@ class Captcha implements Captcha_Interface
     protected $_engine = null;
     protected $_appContext = null;
 
-    public function __construct($name, \Chrome_Context_Application_Interface $appContext, array $frontendOptions, array $backendOptions)
+    public function __construct($name, \Chrome\Context\Application_Interface $appContext, array $frontendOptions, array $backendOptions)
     {
         $this->_appContext = $appContext;
 
@@ -184,7 +184,7 @@ use \Chrome\Captcha\Captcha_Interface;
  */
 interface Engine_Interface
 {
-    public function __construct($name, Captcha_Interface $obj, \Chrome_Context_Application_Interface $appContext, array $backendOptions);
+    public function __construct($name, Captcha_Interface $obj, \Chrome\Context\Application_Interface $appContext, array $backendOptions);
 
     public function getOption($name);
 

@@ -4,7 +4,7 @@ namespace Chrome\Module\Captcha\Renderer;
 
 class Simple
 {
-    public function getImage(\Chrome_Context_Application_Interface $appContext)
+    public function getImage(\Chrome\Context\Application_Interface $appContext)
     {
         require_once LIB.'captcha/captcha.php';
 

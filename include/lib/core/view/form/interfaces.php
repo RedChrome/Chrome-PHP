@@ -40,9 +40,9 @@ interface Chrome_View_Form_Interface
      * display functionality.
      *
      * @param Chrome_Form_Interface $form a form object
-     * @param Chrome_Context_View_Interface $viewContext a view context
+     * @param \Chrome\Context\View_Interface $viewContext a view context
      */
-    public function __construct(Chrome_Form_Interface $form, Chrome_Context_View_Interface $viewContext);
+    public function __construct(Chrome_Form_Interface $form, \Chrome\Context\View_Interface $viewContext);
 
     /**
      * Sets a factory to create Chrome_View_Form_Element_Interface objects.
@@ -90,7 +90,7 @@ interface Chrome_View_Form_Interface
 
     /**
      * Returns the view context, set in __construct
-     * @return Chrome_Context_View_Interface
+     * @return \Chrome\Context\View_Interface
      */
     public function getViewContext();
 }
@@ -136,12 +136,12 @@ interface Chrome_View_Form_Element_Option_Factory_Interface
 }
 
 /**
- * A renderer to render a whole form object. This should be used to render a form. It can be appended in any other view (it extends Chrome_Renderable!)
+ * A renderer to render a whole form object. This should be used to render a form. It can be appended in any other view (it extends \Chrome\Renderable!)
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-interface Chrome_View_Form_Renderer_Interface extends Chrome_Renderable
+interface Chrome_View_Form_Renderer_Interface extends \Chrome\Renderable
 {
     /**
      * Sets a viewForm. This contains all viewFormElements, which may be used to render the form.
@@ -153,9 +153,9 @@ interface Chrome_View_Form_Renderer_Interface extends Chrome_Renderable
     /**
      * Sets a view context
      *
-     * @param Chrome_Context_View_Interface $viewContext
+     * @param \Chrome\Context\View_Interface $viewContext
      */
-    public function setViewContext(Chrome_Context_View_Interface $viewContext);
+    public function setViewContext(\Chrome\Context\View_Interface $viewContext);
 }
 
 /**
@@ -273,7 +273,7 @@ interface Chrome_View_Form_Element_Option_Multiple_Interface extends Chrome_View
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-interface Chrome_View_Form_Element_Basic_Interface extends Chrome_Renderable
+interface Chrome_View_Form_Element_Basic_Interface extends \Chrome\Renderable
 {
     /**
      * Returns the id of the view form element
@@ -471,7 +471,7 @@ interface Chrome_View_Form_Element_Appendable_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-interface Chrome_View_Form_Element_Appender_Interface extends Chrome_Renderable
+interface Chrome_View_Form_Element_Appender_Interface extends \Chrome\Renderable
 {
     /**
      * Sets the result from the previous render call,

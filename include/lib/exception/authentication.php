@@ -17,34 +17,11 @@
  * @subpackage Chrome.Exception
  */
 
-namespace Chrome;
+namespace Chrome\Exception;
 
 use \Chrome\Exception;
 
-class AuthenticationException extends Exception
+class Authentication extends Exception
 {
 
-}
-
-namespace Chrome\Exception\Handler;
-
-use \Chrome\Exception\Handler_Interface;
-
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.Authentication
- */
-class AuthenticationHandler implements Handler_Interface
-{
-    public function exception(\Exception $e)
-    {
-        if(!($e instanceof \Chrome\AuthenticationException)) {
-            $e->show($e);
-        }
-
-        $this->_logger->error('Exception in Chrome_Authentication! Error code: {code}. Message: "{msg}"', array('code' => $e->getCode(), 'msg' => $e->getMessage()));
-        $this->_logger->error($e->getTraceAsString());
-
-        die('Error in authentication! See log files for more information');
-    }
 }

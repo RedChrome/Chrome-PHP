@@ -39,7 +39,7 @@ class Recaptcha implements Engine_Interface
     protected $_error = '';
     protected $_appContext = null;
 
-    public function __construct($name, Captcha_Interface $obj, \Chrome_Context_Application_Interface $appContext, array $backendOptions)
+    public function __construct($name, Captcha_Interface $obj, \Chrome\Context\Application_Interface $appContext, array $backendOptions)
     {
         $this->_appContext = $appContext;
         $this->_reqData = $appContext->getRequestHandler()->getRequestData();

@@ -1,6 +1,8 @@
 <?php
 
-class AuthorisationAdapterSimpleTest extends Chrome_TestCase
+namespace Test\Chrome\Authorisation\Adapter;
+
+class SimpleTest extends \Chrome_TestCase
 {
     protected $_adapter = null;
 
@@ -36,7 +38,7 @@ class AuthorisationAdapterSimpleTest extends Chrome_TestCase
     /**
      * @dataProvider testIsAllowedProvider
      */
-    public function testIsAllowed($userId, $resourceName,$resourceTransformation, $expectedResult)
+    public function testIsAllowed($userId, $resourceName, $resourceTransformation, $expectedResult)
     {
         $resource = new \Chrome\Authorisation\Resource\Resource(new \Chrome\Resource\Resource($resourceName), $resourceTransformation);
 
@@ -44,7 +46,9 @@ class AuthorisationAdapterSimpleTest extends Chrome_TestCase
     }
 }
 
-class AuthorisationAdapterSimpleModelDefaultTest extends Chrome_TestCase
+namespace Test\Chrome\Authorisation\Adapter;
+
+class SimpleModelDefaultTest extends \Chrome_TestCase
 {
     protected $_model = null;
 

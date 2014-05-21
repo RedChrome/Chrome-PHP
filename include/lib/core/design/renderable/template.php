@@ -15,18 +15,15 @@
  *
  * @package    CHROME-PHP
  * @subpackage Chrome.Design
- * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [22.04.2013 19:45:38] --> $
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Renderable\Composition;
 
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Design
  */
-class Chrome_Renderable_Template extends Chrome_Renderable_Composition
+class TemplateComposition extends Composition
 {
     protected $_template = null;
 

@@ -21,7 +21,7 @@ use \Psr\Log\LoggerInterface;
 
 interface Chrome_Model_Interface extends Loggable_Interface
 {
-    public function setModelContext(Chrome_Context_Model_Interface $modelContext);
+    public function setModelContext(\Chrome\Context\Model_Interface $modelContext);
 
     public function getModelContext();
 }
@@ -35,12 +35,12 @@ abstract class Chrome_Model_Abstract implements Chrome_Model_Interface
 {
     /**
      *
-     * @var Chrome_Context_Model_Interface
+     * @var \Chrome\Context\Model_Interface
      */
     protected $_modelContext = null;
     protected $_logger = null;
 
-    public function setModelContext(Chrome_Context_Model_Interface $modelContext)
+    public function setModelContext(\Chrome\Context\Model_Interface $modelContext)
     {
         $this->_modelContext = $modelContext;
     }

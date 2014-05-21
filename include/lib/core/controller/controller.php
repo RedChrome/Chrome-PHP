@@ -38,15 +38,15 @@ interface Controller_Interface extends Processable_Interface
     /**
      * Sets the application context
      *
-     * @param Chrome_Context_Application_Interface $appContext
+     * @param \Chrome\Context\Application_Interface $appContext
      * @return void
      */
-    public function setApplicationContext(\Chrome_Context_Application_Interface $appContext);
+    public function setApplicationContext(\Chrome\Context\Application_Interface $appContext);
 
     /**
      * Returns the application context
      *
-     * @return Chrome_Context_Application_Interface
+     * @return \Chrome\Context\Application_Interface
      */
     public function getApplicationContext();
 }
@@ -62,7 +62,7 @@ abstract class ControllerAbstract implements Controller_Interface
     /**
      * Contains the context to the current application
      *
-     * @var Chrome_Context_Application_Interface
+     * @var \Chrome\Context\Application_Interface
      */
     protected $_applicationContext = null;
 
@@ -157,7 +157,7 @@ abstract class ControllerAbstract implements Controller_Interface
      */
     abstract protected function _shutdown();
 
-    public function __construct(\Chrome_Context_Application_Interface $appContext)
+    public function __construct(\Chrome\Context\Application_Interface $appContext)
     {
         $this->setApplicationContext($appContext);
 
@@ -227,7 +227,7 @@ abstract class ControllerAbstract implements Controller_Interface
         return $this->_exceptionHandler;
     }
 
-    public function setApplicationContext(\Chrome_Context_Application_Interface $appContext)
+    public function setApplicationContext(\Chrome\Context\Application_Interface $appContext)
     {
         $this->_applicationContext = $appContext;
     }

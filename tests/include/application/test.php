@@ -20,7 +20,7 @@
  */
 require_once APPLICATION . 'default.php';
 
-class Chrome_Application_Test extends Chrome_Application_Default
+class Chrome_Application_Test extends \Chrome\Application\DefaultApplication
 {
     protected $_model = null;
 
@@ -31,7 +31,7 @@ class Chrome_Application_Test extends Chrome_Application_Default
         // overwrite this method, thus there is no database connection to product database created
     }
 
-    public function setModelContext(Chrome_Context_Model_Interface $modelContext)
+    public function setModelContext(\Chrome\Context\Model_Interface $modelContext)
     {
         $this->_model = $modelContext;
     }

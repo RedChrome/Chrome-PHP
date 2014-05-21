@@ -37,7 +37,7 @@ class Chrome_Form_Login extends Chrome_Form_Abstract
      *
      * @return Chrome_Form_Login
      */
-    public static function getInstance(Chrome_Context_Application_Interface $appContext)
+    public static function getInstance(\Chrome\Context\Application_Interface $appContext)
     {
         if(self::$_instance === null)
         {
@@ -129,7 +129,7 @@ class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
 {
     private static $_instance = null;
 
-    public static function getInstance(Chrome_Form_Interface $form, Chrome_Context_View_Interface $viewContext)
+    public static function getInstance(Chrome_Form_Interface $form, \Chrome\Context\View_Interface $viewContext)
     {
         if(self::$_instance === null)
         {

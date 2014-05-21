@@ -26,14 +26,13 @@ class Index extends ModuleAbstract
         #$obj = new \Chrome_Controller_User_Login_Page($this->_applicationContext);
         #$obj->execute();
 
-        require_once MODULE.'content/user/login/controller/default.php';
-
-        $obj = new \Chrome_Controller_Content_Login_Default($this->_applicationContext, $this->_applicationContext->getDiContainer()->get('\Chrome\Interactor\User\Login_Interface'));
+        $obj = new \Chrome\Controller\User\Login($this->_applicationContext, $this->_applicationContext->getDiContainer()->get('\Chrome\Interactor\User\Login_Interface'));
         $obj->execute();
 
         $this->_view->addRenderable($obj->getView());
         $this->_view->addRenderable(new \Chrome_View_Index_TODO($this->_applicationContext->getViewContext(), $this));
         $view = new \Chrome_View_Form_Index($this->_form, $this->_applicationContext->getViewContext());
+
         return;
         $this->_view->addRenderable(new \Chrome_View_Form_Index_Renderer($view));
 
