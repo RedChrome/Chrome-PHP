@@ -34,5 +34,4 @@ require_once APPLICATION . 'default.php';
 $application = new \Chrome\Application\DefaultApplication();
 $application->init();
 $application->execute();
-//TODO: set up Zend_Mail properly
 //TODO: add recpatcha error messages to translate

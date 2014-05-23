@@ -43,7 +43,8 @@ INSERT INTO `cpp_authenticate` (`id`, `password`, `password_salt`, `cookie_token
 UPDATE `cpp_authenticate` SET `id` = 0 WHERE `id` = 1;
 ALTER TABLE `cpp_authenticate` AUTO_INCREMENT = 1;
 INSERT INTO `cpp_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
-(NULL, 'b10617e307e7731817dac8b39f19d1418bde2e49db95139b', 'Gd{|Yw"BA4z4,czCw~g0', '5e4869588d85631bb513bcfd7a4d811469836f20a6cc05a0', 1374572687);
+(NULL, '1873e707e31706b141d1199fb3c8da179b1395db492ede8b', 'Gd{|Yw"BA4z4,czCw~g0', '5e4869588d85631bb513bcfd7a4d811469836f20a6cc05a0', 1374572687); -- password is tiger
+
 
 DROP TABLE IF EXISTS `cpp_authorisation_rbac`;
 CREATE TABLE IF NOT EXISTS `cpp_authorisation_rbac` (
@@ -131,7 +132,8 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\Interactor\\User\\Login', 'lib/modules/user/interactors/login.php'),
 ('Chrome\\Linker\\Linker_Interface', 'lib/core/linker/linker.php'),
 ('Chrome\\Linker\\HTTP\\Linker', 'lib/core/linker/linker.php'),
-('Chrome\\Linker\\Console\\Linker', 'lib/core/linker/console.php');
+('Chrome\\Linker\\Console\\Linker', 'lib/core/linker/console.php'),
+('Chrome\\Helper\\User\\AuthenticationResolver\\Email', 'lib/modules/user/helpers/authenticationresolver/email.php');
 
 
 DROP TABLE IF EXISTS `cpp_config`;
@@ -166,7 +168,7 @@ INSERT INTO `cpp_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 ('name', 'Site', 'CHROME-PHP', 'string', '', FALSE),
 ('public_key', 'Captcha/Recaptcha', '6LcQrt4SAAAAAIPs9toLqZ761XTA39aS_AWP-Nog', 'string', '', FALSE),
 ('private_key', 'Captcha/Recaptcha', '6LcQrt4SAAAAAF7flTN8uwi_9eSFy43jOuUcPGm3', 'string', '', FALSE),
-('server_api', 'Captcha/Recaptcha', 'http://www.google.com/recaptcha/api', 'string', '', FALSE),
+('enable_https', 'Captcha/Recaptcha', 'false', 'boolean', '', FALSE),
 ('recaptcha_theme', 'Captcha/Recaptcha', 'clean', 'string', '', FALSE),
 ('default_theme', 'Theme', 'chrome', 'string', '', FALSE);
 
@@ -329,6 +331,7 @@ INSERT INTO `cpp_autoload` (`name`, `path`, `activated`, `priority`, `is_class_r
 ('\\Chrome\\Classloader\\Resolver\\Validator', 'plugins/classloader/validator.php', TRUE, 4, TRUE),
 ('\\Chrome\\Classloader\\Resolver\\Form', 'plugins/classloader/form.php',TRUE, 4, TRUE),
 ('\\Chrome\\Classloader\\Resolver\\Converter', 'plugins/classloader/converter.php',TRUE, 4, TRUE),
+('\\Chrome\\Classloader\\Resolver\\Captcha', 'plugins/classloader/captcha.php', TRUE, 4, TRUE),
 ('\\Chrome_View_Plugin_HTML', 'plugins/view/html.php', TRUE, 6, FALSE),
 ('\\Chrome_View_Plugin_Decorator', 'plugins/view/decorator.php', TRUE, 6, FALSE),
 ('\\Chrome\Filter\Chain\Preprocessor', 'plugins/filter/chain/preprocessor.php', TRUE, 6, FALSE),
@@ -347,7 +350,7 @@ INSERT INTO `cpp_autoload` (`name`, `path`, `activated`, `priority`, `is_class_r
 ('\\Chrome\\Response\\Handler\\HTTPHandler', 'lib/core/response/response/http.php', TRUE, 6, FALSE),
 ('\\Chrome\\Response\\Handler\\JSONHandler', 'lib/core/response/response/json.php', TRUE, 6, FALSE),
 ('\\Chrome\\Response\\Handler\\ConsoleHandler', 'lib/core/response/response/console.php', TRUE, 6, FALSE),
-('\\Chrome\\Controller\\ModuleAbstract', 'lib/core/controller/module.php', TRUE, 6, FALSE);
+('\\Chrome\\Controller\\AbstractModule', 'lib/core/controller/module.php', TRUE, 6, FALSE);
 
 DROP TABLE IF EXISTS `cpp_route_administration`;
 CREATE TABLE IF NOT EXISTS `cpp_route_administration` (
@@ -430,12 +433,13 @@ CREATE TABLE IF NOT EXISTS `cpp_user` (
   `avatar` VARCHAR(256) NULL,
   `address` VARCHAR(300) NULL,
   `design` VARCHAR(256) NOT NULL DEFAULT 'default',
+  `authentication_id` INTEGER UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cpp_user` (`id`, `name`, `email`, `time`, `avatar`, `address`, `design`) VALUES
-(1, 'Alex', 'redchrome@gmx.de', 1349179579, '', '', 'default');
+INSERT INTO `cpp_user` (`id`, `name`, `email`, `time`, `avatar`, `address`, `design`, `authentication_id`) VALUES
+(1, 'Alex', 'redchrome@gmx.de', 1349179579, '', '', 'default', 1);
 
 DROP TABLE IF EXISTS `cpp_user_regist`;
 CREATE TABLE IF NOT EXISTS `cpp_user_regist` (
@@ -455,7 +459,7 @@ ALTER TABLE `cpp_authorisation_user_default`
   ADD CONSTRAINT `authIdUserDefault` FOREIGN KEY (`user_id`) REFERENCES `cpp_authenticate` (`id`) ON UPDATE CASCADE;
 
 ALTER TABLE `cpp_user`
-  ADD CONSTRAINT `authId` FOREIGN KEY (`id`) REFERENCES `cpp_authenticate` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `authId` FOREIGN KEY (`authentication_id`) REFERENCES `cpp_authenticate` (`id`) ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

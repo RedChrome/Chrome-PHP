@@ -19,7 +19,7 @@
 
 namespace Chrome\Controller\Box;
 
-use \Chrome\Controller\ModuleAbstract;
+use \Chrome\Controller\AbstractModule;
 
 /**
  * Class for controlling login box
@@ -27,7 +27,7 @@ use \Chrome\Controller\ModuleAbstract;
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Login extends ModuleAbstract
+class Login extends AbstractModule
 {
     /**
      * initialize the controller
@@ -36,8 +36,8 @@ class Login extends ModuleAbstract
      */
     protected function _initialize()
     {
-        // just load some files... model, view and form(include.php)
-        $this->_require = array('file' => array(CONTENT.'user/login/model.php', VIEW.'box/login/view.php', CONTENT.'user/login/include.php'));
+        // just load some files... view
+        $this->_require = array('file' => array(VIEW.'box/login/view.php', MODULE.'content/user/login/include.php'));
     }
 
     /**
@@ -52,19 +52,18 @@ class Login extends ModuleAbstract
         //$this->_model = new Chrome_Model_Login($this->_applicationContext, null);
         $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Box_Login', $this);
 
+        $login = $this->_applicationContext->getDiContainer()->get('\Chrome\Interactor\User\Login_Interface');
+        #$login = new \Chrome\Interactor\User\Login($this->_applicationContext->getAuthentication());
+
         // if the user is logged in, then show the user menu
-        if($this->_applicationContext->getAuthentication()->isUser() === true) {
+        if($login->isLoggedIn() === true) {
 
             $this->_view->showUserMenu();
 
         // else create the form and display it
         } else {
-            $this->_form = \Chrome_Form_Login::getInstance($this->_applicationContext);
 
-            // form was sent
-            if($this->_form->isSent()) {
-                // here we can do what we want
-            }
+            $this->_form = \Chrome_Form_Login::getInstance($this->_applicationContext);
 
             $this->_view->showLoginForm($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Default'));
         }

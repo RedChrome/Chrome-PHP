@@ -5,5 +5,7 @@
 	"userUserExists": "SELECT `id` FROM cpp_user WHERE `id` = '?' OR `name` = '?' OR `email` = '?' LIMIT 1",
 	
 	"emailExists": "SELECT COUNT(`email`) FROM cpp_user WHERE `email` = '?'", 
-	"addUser": "INSERT INTO `cpp_user(`name`, `email`, `time`) VALUES ('?', '?', '?')"
+	"addUser": "INSERT INTO `cpp_user(`name`, `email`, `time`) VALUES ('?', '?', '?')",
+	
+	"getAuthenticationIDbyEmail": "SELECT `authentication_id` FROM cpp_user WHERE `email` = '?'"
 }

@@ -19,5 +19,4 @@ class SiteNotFoundCest
         $I->see('XX_modules/content/SiteNotFound/title:{}_XX', 'title');
         $I->see('XX_modules/content/SiteNotFound/message:{}_XX', 'main');
     }
-
 }

@@ -2,12 +2,12 @@
 
 namespace Chrome\Controller\User;
 
-use \Chrome\Controller\ModuleAbstract;
+use \Chrome\Controller\AbstractModule;
 
 require_once 'view.php';
 require_once 'include.php';
 
-class Register extends ModuleAbstract
+class Register extends AbstractModule
 {
     const CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE = 'REGISTER';
     protected $_session;
@@ -134,17 +134,17 @@ class Register extends ModuleAbstract
                     $this->_interactor->addRegistrationRequest($registrationRequest, $result);
 
                     /*
-                     $this->_activationKey = $this->_model->generateActivationKey();
+                         $this->_activationKey = $this->_model->generateActivationKey();
 
-                    $this->_model->addRegistrationRequest($this->_form->getData('nickname'), $this->_form->getData('password'), $this->_form->getData('email'), $this->_activationKey);
+                        $this->_model->addRegistrationRequest($this->_form->getData('nickname'), $this->_form->getData('password'), $this->_form->getData('email'), $this->_activationKey);
 
-                    $result = $this->_model->sendRegisterEmail($this->_form->getSentData('email'), $this->_form->getSentData('nickname'), $this->_activationKey);
+                        $result = $this->_model->sendRegisterEmail($this->_form->getSentData('email'), $this->_form->getSentData('nickname'), $this->_activationKey);
 
-                    if($result === false)
-                    {
-                    $this->_stepNoEmailSent();
-                    break;
-                    }
+                        if($result === false)
+                        {
+                        $this->_stepNoEmailSent();
+                        break;
+                        }
                     */
                     $this->_stepThree();
 

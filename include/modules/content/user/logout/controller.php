@@ -19,13 +19,13 @@
 
 namespace Chrome\Controller\User;
 
-use \Chrome\Controller\ModuleAbstract;
+use \Chrome\Controller\AbstractModule;
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
-class Logout extends ModuleAbstract
+class Logout extends AbstractModule
 {
     protected function _execute()
     {

@@ -27,26 +27,9 @@ class Chrome_View_Form_Element_Captcha_Recaptcha extends Chrome_View_Form_Elemen
 {
     protected function _render()
     {
-        $config = $this->_formElement->getForm()->getApplicationContext()->getConfig();
-
-        $publickey = $config->getConfig('Captcha/Recaptcha', 'public_key');
-        $server = $config->getConfig('Captcha/Recaptcha', 'server_api');
-
-        $errorpart = '';
-        if($this->_formElement->getForm()->hasErrors($this->_formElement->getID())) {
-            $errors = $this->_formElement->getErrors();
-            $errorpart = '&amp;error='.$errors[0];
-        }
+        $recaptcha = $this->_formElement->getForm()->getApplicationContext()->getDiContainer()->get('\Recaptcher\RecaptchaInterface');
 
         // add a hidden input text. This is needed for the captcha element to return isSent() = true
-        return '
-    <label for="recaptcha_response_field">Captcha: </label>
-    <script type="text/javascript" src="'.$server.'/challenge?k='.$publickey.$errorpart.'"></script>
-    <noscript>
-        <iframe src="'.$server.'/noscript?k='.$publickey.$errorpart.'" height="300" width="500" frameborder="0"></iframe><br/>
-        <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-        <input type="hidden" name="recaptcha_response_field" value="manual_challenge"/>
-    </noscript>
-    <input type="hidden" value="" name="'.$this->_formElement->getID().'" />';
+        return $recaptcha->getWidgetHtml().'<input type="hidden" value="" name="'.$this->_formElement->getID().'" />';
     }
 }

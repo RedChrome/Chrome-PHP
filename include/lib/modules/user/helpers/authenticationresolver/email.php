@@ -18,13 +18,23 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Module.User
  */
-namespace Chrome\Model\User;
+namespace Chrome\Helper\User\AuthenticationResolver;
 
-interface User_Interface
+use Chrome\Helper\User\AuthenticationResolver_Interface;
+
+require_once LIB.'modules/user/interfaces/helpers.php';
+
+class Email implements AuthenticationResolver_Interface
 {
-    public function hasEmail($email);
+    protected $_userModel = null;
 
-    public function addUser($name, $email);
+    public function __construct(\Chrome\Model\User\User_Interface $user)
+    {
+        $this->_userModel = $user;
+    }
 
-    public function getAuthenticationIdByEmail($email);
+    public function resolveIdentity($identity)
+    {
+        return $this->_userModel->getAuthenticationIdByEmail($identity);
+    }
 }

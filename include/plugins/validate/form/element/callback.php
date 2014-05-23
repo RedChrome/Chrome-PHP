@@ -43,7 +43,7 @@ class CallbackValidator extends AbstractValidator
     {
         $this->_namespace = 'plugins/validate/form/element';
 
-        $returnValue;
+        $returnValue = false;
 
         try {
 

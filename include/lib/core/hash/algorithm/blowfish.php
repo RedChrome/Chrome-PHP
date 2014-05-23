@@ -233,7 +233,6 @@ class Blowfish
         $this->sbox2 = $sbox2;
         $this->sbox3 = $sbox3;
 
-
         if(!isset($key) || strlen($key) == 0)
             $key = array(0);
         else

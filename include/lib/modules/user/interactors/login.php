@@ -21,18 +21,25 @@
 
 namespace Chrome\Interactor\User;
 
+use \Chrome\Helper\User\AuthenticationResolver_Interface;
+
 class Login implements \Chrome\Interactor\Interactor_Interface
 {
     protected $_auth = null;
 
-    public function __construct(\Chrome\Authentication\Authentication_Interface $auth)
+    protected $_resolver = null;
+
+    public function __construct(\Chrome\Authentication\Authentication_Interface $auth, AuthenticationResolver_Interface $resolver)
     {
         $this->_auth = $auth;
+        $this->_resolver = $resolver;
     }
 
-    public function login($userName, $credential, $autologin)
+    public function login($identity, $credential, $autologin)
     {
-        $authResource = new \Chrome\Authentication\Resource\Database($userName, $credential, $autologin);
+        $id = $this->_resolver->resolveIdentity($identity);
+
+        $authResource = new \Chrome\Authentication\Resource\Database($id, $credential, $autologin);
 
         $this->_auth->authenticate($authResource);
     }

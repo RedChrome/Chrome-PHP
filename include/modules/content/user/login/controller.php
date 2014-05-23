@@ -18,12 +18,14 @@
  */
 namespace Chrome\Controller\User;
 
+use \Chrome\Controller\AbstractModule;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Login extends \Chrome\Controller\ModuleAbstract
+class Login extends AbstractModule
 {
 
     protected $_controller;
@@ -48,19 +50,20 @@ class Login extends \Chrome\Controller\ModuleAbstract
     protected function _handleForm()
     {
         if ($this->_applicationContext->getAuthentication()->isUser() == true) {
-            $this->_view->alreadyLoggedIn();
+            $this->_view->alreadyLoggedIn($this->_form, $this->_applicationContext->getDiContainer()
+                            ->get('\Chrome\View\Form\Element\Factory\Default'));
             return;
         }
 
         try {
             if ($this->_form->isSent()) {
                 if ($this->_form->isValid()) {
-                    $this->_interactor->login($this->_form->getSentData('identity'), $this->_form->getSentData('password'), $this->_form->getSentData('stay_loggedin'));
+                    $this->_interactor->login($this->_form->getData('identity'), $this->_form->getData('password'), $this->_form->getData('stay_loggedin'));
 
                     if ($this->_interactor->isLoggedIn() === true) {
                         $this->_view->successfullyLoggedIn();
                     } else {
-                        $this->_view->errorWhileLoggingIn($this->_applicationContext->getDiContainer()
+                        $this->_view->errorWhileLoggingIn($this->_form, $this->_applicationContext->getDiContainer()
                             ->get('\Chrome\View\Form\Element\Factory\Default'));
                     }
                 } else {

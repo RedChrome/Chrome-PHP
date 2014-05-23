@@ -47,6 +47,10 @@ class YearBirthdayValidator extends AbstractValidator
 
         $currentDate = new \DateTime();
 
+        if(!($this->_data instanceof DateTime) ) {
+            $this->_setError('date_not_properly_converted');
+        }
+
         if($this->_data >= $currentDate->sub($this->_minYears))
         {
             $this->_setError('birthday_date_too_young', array('minYears' => $this->_minYears));

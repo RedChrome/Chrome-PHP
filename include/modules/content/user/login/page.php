@@ -19,7 +19,7 @@
 
 #namespace Chrome\Controller;
 
-use \Chrome\Controller\ModuleAbstract;
+use \Chrome\Controller\AbstractModule;
 
 // TODO: is this class needed?
 
@@ -28,7 +28,7 @@ use \Chrome\Controller\ModuleAbstract;
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
-class Chrome_Controller_User_Login_Page extends \Chrome\Controller\ModuleAbstract
+class Chrome_Controller_User_Login_Page extends AbstractModule
 {
 
     protected function _initialize()

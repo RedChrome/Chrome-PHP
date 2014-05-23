@@ -39,7 +39,9 @@ INSERT INTO `cp1_authenticate` (`id`,`password`, `password_salt`, `cookie_token`
 ('4', 'testAuthenticate4', 'testAuthenticateSalt', NULL, 12345678);
 -- password is test
 
-INSERT INTO `cp1_user` (`email`) VALUES ('RegistrationTest_testEmailFromUser');
+INSERT INTO `cp1_user` (`email`, `authentication_id`) VALUES 
+('LoginTest_EmailResolver', 1),
+('RegistrationTest_testEmailFromUser', 2);
 
 INSERT INTO `cpp_user_regist` (`email`, `key`) VALUES 
 ('RegistrationTest_testEmail1', 'activationKey00001'), 

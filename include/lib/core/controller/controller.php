@@ -56,7 +56,7 @@ interface Controller_Interface extends Processable_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
-abstract class ControllerAbstract implements Controller_Interface
+abstract class AbstractController implements Controller_Interface
 {
 
     /**
@@ -182,7 +182,7 @@ abstract class ControllerAbstract implements Controller_Interface
                     require_once $file->getFileName();
                 } else
                 {
-                    throw new \Chrome\Exception('Could not require file '.$file.'! The file does not exist in \Chrome\Controller\ControllerAbstract::_require()!');
+                    throw new \Chrome\Exception('Could not require file '.$file.'! The file does not exist in \Chrome\Controller\AbstractController::_require()!');
                 }
             }
         }

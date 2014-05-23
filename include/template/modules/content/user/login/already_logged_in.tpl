@@ -1,1 +1,1 @@
-Sie sind bereits angemeldet! Sie können sich nicht erneut anmelden. Melden Sie sich zuerst ab, und anschließend wieder an!
+Sie sind bereits angemeldet! Sie kÃ¶nnen sich nicht erneut anmelden. Melden Sie sich zuerst ab, und anschlieÃŸend wieder an!

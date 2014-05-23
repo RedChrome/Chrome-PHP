@@ -2,14 +2,14 @@
 
 namespace Chrome\Controller;
 
-use \Chrome\Controller\ModuleAbstract;
+use \Chrome\Controller\AbstractModule;
 
 require_once 'model.php';
 require_once LIB.'core/view/form.php';
 require_once 'view.php';
 require_once 'include.php';
 
-class Index extends ModuleAbstract
+class Index extends AbstractModule
 {
     protected function _initialize()
     {

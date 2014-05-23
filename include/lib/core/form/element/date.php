@@ -17,7 +17,7 @@
  * @subpackage Chrome.Form
  */
 use \Chrome\Validator\Composition\AndComposition;
-use Chrome\Validator\Form\Element\CallbackValidator;
+use \Chrome\Validator\Form\Element\CallbackValidator;
 
 /**
  *
@@ -52,7 +52,7 @@ class Chrome_Form_Element_Date extends Chrome_Form_Element_Abstract implements C
     {
         try
         {
-            $this->_date = DateTime::createFromFormat('!Y-m-d', $this->_form->getSentData($this->_id));
+            $this->_date = \DateTime::createFromFormat('!Y-m-d', $this->_form->getSentData($this->_id));
         } catch(Exception $e)
         {
             $this->_date = null;
@@ -63,7 +63,7 @@ class Chrome_Form_Element_Date extends Chrome_Form_Element_Abstract implements C
 
     public function inlineValidation($data)
     {
-        if($data instanceof DateTime) {
+        if($data instanceof \DateTime) {
             return true;
         }
 
@@ -77,6 +77,5 @@ class Chrome_Form_Element_Date extends Chrome_Form_Element_Abstract implements C
         }
 
         return null;
-
     }
 }

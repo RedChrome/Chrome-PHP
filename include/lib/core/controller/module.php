@@ -19,13 +19,13 @@
 
 namespace Chrome\Controller;
 
-use Chrome\Controller\ControllerAbstract;
+use Chrome\Controller\AbstractController;
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
-abstract class ModuleAbstract extends ControllerAbstract
+abstract class AbstractModule extends AbstractController
 {
     public function __construct(\Chrome\Context\Application_Interface $appContext)
     {

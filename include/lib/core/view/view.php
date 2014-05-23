@@ -125,7 +125,7 @@ abstract class Chrome_View_Abstract extends Chrome_View
     /**
      * Contains the controller
      *
-     * @var \Chrome\Controller\ControllerAbstract
+     * @var \Chrome\Controller\AbstractController
      */
     protected $_controller = null;
 

@@ -39,6 +39,10 @@ INSERT INTO "chrome"."cp1_config" ("name", "subclass", "value", "type", "modul",
 ('testValueUnknown', 'testSubclass', 'any value, 1 1 ', 'unknown', 'anyModule', '0'),
 ('testValueDouble', 'testSubclass', '2.7182818', 'double', 'anyModule', '0');
 
+INSERT INTO "chrome"."cp1_user" ("email", "authentication_id") VALUES 
+('LoginTest_EmailResolver', 1),
+('RegistrationTest_testEmailFromUser', 2);
+
 INSERT INTO "chrome"."cp1_resource" ("id", "name") VALUES
 (1000, 'test'),
 (1001, 'test2'),

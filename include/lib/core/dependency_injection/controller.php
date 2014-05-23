@@ -36,7 +36,7 @@ class Controller implements Handler_Interface
         }
 
         try {
-        #if(is_subclass_of($key, '\Chrome\Controller\ModuleAbstract')) {
+        #if(is_subclass_of($key, '\Chrome\Controller\AbstractModule')) {
             return new $key($container->get('\Chrome\Context\Application_Interface'));
         #}
         } catch(\Chrome\InvalidArgumentException $exception) {

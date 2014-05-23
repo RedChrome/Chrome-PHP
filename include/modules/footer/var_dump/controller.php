@@ -19,7 +19,7 @@
 
 namespace Chrome\Controller\Footer;
 
-use \Chrome\Controller\ModuleAbstract;
+use \Chrome\Controller\AbstractModule;
 
 require_once MODULE.'footer/var_dump/view.php';
 
@@ -29,7 +29,7 @@ require_once MODULE.'footer/var_dump/view.php';
  * @package    CHROME-PHP
  * @subpackage Chrome.Controller
  */
-class VarDump extends ModuleAbstract
+class VarDump extends AbstractModule
 {
     protected function _execute()
     {

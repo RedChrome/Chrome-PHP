@@ -21,6 +21,7 @@
 namespace Chrome\Application;
 
 use Chrome\Authorisation\Adapter\Simple;
+use Recaptcher\Recaptcha;
 
 /**
  * loads dependencies from composer
@@ -109,7 +110,7 @@ class DefaultApplication implements Application_Interface
     /**
      * Chrome_Front_Controller::getController()
      *
-     * @return \Chrome\Controller\ControllerAbstract
+     * @return \Chrome\Controller\AbstractController
      */
     public function getController()
     {
@@ -273,13 +274,14 @@ class DefaultApplication implements Application_Interface
 
         $this->_modelContext->setDatabaseFactory($factory);
         /*
-         * Testing... define('POSTGRESQL_HOST', 'localhost'); define('POSTGRESQL_USER', 'test'); define('POSTGRESQL_PASS', 'chrome');
-         * define('POSTGRESQL_DB', 'chrome_db'); define('POSTGRESQL_SCHEMA', 'chrome'); // 5433 -> 9.1, 5432 -> 9.2, 5434 -> 9.3
-         * define('POSTGRESQL_PORT', 5433); $dbRegistry = $factory->getConnectionRegistry();
-         * $postgresqlTestConnection = new \Chrome\Database\Connection\Postgresql();
-         * $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
-         * $postgresqlTestConnection->connect(); $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
-         * $dbRegistry->addConnection(Chrome\Database\Registry\Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true); #
+         * Testing...
+              define('POSTGRESQL_HOST', 'localhost'); define('POSTGRESQL_USER', 'test'); define('POSTGRESQL_PASS', 'chrome');
+              define('POSTGRESQL_DB', 'chrome_db'); define('POSTGRESQL_SCHEMA', 'chrome'); // 5433 -> 9.1, 5432 -> 9.2, 5434 -> 9.3
+              define('POSTGRESQL_PORT', 5433); $dbRegistry = $factory->getConnectionRegistry();
+              $postgresqlTestConnection = new \Chrome\Database\Connection\Postgresql();
+              $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
+              $postgresqlTestConnection->connect(); $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
+              $dbRegistry->addConnection(Chrome\Database\Registry\Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
          */
     }
 
@@ -641,7 +643,7 @@ class DefaultApplication implements Application_Interface
         $closure->add('\Chrome\Interactor\User\Login_Interface', function ($c) {
             #require_once LIB.'modules/user/interactors/login.php';
             #$c->get('\Chrome\Context\Application_Interface')->getClassloader()->load('\Chrome\Interactor\User\Login');
-            return new \Chrome\Interactor\User\Login($c->get('\Chrome\Authentication\Authentication_Interface'));
+            return new \Chrome\Interactor\User\Login($c->get('\Chrome\Authentication\Authentication_Interface'), $c->get('\Chrome\Helper\User\AuthenticationResolver_Interface'));
         });
 
         $closure->add('\Chrome\View\Form\Element\Factory\Default', function ($c) {
@@ -650,6 +652,19 @@ class DefaultApplication implements Application_Interface
 
         $closure->add('\Chrome\Controller\User\Login', function ($c) {
             return new \Chrome\Controller\User\Login($c->get('\Chrome\Context\Application_Interface'), $c->get('\Chrome\Interactor\User\Login_Interface'));
+        });
+
+        $closure->add('\Chrome\Helper\User\AuthenticationResolver_Interface', function ($c) {
+            return new \Chrome\Helper\User\AuthenticationResolver\Email($c->get('\Chrome\Model\User\User_Interface'));
+        });
+
+        $closure->add('\Recaptcher\RecaptchaInterface', function ($c) {
+            $config = $c->get('\Chrome\Config\Config_Interface');
+            $privateKey = $config->getConfig('Captcha/Recaptcha', 'private_key');
+            $publicKey  = $config->getConfig('Captcha/Recaptcha', 'public_key');
+            $useHttps   = $config->getConfig('Captcha/Recaptcha', 'enable_https');
+
+            return new \Recaptcher\Recaptcha($publicKey, $privateKey, $useHttps);
         });
     }
 

@@ -117,7 +117,8 @@ INSERT INTO "chrome"."cp1_class" ("id", "name", "file") VALUES
 (DEFAULT, 'Chrome\\Interactor\\User\\Login', 'lib/modules/user/interactors/login.php')
 (DEFAULT, 'Chrome\\Linker\\Linker_Interface', 'lib/core/linker/linker.php'),
 (DEFAULT, 'Chrome\\Linker\\HTTP\\Linker', 'lib/core/linker/linker.php'),
-(DEFAULT, 'Chrome\\Linker\\Console\\Linker', 'lib/core/linker/console.php');
+(DEFAULT, 'Chrome\\Linker\\Console\\Linker', 'lib/core/linker/console.php'),
+(DEFAULT, 'Chrome\\Helper\\User\\AuthenticationResolver\\Email', 'lib/modules/user/helpers/authenticationresolver/email.php');
 
 DROP TABLE IF EXISTS "chrome"."cp1_config";
 CREATE TABLE IF NOT EXISTS "chrome"."cp1_config" (
@@ -151,7 +152,7 @@ INSERT INTO "chrome"."cp1_config" ("name", "subclass", "value", "type", "modul",
 ('name', 'Site', 'CHROME-PHP', 'string', '', FALSE),
 ('public_key', 'Captcha/Recaptcha', '6LcQrt4SAAAAAIPs9toLqZ761XTA39aS_AWP-Nog', 'string', '', FALSE),
 ('private_key', 'Captcha/Recaptcha', '6LcQrt4SAAAAAF7flTN8uwi_9eSFy43jOuUcPGm3', 'string', '', FALSE),
-('server_api', 'Captcha/Recaptcha', 'http://www.google.com/recaptcha/api', 'string', '', FALSE),
+('enable_https', 'Captcha/Recaptcha', 'false', 'boolean', '', FALSE),
 ('recaptcha_theme', 'Captcha/Recaptcha', 'clean', 'string', '', FALSE),
 ('default_theme', 'Theme', 'chrome', 'string', '', FALSE);
 
@@ -335,6 +336,7 @@ INSERT INTO "chrome"."cp1_autoload" ("name", "path", "activated", "priority", "i
 ('\\Chrome\\Classloader\\Resolver\\Validator', 'plugins/classloader/validator.php', TRUE, 4, TRUE),
 ('\\Chrome\\Classloader\\Resolver\\Form', 'plugins/classloader/form.php',TRUE, 4, TRUE),
 ('\\Chrome\\Classloader\\Resolver\\Converter', 'plugins/classloader/converter.php',TRUE, 4, TRUE),
+('\\Chrome\\Classloader\\Resolver\\Captcha', 'plugins/classloader/captcha.php', TRUE, 4, TRUE),
 ('\\Chrome_View_Plugin_HTML', 'plugins/view/html.php', TRUE, 6, FALSE),
 ('\\Chrome_View_Plugin_Decorator', 'plugins/view/decorator.php', TRUE, 6, FALSE),
 ('\\Chrome\Filter\Chain\Preprocessor', 'plugins/filter/chain/preprocessor.php', TRUE, 6, FALSE),
@@ -353,7 +355,7 @@ INSERT INTO "chrome"."cp1_autoload" ("name", "path", "activated", "priority", "i
 ('\\Chrome\\Response\\Handler\\HTTPHandler', 'lib/core/response/response/http.php', TRUE, 6, FALSE),
 ('\\Chrome\\Response\\Handler\\JSONHandler', 'lib/core/response/response/json.php', TRUE, 6, FALSE),
 ('\\Chrome\\Response\\Handler\\ConsoleHandler', 'lib/core/response/response/console.php', TRUE, 6, FALSE),
-('\\Chrome\\Controller\\ModuleAbstract', 'lib/core/controller/module.php', TRUE, 6, FALSE);
+('\\Chrome\\Controller\\AbstractModule', 'lib/core/controller/module.php', TRUE, 6, FALSE);
 
 DROP TABLE IF EXISTS "chrome"."cp1_route_administration";
 CREATE TABLE IF NOT EXISTS "chrome"."cp1_route_administration" (
@@ -411,12 +413,13 @@ CREATE TABLE IF NOT EXISTS "chrome"."cp1_user" (
   "avatar" VARCHAR(256) NULL,
   "address" VARCHAR(300) NULL,
   "design" VARCHAR(256) NOT NULL DEFAULT 'default',
+  "authentication_id" INTEGER NOT NULL,
   PRIMARY KEY ("id"),
   UNIQUE ("email")
 );
 
-INSERT INTO "chrome"."cp1_user" ("id", "name", "email", "group", "time", "avatar", "address", "design") VALUES
-(1, 'Alex', 'redchrome@gmx.de', 0, 1349179579, '', '', 'default');
+INSERT INTO "chrome"."cp1_user" ("id", "name", "email", "group", "time", "avatar", "address", "design", "authentication_id") VALUES
+(1, 'Alex', 'redchrome@gmx.de', 0, 1349179579, '', '', 'default', 1);
 
 DROP TABLE IF EXISTS "chrome"."cp1_user_regist";
 CREATE TABLE IF NOT EXISTS "chrome"."cp1_user_regist" (
@@ -436,4 +439,4 @@ ALTER TABLE "chrome"."cp1_authorisation_user_default"
   ADD CONSTRAINT "authIdUserDefault" FOREIGN KEY ("user_id") REFERENCES "chrome"."cp1_authenticate" ("id") ON UPDATE CASCADE;
 
 ALTER TABLE "chrome"."cp1_user"
-  ADD CONSTRAINT "authId" FOREIGN KEY ("id") REFERENCES "chrome"."cp1_authenticate" ("id") ON UPDATE CASCADE;
+  ADD CONSTRAINT "authId" FOREIGN KEY ("authentication_id") REFERENCES "chrome"."cp1_authenticate" ("id") ON UPDATE CASCADE;

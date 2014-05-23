@@ -19,7 +19,7 @@
 
 namespace Chrome\Controller;
 
-use \Chrome\Controller\ModuleAbstract;
+use \Chrome\Controller\AbstractModule;
 
 require_once 'view.php';
 require_once 'include.php';
@@ -30,7 +30,7 @@ require_once 'include.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Controller
  */
-class Captcha extends ModuleAbstract
+class Captcha extends AbstractModule
 {
     protected function _initialize()
     {

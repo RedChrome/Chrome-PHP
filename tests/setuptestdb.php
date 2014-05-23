@@ -85,14 +85,14 @@ if(isset($_SERVER['argv']) and isset($_SERVER['argv'][1]))
         $connection = $_SERVER['argv'][1];
     } else
     {
-        echo 'Could not find connection name "' . $_SERVER['argv'][1] . '"' . PHP_EOL;
-        echo 'Using default connection "'.$connection.'"'.PHP_EOL;
-        echo 'Available connection names:' . PHP_EOL;
+        echo 'Could not find connection name "' . $_SERVER['argv'][1] . '"' . PHP_EOL.PHP_EOL;
+        echo 'Registered connection names:' . PHP_EOL;
         foreach($connectionRegistry->getConnections() as $connectionName)
         {
             echo ' - ' . $connectionName . PHP_EOL;
         }
         echo PHP_EOL;
+        exit();
     }
 }
 

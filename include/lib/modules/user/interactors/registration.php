@@ -156,7 +156,7 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
 
         if($this->_validateRegistrationRequest($request, $activationKey) !== true) {
             // discards the registration request, so the user can retry to register with the same data (email, name, ...)
-            $this->_discardRegistrationRequestByActivationKey($activaionKey, $result);
+            $this->_discardRegistrationRequestByActivationKey($activationKey, $result);
 
             $result->failed();
             $result->setError('action', 'registration_request_not_valid');

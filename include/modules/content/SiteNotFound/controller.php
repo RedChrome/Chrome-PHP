@@ -2,9 +2,11 @@
 
 namespace Chrome\Controller;
 
+use \Chrome\Controller\AbstractModule;
+
 require_once 'view.php';
 
-class SiteNotFound extends \Chrome\Controller\ModuleAbstract
+class SiteNotFound extends AbstractModule
 {
 
     protected function _initialize()

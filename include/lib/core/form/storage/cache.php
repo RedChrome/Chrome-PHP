@@ -30,7 +30,7 @@ class Chrome_Form_Storage_Cache implements Chrome_Form_Storage_Interface
 
     protected $_form = null;
 
-    public function __construct(Chrome_Form_Interface $form, Chrome_Cache_Interface $cache)
+    public function __construct(Chrome_Form_Interface $form, \Chrome\Cache\Cache_Interface $cache)
     {
         $this->_form = $form;
         $this->_cache = $cache;

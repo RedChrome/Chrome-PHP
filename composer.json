@@ -1,16 +1,16 @@
 {
     "require": {
-        "monolog/monolog": "1.6.*"
+        "monolog/monolog": "1.6.*",
+        "swiftmailer/swiftmailer": "v5.2.0",
+        "dmishh/recaptcher": "1.0.0"
     },
     
     "require-dev": {
-        "codeception/codeception": "1.8.*@dev",
+        "codeception/codeception": "1.8.5",
         "phpunit/phpunit": "3.7.*"
     },
         
     "config": {
     	"vendor-dir": "include/lib/vendor"
     }
-    
-    
 }

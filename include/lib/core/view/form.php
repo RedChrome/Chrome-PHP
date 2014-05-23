@@ -311,8 +311,6 @@ class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface
  */
 class Chrome_View_Form_Element_Appender_Error extends Chrome_View_Form_Element_Appender_Abstract implements Chrome_View_Form_Element_Appender_Type_Interface
 {
-    const TRANSLATE_MODULE = 'form/errors';
-
     const APPENDER_TYPE = 'ERROR';
 
     public function getType()
@@ -331,8 +329,6 @@ class Chrome_View_Form_Element_Appender_Error extends Chrome_View_Form_Element_A
             $errors = '<ul>';
 
             $translate = $this->_viewFormElement->getViewForm()->getViewContext()->getLocalization()->getTranslate();
-
-            $translate->load(self::TRANSLATE_MODULE);
 
             foreach($form->getValidationErrors($elementId) as $error)
             {
@@ -359,8 +355,6 @@ class Chrome_View_Form_Element_Appender_Error_Yaml extends Chrome_View_Form_Elem
             $errors = '<div class="ym-error">';
 
             $translate = $this->_viewFormElement->getViewForm()->getViewContext()->getLocalization()->getTranslate();
-
-            $translate->load(self::TRANSLATE_MODULE);
 
             foreach($form->getValidationErrors($elementId) as $error)
             {

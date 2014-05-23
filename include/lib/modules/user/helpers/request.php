@@ -31,7 +31,7 @@ class Request implements Request_Interface
         $this->_config = $config;
     }
 
-    public function isNicknameValid($name)
+    public function isNameValid($name)
     {
         $name = (string) $name;
 

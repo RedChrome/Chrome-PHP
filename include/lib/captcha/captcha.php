@@ -132,7 +132,7 @@ class Captcha implements Captcha_Interface
             return;
         }
 
-        //TODO: this is really really ugly!
+        // TODO: this is really really ugly!
         // Loading a class has nothign to do with this class..
 
         $engine = strtolower($this->_frontendOptions[self::CHROME_CAPTCHA_ENGINE]);

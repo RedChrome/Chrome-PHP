@@ -19,12 +19,7 @@
 
 namespace Chrome\Captcha\Engine;
 
-use Chrome\Captcha\Captcha_Interface;
-
-/**
- * load ReCaptcha lib
- */
-require_once LIB . 'reCaptcha/recaptchalib.php';
+use \Chrome\Captcha\Captcha_Interface;
 
 /**
  * Class responsible for recaptcha logic
@@ -34,6 +29,8 @@ require_once LIB . 'reCaptcha/recaptchalib.php';
  */
 class Recaptcha implements Engine_Interface
 {
+    const INTERNAL_VERIFY_ERROR = 'Internal error while verifying captcha';
+
     protected $_reqData = null;
     protected $_backendOptions = array();
     protected $_error = '';
@@ -55,21 +52,28 @@ class Recaptcha implements Engine_Interface
 
     public function isValid($key)
     {
-        $recaptchaChallengeField = $this->_reqData->getPOSTData('recaptcha_challenge_field');
-        $recaptchaResponseField = $this->_reqData->getPOSTData('recaptcha_response_field');
+        $recaptcha = $this->_appContext->getDiContainer()->get('\Recaptcher\RecaptchaInterface');
 
-        if(empty($recaptchaResponseField) or empty($recaptchaChallengeField))
-        {
+        $recaptchaChallengeValue = $this->_reqData->getPOSTData($recaptcha->getChallengeField());
+        $recaptchaResponseValue  = $this->_reqData->getPOSTData($recaptcha->getResponseField());
+
+        $isValid = false;
+
+        try {
+            $isValid = $recaptcha->checkAnswer($this->_reqData->getSERVERData('REMOTE_ADDR'), $recaptchaChallengeValue, $recaptchaResponseValue);
+        } catch(\Recaptcher\Exception\InvalidRecaptchaException $exception) {
+            $this->_error = $exception->getMessage();
+            return false;
+        } catch(\Recaptcher\Exception\Exception $exception) {
+            $this->_error = self::INTERNAL_VERIFY_ERROR;
             return false;
         }
 
-        $config = $this->_appContext->getConfig();
-        $privatekey = $config->getConfig('Captcha/Recaptcha', 'private_key');
-        $resp = recaptcha_check_answer($privatekey, $this->_reqData->getSERVERData('REMOTE_ADDR'), $recaptchaChallengeField, $recaptchaResponseField);
+        if($isValid !== true) {
+            return false;
+        }
 
-        $this->_error = $resp->error;
-
-        return $resp->isValid;
+        return true;
     }
 
     public function create()

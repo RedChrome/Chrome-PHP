@@ -121,8 +121,8 @@ class GeneralFormTest extends Chrome_TestCase
         $this->assertEquals('myTestId', $this->_form->getID());
         //TODO: add a proper action attribute test.
         /*
-        $this->_form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_ACTION, 'myAction.html');
-        $this->assertEquals( '/myAction.html', $this->_form->getAttribute(Chrome_Form_Abstract::ATTRIBUTE_ACTION));
+            $this->_form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_ACTION, 'myAction.html');
+            $this->assertEquals( '/myAction.html', $this->_form->getAttribute(Chrome_Form_Abstract::ATTRIBUTE_ACTION));
         */
     }
 

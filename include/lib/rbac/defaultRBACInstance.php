@@ -41,7 +41,6 @@ $login->addTransaction($loginTransaction);
 $guest->addRole($login);
 
 /*
-
 SQL Query
 
 SELECT * FROM

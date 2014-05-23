@@ -67,7 +67,7 @@ class Chrome_View_Box_Login extends Chrome_View_Strategy_Abstract
  * @package CHROME-PHP
  * @subpackage Chrome.Content.User
  */
-class Chrome_View_Box_LoggedIn extends Chrome_View_Abstract
+class Chrome_View_Box_LoggedIn extends Chrome_View
 {
 
     public function render()

@@ -38,7 +38,7 @@ class CaptchaValidator extends AbstractValidator
 
     protected function _validate()
     {
-        $this->_namespace = 'plugins/validate/form/element';
+        $this->_namespace = 'plugins/validate/form/element/captcha';
 
         $isValid = (boolean) $this->_captcha->isValid($this->_data);
 

@@ -49,3 +49,17 @@ interface Request_Interface
      */
     public function isPasswordValid($password);
 }
+
+interface AuthenticationResolver_Interface
+{
+    /**
+     * Resolves an identity (e.g. email address) to an authentication-id
+     *
+     * The authentication-id can be used to authenticate
+     *
+     * E.g. input 'myEmail@bla' => 24
+     *
+     * @param mixed $identity
+     */
+    public function resolveIdentity($identity);
+}

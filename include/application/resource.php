@@ -98,7 +98,7 @@ class ResourceApplication implements \Chrome\Application\Application_Interface
     /**
      * Chrome_Front_Controller::getController()
      *
-     * @return \Chrome\Controller\ControllerAbstract
+     * @return \Chrome\Controller\AbstractController
      */
     public function getController()
     {
