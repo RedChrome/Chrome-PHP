@@ -43,8 +43,8 @@ INSERT INTO `cpp_authenticate` (`id`, `password`, `password_salt`, `cookie_token
 UPDATE `cpp_authenticate` SET `id` = 0 WHERE `id` = 1;
 ALTER TABLE `cpp_authenticate` AUTO_INCREMENT = 1;
 INSERT INTO `cpp_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
-(NULL, '1873e707e31706b141d1199fb3c8da179b1395db492ede8b', 'Gd{|Yw"BA4z4,czCw~g0', '5e4869588d85631bb513bcfd7a4d811469836f20a6cc05a0', 1374572687); -- password is tiger
-
+(NULL, '1873e707e31706b141d1199fb3c8da179b1395db492ede8b', 'Gd{|Yw"BA4z4,czCw~g0', '5e4869588d85631bb513bcfd7a4d811469836f20a6cc05a0', 1374572687);
+ -- password is tiger
 
 DROP TABLE IF EXISTS `cpp_authorisation_rbac`;
 CREATE TABLE IF NOT EXISTS `cpp_authorisation_rbac` (
