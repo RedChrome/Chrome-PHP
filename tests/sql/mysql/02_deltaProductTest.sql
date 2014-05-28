@@ -17,7 +17,7 @@ TRUNCATE `cp1_route_static`;
 TRUNCATE `cp1_user`;
 TRUNCATE `cp1_user_regist`;
 
-INSERT INTO `cp1_authorisation_user_default` (`user_id`, `group_id`) VALUES
+INSERT INTO `cp1_authorisation_user_default` (`authentication_id`, `group_id`) VALUES
 (1, 1),
 (2, 123456),
 (3, 89123),

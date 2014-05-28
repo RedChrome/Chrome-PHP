@@ -24,7 +24,7 @@ interface User_Interface
 {
     public function hasEmail($email);
 
-    public function addUser($name, $email);
+    public function addUser($name, $email, $authenticationId);
 
     public function getAuthenticationIdByEmail($email);
 }

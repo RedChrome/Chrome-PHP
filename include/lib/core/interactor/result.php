@@ -120,7 +120,7 @@ class Result implements Result_Interface
      *
      * @param string $key
      * @return \Iterator
-    */
+     */
     public function getError($key)
     {
         $errors = array();
@@ -134,7 +134,7 @@ class Result implements Result_Interface
 
     /**
      * @return \Iterator
-    */
+     */
     public function getErrors()
     {
         $array = array();

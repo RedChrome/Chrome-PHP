@@ -25,7 +25,7 @@ INSERT INTO "chrome"."cp1_authenticate" ("password", "password_salt", "cookie_to
 ('testAuthenticate4', 'testAuthenticateSalt', NULL, 12345678),
 ('testAuthenticate5', 'testAuthenticateSalt', NULL, 12345678);
 
-INSERT INTO "chrome"."cp1_authorisation_user_default" ("user_id", "group_id") VALUES
+INSERT INTO "chrome"."cp1_authorisation_user_default" ("authentication_id", "group_id") VALUES
 (1, 1),
 (2, 123456),
 (3, 89123),

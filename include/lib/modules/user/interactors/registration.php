@@ -170,16 +170,25 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
             $result->setError('action', 'registration_request_expired');
         }
 
+        // first create the authentication.
+        $creationContainer = $authHelper->createAuthentication($request->getEmail(), $request->getPassword(), $request->getPasswordSalt());
+
+        // hm, we couldnt create an authentication for the user...
+        if(!$creationContainer->isSuccessful()) {
+            $result->failed();
+            $result->setError('action', 'could_not_create_authentication');
+            return;
+        }
+
         try {
-            $userModel->addUser($request->getName(), $request->getEmail());
+            $userModel->addUser($request->getName(), $request->getEmail(), $creationContainer->getID());
         } catch(\Chrome\Exception $e) {
             $result->failed();
             $result->setError('action', 'unknown_error');
             return;
         }
 
-        $authHelper->createAuthentication($request->getEmail(), $request->getPassword(), $request->getPasswordSalt());
-        // TODO: add authenticate, group etc..
+        // TODO: add authorisation group
 
         $this->_discardRegistrationRequestByActivationKey($activationKey, $result);
 

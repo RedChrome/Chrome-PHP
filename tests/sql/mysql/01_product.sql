@@ -71,12 +71,12 @@ INSERT INTO `cpp_authorisation_resource_default` (`id`, `resource_id`, `transfor
 
 DROP TABLE IF EXISTS `cpp_authorisation_user_default`;
 CREATE TABLE IF NOT EXISTS `cpp_authorisation_user_default` (
-  `user_id` INTEGER NOT NULL,
+  `authentication_id` INTEGER NOT NULL,
   `group_id` INTEGER NOT NULL,
-  KEY `authIdUserDefault` (`user_id`)
+  KEY `authIdUserDefault` (`authentication_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-INSERT INTO `cpp_authorisation_user_default` (`user_id`, `group_id`) VALUES
+INSERT INTO `cpp_authorisation_user_default` (`authentication_id`, `group_id`) VALUES
 (0, 1),
 (1, 4);
 
@@ -130,6 +130,7 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\Controller\\SiteNotFound', 'modules/content/SiteNotFound/controller.php'),
 ('Chrome\\Interactor\\User\\Registration',  'lib/modules/user/interactors/registration.php'),
 ('Chrome\\Interactor\\User\\Login', 'lib/modules/user/interactors/login.php'),
+('Chrome\\Interactor\\User\\Logout', 'lib/modules/user/interactors/logout.php'),
 ('Chrome\\Linker\\Linker_Interface', 'lib/core/linker/linker.php'),
 ('Chrome\\Linker\\HTTP\\Linker', 'lib/core/linker/linker.php'),
 ('Chrome\\Linker\\Console\\Linker', 'lib/core/linker/console.php'),
@@ -456,7 +457,7 @@ CREATE TABLE IF NOT EXISTS `cpp_user_regist` (
 
 
 ALTER TABLE `cpp_authorisation_user_default`
-  ADD CONSTRAINT `authIdUserDefault` FOREIGN KEY (`user_id`) REFERENCES `cpp_authenticate` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `authIdUserDefault` FOREIGN KEY (`authentication_id`) REFERENCES `cpp_authenticate` (`id`) ON UPDATE CASCADE;
 
 ALTER TABLE `cpp_user`
   ADD CONSTRAINT `authId` FOREIGN KEY (`authentication_id`) REFERENCES `cpp_authenticate` (`id`) ON UPDATE CASCADE;

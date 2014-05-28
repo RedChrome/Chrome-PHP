@@ -22,10 +22,20 @@ class Create_Dummy implements CreateResource_Interface
 {
     public $_id = 0;
 
+    private $_success = false;
+
     public function getID()
     {
         return $this->_id;
     }
 
+    public function success()
+    {
+        $this->_success = true;
+    }
 
+    public function isSuccessful()
+    {
+        return $this->_success;
+    }
 }

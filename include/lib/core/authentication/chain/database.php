@@ -122,6 +122,8 @@ class DatabaseChain extends Chain_Abstract
             $id = $this->_model->createAuthentication($resource->getCredential(), $resource->getCredentialSalt());
 
             $resource->setID($id);
+
+            $resource->success();
         }
     }
 }
@@ -157,6 +159,7 @@ interface Create_Database_Interface extends CreateResource_Interface
      * @return string salt for the hashed credential
      */
     public function getCredentialSalt();
+
 }
 
 /**
@@ -203,6 +206,8 @@ class Create_Database implements Create_Database_Interface
     protected $_id             = null;
     protected $_identity       = '';
 
+    protected $_success        = false;
+
     public function __construct($identity, $credential, $salt = null)
     {
         $this->_identity       = $identity;
@@ -233,6 +238,16 @@ class Create_Database implements Create_Database_Interface
     public function setID($id)
     {
         $this->_id = $id;
+    }
+
+    public function isSuccessful()
+    {
+        return $this->_success;
+    }
+
+    public function success()
+    {
+        $this->_success = true;
     }
 }
 

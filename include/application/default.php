@@ -616,6 +616,10 @@ class DefaultApplication implements Application_Interface
             return new \Chrome\Cache\Memory();
         });
 
+        $closure->add('\Chrome\Redirection\Redirection_Interface', function ($c) {
+            return new \Chrome\Redirection\Redirection($c->get('\Chrome\Context\Application_Interface'));
+        });
+
         $closure->add('\Chrome\Resource\Model_Interface', function ($c) {
             return $c->get('\Chrome\Model\Resource\Database');
         }, true);
@@ -665,6 +669,14 @@ class DefaultApplication implements Application_Interface
             $useHttps   = $config->getConfig('Captcha/Recaptcha', 'enable_https');
 
             return new \Recaptcher\Recaptcha($publicKey, $privateKey, $useHttps);
+        });
+
+        $closure->add('\Chrome\Controller\User\Logout', function ($c) {
+            return new \Chrome\Controller\User\Logout($c->get('\Chrome\Context\Application_Interface'), $c->get('\Chrome\Interactor\User\Logout'));
+        });
+
+        $closure->add('\Chrome\Interactor\User\Logout', function ($c) {
+            return new \Chrome\Interactor\User\Logout($c->get('\Chrome\Interactor\User\Login_Interface'), $c->get('\Chrome\Redirection\Redirection_Interface'));
         });
     }
 

@@ -57,11 +57,11 @@ INSERT INTO "chrome"."cp1_authorisation_resource_default" ("resource_id", "trans
 
 DROP TABLE IF EXISTS "chrome"."cp1_authorisation_user_default";
 CREATE TABLE IF NOT EXISTS "chrome"."cp1_authorisation_user_default" (
-  "user_id" INTEGER NOT NULL,
+  "authentication_id" INTEGER NOT NULL,
   "group_id" INTEGER NOT NULL
 );
 
-INSERT INTO "chrome"."cp1_authorisation_user_default" ("user_id", "group_id") VALUES
+INSERT INTO "chrome"."cp1_authorisation_user_default" ("authentication_id", "group_id") VALUES
 (0, 1),
 (1, 4);
 
@@ -114,7 +114,8 @@ INSERT INTO "chrome"."cp1_class" ("id", "name", "file") VALUES
 (DEFAULT, 'Chrome\\Controller\\Captcha', 'modules/content/captcha/controller.php'),
 (DEFAULT, 'Chrome\\Controller\\SiteNotFound', 'modules/content/SiteNotFound/controller.php'),
 (DEFAULT, 'Chrome\\Interactor\\User\\Registration', 'lib/modules/user/interactors/registration.php'),
-(DEFAULT, 'Chrome\\Interactor\\User\\Login', 'lib/modules/user/interactors/login.php')
+(DEFAULT, 'Chrome\\Interactor\\User\\Login', 'lib/modules/user/interactors/login.php'),
+(DEFAULT, 'Chrome\\Interactor\\User\\Logout', 'lib/modules/user/interactors/logout.php'),
 (DEFAULT, 'Chrome\\Linker\\Linker_Interface', 'lib/core/linker/linker.php'),
 (DEFAULT, 'Chrome\\Linker\\HTTP\\Linker', 'lib/core/linker/linker.php'),
 (DEFAULT, 'Chrome\\Linker\\Console\\Linker', 'lib/core/linker/console.php'),
@@ -436,7 +437,7 @@ CREATE TABLE IF NOT EXISTS "chrome"."cp1_user_regist" (
 
 
 ALTER TABLE "chrome"."cp1_authorisation_user_default"
-  ADD CONSTRAINT "authIdUserDefault" FOREIGN KEY ("user_id") REFERENCES "chrome"."cp1_authenticate" ("id") ON UPDATE CASCADE;
+  ADD CONSTRAINT "authIdUserDefault" FOREIGN KEY ("authentication_id") REFERENCES "chrome"."cp1_authenticate" ("id") ON UPDATE CASCADE;
 
 ALTER TABLE "chrome"."cp1_user"
   ADD CONSTRAINT "authId" FOREIGN KEY ("authentication_id") REFERENCES "chrome"."cp1_authenticate" ("id") ON UPDATE CASCADE;

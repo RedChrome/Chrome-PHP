@@ -132,29 +132,7 @@ class Captcha implements Captcha_Interface
             return;
         }
 
-        // TODO: this is really really ugly!
-        // Loading a class has nothign to do with this class..
-
         $engine = strtolower($this->_frontendOptions[self::CHROME_CAPTCHA_ENGINE]);
-        $_engine = $this->_frontendOptions[self::CHROME_CAPTCHA_ENGINE];
-
-        // if class is not loaded, then search in /include/plugins/captcha/
-        if(class_exists('Chrome\\Captcha\\Engine\\' . $_engine, false) === false)
-        {
-            $file = new \Chrome\File(PLUGIN . 'captcha/' . $engine . '.php');
-
-            if($file->exists() === false)
-            {
-                throw new \Chrome\Exception('Cannot include captcha engine file, because it does not exist in include/plugins/captcha for engine ' . $engine);
-            } else
-            {
-                require_once $file->getFileName();
-                if(class_exists('Chrome\\Captcha\\Engine\\' . $_engine, false) === false)
-                {
-                    throw new \Chrome\Exception('Loaded captcha engine file does not contain proper class Chrome\\Captcha\\Engine\\' . $_engine);
-                }
-            }
-        }
 
         $engine = 'Chrome\\Captcha\\Engine\\' . $engine;
 

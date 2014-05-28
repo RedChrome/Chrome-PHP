@@ -245,6 +245,21 @@ interface CreateResource_Interface
      * @return int the id of the currently added authentication user
      */
     public function getID();
+
+
+    /**
+     * If an authentication was successfully added, this method was called
+     *
+     * @return void
+     */
+    public function success();
+
+    /**
+     * Returns true if success() was called, otherwise false
+     *
+     * @return boolean
+     */
+    public function isSuccessful();
 }
 
 use \Chrome\Authentication\Chain\Chain_Interface;

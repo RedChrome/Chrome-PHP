@@ -39,9 +39,9 @@ class User extends \Chrome_Model_Database_Statement_Abstract implements User_Int
         return !$result->isEmpty();
     }
 
-    public function addUser($name, $email)
+    public function addUser($name, $email, $authenticationId)
     {
-        $this->_getDBInterface()->loadQuery('addUser')->execute(array($name, $email, CHROME_TIME));
+        $this->_getDBInterface()->loadQuery('addUser')->execute(array($name, $email, CHROME_TIME, $authenticationId));
     }
 
     public function getAuthenticationIdByEmail($email)

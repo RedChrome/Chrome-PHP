@@ -23,7 +23,16 @@ namespace Chrome\Helper\Authentication;
 
 interface Creation_Interface
 {
-    public function createAuthentication($password, $passwordSalt);
+    /**
+     * Create a new authentication entry and returns it's id
+     *
+     * @param string $identity
+     * @param string $password
+     * @param string $passwordSalt
+     *
+     * @return \Chrome\Authentication\CreateResource_Interface the container which create the authentication
+     */
+    public function createAuthentication($identity, $password, $passwordSalt);
 }
 
 class Creation implements Creation_Interface
@@ -41,6 +50,6 @@ class Creation implements Creation_Interface
 
         $this->_auth->createAuthentication($createResource);
 
-        return $createResource->getID();
+        return $createResource;
     }
 }

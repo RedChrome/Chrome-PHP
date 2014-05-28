@@ -9,7 +9,7 @@
     "authenticationCreateAuthentication": "INSERT INTO cpp_authenticate(`password`, `password_salt`, `time`) VALUES(\"?\", \"?\", \"?\")",
 
     "authorisationGetAccessById": "SELECT `resource_group` FROM cpp_authorisation_resource_default WHERE `resource_id` = \"?\" AND `transformation` = \"?\"",
-    "authorisationGetUserGroupById": "SELECT `group_id` FROM cpp_authorisation_user_default WHERE `user_id`= \"?\" ",
+    "authorisationGetUserGroupById": "SELECT `group_id` FROM cpp_authorisation_user_default WHERE `authentication_id`= \"?\" ",
 
     "configLoadConfiguration": "SELECT `name`, `subclass`, `value`, `type` FROM cpp_config",
     "configSetConfiguration": "INSERT INTO cpp_config (`name`, `subclass`, `value`, `type`, `modul`, `hidden`) VALUES(\"?\", \"?\", \"?\", \"?\", \"?\", ?)",

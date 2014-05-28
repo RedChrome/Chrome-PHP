@@ -20,6 +20,7 @@
 namespace Chrome\Controller\User;
 
 use \Chrome\Controller\AbstractModule;
+use \Chrome\Context\Application_Interface;
 
 /**
  * @package CHROME-PHP
@@ -27,14 +28,16 @@ use \Chrome\Controller\AbstractModule;
  */
 class Logout extends AbstractModule
 {
+    protected $_logout = null;
+
+    public function __construct(Application_Interface $app, \Chrome\Interactor\User\Logout $logout)
+    {
+        $this->_logout = $logout;
+        parent::__construct($app);
+    }
+
     protected function _execute()
     {
-
-        $this->_applicationContext->getAuthentication()->deAuthenticate();
-
-        // redirect
-
-        $redirect = new \Chrome\Redirection\Redirection($this->_applicationContext);
-       # $redirect->redirectToPreviousPage();
+        $this->_logout->doLogout();
     }
 }

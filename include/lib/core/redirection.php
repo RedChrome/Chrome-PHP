@@ -20,6 +20,7 @@
 namespace Chrome\Redirection;
 
 use \Chrome\Resource\Resource_Interface;
+use Chrome\Response\Handler\HTTP;
 
 // todo: add redirection to dependecy injector
 /**
@@ -47,8 +48,11 @@ class Redirection implements Redirection_Interface
     protected function _redirect($site)
     {
         $resp = $this->_applicationContext->getResponse();
-        $resp->setStatus('302 Redirect');
-        $resp->addHeader('Location', $site);
+
+        if($resp instanceof HTTP) {
+            $resp->setStatus('303 Temporary Redirect');
+            $resp->addHeader('Location', $site);
+        }
     }
 
     public function redirectToPreviousPage()
@@ -65,7 +69,6 @@ class Redirection implements Redirection_Interface
             return $return;
         } else
         {
-
             // we dont know where the user came, so get to the index.php
             return 'http://' . $requestData->getSERVERData('HTTP_HOST') . ROOT_URL;
         }
