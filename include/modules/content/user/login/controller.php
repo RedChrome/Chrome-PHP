@@ -51,7 +51,7 @@ class Login extends AbstractModule
     {
         if ($this->_applicationContext->getAuthentication()->isUser() == true) {
             $this->_view->alreadyLoggedIn($this->_form, $this->_applicationContext->getDiContainer()
-                            ->get('\Chrome\View\Form\Element\Factory\Default'));
+                            ->get('\Chrome\View\Form\Element\Factory\Yaml'));
             return;
         }
 
@@ -64,7 +64,7 @@ class Login extends AbstractModule
                         $this->_view->successfullyLoggedIn();
                     } else {
                         $this->_view->errorWhileLoggingIn($this->_form, $this->_applicationContext->getDiContainer()
-                            ->get('\Chrome\View\Form\Element\Factory\Default'));
+                            ->get('\Chrome\View\Form\Element\Factory\Yaml'));
                     }
                 } else {
                     $this->_form->destroy();
@@ -73,7 +73,7 @@ class Login extends AbstractModule
                 }
             } else {
                 $this->_view->showForm($this->_form, $this->_applicationContext->getDiContainer()
-                    ->get('\Chrome\View\Form\Element\Factory\Default'));
+                    ->get('\Chrome\View\Form\Element\Factory\Yaml'));
             }
         } catch (\Chrome\Exception $e) {
             $this->_exceptionHandler->exception($e);

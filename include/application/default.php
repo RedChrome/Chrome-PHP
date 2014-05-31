@@ -645,13 +645,35 @@ class DefaultApplication implements Application_Interface
         }, true);
 
         $closure->add('\Chrome\Interactor\User\Login_Interface', function ($c) {
-            #require_once LIB.'modules/user/interactors/login.php';
-            #$c->get('\Chrome\Context\Application_Interface')->getClassloader()->load('\Chrome\Interactor\User\Login');
             return new \Chrome\Interactor\User\Login($c->get('\Chrome\Authentication\Authentication_Interface'), $c->get('\Chrome\Helper\User\AuthenticationResolver_Interface'));
         });
 
         $closure->add('\Chrome\View\Form\Element\Factory\Default', function ($c) {
-            return new \Chrome_View_Form_Element_Factory_Yaml();
+
+            $captchaFactory = new \Chrome_View_Form_Element_Factory_Captcha();
+            $elementFactory = new \Chrome_View_Form_Element_Factory_Suffix('Default');
+
+            $compositionFactory = new \Chrome_View_Form_Element_Factory_Composition($captchaFactory, $elementFactory);
+
+            $defaultManipulateableDecorator = new \Chrome_View_Form_Element_Factory_DefaultManipulateablesDecorator();
+            $defaultAppenderDecorator = new \Chrome_View_Form_Element_Factory_DefaultAppenderDecorator();
+
+            $defaultDecoratorFactory = new \Chrome_View_Form_Element_Factory_Decorable($compositionFactory, $defaultManipulateableDecorator);
+            return new \Chrome_View_Form_Element_Factory_Decorable($defaultDecoratorFactory, $defaultAppenderDecorator);
+        });
+
+        $closure->add('\Chrome\View\Form\Element\Factory\Yaml', function ($c) {
+
+                $captchaFactory = new \Chrome_View_Form_Element_Factory_Captcha();
+                $elementFactory = new \Chrome_View_Form_Element_Factory_Suffix();
+
+                $compositionFactory = new \Chrome_View_Form_Element_Factory_Composition($captchaFactory, $elementFactory);
+
+                $defaultManipulateableDecorator = new \Chrome_View_Form_Element_Factory_DefaultManipulateablesDecorator();
+                $yamlDecorator = new \Chrome_View_Form_Element_Factory_YamlDecorator();
+
+                $defaultDecoratorFactory = new \Chrome_View_Form_Element_Factory_Decorable($compositionFactory, $defaultManipulateableDecorator);
+                return new \Chrome_View_Form_Element_Factory_Decorable($defaultDecoratorFactory, $yamlDecorator);
         });
 
         $closure->add('\Chrome\Controller\User\Login', function ($c) {

@@ -178,7 +178,7 @@ class Register extends AbstractModule
             $this->_form->create();
         }
 
-        $this->_view->setStepOne($this->_form);
+        $this->_view->setStepOne($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Yaml'));
 
         $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = array('step' => 2);
     }
@@ -192,7 +192,7 @@ class Register extends AbstractModule
 
         $this->_form->create();
 
-        $this->_view->setStepTwo($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Default'));
+        $this->_view->setStepTwo($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Yaml'));
 
         $array = $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE];
         $array['step'] = 3;

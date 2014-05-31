@@ -65,7 +65,7 @@ class Login extends AbstractModule
 
             $this->_form = \Chrome_Form_Login::getInstance($this->_applicationContext);
 
-            $this->_view->showLoginForm($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Default'));
+            $this->_view->showLoginForm($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Yaml'));
         }
 
     }

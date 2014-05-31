@@ -58,6 +58,14 @@ require_once LIB.'core/uri.php';
 require_once LIB.'core/application.php';
 
 /**
+ * loads dependencies from composer
+ */
+require_once LIB . 'vendor/autoload.php';
+require_once LIB.'core/registry/object.php';
+require_once LIB.'core/log/log.php';
+require_once LIB.'core/classloader/classloader.php';
+
+/**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Application
@@ -145,6 +153,8 @@ class ResourceApplication implements \Chrome\Application\Application_Interface
         $reqHandler = $requestFactory->getRequest();
         $requestData = $requestFactory->getRequestDataObject();
 
+        $this->_initClassloader();
+
         $this->_applicationContext->setRequestHandler($reqHandler);
         $session = $requestData->getSession();
         $cookie = $requestData->getCookie();
@@ -156,6 +166,23 @@ class ResourceApplication implements \Chrome\Application\Application_Interface
         $response = $responseFactory->getResponse();
         $this->_applicationContext->setResponse($response);
     }
+
+    protected function _initClassloader()
+    {
+        // classloader
+        $this->_classloader = new \Chrome\Classloader\Classloader(BASEDIR);
+        $this->_applicationContext->setClassloader($this->_classloader);
+
+        #$this->_classloader->setLogger($this->_loggerRegistry->get('autoloader'));
+        $this->_classloader->setExceptionHandler(new \Chrome\Exception\Handler\HtmlStackTrace());
+
+        require_once PLUGIN.'classloader/captcha.php';
+
+        $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver\Captcha());
+
+        $autoloader = new \Chrome\Classloader\Autoloader($this->_classloader);
+    }
+
 
     public function setApplication($appClass)
     {

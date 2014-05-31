@@ -19,6 +19,17 @@
 
 // TODO: captcha factory must be before default factory!
 
+interface Chrome_View_Form_Element_Factory_Decorator_Interface
+{
+    /**
+     * Decorates the given $viewFormElement
+     *
+     * @param Chrome_View_Form_Element_Basic_Interface $viewFormElement
+     * @return Chrome_View_Form_Element_Basic_Interface
+     */
+    public function decorate(Chrome_View_Form_Element_Basic_Interface $viewFormElement);
+}
+
 /**
  * This class combines two view form element factories to one factory.
  *
@@ -49,6 +60,44 @@ class Chrome_View_Form_Element_Factory_Composition implements Chrome_View_Form_E
     }
 }
 
+class Chrome_View_Form_Element_Factory_Decorable implements Chrome_View_Form_Element_Factory_Interface
+{
+    protected $_decorable = null;
+
+    protected $_decorator = null;
+
+    public function __construct(Chrome_View_Form_Element_Factory_Interface $decorable, Chrome_View_Form_Element_Factory_Decorator_Interface $decorator)
+    {
+        $this->_decorable = $decorable;
+        $this->_decorator = $decorator;
+    }
+
+    public function getElement(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewFormElementOption)
+    {
+        return $this->_decorator->decorate($this->_decorable->getElement($formElement, $viewFormElementOption));
+    }
+}
+
+abstract class Chrome_View_Form_Element_Factory_Abstract implements Chrome_View_Form_Element_Factory_Interface
+{
+    abstract protected function _getClass(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $formOption);
+
+    /**
+     * @see Chrome_View_Form_Element_Factory_Interface::getElement()
+     */
+    public function getElement(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $formOption)
+    {
+        $class = $this->_getClass($formElement, $formOption);
+
+        if(!is_string($class) ) {
+            return null;
+        }
+
+        // create object
+        return new $class($formElement, $formOption);
+    }
+}
+
 /**
  * Factory to create view form elements.
  *
@@ -57,7 +106,7 @@ class Chrome_View_Form_Element_Factory_Composition implements Chrome_View_Form_E
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Element_Factory_Interface
+class Chrome_View_Form_Element_Factory_Suffix extends Chrome_View_Form_Element_Factory_Abstract
 {
     /**
      * A suffix for creating a view form element
@@ -81,13 +130,12 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
         }
     }
 
-    protected function _getClass(Chrome_Form_Element_Basic_Interface $formElement)
+    protected function _getClass(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $formOption)
     {
         if($formElement instanceof Chrome_Form_Element_Captcha)
         {
             $captcha = $formElement->getOption()->getCaptcha();
-            // TODO: class mappign of captcha to view form is not correct
-            $captchaEngine = ucfirst(strtolower($captcha->getFrontendOption(\Chrome\Captcha\Captcha_Interface::CHROME_CAPTCHA_ENGINE)));
+            $captchaEngine = $captcha->getFrontendOption(\Chrome\Captcha\Captcha_Interface::CHROME_CAPTCHA_ENGINE);
             return 'Chrome_View_Form_Element_Captcha_' . $captchaEngine;
         }
 
@@ -102,61 +150,63 @@ class Chrome_View_Form_Element_Factory_Suffix implements Chrome_View_Form_Elemen
         // append suffixes
         return $class . $formSuffix . $this->_suffix;
     }
+}
 
-    protected function _addAppenders(Chrome_View_Form_Element_Appendable_Interface $viewFormElement)
+class Chrome_View_Form_Element_Factory_DefaultAppenderDecorator implements Chrome_View_Form_Element_Factory_Decorator_Interface
+{
+    public function decorate(Chrome_View_Form_Element_Basic_Interface $viewFormElement)
     {
-        // add label and error appender, if object is appendable
+        if( $viewFormElement instanceof Chrome_View_Form_Element_Appendable_Interface) {
 
-        $error = new Chrome_View_Form_Element_Appender_Error($viewFormElement);
-        $viewFormElement->addAppender($error);
+            // add label and error appender
+            $error = new Chrome_View_Form_Element_Appender_Error($viewFormElement);
+            $viewFormElement->addAppender($error);
 
-        $label = new Chrome_View_Form_Element_Appender_Label($viewFormElement);
-        $viewFormElement->addAppender($label);
+            $label = new Chrome_View_Form_Element_Appender_Label($viewFormElement);
+            $viewFormElement->addAppender($label);
+        }
 
-        #$error = new Chrome_View_Form_Element_Appender_Error($viewFormElement);
+        return $viewFormElement;
     }
+}
 
-    protected function _addManipulateables(Chrome_View_Form_Element_Manipulateable_Interface $viewFormElement)
+class Chrome_View_Form_Element_Factory_DefaultManipulateablesDecorator implements Chrome_View_Form_Element_Factory_Decorator_Interface
+{
+    public function decorate(Chrome_View_Form_Element_Basic_Interface $viewFormElement)
     {
-        if($viewFormElement instanceof Chrome_View_Form_Element_Multiple_Abstract)
-        {
-            $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_IdPrefixForMultipleElement());
-            $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForMultipleElement());
+        if($viewFormElement instanceof Chrome_View_Form_Element_Manipulateable_Interface) {
+            if($viewFormElement instanceof Chrome_View_Form_Element_Multiple_Abstract)
+            {
+                $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_IdPrefixForMultipleElement());
+                $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForMultipleElement());
 
-        } else if($viewFormElement instanceof Chrome_View_Form_Element_Interface) {
+            } else if($viewFormElement instanceof Chrome_View_Form_Element_Interface) {
 
-            $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_IdPrefix());
+                $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_IdPrefix());
 
-            // exclude the basic form elements, like Chrome_Form_Element_Form
-            if( ($viewFormElement->getFormElement() instanceof Chrome_Form_Element_Interface) ) {
-                $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements());
+                // exclude the basic form elements, like Chrome_Form_Element_Form
+                if( ($viewFormElement->getFormElement() instanceof Chrome_Form_Element_Interface) ) {
+                    $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements());
+                }
             }
         }
+
+        return $viewFormElement;
     }
+}
 
-    /**
-     * @see Chrome_View_Form_Element_Factory_Interface::getElement()
-     */
-    public function getElement(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $formOption)
+class Chrome_View_Form_Element_Factory_Captcha extends Chrome_View_Form_Element_Factory_Abstract
+{
+    protected function _getClass(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $formOption)
     {
-        $class = $this->_getClass($formElement);
-
-        // create object
-        $object = new $class($formElement, $formOption);
-
-        // add appenders
-        if($object instanceof Chrome_View_Form_Element_Appendable_Interface)
+        if($formElement instanceof Chrome_Form_Element_Captcha)
         {
-            $this->_addAppenders($object);
+            $captcha = $formElement->getOption()->getCaptcha();
+            $captchaEngine = $captcha->getFrontendOption(\Chrome\Captcha\Captcha_Interface::CHROME_CAPTCHA_ENGINE);
+            return 'Chrome_View_Form_Element_Captcha_' . $captchaEngine;
         }
 
-        // if object is manipulateable, add appropriate manipulators for adding attributes, and id-prefixes
-        if($object instanceof Chrome_View_Form_Element_Manipulateable_Interface)
-        {
-            $this->_addManipulateables($object);
-        }
-
-        return $object;
+        return null;
     }
 }
 
@@ -214,40 +264,34 @@ class Chrome_View_Form_Element_Appender_Yaml extends Chrome_View_Form_Element_Ap
     }
 }
 
-/**
- * Simple factory for yaml form elements
- *
- * @package CHROME-PHP
- * @subpackage Chrome.View
- */
-class Chrome_View_Form_Element_Factory_Yaml extends Chrome_View_Form_Element_Factory_Suffix
+class Chrome_View_Form_Element_Factory_YamlDecorator implements Chrome_View_Form_Element_Factory_Decorator_Interface
 {
-    protected function _addAppenders(Chrome_View_Form_Element_Appendable_Interface $viewFormElement)
-    {
-        // add label and error appender, if object is appendable
-        if($viewFormElement instanceof Chrome_View_Form_Element_Form_Default) {
-            $error = new Chrome_View_Form_Element_Appender_Error($viewFormElement);
-        } else {
-            $error = new Chrome_View_Form_Element_Appender_Error_Yaml($viewFormElement);
+     public function decorate(Chrome_View_Form_Element_Basic_Interface $viewFormElement)
+     {
+        if($viewFormElement instanceof Chrome_View_Form_Element_Appendable_Interface) {
+            // add label and error appender, if object is appendable
+            if($viewFormElement instanceof Chrome_View_Form_Element_Form_Default) {
+                $error = new Chrome_View_Form_Element_Appender_Error($viewFormElement);
+            } else {
+                $error = new Chrome_View_Form_Element_Appender_Error_Yaml($viewFormElement);
+            }
+
+            $viewFormElement->addAppender($error);
+
+            $yaml = new Chrome_View_Form_Element_Appender_Yaml($viewFormElement);
+            $viewFormElement->addAppender($yaml);
+
+            $label = new Chrome_View_Form_Element_Appender_Label($viewFormElement);
+            $viewFormElement->addAppender($label);
         }
 
-        $viewFormElement->addAppender($error);
+        if($viewFormElement instanceof Chrome_View_Form_Element_Manipulateable_Interface) {
+            $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_Yaml());
+        }
 
-        $yaml = new Chrome_View_Form_Element_Appender_Yaml($viewFormElement);
-        $viewFormElement->addAppender($yaml);
-
-        $label = new Chrome_View_Form_Element_Appender_Label($viewFormElement);
-        $viewFormElement->addAppender($label);
-    }
-
-    protected function _addManipulateables(Chrome_View_Form_Element_Manipulateable_Interface $viewFormElement)
-    {
-        parent::_addManipulateables($viewFormElement);
-        $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_Yaml());
-    }
+        return $viewFormElement;
+     }
 }
-
-
 
 /**
  * A view form element option factory, uses the form object instance to retrieve the

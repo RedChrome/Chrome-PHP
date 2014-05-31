@@ -52,7 +52,8 @@ class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
     protected function _initFactories()
     {
         // TODO: inject this class
-        $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Yaml();
+
+        #$this->_formElementFactory = new Chrome_View_Form_Element_Factory_Yaml();
         parent::_initFactories();
     }
 

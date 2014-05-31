@@ -22,7 +22,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Captcha_Gdcaptcha extends Chrome_View_Form_Element_Abstract
+class Chrome_View_Form_Element_Captcha_GDCaptcha extends Chrome_View_Form_Element_Abstract
 {
     protected function _render()
     {

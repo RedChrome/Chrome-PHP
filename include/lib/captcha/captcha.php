@@ -132,7 +132,7 @@ class Captcha implements Captcha_Interface
             return;
         }
 
-        $engine = strtolower($this->_frontendOptions[self::CHROME_CAPTCHA_ENGINE]);
+        $engine = $this->_frontendOptions[self::CHROME_CAPTCHA_ENGINE];
 
         $engine = 'Chrome\\Captcha\\Engine\\' . $engine;
 

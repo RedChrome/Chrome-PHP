@@ -32,11 +32,11 @@ class Application
             $response->flush();
             exit();
         }
-        header('Content-type: image/png');
+
         $response->addHeader('Content-type', 'image/png');
         $response->write($image);
-
         $response->flush();
+
         exit();
     }
 }

@@ -10,9 +10,10 @@ class Chrome_View_Register extends Chrome_View_Strategy_Abstract
         $this->addTitle($translate->get('modules/content/user/register/title'));
     }
 
-    public function setStepOne(Chrome_Form_Interface $form)
+    public function setStepOne(Chrome_Form_Interface $form, Chrome_View_Form_Element_Factory_Interface $elementFactory)
     {
         $viewForm = new Chrome_View_Form_Register_StepOne($form, $this->_viewContext);
+        $viewForm->setElementFactory($elementFactory);
         $this->_views[] = new Chrome_View_Register_StepOne_Renderer_Template_StepOne($viewForm);
     }
 
