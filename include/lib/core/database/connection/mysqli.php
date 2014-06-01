@@ -70,14 +70,25 @@ class Mysqli extends AbstractConnection
             throw new \Chrome\Exception('Cannot connect to MySQL Server without any information about the server! Call setConnectionOptions() before!');
         }
 
-        $this->_doConnect();
+        try {
+            $this->_doConnect();
+        } catch(\Chrome\Exception $e) {
+            $this->_unsetConfig();
+            throw $e;
+        }
 
         $this->_isConnected = true;
 
-        unset($this->_password, $this->_username);
+        $this->_unsetConfig();
+
 
         return true;
     }
+
+	public function _unsetConfig()
+	{
+        unset($this->_password, $this->_username, $this->_host, $this->_database, $this->_port, $this->_socket);
+	}
 
     protected function _doConnect()
     {
@@ -125,7 +136,7 @@ class Mysqli extends AbstractConnection
             return;
         }
 
-        // only disconnect, if we havens set up a persistent connection
+        // only disconnect, if we have set up a persistent connection
         if($this->_isPersistent === false)
         {
             $this->_connection->close();

@@ -79,16 +79,23 @@ class DB2 extends AbstractConnection
         try {
             $this->_connection = db2_pconnect($this->_connectionString, $this->_username, $this->_password, $this->_options);
         } catch(\Chrome\Exception $e) {
+            $this->_unsetConfig();
            // TODO: handle errors
            throw $e;
         }
 
         $this->_isConnected = true;
 
-        unset($this->_password, $this->_username, $this->_database, $this->_host, $this->_clientFlags, $this->_port, $this->_options, $this->_connectionString);
+        $this->_unsetConfig();
+
 
         return $this->_connection;
     }
+	public function _unsetConfig()
+	{
+        unset($this->_password, $this->_username, $this->_database, $this->_host, $this->_clientFlags, $this->_port, $this->_options, $this->_connectionString);
+	}
+
 
     public function disconnect()
     {

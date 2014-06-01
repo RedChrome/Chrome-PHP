@@ -60,15 +60,25 @@ class Mysql extends AbstractConnection
             throw new \Chrome\Exception('Cannot connect with no information! Call setConnectionOptions() before!');
         }
 
-        $this->_doConnect();
-        $this->_selectDb();
+        try {
+            $this->_doConnect();
+            $this->_selectDb();
+        } catch(\Chrome\Exception $e) {
+            $this->_unsetConfig();
+            throw $e;
+        }
 
         $this->_isConnected = true;
 
-        unset($this->_password, $this->_username, $this->_database, $this->_host, $this->_clientFlags, $this->_port);
+        $this->_unsetConfig();
 
         return true;
     }
+
+	protected function _unsetConfig()
+	{
+	    unset($this->_password, $this->_username, $this->_database, $this->_host, $this->_clientFlags, $this->_port);
+	}
 
     protected function _doConnect()
     {

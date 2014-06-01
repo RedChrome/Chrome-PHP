@@ -13,7 +13,7 @@ class DatabaseConnectionMysqlTest extends AbstractDatabaseConnectionTestCase
     {
         parent::doSkipTestsIfNeeded();
 
-        if(get_class($this) === 'DatabaseConnectionMysqlTest' AND version_compare(PHP_VERSION, '5.5.0') >= 0) {
+        if(get_class($this) === 'Test\Chrome\Database\Connection\DatabaseConnectionMysqlTest' AND version_compare(PHP_VERSION, '5.5.0') >= 0) {
             $this->markTestSkipped('Cannot execute mysql test with php version 5.5.0.');
         }
     }
