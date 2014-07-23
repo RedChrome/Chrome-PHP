@@ -1,13 +1,9 @@
 <!-- Modify config.xml too, if you change anything here -->
-<phpunit
-    stopOnFailure="false">
-
+<phpunit stopOnFailure="false">
     <filter>
         <blacklist>
             <directory suffix=".php">../../tests</directory>
-            <directory suffix=".php">../../include/lib/composer</directory>
-            <directory suffix=".php">../../include/lib/psr</directory>
-            <directory suffix=".php">../../include/lib/monolog</directory>
+            <directory suffix=".php">../../include/lib/vendor</directory>
         </blacklist>
     </filter>
 

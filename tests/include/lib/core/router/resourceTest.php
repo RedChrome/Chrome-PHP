@@ -9,13 +9,13 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
         $resource = new \Chrome\Router\Result();
 
-        $resource->setClass('Chrome_TestCase_Class');
+        $resource->setClass('\Test\Chrome\TestCase_Class');
 
         $resource->setFile('AnyExampleFile.php');
 
         $resource->setName('anyExampleName');
 
-        $this->assertEquals('Chrome_TestCase_Class', $resource->getClass());
+        $this->assertEquals('\Test\Chrome\TestCase_Class', $resource->getClass());
         $this->assertEquals('AnyExampleFile.php', $resource->getFile());
         $this->assertEquals('anyExampleName', $resource->getName());
     }

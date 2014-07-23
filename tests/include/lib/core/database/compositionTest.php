@@ -1,9 +1,11 @@
 <?php
 
+namespace Test\Chrome\Database;
+
 require_once LIB . 'core/database/database.php';
 //require_once LIB . 'core/database/interface/simple.php';
 
-class DatabaseCompositionTest extends PHPUnit_Framework_TestCase
+class CompositionTest extends \PHPUnit_Framework_TestCase
 {
     public function testMergeReturnsRequiredCompositionIfOptionsCompIsNull()
     {

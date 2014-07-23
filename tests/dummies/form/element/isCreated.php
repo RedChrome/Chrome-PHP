@@ -1,6 +1,6 @@
 <?php
 
-class Test_Chrome_Form_Element_isCreated extends Chrome_Form_Element_Abstract
+class Test_Chrome_Form_Element_IsCreated extends Chrome_Form_Element_Abstract
 {
     public $isCreated = null;
 

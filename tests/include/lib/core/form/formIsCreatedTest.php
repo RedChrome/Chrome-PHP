@@ -1,8 +1,11 @@
 <?php
+
+namespace Test\Chrome\Form;
+
 require_once 'tests/dummies/form/form.php';
 require_once 'tests/dummies/form/element/isCreated.php';
 
-class FormIsCreatedTest extends Chrome_TestCase
+class FormIsCreatedTest extends \Test\Chrome\TestCase
 {
     protected $_form;
 
@@ -10,13 +13,13 @@ class FormIsCreatedTest extends Chrome_TestCase
 
     public function setUp()
     {
-        $this->_form = new Test_Chrome_Form_No_Elements($this->_appContext);
-        $this->_option = new Chrome_Form_Option_Element();
+        $this->_form = new \Test_Chrome_Form_No_Elements($this->_appContext);
+        $this->_option = new \Chrome_Form_Option_Element();
     }
 
     protected function _addElement()
     {
-        $element = new Test_Chrome_Form_Element_isCreated($this->_form, 'created', $this->_option);
+        $element = new \Test_Chrome_Form_Element_isCreated($this->_form, 'created', $this->_option);
         $element->isCreated = true;
         $this->_form->addElement($element);
     }
@@ -49,8 +52,8 @@ class FormIsCreatedTest extends Chrome_TestCase
     public function testFormIsNotCreated()
     {
         $errors = array('not created, test');
-        $option = new Chrome_Form_Option_Element();
-        $element = new Test_Chrome_Form_Element_isCreated($this->_form, 'notCreatedElement', $option);
+        $option = new \Chrome_Form_Option_Element();
+        $element = new \Test_Chrome_Form_Element_isCreated($this->_form, 'notCreatedElement', $option);
         $element->isCreated = false;
         $element->errors = $errors;
 

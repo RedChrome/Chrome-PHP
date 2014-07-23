@@ -1,6 +1,8 @@
 <?php
 
-class DatabaseAdapterMysqliTest extends DatabaseAdapterMysqlTest
+namespace Test\Chrome\Database\Adapter;
+
+class MysqliTest extends MysqlTest
 {
 
     public function setUp()
@@ -39,7 +41,7 @@ class DatabaseAdapterMysqliTest extends DatabaseAdapterMysqlTest
 
         $connection = new \Test\Chrome\Database\Connection\Dummy();
         $connection->_isConnected = false;
-        $connection->_connection = new mysqli();
+        $connection->_connection = new \mysqli();
 
         // call handleConnection on connect(), see parent class for handleConnection()
         $connection->_connectionHandler = $this;

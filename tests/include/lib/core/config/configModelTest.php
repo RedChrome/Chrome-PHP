@@ -2,7 +2,7 @@
 
 namespace Test\Chrome\Model\Config;
 
-class ModelTest extends \Chrome_TestCase
+class ModelTest extends \Test\Chrome\TestCase
 {
     protected $_config = null;
 

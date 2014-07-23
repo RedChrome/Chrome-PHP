@@ -1,11 +1,13 @@
 <?php
-;
+
+namespace Test\Chrome\Database\Facade;
 
 require_once LIB . 'core/database/database.php';
 require_once 'tests/dummies/database/connection/dummy.php';
 require_once 'tests/dummies/database/adapter.php';
 require_once 'tests/dummies/database/result.php';
-class DatabaseInterfaceSimpleTest extends Chrome_TestCase
+
+class SimpleTest extends \Test\Chrome\TestCase
 {
     protected $_connection;
     protected $_adapter;

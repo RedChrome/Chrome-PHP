@@ -1,12 +1,14 @@
 <?php
 
+namespace Test\Chrome\Database\Factory;
+
 require_once LIB.'core/database/database.php';
 
-class DatabaseFactoryTest extends PHPUnit_Framework_TestCase
+class Test extends \PHPUnit_Framework_TestCase
 {
     public function testConstructor()
     {
-        $connection = new Chrome\Database\Registry\Connection();
+        $connection = new \Chrome\Database\Registry\Connection();
 
         $statement = new \Chrome\Database\Registry\Statement();
 
@@ -19,11 +21,11 @@ class DatabaseFactoryTest extends PHPUnit_Framework_TestCase
 
     public function testSetRegistry()
     {
-        $connection = new Chrome\Database\Registry\Connection();
+        $connection = new \Chrome\Database\Registry\Connection();
 
         $statement = new \Chrome\Database\Registry\Statement();
 
-        $factory = new \Chrome\Database\Factory\Factory(new Chrome\Database\Registry\Connection(), new \Chrome\Database\Registry\Statement());
+        $factory = new \Chrome\Database\Factory\Factory(new \Chrome\Database\Registry\Connection(), new \Chrome\Database\Registry\Statement());
 
         $factory->setConnectionRegistry($connection);
         $factory->setStatementRegistry($statement);
@@ -35,7 +37,7 @@ class DatabaseFactoryTest extends PHPUnit_Framework_TestCase
 
     public function testSetDefault()
     {
-        $factory = new \Chrome\Database\Factory\Factory(new Chrome\Database\Registry\Connection(), new \Chrome\Database\Registry\Statement());
+        $factory = new \Chrome\Database\Factory\Factory(new \Chrome\Database\Registry\Connection(), new \Chrome\Database\Registry\Statement());
 
         $factory->setDefaultInterface('\Chrome\Database\Facade\Simple');
         $this->assertEquals('\Chrome\Database\Facade\Simple', $factory->getDefaultInterfaceClass());
@@ -46,7 +48,7 @@ class DatabaseFactoryTest extends PHPUnit_Framework_TestCase
 
     public function testLogger()
     {
-        $factory = new \Chrome\Database\Factory\Factory(new Chrome\Database\Registry\Connection(), new \Chrome\Database\Registry\Statement());
+        $factory = new \Chrome\Database\Factory\Factory(new \Chrome\Database\Registry\Connection(), new \Chrome\Database\Registry\Statement());
 
         $this->assertTrue($factory->getLogger() instanceof Chrome_Logger_Interface or $factory->getLogger() === null);
 

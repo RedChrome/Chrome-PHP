@@ -1,11 +1,15 @@
 <?php
 
+namespace Test\Chrome\Database\Facade;
+
+use Mockery as M;
+
 require_once LIB . 'core/database/database.php';
 require_once 'tests/dummies/database/connection/dummy.php';
 require_once 'tests/dummies/database/adapter.php';
 require_once 'tests/dummies/database/result.php';
 
-class DatabaseInterfaceModelTest extends Chrome_TestCase
+class ModelTest extends \Test\Chrome\TestCase
 {
     protected function _getDatabaseFactory()
     {
@@ -46,9 +50,9 @@ class DatabaseInterfaceModelTest extends Chrome_TestCase
 
     public function testDefaultModelImplementation()
     {
-        $registry = $this->getMock('\Chrome\Database\Registry\Statement_Interface');
-        $adapter = $this->getMock('\Chrome\Database\Adapter\Adapter_Interface');
-        $result = $this->getMock('\Chrome\Database\Result\Result_Interface');
+        $registry = M::mock('\Chrome\Database\Registry\Statement_Interface');
+        $adapter = M::mock('\Chrome\Database\Adapter\Adapter_Interface');
+        $result = M::mock('\Chrome\Database\Result\Result_Interface');
 
         $interface = new \Chrome\Database\Facade\Model($adapter, $result, $registry);
 

@@ -1,6 +1,8 @@
 <?php
 
-class DatabaseAdapterMysqlTest extends Chrome_TestCase
+namespace Test\Chrome\Database\Adapter;
+
+class MysqlTest extends \Test\Chrome\TestCase
 {
     protected $_db;
 

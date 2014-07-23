@@ -1,8 +1,11 @@
 <?php
-class DatabaseResultIteratorTest extends Chrome_TestCase
+
+namespace Test\Chrome\Database\Result;
+
+class IteratorTest extends \Test\Chrome\TestCase
 {
-    public $_dataArray = array();
-    public $_connection = null;
+    public $dataArray = array();
+    public $connection = null;
 
     protected function _getDatabaseFactory()
     {
@@ -18,7 +21,7 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
 
     public function testFetchData()
     {
-        $this->_dataArray = array(1, 2, 3, 4, 5, 6);
+        $this->dataArray = array(1, 2, 3, 4, 5, 6);
 
         $connection = new \Test\Chrome\Database\Connection\Dummy('exampleResource, not null');
 
@@ -39,12 +42,12 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
         }
         $this->assertSame(7, $i);
         $this->assertFalse($db->getResult()->isEmpty());
-        $this->assertEquals(array(), $this->_dataArray);
+        $this->assertEquals(array(), $this->dataArray);
     }
 
     public function testIteratorWithEmptyResult()
     {
-        $this->_dataArray = array();
+        $this->dataArray = array();
 
         $connection = new \Test\Chrome\Database\Connection\Dummy('exampleResource, not null');
 
@@ -70,7 +73,7 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
 
     public function testHasNext()
     {
-        $this->_dataArray = array(1, 2, 3, 4, 5, 6);
+        $this->dataArray = array(1, 2, 3, 4, 5, 6);
 
         $connection = new \Test\Chrome\Database\Connection\Dummy('exampleResource, not null');
 
@@ -122,12 +125,12 @@ class DatabaseResultIteratorTest extends Chrome_TestCase
 
     public function getNext()
     {
-        return array_shift($this->_dataArray);
+        return array_shift($this->dataArray);
     }
 
     public function testSerialize()
     {
-        $this->_dataArray = array(1, 2, 3, 4, 5, 6);
+        $this->dataArray = array(1, 2, 3, 4, 5, 6);
 
         $connection = new \Test\Chrome\Database\Connection\Dummy('exampleResource, not null');
 

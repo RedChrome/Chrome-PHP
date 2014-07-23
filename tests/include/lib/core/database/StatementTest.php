@@ -1,8 +1,10 @@
 <?php
 
+namespace Test\Chrome\Database;
+
 require_once LIB.'core/database/database.php';
 
-class DatabaseStatementTest extends PHPUnit_Framework_TestCase
+class StatementTest extends \PHPUnit_Framework_TestCase
 {
     protected $_statementRegistry;
 

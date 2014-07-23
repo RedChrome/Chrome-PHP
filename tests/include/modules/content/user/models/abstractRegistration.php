@@ -2,7 +2,7 @@
 
 namespace Test\Chrome\Models\User\Registration;
 
-abstract class AbstractModelTestCase extends \Chrome_TestCase
+abstract class AbstractModelTestCase extends \Test\Chrome\TestCase
 {
     /**
      * @return \Chrome\Model\User\Registration_Interface

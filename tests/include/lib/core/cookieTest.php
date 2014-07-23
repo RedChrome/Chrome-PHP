@@ -1,7 +1,9 @@
 <?php
+namespace Test\Chrome\Request\Cookie;
+
 use \Chrome\Request\Cookie\Cookie;
 
-class CookieTest extends Chrome_TestCase
+class CookieTest extends \Test\Chrome\TestCase
 {
 
     public function setUp()

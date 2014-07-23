@@ -2,7 +2,7 @@
 
 namespace Test\Chrome\Authentication\Chain;
 
-class DatabaseTest extends \Chrome_TestCase
+class DatabaseTest extends \Test\Chrome\TestCase
 {
     protected $_chain = null;
 

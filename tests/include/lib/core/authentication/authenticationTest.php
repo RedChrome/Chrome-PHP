@@ -2,6 +2,8 @@
 
 namespace Test\Chrome\Authentication;
 
+use Mockery as M;
+
 require_once 'tests/dummies/authentication/resource.php';
 require_once 'tests/dummies/authentication/chain.php';
 require_once 'tests/dummies/cookie.php';
@@ -15,25 +17,50 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $this->_auth = new \Chrome\Authentication\Authentication();
     }
 
-    public function tearDown()
+    protected function _getChainMock()
     {
+        return M::mock('\Chrome\Authentication\Chain\Chain_Interface')->shouldIgnoreMissing(null);
+    }
 
+    protected function _getCreateResourceMock()
+    {
+        return M::mock('\Chrome\Authentication\CreateResource_Interface');
+    }
+
+    protected function _getResourceMock()
+    {
+        return M::mock('\Chrome\Authentication\Resource_Interface');
+    }
+
+    protected function _getExceptionHandlerMock()
+    {
+        return M::mock('\Chrome\Exception\Handler_Interface')->shouldIgnoreMissing(null);
+    }
+
+    protected function _getAuthenticationException()
+    {
+        return new \Chrome\Exception\Authentication();
+    }
+
+    protected function _getContainerMock()
+    {
+        return M::mock('\Chrome\Authentication\Container_Interface');
     }
 
     public function testGetChain()
     {
         // every authentication object has to have at least one chain
-        $this->assertTrue($this->_auth->getChain() instanceof \Chrome\Authentication\Chain\Chain_Interface);
+        $this->assertInstanceOf('\Chrome\Authentication\Chain\Chain_Interface', $this->_auth->getChain());
 
-        $chain = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
+        $chain = $this->_getChainMock();
         $this->_auth->setChain($chain);
         $this->assertSame($chain, $this->_auth->getChain());
     }
 
     public function testAddChain()
     {
-        $firstChain  = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
-        $secondChain = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
+        $firstChain  = $this->_getChainMock();
+        $secondChain = $this->_getChainMock();
 
         $this->_auth->setChain($firstChain);
         $this->assertSame($firstChain, $this->_auth->getChain());
@@ -55,32 +82,32 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     public function testCreateAuthentication()
     {
         $chain = $this->_auth->getChain();
-        $resource = $this->getMock('\Chrome\Authentication\CreateResource_Interface');
+        $resource = $this->_getCreateResourceMock();
 
-        $this->_auth->setExceptionHandler($this->getMock('\Chrome\Exception\Handler_Interface'));
-        $exceptionHandler = $this->getMock('\Chrome\Exception\Handler_Interface');
+        $this->_auth->setExceptionHandler($this->_getExceptionHandlerMock());
+        $exceptionHandler = $this->_getExceptionHandlerMock();
         $this->_auth->setExceptionHandler($exceptionHandler);
         $this->assertSame($exceptionHandler, $this->_auth->getExceptionHandler());
 
         // throws a exception while creating authentication
-        $chain = $this->getMock('Chrome\Authentication\Chain\Chain_Interface');
-        $chain->expects($this->any())->method('createAuthentication')->will($this->throwException(new \Chrome\Exception\Authentication()));
+        $chain = $this->_getChainMock();
+        $chain->shouldReceive('createAuthentication')->zeroOrMoreTimes()->andThrow($this->_getAuthenticationException());
         // this will throw an exception, but it is caught in the exception handler
         $this->_auth->setChain($chain)->createAuthentication($resource);
 
         // this will not throw an exception
-        $this->_auth->setChain($this->getMock('Chrome\Authentication\Chain\Chain_Interface'))->createAuthentication($resource);
+        $this->_auth->setChain($this->_getChainMock())->createAuthentication($resource);
 
         $this->_auth->setChain($chain);
     }
 
     public function testExceptionHandlerWhileAuthenticaing()
     {
-        $resource = $this->getMock('\Chrome\Authentication\Resource_Interface');
-        $this->_auth->setExceptionHandler($this->getMock('\Chrome\Exception\Handler_Interface'));
+        $resource = $this->_getResourceMock();
+        $this->_auth->setExceptionHandler($this->_getExceptionHandlerMock());
 
-        $chain = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
-        $chain->expects($this->any())->method('authenticate')->will($this->throwException(new \Chrome\Exception\Authentication()));
+        $chain = $this->_getChainMock();
+        $chain->shouldReceive('authenticate')->zeroOrMoreTimes()->with($resource)->andThrow($this->_getAuthenticationException());
 
         $this->_auth->setChain($chain)->authenticate($resource);
     }
@@ -90,20 +117,20 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionHandlerWhileAuthenticaingWithError()
     {
-        $resource = $this->getMock('\Chrome\Authentication\Resource_Interface');
+        $resource = $this->_getResourceMock();
 
         // do not set an exception handler, this will give us the exception
         $this->setExpectedException('\Chrome\Exception\Authentication');
 
-        $chain = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
-        $chain->expects($this->any())->method('authenticate')->will($this->throwException(new \Chrome\Exception\Authentication()));
+        $chain = $this->_getChainMock();
+        $chain->shouldReceive('authenticate')->zeroOrMoreTimes()->with($resource)->andThrow($this->_getAuthenticationException());
 
         $this->_auth->setChain($chain)->authenticate($resource);
     }
 
     public function testAuthenticateCouldNotAuthenticate()
     {
-        $chain = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
+        $chain = $this->_getChainMock();
         $this->_auth->addChain($chain);
 
         $this->setExpectedException('\Chrome\Exception\Authentication');
@@ -113,8 +140,8 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 
     public function testAuthenticateHandlesWrongIDs()
     {
-        $chain = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
-        $chain->expects($this->any())->method('authenticate')->will($this->returnValue('1f921'));
+        $chain = $this->_getChainMock();
+        $chain->shouldReceive('authenticate')->zeroOrMoreTimes()->andReturn('1f921');
         $this->_auth->addChain($chain);
 
         $this->setExpectedException('\Chrome\Exception\Authentication');
@@ -126,12 +153,11 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     {
         $id = mt_rand(1, 100);
 
-        $container = $this->getMock('\Chrome\Authentication\Container_Interface');
-        $container->expects($this->any())->method('getID')->will($this->returnValue($id));
-        $container->expects($this->any())->method('getStatus')->will($this->returnValue(\Chrome\Authentication\Container_Interface::STATUS_USER));
-
-        $chain = $this->getMock('\Chrome\Authentication\Chain\Chain_Interface');
-        $chain->expects($this->any())->method('authenticate')->will($this->returnValue($container));
+        $container = $this->_getContainerMock();
+        $container->shouldReceive('getID')->zeroOrMoreTimes()->andReturn($id);
+        $container->shouldReceive('getStatus')->zeroOrMoreTimes()->andReturn(\Chrome\Authentication\Container_Interface::STATUS_USER);
+        $chain = $this->_getChainMock();
+        $chain->shouldReceive('authenticate')->zeroOrMoreTimes()->andReturn($container);
 
         $this->_auth->addChain($chain);
 
@@ -139,7 +165,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($id, $this->_auth->getAuthenticationID());
         $this->assertTrue($this->_auth->isAuthenticated());
-        $this->assertTrue($this->_auth->getAuthenticationDataContainer() instanceof \Chrome\Authentication\Container_Interface);
+        $this->assertInstanceOf('\Chrome\Authentication\Container_Interface', $this->_auth->getAuthenticationDataContainer());
     }
 
     public function testDeauthenticate()

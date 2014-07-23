@@ -2,6 +2,8 @@
 
 namespace Test\Chrome\Validator\Composition;
 
+use Mockery as M;
+
 class OrTest extends \PHPUnit_Framework_TestCase
 {
     protected $_validator = null;
@@ -13,7 +15,9 @@ class OrTest extends \PHPUnit_Framework_TestCase
 
     protected function _getValidatorMock()
     {
-        return $this->getMock('\Chrome\Validator\Validator_Interface');
+        $mock = M::mock('\Chrome\Validator\Validator_Interface');
+        $mock->shouldIgnoreMissing(null);
+        return $mock;
     }
 
     public function testValidateSuccess()
@@ -27,16 +31,16 @@ class OrTest extends \PHPUnit_Framework_TestCase
         // not called validate before...
         $this->assertFalse($this->_validator->isValid());
 
-        $validator1->expects($this->once())->method('validate');
-        $validator2->expects($this->once())->method('validate');
-        $validator3->expects($this->once())->method('validate');
+        $validator1->shouldReceive('validate')->once();
+        $validator2->shouldReceive('validate')->once();
+        $validator3->shouldReceive('validate')->once();
 
-        $validator1->expects($this->once())->method('isValid')->will($this->returnValue(false));
-        $validator2->expects($this->once())->method('isValid')->will($this->returnValue(false));
-        $validator3->expects($this->once())->method('isValid')->will($this->returnValue(true));
+        $validator1->shouldReceive('isValid')->once()->withAnyArgs()->andReturn(false);
+        $validator2->shouldReceive('isValid')->once()->withAnyArgs()->andReturn(false);
+        $validator3->shouldReceive('isValid')->once()->withAnyArgs()->andReturn(true);
 
-        $validator2->expects($this->once())->method('getAllErrors')->will($this->returnValue(array($this->getMock('\Chrome\Localization\Message_Interface'))));
-        $validator1->expects($this->once())->method('getAllErrors')->will($this->returnValue(array($this->getMock('\Chrome\Localization\Message_Interface'))));
+        $validator2->shouldReceive('getAllErrors')->once()->withAnyArgs()->andReturn(array(M::mock('\Chrome\Localization\Message_Interface')->shouldIgnoreMissing(null)));
+        $validator1->shouldReceive('getAllErrors')->once()->withAnyArgs()->andReturn(array(M::mock('\Chrome\Localization\Message_Interface')->shouldIgnoreMissing(null)));
 
         $this->_validator->setData(null);
         $this->_validator->validate();
@@ -58,19 +62,19 @@ class OrTest extends \PHPUnit_Framework_TestCase
 
         $this->_validator->addValidators(array($validator1, $validator2, $validator3));
 
-        $error = array($this->getMock('\Chrome\Localization\Message_Interface'));
+        $error = array(M::mock('\Chrome\Localization\Message_Interface')->shouldIgnoreMissing(null));
 
-        $validator1->expects($this->once())->method('validate');
-        $validator2->expects($this->never())->method('validate');
-        $validator3->expects($this->never())->method('validate');
+        $validator1->shouldReceive('validate')->once();
+        $validator2->shouldReceive('validate')->never();
+        $validator3->shouldReceive('validate')->never();
 
-        $validator1->expects($this->once())->method('isValid')->will($this->returnValue(true));
-        $validator2->expects($this->never())->method('isValid')->will($this->returnValue(false));
-        $validator3->expects($this->never())->method('isValid')->will($this->returnValue(false));
+        $validator1->shouldReceive('isValid')->once()->withAnyArgs()->andReturn(true);
+        $validator2->shouldReceive('isValid')->never()->withAnyArgs()->andReturn(false);
+        $validator3->shouldReceive('isValid')->never()->withAnyArgs()->andReturn(false);
 
-        $validator1->expects($this->never())->method('getAllErrors')->will($this->returnValue($error));
-        $validator2->expects($this->never())->method('getAllErrors')->will($this->returnValue($error));
-        $validator3->expects($this->never())->method('getAllErrors')->will($this->returnValue($error));
+        $validator1->shouldReceive('getAllErrors')->never()->withAnyArgs()->andReturn($error);
+        $validator2->shouldReceive('getAllErrors')->never()->withAnyArgs()->andReturn($error);
+        $validator3->shouldReceive('getAllErrors')->never()->withAnyArgs()->andReturn($error);
 
         $this->_validator->setData(null);
         $this->_validator->validate();
@@ -91,19 +95,19 @@ class OrTest extends \PHPUnit_Framework_TestCase
 
         $this->_validator->addValidators(array($validator1, $validator2, $validator3));
 
-        $error = array($this->getMock('\Chrome\Localization\Message_Interface'));
+        $error = array(M::mock('\Chrome\Localization\Message_Interface')->shouldIgnoreMissing(null));
 
-        $validator1->expects($this->once())->method('validate');
-        $validator2->expects($this->once())->method('validate');
-        $validator3->expects($this->once())->method('validate');
+        $validator1->shouldReceive('validate')->once();
+        $validator2->shouldReceive('validate')->once();
+        $validator3->shouldReceive('validate')->once();
 
-        $validator1->expects($this->once())->method('isValid')->will($this->returnValue(false));
-        $validator2->expects($this->once())->method('isValid')->will($this->returnValue(false));
-        $validator3->expects($this->once())->method('isValid')->will($this->returnValue(false));
+        $validator1->shouldReceive('isValid')->once()->withAnyArgs()->andReturn(false);
+        $validator2->shouldReceive('isValid')->once()->withAnyArgs()->andReturn(false);
+        $validator3->shouldReceive('isValid')->once()->withAnyArgs()->andReturn(false);
 
-        $validator1->expects($this->once())->method('getAllErrors')->will($this->returnValue(array()));
-        $validator2->expects($this->once())->method('getAllErrors')->will($this->returnValue(array()));
-        $validator3->expects($this->once())->method('getAllErrors')->will($this->returnValue($error));
+        $validator1->shouldReceive('getAllErrors')->once()->withNoArgs()->andReturn(array());
+        $validator2->shouldReceive('getAllErrors')->once()->withNoArgs()->andReturn(array());
+        $validator3->shouldReceive('getAllErrors')->once()->withNoArgs()->andReturn($error);
 
         $this->_validator->setData(null);
         $this->_validator->validate();

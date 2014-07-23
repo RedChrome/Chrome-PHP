@@ -2,13 +2,15 @@
 
 namespace Test\Chrome\Authorisation\Resource;
 
+use Mockery as M;
+
 require_once LIB.'core/authorisation/authorisation.php';
 
 class AuthorisationResourceTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateResource()
     {
-        $assert = $this->getMock('Chrome\Authorisation\Assert\Assert_Interface');
+        $assert = M::mock('Chrome\Authorisation\Assert\Assert_Interface');
 
         $resource = new \Chrome\Resource\Resource('test');
         $authResource = new \Chrome\Authorisation\Resource\Resource($resource, 'create');
@@ -26,7 +28,6 @@ class AuthorisationResourceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($resource2, $authResource->getResource());
         $this->assertEquals('read', $authResource->getTransformation());
         $this->assertSame($assert, $authResource->getAssert());
-
     }
 
 }
