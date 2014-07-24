@@ -20,6 +20,8 @@
 namespace Chrome\Validator\Form\Element;
 
 use Chrome\Validator\AbstractValidator;
+use Chrome\Validator\Composition_Interface;
+use Chrome\Validator\Form\Element\ElementValidator;
 
 /**
  * a validator which validates all attachments of a form element. If only one attachment is valid, then
@@ -32,21 +34,24 @@ class AttachmentValidator extends AbstractValidator
 {
     protected $_option = null;
 
-    public function __construct(\Chrome_Form_Option_Element_Attachable_Interface $option)
+    protected $_composition = null;
+
+    public function __construct(\Chrome_Form_Option_Element_Attachable_Interface $option, Composition_Interface $composition)
     {
         $this->_option = $option;
+        $this->_composition = $composition;
     }
 
     protected function _validate()
     {
         foreach($this->_option->getAttachments() as $attachment)
         {
-            if($attachment->isValid())
-            {
-                return true;
-            }
+            $this->_composition->addValidator(new ElementValidator($attachment));
         }
 
-        return false;
+        $this->_composition->setData($this->_data);
+        $this->_composition->validate();
+
+        return $this->_composition->isValid();
     }
 }

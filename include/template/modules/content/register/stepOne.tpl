@@ -6,7 +6,7 @@
     <label for="rules"><?php echo $LANG->get('our_rules'); ?></label>
     <textarea id="rules" rows="25" readonly="readonly"><?php echo $LANG->get('modules/content/user/register/rules'); ?></textarea>
 </div>
-    <?php echo $FORM['accept']->render(); ?>
+	<?php echo $FORM['accept']->render(); ?>
 <br />
     <?php echo $FORM['buttons']->render(); ?>
 <?php echo $FORM['Register_StepOne']->render(); ?>

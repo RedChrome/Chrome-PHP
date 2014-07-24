@@ -19,30 +19,25 @@
 
 namespace Chrome\Validator\Form\Element;
 
-use Chrome\Validator\AbstractValidator;
+use \Chrome\Validator\AbstractValidator;
 
 /**
- * Validator which skips other validator processes if the form element is marked as read-only.
- *
- * Since readonly input filed are not send to the server, we dont need to validate an empty input.
+ * This validates a form element by calling isValid on this object
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */
-class ReadonlyValidator extends AbstractValidator
+class ElementValidator extends AbstractValidator
 {
-    public function __construct(\Chrome_Form_Option_Element_Interface $option)
+    protected $_formElement = null;
+
+    public function __construct(\Chrome_Form_Element_Basic_Interface $formElement)
     {
-        $this->_options = $option;
+        $this->_formElement = $formElement;
     }
 
     protected function _validate()
     {
-        if($this->_options->getIsReadonly() === true) {
-            return true;
-        }
-
-        // this specific validator must not set errors.
-        return false;
+        return $this->_formElement->isValid();
     }
 }

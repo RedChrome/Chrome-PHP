@@ -43,7 +43,7 @@ class SentReadonlyValidator extends AbstractValidator
     {
         $this->_namespace = 'plugins/validate/form/element';
 
-        if($this->_option instanceof \Chrome_Form_Element_Interface)
+        if($this->_option instanceof \Chrome_Form_Option_Element_Interface)
         {
             if($this->_option->getIsReadonly() === true) {
                 if($this->_data !== null) {

@@ -556,7 +556,7 @@ abstract class Chrome_Form_Element_Abstract extends Chrome_Form_Element_Basic_Ab
 
         if($this->_option instanceof Chrome_Form_Option_Element_Attachable_Interface)
         {
-            $andComposition->addValidator(new AttachmentValidator($this->_option));
+            $andComposition->addValidator(new AttachmentValidator($this->_option, new OrComposition()));
         }
 
         $this->_addUserValidator($andComposition);
@@ -673,7 +673,7 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
 
         if($this->_option instanceof Chrome_Form_Option_Element_Attachable_Interface)
         {
-            $and->addValidator(new AttachmentValidator($this->_option));
+            $and->addValidator(new AttachmentValidator($this->_option, new OrComposition()));
         }
 
         $this->_addUserValidator($and);

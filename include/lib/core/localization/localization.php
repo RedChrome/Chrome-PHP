@@ -104,7 +104,28 @@ class Message implements Message_Interface
 
     public function __toString()
     {
-        return $this->_namespace.':'.$this->_message.'{'.implode(',', $this->_params).'}';
+        return $this->_namespace.':'.$this->_message.'{'.$this->_exportParams().'}';
+    }
+
+    protected function _exportParams()
+    {
+        $return = '';
+
+        foreach($this->_params as $parameter)
+        {
+            $return .= gettype($parameter).':';
+
+            if(is_object($parameter) ) {
+                $return .= var_export($parameter, true);
+            } else {
+                $return .= $parameter;
+            }
+
+            $return .= ',';
+        }
+
+        return substr($return, 0, strlen($return)-1);
+
     }
 }
 
