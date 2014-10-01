@@ -1,20 +1,8 @@
 <?php
 
-require_once 'tests/dummies/form/form.php';
+namespace Test\Chrome\Form\Element;
 
-class Test_Chrome_Form_Element_Form extends Test_Chrome_Form
-{
-    protected function _init()
-    {
-
-        //$formOption = new
-
-    }
-
-
-}
-
-class FormElementFormTest extends Chrome_TestCase
+class FormTest extends \Test\Chrome\TestCase
 {
     protected $_option = null;
 
@@ -24,10 +12,10 @@ class FormElementFormTest extends Chrome_TestCase
 
     public function setUp()
     {
-        $this->_form = new Test_Chrome_Form_Element_Form($this->_appContext);
+        $this->_form = new \Test_Chrome_Form_One_Element($this->_appContext);
         // do not use the default session -> this would pollute the session namespace
-        $storage = new Chrome_Form_Storage_Session(new \Test\Chrome\Request\Session\Dummy(new \Test\Chrome\Request\Cookie\Dummy(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface')), 'TEST_FORM_ELEMENT_FORM');
-        $this->_option = new Chrome_Form_Option_Element_Form($storage);
+        $storage = new \Chrome_Form_Storage_Session(new \Test\Chrome\Request\Session\Dummy(new \Test\Chrome\Request\Cookie\Dummy(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface')), 'TEST_FORM_ELEMENT_FORM');
+        $this->_option = new \Chrome_Form_Option_Element_Form($storage);
     }
 
     public function testFormIsValidWithValidToken()
@@ -39,7 +27,7 @@ class FormElementFormTest extends Chrome_TestCase
         $this->_option->setMinAllowedTime(0);
         $this->_option->setToken($token);
 
-        $formElement = new Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
+        $formElement = new \Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
 
         $this->_form->addElement($formElement);
 
@@ -61,7 +49,7 @@ class FormElementFormTest extends Chrome_TestCase
         $this->_option->setMinAllowedTime(0);
         $this->_option->setToken($token);
 
-        $formElement = new Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
+        $formElement = new \Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
 
         $this->_form->addElement($formElement);
 
@@ -78,7 +66,7 @@ class FormElementFormTest extends Chrome_TestCase
     {
         $this->_option->setMinAllowedTime(2);
 
-        $formElement = new Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
+        $formElement = new \Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
 
         $this->_form->addElement($formElement);
 
@@ -96,7 +84,7 @@ class FormElementFormTest extends Chrome_TestCase
 
         $this->_option->setMinAllowedTime($time);
 
-        $formElement = new Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
+        $formElement = new \Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
 
         $this->_form->addElement($formElement);
 
@@ -117,7 +105,7 @@ class FormElementFormTest extends Chrome_TestCase
         $this->_option->setMinAllowedTime(0);
         $this->_option->setMaxAllowedTime($time);
 
-        $formElement = new Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
+        $formElement = new \Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
 
         $this->_form->addElement($formElement);
 
@@ -138,7 +126,7 @@ class FormElementFormTest extends Chrome_TestCase
         $this->_option->setMinAllowedTime(0);
         $this->_option->setMaxAllowedTime($time);
 
-        $formElement = new Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
+        $formElement = new \Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
 
         $this->_form->addElement($formElement);
 
@@ -156,7 +144,7 @@ class FormElementFormTest extends Chrome_TestCase
     {
         $this->_option->setMinAllowedTime(0);
 
-        $formElement = new Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
+        $formElement = new \Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
 
         $this->assertFalse($formElement->isCreated());
 
@@ -183,7 +171,7 @@ class FormElementFormTest extends Chrome_TestCase
 
         $this->assertFalse($this->_form->isValid());
 
-        $this->assertTrue($formElement->getStorage() instanceof Chrome_Form_Storage_Interface);
+        $this->assertTrue($formElement->getStorage() instanceof \Chrome_Form_Storage_Interface);
 
         $this->_form->reset();
         $sentData = array($this->_option->getTokenNamespace() => $this->_option->getToken());
@@ -200,7 +188,7 @@ class FormElementFormTest extends Chrome_TestCase
     {
         $this->_option->setMinAllowedTime(0);
 
-        $formElement = new Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
+        $formElement = new \Chrome_Form_Element_Form($this->_form, $this->_id, $this->_option);
         $this->_form->addElement($formElement);
 
         $this->_form->create();
@@ -212,12 +200,12 @@ class FormElementFormTest extends Chrome_TestCase
         $optionCloned = clone $this->_option;
 
         $optionCloned->setToken(null);
-        $optionCloned->setStorage(new Chrome_Form_Storage_Session(new \Test\Chrome\Request\Session\Dummy(new \Test\Chrome\Request\Cookie\Dummy(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface')), 'TEST_FORM_ELEMENT_FORM'), $this->_id);
+        $optionCloned->setStorage(new \Chrome_Form_Storage_Session(new \Test\Chrome\Request\Session\Dummy(new \Test\Chrome\Request\Cookie\Dummy(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface')), 'TEST_FORM_ELEMENT_FORM'), $this->_id);
         $optionCloned->getStorage()->remove($this->_id);
         $this->assertNull($optionCloned->getStorage()->get($this->_id));
         $optionCloned->setStorage($this->_option->getStorage());
 
-        $anotherFormElement = new Chrome_Form_Element_Form($this->_form, $this->_id, $optionCloned);
+        $anotherFormElement = new \Chrome_Form_Element_Form($this->_form, $this->_id, $optionCloned);
 
         $this->assertEquals($this->_option->getToken(), $optionCloned->getToken());
     }

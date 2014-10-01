@@ -104,7 +104,7 @@ interface Facade_Interface extends Loggable_Interface
      *          -> actual query: 'SELECT * FROM cp1_test WHERE cond1 = ? OR cond2 LIKE "?{1} ?"
      *
      * @param string $query a query
-     * @param array $parameters containing the parameters in numerical order to replace '?' in query string. every parameter get escaped
+     * @param array $parameters containing the parameters in numerical order to replace '?' in query string. Every parameter get escaped
      * @return \Chrome\Database\Result\Result_Interface the result class containing the answer for $query
      */
     public function query($query, array $params = array());

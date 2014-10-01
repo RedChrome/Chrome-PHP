@@ -22,7 +22,7 @@ namespace Chrome\Validator\Form\Element;
 use Chrome\Validator\AbstractValidator;
 
 /**
- * Validator which skipps other validator processes if the form element is marked as read-only.
+ * Validator which skips other validator processes if the form element is marked as read-only.
  *
  * Since readonly input filed are not send to the server, we dont need to validate an empty input.
  *
@@ -38,12 +38,11 @@ class ReadonlyValidator extends AbstractValidator
 
     protected function _validate()
     {
-        $this->_namespace = 'plugins/validate/form/element';
-
         if($this->_options->getIsReadonly() === true) {
             return true;
         }
 
+        // this specific validator must not set errors.
         return false;
     }
 }

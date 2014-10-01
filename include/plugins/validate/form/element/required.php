@@ -40,7 +40,7 @@ class RequiredValidator extends AbstractValidator
     {
         $this->_namespace = 'plugins/validate/form/element';
 
-        if($this->_option instanceof Chrome_Form_Option_Element_Multiple_Interface)
+        if($this->_option instanceof \Chrome_Form_Option_Element_Multiple_Interface)
         {
 
             if(!is_array($this->_data))
@@ -50,18 +50,18 @@ class RequiredValidator extends AbstractValidator
 
             if($this->_compareArraysToSubset($this->_option->getRequired(), $this->_data) === false)
             {
-                // TODO: add error message
+                // error messages getting set in _compareArraysToSubset
                 return false;
             }
 
             return true;
         }
 
-        if($this->_option instanceof Chrome_Form_Option_Element_Interface)
+        if($this->_option instanceof \Chrome_Form_Option_Element_Interface)
         {
             if($this->_option->getIsRequired() === true and $this->_data === null)
             {
-                // TODO: add error message
+                $this->_setError('required_field_was_not_send');
                 return false;
             }
 

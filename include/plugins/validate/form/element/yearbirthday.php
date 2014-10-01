@@ -22,7 +22,7 @@ namespace Chrome\Validator\Form\Element;
 use Chrome\Validator\AbstractValidator;
 
 /**
- * Validates a birthday input, by checking that the input is an given year range
+ * Validates a birthday input, by checking that the input is an given year range, including the boundary ($minYears, $maxYears)
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Validator
@@ -43,20 +43,20 @@ class YearBirthdayValidator extends AbstractValidator
     {
         $this->_namespace = 'plugins/validate/form/element';
 
-        // TODO: Test this
-
         $currentDate = new \DateTime();
 
-        if(!($this->_data instanceof DateTime) ) {
+        if(!($this->_data instanceof \DateTime) ) {
             $this->_setError('date_not_properly_converted');
         }
 
-        if($this->_data >= $currentDate->sub($this->_minYears))
-        {
+        if($this->_data > $currentDate->sub($this->_minYears)) {
             $this->_setError('birthday_date_too_young', array('minYears' => $this->_minYears));
         }
 
-        if($this->_data <= $currentDate->sub($this->_maxYears)) {
+        // we need a new one, since ->sub manipulates $currentDate and DateTimeImmutable is available only in PHP>5.5
+        $currentDate = new \DateTime();
+
+        if($this->_data < $currentDate->sub($this->_maxYears)) {
             $this->_setError('birthday_date_too_old', array('maxYears' => $this->_maxYears));
         }
     }

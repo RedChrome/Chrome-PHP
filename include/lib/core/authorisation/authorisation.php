@@ -51,7 +51,7 @@ interface Resource_Interface
      *
      * Return the assertion object
      *
-     * @return Chrome_Authorisation_Assert_Interface
+     * @return \Chrome\Authorisation\Assert\Assert_Interface
      */
     public function getAssert();
 
@@ -60,7 +60,7 @@ interface Resource_Interface
      *
      * Sets the assertion object
      *
-     * @param Chrome_Authorisation_Assert_Interface $assert the assertion object
+     * @param \Chrome\Authorisation\Assert\Assert_Interface $assert the assertion object
      * @return void
      */
     public function setAssert(Assert_Interface $assert);
@@ -273,14 +273,6 @@ class Authorisation implements Authorisation_Interface
     protected $_userId = 0;
 
     /**
-     * @see \Chrome\Authorisation\Authorisation_Interface::setUserId()
-     */
-    public function setUserId($userId)
-    {
-        $this->_userId = (int) $userId;
-    }
-
-    /**
      * Chrome_Authorisation::__construct()
      *
      * @return Chrome_Authorisation
@@ -288,6 +280,14 @@ class Authorisation implements Authorisation_Interface
     public function __construct(Adapter_Interface $adapter)
     {
         $this->_adapter = $adapter;
+    }
+
+    /**
+     * @see \Chrome\Authorisation\Authorisation_Interface::setUserId()
+     */
+    public function setUserId($userId)
+    {
+        $this->_userId = (int) $userId;
     }
 
     /**

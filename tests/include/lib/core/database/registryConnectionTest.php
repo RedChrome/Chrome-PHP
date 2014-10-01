@@ -1,15 +1,18 @@
 <?php
 
+namespace Test\Chrome\Database\Registry;
+
+
 require_once LIB . 'core/database/database.php';
 require_once 'tests/dummies/database/connection/dummy.php';
 
-class DatabaseRegistryConnectionTest extends PHPUnit_Framework_TestCase
+class ConnectionTest extends \PHPUnit_Framework_TestCase
 {
     public $registry = null;
 
     public function setUp()
     {
-        $this->registry = new Chrome\Database\Registry\Connection();
+        $this->registry = new \Chrome\Database\Registry\Connection();
     }
 
     public function testGetInstance()

@@ -1,12 +1,14 @@
 <?php
 
+namespace Test\Chrome\Database\Result;
+
 require_once LIB.'core/database/database.php';
 require_once 'tests/dummies/database/connection/dummy.php';
 require_once 'tests/dummies/database/adapter.php';
 
-class DatabaseResultAssocTest extends Chrome_TestCase
+class AssocTest extends \Test\Chrome\TestCase
 {
-    public $_dataArray = array();
+    public $dataArray = array();
 
     protected function _getDatabaseFactory()
     {
@@ -15,7 +17,7 @@ class DatabaseResultAssocTest extends Chrome_TestCase
 
     public function testHasNext()
     {
-        $this->_dataArray = array(1,2);
+        $this->dataArray = array(1,2);
 
         $connection = new \Test\Chrome\Database\Connection\Dummy('exampleResource, not null');
 
@@ -29,7 +31,7 @@ class DatabaseResultAssocTest extends Chrome_TestCase
         $this->assertTrue($db->getResult()->hasNext());
         $this->assertEquals(1, $db->getResult()->getNext());
 
-        $this->_dataArray = array();
+        $this->dataArray = array();
 
         $db->getAdapter()->setDataResource($this);
 
@@ -49,12 +51,12 @@ class DatabaseResultAssocTest extends Chrome_TestCase
 
     public function getNext()
     {
-        return array_shift($this->_dataArray);
+        return array_shift($this->dataArray);
     }
 
     public function testArrayAccessInterface()
     {
-        $this->_dataArray = array(array('testKey' => 'testValue'));
+        $this->dataArray = array(array('testKey' => 'testValue'));
 
         $connection = new \Test\Chrome\Database\Connection\Dummy('exampleResource, not null');
 

@@ -2,7 +2,7 @@
 
 namespace Test\Chrome\Registry;
 
-abstract class AbstractTestCase extends \Chrome_TestCase
+abstract class AbstractTestCase extends \Test\Chrome\TestCase
 {
     /**
      * Structure:

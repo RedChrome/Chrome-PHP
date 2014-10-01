@@ -1,7 +1,8 @@
 <?php
 
+namespace Test\Chrome;
 
-abstract class Chrome_TestCase extends PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     protected $_session, $_cookie, $_appContext, $_diContainer;
 
@@ -20,7 +21,7 @@ abstract class Chrome_TestCase extends PHPUnit_Framework_TestCase
 
     public static function returnValues(array $values)
     {
-        return new PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls($values);
+        return new \PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls($values);
     }
 }
 

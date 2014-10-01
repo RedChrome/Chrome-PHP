@@ -21,6 +21,8 @@
  * @author Alexander Book
  */
 
+namespace Test\Chrome;
+
 /**
  * load additional testing config
  */
@@ -31,7 +33,7 @@ require_once 'config.php';
  */
 require_once 'include/chrome.php';
 
-class Chrome_TestSetup
+class TestSetup
 {
     protected $_errorConfig = null;
     protected $_databaseInitialized = false;
@@ -69,7 +71,7 @@ class Chrome_TestSetup
         require_once 'bootstrap.php';
 
         $this->_errorConfig = new \Chrome\Exception\Configuration();
-        $this->_errorConfig->setErrorHandler(new Chrome\Exception\Handler\DefaultErrorHandler());
+        $this->_errorConfig->setErrorHandler(new \Chrome\Exception\Handler\DefaultErrorHandler());
         $this->_errorConfig->setExceptionHandler(new \Chrome\Exception\Handler\Console());
 
         $this->_applicationContext = new \Chrome\Context\Application();
@@ -87,7 +89,7 @@ class Chrome_TestSetup
 
         require_once LIB . 'core/database/database.php';
 
-        $dbRegistry = new Chrome\Database\Registry\Connection();
+        $dbRegistry = new \Chrome\Database\Registry\Connection();
 
         // configure default database connection
         try
@@ -97,7 +99,7 @@ class Chrome_TestSetup
             $defaultConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
             //$defaultConnection->connect();
 
-            $dbRegistry->addConnection(Chrome\Database\Registry\Connection::DEFAULT_CONNECTION, $defaultConnection, true);
+            $dbRegistry->addConnection(\Chrome\Database\Registry\Connection::DEFAULT_CONNECTION, $defaultConnection, true);
         } catch(Exception $e)
         {
             $this->_errorConfig->getExceptionHandler()->exception($e);
@@ -148,7 +150,7 @@ class Chrome_TestSetup
 
         require_once 'tests/include/application/test.php';
 
-        $application = new Chrome_Application_Test(new \Chrome\Exception\Handler\Console());
+        $application = new \Test\Chrome\Application\DefaultTestApplication(new \Chrome\Exception\Handler\Console());
         $application->setModelContext($this->_applicationContext->getModelContext());
         $application->init();
         $this->_diContainer = $application->getDiContainer();

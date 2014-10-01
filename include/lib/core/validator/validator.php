@@ -154,41 +154,7 @@ interface Composition_Interface extends Validator_Interface
 /**
  * AbstractValidator
  *
- * Example:
- * <code>
- * namespace Chrome\Validator;
- *
- * class TestValidator extends AbstractValidator {
- *
- *	private $_email;
- *
- * 	public function __construct($email) {
- * 		$this->_email = $email;
- * 		parent::__construct();
- * 	}
- *
- * 	private function _validate() {
- *
- * 		if(strlen($email) < 5) {
- * 			$this->setError('Email too short');
- * 		} // etc..
- * 	}
- * }
- *
- * $v['e1'] = new TestValidator($_POST['email']);
- * $v['e2'] = new TestValidator($_POST['email']);
- * // add here another Validator e.g. UserValidator
- *
- * foreach($v AS $validator) {
- * 	if(!$validator->isValid()) {
- * 		while( ($error = $validator->getError()) !== null)
- * 			$errors[] = $error;
- * 	}
- * }
- *
- * echo $errorMsg;
- *
- * </code>
+ * TODO: doc
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
@@ -306,7 +272,7 @@ abstract class AbstractValidator implements Validator_Interface
     /**
      * pops an error off
      *
-     * @return string error message
+     * @return \Chrome\Localization\Message_Interface
      */
     public function getError()
     {

@@ -2,7 +2,7 @@
 
 namespace Test\Chrome\Authorisation\Adapter;
 
-class SimpleTest extends \Chrome_TestCase
+class SimpleTest extends \Test\Chrome\TestCase
 {
     protected $_adapter = null;
 
@@ -48,7 +48,7 @@ class SimpleTest extends \Chrome_TestCase
 
 namespace Test\Chrome\Authorisation\Adapter;
 
-class SimpleModelDefaultTest extends \Chrome_TestCase
+class SimpleModelDefaultTest extends \Test\Chrome\TestCase
 {
     protected $_model = null;
 

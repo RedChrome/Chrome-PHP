@@ -1,6 +1,8 @@
 <?php
 
-class Test_Chrome_Request_Data_Form extends \Chrome\Request\DataAbstract
+namespace Test\Chrome\Form;
+
+class Request_Data_Form extends \Chrome\Request\DataAbstract
 {
 
     public function __construct()
@@ -23,13 +25,13 @@ class Test_Chrome_Request_Data_Form extends \Chrome\Request\DataAbstract
     }
 }
 
-class GeneralFormTest extends Chrome_TestCase
+class GeneralFormTest extends \Test\Chrome\TestCase
 {
     protected $_form;
 
     public function setUp()
     {
-        $this->_form = new Test_Chrome_Form_No_Elements($this->_appContext);
+        $this->_form = new \Test_Chrome_Form_No_Elements($this->_appContext);
     }
 
     public function testIfNoElementsAreAdded()
@@ -56,33 +58,33 @@ class GeneralFormTest extends Chrome_TestCase
         $this->assertFalse($this->_form->hasCreationErrors('notExisting'));
         $this->assertFalse($this->_form->hasValidationErrors('notExisting'));
         $this->assertFalse($this->_form->hasErrors('notExisting'));
-        $this->assertTrue(is_array($this->_form->getAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE)));
+        $this->assertTrue(is_array($this->_form->getAttribute(\Chrome_Form_Interface::ATTRIBUTE_STORE)));
     }
 
     public function testSetAttributeStoreHandler()
     {
-        $storage = new Chrome_Form_Storage_Session($this->_appContext->getRequestHandler()->getRequestData()->getSession(), 'testForm');
-        $option = new Chrome_Form_Option_Storage();
-        $storeHandler = new Chrome_Form_Handler_Store($storage, $option, array());
-        $storeHandler2 = new Chrome_Form_Handler_Store($storage, $option, array());
+        $storage = new \Chrome_Form_Storage_Session($this->_appContext->getRequestHandler()->getRequestData()->getSession(), 'testForm');
+        $option = new \Chrome_Form_Option_Storage();
+        $storeHandler = new \Chrome_Form_Handler_Store($storage, $option, array());
+        $storeHandler2 = new \Chrome_Form_Handler_Store($storage, $option, array());
 
-        $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE, $storeHandler);
-        $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE, $storeHandler);
-        $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE, $storeHandler2);
+        $this->_form->setAttribute(\Chrome_Form_Interface::ATTRIBUTE_STORE, $storeHandler);
+        $this->_form->setAttribute(\Chrome_Form_Interface::ATTRIBUTE_STORE, $storeHandler);
+        $this->_form->setAttribute(\Chrome_Form_Interface::ATTRIBUTE_STORE, $storeHandler2);
 
-        $this->assertSame(array($storeHandler, $storeHandler, $storeHandler2), $this->_form->getAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE), 'store handler should be injected correctly');
+        $this->assertSame(array($storeHandler, $storeHandler, $storeHandler2), $this->_form->getAttribute(\Chrome_Form_Interface::ATTRIBUTE_STORE), 'store handler should be injected correctly');
     }
 
     public function testSetAttributeStoreHandlerThrowsExcpetionOnWrongStoreHandler()
     {
         $this->setExpectedException('\Chrome\InvalidArgumentException');
-        $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE, 'string');
+        $this->_form->setAttribute(\Chrome_Form_Interface::ATTRIBUTE_STORE, 'string');
     }
 
     public function testSetAttributeStoreHandlerThrowsExcpetionOnWrongStoreHandler2()
     {
         $this->setExpectedException('\Chrome\InvalidArgumentException');
-        $this->_form->setAttribute(Chrome_Form_Interface::ATTRIBUTE_STORE, $this);
+        $this->_form->setAttribute(\Chrome_Form_Interface::ATTRIBUTE_STORE, $this);
     }
 
     public function testExceptionIfElementDoesNotExistInisSent()
@@ -117,7 +119,7 @@ class GeneralFormTest extends Chrome_TestCase
     {
         $this->_form->setAttribute('test', true);
         $this->assertTrue($this->_form->getAttribute('test'));
-        $this->_form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_ID, 'myTestId');
+        $this->_form->setAttribute(\Chrome_Form_Abstract::ATTRIBUTE_ID, 'myTestId');
         $this->assertEquals('myTestId', $this->_form->getID());
         //TODO: add a proper action attribute test.
         /*
@@ -128,12 +130,12 @@ class GeneralFormTest extends Chrome_TestCase
 
     public function testFormWithRequestData()
     {
-        $this->_form->setRequestData(new Test_Chrome_Request_Data_Form());
-        $this->_form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, Chrome_Form_Abstract::CHROME_FORM_METHOD_GET);
+        $this->_form->setRequestData(new Request_Data_Form());
+        $this->_form->setAttribute(\Chrome_Form_Abstract::ATTRIBUTE_METHOD, \Chrome_Form_Abstract::CHROME_FORM_METHOD_GET);
         $this->assertTrue($this->_form->issetSentData('GET'));
-        $this->_form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, Chrome_Form_Abstract::CHROME_FORM_METHOD_POST);
+        $this->_form->setAttribute(\Chrome_Form_Abstract::ATTRIBUTE_METHOD, \Chrome_Form_Abstract::CHROME_FORM_METHOD_POST);
         $this->assertTrue($this->_form->issetSentData('POST'));
         $this->setExpectedException('\Chrome\Exception', '', 1);
-        $this->_form->setAttribute(Chrome_Form_Abstract::ATTRIBUTE_METHOD, 'anyMethod...');
+        $this->_form->setAttribute(\Chrome_Form_Abstract::ATTRIBUTE_METHOD, 'anyMethod...');
     }
 }

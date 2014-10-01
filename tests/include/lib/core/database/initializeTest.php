@@ -1,8 +1,10 @@
 <?php
 
+namespace Test\Chrome\Database;
+
 require_once LIB . 'core/database/database.php';
 
-class DatabaseInitializeTest extends PHPUnit_Framework_TestCase
+class InitializeTest extends \PHPUnit_Framework_TestCase
 {
     protected $_init = null;
 

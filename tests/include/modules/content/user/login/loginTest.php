@@ -2,7 +2,9 @@
 
 namespace Test\Chrome\Interactor\Login;
 
-class LoginTest extends \Chrome_TestCase
+use Mockery as M;
+
+class LoginTest extends \Test\Chrome\TestCase
 {
     public function testSuccessfulLoginViaEmail()
     {
@@ -23,14 +25,16 @@ class LoginTest extends \Chrome_TestCase
 
     public function testUnsuccessfulLogin()
     {
-        $resolver = $this->getMock('\Chrome\Helper\User\AuthenticationResolver_Interface');
-        $resolver->expects($this->once())->method('resolveIdentity')->will($this->returnValue(0));
+        $identity = 'LoginTest_EmailResolver';
+
+        $resolver = M::mock('\Chrome\Helper\User\AuthenticationResolver_Interface');
+        $resolver->shouldReceive('resolveIdentity')->once()->with($identity)->andReturn(0);
 
         $loginInteractor = new \Chrome\Interactor\User\Login($this->_diContainer->get('\Chrome\Authentication\Authentication_Interface'), $resolver);
 
         $this->assertFalse($loginInteractor->isLoggedIn());
 
-        $loginInteractor->login('LoginTest_EmailResolver', 'test', false);
+        $loginInteractor->login($identity, 'test', false);
 
         $this->assertFalse($loginInteractor->isLoggedIn());
     }

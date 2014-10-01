@@ -36,10 +36,14 @@ if(in_array('--setCWD', $_SERVER['argv'])) {
 
 // load phpUnit
 require 'include/lib/vendor/phpunit/phpunit/PHPUnit/Autoload.php';
+
 // load test setup
 require_once 'phpUnit/testsetup.php';
-// load custom phpUnit command
+
+// load custom phpUnit command and default test case
+require_once 'tests/phpUnit/command.php';
 require_once 'tests/phpUnit/testCase.php';
+
 // load abstract tests
 require_once 'tests/abstractTests/bootstrap.php';
 

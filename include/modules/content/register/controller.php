@@ -7,6 +7,10 @@ use \Chrome\Controller\AbstractModule;
 require_once 'view.php';
 require_once 'include.php';
 
+/**
+ * @todo This class has two actions (register and confirm_registration). Every controller is
+ *
+ */
 class Register extends AbstractModule
 {
     const CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE = 'REGISTER';

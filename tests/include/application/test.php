@@ -18,9 +18,11 @@
  * @package   CHROME-PHP
  * @subpackage Chrome.Test
  */
+namespace Test\Chrome\Application;
+
 require_once APPLICATION . 'default.php';
 
-class Chrome_Application_Test extends \Chrome\Application\DefaultApplication
+class DefaultTestApplication extends \Chrome\Application\DefaultApplication
 {
     protected $_model = null;
 

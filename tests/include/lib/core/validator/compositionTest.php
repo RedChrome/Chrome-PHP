@@ -2,7 +2,8 @@
 
 namespace Test\Chrome\Validator;
 
-use \PHPUnit_Framework_TestCase;
+use Mockery as M;
+use PHPUnit_Framework_TestCase;
 
 class AbstractCompositionTest extends PHPUnit_Framework_TestCase
 {
@@ -10,7 +11,8 @@ class AbstractCompositionTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_validator = $this->getMockForAbstractClass('\Chrome\Validator\AbstractComposition');
+        $this->_validator = M::mock('\Chrome\Validator\AbstractComposition');
+        $this->_validator->shouldDeferMissing();
     }
 
     public function testAddingValidator()
@@ -31,7 +33,7 @@ class AbstractCompositionTest extends PHPUnit_Framework_TestCase
 
 	protected function _getValidatorMock()
 	{
-        return $this->getMock('\Chrome\Validator\Validator_Interface');
+	    return M::mock('\Chrome\Validator\Validator_Interface');
 	}
 
     /**
@@ -117,8 +119,8 @@ class AbstractCompositionTest extends PHPUnit_Framework_TestCase
         $validator1 = $this->_getValidatorMock();
         $validator2 = $this->_getValidatorMock();
 
-        $validator1->expects($this->once())->method('setData')->with($data);
-        $validator2->expects($this->once())->method('setData')->with($data);
+        $validator1->shouldReceive('setData')->with($data)->once();
+        $validator2->shouldReceive('setData')->with($data)->once();
 
         $this->_validator->setValidators(array($validator1, $validator2));
 
