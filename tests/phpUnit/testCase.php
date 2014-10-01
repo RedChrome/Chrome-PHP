@@ -78,4 +78,18 @@ class PHPUnit_TextUI_TestRunner_Chrome extends PHPUnit_TextUI_TestRunner
 
         return $tests;
     }
+
+    public function doRun(PHPUnit_Framework_Test $suite, array $arguments = array())
+    {
+        parent::run($suite, $arguments);
+
+        if(TEST_DISPLAY_EXECUTED_QUERIES === false) {
+            return;
+        }
+
+        foreach($this->_appContext->getModelContext()->getDatabaseFactory()->getStatementRegistry()->getStatements() as $query)
+        {
+            echo $query."\n";
+        }
+    }
 }

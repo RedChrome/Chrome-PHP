@@ -1,6 +1,7 @@
 <?php
 
 define('TEST_DATABASE_CONNECTIONS', true);
+define('TEST_DISPLAY_EXECUTED_QUERIES', false);
 define('CHROME_CLASSLOADER_ABSOLUTE_FILE_LOADING', false);
 
 if(getenv('TRAVIS') == true)

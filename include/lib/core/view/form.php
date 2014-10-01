@@ -254,15 +254,13 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
 
 
 /**
- * @todo add doc
+ * Basic implementation of the label interface
  *
  */
 class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface
 {
-    protected $_currentInt = 0;
-    protected $_values = array();
     protected $_labels = array();
-    protected $_position = null;
+    protected $_position = self::LABEL_POSITION_DEFAULT;
 
     public function __construct(array $labels = null, $labelPosition = self::LABEL_POSITION_DEFAULT)
     {
@@ -290,24 +288,22 @@ class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface
 
     public function setLabel($labelForValue, $label)
     {
-        $this->_values[$labelForValue] = $this->_currentInt;
-        $this->_labels[$this->_currentInt] = $label;
-        ++$this->_currentInt;
+        $this->_labels[$labelForValue] = $label;
     }
 
     public function getLabel($labelForValue)
     {
-        if(!isset($this->_values[$labelForValue]))
-        {
-            return $labelForValue;
-        }
-
-        return $this->_labels[$this->_values[$labelForValue]];
+        return isset($this->_labels[$labelForValue]) ? $this->_labels[$labelForValue] : $labelForValue;
     }
 }
 
 /**
- * @todo add doc
+ * Appends to the rendered output of a view form element the errors of the form element
+ *
+ * This appender will add to the rendered output of a view form element, the corressponding form element errors.
+ *
+ * If a translator was set, the translator is used to translate the error messages
+ *
  */
 class Chrome_View_Form_Element_Appender_Error extends Chrome_View_Form_Element_Appender_Abstract implements Chrome_View_Form_Element_Appender_Type_Interface
 {
@@ -328,6 +324,7 @@ class Chrome_View_Form_Element_Appender_Error extends Chrome_View_Form_Element_A
         {
             $errors = '<ul>';
 
+            // TODO: inject the translator, if nothing was injected, do not translate
             $translate = $this->_viewFormElement->getViewForm()->getViewContext()->getLocalization()->getTranslate();
 
             foreach($form->getValidationErrors($elementId) as $error)
