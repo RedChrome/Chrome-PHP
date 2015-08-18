@@ -35,7 +35,7 @@ if(in_array('--setCWD', $_SERVER['argv'])) {
 }
 
 // load phpUnit
-require 'include/lib/vendor/phpunit/phpunit/PHPUnit/Autoload.php';
+require_once 'include/lib/vendor/phpunit/phpunit/PHPUnit/Autoload.php';
 
 // load test setup
 require_once 'phpUnit/testsetup.php';

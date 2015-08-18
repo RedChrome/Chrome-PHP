@@ -13,6 +13,7 @@ ls
 ## remove old yaml, if exists
 rm -rf public/css/yaml
 rmdir public/css/yaml
+mkdir public/css/yaml
 
 ## download yaml from git and get the appropriate version
 git clone git://github.com/yamlcss/yaml.git public/_tmp_yaml
