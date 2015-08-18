@@ -20,7 +20,7 @@ namespace Chrome;
 
 interface Directory_Interface
 {
-    const SEPARATOR = DIRECTORY_SEPARATOR;
+    const SEPARATOR = '/';
 
     /**
      * @param string $directory
@@ -187,7 +187,11 @@ class Directory implements Directory_Interface
     public function exists()
     {
         if($this->_exists === null) {
-            $this->_exists = (@filetype($this->_directory) === 'dir');
+            try {
+                $this->_exists = (@filetype($this->_directory) === 'dir');
+            } catch(\Chrome\Exception $e) {
+                $this->_exists = false;
+            }
         }
 
         return $this->_exists;

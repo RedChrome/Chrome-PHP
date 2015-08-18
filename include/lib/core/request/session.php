@@ -210,6 +210,7 @@ class Session implements Session_Interface
         // do not use cookies... we have an own implementation
         @ini_set('session.use_cookies', 0);
 
+        $this->_directory = $path;
         $path->create();
         session_save_path($path->getDirectory());
 

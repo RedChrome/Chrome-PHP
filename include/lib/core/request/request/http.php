@@ -39,7 +39,7 @@ class HTTPHandler implements Handler_Interface
     public function __construct(Hash_Interface $hash, \Chrome\Directory_Interface $sessionPath)
     {
         $this->_hash = $hash;
-        $this->_sessionPath = $sesseionPath;
+        $this->_sessionPath = $sessionPath;
     }
 
     public function canHandleRequest()

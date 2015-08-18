@@ -111,7 +111,8 @@ class Statement extends \Chrome_Model_Cache_Abstract implements Statement_Interf
     protected function _createCache($database, $namespace)
     {
         $options = new \Chrome\Cache\Option\File\Json();
-        $options->setCacheFile(RESOURCE . 'database/' . strtolower($database) . '/' . strtolower($namespace) . '.json');
+        // TODO: this should be in the dependency injection container!
+        $options->setCacheFile(new \Chrome\File(RESOURCE . 'database/' . strtolower($database) . '/' . strtolower($namespace) . '.json'));
         return new \Chrome\Cache\File\Json($options);
     }
 

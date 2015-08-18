@@ -151,7 +151,7 @@ abstract class DataAbstract implements Data_Interface
     /**
      * @return \Chrome\Request\Data_Interface
      */
-    public function __construct(Hash_Interface $hash, \Chrome\Directory_Interface $seesionPath)
+    public function __construct(Hash_Interface $hash, \Chrome\Directory_Interface $sessionPath)
     {
         $this->_vars = array(
             'SERVER' => $_SERVER,

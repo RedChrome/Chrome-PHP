@@ -34,9 +34,12 @@ class ConsoleHandler implements Handler_Interface
 
     protected $_hash = null;
 
-    public function __construct(Hash_Interface $hash)
+    protected $_sessionPath = null;
+
+    public function __construct(Hash_Interface $hash, \Chrome\Directory_Interface $sessionPath)
     {
         $this->_hash = $hash;
+        $this->_sessionPath = $sessionPath;
     }
 
     public function canHandleRequest()
@@ -48,7 +51,7 @@ class ConsoleHandler implements Handler_Interface
     {
         if($this->_requestData === null)
         {
-            $this->_requestData = new ConsoleData($this->_hash);
+            $this->_requestData = new ConsoleData($this->_hash, $this->_sessionPath);
         }
 
         return $this->_requestData;

@@ -24,14 +24,12 @@ cp public/_tmp_yaml/yaml/* public/css/yaml
 rm -rf public/_tmp_yaml
 rmdir public/_tmp_yaml
 
+## COMPOSER ##
+composer update
+
 ## INIT DATABASE
 mysql -e 'create database chrome_2_test;'
 php tests/setuptestdb.php $DATABASE_CONNECTION
 
 ## clean tmp dir
 rm -rf include/tmp
-
-cd scripts
-
-## COMPOSER ##
-composer --working-dir=../ update
