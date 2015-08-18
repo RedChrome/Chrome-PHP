@@ -24,6 +24,11 @@ cp public/_tmp_yaml/yaml/* public/css/yaml
 rm -rf public/_tmp_yaml
 rmdir public/_tmp_yaml
 
+cd
+cd
+cd
+ls
+
 ## COMPOSER ##
 composer update
 
