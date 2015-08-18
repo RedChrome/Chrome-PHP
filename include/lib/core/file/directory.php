@@ -225,12 +225,12 @@ class Directory implements Directory_Interface
 
     public function getFileIterator($addDirectory = true)
     {
-        return new \Chrome\Directory\FileFilter(new \DirectoryIterator($this->_directory, ($addDirectory) ? $this->_directory.self::SEPARATOR : ''));
+        return new \Chrome\Directory\FileFilter(new \DirectoryIterator($this->_directory), ($addDirectory) ? $this->_directory.self::SEPARATOR : '');
     }
 
     public function getDirectoryIterator($addDirectory = true)
     {
-        return new \Chrome\Directory\DirectoryFilter(new \DirectoryIterator($this->_directory, ($addDirectory) ? $this->_directory.self::SEPARATOR : ''));
+        return new \Chrome\Directory\DirectoryFilter(new \DirectoryIterator($this->_directory), ($addDirectory) ? $this->_directory.self::SEPARATOR : '');
     }
 
     public function getIterator()
@@ -317,7 +317,7 @@ class FileFilter extends \FilterIterator
 {
     protected $_prefix = '';
 
-    public function __construct(Iterator $iterator, $prefix = '')
+    public function __construct(\Iterator $iterator, $prefix = '')
     {
         parent::__construct($iterator);
         $this->_prefix = $prefix;
@@ -325,7 +325,7 @@ class FileFilter extends \FilterIterator
 
     public function accept()
     {
-        $element = $this->getInnerIterator()->current();
+        $element = $this->_prefix.$this->getInnerIterator()->current();
         if(@filetype($element) === 'file') {
             return true;
         }
@@ -343,7 +343,7 @@ class DirectoryFilter extends FileFilter
 {
     public function accept()
     {
-        $element = $this->getInnerIterator()->current();
+        $element = $this->_prefix.$this->getInnerIterator()->current();
         if($element !== '.' && $element !== '..' && @filetype($element) === 'dir') {
             return true;
         }

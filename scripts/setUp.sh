@@ -30,6 +30,8 @@ ls
 composer self-update
 composer update
 
+ls
+
 ## INIT DATABASE
 mysql -e 'create database chrome_2_test;'
 php tests/setuptestdb.php $DATABASE_CONNECTION

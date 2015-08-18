@@ -72,16 +72,19 @@ class SQLFileWalker
             throw new \Chrome\Exception('Directory '.$this->_directory.' does not exist');
         }
 
-        $files = scandir($this->_directory, 0);
+
+        $files = $this->_directory->getFileIterator();
         $sqlFiles = array();
 
         foreach($files as $fileName) {
-            $file = new \Chrome\File($this->_directory.$fileName);
+            $file = $this->_directory->file($fileName);
 
             if($file->hasExtension('sql')) {
-                $sqlFiles[] = $this->_directory.$fileName;
+                $sqlFiles[] = $file->getFileName();
             }
         }
+
+        asort($sqlFiles);
 
         return $sqlFiles;
     }
