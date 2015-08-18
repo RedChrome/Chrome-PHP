@@ -7,6 +7,7 @@ DATABASE_CONNECTION=default
 
 
 
+ls
 
 ## INSTALL YAML ##
 ## remove old yaml, if exists
