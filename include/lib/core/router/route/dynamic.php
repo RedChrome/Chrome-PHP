@@ -15,10 +15,6 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Router
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [30.03.2013 18:39:20] --> $
- * @author Alexander Book
  */
 
 // TODO: Add a db scheme for \Chrome\Model\Route\DynamicRoute\Database::getResourcesAsArray

@@ -37,20 +37,19 @@ namespace Chrome\Cache\Option\File;
  */
 abstract class Strategy implements \Chrome\Cache\Option\Option_Interface
 {
-    protected $_file = '';
+    protected $_file = null;
 
     protected $_lifeTime = 0;
 
-    public function setCacheFile($file)
+    public function setCacheFile(\Chrome\File_Interface $file)
     {
-        if(!is_string($file))
-        {
-            throw new \Chrome\InvalidArgumentException('Expected $file to be a string, given ' . gettype($file));
-        }
-
         $this->_file = $file;
     }
 
+    /**
+     *
+     * @return \Chrome\File_Interface
+     */
     public function getCacheFile()
     {
         return $this->_file;
@@ -213,7 +212,7 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
         // set lifetime for the cache
         $this->_lifetime = $options->getLifeTime();
 
-        $this->_file = new File($options->getCacheFile());
+        $this->_file = $options->getCacheFile();
 
         $fileIsEmpty = false;
 
@@ -345,8 +344,9 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
     {
         $this->_clear();
         $this->_closeFile();
+        $this->_file->getModifier()->delete();
 
-        return unlink($this->_fileName);
+        return true; #unlink($this->_fileName);
     }
 
     /**
@@ -383,7 +383,7 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
         {
             $encodedData = $this->_encode($this->_data);
 
-            $modifier = new Modifier($this->_file);
+            $modifier = $this->_file->getModifier();
             $modifier->rewind();
             $modifier->write($encodedData);
 
@@ -407,7 +407,8 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
         */
         try
         {
-            $data = file_get_contents($this->_file->getFileName());
+            $data = $this->_file->getContent();
+            //$data = file_get_contents($this->_file->getFileName());
 
             $this->_data = $this->_decode($data);
         } catch(\Chrome\Exception $e)
@@ -444,14 +445,10 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
             return;
         }
 
-        if(!\Chrome_Dir::exists($this->_file->getFileName())) {
-            \Chrome_Dir::createDir($this->_file->getFileName());
-        }
+        $this->_file->getDirectory()->create();
 
         // load Chrome_File class and create the file
         $this->_file->open(File_Interface::FILE_OPEN_TRUNCATE_WRITE_ONLY);
-
-        #$this->_filePointer = \Chrome_File::openFile($this->_fileName, 'wb');
     }
 
     /**

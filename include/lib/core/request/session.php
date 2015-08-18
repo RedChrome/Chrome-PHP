@@ -115,13 +115,6 @@ use \Chrome\Request\Cookie_Interface;
 class Session implements Session_Interface
 {
     /**
-     * Path where all sessions get saved
-     *
-     * @var string
-     */
-    const CHROME_SESSION_SESSION_SAVE_PATH             = CHROME_SESSION_SAVE_PATH;
-
-    /**
      * Probability for the garbace collector to scan.
      * 1/@var is the probability to scan, so if it is set to 100, then the prob. would be 1%
      *
@@ -193,11 +186,18 @@ class Session implements Session_Interface
     protected $_requestData = null;
 
     /**
+     * Directory to the saved sessions
+     *
+     * @var \Chrome\Directory
+     */
+    protected $_directory = null;
+
+    /**
      * Chrome_Session::__construct()
      *
      * @return Chrome_Session
      */
-    public function __construct(Cookie_Interface $cookie, Data_Interface $requestData, Hash_Interface $hash)
+    public function __construct(Cookie_Interface $cookie, Data_Interface $requestData, Hash_Interface $hash, \Chrome\Directory_Interface $path)
     {
         $this->_cookie = $cookie;
         $this->_hash   = $hash;
@@ -210,14 +210,8 @@ class Session implements Session_Interface
         // do not use cookies... we have an own implementation
         @ini_set('session.use_cookies', 0);
 
-        if(self::CHROME_SESSION_SESSION_SAVE_PATH !== null) {
-
-            if(!\Chrome_Dir::exists(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH)) {
-                \Chrome_Dir::createDir(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH);
-            }
-            // specific path to session, protection against hijacking
-            @ini_set('session.save_path', TMP.self::CHROME_SESSION_SESSION_SAVE_PATH);
-        }
+        $path->create();
+        session_save_path($path->getDirectory());
 
         $this->garbageCollector();
         $this->_start();
@@ -493,19 +487,17 @@ class Session implements Session_Interface
             return;
         }
 
-        // get all files, remove ./ AND ../
-        $files = scandir(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH);
-        array_shift($files);
-        array_shift($files);
+
+        $fileIterator = $this->_directory->getFileIterator();
 
         $time = CHROME_TIME - self::CHROME_SESSION_SESSION_LIFETIME;
 
         clearstatcache();
 
-        foreach($files as $file)
-        {
-            if(fileatime(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH.'/'.$file) < $time) {
-                unlink(TMP.self::CHROME_SESSION_SESSION_SAVE_PATH.'/'.$file);
+        foreach($fileIterator as $file) {
+            $fileObj = $this->_directory->file($file);
+            if($fileObj->getInformation()->getAccessTime() < $time) {
+                $fileObj->getModifier()->delete();
             }
         }
     }

@@ -19,7 +19,7 @@
  * @subpackage Chrome.Core
  */
 
-if(CHROME_PHP !== true)
+if(!defined('CHROME_PHP'))
     die();
 
 //########### DATABASE ###########
@@ -138,6 +138,7 @@ define('BASE', FILE_LEVEL);
 define('ADMIN', BASEDIR . 'admin/');
 define('LIB', BASEDIR . 'lib/');
 define('TEMPLATE', BASEDIR . 'template/');
+// TODO: Remove TMP and CACHE constants
 define('TMP', BASEDIR . 'tmp/');
 define('CACHE', TMP . 'cache/');
 define('PLUGIN', BASEDIR . 'plugins/');

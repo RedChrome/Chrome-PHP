@@ -21,21 +21,14 @@ namespace Chrome\Cache\Option;
 
 class Files implements Option_Interface
 {
-    protected $_dir = CACHE;
+    protected $_dir = null;
 
     protected $_extension = '.cache';
 
-    public function setDirectory($dir)
+    public function setDirectory(\Chrome\Directory_Interface $dir)
     {
         $this->_dir = $dir;
-
-        if($dir{strlen($dir) - 1} !== '/') {
-            $this->_dir .= '/';
-        }
-
-        if(!_isDir($dir)) {
-            \Chrome_Dir::createDir($dir);
-        }
+        $this->_dir->create();
     }
 
     public function setExtension($ext)
@@ -47,6 +40,9 @@ class Files implements Option_Interface
         $this->_extension = $ext;
     }
 
+    /**
+     * @return \Chrome\Directory_Interface
+     */
     public function getDirectory()
     {
         return $this->_dir;
@@ -87,14 +83,17 @@ class Files implements Cache_Interface
 
     public function has($file)
     {
-        $file = new \Chrome\File($this->_dir.$file.$this->_extension);
+        $file = $this->_dir->file($file.$this->_extension, true);
+        //$file = new \Chrome\File($this->_dir.$file.$this->_extension);
         return $file->exists();
     }
 
     public function get($file)
     {
         if($this->has($file)) {
-            return file_get_contents($this->_dir.$file.$this->_extension);
+            return $this->_dir->file($file.$this->_extension, true)->getContent();
+
+            #file_get_contents($this->_dir.$file.$this->_extension);
         } else {
             return null;
         }
@@ -102,12 +101,14 @@ class Files implements Cache_Interface
 
     public function remove($file)
     {
-        _rmFile($this->_dir.$file.$this->_extension);
+        $this->_dir->file($file, true)->getModifier()->delete();
+        #_rmFile($this->_dir.$file.$this->_extension);
     }
 
     public function clear()
     {
-        return _rmDir($this->_dir);
+        $this->_dir->delete();
+        #return _rmDir($this->_dir);
     }
 
     public function set($file, $content)

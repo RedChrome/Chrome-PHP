@@ -65,7 +65,7 @@ class Mysqli extends AbstractAdapter
 
         if($this->_result === false) {
             $this->_isEmpty = true;
-            throw new \Chrome\Exception\Database('Error while sending "'.$query.'" to database! MySQL Error:'.$this->getErrorMessage());
+            throw new \Chrome\Exception\Database('Error while sending "'.$query.'" to database!'.PHP_EOL.'MySQL Error: '.$this->getErrorMessage());
         }
 
         if(($this->_result instanceof \mysqli_result)) {

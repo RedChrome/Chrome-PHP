@@ -16,7 +16,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Test
  * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
  * @version Git: <git_id>
  * @author Alexander Book
  */
@@ -25,8 +25,8 @@ if(!defined('CHROME_PHP')) {
     define('CHROME_PHP', true);
 }
 
+chdir(dirname(dirname(__FILE__)));
 if(in_array('--setCWD', $_SERVER['argv'])) {
-    chdir(dirname(dirname(__FILE__)));
     foreach($_SERVER['argv'] as $key => $value) {
         if($value === '--setCWD') {
             unset($_SERVER['argv'][$key]);

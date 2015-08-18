@@ -21,13 +21,23 @@
  * @author Alexander Book
  */
 
+define('CHROME_PHP', true);
+
 chdir(dirname(dirname(__FILE__)));
 
+require_once 'include/config.php';
+require_once 'include/application/default.php';
 require_once 'tests/phpUnit/dbsetup.php';
 require_once 'tests/phpUnit/testsetup.php';
+$application = new \Chrome\Application\DefaultApplication();
+$application->init();
 
 $app = new \Test\Chrome\TestSetup();
 $app->testDb();
-$dbFactory = $app->getApplicationContext()->getModelContext()->getDatabaseFactory();
 
-\Test\Chrome\setupDatabase($dbFactory);
+$datbaseInitializer = new \Chrome\Database\Initializer\Initializer();
+$datbaseInitializer->initialize();
+
+$databaseFactory = $datbaseInitializer->getFactory();
+
+\Test\Chrome\setupDatabase($databaseFactory, true);

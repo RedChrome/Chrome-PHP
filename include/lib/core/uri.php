@@ -15,7 +15,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.URI
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
  */
 
 namespace Chrome\URI;

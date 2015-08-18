@@ -23,7 +23,7 @@ interface Interactor_Interface
 
 }
 
-interface Status_Interface
+interface State_Interface
 {
     public function failed();
 
@@ -59,7 +59,7 @@ interface Error_Interface
     public function getErrors();
 }
 
-interface Result_Interface extends Status_Interface, Error_Interface
+interface Result_Interface extends State_Interface, Error_Interface
 {
     /**
      * Resets everything
@@ -69,28 +69,28 @@ interface Result_Interface extends Status_Interface, Error_Interface
 
 class Result implements Result_Interface
 {
-    protected $_status = null;
+    protected $_state = null;
 
     protected $_errors = array();
 
     public function failed()
     {
-        $this->_status = false;
+        $this->_state = false;
     }
 
     public function succeeded()
     {
-        $this->_status = true;
+        $this->_state = true;
     }
 
     public function hasFailed()
     {
-        return ($this->_status === false);
+        return ($this->_state === false);
     }
 
     public function hasSucceeded()
     {
-        return ($this->_status === true);
+        return ($this->_state === true);
     }
 
     public function setError($key, $error)
@@ -149,9 +149,43 @@ class Result implements Result_Interface
 
     public function reset()
     {
-        $this->_status = null;
+        $this->_state = null;
         $this->_errors = array();
     }
 }
 
+class ExceptionResult extends Result
+{
+    protected $_exception = null;
+
+    public function __construct(\Chrome\Exception $e) {
+        $this->_exception = $e;
+        $this->failed();
+    }
+
+    /**
+     * @return \Chrome\Exception
+     */
+    public function getException()
+    {
+        return $this->_exception;
+    }
+}
+
+class FailedResult extends Result
+{
+    public function __construct($key, array $errors)
+    {
+        $this->failed();
+        $this->setErrors($key, $errors);
+    }
+}
+
+class SucceededResult extends Result
+{
+    public function __construct()
+    {
+        $this->succeeded();
+    }
+}
 

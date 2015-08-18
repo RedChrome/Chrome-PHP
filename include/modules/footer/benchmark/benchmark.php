@@ -16,7 +16,7 @@
  * @package    CHROME-PHP
  * @subpackage Chrome.Modules
  * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
  * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:31:08] --> $
  * @author     Alexander Book
  */

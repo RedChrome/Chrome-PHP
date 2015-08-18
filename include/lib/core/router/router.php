@@ -15,7 +15,7 @@
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Router
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
  */
 
 namespace Chrome\Router;
@@ -32,7 +32,6 @@ interface Router_Interface extends \Chrome\Router\Route\Route_Interface, \Chrome
 
     public function addRoute(\Chrome\Router\Route\Route_Interface $obj);
 }
-
 
 /**
  *
@@ -53,7 +52,6 @@ interface Result_Interface
 
     public function getName();
 }
-
 
 /**
  *
@@ -101,7 +99,6 @@ class Result implements Result_Interface
     }
 }
 
-
 /**
  *
  * @package CHROME-PHP
@@ -120,36 +117,34 @@ class Router implements Router_Interface
 
     public function match(URI_Interface $url, \Chrome\Request\Data_Interface $data)
     {
-        try
-        {
+        if($this->_doMatch($url, $data) !== true OR !$this->_isSuccessfullyMatched()) {
+            // this should not happen. The application should set always a route handler which does always find a route. -> FallbackRoute
+            throw new \Chrome\Exception('Could not found adequate controller class!', 2001);
+        }
+    }
+
+    protected function _isSuccessfullyMatched()
+    {
+        return $this->_result != null AND ($this->_result instanceof \Chrome\Router\Result_Interface);
+    }
+
+    protected function _doMatch(URI_Interface $url, \Chrome\Request\Data_Interface $data)
+    {
+        try {
             foreach($this->_routerClasses as $router)
             {
                 if($router->match($url, $data) === true)
                 {
                     $this->_result = $router->getResult();
-
-                    break;
+                    return true;
                 }
-            }
-
-            if($this->_result == null or !($this->_result instanceof \Chrome\Router\Result_Interface))
-            {
-
-                // already tried to route to 404.html and not found... there is smt. wrong!
-                if($url->getPath() === '404.html')
-                {
-                    throw new \Chrome\Exception('Could not found adequate controller class!', 2001);
-                }
-
-                // todo: is this okay?
-                $url = new \Chrome\URI\URI();
-                $url->setPath('404.html');
-                $this->match($url, $data);
             }
         } catch(\Chrome\Exception $e)
         {
             $this->_exceptionHandler->exception($e);
         }
+
+        return false;
     }
 
     public function route(URI_Interface $url, \Chrome\Request\Data_Interface $data)
@@ -158,13 +153,7 @@ class Router implements Router_Interface
         $path = ltrim(preg_replace('#\A' . ROOT_URL . '#', '', '/'.$url->getPath()), '/');
         $url->setPath($path);
 
-        try
-        {
-            $this->match($url, $data);
-        } catch(\Chrome\Exception $e)
-        {
-            $this->_exceptionHandler->exception($e);
-        }
+        $this->match($url, $data);
 
         return $this->_result;
     }
@@ -206,6 +195,9 @@ interface Route_Interface
 {
     public function match(URI_Interface $url, \Chrome\Request\Data_Interface $data);
 
+    /**
+     * @return \Chrome\Router\Result_Interface
+     */
     public function getResult();
 }
 

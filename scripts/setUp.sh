@@ -10,12 +10,12 @@ DATABASE_CONNECTION=default
 
 ## INSTALL YAML ##
 ## remove old yaml, if exists
-rm -rf public/css/yaml
-rmdir public/css/yaml
+rm -rf ../public/css/yaml
+rmdir ../public/css/yaml
 
 ## download yaml from git and get the appropriate version
-git clone git://github.com/yamlcss/yaml.git public/_tmp_yaml
-cd public/_tmp_yaml
+git clone git://github.com/yamlcss/yaml.git ../public/_tmp_yaml
+cd ../public/_tmp_yaml
 git checkout tags/$YAML_VERSION
 cd ../..
 
@@ -24,12 +24,14 @@ cp public/_tmp_yaml/yaml/* public/css/yaml
 rm -rf public/_tmp_yaml
 rmdir public/_tmp_yaml
 
-## COMPOSER ##
-composer update
-
 ## INIT DATABASE
 mysql -e 'create database chrome_2_test;'
 php tests/setuptestdb.php $DATABASE_CONNECTION
 
 ## clean tmp dir
 rm -rf include/tmp
+
+cd scripts
+
+## COMPOSER ##
+composer --working-dir=../ update
