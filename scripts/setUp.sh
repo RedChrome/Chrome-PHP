@@ -17,19 +17,17 @@ rmdir ../public/css/yaml
 git clone git://github.com/yamlcss/yaml.git ../public/_tmp_yaml
 cd ../public/_tmp_yaml
 git checkout tags/$YAML_VERSION
-cd ../..
+cd ../
 
 ## remove the unnecessary stuff and create the needed structure
 cp public/_tmp_yaml/yaml/* public/css/yaml
 rm -rf public/_tmp_yaml
 rmdir public/_tmp_yaml
 
-cd
-cd
-cd
 ls
 
 ## COMPOSER ##
+composer self-update
 composer update
 
 ## INIT DATABASE
