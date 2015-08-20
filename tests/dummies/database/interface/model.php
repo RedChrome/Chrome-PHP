@@ -2,7 +2,7 @@
 
 namespace Test\Chrome\Model\Database;
 
-class Statement extends \Chrome\Model\Database\Statement
+class Statement extends \Chrome\Model\Database\JsonStatement
 {
     protected function _createCache($database, $namespace)
     {

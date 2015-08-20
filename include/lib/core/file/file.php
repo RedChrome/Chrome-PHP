@@ -95,12 +95,24 @@ interface File_Interface
     /**
      * Return the content of the file
      *
+     * @see file_get_contents
+     *
      * @param int $offset The offset where the reading starts on the original stream.
      * @param int $maxlen Maximum length of data read. -1 reads until end of file.
      *
      * @return string
      */
     public function getContent($offset = -1, $maxlen = -1);
+
+    /**
+     * Write $data into $file
+     *
+     * @see file_put_contents
+     *
+     * @param mixed $data
+     * @param number $flags
+     */
+    public function putContent($data, $flags = 0);
 
     /**
      * @return \Chrome\Directory_Interface
@@ -299,13 +311,20 @@ class File implements File_Interface
 
     public function getContent($offset = -1, $maxlen = -1)
     {
-        // TODO: maybe use file pointer?
-
         if($maxlen > -1) {
             return file_get_contents($this->_fileName, $this->_useIncludePath, $this->_context, $offset, $maxlen);
         }
 
         return file_get_contents($this->_fileName, $this->_useIncludePath, $this->_context, $offset);
+    }
+
+    public function putContent($data, $flags = 0)
+    {
+        if($this->_context !== null) {
+            return file_put_contents($this->_fileName, $data, $flags, $this->_context);
+        }
+
+        return file_put_contents($this->_fileName, $data, $flags);
     }
 
     public function getUseIncludePath()
@@ -387,6 +406,10 @@ interface Information_Interface
     public function getType();
 
     public function getPermissions();
+
+    public function isWriteable();
+
+    public function isReadable();
 
     /**
      * @return array
@@ -480,6 +503,16 @@ class Information implements Information_Interface
     public function getPermissions()
     {
         return fileperms($this->_file->getFileName());
+    }
+
+    public function isWriteable()
+    {
+        return is_writable($this->_file->getFileName());
+    }
+
+    public function isReadable()
+    {
+        return is_readable($this->_file->getFileName());
     }
 
     public function getFileInformation()
@@ -588,7 +621,8 @@ class Modifier implements Modifier_Interface
 
     public function move($destination)
     {
-        // TODO: what if windows and php version < 5.3.1
+        // Note: this works for php >= 5.3.1
+        // So, require php >= 5.3.1
         $this->rename($destination);
     }
 

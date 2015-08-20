@@ -518,7 +518,7 @@ class DefaultApplication implements Application_Interface
         }, true);
 
         $closure->add('\Chrome\Model\Database\Statement_Interface', function ($c) {
-            return new \Chrome\Model\Database\Statement($c->get('\Chrome\Cache\Memory\DBStatement'));
+            return new \Chrome\Model\Database\JsonStatement($c->get('\Chrome\Cache\Memory\DBStatement'), new \Chrome\Directory(RESOURCE . 'database'));
         });
 
         $closure->add('\Chrome_Model_Route_Static_Interface', function ($c) {
