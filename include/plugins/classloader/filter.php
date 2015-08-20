@@ -38,7 +38,7 @@ class Filter extends AbstractResolver
     public function resolve($class)
     {
         if(preg_match('#Chrome\\\\Filter((?:\\\\[a-z_A-Z0-9]{1,})*)\\\\([a-z_A-Z0-9]{1,})#AD', $class, $matches)) {
-            return 'plugins/filter'.strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php'));
+            return $this->_directory->file(substr(strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php')), 1), true);
         }
 
         return false;

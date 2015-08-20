@@ -54,10 +54,10 @@ class TestSetup
     protected function _initClassloader()
     {
         require_once PLUGIN . 'classloader/database.php';
-        $classloader = new \Chrome\Classloader\Classloader(BASEDIR);
+        $classloader = new \Chrome\Classloader\Classloader(new \Chrome\Directory(BASEDIR));
         $classloader->setExceptionHandler($this->_errorConfig->getExceptionHandler());
         $classloader->setLogger(new \Psr\Log\NullLogger());
-        $classloader->appendResolver(new \Chrome\Classloader\Resolver\Database());
+        $classloader->appendResolver(new \Chrome\Classloader\Resolver\Database(new \Chrome\Directory('lib/core/database')));
 
         new \Chrome\Classloader\Autoloader($classloader);
 

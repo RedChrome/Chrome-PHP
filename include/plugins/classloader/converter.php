@@ -38,7 +38,7 @@ class Converter extends AbstractResolver
     public function resolve($class)
     {
         if(preg_match('#Chrome\\\\Converter\\\\Delegate\\\\(.{1,})Delegate#iu', $class, $matches)) {
-            return 'plugins/converter/'.lcfirst($matches[1]).'.php';
+            return $this->_directory->file(lcfirst($matches[1]).'.php', true);
         }
 
         return false;

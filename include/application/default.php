@@ -192,7 +192,7 @@ class DefaultApplication implements Application_Interface
         require_once LIB.'core/database/facade/model.php';
 
         // init require-class, can be skipped if every class is defined
-        $this->_classloader->prependResolver($this->_diContainer->get('\Chrome\Classloader\Resolver_Model_Interface'));
+        $this->_classloader->prependResolver($this->_diContainer->get('\Chrome\Classloader\Resolver\Model_Interface'));
 
         $this->_initConfig();
         $registryHandler->add('\Chrome\Config\Config_Interface', $this->_applicationContext->getConfig());
@@ -358,7 +358,7 @@ class DefaultApplication implements Application_Interface
     protected function _initClassloader()
     {
         // autoloader
-        $this->_classloader = new \Chrome\Classloader\Classloader(BASEDIR);
+        $this->_classloader = new \Chrome\Classloader\Classloader(new \Chrome\Directory(BASEDIR));
         $this->_applicationContext->setClassloader($this->_classloader);
 
         // $this->_autoloader = new Chrome_Require_Autoloader();
@@ -369,8 +369,8 @@ class DefaultApplication implements Application_Interface
         require_once PLUGIN . 'classloader/cache.php';
         require_once PLUGIN . 'classloader/model.php';
 
-        $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver\Database());
-        $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver\Cache());
+        $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver\Database(new \Chrome\Directory('lib/core/database')));
+        $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver\Cache(new \Chrome\Directory('plugins/cache')));
 
         $autoloader = new \Chrome\Classloader\Autoloader($this->_classloader);
     }
@@ -547,8 +547,32 @@ class DefaultApplication implements Application_Interface
             return new \Chrome_Model_Design_Loader_Static_Cache($c->get('\Chrome_Model_Design_Loader_Static_DB'), $cache);
         }, true);
 
-        $closure->add('\Chrome\Classloader\Resolver_Model_Interface', function ($c) {
-            return new \Chrome\Classloader\Resolver\Model($c->get('\Chrome_Model_Classloader_Model_Interface'));
+        $closure->add('\Chrome\Classloader\Resolver\Model_Interface', function ($c) {
+            return new \Chrome\Classloader\Resolver\Model($c->get('\Chrome_Model_Classloader_Model_Interface'), $c);
+        });
+
+        $closure->add('\Chrome\Classloader\Resolver\Filter', function ($c) {
+           return new \Chrome\Classloader\Resolver\Filter(new \Chrome\Directory('plugins/filter'));
+        });
+
+        $closure->add('\Chrome\Classloader\Resolver\Exception', function ($c) {
+            return new \Chrome\Classloader\Resolver\Exception(new \Chrome\Directory('lib/exception'));
+        });
+
+        $closure->add('\Chrome\Classloader\Resolver\Validator', function ($c) {
+            return new \Chrome\Classloader\Resolver\Validator(new \Chrome\Directory('plugins/validate'));
+        });
+
+        $closure->add('\Chrome\Classloader\Resolver\Form', function ($c) {
+            return new \Chrome\Classloader\Resolver\Form(new \Chrome\Directory('lib/core/form'), new \Chrome\Directory('plugins/View/form'));
+        });
+
+        $closure->add('\Chrome\Classloader\Resolver\Converter', function ($c) {
+           return new \Chrome\Classloader\Resolver\Converter(new \Chrome\Directory('plugins/converter'));
+        });
+
+        $closure->add('\Chrome\Classloader\Resolver\Captcha', function ($c) {
+            return new \Chrome\Classloader\Resolver\Captcha(new \Chrome\Directory('plugins/captcha'));
         });
 
         $closure->add('\Chrome_Model_Classloader_Model_Interface', function ($c) {

@@ -55,7 +55,7 @@ interface Classloader_Interface extends \Chrome\Exception\Processable_Interface,
      */
     public function load($class);
 
-    public function loadByFile($class, $file);
+    public function loadByFile($class, \Chrome\File_Interface $file);
 
     public function appendResolver(Resolver_Interface $resolver);
 
@@ -79,10 +79,10 @@ interface Resolver_Interface
     /**
      * Tries to locate a file which contains the class $class
      *
-     * Returns false if no file could get found, or a file containig the $class.
+     * Returns false if no file could get found, or a \Chrome\File_Interface object containig the resolved class implementation.
      *
      * @param string $class
-     * @return string boolean
+     * @return \Chrome\File_Interface
      */
     public function resolve($class);
 
@@ -104,6 +104,15 @@ interface Resolver_Interface
  */
 abstract class AbstractResolver implements Resolver_Interface
 {
+    /**
+     * @var \Chrome\Directory_Interface
+     */
+    protected $_directory = null;
+
+    public function __construct(\Chrome\Directory_Interface $directory)
+    {
+       $this->_directory = $directory;
+    }
 
     public function init(Classloader_Interface $classloader)
     {
@@ -200,15 +209,10 @@ class Classloader implements Classloader_Interface
     /**
      * A prefix for the classloader to search in the proper directory
      *
-     * The prefix should end with "/".
      *
-     * A valid directory prefix would be
-     *
-     * "any/path/to/anything/"
-     *
-     * @var string
+     * @var \Chrome\Directory_Interface
      */
-    protected $_directoryPrefix = '';
+    protected $_directory = null;
 
     /**
      *
@@ -216,23 +220,21 @@ class Classloader implements Classloader_Interface
      */
     protected $_loadedClasses = array();
 
-    public function __construct($directoryPrefix)
+    public function __construct(\Chrome\Directory_Interface $directory)
     {
-        $this->_directoryPrefix = $directoryPrefix;
+        $this->_directory = $directory;
     }
 
     /**
      * loades $class by loading $fileName
      *
      * @param string $class
-     * @param string $fileName
+     * @param \Chrome\File_Interface $file
      */
-    protected function _doLoadClassByFile($class, $fileName)
+    protected function _doLoadClassByFile($class, $file)
     {
-        $fileName = $this->_directoryPrefix.$fileName;
-
         $this->_checkWorkingDir();
-        $this->_loadFile($fileName);
+        $this->_loadFile($this->_directory->file($file));
         $this->_addClass($class);
     }
 
@@ -247,12 +249,18 @@ class Classloader implements Classloader_Interface
         }
     }
 
+    /**
+     * @return \Chrome\File_Interface
+     */
     protected function _resolve($class)
     {
         foreach($this->_resolvers as $resolver)
         {
             if(($file = $resolver->resolve($class)) !== false)
             {
+                #if(!($file instanceof \Chrome\File_Interface)) {
+                #    throw new \Chrome\Exception(get_class($resolver));
+                #}
                 return $file;
             }
         }
@@ -267,15 +275,14 @@ class Classloader implements Classloader_Interface
      * @param string $file
      *        file to include
      */
-    protected function _loadFile($fileName)
+    protected function _loadFile(\Chrome\File_Interface $file)
     {
-        $file = new \Chrome\File($fileName);
-
         if($file->exists())
         {
-            require_once $fileName;
+            require_once $file->getFileName();
         } else
         {
+            var_dump(is_file($file->getFileName()),$file->getFileName(), getcwd());
             throw new \Chrome\Exception('Could not load file '.$file);
         }
     }
@@ -293,15 +300,15 @@ class Classloader implements Classloader_Interface
                 return true;
             }
 
-            $fileName = $this->_resolve($class);
+            $file = $this->_resolve($class);
 
-            if($fileName === false)
+            if(!($file instanceof \Chrome\File_Interface))
             {
                 $this->_logger->error('Could not load class {classname}', array('classname' => $class));
                 return false;
             }
 
-            $this->_doLoadClassByFile($class, $fileName);
+            $this->_doLoadClassByFile($class, $file);
 
             return true;
         } catch(\Chrome\Exception $e)
@@ -324,17 +331,16 @@ class Classloader implements Classloader_Interface
      *
      * @see \Chrome\Classloader\Classloader_Interface::loadByFile()
      */
-    public function loadByFile($class, $fileName)
+    public function loadByFile($class, \Chrome\File_Interface $file)
     {
         try
         {
             if($this->isLoaded($class) === true)
             {
-
                 return true;
             }
 
-            $this->_doLoadClassByFile($class, $fileName);
+            $this->_doLoadClassByFile($class, $file);
         } catch(\Chrome\Exception $e)
         {
             $this->_exceptionHandler->exception($e);

@@ -30,6 +30,22 @@ use \Chrome\Classloader\AbstractResolver;
 class Form extends AbstractResolver
 {
     /**
+     * @var \Chrome\Directory_Interface
+     */
+    protected $_pluginDirectory = null;
+
+    public function __construct(\Chrome\Directory_Interface $libDir, \Chrome\Directory_Interface $pluginDir = null)
+    {
+        parent::__construct($libDir);
+
+        if($pluginDir === null) {
+            $pluginDir = $libDir;
+        }
+
+        $this->_pluginDirectory = $pluginDir;
+    }
+
+    /**
      * Resolves a class, if $class is of Chrome_Form_* type
      *
      * @param stinrg $class
@@ -39,27 +55,27 @@ class Form extends AbstractResolver
     {
         if(preg_match('#Chrome_Form_Element_(.{1,})#i', $class, $matches))
         {
-            return 'lib/core/form/element/' . strtolower($matches[1]) . '.php';
+            return $this->_directory->file('element/' . strtolower($matches[1]) . '.php', true);
         }
 
         if(preg_match('#Chrome_Form_Option_Element_(.{1,})#i', $class, $matches))
         {
-            return 'lib/core/form/element/' . strtolower($matches[1]) . '.php';
+            return $this->_directory->file('element/' . strtolower($matches[1]) . '.php', true);
         }
 
         if(preg_match('#Chrome_View_Form_Element_(.{1,})#i', $class, $matches))
         {
-            return 'plugins/View/form/' . strtolower(str_replace('_', '/', $matches[1])) . '.php';
+            return $this->_pluginDirectory->file(strtolower(str_replace('_', '/', $matches[1])) . '.php', true);
         }
 
         if(preg_match('#Chrome_Form_Handler_(.{1,})#i', $class, $matches))
         {
-            return 'lib/core/form/handler/' . strtolower($matches[1]) . '.php';
+            return $this->_directory->file('handler/' . strtolower($matches[1]) . '.php', true);
         }
 
         if(preg_match('#Chrome_Form_Storage_(.{1,})#i', $class, $matches))
         {
-            return 'lib/core/form/storage/' . strtolower($matches[1]) . '.php';
+            return $this->_directory->file('storage/' . strtolower($matches[1]) . '.php', true);
         }
 
         return false;

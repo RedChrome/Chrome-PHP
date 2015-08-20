@@ -31,8 +31,20 @@ interface Directory_Interface
     public function directory($directory, $useDirectory = false);
 
     /**
+     * Creates a file from the given $file parameter
      *
-     * @param string $file
+     * If $file is a \Chrome\File_Interface object, then the this directory is automatically prefixed to the $file ($useDirectory is set to true)
+     *
+     * If $useDirectory === true then this directory gets prefixed to $file.
+     *
+     * Example:
+     * $dir = new \Chrome\Directory('dir/to/anything/')
+     * $file = 'path/myfile.xx' (a string, not a \Chrome\File_Interface object)
+     *
+     * $dir->file($file, true) -> 'dir/to/anything/path/myfile.xx'
+     * $dir->file($file, false) -> 'path/myfile.xx' (!== $file)
+     *
+     * @param string|\Chrome\File_Interface $file
      * @param bool $useDirectory use this directory as prefix
      *
      * @return \Chrome\File_Interface
@@ -174,6 +186,14 @@ class Directory implements Directory_Interface
 
     public function file($file, $useDirectory = false)
     {
+        // ignore the user parameter, if the user passes a \Chrome\File_Interface object
+        // then he wants to prefix the file with the directory (if he does not want this, then
+        // why does he call this function anyway?)
+        if($file instanceof \Chrome\File_Interface) {
+            $useDirectory = true;
+            $file = $file->getFileName();
+        }
+
         $prefix = ($useDirectory) ? $this->_directory.self::SEPARATOR : '';
 
         return new \Chrome\File($prefix.$file);

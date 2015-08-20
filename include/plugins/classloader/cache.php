@@ -41,7 +41,7 @@ class Cache extends AbstractResolver
 
             $matches[2] = strtolower(str_replace('\\', '/', $matches[2]));
 
-            return 'plugins/cache/'.$matches[2].'.php';
+            return $this->_directory->file($matches[2].'.php', true);
         }
 
         return false;

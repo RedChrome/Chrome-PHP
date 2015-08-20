@@ -15,7 +15,12 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         $resolver = $this->_getResolver();
 
         foreach($resolves as $class => $file) {
-            $this->assertSame($file, $resolver->resolve($class));
+            $resolvedFile = $resolver->resolve($class);
+            if($resolvedFile !== false) {
+                $this->assertSame($file, $resolvedFile->getFileName());
+            } else {
+                $this->assertSame($file, false);
+            }
         }
     }
 }

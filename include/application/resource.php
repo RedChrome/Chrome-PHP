@@ -170,7 +170,7 @@ class ResourceApplication implements \Chrome\Application\Application_Interface
     protected function _initClassloader()
     {
         // classloader
-        $this->_classloader = new \Chrome\Classloader\Classloader(BASEDIR);
+        $this->_classloader = new \Chrome\Classloader\Classloader(new \Chrome\Directory(BASEDIR));
         $this->_applicationContext->setClassloader($this->_classloader);
 
         #$this->_classloader->setLogger($this->_loggerRegistry->get('autoloader'));
@@ -178,7 +178,7 @@ class ResourceApplication implements \Chrome\Application\Application_Interface
 
         require_once PLUGIN.'classloader/captcha.php';
 
-        $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver\Captcha());
+        $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver\Captcha(new \Chrome\Directory('plugins/captcha')));
 
         $autoloader = new \Chrome\Classloader\Autoloader($this->_classloader);
     }

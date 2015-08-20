@@ -39,7 +39,7 @@ class Captcha extends AbstractResolver
     {
         if(preg_match('#Chrome\\\\Captcha((?:\\\\[a-z_A-Z0-9]{1,})*)\\\\([a-z_A-Z0-9]{1,})?#', $class, $matches)) {
 
-            return 'plugins/captcha'.strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php'));
+            return $this->_directory->file(substr(strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php')), 1), true);
         }
 
         return false;

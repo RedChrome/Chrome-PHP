@@ -72,9 +72,19 @@ class Model implements Model_Interface
      */
     protected $_requiredFilesLoaded = false;
 
-    public function __construct(\Chrome_Model_Interface $model)
+    /**
+     * Dependency injection container.
+     *
+     * Needed to retrieve other classloaders
+     *
+     * @var \Chrome\DI\Container_Interface
+     */
+    protected $_diContainer = null;
+
+    public function __construct(\Chrome_Model_Interface $model, \Chrome\DI\Container_Interface $diContainer)
     {
         $this->_model = $model;
+        $this->_diContainer = $diContainer;
 
         $this->_getClasses();
     }
@@ -96,11 +106,12 @@ class Model implements Model_Interface
 
         foreach($this->_require as $value)
         {
-            $classloader->loadByFile($value['name'], $value['path']);
+            // TODO: maybe inject \Chrome\File
+            $classloader->loadByFile($value['name'], new \Chrome\File($value['path']));
 
             if($value['is_class_resolver'] == true)
             {
-                $classloader->appendResolver(new $value['name']());
+                $classloader->appendResolver($this->_diContainer->get($value['name']));
             }
         }
 
@@ -133,7 +144,8 @@ class Model implements Model_Interface
     {
         if(isset($this->_class[$className]))
         {
-            return $this->_class[$className];
+            // TODO: same here, look up.
+            return new \Chrome\File($this->_class[$className]);
         }
 
         return false;
