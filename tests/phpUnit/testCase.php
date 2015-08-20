@@ -25,7 +25,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     }
 }
 
-class PHPUnit_TextUI_Command_Chrome extends PHPUnit_TextUI_Command
+class PHPUnit_TextUI_Command_Chrome extends \PHPUnit_TextUI_Command
 {
     protected function createRunner()
     {
@@ -38,7 +38,7 @@ class PHPUnit_TextUI_Command_Chrome extends PHPUnit_TextUI_Command
 /**
  * These classes are needed to inject the application context into all Chrome_TestCase classes.
  */
-class PHPUnit_TextUI_TestRunner_Chrome extends PHPUnit_TextUI_TestRunner
+class PHPUnit_TextUI_TestRunner_Chrome extends \PHPUnit_TextUI_TestRunner
 {
     protected $_appContext = null;
     protected $_diContainer = null;

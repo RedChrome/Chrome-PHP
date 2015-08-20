@@ -1,6 +1,8 @@
 <?php
 
-class CaptchaTest extends PHPUnit_Extensions_SeleniumTestCase
+namespace Test\GUI\Captcha;
+
+class CaptchaTest extends \PHPUnit_Extensions_SeleniumTestCase
 {
 
     public function setUp()

@@ -1,6 +1,8 @@
 <?php
 
-abstract class Test_Chrome_Form extends Chrome_Form_Abstract
+namespace Test\Chrome\Form;
+
+abstract class SimpleTestForm extends \Chrome_Form_Abstract
 {
     public function addElement(Chrome_Form_Element_Basic_Interface $element)
     {
@@ -8,14 +10,14 @@ abstract class Test_Chrome_Form extends Chrome_Form_Abstract
     }
 }
 
-class Test_Chrome_Form_No_Elements extends Test_Chrome_Form
+class EmptyForm extends SimpleTestForm
 {
     protected function _init()
     {
     }
 }
 
-class Test_Chrome_Form_One_Element extends Test_Chrome_Form
+class OneElementForm extends SimpleTestForm
 {
     protected function _init()
     {

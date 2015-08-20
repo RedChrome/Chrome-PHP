@@ -70,12 +70,17 @@ class TestSetup
     {
         require_once 'bootstrap.php';
 
-        $this->_errorConfig = new \Chrome\Exception\Configuration();
-        $this->_errorConfig->setErrorHandler(new \Chrome\Exception\Handler\DefaultErrorHandler());
-        $this->_errorConfig->setExceptionHandler(new \Chrome\Exception\Handler\Console());
+        $this->_initErrorConfiguration();
 
         $this->_applicationContext = new \Chrome\Context\Application();
         $this->_initClassloader();
+    }
+
+    protected function _initErrorConfiguration()
+    {
+        $this->_errorConfig = new \Chrome\Exception\Configuration();
+        $this->_errorConfig->setErrorHandler(new \Chrome\Exception\Handler\DefaultErrorHandler());
+        $this->_errorConfig->setExceptionHandler(new \Chrome\Exception\Handler\PHPUnit());
     }
 
     public function testDb()

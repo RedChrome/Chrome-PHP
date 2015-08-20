@@ -15,3 +15,4 @@ require_once LIB.'core/core.php';
  * additional, non-core files
  */
 require_once LIB.'exception/handler/console.php';
+require_once LIB.'exception/handler/phpunit.php';

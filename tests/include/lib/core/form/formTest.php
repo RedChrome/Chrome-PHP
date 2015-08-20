@@ -31,7 +31,7 @@ class GeneralFormTest extends \Test\Chrome\TestCase
 
     public function setUp()
     {
-        $this->_form = new \Test_Chrome_Form_No_Elements($this->_appContext);
+        $this->_form = new EmptyForm($this->_appContext);
     }
 
     public function testIfNoElementsAreAdded()

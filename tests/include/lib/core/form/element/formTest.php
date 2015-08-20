@@ -2,6 +2,8 @@
 
 namespace Test\Chrome\Form\Element;
 
+use Test\Chrome\Form\OneElementForm;
+
 class FormTest extends \Test\Chrome\TestCase
 {
     protected $_option = null;
@@ -12,7 +14,7 @@ class FormTest extends \Test\Chrome\TestCase
 
     public function setUp()
     {
-        $this->_form = new \Test_Chrome_Form_One_Element($this->_appContext);
+        $this->_form = new OneElementForm($this->_appContext);
         // do not use the default session -> this would pollute the session namespace
         $storage = new \Chrome_Form_Storage_Session(new \Test\Chrome\Request\Session\Dummy(new \Test\Chrome\Request\Cookie\Dummy(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface')), 'TEST_FORM_ELEMENT_FORM');
         $this->_option = new \Chrome_Form_Option_Element_Form($storage);
