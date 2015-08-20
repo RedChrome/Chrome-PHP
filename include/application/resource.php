@@ -30,7 +30,7 @@ require_once LIB.'core/error/error.php';
  * load file functions
  */
 require_once LIB.'core/file/file.php';
-require_once LIB.'core/file/dir.php';
+require_once LIB.'core/file/directory.php';
 
 /**
  * load Chrome_Hash for easy hashing
@@ -148,7 +148,7 @@ class ResourceApplication implements \Chrome\Application\Application_Interface
         require_once LIB . 'core/request/request/http.php';
         require_once LIB . 'core/response/response/http.php';
 
-        $requestFactory->addRequestObject(new \Chrome\Request\Handler\HTTPHandler(new \Chrome\Hash\Hash()));
+        $requestFactory->addRequestObject(new \Chrome\Request\Handler\HTTPHandler(new \Chrome\Hash\Hash(), new \Chrome\Directory(TMP.CHROME_SESSION_SAVE_PATH)));
 
         $reqHandler = $requestFactory->getRequest();
         $requestData = $requestFactory->getRequestDataObject();

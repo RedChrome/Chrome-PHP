@@ -1,8 +1,8 @@
 <?php
 
-namespace Test\Chrome\Form;
+namespace Test\Chrome\Form\Element;
 
-class Test_Chrome_Form_Element_IsCreated extends EmptyForm
+class IsCreated extends \Chrome_Form_Element_Abstract
 {
     public $isCreated = null;
 

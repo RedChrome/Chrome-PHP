@@ -2,6 +2,10 @@
 
 namespace Test\Chrome\Form;
 
+use Test\Chrome\Form\Element\IsCreated;
+
+use Test\Chrome\Form\Element\IsSent;
+
 require_once 'tests/dummies/form/form.php';
 require_once 'tests/dummies/form/element/isSent.php';
 
@@ -13,20 +17,20 @@ class FormIsSentTest extends \Test\Chrome\TestCase
 
     public function setUp()
     {
-        $this->_form = new \Test_Chrome_Form_No_Elements($this->_appContext);
+        $this->_form = new EmptyForm($this->_appContext);
         $this->_option = new \Chrome_Form_Option_Element();
     }
 
     protected function _addElement()
     {
-        $element = new \Test_Chrome_Form_Element_isSent($this->_form, 'sent', $this->_option);
+        $element = new IsSent($this->_form, 'sent', $this->_option);
         $element->isSent = true;
         $this->_form->addElement($element);
     }
 
     public function testIsSentRequiresIsCreated()
     {
-        $notCreated = new \Test_Chrome_Form_Element_isCreated($this->_form, 'notCreated', $this->_option);
+        $notCreated = new IsCreated($this->_form, 'notCreated', $this->_option);
         $notCreated->isCreated = false;
         $notCreated->errors = array('test, not created');
 
@@ -49,7 +53,7 @@ class FormIsSentTest extends \Test\Chrome\TestCase
     {
         $errors = array('test, not sent');
         $this->_addElement();
-        $notSent = new \Test_Chrome_Form_Element_isSent($this->_form, 'notSent', $this->_option);
+        $notSent = new IsSent($this->_form, 'notSent', $this->_option);
         $notSent->isSent = false;
         $notSent->errors = $errors;
         $this->_form->addElement($notSent);

@@ -203,6 +203,8 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
                 return false;
             }
         }
+
+        return true;
     }
 
     protected function _validateRegistrationRequest(\Chrome\Model\User\Registration\Request_Interface $regRequest, $activationKey)

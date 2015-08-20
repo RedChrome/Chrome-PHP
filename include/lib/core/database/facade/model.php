@@ -73,20 +73,23 @@ interface Statement_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class Statement extends \Chrome_Model_Cache_Abstract implements Statement_Interface
+class JsonStatement extends \Chrome_Model_Cache_Abstract implements Statement_Interface
 {
     const DEFAULT_NAMESPACE = 'core';
 
     protected $_database = null;
     protected $_namespace = null;
 
+    protected $_directory = null;
     protected $_externalCache = null;
 
-    public function __construct(\Chrome\Cache\Cache_Interface $cache, $namespace = null)
+    public function __construct(\Chrome\Cache\Cache_Interface $cache, \Chrome\Directory_Interface $cacheDir, $namespace = null)
     {
         if(!is_string($namespace)) {
             $namespace = self::DEFAULT_NAMESPACE;
         }
+
+        $this->_directory = $cacheDir;
 
         $this->_externalCache = $cache;
 
@@ -111,7 +114,7 @@ class Statement extends \Chrome_Model_Cache_Abstract implements Statement_Interf
     protected function _createCache($database, $namespace)
     {
         $options = new \Chrome\Cache\Option\File\Json();
-        $options->setCacheFile(RESOURCE . 'database/' . strtolower($database) . '/' . strtolower($namespace) . '.json');
+        $options->setCacheFile($this->_directory->file(strtolower($database) . \Chrome\Directory_Interface::SEPARATOR . strtolower($namespace) . '.json', true));
         return new \Chrome\Cache\File\Json($options);
     }
 

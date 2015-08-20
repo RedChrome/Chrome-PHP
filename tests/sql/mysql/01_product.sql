@@ -102,6 +102,7 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\Template\\PHP', 'lib/core/template/template.php'),
 ('Chrome\\Router\\Route\\StaticRoute', 'lib/core/router/route/static.php'),
 ('Chrome\\Router\\Route\\DynamicRoute', 'lib/core/router/route/dynamic.php'),
+('Chrome\\Router\\Route\\FallbackRoute', 'lib/core/router/route/dynamic.php'),
 ('Chrome\\Captcha\\Captcha_Interface', 'lib/captcha/captcha.php'),
 ('Chrome\\Captcha\\Captcha', 'lib/captcha/captcha.php'),
 ('Chrome_RBAC', 'lib/rbac/rbac.php'),
@@ -117,7 +118,7 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\Redirection\\Redirection_Interface', 'lib/core/redirection.php'),
 ('Chrome\\Redirection\\Redirection', 'lib/core/redirection.php'),
 ('Chrome_Controller_User_Login_Page', 'modules/content/user/login/page.php'),
-('Chrome\\Model\\Database\\Statement', 'lib/core/database/interface/model.php'),
+('Chrome\\Model\\Database\\JsonStatement', 'lib/core/database/facade/model.php'),
 ('Chrome_Form_Decorator_Individual_Abstract', 'lib/core/form/decorator.php'),
 ('Chrome_User_Registration', 'lib/View/content/user/registration.class.php'),
 ('Chrome_User_EMail', 'lib/User/user_email.php'),
@@ -171,7 +172,8 @@ INSERT INTO `cpp_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 ('private_key', 'Captcha/Recaptcha', '6LcQrt4SAAAAAF7flTN8uwi_9eSFy43jOuUcPGm3', 'string', '', FALSE),
 ('enable_https', 'Captcha/Recaptcha', 'false', 'boolean', '', FALSE),
 ('recaptcha_theme', 'Captcha/Recaptcha', 'clean', 'string', '', FALSE),
-('default_theme', 'Theme', 'chrome', 'string', '', FALSE);
+('default_theme', 'Theme', 'chrome', 'string', '', FALSE),
+('fallback_class', 'Chrome/Router', '\\Chrome\\Controller\\SiteNotFound', 'string', '', FALSE);
 
 DROP TABLE IF EXISTS `cpp_design_controller`;
 CREATE TABLE IF NOT EXISTS `cpp_design_controller` (
@@ -335,8 +337,8 @@ INSERT INTO `cpp_autoload` (`name`, `path`, `activated`, `priority`, `is_class_r
 ('\\Chrome\\Classloader\\Resolver\\Captcha', 'plugins/classloader/captcha.php', TRUE, 4, TRUE),
 ('\\Chrome_View_Plugin_HTML', 'plugins/view/html.php', TRUE, 6, FALSE),
 ('\\Chrome_View_Plugin_Decorator', 'plugins/view/decorator.php', TRUE, 6, FALSE),
-('\\Chrome\Filter\Chain\Preprocessor', 'plugins/filter/chain/preprocessor.php', TRUE, 6, FALSE),
-('\\Chrome\Filter\Chain\Postprocessor', 'plugins/filter/chain/postprocessor.php', TRUE, 6, FALSE),
+('\\Chrome\\Filter\\Chain\\Preprocessor', 'plugins/filter/chain/preprocessor.php', TRUE, 6, FALSE),
+('\\Chrome\\Filter\\Chain\\Postprocessor', 'plugins/filter/chain/postprocessor.php', TRUE, 6, FALSE),
 ('\\Chrome\\Exception\Authentication', 'lib/exception/authentication.php', TRUE, 6, FALSE),
 ('\\Chrome\\Authentication\\Authentication', 'lib/core/authentication/authentication.php', TRUE, 6, FALSE),
 ('\\Chrome\\Authentication\\Chain\\DatabaseChain', 'lib/core/authentication/chain/database.php', TRUE, 6, FALSE),
@@ -346,6 +348,7 @@ INSERT INTO `cpp_autoload` (`name`, `path`, `activated`, `priority`, `is_class_r
 ('\\Chrome\\Authorisation\\Adapter\\Simple', 'lib/core/authorisation/adapter/simple.php', TRUE, 6, FALSE),
 ('\\Chrome\\Router\\Route\\StaticRoute', 'lib/core/router/route/static.php', TRUE, 6, FALSE),
 ('\\Chrome\\Router\\Route\\DynamicRoute', 'lib/core/router/route/dynamic.php', TRUE, 6, FALSE),
+('\\Chrome\\Router\\Route\\FallbackRoute', 'lib/core/router/route/fallback.php', TRUE, 6, FALSE),
 ('\\Chrome\\Request\\Handler\\ConsoleHandler', 'lib/core/request/request/console.php', TRUE, 6, FALSE),
 ('\\Chrome\\Request\\Handler\\HTTPHandler', 'lib/core/request/request/http.php', TRUE, 6, FALSE),
 ('\\Chrome\\Response\\Handler\\HTTPHandler', 'lib/core/response/response/http.php', TRUE, 6, FALSE),
@@ -418,7 +421,6 @@ INSERT INTO `cpp_route_static` (`resource_id`, `search`, `class`, `POST`, `GET`)
 (1, '', '\\Chrome\\Controller\\Index', '', ''),
 (1, 'index.html', '\\Chrome\\Controller\\Index', '', ''),
 (2, 'login.html', '\\Chrome\\Controller\\User\\Login', '', ''),
-(5, '404.html', '\\Chrome\\Controller\\SiteNotFound', '', ''),
 (3, 'registrieren.html', '\\Chrome\\Controller\\User\\Register', '', 'action=register'),
 (4, 'logout.html', '\\Chrome\\Controller\\User\\Logout', '', ''),
 (6, 'registrierung_bestaetigen.html', '\\Chrome\\Controller\\User\\Register', '', 'action=confirm_registration'),

@@ -633,6 +633,7 @@ class Model implements Model_Interface
         return $this->_converter;
     }
 }
+
 class View implements \Chrome\Context\View_Interface
 {
     protected $_pluginFacade = null;

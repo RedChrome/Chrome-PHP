@@ -151,7 +151,7 @@ abstract class DataAbstract implements Data_Interface
     /**
      * @return \Chrome\Request\Data_Interface
      */
-    public function __construct(Hash_Interface $hash)
+    public function __construct(Hash_Interface $hash, \Chrome\Directory_Interface $sessionPath)
     {
         $this->_vars = array(
             'SERVER' => $_SERVER,
@@ -163,7 +163,7 @@ abstract class DataAbstract implements Data_Interface
             'COOKIE' => $_COOKIE);
 
         $this->_cookie = new \Chrome\Request\Cookie\Cookie($this, $hash);
-        $this->_session = new \Chrome\Request\Session\Session($this->_cookie, $this, $hash);
+        $this->_session = new \Chrome\Request\Session\Session($this->_cookie, $this, $hash, $sessionPath);
     }
 
     protected function _getData($varName, $key = null)

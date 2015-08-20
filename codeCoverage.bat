@@ -1,1 +1,0 @@
-php tests\phpUnit.php --configuration tests\phpUnit\configCodeCoverage.xml  tests\ 

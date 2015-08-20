@@ -747,7 +747,8 @@ class Chrome_File_System_Read implements Chrome_File_System_Read_Interface
 
         try
         {
-            Chrome_Dir::delete($path);
+            $dir = new \Chrome\Directory($path);
+            $dir->delete();
         } catch(\Chrome\Exception $e)
         {
             return false;

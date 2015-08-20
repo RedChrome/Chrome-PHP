@@ -183,7 +183,7 @@ class DefaultApplication implements Application_Interface
 
         $this->_initClassloader();
 
-        $this->_initLocalization();
+
 
         $this->_initDatabase();
         $registryHandler->add('Chrome\Database\Factory\Factory_Interface', $this->_modelContext->getDatabaseFactory());
@@ -219,6 +219,7 @@ class DefaultApplication implements Application_Interface
         $pluginFacade->registerPlugin(new \Chrome_View_Plugin_Decorator($this->_applicationContext));
 
         $this->_initConverter();
+        $this->_initLocalization();
     }
 
     /**
@@ -309,7 +310,7 @@ class DefaultApplication implements Application_Interface
             // load default validate messages
             $translate->load('validate');
             #require_once 'tests/dummies/localization/translate/test.php';
-            #$translate = new \Chrome\Localization\Translate_Test_XX($localization);
+            #   $translate = new \Chrome\Localization\Translate_Test_XX($localization);
             $localization->setTranslate($translate);
             $this->_applicationContext->getViewContext()->setLocalization($localization);
         } catch(\Chrome\Exception $e)
@@ -320,7 +321,8 @@ class DefaultApplication implements Application_Interface
 
     protected function _initLoggers()
     {
-        \Chrome_Dir::createDir(TMP . CHROME_LOG_DIR, 0777, false);
+        $loggerDirectory = new \Chrome\Directory(TMP . CHROME_LOG_DIR);
+        $loggerDirectory->create();
 
         $dateFormat = 'Y-m-d H:i:s:u';
         $output = '[%datetime%] %channel%.%level_name%: %message%. %context% %extra%' . PHP_EOL;
@@ -424,8 +426,8 @@ class DefaultApplication implements Application_Interface
         // $request->addRequestObject();
         // this handler is always capable of handling a request, so it always returns true in canHandleRequest
         $hash = $this->_diContainer->get('\Chrome\Hash\Hash_Interface');
-        $requestFactory->addRequestObject(new \Chrome\Request\Handler\HTTPHandler($hash));
-        #$requestFactory->addRequestObject(new Chrome_Request_Handler_Console($hash));
+        $requestFactory->addRequestObject(new \Chrome\Request\Handler\HTTPHandler($hash, new \Chrome\Directory(TMP.CHROME_SESSION_SAVE_PATH)));
+        #$requestFactory->addRequestObject(new \Chrome\Request\Handler\ConsoleHandler($hash));
 
         $reqHandler = $requestFactory->getRequest();
         $this->_applicationContext->setRequestHandler($requestFactory->getRequest());
@@ -436,7 +438,7 @@ class DefaultApplication implements Application_Interface
 
         $responseFactory->addResponseHandler(new \Chrome\Response\Handler\JSONHandler($reqHandler));
         $responseFactory->addResponseHandler(new \Chrome\Response\Handler\HTTPHandler($reqHandler));
-        #$responseFactory->addResponseHandler(new Chrome_Response_Handler_Console($reqHandler));
+        #$responseFactory->addResponseHandler(new \Chrome\Response\Handler\ConsoleHandler($reqHandler));
 
         $response = $responseFactory->getResponse();
         $this->_applicationContext->setResponse($response);
@@ -464,6 +466,8 @@ class DefaultApplication implements Application_Interface
         $this->_router->addRoute(new \Chrome\Router\Route\StaticRoute($this->_diContainer->get('\Chrome_Model_Route_Static_Interface'), $routerLogger));
         // matches dynamic created routes
         $this->_router->addRoute(new \Chrome\Router\Route\DynamicRoute($this->_diContainer->get('\Chrome_Model_Route_Dynamic_Interface'), $routerLogger));
+
+        $this->_router->addRoute(new \Chrome\Router\Route\FallbackRoute($this->_diContainer->get('\Chrome\Config\Config_Interface')));
         // matches routes to administration site
         //$this->_router->addRoute(new Chrome_Route_Administration(new Chrome_Model_Route_Administration($this->_modelContext), $routerLogger));
     }
@@ -507,19 +511,19 @@ class DefaultApplication implements Application_Interface
         $closure->add('\Chrome\Model\Config', function ($c) {
 
             $cacheOption = new \Chrome\Cache\Option\File\Serialization();
-            $cacheOption->setCacheFile(CACHE . '_config.cache');
+            $cacheOption->setCacheFile(new \Chrome\File(CACHE . '_config.cache'));
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
             return new \Chrome\Model\Config\Cache($c->get('\Chrome\Model\Config\Database'), $cache);
         }, true);
 
         $closure->add('\Chrome\Model\Database\Statement_Interface', function ($c) {
-            return new \Chrome\Model\Database\Statement($c->get('\Chrome\Cache\Memory\DBStatement'));
+            return new \Chrome\Model\Database\JsonStatement($c->get('\Chrome\Cache\Memory\DBStatement'), new \Chrome\Directory(RESOURCE . 'database'));
         });
 
         $closure->add('\Chrome_Model_Route_Static_Interface', function ($c) {
             $cacheOption = new \Chrome\Cache\Option\File\Serialization();
-            $cacheOption->setCacheFile(CACHE.'router/_static.cache');
+            $cacheOption->setCacheFile(new \Chrome\File(CACHE.'router/_static.cache'));
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
             return new \Chrome\Model\Route\StaticRoute\Cache($c->get('\Chrome_Model_Route_Static_Database'), $cache);
@@ -537,7 +541,7 @@ class DefaultApplication implements Application_Interface
 
         $closure->add('\Chrome_Model_Design_Loader_Static_Interface', function ($c) {
             $cacheOption = new \Chrome\Cache\Option\File\Serialization();
-            $cacheOption->setCacheFile(CACHE.'_designLoaderStatic.cache');
+            $cacheOption->setCacheFile(new \Chrome\File(CACHE.'_designLoaderStatic.cache'));
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
             return new \Chrome_Model_Design_Loader_Static_Cache($c->get('\Chrome_Model_Design_Loader_Static_DB'), $cache);
@@ -550,7 +554,7 @@ class DefaultApplication implements Application_Interface
         $closure->add('\Chrome_Model_Classloader_Model_Interface', function ($c) {
 
             $cacheOption = new \Chrome\Cache\Option\File\Serialization();
-            $cacheOption->setCacheFile(CACHE.'_require.cache');
+            $cacheOption->setCacheFile(new \Chrome\File(CACHE.'_require.cache'));
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
             return new \Chrome_Model_Classloader_Cache($c->get('\Chrome_Model_Classloader_Model_Database'), $cache);
@@ -564,7 +568,7 @@ class DefaultApplication implements Application_Interface
 
         $closure->add('\Chrome_Model_Route_Dynamic_Interface', function ($c) {
             $cacheOption = new \Chrome\Cache\Option\File\Serialization();
-            $cacheOption->setCacheFile(CACHE.'router/_dynamic.cache');
+            $cacheOption->setCacheFile(new \Chrome\File(CACHE.'router/_dynamic.cache'));
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
             return new \Chrome\Model\Route\DynamicRoute\Cache($c->get('\Chrome\Model\Route\DynamicRoute\Database'), $cache);

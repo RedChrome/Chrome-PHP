@@ -39,6 +39,7 @@ class StaticHelper implements Helper_Interface
             $resourceClone = clone $resource;
 
             // remove "static:"
+            // strlen("static:") = 7
             $resourceClone->setResourceName(substr($resourceClone->getResourceName(), 7));
 
             $link = $this->_resourceModel->getLinkByResource($resourceClone);

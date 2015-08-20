@@ -1,6 +1,8 @@
 <?php
 
-class Test_Chrome_Form_Element_isSent extends Chrome_Form_Element_Abstract
+namespace Test\Chrome\Form\Element;
+
+class IsSent extends \Chrome_Form_Element_Abstract
 {
     public $isSent = null;
 

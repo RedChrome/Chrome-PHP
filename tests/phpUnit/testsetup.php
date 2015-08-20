@@ -16,7 +16,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Test
  * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Create Commons
+ * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
  * @version Git: <git_id>
  * @author Alexander Book
  */
@@ -117,7 +117,7 @@ class TestSetup
         {
 
             // configure default database connection
-            // remove comment in those lines, to connect to db at once. Now it will only connect if needed
+            // remove comment in those lines, to connect to db immediately. Now it will only connect if needed
             $mysqlTestConnection = new \Chrome\Database\Connection\Mysql();
             $mysqlTestConnection->setConnectionOptions(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
             // mysqlTestConnection->connect();

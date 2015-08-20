@@ -21,31 +21,24 @@
  * @author Alexander Book
  */
 
-if(!defined('CHROME_PHP')) {
-    define('CHROME_PHP', true);
-}
+define('CHROME_PHP', true);
 
 chdir(dirname(dirname(__FILE__)));
-if(in_array('--setCWD', $_SERVER['argv'])) {
-    foreach($_SERVER['argv'] as $key => $value) {
-        if($value === '--setCWD') {
-            unset($_SERVER['argv'][$key]);
-        }
-    }
-}
 
-// load phpUnit
-require_once 'include/lib/vendor/phpunit/phpunit/PHPUnit/Autoload.php';
+require_once 'include/config.php';
+require_once 'include/application/default.php';
+require_once 'tests/phpUnit/dbsetup.php';
+require_once 'tests/phpUnit/testsetup.php';
+// TODO: fix Request Console Handler
+#$application = new \Chrome\Application\DefaultApplication();
+#$application->init();
 
-// load test setup
-require_once 'phpUnit/testsetup.php';
+$app = new \Test\Chrome\TestSetup();
+$app->testDb();
 
-// load custom phpUnit command and default test case
-require_once 'tests/phpUnit/command.php';
-require_once 'tests/phpUnit/testCase.php';
+$datbaseInitializer = new \Chrome\Database\Initializer\Initializer();
+$datbaseInitializer->initialize();
 
-// load abstract tests
-require_once 'tests/abstractTests/bootstrap.php';
+$databaseFactory = $datbaseInitializer->getFactory();
 
-$command = new PHPUnit_TextUI_Command_Chrome();
-$command->run($_SERVER['argv'], true);
+\Test\Chrome\setupDatabase($databaseFactory, true);

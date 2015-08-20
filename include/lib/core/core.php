@@ -53,10 +53,10 @@ require_once 'mime.php';
 require_once 'date.php';
 
 /**
- * load Chrome_File, Chrome_Dir classes, for easy file and dir manipulation
+ * load Chrome_File, Chrome_Directory classes, for easy file and dir manipulation
  */
 require_once 'file/file.php';
-require_once 'file/dir.php';
+require_once 'file/directory.php';
 
 /**
  * load file_system class for fast isFile & isDir functions

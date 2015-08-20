@@ -103,8 +103,19 @@ abstract class Chrome_Model_Database_Statement_Abstract extends Chrome_Model_Dat
     {
         $interfaceInstance = parent::_connect();
 
+        // always true unless $_dbInterface is changed
         if($interfaceInstance instanceof \Chrome\Database\Facade\Model_Interface) {
             $interfaceInstance->setModel($this->_dbStatementModel);
         }
+    }
+
+    /**
+     * @return Chrome\Database\Facade\Model_Interface
+     */
+    protected function _getDBInterface($clear = true)
+    {
+        // will always return Chrome\Database\Facade\Model_Interface if $_dbInterface is not changed
+        // just for code completion, do not remove this
+        return parent::_getDBInterface($clear);
     }
 }

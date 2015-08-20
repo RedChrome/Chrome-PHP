@@ -74,6 +74,7 @@ class Message implements Message_Interface
     protected $_message = '';
     protected $_params = array();
     protected $_namespace = '';
+
     public function __construct($message, array $params = array(), $namespace = '')
     {
         $this->_message = $message;
@@ -240,10 +241,12 @@ class Translate_Simple implements Translate_Interface
             $this->_translations = $this->_translations + $translations;
 
             $newTranslation = array();
+
             foreach($translations as $key => $value) {
                 $key = $section.'/'.$key;
                 $newTranslation[$key] = $value;
             }
+
             $this->_translations = $this->_translations + $newTranslation;
         }
 

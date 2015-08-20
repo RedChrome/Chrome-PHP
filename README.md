@@ -5,7 +5,7 @@ Chrome-PHP is an object-oriented PHP framework which is based on well-known desi
 A live demo is available at http://chrome.bplaced.net/
 
 ##Requirements
-- PHP >= 5.3.0
+- PHP >= 5.3.1
 - relational Database:
   - MySQL
   - PostgreSQL 

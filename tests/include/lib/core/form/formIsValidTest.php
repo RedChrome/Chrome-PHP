@@ -2,6 +2,10 @@
 
 namespace Test\Chrome\Form;
 
+use Test\Chrome\Form\Element\IsSent;
+
+use Test\Chrome\Form\Element\IsValid;
+
 require_once 'tests/dummies/form/form.php';
 require_once 'tests/dummies/form/element/isValid.php';
 
@@ -13,20 +17,20 @@ class FormIsValidTest extends \Test\Chrome\TestCase
 
     public function setUp()
     {
-        $this->_form = new \Test_Chrome_Form_No_Elements($this->_appContext);
+        $this->_form = new EmptyForm($this->_appContext);
         $this->_option = new \Chrome_Form_Option_Element();
     }
 
     protected function _addElement()
     {
-        $element = new \Test_Chrome_Form_Element_isValid($this->_form, 'valid', $this->_option);
+        $element = new IsValid($this->_form, 'valid', $this->_option);
         $element->isValid = true;
         $this->_form->addElement($element);
     }
 
     public function testIsValidRequiresIsSent()
     {
-        $notSent = new \Test_Chrome_Form_Element_isSent($this->_form, 'notSent', $this->_option);
+        $notSent = new IsSent($this->_form, 'notSent', $this->_option);
         $notSent->isSent = false;
         $notSent->errors = array('test, not sent');
 
@@ -49,7 +53,7 @@ class FormIsValidTest extends \Test\Chrome\TestCase
     {
         $errors = array('test, not valid');
         $this->_addElement();
-        $notValid = new \Test_Chrome_Form_Element_isValid($this->_form, 'notValid', $this->_option);
+        $notValid = new IsValid($this->_form, 'notValid', $this->_option);
         $notValid->isValid = false;
         $notValid->errors = $errors;
         $this->_form->addElement($notValid);

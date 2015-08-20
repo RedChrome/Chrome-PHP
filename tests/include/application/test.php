@@ -45,7 +45,7 @@ class DefaultTestApplication extends \Chrome\Application\DefaultApplication
         // set up the available request handler
 
         $hash = new \Chrome\Hash\Hash();
-        $requestFactory->addRequestObject(new \Chrome\Request\Handler\ConsoleHandler($hash));
+        $requestFactory->addRequestObject(new \Chrome\Request\Handler\ConsoleHandler($hash, new \Chrome\Directory(TMP.CHROME_SESSION_SAVE_PATH)));
 
         $reqHandler = $requestFactory->getRequest();
         $this->_applicationContext->setRequestHandler($requestFactory->getRequest());
