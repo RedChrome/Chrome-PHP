@@ -42,7 +42,7 @@ interface Apc_Interface extends Option_Interface
     /**
      * Sets how long the cache entries will live
      *
-     * @param int $seconds (0 => infinity)
+     * @param int $seconds (0 => infinity, < 0 => immediately invalid)
      */
     public function setTimeToLive($seconds);
 
@@ -53,22 +53,16 @@ interface Apc_Interface extends Option_Interface
 }
 
 /**
- * Default implementation of the option session interface
+ * Default implementation of the option apc interface
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
  */
-class Apc implements Session_Interface
+class Apc implements Apc_Interface
 {
     protected $_namespace = '';
 
     protected $_ttl = 0;
-
-    public function __construct(\Chrome\Request\Session_Interface $session, $namespace)
-    {
-        $this->setSession($session);
-        $this->setNamespace($namespace);
-    }
 
     public function setNamespace($namespace)
     {
@@ -87,8 +81,8 @@ class Apc implements Session_Interface
 
     public function setTimeToLive($time)
     {
-        if($time < 0 || !is_int($time)) {
-            throw new \Chrome\InvalidArgumentException('Argument $time must be a non-negative integer');
+        if(!is_int($time)) {
+            throw new \Chrome\InvalidArgumentException('Argument $time must be an integer');
         }
 
         $this->_ttl = $time;
@@ -122,7 +116,7 @@ class Apc implements Cache_Interface
 
     public function clear()
     {
-        $iterator = new \APCIterator('user', '#^namespace:.*#i');
+        $iterator = new \APCIterator('user', '#^'.$this->_namespace.':.*#i');
 
         foreach($iterator as $key => $value) {
             \apc_delete($key);

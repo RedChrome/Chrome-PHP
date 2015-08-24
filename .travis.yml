@@ -7,8 +7,9 @@ php:
   - 5.3
   
 before_script:
-  - chmod -R 777 ./scripts/setUp.sh
-  - ./scripts/setUp.sh
+  - chmod a+x scripts/unix/travis.sh
+  - chmod a+x scripts/unix/tests.sh
+  - ./scripts/unix/travis.sh
   
 script: 
-  - 'php tests/phpUnit.php --configuration tests/phpUnit/config.xml tests/'
+  - ./scripts/unix/tests.sh
