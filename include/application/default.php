@@ -243,16 +243,7 @@ class DefaultApplication implements Application_Interface
 
             $this->_controller->execute();
 
-            // use the design from the controller, but only if he set one design
-            if(($design = $this->_applicationContext->getDesign()) === null)
-            {
-                $design = new \Chrome_Design();
-                $this->_applicationContext->setDesign($design);
-
-                $themeFactory = new \Chrome_Design_Factory_Theme($this->_applicationContext);
-                $theme = $themeFactory->build('chrome_one_sidebar');
-                $theme->initDesign($design, $this->_controller, $this->_diContainer);
-            }
+            $design = $this->_initDesign();
 
             $this->_applicationContext->getResponse()->write($design->render());
 
@@ -263,6 +254,25 @@ class DefaultApplication implements Application_Interface
         {
             $this->_exceptionHandler->exception($e);
         }
+    }
+
+    protected function _initDesign()
+    {
+        // use the design from the controller, but only if he set one design
+        if(($design = $this->_applicationContext->getDesign()) !== null) {
+            return $design;
+        }
+
+        $design = new \Chrome\Design\Design();
+        $this->_applicationContext->setDesign($design);
+
+        $theme = $this->_diContainer->get('\Chrome\Design\Theme\ChromeOneSidebar');
+
+        $theme->setDesign($design);
+        $theme->setController($this->_controller);
+        $theme->apply();
+
+        return $design;
     }
 
     protected function _initDatabase()
@@ -496,17 +506,20 @@ class DefaultApplication implements Application_Interface
         require_once LIB . 'core/dependency_injection/controller.php';
         require_once LIB . 'core/dependency_injection/model.php';
         require_once LIB . 'core/dependency_injection/validator.php';
+        require_once LIB . 'core/dependency_injection/theme.php';
         $registry = new \Chrome\DI\Handler\Registry();
         $closure = new \Chrome\DI\Handler\Closure();
         $controller = new \Chrome\DI\Handler\Controller();
         $model = new \Chrome\DI\Handler\Model();
         $validator = new \Chrome\DI\Handler\Validator();
+        $theme = new \Chrome\DI\Handler\Theme();
 
         $this->_diContainer->attachHandler('registry', $registry);
         $this->_diContainer->attachHandler('closure', $closure);
         $this->_diContainer->attachHandler('controller', $controller);
         $this->_diContainer->attachHandler('model', $model);
         $this->_diContainer->attachHandler('validator', $validator);
+        $this->_diContainer->attachHandler('theme', $theme);
 
         $closure->add('\Chrome\Model\Config', function ($c) {
 
@@ -533,18 +546,18 @@ class DefaultApplication implements Application_Interface
             return $c->get('\Chrome\Model\Route\StaticRoute\Database');
         }, true);
 
-        $closure->add('\Chrome_Design_Loader_Interface', function ($c) {
+        $closure->add('\Chrome\Design\Loader_Interface', function ($c) {
             $viewFactory = $c->get('\Chrome_View_Factory_Interface');
-            $model = $c->get('\Chrome_Model_Design_Loader_Static_Interface');
-            return new \Chrome_Design_Loader_Static($c, $viewFactory, $model);
+            $model = $c->get('\Chrome\Model\Design\StaticLoader_Interface');
+            return new \Chrome\Design\StaticLoader($c, $viewFactory, $model);
         });
 
-        $closure->add('\Chrome_Model_Design_Loader_Static_Interface', function ($c) {
+        $closure->add('\Chrome\Model\Design\StaticLoader_Interface', function ($c) {
             $cacheOption = new \Chrome\Cache\Option\File\Serialization();
             $cacheOption->setCacheFile(new \Chrome\File(CACHE.'_designLoaderStatic.cache'));
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
-            return new \Chrome_Model_Design_Loader_Static_Cache($c->get('\Chrome_Model_Design_Loader_Static_DB'), $cache);
+            return new \Chrome\Model\Design\StaticLoaderCache($c->get('\Chrome\Model\Design\StaticLoaderDatabase'), $cache);
         }, true);
 
         $closure->add('\Chrome\Classloader\Resolver\Model_Interface', function ($c) {
@@ -573,6 +586,10 @@ class DefaultApplication implements Application_Interface
 
         $closure->add('\Chrome\Classloader\Resolver\Captcha', function ($c) {
             return new \Chrome\Classloader\Resolver\Captcha(new \Chrome\Directory('plugins/captcha'));
+        });
+
+        $closure->add('\Chrome\Classloader\Resolver\Theme', function ($c) {
+           return new \Chrome\Classloader\Resolver\Theme(new \Chrome\Directory('themes'));
         });
 
         $closure->add('\Chrome_Model_Classloader_Model_Interface', function ($c) {

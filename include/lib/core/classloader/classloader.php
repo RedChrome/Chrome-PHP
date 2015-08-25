@@ -282,7 +282,6 @@ class Classloader implements Classloader_Interface
             require_once $file->getFileName();
         } else
         {
-            var_dump(is_file($file->getFileName()),$file->getFileName(), getcwd());
             throw new \Chrome\Exception('Could not load file '.$file);
         }
     }

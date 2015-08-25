@@ -22,10 +22,11 @@
 namespace Chrome\Database\Adapter;
 
 /**
- * Adapter to cache result sets using Chrome_Cache_Interface
+ * Adapter to cache result sets using \Chrome\Cache\Cache_Interface
  *
  * E.g.
  * <code>
+ * $cache = new \Chrome\Cache\File(...);
  * $cacheAdapter = new \Chrome\Database\Adapter\Cache($result);
  * $result->setAdapter($cacheAdapter);
  *

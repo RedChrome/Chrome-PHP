@@ -17,30 +17,36 @@
  * @subpackage Chrome.Design
  */
 
+namespace Chrome\Design\Theme;
+
+use \Chrome\Design\Design_Interface;
+use \Chrome\Design\AbstractTheme;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Design.Theme
  */
-class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstract
+class ChromeOneSidebar extends AbstractTheme
 {
-    public function initDesign(Chrome_Design_Interface $design, \Chrome\Controller\Controller_Interface $controller, \Chrome\DI\Container_Interface $diContainer)
+    public function apply()
     {
-        require_once LIB . 'core/design/options/static.php';
+        $diContainer = $this->_appContext->getDiContainer();
+
         require_once LIB . 'core/design/loader/static.php';
 
         $exceptionHandler = new \Chrome\Exception\Handler\HtmlStackTrace();
 
         $template = new \Chrome\Template\PHP();
-        $template->assignTemplate('design/chrome_one_sidebar/layout.tpl');
+        $template->assignTemplate('design/chromeOneSidebar/layout.tpl');
         $template->assign('LINKER', $diContainer->get('\Chrome\Linker\Linker_Interface'));
 
         // this list needs 7 renderables
         $htmlList = new \Chrome\Renderable\RenderableList();
-        $html = new Chrome\Renderable\Composition\TemplateComposition($template, $exceptionHandler);
+        $html = new \Chrome\Renderable\Composition\TemplateComposition($template, $exceptionHandler);
         $html->setRenderableList($htmlList);
 
-        $design->setRenderable($html);
+        $this->_design->setRenderable($html);
 
         $head = new \Chrome\Renderable\Composition\Composition();
         $preBodyIn = new \Chrome\Renderable\Composition\Composition();
@@ -49,9 +55,7 @@ class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstrac
         $footer = new \Chrome\Renderable\Composition\Composition();
         $postBodyIn = new \Chrome\Renderable\Composition\Composition();
 
-        $view = $controller->getView();
-
-        if($view instanceof \Chrome\Renderable)
+        if($this->_controller !== null && (($view = $this->_controller->getView()) instanceof \Chrome\Renderable))
         {
             $body->getRenderableList()->addRenderable($view);
         }
@@ -70,7 +74,8 @@ class Chrome_Design_Theme_Chrome_One_Sidebar extends Chrome_Design_Theme_Abstrac
         {
             $option->setPosition($key);
             $composition->setOption($option);
-            $loader = $diContainer->get('\Chrome_Design_Loader_Interface');
+            $loader = $diContainer->get('\Chrome\Design\Loader_Interface');
+            // TODO: change name of the sidebar (-> db)
             $loader->setTheme('chrome_one_sidebar');
 
             $loader->addComposition($composition);

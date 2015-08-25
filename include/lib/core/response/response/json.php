@@ -43,9 +43,11 @@ class JSONHandler extends HTTPHandler
 
     public function getResponse()
     {
-        return new JSON($this->_request->getRequestData()->getSERVERData('HTTP_PROTOCOL'));
+        return new \Chrome\Response\JSON($this->_request->getRequestData()->getSERVERData('HTTP_PROTOCOL'));
     }
 }
+
+namespace Chrome\Response;
 
 /**
  * @package CHROME-PHP

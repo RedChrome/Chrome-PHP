@@ -17,6 +17,8 @@
  * @subpackage Chrome.Design
  */
 
+namespace Chrome\Design;
+
 require_once 'renderable.php';
 
 /**
@@ -24,7 +26,7 @@ require_once 'renderable.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
-interface Chrome_Design_Interface extends \Chrome\Renderable
+interface Design_Interface extends \Chrome\Renderable
 {
     public function setRenderable(\Chrome\Renderable $renderable);
 
@@ -35,7 +37,7 @@ interface Chrome_Design_Interface extends \Chrome\Renderable
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
-interface Chrome_Design_Loader_Interface
+interface Loader_Interface
 {
     public function setTheme($theme);
 
@@ -52,17 +54,52 @@ interface Chrome_Design_Loader_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Design.Theme
  */
-interface Chrome_Design_Theme_Interface
+interface Theme_Interface
 {
     public function setApplicationContext(\Chrome\Context\Application_Interface $appContext);
 
+    public function setDesign(Design_Interface $design);
+
+    public function setController(\Chrome\Controller\Controller_Interface $controller);
+
+    /**
+     * Applies the theme to the given design
+     *
+     * @return void
+     */
+    public function apply();
+
     // TODO: refine this method
-    public function initDesign(Chrome_Design_Interface $design, \Chrome\Controller\Controller_Interface $controller, \Chrome\DI\Container_Interface $container);
+    //public function initDesign(Design_Interface $design, \Chrome\Controller\Controller_Interface $controller);
 }
 
-abstract class Chrome_Design_Theme_Abstract implements Chrome_Design_Theme_Interface
+abstract class AbstractTheme implements Theme_Interface
 {
+
+    /**
+     * @var \Chrome\Context\Application_Interface
+     */
     protected $_appContext = null;
+
+    /**
+     * @var Design_Interface
+     */
+    protected $_design = null;
+
+    /**
+     * @var \Chrome\Controller\Controller_Interface
+     */
+    protected $_controller = null;
+
+    public function setDesign(Design_Interface $design)
+    {
+        $this->_design = $design;
+    }
+
+    public function setController(\Chrome\Controller\Controller_Interface $controller)
+    {
+        $this->_controller = $controller;
+    }
 
     public function setApplicationContext(\Chrome\Context\Application_Interface $appContext)
     {
@@ -74,14 +111,14 @@ abstract class Chrome_Design_Theme_Abstract implements Chrome_Design_Theme_Inter
  * @package    CHROME-PHP
  * @subpackage Chrome.Design
  */
-interface Chrome_Design_Factory_Interface
+interface Factory_Interface
 {
     public function __construct(\Chrome\Context\Application_Interface $appContext);
 
     public function build();
 }
 
-abstract class Chrome_Design_Factory_Abstract implements Chrome_Design_Factory_Interface
+abstract class AbstractFactory implements Factory_Interface
 {
     protected $_applicationContext = null;
 
@@ -95,5 +132,3 @@ abstract class Chrome_Design_Factory_Abstract implements Chrome_Design_Factory_I
 require_once 'renderable/composition.php';
 require_once 'renderable/template.php';
 require_once 'design/default.php';
-require_once 'factory/design.php';
-require_once 'factory/theme.php';

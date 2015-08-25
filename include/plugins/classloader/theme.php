@@ -19,26 +19,23 @@
 
 namespace Chrome\Classloader\Resolver;
 
-use Chrome\Classloader\AbstractResolver;
+use \Chrome\Classloader\AbstractResolver;
 
 /**
- * Resolves all classes beginning with '\Chrome\Captcha\'
+ * resolves all classes which are contained in the namespace
+ * Chrome\Design\Theme\*\
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Captcha extends AbstractResolver
+class Theme extends AbstractResolver
 {
-    /**
-     * Resolves a class, if $class beginns with 'Chrome\Captcha\'
-     *
-     * @param string $class
-     * @return file name, or false if not found
-     */
     public function resolve($class)
     {
-        if(preg_match('#Chrome\\\\Captcha((?:\\\\[a-z_A-Z0-9]{1,})*)\\\\([a-z_A-Z0-9]{1,})?#', $class, $matches)) {
-            return $this->_directory->file(substr(strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php')), 1), true);
+        // match classes like Chrome\Validator\My\Sub\Namespace\MyClassNameValidator
+        if(preg_match('#Chrome\\\\Design\\\\Theme\\\\([a-z_A-Z0-9]{1,})#AD', $class, $matches))
+        {
+            return $this->_directory->file(strtolower(str_replace('\\', '/', $matches[1].'/theme.php')), true);
         }
 
         return false;

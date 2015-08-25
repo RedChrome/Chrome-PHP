@@ -42,9 +42,11 @@ class HTTPHandler implements Handler_Interface
 
     public function getResponse()
     {
-        return new HTTP($this->_request->getRequestData()->getSERVERData('SERVER_PROTOCOL'));
+        return new \Chrome\Response\HTTP($this->_request->getRequestData()->getSERVERData('SERVER_PROTOCOL'));
     }
 }
+
+namespace Chrome\Response;
 
 /**
  * @package CHROME-PHP

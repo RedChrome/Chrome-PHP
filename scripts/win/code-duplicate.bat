@@ -1,1 +1,1 @@
-phpcpd ../include
+phpcpd ../../xinclude

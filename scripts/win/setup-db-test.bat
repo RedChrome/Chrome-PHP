@@ -1,2 +1,2 @@
 @Echo Off
-php ../tests/setuptestdb.php default
+php ../../tests/setuptestdb.php default

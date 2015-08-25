@@ -41,9 +41,11 @@ class ConsoleHandler implements Handler_Interface
 
     public function getResponse()
     {
-        return new Console();
+        return new \Chrome\Response\Console();
     }
 }
+
+namespace Chrome\Response;
 
 /**
  *
