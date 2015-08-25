@@ -1,6 +1,8 @@
 <?php
 
-class Chrome_Model_HTTP_Index extends Chrome_Model_Abstract
+namespace Chrome\Model\Index;
+
+class Index extends \Chrome\Model\AbstractModel
 {
     public function __construct()
     {

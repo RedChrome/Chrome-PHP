@@ -61,7 +61,7 @@ class Config implements Config_Interface
     /**
      * Contains instance of model class
      *
-     * @var Chrome_Model_Abstract
+     * @var \Chrome\Model\Model_Interface
      */
     private $_model = null;
 
@@ -71,7 +71,7 @@ class Config implements Config_Interface
      * loads config
      *
      */
-    public function __construct(\Chrome_Model_Interface $model)
+    public function __construct(\Chrome\Model\Model_Interface $model)
     {
         $this->_model = $model;
 
@@ -88,7 +88,7 @@ class Config implements Config_Interface
      *
      * Retuns a model
      *
-     * @returns Chrome_Model_Abstract
+     * @returns \Chrome\Model\Model_Interface
      */
     public function getModel()
     {

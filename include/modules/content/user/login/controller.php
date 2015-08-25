@@ -88,7 +88,7 @@ class Login extends AbstractModule
             ->getFactory()
             ->build('Chrome_View_User_Login_Default', $this);
 
-        // $this->_model = new Chrome_Model_Login($this->_applicationContext, $this->_form);
+        // $this->_model = new \Chrome\Model\Login\Database($this->_applicationContext, $this->_form);
 
         $this->_form->create();
 

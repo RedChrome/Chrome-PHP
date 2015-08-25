@@ -2,7 +2,7 @@
 
 namespace Test\Chrome\Model;
 
-class NullModel extends \Chrome_Model_Abstract
+class NullModel extends \Chrome\Model\AbstractModel
 {
     public function __call($methodName, array $params)
     {

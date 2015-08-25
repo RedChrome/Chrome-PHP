@@ -34,7 +34,7 @@ class DatabaseChain extends Chain_Abstract
     /**
      * object for manipulating data
      *
-     * @var Chrome_Model_Abstract
+     * @var \Chrome\Model\Model_Interface
      */
     protected $_model = null;
 
@@ -52,7 +52,7 @@ class DatabaseChain extends Chain_Abstract
      */
     protected $_setTime = true;
 
-    public function __construct(\Chrome_Model_Abstract $model, $updateTime = false, $setTime = true)
+    public function __construct(\Chrome\Model\Model_Interface $model, $updateTime = false, $setTime = true)
     {
         $this->_model      = $model;
         $this->_updateTime = (boolean) $updateTime;
@@ -257,7 +257,7 @@ namespace Chrome\Model\Authentication;
  * @package    CHROME-PHP
  * @subpackage Chrome.Authentication
  */
-class Database extends \Chrome_Model_Database_Statement_Abstract
+class Database extends \Chrome\Model\AbstractDatabaseStatement
 {
     protected $_options = array(
                            'dbTable'          => 'authenticate',

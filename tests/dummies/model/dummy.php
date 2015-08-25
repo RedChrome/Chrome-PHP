@@ -2,7 +2,7 @@
 
 namespace Test\Chrome\Model;
 
-class Dummy extends \Chrome_Model_Abstract
+class Dummy extends \Chrome\Model\AbstractModel
 {
     public $data = array();
     public $defaultData = null;

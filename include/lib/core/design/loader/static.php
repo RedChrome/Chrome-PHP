@@ -36,7 +36,7 @@ class StaticLoader implements Loader_Interface
 
     protected $_theme = '';
 
-    public function __construct(\Chrome\DI\Container_Interface $dependencyContainer, \Chrome_View_Factory_Interface $viewFactory, \Chrome_Model_Abstract $model)
+    public function __construct(\Chrome\DI\Container_Interface $dependencyContainer, \Chrome_View_Factory_Interface $viewFactory, \Chrome\Model\Model_Interface $model)
     {
         $this->_dependencyContainer = $dependencyContainer;
         $this->_viewFactory = $viewFactory;
@@ -146,7 +146,7 @@ class StaticOption implements \Chrome\Renderable\Option_Interface
 
 namespace Chrome\Model\Design;
 
-class StaticLoaderCache extends \Chrome_Model_Cache_Abstract
+class StaticLoaderCache extends \Chrome\Model\AbstractCache
 {
     public function getViewsByPosition($position, $theme)
     {
@@ -161,7 +161,7 @@ class StaticLoaderCache extends \Chrome_Model_Cache_Abstract
     }
 }
 
-class StaticLoaderDatabase extends \Chrome_Model_Database_Statement_Abstract
+class StaticLoaderDatabase extends \Chrome\Model\AbstractDatabaseStatement
 {
     protected function _setDatabaseOptions()
     {

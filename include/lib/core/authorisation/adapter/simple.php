@@ -53,7 +53,7 @@ class Simple implements Adapter_Interface
     const CHROME_AUTHORISATION_DEFAULT_MAX_GROUPS = 24;
 
     /**
-     * @var Chrome_Model_Abstract
+     * @var \Chrome\Model\Model_Interface
      */
     protected $_model = null;
 
@@ -134,7 +134,7 @@ interface Model_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Authorisation
  */
-class Database extends \Chrome_Model_Database_Statement_Abstract implements Model_Interface
+class Database extends \Chrome\Model\AbstractDatabaseStatement implements Model_Interface
 {
     protected $_resourceModel = null;
 

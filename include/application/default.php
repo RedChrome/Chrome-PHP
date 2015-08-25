@@ -598,7 +598,7 @@ class DefaultApplication implements Application_Interface
             $cacheOption->setCacheFile(new \Chrome\File(CACHE.'_require.cache'));
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
-            return new \Chrome_Model_Classloader_Cache($c->get('\Chrome_Model_Classloader_Model_Database'), $cache);
+            return new \Chrome\Model\Classloader\Cache($c->get('\Chrome\Model\Classloader\Database'), $cache);
         }, true);
 
         $closure->add('\Chrome\Model\Authorisation\Simple\Model_Interface', function ($c) {

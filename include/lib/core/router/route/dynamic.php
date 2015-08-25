@@ -162,7 +162,7 @@ namespace Chrome\Model\Route\DynamicRoute;
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Cache extends \Chrome_Model_Cache_Abstract
+class Cache extends \Chrome\Model\AbstractCache
 {
     const CHROME_MODEL_ROUTER_DYNAMIC_CACHE_CACHE_FILE = 'tmp/cache/router/_dynamic.cache';
 
@@ -195,7 +195,7 @@ class Cache extends \Chrome_Model_Cache_Abstract
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Database extends \Chrome_Model_Database_Statement_Abstract
+class Database extends \Chrome\Model\AbstractDatabaseStatement
 {
     public function getResourcesAsArray()
     {

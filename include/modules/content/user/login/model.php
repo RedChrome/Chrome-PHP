@@ -1,6 +1,8 @@
 <?php
 
-class Chrome_Model_Login extends \Chrome_Model_Database_Statement_Abstract
+namespace Chrome\Model\Login;
+
+class Database extends \Chrome\Model\AbstractDatabaseStatement
 {
     protected function _setDatabaseOptions()
     {

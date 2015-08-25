@@ -17,13 +17,15 @@
  * @subpackage Chrome.Classloader
  */
 
+namespace Chrome\Model\Classloader;
+
 /**
- * Chrome_Model_Classloader_Database
+ * Database
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Classloader
  */
-class Chrome_Model_Classloader_Model_Database extends \Chrome_Model_Database_Statement_Abstract
+class Database extends \Chrome\Model\AbstractDatabaseStatement
 {
 
     /**
@@ -148,12 +150,12 @@ class Chrome_Model_Classloader_Model_Database extends \Chrome_Model_Database_Sta
 }
 
 /**
- * Chrome_Model_Classloader_Cache
+ * Cache
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Require
  */
-class Chrome_Model_Classloader_Cache extends Chrome_Model_Cache_Abstract
+class Cache extends \Chrome\Model\AbstractCache
 {
     /**
      * Namespace

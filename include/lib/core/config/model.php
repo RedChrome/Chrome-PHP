@@ -24,7 +24,7 @@ namespace Chrome\Model\Config;
  * @package CHROME-PHP
  * @subpackage Chrome.Config
  */
-class Database extends \Chrome_Model_Database_Statement_Abstract
+class Database extends \Chrome\Model\AbstractDatabaseStatement
 {
     const TYPE_INT = 'integer', TYPE_STRING = 'string', TYPE_DOUBLE = 'double', TYPE_BOOL = 'boolean';
 
@@ -83,7 +83,7 @@ class Database extends \Chrome_Model_Database_Statement_Abstract
  * @package CHROME-PHP
  * @subpackage Chrome.Config
  */
-class Cache extends \Chrome_Model_Cache_Abstract
+class Cache extends \Chrome\Model\AbstractCache
 {
     public function loadConfig()
     {

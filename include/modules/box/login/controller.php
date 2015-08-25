@@ -49,7 +49,7 @@ class Login extends AbstractModule
     {
         // setting up
 
-        //$this->_model = new Chrome_Model_Login($this->_applicationContext, null);
+        //$this->_model = new \Chrome\Model\Login\Database($this->_applicationContext, null);
         $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Box_Login', $this);
 
         $login = $this->_applicationContext->getDiContainer()->get('\Chrome\Interactor\User\Login_Interface');

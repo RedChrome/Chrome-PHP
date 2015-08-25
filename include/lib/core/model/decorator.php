@@ -17,15 +17,17 @@
  * @subpackage Chrome.Model
  */
 
+namespace Chrome\Model;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Model
  */
-abstract class Chrome_Model_Decorator_Abstract extends Chrome_Model_Abstract
+abstract class AbstractDecorator extends AbstractModel
 {
     protected $_decorable = null;
 
-    public function __construct(Chrome_Model_Interface $instance = null)
+    public function __construct(Model_Interface $instance = null)
     {
         if($instance !== null) {
             $this->setDecorable($instance);
@@ -37,7 +39,7 @@ abstract class Chrome_Model_Decorator_Abstract extends Chrome_Model_Abstract
         return call_user_func_array(array($this->_decorable, $func), $args);
     }
 
-    public function setDecorable(Chrome_Model_Abstract $instance)
+    public function setDecorable(\Chrome\Model\Model_Interface $instance)
     {
         $this->_decorable = $instance;
     }
@@ -54,7 +56,7 @@ abstract class Chrome_Model_Decorator_Abstract extends Chrome_Model_Abstract
  * @package    CHROME-PHP
  * @subpackage Chrome.Model
  */
-abstract class Chrome_Model_Cache_Abstract extends Chrome_Model_Decorator_Abstract
+abstract class AbstractCache extends AbstractDecorator
 {
     /**
      * contains an instance of a cache class
@@ -68,10 +70,9 @@ abstract class Chrome_Model_Cache_Abstract extends Chrome_Model_Decorator_Abstra
      *
      * This is a decorator pattern.
      *
-     * @param Chrome_Model_Abstract $instance instance of another model object
-     * @return Chrome_Model_Cache_Abstract
+     * @param \Chrome\Model\Model_Interface $instance instance of another model object
      */
-    public function __construct(Chrome_Model_Abstract $instance, \Chrome\Cache\Cache_Interface $cache)
+    public function __construct(\Chrome\Model\Model_Interface $instance, \Chrome\Cache\Cache_Interface $cache)
     {
         parent::__construct($instance);
         $this->setCache($cache);
