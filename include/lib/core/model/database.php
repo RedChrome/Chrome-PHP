@@ -31,7 +31,7 @@ abstract class AbstractDatabase extends \Chrome\Model\AbstractModel
     protected $_dbFactory = null;
 
     /**
-     * @param \Chrome\Context\Model_Interface $modelContext
+     * @param \Chrome\Database\Factory\Factory_Interface $databaseFactory
      */
     public function __construct(\Chrome\Database\Factory\Factory_Interface $databaseFactory)
     {

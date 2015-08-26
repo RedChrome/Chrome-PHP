@@ -26,22 +26,15 @@ class Chrome_View_Form_Element_Backward_Default extends Chrome_View_Form_Element
 {
     protected function _render()
     {
-        // @todo implement option: delte passwords via javascript on backward
-
         $lang = $this->_getTranslate();
         //$lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_DEFAULT_LANGUAGE);
 
         $this->_attribute->setAttribute('value', $lang->get('backward'));
         $this->_attribute->remove('required');
 
-        $formId = $this->_viewForm->getViewElements($this->_formElement->getForm()->getID())->getId();#->getFlag('id');
-        $this->_attribute->setAttribute('onclick', 'javascript:truncate_form_input(\'' . $formId . '\');return true');
-
-        return '<input type="submit" ' . $this->_renderFlags() . '/>';
-
-        // f($this->_options[self::CHROME_FORM_DECORATOR_BACKWARD_DELETE_PASSWORDS] === true) {
-        // $addOnclick = 'onclick="javascript:truncate_form_input(\''.$this->_formElement->getForm()->getID().'\');return true"';
-        // else {
-        // $addOnclick = '';
+        // The attribute "formnovalidate" is crucial!
+        // if the user clicks on the backward button, he may not have filled out the whole form
+        // so we need to disable the html5 validation. This is done by this simple attribute
+        return '<input type="submit" ' . $this->_renderFlags() . ' formnovalidate/>';
     }
 }

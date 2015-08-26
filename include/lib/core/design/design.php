@@ -68,9 +68,6 @@ interface Theme_Interface
      * @return void
      */
     public function apply();
-
-    // TODO: refine this method
-    //public function initDesign(Design_Interface $design, \Chrome\Controller\Controller_Interface $controller);
 }
 
 abstract class AbstractTheme implements Theme_Interface
