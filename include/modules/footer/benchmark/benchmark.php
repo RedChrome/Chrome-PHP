@@ -13,29 +13,19 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
- * @subpackage Chrome.Modules
- * @copyright  Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [27.03.2013 15:31:08] --> $
- * @author     Alexander Book
+ * @package CHROME-PHP
+ * @subpackage Chrome.View
  */
 
-/**
- * Chrome_View_Footer_Benchmark
- *
- * @author CHROME-PHP
- * @copyright Alexander Book
- * @version 2010
- * @access public
- */
-class Chrome_View_Footer_Benchmark extends Chrome_View
+namespace Chrome\View\Footer;
+
+class Benchmark extends \Chrome\View\AbstractView
 {
     public function render()
     {
         return 'rendered in ' . sprintf('%01.2f', (microtime(true) - CHROME_MTIME) * 1000) . ' msec<br>
-Consumed ' . memory_get_usage(true) . ' Byte so far<br>
-Peak usage was ' . memory_get_peak_usage(true) . ' Byte so far
+Consumed ' . memory_get_usage(true) . ' Bytes so far<br>
+Peak usage was ' . memory_get_peak_usage(true) . ' Bytes so far
 ';
     }
 }

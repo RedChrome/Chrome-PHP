@@ -564,7 +564,7 @@ class DefaultApplication implements Application_Interface
         });
 
         $closure->add('\Chrome\Classloader\Resolver\Form', function ($c) {
-            return new \Chrome\Classloader\Resolver\Form(new \Chrome\Directory('lib/core/form'), new \Chrome\Directory('plugins/view/form'));
+            return new \Chrome\Classloader\Resolver\Form(new \Chrome\Directory('lib/core/form'), new \Chrome\Directory('plugins/View/form'));
         });
 
         $closure->add('\Chrome\Classloader\Resolver\Converter', function ($c) {

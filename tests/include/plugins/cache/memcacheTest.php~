@@ -8,7 +8,7 @@ class APCTest extends PHPUnit_Framework_TestCase
 {
 	protected function _skipTests()
 	{
-		if(!extension_loaded('apc')) {
+		if(!extension_loaded('memcache')) {
 			$this->markTestSkipped('Extension APC not loaded. Cannot test implementation');
 		}
 	}
@@ -47,6 +47,13 @@ class APCTest extends PHPUnit_Framework_TestCase
 			$this->assertFalse($cache2->has($key));
 			$this->assertNull($cache2->get($key));
 		}
+		
+		$cache->remove('notExisting');
+		$cache->remove('2');
+
+		$this->assertFalse($cache->has('notExisting'));
+		$this->assertFalse($cache->has('2'));			
+
 
 		$cache->clear();
 

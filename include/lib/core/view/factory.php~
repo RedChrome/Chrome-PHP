@@ -42,9 +42,7 @@ class Chrome_View_Factory implements Chrome_View_Factory_Interface
     public function build($viewClass, \Chrome\Controller\Controller_Interface $controller = null)
     {
         if($controller === null) {
-            
-		throw new \Chrome\Exception('Use DI');
-		//return new $viewClass($this->_viewContext);
+            return new $viewClass($this->_viewContext);
         } else {
 
 		throw new \Chrome\Exception('Should be called from dependecy injector');

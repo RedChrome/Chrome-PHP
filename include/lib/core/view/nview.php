@@ -17,12 +17,9 @@
  * @subpackage Chrome.View
  */
 
-namespace Chrome\View\Header;
+namespace Chrome\View;
 
-class Header extends \Chrome\View\AbstractView
+abstract class AbstractView extends \Chrome_View
 {
-    public function render()
-    {
-        return '<header><div class="ym-col3"><div class="ym-wbox"><h1>Chrome-PHP Preview</h1></div></div></header>';
-    }
+
 }

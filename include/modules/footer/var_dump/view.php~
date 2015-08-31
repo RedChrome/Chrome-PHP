@@ -16,15 +16,13 @@
  * @subpackage Chrome.View
  */
 
-namespace Chrome\View\Footer;
-
 /**
  * Chrome_View_Footer_VarDump
- *
+
  * @package    CHROME-PHP
  * @subpackage Chrome.View
  */
-class VarDump extends \Chrome\View\AbstractView
+class Chrome_View_Footer_VarDump extends \Chrome\View\AbstractView
 {
     protected $_data = array();
 

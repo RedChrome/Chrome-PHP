@@ -17,9 +17,7 @@
  * @subpackage Chrome.View
  */
 
-namespace Chrome\View\Header;
-
-class Header extends \Chrome\View\AbstractView
+class Chrome_View_Header_Header extends Chrome_View
 {
     public function render()
     {

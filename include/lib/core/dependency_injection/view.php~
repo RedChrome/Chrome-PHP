@@ -13,16 +13,28 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
- * @subpackage Chrome.View
+ * @package CHROME-PHP
+ * @subpackage Chrome.DependencyInjection
  */
 
-namespace Chrome\View\Header;
+namespace Chrome\DI\Handler;
 
-class Header extends \Chrome\View\AbstractView
+use Chrome\DI\Handler_Interface;
+use Chrome\DI\Container_Interface;
+
+class View implements Handler_Interface
 {
-    public function render()
+    public function remove($key)
     {
-        return '<header><div class="ym-col3"><div class="ym-wbox"><h1>Chrome-PHP Preview</h1></div></div></header>';
+        // do nothing
+    }
+
+    public function get($key, Container_Interface $container)
+    {
+        if(!is_subclass_of($key, '\Chrome_View')) {
+            return null;
+        }
+
+	return new $key($container->get('\Chrome\Context\View_Interface'));
     }
 }

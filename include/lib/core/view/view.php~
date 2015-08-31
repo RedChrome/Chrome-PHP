@@ -178,4 +178,3 @@ class Chrome_View_Template_Simple_Abstract extends Chrome_View
     }
 }
 
-require_once 'nview.php';

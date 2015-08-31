@@ -94,6 +94,8 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
                 case 'view':
                     {
                         $view = $this->_dependencyContainer->get($row['class']);
+                        //$view = $this->_viewFactory->build($row['class']);
+
                         break;
                     }
 

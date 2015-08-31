@@ -208,22 +208,22 @@ INSERT INTO `cpp_design_static` (`name`, `file`, `class`, `position`, `type`, `t
 ('right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome', 2),
 ('right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome', 3),
 ('left_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'leftBox', 'view', 'chrome', 1),
-('Benchmark', 'modules/footer/benchmark/benchmark.php', 'Chrome_View_Footer_Benchmark', 'footer', 'view', 'chrome', 1),
-('Header', 'modules/header/header/header.php', 'Chrome_View_Header_Header', 'preBodyIn', 'view', 'chrome', 1),
+('Benchmark', 'modules/footer/benchmark/benchmark.php', 'Chrome\\View\\Footer\\Benchmark', 'footer', 'view', 'chrome', 1),
+('Header', 'modules/header/header/header.php', '\\Chrome\\View\\Header\\Header', 'preBodyIn', 'view', 'chrome', 1),
 ('Login', 'modules/box/login/controller.php', '\\Chrome\\Controller\\Box\\Login', 'leftBox', 'controller', 'chrome', 0),
-('cssIncluder', 'modules/html/head/cssIncluder/view.php', 'Chrome_View_Html_Head_CssIncluder', 'head', 'view', 'chrome', 0),
+('cssIncluder', 'modules/html/head/cssIncluder/view.php', '\\Chrome\\View\\Html\\Head\\CssIncluder', 'head', 'view', 'chrome', 0),
 ('VarDump', 'modules/footer/var_dump/controller.php', '\\Chrome\\Controller\\Footer\\VarDump', 'footer', 'controller', 'chrome', 2),
-('jsIncluder', 'modules/html/bottom/jsIncluder/view.php', 'Chrome_View_HTML_Bottom_JsIncluder', 'postBodyIn', 'view', 'chrome', 0),
+('jsIncluder', 'modules/html/bottom/jsIncluder/view.php', '\\Chrome\\View\\html\\Bottom\\JsIncluder', 'postBodyIn', 'view', 'chrome', 0),
 ('right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome_one_sidebar', 1),
 ('right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome_one_sidebar', 2),
 ('right_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome_one_sidebar', 3),
 ('left_box', 'modules/box/test/test.php', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome_one_sidebar', 1),
-('Benchmark', 'modules/footer/benchmark/benchmark.php', 'Chrome_View_Footer_Benchmark', 'footer', 'view', 'chrome_one_sidebar', 1),
-('Header', 'modules/header/header/header.php', 'Chrome_View_Header_Header', 'preBodyIn', 'view', 'chrome_one_sidebar', 1),
+('Benchmark', 'modules/footer/benchmark/benchmark.php', 'Chrome\\View\\Footer\\Benchmark', 'footer', 'view', 'chrome_one_sidebar', 1),
+('Header', 'modules/header/header/header.php', '\\Chrome\\View\\Header\\Header', 'preBodyIn', 'view', 'chrome_one_sidebar', 1),
 ('Login', 'modules/box/login/controller.php', '\\Chrome\\Controller\\Box\\Login', 'rightBox', 'controller', 'chrome_one_sidebar', 0),
-('cssIncluder', 'modules/html/head/cssIncluder/view.php', 'Chrome_View_Html_Head_CssIncluder', 'head', 'view', 'chrome_one_sidebar', 0),
+('cssIncluder', 'modules/html/head/cssIncluder/view.php', '\\Chrome\\View\\Html\\Head\\CssIncluder', 'head', 'view', 'chrome_one_sidebar', 0),
 ('VarDump', 'modules/footer/var_dump/controller.php', '\\Chrome\\Controller\\Footer\\VarDump', 'footer', 'controller', 'chrome_one_sidebar', 2),
-('jsIncluder', 'modules/html/bottom/jsIncluder/view.php', 'Chrome_View_HTML_Bottom_JsIncluder', 'postBodyIn', 'view', 'chrome_one_sidebar', 0);
+('jsIncluder', 'modules/html/bottom/jsIncluder/view.php', '\\Chrome\\View\\Html\\Bottom\\JsIncluder', 'postBodyIn', 'view', 'chrome_one_sidebar', 0);
 
 DROP TABLE IF EXISTS `cpp_rbac_group`;
 CREATE TABLE IF NOT EXISTS `cpp_rbac_group` (

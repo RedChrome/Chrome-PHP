@@ -17,7 +17,7 @@
  * @subpackage Chrome.View
  */
 
-namespace Chrome\View\Html\Head;
+namespace Chrome\View\Html\Header;
 
 class CssIncluder extends \Chrome\View\AbstractView
 {
