@@ -17,12 +17,14 @@
  * @subpackage Chrome.Design
  */
 
+namespace Chrome\Design;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Design
  */
-class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
+class StaticLoader implements Loader_Interface
 {
     protected $_compositions = array();
 
@@ -32,7 +34,11 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 
     protected $_theme = '';
 
+<<<<<<< HEAD
     public function __construct(\Chrome\DI\Container_Interface $dependencyContainer, Chrome_Model_Abstract $model)
+=======
+    public function __construct(\Chrome\DI\Container_Interface $dependencyContainer, \Chrome_View_Factory_Interface $viewFactory, \Chrome\Model\Model_Interface $model)
+>>>>>>> 6ce74eae23c960bea832dc2da29400c6e7f127b0
     {
         $this->_dependencyContainer = $dependencyContainer;
         $this->_model = $model;
@@ -68,7 +74,6 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
         }
     }
 
-    // @todo: this should get moved to a model
     protected function _loadViewsByPosition(\Chrome\Renderable\Composition\Composition_Interface $composition, \Chrome\Database\Result\Iterator $resultViewsWithPosition)
     {
         if($resultViewsWithPosition->isEmpty())
@@ -78,15 +83,6 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
 
         foreach($resultViewsWithPosition as $row)
         {
-            $file = new \Chrome\File(BASEDIR . $row['file']);
-
-            if(!$file->exists())
-            {
-                throw new \Chrome\Exception('Cannot load file '.$file.' containing required class for rendering');
-            }
-
-            require_once $file->getFileName();
-
             $view = null;
 
             switch(strtolower($row['type']))
@@ -124,7 +120,31 @@ class Chrome_Design_Loader_Static implements Chrome_Design_Loader_Interface
         }
     }
 }
-class Chrome_Model_Design_Loader_Static_Cache extends Chrome_Model_Cache_Abstract
+
+namespace Chrome\Renderable\Option;
+
+/**
+ * @package    CHROME-PHP
+ * @subpackage Chrome.Design
+ */
+class StaticOption implements \Chrome\Renderable\Option_Interface
+{
+    protected $_position = null;
+
+    public function setPosition($pos)
+    {
+        $this->_position = $pos;
+    }
+
+    public function getPosition()
+    {
+        return $this->_position;
+    }
+}
+
+namespace Chrome\Model\Design;
+
+class StaticLoaderCache extends \Chrome\Model\AbstractCache
 {
     public function getViewsByPosition($position, $theme)
     {
@@ -138,7 +158,8 @@ class Chrome_Model_Design_Loader_Static_Cache extends Chrome_Model_Cache_Abstrac
         return $this->_cache->get($key);
     }
 }
-class Chrome_Model_Design_Loader_Static_DB extends \Chrome_Model_Database_Statement_Abstract
+
+class StaticLoaderDatabase extends \Chrome\Model\AbstractDatabaseStatement
 {
     protected function _setDatabaseOptions()
     {

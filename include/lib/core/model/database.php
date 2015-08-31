@@ -17,7 +17,9 @@
  * @subpackage Chrome.Model
  */
 
-abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
+namespace Chrome\Model;
+
+abstract class AbstractDatabase extends \Chrome\Model\AbstractModel
 {
     protected $_dbAdapter = \Chrome\Database\Factory\Factory_Interface::DEFAULT_ADAPTER;
     protected $_dbInterface = \Chrome\Database\Factory\Factory_Interface::DEFAULT_INTERFACE;
@@ -29,7 +31,7 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
     protected $_dbFactory = null;
 
     /**
-     * @param \Chrome\Context\Model_Interface $modelContext
+     * @param \Chrome\Database\Factory\Factory_Interface $databaseFactory
      */
     public function __construct(\Chrome\Database\Factory\Factory_Interface $databaseFactory)
     {
@@ -87,7 +89,7 @@ abstract class Chrome_Model_Database_Abstract extends Chrome_Model_Abstract
     }
 }
 
-abstract class Chrome_Model_Database_Statement_Abstract extends Chrome_Model_Database_Abstract
+abstract class AbstractDatabaseStatement extends \Chrome\Model\AbstractDatabase
 {
     protected $_dbStatementModel = null;
 

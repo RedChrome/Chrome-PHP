@@ -22,7 +22,7 @@ namespace Chrome\Model\User;
 
 require_once LIB.'modules/user/interfaces/user.php';
 
-class User extends \Chrome_Model_Database_Statement_Abstract implements User_Interface
+class User extends \Chrome\Model\AbstractDatabaseStatement implements User_Interface
 {
     protected function _setDatabaseOptions()
     {

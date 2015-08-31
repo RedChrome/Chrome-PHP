@@ -15,11 +15,14 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Model
  */
+
+namespace Chrome\Model;
+
 use \Chrome\Registry\Logger\Registry_Interface;
 use \Chrome\Logger\Loggable_Interface;
 use \Psr\Log\LoggerInterface;
 
-interface Chrome_Model_Interface extends Loggable_Interface
+interface Model_Interface extends Loggable_Interface
 {
     public function setModelContext(\Chrome\Context\Model_Interface $modelContext);
 
@@ -31,13 +34,16 @@ interface Chrome_Model_Interface extends Loggable_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Model
  */
-abstract class Chrome_Model_Abstract implements Chrome_Model_Interface
+abstract class AbstractModel implements Model_Interface
 {
     /**
-     *
      * @var \Chrome\Context\Model_Interface
      */
     protected $_modelContext = null;
+
+    /**
+     * @var LoggerInterface
+     */
     protected $_logger = null;
 
     public function setModelContext(\Chrome\Context\Model_Interface $modelContext)

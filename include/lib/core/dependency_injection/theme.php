@@ -22,7 +22,7 @@ namespace Chrome\DI\Handler;
 use Chrome\DI\Handler_Interface;
 use Chrome\DI\Container_Interface;
 
-class Model implements Handler_Interface
+class Theme implements Handler_Interface
 {
     public function remove($key)
     {
@@ -31,10 +31,15 @@ class Model implements Handler_Interface
 
     public function get($key, Container_Interface $container)
     {
-        if(!is_subclass_of($key, '\Chrome\Model\AbstractDatabaseStatement')) {
+        if(!is_subclass_of($key, '\Chrome\Design\Theme_Interface')) {
             return null;
+
+            var_dump($key);
         }
 
-        return new $key($container->get('Chrome\Database\Factory\Factory_Interface'), $container->get('\Chrome\Model\Database\Statement_Interface'));
+        $instance = new $key();
+        $instance->setApplicationContext($container->get('\Chrome\Context\Application_Interface'));
+
+        return $instance;
     }
 }

@@ -49,9 +49,14 @@ class Login extends AbstractModule
     {
         // setting up
 
+<<<<<<< HEAD
         //$this->_model = new Chrome_Model_Login($this->_applicationContext, null);
         $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome_View_Box_Login');
 	//$this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Box_Login', $this);
+=======
+        //$this->_model = new \Chrome\Model\Login\Database($this->_applicationContext, null);
+        $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Box_Login', $this);
+>>>>>>> 6ce74eae23c960bea832dc2da29400c6e7f127b0
 
         $login = $this->_applicationContext->getDiContainer()->get('\Chrome\Interactor\User\Login_Interface');
         #$login = new \Chrome\Interactor\User\Login($this->_applicationContext->getAuthentication());

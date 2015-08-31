@@ -16,7 +16,7 @@ class Index extends AbstractModule
         $factory = $this->_applicationContext->getViewContext()->getFactory();
         $this->_view = $this->_applicationContext->getDiContainer()->get('Chrome_View_Index');
 
-        $this->_model = new \Chrome_Model_HTTP_Index();
+        $this->_model = new \Chrome\Model\Index\Index();
     }
 
     protected function _execute()

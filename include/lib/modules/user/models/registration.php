@@ -22,7 +22,7 @@ namespace Chrome\Model\User;
 
 require_once LIB.'modules/user/interfaces/registration.php';
 
-class Registration extends \Chrome_Model_Database_Statement_Abstract implements Registration_Interface
+class Registration extends \Chrome\Model\AbstractDatabaseStatement implements Registration_Interface
 {
     protected function _setDatabaseOptions()
     {

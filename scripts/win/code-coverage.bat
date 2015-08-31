@@ -1,3 +1,1 @@
-cd ..\
-php tests\phpUnit.php --configuration tests\phpUnit\configCodeCoverage.xml  tests\ 
-cd scripts
+php ..\..\tests\phpUnit.php --configuration tests\phpUnit\configCodeCoverage.xml  tests\ 

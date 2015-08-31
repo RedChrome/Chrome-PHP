@@ -45,9 +45,9 @@ interface Model_Interface extends Resolver_Interface
 class Model implements Model_Interface
 {
     /**
-     * Contains Chrome_Model_Abstract instance
+     * Contains \Chrome\Model\Model_Interface instance
      *
-     * @var Chrome_Model_Abstract
+     * @var \Chrome\Model\Model_Interface
      */
     protected $_model = null;
 
@@ -81,7 +81,7 @@ class Model implements Model_Interface
      */
     protected $_diContainer = null;
 
-    public function __construct(\Chrome_Model_Interface $model, \Chrome\DI\Container_Interface $diContainer)
+    public function __construct(\Chrome\Model\Model_Interface $model, \Chrome\DI\Container_Interface $diContainer)
     {
         $this->_model = $model;
         $this->_diContainer = $diContainer;

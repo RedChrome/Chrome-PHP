@@ -17,11 +17,13 @@
  * @subpackage Chrome.Design
  */
 
+namespace Chrome\Design;
+
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Design
  */
-class Chrome_Design implements Chrome_Design_Interface
+class Design implements Design_Interface
 {
     protected $_renderable = null;
 

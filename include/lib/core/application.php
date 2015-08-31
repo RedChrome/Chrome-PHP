@@ -392,14 +392,14 @@ interface Application_Interface
      *
      * A design is a wrapper for a view composition. Thus a design only contains the entry point to render all registered views.
      *
-     * @param Chrome_Design_Interface $design
+     * @param \Chrome\Design\Design_Interface $design
      */
-    public function setDesign(\Chrome_Design_Interface $design);
+    public function setDesign(\Chrome\Design\Design_Interface $design);
 
     /**
      * Returns a design object
      *
-     * @return Chrome_Design_Interface
+     * @return \Chrome\Design\Design_Interface
      */
     public function getDesign();
 
@@ -574,7 +574,7 @@ class Application implements Application_Interface
         return $this->_loggerRegistry;
     }
 
-    public function setDesign(\Chrome_Design_Interface $design)
+    public function setDesign(\Chrome\Design\Design_Interface $design)
     {
         $this->_design = $design;
     }

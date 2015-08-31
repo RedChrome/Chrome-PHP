@@ -97,9 +97,9 @@ abstract class AbstractController implements Controller_Interface
     protected $_interactor = null;
 
     /**
-     * contains an instance of Chrome_Model_Abstract
+     * contains an instance of \Chrome\Model\Model_Interface
      *
-     * @var Chrome_Model_Abstract
+     * @var \Chrome\Model\Model_Interface
      */
     protected $_model = array();
 

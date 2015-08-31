@@ -24,7 +24,7 @@
     "routeStaticGetRoute": "SELECT `class`, `POST`, `GET` FROM cpp_route_static WHERE `search` = \"?\" LIMIT 0,1",
     "routeStaticFindResource": "SELECT `search` AS `link` FROM cpp_route_static WHERE `resource_id` = ? ORDER BY `id` DESC LIMIT 0,1",
 
-    "designLoaderStaticGetViewsByPosition": "SELECT `file`, `class`, `type` FROM cpp_design_static WHERE `position` = \"?\" AND `theme` = \"?\"  ORDER BY `order` ASC",
+    "designLoaderStaticGetViewsByPosition": "SELECT  `class`, `type` FROM cpp_design_static WHERE `position` = \"?\" AND `theme` = \"?\"  ORDER BY `order` ASC",
     
     "resourceGetResourceId": "SELECT `id` FROM cpp_resource WHERE `name` = \"?\" AND `parameter` = \"?\"",
     "resourceGetResource": "SELECT `name`, `parameter` FROM cpp_resource WHERE `id` = ?",

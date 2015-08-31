@@ -17,16 +17,22 @@
  * @subpackage Chrome.Design
  */
 
+namespace Chrome\Design\Theme;
+
+use \Chrome\Design\Design_Interface;
+use \Chrome\Design\AbstractTheme;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Design.Theme
  */
-class Chrome_Design_Theme_Chrome extends Chrome_Design_Theme_Abstract
+class Chrome extends AbstractTheme
 {
-    public function initDesign(Chrome_Design_Interface $design, \Chrome\Controller\Controller_Interface $controller, \Chrome\DI\Container_Interface $diContainer)
+    public function apply()
     {
-        require_once LIB . 'core/design/options/static.php';
+        $diContainer = $this->_appContext->getDiContainer();
+
         require_once LIB . 'core/design/loader/static.php';
 
         // @todo use another exception handler
@@ -38,10 +44,10 @@ class Chrome_Design_Theme_Chrome extends Chrome_Design_Theme_Abstract
 
         // this list needs 7 renderables
         $htmlList = new \Chrome\Renderable\RenderableList();
-        $html = new Chrome\Renderable\Composition\TemplateComposition($template, $exceptionHandler);
+        $html = new \Chrome\Renderable\Composition\TemplateComposition($template, $exceptionHandler);
         $html->setRenderableList($htmlList);
 
-        $design->setRenderable($html);
+        $this->_design->setRenderable($html);
 
         $head = new \Chrome\Renderable\Composition\Composition();
         $preBodyIn = new \Chrome\Renderable\Composition\Composition();
@@ -51,9 +57,7 @@ class Chrome_Design_Theme_Chrome extends Chrome_Design_Theme_Abstract
         $footer = new \Chrome\Renderable\Composition\Composition();
         $postBodyIn = new \Chrome\Renderable\Composition\Composition();
 
-        $view = $controller->getView();
-
-        if($view instanceof \Chrome\Renderable)
+        if($this->_controller !== null && (($view = $this->_controller->getView()) instanceof \Chrome\Renderable))
         {
             $body->getRenderableList()->addRenderable($view);
         }
@@ -74,7 +78,7 @@ class Chrome_Design_Theme_Chrome extends Chrome_Design_Theme_Abstract
             $option->setPosition($key);
             $composition->setOption($option);
 
-            $loader = $diContainer->get('\Chrome_Design_Loader_Interface');
+            $loader = $diContainer->get('\Chrome\Design\Loader_Interface');
             $loader->setTheme('chrome');
             $loader->addComposition($composition);
             $loader->load();

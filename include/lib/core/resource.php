@@ -163,7 +163,7 @@ use Chrome\Resource\Model_Interface;
 use Chrome\Resource\Resource_Interface;
 use Chrome\Resource\Resource;
 
-class Database extends \Chrome_Model_Database_Statement_Abstract implements Model_Interface
+class Database extends \Chrome\Model\AbstractDatabaseStatement implements Model_Interface
 {
     protected function _convertArrayParamsToString(array $params)
     {

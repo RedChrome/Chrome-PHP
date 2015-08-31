@@ -208,7 +208,7 @@ abstract class AbstractRoute implements Route_Interface, Loggable_Interface
     protected $_model = null;
     protected $_result = null;
 
-    public function __construct(\Chrome_Model_Abstract $model, LoggerInterface $logger)
+    public function __construct(\Chrome\Model\Model_Interface $model, LoggerInterface $logger)
     {
         $this->_model = $model;
         $this->setLogger($logger);

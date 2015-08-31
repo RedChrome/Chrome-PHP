@@ -73,7 +73,7 @@ interface Statement_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-class JsonStatement extends \Chrome_Model_Cache_Abstract implements Statement_Interface
+class JsonStatement extends \Chrome\Model\AbstractCache implements Statement_Interface
 {
     const DEFAULT_NAMESPACE = 'core';
 

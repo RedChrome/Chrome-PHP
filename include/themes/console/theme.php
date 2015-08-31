@@ -13,28 +13,28 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
+ * @package CHROME-PHP
  * @subpackage Chrome.Design
- * @copyright  Copyright (c) 2008-2009 Chrome - PHP (http://www.chrome-php.de)
- * @license    http://chrome-php.de/license/new-bsd        New BSD License
- * @version    $Id: 0.1 beta <!-- phpDesigner :: Timestamp [02.04.2013 19:38:48] --> $
  */
 
-if(CHROME_PHP !== true) die();
+namespace Chrome\Design\Theme;
+
+use Chrome\Design\AbstractTheme;
+use Chrome\Design\Design_Interface;
 
 /**
  * @package    CHROME-PHP
  * @subpackage Chrome.Design.Theme
  */
-class Chrome_Design_Theme_Console extends Chrome_Design_Theme_Abstract
+class Console extends AbstractTheme
 {
-    public function initDesign(Chrome_Design_Interface $design, \Chrome\Controller\Controller_Interface $controller)
+    public function apply()
     {
         $htmlList = new \Chrome\Renderable\RenderableList();
-        $html = new Chrome\Renderable\Composition\Composition();
+        $html = new \Chrome\Renderable\Composition\Composition();
         $html->setRenderableList($htmlList);
 
-        $design->setRenderable($html);
+        $this->_design->setRenderable($html);
 
         $html->getRenderableList()->addRenderable($controller->getView());
     }

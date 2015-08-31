@@ -46,7 +46,7 @@ interface Chrome_RBAC_Interface extends Chrome_Authorisation_Adapter_Interface
     const CHROME_RBAC_DENY = 0;
     const CHROME_RBAC_ALLOW = 1;
 
-    public static function getInstance(Chrome_Model_Abstract $model);
+    public static function getInstance(\Chrome\Model\Model_Interface $model);
 
     public function setUser(Chrome_RBAC_User_Interface $user);
 
@@ -77,7 +77,7 @@ class Chrome_RBAC implements Chrome_RBAC_Interface
     {
     }
 
-    public static function getInstance(Chrome_Model_Abstract $_model)
+    public static function getInstance(\Chrome\Model\Model_Interface $_model)
     {
         if(self::$_instance === null)
         {
@@ -239,7 +239,7 @@ class Chrome_RBAC implements Chrome_RBAC_Interface
         return array('_groups', '_roles');
     }
 }
-class Chrome_Model_RBAC extends Chrome_Model_Abstract
+class Chrome_Model_RBAC extends \Chrome\Model\AbstractModel
 {
     private static $_instance = null;
 
@@ -258,7 +258,7 @@ class Chrome_Model_RBAC extends Chrome_Model_Abstract
         return self::$_instance;
     }
 }
-class Chrome_Model_RBAC_File extends Chrome_Model_Abstract
+class Chrome_Model_RBAC_File extends \Chrome\Model\AbstractModel
 {
 
     public function getRBACInstance()
@@ -267,7 +267,7 @@ class Chrome_Model_RBAC_File extends Chrome_Model_Abstract
         return $rbac;
     }
 }
-class Chrome_Model_RBAC_Cache extends Chrome_Model_Cache_Abstract
+class Chrome_Model_RBAC_Cache extends \Chrome\Model\AbstractCache
 {
     const CHROME_MODEL_RBAC_CACHE_CACHE_FILE = 'tmp/cache/_rbac.cache';
 
@@ -288,7 +288,7 @@ class Chrome_Model_RBAC_Cache extends Chrome_Model_Cache_Abstract
         return $return;
     }
 }
-class Chrome_Model_RBAC_DB extends Chrome_Model_Database_Abstract
+class Chrome_Model_RBAC_DB extends \Chrome\Model\AbstractDatabase
 {
     protected $_dbInterface = 'Iterator';
 

@@ -73,7 +73,7 @@ namespace Chrome\Model\Route\StaticRoute;
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Cache extends \Chrome_Model_Cache_Abstract
+class Cache extends \Chrome\Model\AbstractCache
 {
     const CACHE_NAMESPACE_GET_ROUTE = 1;
     const CACHE_NAMESPACE_FINDE_ROUTE = 2;
@@ -120,7 +120,7 @@ require_once LIB.'core/linker/http/staticInterface.php';
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Database extends \Chrome_Model_Database_Statement_Abstract implements \Chrome\Linker\HTTP\Model\Static_Interface
+class Database extends \Chrome\Model\AbstractDatabaseStatement implements \Chrome\Linker\HTTP\Model\Static_Interface
 {
     protected $_resourceModel = null;
 
