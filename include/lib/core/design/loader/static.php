@@ -34,11 +34,7 @@ class StaticLoader implements Loader_Interface
 
     protected $_theme = '';
 
-<<<<<<< HEAD
-    public function __construct(\Chrome\DI\Container_Interface $dependencyContainer, Chrome_Model_Abstract $model)
-=======
-    public function __construct(\Chrome\DI\Container_Interface $dependencyContainer, \Chrome_View_Factory_Interface $viewFactory, \Chrome\Model\Model_Interface $model)
->>>>>>> 6ce74eae23c960bea832dc2da29400c6e7f127b0
+    public function __construct(\Chrome\DI\Container_Interface $dependencyContainer, \Chrome\Model\AbstractModel $model)
     {
         $this->_dependencyContainer = $dependencyContainer;
         $this->_model = $model;
