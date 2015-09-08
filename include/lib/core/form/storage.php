@@ -17,38 +17,42 @@
  * @subpackage Chrome.Form
  */
 
+namespace Chrome\Form\Handler;
+
 /**
  * Interface for all 'store handlers'.
  *
- * A "store handler" stores/saves the data sent by the user, using a Chrome_Form_Storage_Interface storage and
- * a Chrome_Form_Option_Storable_Interface option. To retrieve the stored data, use getStored().
+ * A "store handler" stores/saves the data sent by the user, using a \Chrome\Form\Storage_Interface storage and
+ * a \Chrome\Form\Option\Storage_Interface option. To retrieve the stored data, use getStored().
  *
  * These handlers must be set as receiving handlers!
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Storage
  */
-interface Chrome_Form_Handler_Store_Interface
+interface Store_Interface
 {
     /**
      * Returns true if this handler can/(or has) stored user input for $element
      *
-     * @param Chrome_Form_Element_Basic_Interface $element
+     * @param \Chrome\Form\Element\BasicElement_Interface $element
      *        a form element
      *
      * @return boolean
      */
-    public function hasStored(Chrome_Form_Element_Basic_Interface $element);
+    public function hasStored(\Chrome\Form\Element\BasicElement_Interface $element);
 
     /**
      * Returns the stored data for $element. If no data was stored, null is returned
      *
-     * @param Chrome_Form_Element_Basic_Interface $element
+     * @param \Chrome\Form\Element\BasicElement_Interface $element
      *        a form element
      * @return mixed|null
      */
-    public function getStored(Chrome_Form_Element_Basic_Interface $element);
+    public function getStored(\Chrome\Form\Element\BasicElement_Interface $element);
 }
+
+namespace Chrome\Form;
 
 /**
  * Interface to access a storage, for form elements
@@ -56,7 +60,7 @@ interface Chrome_Form_Handler_Store_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Storage
  */
-interface Chrome_Form_Storage_Interface
+interface Storage_Interface
 {
     /**
      * Retrieves the data for $elementName
@@ -95,13 +99,15 @@ interface Chrome_Form_Storage_Interface
     public function has($elementName);
 }
 
+namespace Chrome\Form\Option;
+
 /**
  * Interface to set storage options.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Storage
  */
-interface Chrome_Form_Option_Storable_Interface
+interface Storage_Interface
 {
     /**
      * Whether the storage is enabled.
@@ -114,7 +120,7 @@ interface Chrome_Form_Option_Storable_Interface
     /**
      * Whether the form element should save the user input, even if it is empty (which means null)
      * This should be allowed if the form element is not required.
-     * If this is enabled, then the user cannot delete any prior input.
+     * If it is enabled, then the user cannot delete any prior input.
      *
      * @return boolean
      */
@@ -146,20 +152,20 @@ interface Chrome_Form_Option_Storable_Interface
     /**
      * Enables/Disables the "storeInvalidData" functionality
      *
-     * @param unknown $bool
+     * @param boolean $bool
      */
     public function setStoreInvalidData($bool);
 }
 
 /**
- * Default implementation of Chrome_Form_Option_Storable_Interface
+ * Default implementation of \Chrome\Form\Option\Storage_Interface
  *
  * This is just an option container with validating the setters.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Storage
  */
-class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interface
+class Storage implements Storage_Interface
 {
     /**
      * Store data even if data===null
@@ -182,49 +188,31 @@ class Chrome_Form_Option_Storage implements Chrome_Form_Option_Storable_Interfac
      */
     protected $_storeInvalidData = false;
 
-    /**
-     * @see Chrome_Form_Option_Storable_Interface::getStorageEnabled()
-     */
     public function getStorageEnabled()
     {
         return $this->_storageEnabled;
     }
 
-    /**
-     * @see Chrome_Form_Option_Storable_Interface::getStoreNullData()
-     */
     public function getStoreNullData()
     {
         return $this->_storeNullData;
     }
 
-    /**
-     * @see Chrome_Form_Option_Storable_Interface::getStoreInvalidData()
-     */
     public function getStoreInvalidData()
     {
         return $this->_storeInvalidData;
     }
 
-    /**
-     * @see Chrome_Form_Option_Storable_Interface::setStorageEnabled()
-     */
     public function setStorageEnabled($bool)
     {
         $this->_storageEnabled = (bool) $bool;
     }
 
-    /**
-     * @see Chrome_Form_Option_Storable_Interface::setStoreNullData()
-     */
     public function setStoreNullData($bool)
     {
         $this->_storeNullData = (bool) $bool;
     }
 
-    /**
-     * @see Chrome_Form_Option_Storable_Interface::setStoreInvalidData()
-     */
     public function setStoreInvalidData($bool)
     {
         $this->_storeInvalidData = (bool) $bool;

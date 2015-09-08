@@ -175,9 +175,9 @@ class DefaultApplication implements Application_Interface
         $registryHandler->add('\Chrome\Context\Model_Interface', $this->_modelContext);
         $registryHandler->add('\Chrome\Context\Application_Interface', $this->_applicationContext);
 
-        //$viewFactory = new \Chrome_View_Factory($viewContext);
-        //$viewContext->setFactory($viewFactory);
-        //$registryHandler->add('\Chrome_View_Factory_Interface', $viewFactory);
+        $viewFactory = new \Chrome\View\Factory($this->_diContainer);
+        $viewContext->setFactory($viewFactory);
+        $registryHandler->add('\Chrome\View\Factory_Interface', $viewFactory);
         $registryHandler->add('\Chrome\Hash\Hash_Interface', new \Chrome\Hash\Hash());
 
         $this->_initClassloader();
@@ -619,7 +619,7 @@ class DefaultApplication implements Application_Interface
         });
 
         $closure->add('\Chrome\Controller\User\Register', function ($c) {
-            return new \Chrome\Controller\User\Register($c->get('\Chrome\Context\Application_Interface'), $c->get('\Chrome\Interactor\User\Registration_Interface'), new \Chrome_View_Register($c->get('\Chrome\Context\View_Interface')));
+            return new \Chrome\Controller\User\Register($c->get('\Chrome\Context\Application_Interface'), $c->get('\Chrome\Interactor\User\Registration_Interface'), new \Chrome\View\User\Register($c->get('\Chrome\Context\View_Interface')));
         });
 
         $closure->add('\Chrome\Interactor\User\Registration_Interface', function ($c) {
@@ -747,6 +747,77 @@ class DefaultApplication implements Application_Interface
 
         $closure->add('\Chrome\Interactor\User\Logout', function ($c) {
             return new \Chrome\Interactor\User\Logout($c->get('\Chrome\Interactor\User\Login_Interface'), $c->get('\Chrome\Redirection\Redirection_Interface'));
+        });
+
+        $closure->add('\Chrome\Form\User\Login', function($c) {
+            $form = \Chrome_Form_Login::getInstance($c->get('\Chrome\Context\Application_Interface'));
+
+            // cause this form can get used everywhere, we need to be sure
+            // that this form is once created
+            if(!$form->isCreated())
+            {
+                $form->create();
+            }
+
+            return $form;
+        }, true);
+
+        $closure->add('\Chrome\View\User\Login\Form', function ($c) {
+            $viewForm = new \Chrome_View_Form_Login($c->get('\Chrome\Form\User\Login'), $c->get('\Chrome\Context\View_Interface'));
+            $viewForm->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
+
+            return $viewForm;
+        }, true);
+
+        $closure->add('\Chrome\View\User\UserMenu\FormRenderer', function ($c) {
+            return new \Chrome\View\User\Login\FormRenderer($c->get('\Chrome\View\User\Login\Form'), $c->get('\Chrome\Context\View_Interface'));
+        });
+
+        $closure->add('\Chrome\View\Captcha\FormRenderer', function ($c) {
+           return new \Chrome\View\Captcha\FormRenderer($c->get('\Chrome\View\Captcha\Form'));
+        });
+
+        $closure->add('\Chrome\Form\Captcha', function ($c) {
+           return new \Chrome_Form_Captcha($c->get('\Chrome\Context\Application_Interface'));
+        });
+
+        $closure->add('\Chrome\View\Captcha\Form', function ($c) {
+            $viewForm = new \Chrome_View_Form_Captcha($c->get('\Chrome\Form\Captcha'), $c->get('\Chrome\Context\View_Interface'));
+            $viewForm->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
+
+            return $viewForm;
+        });
+
+        $closure->add('\Chrome\Form\User\Register\StepOne', function ($c) {
+            return new \Chrome_Form_Register_StepOne($c->get('\Chrome\Context\Application_Interface'));
+        });
+
+        $closure->add('\Chrome\View\User\Register\Form\StepOne', function ($c) {
+            $viewForm = new \Chrome_View_Form_Register_StepOne($c->get('\Chrome\Form\User\Register\StepOne'), $c->get('\Chrome\Context\View_Interface'));
+            $viewForm->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
+            return $viewForm;
+        });
+
+        $closure->add('\Chrome\View\User\Register\Form\Renderer\StepOne', function ($c) {
+            return new \Chrome\View\User\Register\Form\Renderer\StepOne($c->get('\Chrome\View\User\Register\Form\StepOne'));
+        });
+
+        $closure->add('\Chrome\Form\User\Register\StepTwo', function ($c) {
+            return new \Chrome_Form_Register_StepTwo($c->get('\Chrome\Context\Application_Interface'));
+        });
+
+        $closure->add('\Chrome\View\User\Register\Form\StepTwo', function ($c) {
+            $formView = new \Chrome_View_Form_Register_StepTwo($c->get('\Chrome\Form\User\Register\StepTwo'), $c->get('\Chrome\Context\View_Interface'));
+            $formView->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
+            return $formView;
+        });
+
+        $closure->add('\Chrome\View\User\Register\Form\Renderer\StepTwo', function ($c) {
+            return new \Chrome\View\User\Register\Form\Renderer\StepTwo($c->get('\Chrome\View\User\Register\Form\StepTwo'));
+        });
+
+        $closure->add('\Chrome\View\User\Login\FormRenderer', function ($c) {
+           return new \Chrome\View\User\Login\FormRenderer($c->get('\Chrome\View\User\Login\Form'));
         });
     }
 

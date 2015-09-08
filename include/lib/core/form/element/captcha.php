@@ -17,7 +17,9 @@
  * @subpackage Chrome.Form
  */
 
-interface Chrome_Form_Option_Element_Captcha_Interface extends Chrome_Form_Option_Element_Interface
+namespace Chrome\Form\Option\Element;
+
+interface Captcha_Interface extends \Chrome\Form\Option\Element_Interface
 {
     /**
      * @return \Chrome\Captcha\Captcha_Interface
@@ -32,7 +34,7 @@ interface Chrome_Form_Option_Element_Captcha_Interface extends Chrome_Form_Optio
     public function getRecreateIfInvalid();
 }
 
-class Chrome_Form_Option_Element_Captcha extends Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Captcha_Interface
+class Captcha extends \Chrome\Form\Option\Element implements Captcha_Interface
 {
     protected $_form = null;
 
@@ -44,7 +46,7 @@ class Chrome_Form_Option_Element_Captcha extends Chrome_Form_Option_Element impl
 
     protected $_recreateIfInvalid = true;
 
-    public function __construct(Chrome_Form_Interface $form)
+    public function __construct(\Chrome\Form\Form_Interface $form)
     {
         $this->_form = $form;
     }
@@ -85,18 +87,20 @@ class Chrome_Form_Option_Element_Captcha extends Chrome_Form_Option_Element impl
     }
 }
 
+namespace Chrome\Form\Element;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Captcha extends Chrome_Form_Element_Abstract implements \Chrome\Form\Element\Interfaces\Captcha
+class Captcha extends \Chrome\Form\Element\AbstractElement implements \Chrome\Form\Element\Interfaces\Captcha
 {
     protected $_captcha = null;
 
     protected $_reCreated = false;
 
-    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Captcha_Interface $option)
+    public function __construct(\Chrome\Form\Form_Interface $form, $id, \Chrome\Form\Option\Element\Captcha_Interface $option)
     {
         parent::__construct($form, $id, $option);
         $this->_captcha = $option->getCaptcha();

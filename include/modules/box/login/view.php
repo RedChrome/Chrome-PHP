@@ -14,107 +14,43 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Content.User
+ * @subpackage Chrome.View.User
  */
+
+namespace Chrome\View\User;
+
+use Chrome\View\AbstractViewStrategy;
+use Chrome\View\AbstractView;
 
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Content.User
  */
-class Chrome_View_Box_Login extends Chrome_View_Strategy_Abstract
+class UserMenu extends AbstractViewStrategy
 {
-
-    protected function _setUp()
-    {
-        // add the .js file for ajax support
-        #$this->addJS(new \Chrome\Resource\Resource('rel:public/javascript/modules/box/login.js'));
-    }
-
-    /**
-     * sets the actual rendered view
-     *
-     * @return void
-     */
-    public function showUserMenu()
+    public function displayUserMenu()
     {
         $this->setViewTitle('User Menu');
-        $this->_views = $this->_viewContext->getFactory()->build('Chrome_View_Box_LoggedIn');
+        $this->_view = $this->_viewContext->getFactory()->get('\Chrome\View\User\UserMenuView');
     }
 
-    /**
-     *
-     * @return void
-     */
-    public function showLoginForm(Chrome_Form_Interface $form, Chrome_View_Form_Element_Factory_Interface $viewFormElementFactory)
+    public function displayLogin()
     {
         $this->setViewTitle('Login');
-        #$viewForm = new Chrome_View_Form_Login($this->_controller->getForm());
-        $viewForm = Chrome_View_Form_Login::getInstance($form, $this->_viewContext);
-        $viewForm->setElementFactory($viewFormElementFactory);
-        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Box($viewForm, $this->_viewContext);
+        $this->_view = $this->_viewContext->getFactory()->get('\Chrome\View\User\UserMenu\FormRenderer');
     }
 }
 
 /**
  *
- *
- *
- * TODO: move this to another box module
- * This is the View for the User Menu
- *
- *
  * @package CHROME-PHP
  * @subpackage Chrome.Content.User
  */
-class Chrome_View_Box_LoggedIn extends Chrome_View
+class UserMenuView extends AbstractView
 {
-
     public function render()
     {
         return 'Eingeloggt...<br>Hier kommt dann das User Menu hin ;)';
-    }
-}
-
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Content.User
- */
-class Chrome_View_Box_Form_Login extends Chrome_View_Abstract
-{
-
-    public function render()
-    {
-        // create template with the form
-        $template = new \Chrome\Template\PHP();
-        $template->assignTemplate('modules/box/login/form_log_in');
-        // assigning form and language
-        $template->assign('FORM', $this->_controller->getForm());
-        $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate());
-        //$template->assign('LANG', new Chrome_Language('modules/content/user/login'));
-        // return the rendered template
-        return $template->render();
-    }
-}
-
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Content.User
- */
-class Chrome_View_Form_Renderer_Template_Login_Box extends Chrome_View_Form_Renderer_Template_Abstract
-{
-    protected function _getTemplate()
-    {
-        $template = new \Chrome\Template\PHP();
-
-        //$lang = new Chrome_Language('modules/content/user/login');
-
-        $template = new \Chrome\Template\PHP();
-        $template->assignTemplate('modules/box/login/form_log_in');
-        $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate());
-
-        return $template;
     }
 }

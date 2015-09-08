@@ -16,13 +16,14 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
+namespace Chrome\Form\Option\Element;
 
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Option_Element_Form extends Chrome_Form_Option_Element_Basic
+class Form extends \Chrome\Form\Option\BasicElement
 {
     protected $_token = null;
     protected $_maxTime = 3600;
@@ -31,7 +32,7 @@ class Chrome_Form_Option_Element_Form extends Chrome_Form_Option_Element_Basic
     protected $_tokenNamespace = 'token';
     protected $_time = CHROME_TIME;
 
-    public function __construct(Chrome_Form_Storage_Interface $storage)
+    public function __construct(\Chrome\Form\Storage_Interface $storage)
     {
         $this->setStorage($storage);
     }
@@ -69,7 +70,7 @@ class Chrome_Form_Option_Element_Form extends Chrome_Form_Option_Element_Basic
         return $this->_minTime;
     }
 
-    public function setStorage(Chrome_Form_Storage_Interface $storage)
+    public function setStorage(\Chrome\Form\Storage_Interface $storage)
     {
         $this->_storage = $storage;
     }
@@ -100,6 +101,10 @@ class Chrome_Form_Option_Element_Form extends Chrome_Form_Option_Element_Basic
     }
 }
 
+namespace Chrome\Form\Element;
+
+use Chrome\Form\Element\AbstractBasicElement;
+
 /**
  * Basic form element class for ALL forms!
  *
@@ -113,7 +118,7 @@ class Chrome_Form_Option_Element_Form extends Chrome_Form_Option_Element_Basic
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract implements \Chrome\Form\Element\Interfaces\Form
+class Form extends AbstractBasicElement implements \Chrome\Form\Element\Interfaces\Form
 {
     /**
      * Options for this element:
@@ -150,15 +155,14 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract implem
 
     /**
      *
-     * @param Chrome_Form_Interface $form
+     * @param \Chrome\Form\Form_Interface $form
      *        the form which should contain this element
      * @param string $id
      *        the id of this new element, must be unique
-     * @param Chrome_Form_Option_Element_Form $options
+     * @param \Chrome\Form\Option\Element\Form $options
      *        options for this element
-     * @return Chrome_Form_Element_Form
      */
-    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Form $option)
+    public function __construct(\Chrome\Form\Form_Interface $form, $id, \Chrome\Form\Option\Element\Form $option)
     {
         parent::__construct($form, $id, $option);
 
@@ -173,9 +177,6 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract implem
             {
                 $this->_option->setToken($storedData[self::CHROME_FORM_ELEMENT_FORM_TOKEN]);
 
-                // renew the timer
-                // storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] = CHROME_TIME;
-
                 $this->_storage->set($this->_id, $storedData);
             }
         }
@@ -189,8 +190,6 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract implem
             return false;
         }
 
-        //$storedData = $this->_storage->get($this->_id);
-
         return true;
     }
 
@@ -198,41 +197,6 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract implem
     {
         return new \Chrome\Validator\Form\Element\ElementFormValidator($this->_id, $this->_option);
     }
-
-    /*
-        public function isValid()
-        {
-            if($this->_isValid !== null)
-            {
-                return $this->_isValid;
-            }
-
-            $storedData = $this->_storage->get($this->_id);
-
-            if($storedData[self::CHROME_FORM_ELEMENT_FORM_TOKEN] !== $this->getData())
-            {
-                $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN;
-                $this->_isValid = false;
-                return false;
-            }
-
-            if($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_option->getMaxAllowedTime() < $this->_option->getTime())
-            {
-                $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME;
-                $this->_isValid = false;
-                return false;
-            }
-
-            if($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_option->getMinAllowedTime() > $this->_option->getTime())
-            {
-                $this->_errors[] = self::CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME;
-                $this->_isValid = false;
-                return false;
-            }
-
-            $this->_isValid = true;
-            return true;
-    }*/
 
     protected function _isSent()
     {
@@ -282,7 +246,7 @@ class Chrome_Form_Element_Form extends Chrome_Form_Element_Basic_Abstract implem
         $this->_option->setTime($time);
     }
 
-    public function setStorage(Chrome_Form_Storage_Interface $storage)
+    public function setStorage(\Chrome\Form\Storage_Interface $storage)
     {
         $this->_storage = $storage;
     }

@@ -2,7 +2,7 @@
 
 namespace Test\Chrome\Form\Element;
 
-class IsValid extends \Chrome_Form_Element_Abstract
+class IsValid extends \Chrome\Form\Element\AbstractElement
 {
     public $isValid = null;
 

@@ -31,7 +31,7 @@ use Chrome\Validator\AbstractValidator;
  */
 class ReadonlyValidator extends AbstractValidator
 {
-    public function __construct(\Chrome_Form_Option_Element_Interface $option)
+    public function __construct(\Chrome\Form\Option\Element_Interface $option)
     {
         $this->_options = $option;
     }

@@ -35,7 +35,7 @@ class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
         return $this->_title . $this->_getDefaultTitleEnding();
     }
 
-    public function addTitle(Chrome_View_Interface $obj, $title)
+    public function addTitle(\Chrome\View\View_Interface $obj, $title)
     {
         if($this->_title === '')
         {
@@ -51,22 +51,22 @@ class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
         }
     }
 
-    public function setTitle(Chrome_View_Interface $obj, $title)
+    public function setTitle(\Chrome\View\View_Interface $obj, $title)
     {
         $this->_title = $title;
     }
 
-    public function addJS(Chrome_View_Interface $obj, Resource_Interface $resource)
+    public function addJS(\Chrome\View\View_Interface $obj, Resource_Interface $resource)
     {
         $this->_JS[] = $this->_applicationContext->getDiContainer()->get('\Chrome\Linker\Linker_Interface')->get($resource);
     }
 
-    public function setJS(Chrome_View_Interface $obj, array $js)
+    public function setJS(\Chrome\View\View_Interface $obj, array $js)
     {
         $this->_JS = $js;
     }
 
-    public function getJS(Chrome_View_Interface $obj = null, $getAsHtmlString = true)
+    public function getJS(\Chrome\View\View_Interface $obj = null, $getAsHtmlString = true)
     {
         if($getAsHtmlString === true)
         {
@@ -84,17 +84,17 @@ class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
         return $this->_JS;
     }
 
-    public function addCSS(Chrome_View_Interface $obj, Resource_Interface $resource)
+    public function addCSS(\Chrome\View\View_Interface $obj, Resource_Interface $resource)
     {
         $this->_CSS[] =  $this->_applicationContext->getDiContainer()->get('\Chrome\Linker\Linker_Interface')->get($resource);
     }
 
-    public function setCSS(Chrome_View_Interface $obj, array $css)
+    public function setCSS(\Chrome\View\View_Interface $obj, array $css)
     {
         $this->_CSS = $css;
     }
 
-    public function getCSS(Chrome_View_Interface $obj = null, $getAsHtmlString = true)
+    public function getCSS(\Chrome\View\View_Interface $obj = null, $getAsHtmlString = true)
     {
         if($getAsHtmlString !== true)
         {

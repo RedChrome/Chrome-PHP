@@ -21,8 +21,8 @@ use Chrome\Misc\Attribute_Secure_Interface;
 
 /**
  *
- * This interface is an analogue to Chrome_Form_Interface. It contains all Chrome_View_Form_Element_Interface $viewElement's for all Chrome_Form_Element_Basic_Interface $element's
- * elements from a Chrome_Form_Interface $form.
+ * This interface is an analogue to \Chrome\Form\Form_Interface. It contains all Chrome_View_Form_Element_Interface $viewElement's for all \Chrome\Form\Element\BasicElement_Interface $element's
+ * elements from a \Chrome\Form\Form_Interface $form.
  *
  * A $form contains some $element's and each $element has a corresponding $viewElement. This class is (some kind of) a set of all $viewElement's. Note that the id's
  * of both objects are the same.
@@ -39,10 +39,10 @@ interface Chrome_View_Form_Interface
      * Creates a new Chrome_View_Form_Interface instance using any given $form. The view context supplies additional
      * display functionality.
      *
-     * @param Chrome_Form_Interface $form a form object
+     * @param \Chrome\Form\Form_Interface $form a form object
      * @param \Chrome\Context\View_Interface $viewContext a view context
      */
-    public function __construct(Chrome_Form_Interface $form, \Chrome\Context\View_Interface $viewContext);
+    public function __construct(\Chrome\Form\Form_Interface $form, \Chrome\Context\View_Interface $viewContext);
 
     /**
      * Sets a factory to create Chrome_View_Form_Element_Interface objects.
@@ -109,11 +109,11 @@ interface Chrome_View_Form_Element_Factory_Interface
      * This returns a Chrome_View_Form_Element_Interface instance, which can render a $formElement. To create this object, we need a viewElementOption object
      * which contains some infos about the rendering
      *
-     * @param Chrome_Form_Element_Basic_Interface $formElement
+     * @param \Chrome\Form\Element\BasicElement_Interface $formElement
      * @param Chrome_View_Form_Element_Option_Basic_Interface $formOption
      * @return Chrome_View_Form_Element_Interface|null
      */
-    public function getElement(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewFormElementOption);
+    public function getElement(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewFormElementOption);
 }
 
 /**
@@ -129,10 +129,10 @@ interface Chrome_View_Form_Element_Option_Factory_Interface
      *
      * Note that the viewElementOption really depends on $formElement.
      *
-     * @param Chrome_Form_Element_Basic_Interface $formElement
+     * @param \Chrome\Form\Element\BasicElement_Interface $formElement
      * @return Chrome_View_Form_Element_Option_Basic_Interface
      */
-    public function getElementOption(Chrome_Form_Element_Basic_Interface $formElement);
+    public function getElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement);
 }
 
 /**
@@ -297,7 +297,7 @@ interface Chrome_View_Form_Element_Basic_Interface extends \Chrome\Renderable
     /**
      * Returns the corresponding form element
      *
-     * @return Chrome_Form_Element_Basic_Interface
+     * @return \Chrome\Form\Element\BasicElement_Interface
      */
     public function getFormElement();
 

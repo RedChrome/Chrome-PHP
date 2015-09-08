@@ -20,8 +20,6 @@
 namespace Chrome\Validator\Form\Element;
 
 use \Chrome\Validator\AbstractValidator;
-use \Chrome_Form_Option_Element_Form;
-use \Chrome_Form_Element_Form;
 
 /**
  * This validates the form element "form"
@@ -56,7 +54,7 @@ class ElementFormValidator extends AbstractValidator
 
     protected $_formOption = null;
 
-    public function __construct($id, \Chrome_Form_Option_Element_Form $formOptions)
+    public function __construct($id, \Chrome\Form\Option\Element\Form $formOptions)
     {
         $this->_id = $id;
         $this->_formOption = $formOptions;
@@ -68,19 +66,19 @@ class ElementFormValidator extends AbstractValidator
 
         $storedData = $this->_formOption->getStorage()->get($this->_id);
 
-        if($storedData[Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_TOKEN] !== $this->_data)
+        if($storedData[\Chrome\Form\Element\Form::CHROME_FORM_ELEMENT_FORM_TOKEN] !== $this->_data)
         {
             $this->_setError(self::CHROME_FORM_ELEMENT_FORM_ERROR_TOKEN);
             return false;
         }
 
-        if($storedData[Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_formOption->getMaxAllowedTime() < $this->_formOption->getTime())
+        if($storedData[\Chrome\Form\Element\Form::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_formOption->getMaxAllowedTime() < $this->_formOption->getTime())
         {
             $this->_setError(self::CHROME_FORM_ELEMENT_FORM_ERROR_MAX_ALLOWED_TIME);
             return false;
         }
 
-        if($storedData[Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_formOption->getMinAllowedTime() > $this->_formOption->getTime())
+        if($storedData[\Chrome\Form\Element\Form::CHROME_FORM_ELEMENT_FORM_TIME] + $this->_formOption->getMinAllowedTime() > $this->_formOption->getTime())
         {
             $this->_setError(self::CHROME_FORM_ELEMENT_FORM_ERROR_MIN_ALLOWED_TIME);
             return false;

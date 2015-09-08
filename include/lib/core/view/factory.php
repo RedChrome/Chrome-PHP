@@ -17,40 +17,45 @@
  * @subpackage Chrome.View
  */
 
+namespace Chrome\View;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-interface Chrome_View_Factory_Interface
+interface Factory_Interface
 {
-    public function build($viewClass);
+    /**
+     *
+     * @param unknown $view
+     * @return \Chrome\Renderable
+     */
+    public function get($view);
 }
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-class Chrome_View_Factory implements Chrome_View_Factory_Interface
+class Factory implements Factory_Interface
 {
-    protected $_viewContext = null;
+    protected $_diContainer = null;
 
-    public function __construct(\Chrome\Context\View_Interface $viewContext)
+    public function __construct(\Chrome\DI\Container_Interface $diContainer)
     {
-        $this->_viewContext = $viewContext;
+        $this->_diContainer = $diContainer;
     }
 
-    public function build($viewClass, \Chrome\Controller\Controller_Interface $controller = null)
+    public function get($view)
     {
-        if($controller === null) {
-            
-		throw new \Chrome\Exception('Use DI');
-		//return new $viewClass($this->_viewContext);
-        } else {
+        $return = $this->_diContainer->get($view);
 
-		throw new \Chrome\Exception('Should be called from dependecy injector');
-            return new $viewClass($this->_viewContext, $controller);
+        // this is necessary. In order to not allow views to access other object
+        if(!($return instanceof \Chrome\Renderable)) {
+            throw new \Chrome\Exception('Views are only able to retrieve \Chrome\Renderable objects!');
         }
 
+        return $return;
     }
 
 }

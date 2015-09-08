@@ -23,12 +23,12 @@
 class Chrome_View_Plugin_Decorator extends Chrome_View_Plugin_Abstract
 {
 
-    public function setViewTitle(Chrome_View_Interface $obj, $title)
+    public function setViewTitle(\Chrome\View\View_Interface $obj, $title)
     {
         $obj->setVar('view_title', $title);
     }
 
-    public function getViewTitle(Chrome_View_Interface $obj)
+    public function getViewTitle(\Chrome\View\View_Interface $obj)
     {
         $title = $obj->getVar('view_title');
 
@@ -40,20 +40,20 @@ class Chrome_View_Plugin_Decorator extends Chrome_View_Plugin_Abstract
         return $title;
     }
 
-    public function addStyle(Chrome_View_Interface $obj, $style)
+    public function addStyle(\Chrome\View\View_Interface $obj, $style)
     {
 
         // Chrome_Design::getInstance()->getStyle()->addStyle($style);
     }
 
-    public function setStyle(Chrome_View_Interface $obj, $style)
+    public function setStyle(\Chrome\View\View_Interface $obj, $style)
     {
         $styleObj = Chrome_Design::getInstance()->getStyle();
         $styleObj->removeAllStyles();
         $styleObj->addStyle($style);
     }
 
-    public function setAjaxEnvironment(Chrome_View_Interface $obj)
+    public function setAjaxEnvironment(\Chrome\View\View_Interface $obj)
     {
         $this->addStyle($obj, 'ajax');
     }

@@ -53,12 +53,12 @@ class Form extends AbstractResolver
      */
     public function resolve($class)
     {
-        if(preg_match('#Chrome_Form_Element_(.{1,})#i', $class, $matches))
+        if(preg_match('#Chrome\\\\Form\\\\Element\\\\(.{1,})#i', $class, $matches))
         {
             return $this->_directory->file('element/' . strtolower($matches[1]) . '.php', true);
         }
 
-        if(preg_match('#Chrome_Form_Option_Element_(.{1,})#i', $class, $matches))
+        if(preg_match('#Chrome\\\\Form\\\\Option\\\\Element\\\\(.{1,})#i', $class, $matches))
         {
             return $this->_directory->file('element/' . strtolower($matches[1]) . '.php', true);
         }
@@ -68,12 +68,12 @@ class Form extends AbstractResolver
             return $this->_pluginDirectory->file(strtolower(str_replace('_', '/', $matches[1])) . '.php', true);
         }
 
-        if(preg_match('#Chrome_Form_Handler_(.{1,})#i', $class, $matches))
+        if(preg_match('#Chrome\\\\Form\\\\Handler\\\\(.{1,})#i', $class, $matches))
         {
             return $this->_directory->file('handler/' . strtolower($matches[1]) . '.php', true);
         }
 
-        if(preg_match('#Chrome_Form_Storage_(.{1,})#i', $class, $matches))
+        if(preg_match('#Chrome\\\\Form\\\\Storage\\\\(.{1,})#i', $class, $matches))
         {
             return $this->_directory->file('storage/' . strtolower($matches[1]) . '.php', true);
         }

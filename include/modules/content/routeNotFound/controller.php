@@ -6,12 +6,12 @@ use \Chrome\Controller\AbstractModule;
 
 require_once 'view.php';
 
-class SiteNotFound extends AbstractModule
+class RouteNotFound extends AbstractModule
 {
 
     protected function _initialize()
     {
-        $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Content_SiteNotFound');
+        $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome\View\RouteNotFound\RouteNotFound');
     }
 
     protected function _execute()

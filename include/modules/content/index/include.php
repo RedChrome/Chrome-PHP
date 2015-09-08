@@ -1,9 +1,7 @@
 <?php
 
-
-class Chrome_Form_Index extends Chrome_Form_Abstract
+class Chrome_Form_Index extends \Chrome\Form\AbstractForm
 {
-
     protected function _init()
     {
         $this->_id = 'Index';
@@ -24,62 +22,62 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
         $textValidators->addValidators(array($emptyValidator, $lengthValidator));
 
         // form
-        $storageSession = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
-        $formElementOption = new Chrome_Form_Option_Element_Form($storageSession);
+        $storageSession = new \Chrome\Form\Storage\Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
+        $formElementOption = new \Chrome\Form\Option\Element\Form($storageSession);
         $formElementOption->setMaxAllowedTime(30)->setMinAllowedTime(1);
 
-        $formElement = new Chrome_Form_Element_Form($this, $this->_id, $formElementOption);
+        $formElement = new \Chrome\Form\Element\Form($this, $this->_id, $formElementOption);
         $this->_addElement($formElement);
 
         // radio
-        $radioOption = new Chrome_Form_Option_Element_Multiple();
+        $radioOption = new \Chrome\Form\Option\MultipleElement();
         $radioOption->setAllowedValues(array('test', 'test2'));
         $radioOption->setReadonly(array('test'));
         $radioOption->setRequired(array('test2'));
 
-        $radioElement = new Chrome_Form_Element_Radio($this, 'radio', $radioOption);
+        $radioElement = new \Chrome\Form\Element\Radio($this, 'radio', $radioOption);
         $this->_addElement($radioElement);
 
         // text
-        $textOption = new Chrome_Form_Option_Element();
+        $textOption = new \Chrome\Form\Option\Element();
         $textOption->setIsRequired(true);
         $textOption->setValidator($textValidators);
 
-        $textElement = new Chrome_Form_Element_Text($this, 'text', $textOption);
+        $textElement = new \Chrome\Form\Element\Text($this, 'text', $textOption);
         $this->_addElement($textElement);
 
         // password
-        $passwordOption = new Chrome_Form_Option_Element();
+        $passwordOption = new \Chrome\Form\Option\Element();
         $passwordOption->setIsRequired(true);
         $passwordOption->setValidator($emptyValidator);
 
-        $passwordElement = new Chrome_Form_Element_Password($this, 'password', $passwordOption);
+        $passwordElement = new \Chrome\Form\Element\Password($this, 'password', $passwordOption);
         $this->_addElement($passwordElement);
 
         // checkbox
-        $checkboxOption = new Chrome_Form_Option_Element_Multiple();
+        $checkboxOption = new \Chrome\Form\Option\MultipleElement();
         $checkboxOption->setAllowedValues(array('Value1', 'Value2', 'vAlue3'));
         $checkboxOption->setRequired(array('vAlue3', 'Value2'));
         $checkboxOption->setReadonly(array('Value1'));
 
-        $checkboxElement = new Chrome_Form_Element_Checkbox($this, 'checkbox', $checkboxOption);
+        $checkboxElement = new \Chrome\Form\Element\Checkbox($this, 'checkbox', $checkboxOption);
         $this->_addElement($checkboxElement);
 
         // select
-        $selectOption = new Chrome_Form_Option_Element_Multiple();
+        $selectOption = new \Chrome\Form\Option\MultipleElement();
         $selectOption->setAllowedValues(array('Value1', 'Value2', 'Value3'));
         $selectOption->setSelectMultiple(true);
         $selectOption->setReadonly(array('Value2'));
         $selectOption->setRequired(array('Value3'));
 
-        $selectElement = new Chrome_Form_Element_Select($this, 'select', $selectOption);
+        $selectElement = new \Chrome\Form\Element\Select($this, 'select', $selectOption);
         $this->_addElement($selectElement);
 
         // submit
-        $submitOption = new Chrome_Form_Option_Element();
+        $submitOption = new \Chrome\Form\Option\Element();
         $submitOption->setAllowedValue('Absenden');
 
-        $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
+        $submitElement = new \Chrome\Form\Element\Submit($this, 'submit', $submitOption);
         $this->_addElement($submitElement);
 
         // this->_elements['birthday'] = new Chrome_Form_Element_Birthday($this, 'birthday', array());
@@ -88,11 +86,11 @@ class Chrome_Form_Index extends Chrome_Form_Abstract
 
         #$storage = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
 
-        $storageOption = new Chrome_Form_Option_Storage();
+        $storageOption = new \Chrome\Form\Option\Storage();
         #$storageOption->setStorageEnabled(true);
         #$storageOption->setStoreNullData(true);
         #$storageOption->setStoreInvalidData(false);
 
-        $this->setAttribute(self::ATTRIBUTE_STORE, new Chrome_Form_Handler_Store($storageSession, $storageOption, array('radio', 'select', 'text', 'checkbox')));
+        $this->setAttribute(self::ATTRIBUTE_STORE, new \Chrome\Form\Handler\Store($storageSession, $storageOption, array('radio', 'select', 'text', 'checkbox')));
     }
 }

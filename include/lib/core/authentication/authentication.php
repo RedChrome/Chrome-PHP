@@ -460,7 +460,6 @@ class Authentication implements \Chrome\Authentication\Authentication_Interface
     {
         try
         {
-            // $return is an instance of Chrome_Authentication_Data_Container_Interface
             $this->_container = $this->_chain->authenticate($resource);
 
             // user could not authenticate or he should not authenticate

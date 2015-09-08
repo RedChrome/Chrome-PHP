@@ -17,13 +17,15 @@
  * @subpackage Chrome.Form
  */
 
+namespace Chrome\Form\Option;
+
 /**
  * Interface for attributes
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Option
  */
-interface Chrome_Form_Attribute_Interface
+interface Attribute_Interface
 {
     public function setAttribute($key, $value);
 
@@ -40,7 +42,7 @@ interface Chrome_Form_Attribute_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Option
  */
-interface Chrome_Form_Option_Element_Basic_Interface
+interface BasicElement_Interface
 {
     /**
      * Sets a validator
@@ -82,7 +84,7 @@ interface Chrome_Form_Option_Element_Basic_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Option
  */
-interface Chrome_Form_Option_Element_Interface extends Chrome_Form_Option_Element_Basic_Interface
+interface Element_Interface extends BasicElement_Interface
 {
     public function setIsRequired($boolean);
 
@@ -104,7 +106,7 @@ interface Chrome_Form_Option_Element_Interface extends Chrome_Form_Option_Elemen
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Option
  */
-interface Chrome_Form_Option_Element_Multiple_Interface extends Chrome_Form_Option_Element_Basic_Interface
+interface MultipleElement_Interface extends BasicElement_Interface
 {
     public function setAllowedValues(array $allowedValues);
 
@@ -123,16 +125,16 @@ interface Chrome_Form_Option_Element_Multiple_Interface extends Chrome_Form_Opti
     public function getSelectMultiple();
 }
 
-interface Chrome_Form_Option_Element_Attachable_Interface
+interface AttachableElement_Interface
 {
-    public function attach(Chrome_Form_Element_Basic_Interface $element);
+    public function attach(\Chrome\Form\Element\BasicElement_Interface $element);
 
     public function setAttachments(array $elements);
 
     public function getAttachments();
 }
 
-class Chrome_Form_Option_Element_Basic implements Chrome_Form_Option_Element_Basic_Interface
+class BasicElement implements BasicElement_Interface
 {
     protected $_validator = null;
 
@@ -163,7 +165,7 @@ class Chrome_Form_Option_Element_Basic implements Chrome_Form_Option_Element_Bas
     }
 }
 
-class Chrome_Form_Option_Element extends Chrome_Form_Option_Element_Basic implements Chrome_Form_Option_Element_Interface
+class Element extends BasicElement implements Element_Interface
 {
     protected $_isRequired = false;
 
@@ -210,7 +212,7 @@ class Chrome_Form_Option_Element extends Chrome_Form_Option_Element_Basic implem
     }
 }
 
-class Chrome_Form_Option_Element_Multiple extends Chrome_Form_Option_Element_Basic implements Chrome_Form_Option_Element_Multiple_Interface
+class MultipleElement extends BasicElement implements MultipleElement_Interface
 {
     protected $_required = array();
 

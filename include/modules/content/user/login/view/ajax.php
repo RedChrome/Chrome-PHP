@@ -13,22 +13,16 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package CHROME-PHP
- * @subpackage Chrome.User
- * @copyright Copyright (c) 2008-2012 Chrome - PHP (http://www.chrome-php.de)
- * @license http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version $Id: 0.1 beta <!-- phpDesigner :: Timestamp [01.06.2013 13:59:02] --> $
- * @author Alexander Book
+ * @package    CHROME-PHP
+ * @subpackage Chrome.View.User
  */
-if(CHROME_PHP !== true)
-    die();
 
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Chrome_View_User_Login_Ajax extends Chrome_View_Abstract
+class Chrome_View_User_Login_Ajax extends \Chrome\View\AbstractView
 {
     /**
      * How long the messages are shown in the browser, in msec
@@ -72,7 +66,7 @@ class Chrome_View_User_Login_Ajax extends Chrome_View_Abstract
         $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Ajax_WrongPassword', $this->_controller);
     }
 }
-class Chrome_View_User_Ajax_AlreadyLoggedIn extends Chrome_View_Abstract
+class Chrome_View_User_Ajax_AlreadyLoggedIn extends \Chrome\View\AbstractView
 {
 
     public function render()
@@ -82,7 +76,7 @@ class Chrome_View_User_Ajax_AlreadyLoggedIn extends Chrome_View_Abstract
                     'reloadDelay' => Chrome_View_User_Login_Ajax::CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY);
     }
 }
-class Chrome_View_User_Ajax_SuccessfullyLoggedIn extends Chrome_View_Abstract
+class Chrome_View_User_Ajax_SuccessfullyLoggedIn extends \Chrome\View\AbstractView
 {
 
     public function render()
@@ -90,18 +84,18 @@ class Chrome_View_User_Ajax_SuccessfullyLoggedIn extends Chrome_View_Abstract
         return array('success' => true, 'message' => 'Login successfull:<br>Logged In!', 'reloadDelay' => Chrome_View_User_Login_Ajax::CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY);
     }
 }
-class Chrome_View_User_Ajax_FormNotValid extends Chrome_View_Abstract
+class Chrome_View_User_Ajax_FormNotValid extends \Chrome\View\AbstractView
 {
 
     public function render()
     {
         return array('success' => false,
-                    'token' => $this->_controller->getForm()->getElement('login')->getOptions(Chrome_Form_Element_Form::CHROME_FORM_ELEMENT_FORM_TOKEN),
+                    'token' => $this->_controller->getForm()->getElement('login')->getOptions(\Chrome\Form\Element\Form::CHROME_FORM_ELEMENT_FORM_TOKEN),
                     'message' => 'Login failed:<br>Form was malformed',
                     'reloadDelay' => Chrome_View_User_Login_Ajax::CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY);
     }
 }
-class Chrome_View_User_Ajax_ShowForm extends Chrome_View_Abstract
+class Chrome_View_User_Ajax_ShowForm extends \Chrome\View\AbstractView
 {
 
     public function render()
@@ -111,7 +105,7 @@ class Chrome_View_User_Ajax_ShowForm extends Chrome_View_Abstract
                     'reloadDelay' => Chrome_View_User_Login_Ajax::CHROME_VIEW_USER_LOGIN_AJAX_MESSAGE_DELAY);
     }
 }
-class Chrome_View_User_Ajax_WrongPassword extends Chrome_View_Abstract
+class Chrome_View_User_Ajax_WrongPassword extends \Chrome\View\AbstractView
 {
 
     public function render()

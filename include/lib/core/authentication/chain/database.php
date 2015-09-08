@@ -72,12 +72,7 @@ class DatabaseChain extends Chain_Abstract
     public function authenticate(Resource_Interface $resource = null)
     {
         // if no data is given, then it cannot authenticate
-        if($resource === null) {
-            return $this->_chain->authenticate($resource);
-        }
-
-        // cannot work with this resource
-        if(($resource instanceof \Chrome\Authentication\Resource\Database_Interface) === false) {
+        if($resource === null OR ($resource instanceof \Chrome\Authentication\Resource\Database_Interface) === false) {
             return $this->_chain->authenticate($resource);
         }
 

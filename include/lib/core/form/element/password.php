@@ -17,12 +17,14 @@
  * @subpackage Chrome.Form
  */
 
+namespace Chrome\Form\Element;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Password extends Chrome_Form_Element_Abstract implements \Chrome\Form\Element\Interfaces\Password
+class Password extends \Chrome\Form\Element\AbstractElement implements \Chrome\Form\Element\Interfaces\Password
 {
     public function isCreated()
     {

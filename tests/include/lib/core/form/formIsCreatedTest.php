@@ -16,7 +16,7 @@ class FormIsCreatedTest extends \Test\Chrome\TestCase
     public function setUp()
     {
         $this->_form = new EmptyForm($this->_appContext);
-        $this->_option = new \Chrome_Form_Option_Element();
+        $this->_option = new \Chrome\Form\Option\Element();
     }
 
     protected function _addElement()
@@ -54,7 +54,7 @@ class FormIsCreatedTest extends \Test\Chrome\TestCase
     public function testFormIsNotCreated()
     {
         $errors = array('not created, test');
-        $option = new \Chrome_Form_Option_Element();
+        $option = new \Chrome\Form\Option\Element();
         $element = new IsCreated($this->_form, 'notCreatedElement', $option);
         $element->isCreated = false;
         $element->errors = $errors;

@@ -14,7 +14,7 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package    CHROME-PHP
- * @subpackage Chrome.Controller
+ * @subpackage Chrome.Controller.Box
  */
 
 namespace Chrome\Controller\Box;
@@ -51,7 +51,7 @@ class Login extends AbstractModule
 
 
         //$this->_model = new Chrome_Model_Login($this->_applicationContext, null);
-        $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome_View_Box_Login');
+        $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome\View\User\UserMenu');
 	   //$this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Box_Login', $this);
 
 
@@ -60,15 +60,12 @@ class Login extends AbstractModule
 
         // if the user is logged in, then show the user menu
         if($login->isLoggedIn() === true) {
-
-            $this->_view->showUserMenu();
-
-        // else create the form and display it
+            $this->_view->displayUserMenu();
+        // else show the login form
         } else {
-
-            $this->_form = \Chrome_Form_Login::getInstance($this->_applicationContext);
-
-            $this->_view->showLoginForm($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Yaml'));
+            // we dont have to care about the form, since all the action
+            // will be sent to the content/user/login/controller.
+            $this->_view->displayLogin();
         }
 
     }

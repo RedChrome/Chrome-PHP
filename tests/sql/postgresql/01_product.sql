@@ -83,7 +83,7 @@ INSERT INTO "chrome"."cp1_class" ("id", "name", "file") VALUES
 (DEFAULT, 'Chrome_Database_Right_Handler_Interface', 'lib/core/database/right_handler.php'),
 (DEFAULT, 'Chrome\\Database\\Connection\\Mysql', 'lib/core/database/connection/mysql.php'),
 (DEFAULT, 'Chrome\\Database\\Connection\\Postgresql', 'lib/core/database/connection/postgresql.php'),
-(DEFAULT, 'Chrome_Form_Abstract', 'lib/core/form/form.php'),
+(DEFAULT, '\Chrome\Form\AbstractForm', 'lib/core/form/form.php'),
 (DEFAULT, 'Chrome\\Template\\PHP', 'lib/core/template/template.php'),
 (DEFAULT, 'Chrome\\Router\\Route\\StaticRoute', 'lib/core/router/route/static.php'),
 (DEFAULT, 'Chrome\\Router\\Route\\DynamicRoute', 'lib/core/router/route/dynamic.php'),

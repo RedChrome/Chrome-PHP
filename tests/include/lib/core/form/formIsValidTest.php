@@ -3,7 +3,6 @@
 namespace Test\Chrome\Form;
 
 use Test\Chrome\Form\Element\IsSent;
-
 use Test\Chrome\Form\Element\IsValid;
 
 require_once 'tests/dummies/form/form.php';
@@ -18,7 +17,7 @@ class FormIsValidTest extends \Test\Chrome\TestCase
     public function setUp()
     {
         $this->_form = new EmptyForm($this->_appContext);
-        $this->_option = new \Chrome_Form_Option_Element();
+        $this->_option = new \Chrome\Form\Option\Element();
     }
 
     protected function _addElement()

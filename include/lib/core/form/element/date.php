@@ -16,6 +16,8 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
+namespace Chrome\Form\Element;
+
 use \Chrome\Validator\Composition\AndComposition;
 use \Chrome\Validator\Form\Element\CallbackValidator;
 
@@ -24,7 +26,7 @@ use \Chrome\Validator\Form\Element\CallbackValidator;
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Date extends Chrome_Form_Element_Abstract implements Chrome_Form_Element_Storable, \Chrome\Form\Element\Interfaces\Date
+class Date extends \Chrome\Form\Element\AbstractElement implements \Chrome\Form\Element\Storable_Interface, \Chrome\Form\Element\Interfaces\Date
 {
     protected $_date = null;
 

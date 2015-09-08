@@ -120,7 +120,7 @@ abstract class AbstractController implements Controller_Interface
 
     /**
      *
-     * @var Chrome_Form_Interface
+     * @var \Chrome\Form\Form_Interface
      */
     protected $_form = null;
 

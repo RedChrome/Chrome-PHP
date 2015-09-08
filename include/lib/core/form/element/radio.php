@@ -17,11 +17,13 @@
  * @subpackage Chrome.Form
  */
 
+namespace Chrome\Form\Element;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Radio extends Chrome_Form_Element_Multiple_Abstract implements Chrome_Form_Element_Storable, \Chrome\Form\Element\Interfaces\Radio
+class Radio extends \Chrome\Form\Element\AbstractMultipleElement implements \Chrome\Form\Element\Storable_Interface, \Chrome\Form\Element\Interfaces\Radio
 {
     public function isCreated()
     {

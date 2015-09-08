@@ -17,6 +17,8 @@
  * @subpackage Chrome.View
  */
 
+namespace Chrome\View;
+
 require_once 'factory.php';
 require_once 'form.php';
 
@@ -24,7 +26,7 @@ require_once 'form.php';
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-interface Chrome_View_Interface extends \Chrome\Renderable
+interface View_Interface extends \Chrome\Renderable
 {
     /**
      * Sets a var
@@ -42,7 +44,7 @@ interface Chrome_View_Interface extends \Chrome\Renderable
     public function getVar($key);
 }
 
-abstract class Chrome_View implements Chrome_View_Interface
+abstract class AbstractView implements View_Interface
 {
     /**
      * @var Chrome_View_Plugin_Facade_Interface
@@ -81,10 +83,10 @@ abstract class Chrome_View implements Chrome_View_Interface
      * Calls a method from view helper if it exists
      *
      * @return mixed
-     */
+    */
     public function __call($func, $args)
     {
-       return $this->_callPluginMethod($func, $args);
+        return $this->_callPluginMethod($func, $args);
     }
 
     /**
@@ -95,11 +97,11 @@ abstract class Chrome_View implements Chrome_View_Interface
     protected function _callPluginMethod($func, $args)
     {
         if($this->_pluginFacade === null) {
-           $this->_pluginFacade = $this->_viewContext->getPluginFacade();
+            $this->_pluginFacade = $this->_viewContext->getPluginFacade();
 
-           if($this->_pluginFacade === null) {
-               return;
-           }
+            if($this->_pluginFacade === null) {
+                return;
+            }
         }
 
         return $this->_pluginFacade->call($func, array_merge(array($this), $args));
@@ -116,48 +118,53 @@ abstract class Chrome_View implements Chrome_View_Interface
     }
 }
 
-/**
- * @package CHROME-PHP
- * @subpackage Chrome.View
- */
-abstract class Chrome_View_Abstract extends Chrome_View
-{
-    /**
-     * Contains the controller
-     *
-     * @var \Chrome\Controller\AbstractController
-     */
-    protected $_controller = null;
 
-    /**
-     * Constructor
-     * @todo why controller?
-     * @return \Chrome\Controller\Controller_Interface
-     */
-    public function __construct(\Chrome\Context\View_Interface $viewContext, \Chrome\Controller\Controller_Interface $controller)
-    {
-        parent::__construct($viewContext);
-        #$this->_controller = $controller;
-    }
-}
-
-abstract class Chrome_View_Strategy_Abstract extends Chrome_View
+abstract class AbstractViewStrategy extends AbstractView
 {
-    protected $_views = array();
+    protected $_view = null;
 
     public function render()
     {
-        $return = '';
+        if($this->_view !== null) {
+            return $this->_view->render();
+        }
+    }
+}
 
+
+interface Layout_Interface extends \Chrome\Renderable
+{
+
+}
+
+abstract class AbstractLayout extends AbstractView
+{
+
+}
+
+abstract class AbstractListLayout extends AbstractView implements Layout_Interface
+{
+
+    protected $_views = array();
+
+    protected $_appending = '';
+
+    public function render()
+    {
         if(!is_array($this->_views)) {
             $this->_views = array($this->_views);
         }
 
         foreach($this->_views as $view) {
-            $return .= $view->render();
+            $this->_append($view);
         }
 
-        return $return;
+        return $this->_appending;
+    }
+
+    protected function _append(\Chrome\Renderable $view)
+    {
+        $this->_appending .= $view->render();
     }
 
     public function addRenderable(\Chrome\Renderable $renderable)
@@ -166,7 +173,7 @@ abstract class Chrome_View_Strategy_Abstract extends Chrome_View
     }
 }
 
-class Chrome_View_Template_Simple_Abstract extends Chrome_View
+abstract class AbstractTemplate extends AbstractView
 {
     protected $_templateFile = '';
 
@@ -178,4 +185,3 @@ class Chrome_View_Template_Simple_Abstract extends Chrome_View
     }
 }
 
-require_once 'nview.php';

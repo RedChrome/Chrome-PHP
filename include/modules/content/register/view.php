@@ -1,89 +1,118 @@
 <?php
 
-class Chrome_View_Register extends Chrome_View_Strategy_Abstract
+/**
+ * CHROME-PHP CMS
+ *
+ * LICENSE
+ *
+ * This source file is subject to the Creative Commons license that is bundled
+ * with this package in the file LICENSE.
+ * It is also available through the world-wide-web at this URL:
+ * http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * If you did not receive a copy of the license AND are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@chrome-php.de so we can send you a copy immediately.
+ *
+ * @package    CHROME-PHP
+ * @subpackage Chrome.View.User
+ */
+
+namespace Chrome\View\User;
+
+use Chrome\View\AbstractViewStrategy;
+
+class Register extends AbstractViewStrategy
 {
     protected $_form = null;
 
+    protected $_translate = null;
+
     protected function _setUp()
     {
-        $translate = $this->_viewContext->getLocalization()->getTranslate();
-        $this->addTitle($translate->get('modules/content/user/register/title'));
+        $this->_translate = $this->_viewContext->getLocalization()->getTranslate();
+        $this->addTitle($this->_translate->get('modules/content/user/register/title'));
     }
 
-    public function setStepOne(Chrome_Form_Interface $form, Chrome_View_Form_Element_Factory_Interface $elementFactory)
+    public function setStepOne()
     {
-        $viewForm = new Chrome_View_Form_Register_StepOne($form, $this->_viewContext);
-        $viewForm->setElementFactory($elementFactory);
-        $this->_views[] = new Chrome_View_Register_StepOne_Renderer_Template_StepOne($viewForm);
+        $this->addTitle($this->_translate->get('modules/content/user/register/title_step_1'));
+        $this->_view = $this->_viewContext->getFactory()->get('\Chrome\View\User\Register\Form\Renderer\StepOne');
     }
 
-    public function setStepTwo(Chrome_Form_Interface $form, Chrome_View_Form_Element_Factory_Interface $viewFormElementFactory)
+    public function setStepTwo()
     {
-        $formView = new Chrome_View_Form_Register_StepTwo($form, $this->_viewContext);
-        $formView->setElementFactory($viewFormElementFactory);
-        $this->_views[] = new Chrome_View_Register_Form_Renderer_Template_StepTwo($formView);
-        #$this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_StepTwo', $this->_controller);
+        $this->addTitle($this->_translate->get('modules/content/user/register/title_step_2'));
+        $this->_view = $this->_viewContext->getFactory()->get('\Chrome\View\User\Register\Form\Renderer\StepTwo');
     }
 
     public function setStepThree()
     {
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_StepThree');
+        $this->addTitle($this->_translate->get('modules/content/user/register/title_step_3'));
+        $this->_view = $this->_viewContext->getFactory()->get('\Chrome\View\User\Register\StepThree');
     }
 
     public function setStepNoEmailSent()
     {
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_StepEmailNotSent');
+        $this->addTitle($this->_translate->get('modules/content/user/register/title_failed'));
+        $this->_view = $this->_viewContext->getFactory()->get('\Chrome\View\User\Register\EmailNotSent');
     }
 
     public function alreadyRegistered()
     {
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_AlreadyRegistered');
+        $this->addTitle($this->_translate->get('modules/content/user/register/title_failed'));
+        $this->_view = $this->_viewContext->getFactory()->get('\Chrome\View\User\Register\AlreadyRegistered');
     }
 
     public function registrationFinished()
     {
-        $this->addTitle('Fertig');
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_Registration_Finished');
+        $this->addTitle($this->_translate->get('modules/content/user/register/title_finished'));
+        $this->_view = $this->_viewContext->getFactory()->build('\Chrome\View\User\Register\RegistrationFinished');
     }
 
     public function registrationFailed()
     {
-        $this->addTitle('Fehlgeschlagen');
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Register_Registration_Failed');
+        $this->addTitle($this->_translate->get('modules/content/user/register/title_failed'));
+        $this->_view = $this->_viewContext->getFactory()->build('\Chrome\View\User\Register\RegistrationFailed');
     }
 }
 
-class Chrome_View_Register_StepOne_Renderer_Template_StepOne extends Chrome_View_Form_Renderer_Template_Simple_Abstract
+namespace Chrome\View\User\Register\Form\Renderer;
+
+class StepOne extends \Chrome_View_Form_Renderer_Template_Simple_Abstract
 {
     protected $_templateFile = 'modules/content/register/stepOne';
 }
 
-class Chrome_View_Register_Form_Renderer_Template_StepTwo extends Chrome_View_Form_Renderer_Template_Simple_Abstract
+class StepTwo extends \Chrome_View_Form_Renderer_Template_Simple_Abstract
 {
     protected $_templateFile = 'modules/content/register/stepTwo';
 }
 
-class Chrome_View_Register_StepThree extends Chrome_View_Template_Simple_Abstract
+namespace Chrome\View\User\Register;
+
+use Chrome\View\AbstractView;
+
+class StepThree extends \Chrome\View\AbstractTemplate
 {
     protected $_templateFile = 'modules/content/register/stepThree';
 }
 
-class Chrome_View_Register_AlreadyRegistered extends Chrome_View_Template_Simple_Abstract
+class AlreadyRegistered extends \Chrome\View\AbstractTemplate
 {
     protected $_templateFile = 'modules/content/register/alreadyRegistered';
 }
 
-class Chrome_View_Register_Registration_Finished extends Chrome_View_Template_Simple_Abstract
+class RegistrationFinished extends \Chrome\View\AbstractTemplate
 {
     protected $_templateFile = 'modules/content/register/registrationFinished';
 }
 
-class Chrome_View_Register_Registration_Failed extends Chrome_View_Template_Simple_Abstract
+class RegistrationFailed extends \Chrome\View\AbstractTemplate
 {
     protected $_templateFile = 'modules/content/register/registrationFailed';
 }
 
-class Chrome_View_Register_StepEmailNotSent extends Chrome_View_Abstract
+class EmailNotSent extends AbstractView
 {
     public function render()
     {

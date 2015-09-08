@@ -37,8 +37,8 @@ class Chrome_View_Form_Element_Form_Default extends Chrome_View_Form_Element_Bas
     {
         if($this->_int == 0)
         {
-            $this->_attribute->setAttribute('method', $this->_formElement->getForm()->getAttribute(Chrome_Form_Interface::ATTRIBUTE_METHOD));
-            $this->_attribute->setAttribute('action', $this->_formElement->getForm()->getAttribute(Chrome_Form_Interface::ATTRIBUTE_ACTION));
+            $this->_attribute->setAttribute('method', $this->_formElement->getForm()->getAttribute(\Chrome\Form\Form_Interface::ATTRIBUTE_METHOD));
+            $this->_attribute->setAttribute('action', $this->_formElement->getForm()->getAttribute(\Chrome\Form\Form_Interface::ATTRIBUTE_ACTION));
             $this->_attribute->setAttribute('required', '');
 
             $token = $this->_elementOption->getToken();

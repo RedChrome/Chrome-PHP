@@ -2,7 +2,7 @@
 
 namespace Test\Chrome\Form\Element;
 
-class IsCreated extends \Chrome_Form_Element_Abstract
+class IsCreated extends \Chrome\Form\Element\AbstractElement
 {
     public $isCreated = null;
 

@@ -98,7 +98,7 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome_Database_Right_Handler_Interface', 'lib/core/database/right_handler.php'),
 ('Chrome\\Database\\Connection\\Mysql', 'lib/core/database/connection/mysql.php'),
 ('Chrome\\Database\\Connection\\Postgresql', 'lib/core/database/connection/postgresql.php'),
-('Chrome_Form_Abstract', 'lib/core/form/form.php'),
+('Chrome\\Form\\AbstractForm', 'lib/core/form/form.php'),
 ('Chrome\\Template\\PHP', 'lib/core/template/template.php'),
 ('Chrome\\Router\\Route\\StaticRoute', 'lib/core/router/route/static.php'),
 ('Chrome\\Router\\Route\\DynamicRoute', 'lib/core/router/route/dynamic.php'),
@@ -128,7 +128,7 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\Controller\\User\\Logout', 'modules/content/user/logout/controller.php'),
 ('Chrome\\Controller\\User\\Login', 'modules/content/user/login/controller.php'),
 ('Chrome\\Controller\\Captcha', 'modules/content/captcha/controller.php'),
-('Chrome\\Controller\\SiteNotFound', 'modules/content/SiteNotFound/controller.php'),
+('Chrome\\Controller\\RouteNotFound', 'modules/content/routeNotFound/controller.php'),
 ('Chrome\\Controller\\Box\\Login', 'modules/box/login/controller.php'),
 ('Chrome\\Controller\\Footer\\VarDump', 'modules/footer/var_dump/controller.php'),
 ('Chrome\\Interactor\\User\\Registration',  'lib/modules/user/interactors/registration.php'),
@@ -137,11 +137,12 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\Linker\\Linker_Interface', 'lib/core/linker/linker.php'),
 ('Chrome\\Linker\\HTTP\\Linker', 'lib/core/linker/linker.php'),
 ('Chrome\\Linker\\Console\\Linker', 'lib/core/linker/console.php'),
-('Chrome_View_Box_Test', 'modules/box/test/test.php'),
+('Chrome\\View\\Test\\Test', 'modules/box/test/test.php'),
 ('Chrome\\View\\Footer\\Benchmark', 'modules/footer/benchmark/benchmark.php'),
 ('Chrome\\View\\Header\\Header', 'modules/header/header/header.php'),
 ('Chrome\\View\\Html\\Head\\CssIncluder', 'modules/html/head/cssIncluder/view.php'),
 ('Chrome\\View\\Html\\Bottom\\JsIncluder', 'modules/html/bottom/jsIncluder/view.php'),
+('Chrome\\View\\User\\Login\\FormRenderer', 'modules/content/user/login/view/default.php'),
 ('Chrome\\Helper\\User\\AuthenticationResolver\\Email', 'lib/modules/user/helpers/authenticationresolver/email.php');
 
 
@@ -180,7 +181,7 @@ INSERT INTO `cpp_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 ('enable_https', 'Captcha/Recaptcha', 'false', 'boolean', '', FALSE),
 ('recaptcha_theme', 'Captcha/Recaptcha', 'clean', 'string', '', FALSE),
 ('default_theme', 'Theme', 'chrome', 'string', '', FALSE),
-('fallback_class', 'Chrome/Router', '\\Chrome\\Controller\\SiteNotFound', 'string', '', FALSE);
+('fallback_class', 'Chrome/Router', '\\Chrome\\Controller\\RouteNotFound', 'string', '', FALSE);
 
 DROP TABLE IF EXISTS `cpp_design_controller`;
 CREATE TABLE IF NOT EXISTS `cpp_design_controller` (
@@ -210,20 +211,20 @@ CREATE TABLE IF NOT EXISTS `cpp_design_static` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 INSERT INTO `cpp_design_static` (`name`, `class`, `position`, `type`, `theme`, `order`) VALUES
-('right_box', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome', 1),
-('right_box', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome', 2),
-('right_box', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome', 3),
-('left_box', 'Chrome_View_Box_Test', 'leftBox', 'view', 'chrome', 1),
+('right_box', '\\Chrome\\View\\Test\\Test', 'rightBox', 'view', 'chrome', 1),
+('right_box', '\\Chrome\\View\\Test\\Test', 'rightBox', 'view', 'chrome', 2),
+('right_box', '\\Chrome\\View\\Test\\Test', 'rightBox', 'view', 'chrome', 3),
+('left_box', '\\Chrome\\View\\Test\\Test', 'leftBox', 'view', 'chrome', 1),
 ('Benchmark', 'Chrome\\View\\Footer\\Benchmark', 'footer', 'view', 'chrome', 1),
 ('Header', '\\Chrome\\View\\Header\\Header', 'preBodyIn', 'view', 'chrome', 1),
 ('Login', '\\Chrome\\Controller\\Box\\Login', 'leftBox', 'controller', 'chrome', 0),
 ('cssIncluder', '\\Chrome\\View\\Html\\Head\\CssIncluder', 'head', 'view', 'chrome', 0),
 ('VarDump', '\\Chrome\\Controller\\Footer\\VarDump', 'footer', 'controller', 'chrome', 2),
 ('jsIncluder', '\\Chrome\\View\\html\\Bottom\\JsIncluder', 'postBodyIn', 'view', 'chrome', 0),
-('right_box', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome_one_sidebar', 1),
-('right_box', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome_one_sidebar', 2),
-('right_box', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome_one_sidebar', 3),
-('left_box', 'Chrome_View_Box_Test', 'rightBox', 'view', 'chrome_one_sidebar', 1),
+('right_box', '\\Chrome\\View\\Test\\Test', 'rightBox', 'view', 'chrome_one_sidebar', 1),
+('right_box', '\\Chrome\\View\\Test\\Test', 'rightBox', 'view', 'chrome_one_sidebar', 2),
+('right_box', '\\Chrome\\View\\Test\\Test', 'rightBox', 'view', 'chrome_one_sidebar', 3),
+('left_box', '\\Chrome\\View\\Test\\Test', 'rightBox', 'view', 'chrome_one_sidebar', 1),
 ('Benchmark', 'Chrome\\View\\Footer\\Benchmark', 'footer', 'view', 'chrome_one_sidebar', 1),
 ('Header', '\\Chrome\\View\\Header\\Header', 'preBodyIn', 'view', 'chrome_one_sidebar', 1),
 ('Login', '\\Chrome\\Controller\\Box\\Login', 'rightBox', 'controller', 'chrome_one_sidebar', 0),
@@ -425,13 +426,13 @@ CREATE TABLE IF NOT EXISTS `cpp_route_static` (
 );
 
 INSERT INTO `cpp_route_static` (`resource_id`, `search`, `class`, `POST`, `GET`) VALUES
-(1, '', '\\Chrome\\Controller\\Index', '', ''),
-(1, 'index.html', '\\Chrome\\Controller\\Index', '', ''),
-(2, 'login.html', '\\Chrome\\Controller\\User\\Login', '', ''),
-(3, 'registrieren.html', '\\Chrome\\Controller\\User\\Register', '', 'action=register'),
-(4, 'logout.html', '\\Chrome\\Controller\\User\\Logout', '', ''),
-(6, 'registrierung_bestaetigen.html', '\\Chrome\\Controller\\User\\Register', '', 'action=confirm_registration'),
-(7, 'captcha.html', '\\Chrome\\Controller\\Captcha', '', '');
+(1, '', 'Chrome\\Controller\\Index', '', ''),
+(1, 'index.html', 'Chrome\\Controller\\Index', '', ''),
+(2, 'login.html', 'Chrome\\Controller\\User\\Login', '', ''),
+(3, 'registrieren.html', 'Chrome\\Controller\\User\\Register', '', 'action=register'),
+(4, 'logout.html', 'Chrome\\Controller\\User\\Logout', '', ''),
+(6, 'registrierung_bestaetigen.html', 'Chrome\\Controller\\User\\Register', '', 'action=confirm_registration'),
+(7, 'captcha.html', 'Chrome\\Controller\\Captcha', '', '');
 
 DROP TABLE IF EXISTS `cpp_user`;
 CREATE TABLE IF NOT EXISTS `cpp_user` (

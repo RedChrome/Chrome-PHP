@@ -2,7 +2,7 @@
 
 namespace Test\Chrome\Form\Element;
 
-class IsSent extends \Chrome_Form_Element_Abstract
+class IsSent extends \Chrome\Form\Element\AbstractElement
 {
     public $isSent = null;
 

@@ -628,7 +628,13 @@ class Modifier implements Modifier_Interface
 
     public function delete()
     {
-        if(!unlink($this->_file->getFileName(), $this->_file->getContext())) {
+        if($this->_file->getContext() !== null) {
+            $success = unlink($this->_file->getFileName(), $this->_file->getContext());
+        } else {
+            $success = unlink($this->_file->getFileName());
+        }
+
+        if(!$success) {
             throw new \Chrome\FileException('Could not delete file "'.$this->_file->getFileName().'"');
         }
     }

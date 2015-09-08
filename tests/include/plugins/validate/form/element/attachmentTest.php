@@ -7,19 +7,19 @@ use Chrome\Validator\Composition_Interface;
 
 class AttachmentTest extends \PHPUnit_Framework_TestCase
 {
-    protected function _getValidator(\Chrome_Form_Option_Element_Attachable_Interface $option, Composition_Interface $composition)
+    protected function _getValidator(\Chrome\Form\Option\AttachableElement_Interface $option, Composition_Interface $composition)
     {
         return new \Chrome\Validator\Form\Element\AttachmentValidator($option, $composition);
     }
 
     protected function _getAttachmentOption()
     {
-        return M::mock('\Chrome_Form_Option_Element_Attachable_Interface');
+        return M::mock('\Chrome\Form\Option\AttachableElement_Interface');
     }
 
     protected function _getAttachment()
     {
-        return M::mock('\Chrome_Form_Element_Basic_Interface');
+        return M::mock('\Chrome\Form\Element\BasicElement_Interface');
     }
 
     protected function _getComposition()

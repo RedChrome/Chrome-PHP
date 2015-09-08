@@ -8,20 +8,20 @@ class SentReadonlyTest extends \PHPUnit_Framework_TestCase
 {
     protected function _getSingleOption()
     {
-        return M::mock('\Chrome_Form_Option_Element_Interface');
+        return M::mock('\Chrome\Form\Option\Element_Interface');
     }
 
     protected function _getMultipleOption()
     {
-        return M::mock('\Chrome_Form_Option_Element_Multiple_Interface');
+        return M::mock('\Chrome\Form\Option\MultipleElement_Interface');
     }
 
     protected function _getBasicOption()
     {
-        return M::mock('\Chrome_Form_Option_Element_Basic_Interface');
+        return M::mock('\Chrome\Form\Option\BasicElement_Interface');
     }
 
-    protected function _getValidator(\Chrome_Form_Option_Element_Basic_Interface $option)
+    protected function _getValidator(\Chrome\Form\Option\BasicElement_Interface $option)
     {
         return new \Chrome\Validator\Form\Element\SentReadonlyValidator($option);
     }

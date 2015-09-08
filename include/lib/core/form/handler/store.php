@@ -17,6 +17,8 @@
  * @subpackage Chrome.Form
  */
 
+namespace Chrome\Form\Handler;
+
 /**
  *
  * USE THIS ONLY AS RECEIVING HANDLER!!
@@ -26,7 +28,7 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Handler_Store implements Chrome_Form_Handler_Interface, Chrome_Form_Handler_Store_Interface
+class Store implements \Chrome\Form\Handler\Handler_Interface, \Chrome\Form\Handler\Store_Interface
 {
     protected $_storage = null;
 
@@ -39,7 +41,7 @@ class Chrome_Form_Handler_Store implements Chrome_Form_Handler_Interface, Chrome
      * @param array $whiteListForElements
      *        contains form element id's which should get stored
      */
-    public function __construct(Chrome_Form_Storage_Interface $storage, Chrome_Form_Option_Storable_Interface $option, array $whiteListForElements)
+    public function __construct(\Chrome\Form\Storage_Interface $storage, \Chrome\Form\Option\Storage_Interface $option, array $whiteListForElements)
     {
         $this->_storage = $storage;
 
@@ -48,24 +50,24 @@ class Chrome_Form_Handler_Store implements Chrome_Form_Handler_Interface, Chrome
         $this->_whiteList = $whiteListForElements;
     }
 
-    public function is(Chrome_Form_Interface $form)
+    public function is(\Chrome\Form\Form_Interface $form)
     {
         $this->_store($form);
     }
 
-    public function isNot(Chrome_Form_Interface $form)
+    public function isNot(\Chrome\Form\Form_Interface $form)
     {
         $this->_store($form);
     }
 
-    protected function _store(Chrome_Form_Interface $form)
+    protected function _store(\Chrome\Form\Form_Interface $form)
     {
         foreach($this->_whiteList as $elementId)
         {
 
             $element = $form->getElements($elementId);
 
-            if(!($element instanceof Chrome_Form_Element_Storable))
+            if(!($element instanceof \Chrome\Form\Element\Storable_Interface))
             {
                 continue;
             }
@@ -77,17 +79,17 @@ class Chrome_Form_Handler_Store implements Chrome_Form_Handler_Interface, Chrome
         }
     }
 
-    public function hasStored(Chrome_Form_Element_Basic_Interface $element)
+    public function hasStored(\Chrome\Form\Element\BasicElement_Interface $element)
     {
         return in_array($element->getID(), $this->_whiteList);
     }
 
-    public function getStored(Chrome_Form_Element_Basic_Interface $element)
+    public function getStored(\Chrome\Form\Element\BasicElement_Interface $element)
     {
         return $this->_storage->get($element->getID());
     }
 
-    protected function _doStore(Chrome_Form_Element_Storable $element)
+    protected function _doStore(\Chrome\Form\Element\Storable_Interface $element)
     {
         if($this->_option->getStorageEnabled() === false)
         {

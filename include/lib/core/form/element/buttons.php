@@ -17,15 +17,17 @@
  * @subpackage Chrome.Form
  */
 
+namespace Chrome\Form\Option\Element;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Option_Element_Buttons extends Chrome_Form_Option_Element implements Chrome_Form_Option_Element_Attachable_Interface
+class Buttons extends \Chrome\Form\Option\Element implements \Chrome\Form\Option\AttachableElement_Interface
 {
     protected $_buttons = array();
 
-    public function attach(Chrome_Form_Element_Basic_Interface $element)
+    public function attach(\Chrome\Form\Element\BasicElement_Interface $element)
     {
         $this->_buttons[] = $element;
 
@@ -42,8 +44,8 @@ class Chrome_Form_Option_Element_Buttons extends Chrome_Form_Option_Element impl
         $this->_buttons = array();
 
         foreach($elements as $element) {
-            if(!($element instanceof Chrome_Form_Element_Basic_Interface)) {
-                throw new \Chrome\Exception('All elements in array have to be instances of Chrome_Form_Element_Basic_Interface');
+            if(!($element instanceof \Chrome\Form\Element\BasicElement_Interface)) {
+                throw new \Chrome\Exception('All elements in array have to be instances of \Chrome\Form\Element\BasicElement_Interface');
             }
 
             $this->_buttons[] = $element;
@@ -53,15 +55,17 @@ class Chrome_Form_Option_Element_Buttons extends Chrome_Form_Option_Element impl
     }
 }
 
+namespace Chrome\Form\Element;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Buttons extends Chrome_Form_Element_Abstract implements \Chrome\Form\Element\Interfaces\Buttons
+class Buttons extends \Chrome\Form\Element\AbstractElement implements \Chrome\Form\Element\Interfaces\Buttons
 {
     const CHROME_FORM_ELEMENT_ERROR_NO_BUTTON_PRESSED = 'NOBUTTONPRESSED';
 
-    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Buttons $option)
+    public function __construct(\Chrome\Form\Form_Interface $form, $id, \Chrome\Form\Option\Element\Buttons $option)
     {
         parent::__construct($form, $id, $option);
     }

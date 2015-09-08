@@ -31,10 +31,10 @@ class View implements Handler_Interface
 
     public function get($key, Container_Interface $container)
     {
-        if(!is_subclass_of($key, '\Chrome_View')) {
+        if(!is_subclass_of($key, '\Chrome\View\View_Interface')) {
             return null;
         }
 
-	return new $key($container->get('\Chrome\Context\View_Interface'));
+	   return new $key($container->get('\Chrome\Context\View_Interface'));
     }
 }

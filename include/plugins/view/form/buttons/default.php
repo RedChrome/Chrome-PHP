@@ -30,6 +30,8 @@ class Chrome_View_Form_Element_Buttons_Default extends Chrome_View_Form_Element_
 
         foreach($this->_option->getAttachments() as $button)
         {
+
+
             $return .= $button->render();
         }
 

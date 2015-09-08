@@ -49,9 +49,8 @@ class Login extends AbstractModule
 
     protected function _handleForm()
     {
-        if ($this->_applicationContext->getAuthentication()->isUser() == true) {
-            $this->_view->alreadyLoggedIn($this->_form, $this->_applicationContext->getDiContainer()
-                            ->get('\Chrome\View\Form\Element\Factory\Yaml'));
+        if ($this->_applicationContext->getAuthentication()->isUser() === true) {
+            $this->_view->alreadyLoggedIn();
             return;
         }
 
@@ -63,17 +62,17 @@ class Login extends AbstractModule
                     if ($this->_interactor->isLoggedIn() === true) {
                         $this->_view->successfullyLoggedIn();
                     } else {
-                        $this->_view->errorWhileLoggingIn($this->_form, $this->_applicationContext->getDiContainer()
-                            ->get('\Chrome\View\Form\Element\Factory\Yaml'));
+                        $this->_view->displayLogin();
+                        /*$this->_view->errorWhileLoggingIn($this->_form, $this->_applicationContext->getDiContainer()
+                            ->get('\Chrome\View\Form\Element\Factory\Yaml'));*/
                     }
                 } else {
                     $this->_form->destroy();
                     $this->_form->create();
-                    $this->_view->formNotValid();
+                    $this->_view->displayLogin();
                 }
             } else {
-                $this->_view->showForm($this->_form, $this->_applicationContext->getDiContainer()
-                    ->get('\Chrome\View\Form\Element\Factory\Yaml'));
+                $this->_view->displayLogin();
             }
         } catch (\Chrome\Exception $e) {
             $this->_exceptionHandler->exception($e);
@@ -82,17 +81,9 @@ class Login extends AbstractModule
 
     protected function _execute()
     {
-        $this->_form = \Chrome_Form_Login::getInstance($this->_applicationContext);
+        $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Login');
 
-       $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome_View_User_Login_Default');
-
-/*
-$this->_applicationContext->getViewContext()
-            ->getFactory()
-            ->build('Chrome_View_User_Login_Default', $this);
-
-        // $this->_model = new \Chrome\Model\Login\Database($this->_applicationContext, $this->_form);
-*/
+        $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome\View\User\Login');
 
         $this->_form->create();
 

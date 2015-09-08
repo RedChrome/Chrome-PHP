@@ -6,14 +6,14 @@ use Mockery as M;
 
 class ElementTest extends \PHPUnit_Framework_TestCase
 {
-    protected function _getValidator(\Chrome_Form_Element_Basic_Interface $formElement)
+    protected function _getValidator(\Chrome\Form\Element\BasicElement_Interface $formElement)
     {
         return new \Chrome\Validator\Form\Element\ElementValidator($formElement);
     }
 
     protected function _getFormElement()
     {
-        return M::mock('\Chrome_Form_Element_Basic_Interface');
+        return M::mock('\Chrome\Form\Element\BasicElement_Interface');
     }
 
     public function testValidator()

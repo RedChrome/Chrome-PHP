@@ -17,11 +17,13 @@
  * @subpackage Chrome.Form
  */
 
+namespace Chrome\Form\Element;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Hidden extends Chrome_Form_Element_Abstract implements \Chrome\Form\Element\Interfaces\Hidden
+class Hidden extends \Chrome\Form\Element\AbstractElement implements \Chrome\Form\Element\Interfaces\Hidden
 {
     public function isCreated()
     {

@@ -20,6 +20,7 @@ namespace Chrome\Classloader;
 
 use \Chrome\Logger\Loggable_Interface;
 use \Psr\Log\LoggerInterface;
+use Chrome\Exception\Chrome\Exception;
 
 /**
  *
@@ -166,7 +167,6 @@ class Autoloader implements Autoloader_Interface
     }
 
     /**
-     *
      * @see \Chrome\Classloader\Autoloader_Interface::load()
      */
     public function load($class)
@@ -258,9 +258,6 @@ class Classloader implements Classloader_Interface
         {
             if(($file = $resolver->resolve($class)) !== false)
             {
-                #if(!($file instanceof \Chrome\File_Interface)) {
-                #    throw new \Chrome\Exception(get_class($resolver));
-                #}
                 return $file;
             }
         }
@@ -294,6 +291,8 @@ class Classloader implements Classloader_Interface
     {
         try
         {
+            $class = $this->_sanitiseClassname($class);
+
             if($this->isLoaded($class))
             {
                 return true;
@@ -318,6 +317,8 @@ class Classloader implements Classloader_Interface
 
     public function isLoaded($class)
     {
+        $class = $this->_sanitiseClassname($class);
+
         return in_array($class, $this->_loadedClasses) or class_exists($class, false);
     }
 
@@ -334,6 +335,8 @@ class Classloader implements Classloader_Interface
     {
         try
         {
+            $class = $this->_sanitiseClassname($class);
+
             if($this->isLoaded($class) === true)
             {
                 return true;
@@ -391,6 +394,15 @@ class Classloader implements Classloader_Interface
             }
 
             $this->_resolvers[] = $resolver;
+        }
+    }
+
+    protected function _sanitiseClassname($class) {
+
+        if($class{0} == '\\') {
+            return substr($class, 1);
+        } else {
+            return $class;
         }
     }
 

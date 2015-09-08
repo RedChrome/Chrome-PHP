@@ -132,14 +132,14 @@ interface View_Interface
      *
      * A view factory is used to create views by only passing it's class name.
      *
-     * @param Chrome_View_Factory_Interface $factory
+     * @param \Chrome\View\Factory_Interface $factory
      */
-    public function setFactory(\Chrome_View_Factory_Interface $factory);
+    public function setFactory(\Chrome\View\Factory_Interface $factory);
 
     /**
      * Returns a view factory
      *
-     * @return Chrome_View_Factory_Interface
+     * @return \Chrome\View\Factory_Interface
      */
     public function getFactory();
 
@@ -684,7 +684,7 @@ class View implements \Chrome\Context\View_Interface
         return $this->_pluginFacade;
     }
 
-    public function setFactory(\Chrome_View_Factory_Interface $factory)
+    public function setFactory(\Chrome\View\Factory_Interface $factory)
     {
         $this->_factory = $factory;
     }

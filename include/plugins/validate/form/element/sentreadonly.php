@@ -34,7 +34,7 @@ class SentReadonlyValidator extends AbstractValidator
 {
     protected $_option = null;
 
-    public function __construct(\Chrome_Form_Option_Element_Basic_Interface $option)
+    public function __construct(\Chrome\Form\Option\BasicElement_Interface $option)
     {
         $this->_option = $option;
     }
@@ -43,7 +43,7 @@ class SentReadonlyValidator extends AbstractValidator
     {
         $this->_namespace = 'plugins/validate/form/element';
 
-        if($this->_option instanceof \Chrome_Form_Option_Element_Interface)
+        if($this->_option instanceof \Chrome\Form\Option\Element_Interface)
         {
             if($this->_option->getIsReadonly() === true) {
                 if($this->_data !== null) {
@@ -55,7 +55,7 @@ class SentReadonlyValidator extends AbstractValidator
             return true;
         }
 
-        if($this->_option instanceof \Chrome_Form_Option_Element_Multiple_Interface) {
+        if($this->_option instanceof \Chrome\Form\Option\MultipleElement_Interface) {
 
             foreach($this->_option->getReadonly() as $readonlyInput) {
                 if(in_array($readonlyInput, (array) $this->_data)) {

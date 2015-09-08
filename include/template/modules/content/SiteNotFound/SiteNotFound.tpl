@@ -1,1 +1,0 @@
-<?php echo $LANG->get('modules/content/SiteNotFound/message'); ?>

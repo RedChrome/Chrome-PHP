@@ -34,7 +34,7 @@ class Captcha extends AbstractModule
 {
     protected function _initialize()
     {
-        $this->_view = $this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Captcha', $this);
+        $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome\View\Captcha\Captcha');
     }
 
     protected function _execute()
@@ -48,7 +48,12 @@ class Captcha extends AbstractModule
         } else if(!$this->_form->isValid()) {
            $this->_form->renew();
         } else {
-           $this->_view->formValid($this->_form);
+            // this is needed, because even if the captcha was valid, we want to display a new captcha!
+            // normaly, after the captcha is valid, we do not display a captcha again.
+            //$captcha = $this->_form->getElements('captcha')->getOption()->getCaptcha();
+            //$captcha->create();
+
+            $this->_view->formValid($this->_form);
         }
 
         $this->_view->test($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Yaml'));

@@ -35,14 +35,14 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     /**
      * The coressponding form
      *
-     * @var Chrome_Form_Interface
+     * @var \Chrome\Form\Form_Interface
      */
     protected $_form = null;
 
     /**
      * Contains all form elements from $_form
      *
-     * @var array of Chrome_Form_Element_Basic_Interface
+     * @var array of \Chrome\Form\Element\BasicElement_Interface
      */
     protected $_formElements = array();
 
@@ -84,10 +84,10 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     /**
      * Simple constructor
      *
-     * @param Chrome_Form_Interface $form
+     * @param \Chrome\Form\Form_Interface $form
      * @param \Chrome\Context\View_Interface $viewContext
      */
-    public function __construct(Chrome_Form_Interface $form, \Chrome\Context\View_Interface $viewContext)
+    public function __construct(\Chrome\Form\Form_Interface $form, \Chrome\Context\View_Interface $viewContext)
     {
         $this->_viewContext = $viewContext;
         $this->_form = $form;
@@ -183,11 +183,11 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
      *
      * It uses {@link _modifyElementOption} to modify the current view form element option.
      *
-     * @param Chrome_Form_Element_Basic_Interface $formElement
+     * @param \Chrome\Form\Element\BasicElement_Interface $formElement
      * @throws \Chrome\Exception
      * @return Chrome_View_Form_Element_Interface
      */
-    protected function _setUpElement(Chrome_Form_Element_Basic_Interface $formElement)
+    protected function _setUpElement(\Chrome\Form\Element\BasicElement_Interface $formElement)
     {
         // get the option, and modify it...
         $formOption = $this->_formElementOptionFactory->getElementOption($formElement);
@@ -203,7 +203,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         // if the form element option acceptes attachment, then create for every attach element
         // a coressponding view form element, and attach it to the attachable option.
         // this can only be done, if both options, are able to attach objects.
-        if($formElement->getOption() instanceof Chrome_Form_Option_Element_Attachable_Interface and $formOption instanceof Chrome_View_Form_Element_Option_Attachable_Interface)
+        if($formElement->getOption() instanceof \Chrome\Form\Option\AttachableElement_Interface and $formOption instanceof Chrome_View_Form_Element_Option_Attachable_Interface)
         {
             foreach($formElement->getOption()->getAttachments() as $attachmentElement)
             {
@@ -226,11 +226,11 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     /**
      * Here is the location to put specific, form dependent option manipulation logic.
      *
-     * @param Chrome_Form_Element_Basic_Interface $formElement
+     * @param \Chrome\Form\Element\BasicElement_Interface $formElement
      * @param Chrome_View_Form_Element_Option_Basic_Interface $viewOption
      * @return Chrome_View_Form_Element_Option_Basic_Interface
      */
-    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
+    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
     {
         return $viewOption;
     }
@@ -358,7 +358,7 @@ class Chrome_View_Form_Element_Appender_Error_Yaml extends Chrome_View_Form_Elem
                 $errors .= '<p class="ym-message">' . $translate->getByMessage($error) . '</p>';
             }
 
-            if($formElement instanceof Chrome_Form_Element_Form) {
+            if($formElement instanceof \Chrome\Form\Element\Form) {
                 return $this->_result.$errors.'</div>';
             }
 

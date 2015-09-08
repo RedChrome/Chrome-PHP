@@ -2,9 +2,9 @@
 
 namespace Test\Chrome\Form;
 
-abstract class SimpleTestForm extends \Chrome_Form_Abstract
+abstract class SimpleTestForm extends \Chrome\Form\AbstractForm
 {
-    public function addElement(\Chrome_Form_Element_Basic_Interface $element)
+    public function addElement(\Chrome\Form\Element\BasicElement_Interface $element)
     {
         $this->_addElement($element);
     }
@@ -21,8 +21,8 @@ class OneElementForm extends SimpleTestForm
 {
     protected function _init()
     {
-        $option  = new \Chrome_Form_Option_Element_Multiple();
-        $element = new \Chrome_Form_Element_Checkbox($this, 'checkbox', $option);
+        $option  = new \Chrome\Form\Option\MultipleElement();
+        $element = new \Chrome\Form\Element\Checkbox($this, 'checkbox', $option);
         $this->_addElement($element);
     }
 }

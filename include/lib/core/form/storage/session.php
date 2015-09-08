@@ -17,12 +17,14 @@
  * @subpackage Chrome.Form
  */
 
+namespace Chrome\Form\Storage;
+
 /**
- * Implementation of {@link Chrome_Form_Storage_Interface}
+ * Implementation of {@link \Chrome\Form\Storage_Interface}
  *
  * This uses the session to store client data
  */
-class Chrome_Form_Storage_Session implements Chrome_Form_Storage_Interface
+class Session implements \Chrome\Form\Storage_Interface
 {
     const FORM_NAMESPACE = 'FORMS';
 

@@ -383,12 +383,11 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
         {
             $encodedData = $this->_encode($this->_data);
 
-            $modifier = $this->_file->getModifier();
-            $modifier->rewind();
-            $modifier->write($encodedData);
+            $this->_file->putContent($encodedData);
 
         } catch(\Chrome\Exception $e)
         {
+            // todo: hm... how about logging?
             return;
         }
     }
@@ -411,6 +410,7 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
             //$data = file_get_contents($this->_file->getFileName());
 
             $this->_data = $this->_decode($data);
+
         } catch(\Chrome\Exception $e)
         {
             $this->_data = array();
@@ -428,7 +428,7 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
     {
         $this->_dataChanged = true;
 
-        $this->_openFile();
+        #$this->_openFile();
     }
 
     /**

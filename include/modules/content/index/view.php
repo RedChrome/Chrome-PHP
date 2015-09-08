@@ -1,7 +1,18 @@
 <?php
 
-class Chrome_View_Index extends Chrome_View_Strategy_Abstract
+namespace Chrome\View\Index;
+
+use \Chrome\View\AbstractView;
+use \Chrome\View\AbstractListLayout;
+
+class Index extends AbstractListLayout
 {
+    protected $_todoView = null;
+
+    public function setViews(\Chrome\View\Index\ToDo $todoView)
+    {
+        $this->_todoView = $todoView;
+    }
 
     protected function _setUp()
     {
@@ -10,63 +21,11 @@ class Chrome_View_Index extends Chrome_View_Strategy_Abstract
 
     public function doSth()
     {
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_TODO');
-    }
-
-    public function formIsValid()
-    {
-        $this->addTitle('valid');
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_Form_Is_Valid', $this->_controller);
-    }
-
-    public function formIsInvalid()
-    {
-        $this->addTitle('invalid');
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_Form_Is_Invalid', $this->_controller);
-    }
-
-    public function formNotSent()
-    {
-        $this->addTitle('not sent');
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_Form_Not_Sent', $this->_controller);
-    }
-
-    public function formNotCreated()
-    {
-        $this->addTitle('not created');
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_Index_Form_Not_Sent', $this->_controller);
+        $this->_views[] = $this->_todoView;
     }
 }
-class Chrome_View_Index_Form_Is_Valid extends Chrome_View_Abstract
-{
-    public function render()
-    {
-        return 'form is valid... getting data:<br>' . var_export($this->_controller->getForm()->getData(), true);
-    }
-}
-class Chrome_View_Index_Form_Is_Invalid extends Chrome_View_Abstract
-{
-    public function render()
-    {
-        return 'form is invalid... getting errors:<br>' . var_export($this->_controller->getForm()->getValidationErrors(), true);
-    }
-}
-class Chrome_View_Index_Form_Not_Sent extends Chrome_View_Abstract
-{
-    public function render()
-    {
-        return 'user did not sent data to server...<br>re-creating form...' . var_export($this->_controller->getForm()->getReceivingErrors(), true);
-    }
-}
-class Chrome_View_Index_Form_Not_Created extends Chrome_View_Abstract
-{
 
-    public function render()
-    {
-        return 'form not created..<br>creating it...';
-    }
-}
-class Chrome_View_Index_STHOTHER extends Chrome_View_Abstract
+class Chrome_View_Index_STHOTHER extends AbstractView
 {
 
     public function render()
@@ -78,17 +37,18 @@ class Chrome_View_Index_STHOTHER extends Chrome_View_Abstract
 
         $formElement = $form->getElements('text');
 
-        $option = new Chrome_View_Form_Element_Option();
+        $option = new \Chrome_View_Form_Element_Option();
 
-        $option->setLabel(new Chrome_View_Form_Label_Default(array('text' => 'Text')));
+        $option->setLabel(new \Chrome_View_Form_Label_Default(array('text' => 'Text')));
         $option->setPlaceholder('Text placeholder');
 
-        $input = new Chrome_View_Form_Element_Text_Default($formElement, $option);
+        $input = new \Chrome_View_Form_Element_Text_Default($formElement, $option);
 
         return $input->render();
     }
 }
-class Chrome_View_Index_TODO extends Chrome_View_Abstract
+
+class ToDo extends AbstractView
 {
 
     public function render()
@@ -116,44 +76,43 @@ class Chrome_View_Index_TODO extends Chrome_View_Abstract
         ';
     }
 }
-class Chrome_View_Form_Index extends Chrome_View_Form_Abstract
+
+class Form extends \Chrome_View_Form_Abstract
 {
     protected function _initFactories()
     {
-        $this->_formElementFactory = new Chrome_View_Form_Element_Factory_Suffix('Default');
-        $this->_formElementOptionFactory = new Chrome_View_Form_Element_Option_Factory_Default();
-        $this->_renderer = new Chrome_View_Form_Index_Renderer($this);
-
-        #parent::_init();
+        $this->_formElementFactory = new \Chrome_View_Form_Element_Factory_Suffix('Default');
+        $this->_formElementOptionFactory = new \Chrome_View_Form_Element_Option_Factory_Default();
+        $this->_renderer = new FormRenderer($this);
     }
 
-    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
+    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
     {
         switch($formElement->getID())
         {
             case 'radio':
                 {
-                    $label = new Chrome_View_Form_Label_Default(array('test' => 'Value1_label', 'test2' => 'VaLUE2_label'));
-                    $label->setPosition(Chrome_View_Form_Label_Interface::LABEL_POSITION_FRONT);
+                    $label = new \Chrome_View_Form_Label_Default(array('test' => 'Value1_label', 'test2' => 'VaLUE2_label'));
+                    $label->setPosition(\Chrome_View_Form_Label_Interface::LABEL_POSITION_FRONT);
                     $viewOption->setLabel($label);
                     break;
                 }
             case 'password':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('password' => 'Password_label')))->setPlaceholder('password_placeholder');
+                    $viewOption->setLabel(new \Chrome_View_Form_Label_Default(array('password' => 'Password_label')))->setPlaceholder('password_placeholder');
                     break;
                 }
 
             case 'text':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('text' => 'Text_label')))->setPlaceholder('text_placeholder');
+                    $viewOption->setLabel(new \Chrome_View_Form_Label_Default(array('text' => 'Text_label')))->setPlaceholder('text_placeholder');
                     break;
                 }
 
             case 'checkbox':
                 {
-                    $label = new Chrome_View_Form_Label_Default(array('Value1' => 'Value1_label', 'Value2' => 'Value2_Label', 'vAlue3' => 'VALUE3_LABEL'));
-                    $label->setPosition(Chrome_View_Form_Label_Interface::LABEL_POSITION_BEHIND);
+                    $label = new \Chrome_View_Form_Label_Default(array('Value1' => 'Value1_label', 'Value2' => 'Value2_Label', 'vAlue3' => 'VALUE3_LABEL'));
+                    $label->setPosition(\Chrome_View_Form_Label_Interface::LABEL_POSITION_BEHIND);
 
                     $viewOption->setLabel($label);
                     break;
@@ -162,7 +121,7 @@ class Chrome_View_Form_Index extends Chrome_View_Form_Abstract
             case 'select':
                 {
                     $viewOption->setDefaultInput(array('Value1'));
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('select' => 'Meine Auswahl - Test', 'Value1' => 'VALUE1_Label', 'Value2' => 'Value2_Label', 'Value3' => 'v3_Label')));
+                    $viewOption->setLabel(new \Chrome_View_Form_Label_Default(array('select' => 'Meine Auswahl - Test', 'Value1' => 'VALUE1_Label', 'Value2' => 'Value2_Label', 'Value3' => 'v3_Label')));
                     break;
                 }
         }
@@ -170,7 +129,8 @@ class Chrome_View_Form_Index extends Chrome_View_Form_Abstract
         return $viewOption;
     }
 }
-class Chrome_View_Form_Index_Renderer extends Chrome_View_Form_Renderer_Abstract
+
+class FormRenderer extends \Chrome_View_Form_Renderer_Abstract
 {
     protected function _render()
     {

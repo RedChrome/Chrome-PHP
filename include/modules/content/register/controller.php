@@ -17,7 +17,7 @@ class Register extends AbstractModule
     protected $_session;
     protected $_authorisation = null;
 
-    public function __construct(\Chrome\Context\Application_Interface $appContext, \Chrome\Interactor\User\Registration $interactor, \Chrome_View_Register $view)
+    public function __construct(\Chrome\Context\Application_Interface $appContext, \Chrome\Interactor\User\Registration $interactor, \Chrome\View\User\Register $view)
     {
         $this->_applicationContext = $appContext;
         $this->_setRequestHandler($appContext->getRequestHandler());
@@ -174,7 +174,7 @@ class Register extends AbstractModule
     {
         if($this->_form == null)
         {
-            $this->_form = new \Chrome_Form_Register_StepOne($this->_applicationContext);
+            $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Register\StepOne');
         }
 
         if(!$this->_form->isCreated())
@@ -182,7 +182,7 @@ class Register extends AbstractModule
             $this->_form->create();
         }
 
-        $this->_view->setStepOne($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Yaml'));
+        $this->_view->setStepOne();
 
         $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = array('step' => 2);
     }
@@ -191,12 +191,12 @@ class Register extends AbstractModule
     {
         if(!($this->_form instanceof Chrome_Form_Register_StepTwo))
         {
-            $this->_form = new \Chrome_Form_Register_StepTwo($this->_applicationContext);
+            $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Register\StepTwo');
         }
 
         $this->_form->create();
 
-        $this->_view->setStepTwo($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Yaml'));
+        $this->_view->setStepTwo();
 
         $array = $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE];
         $array['step'] = 3;

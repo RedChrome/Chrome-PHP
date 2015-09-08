@@ -31,7 +31,7 @@ class RequiredValidator extends AbstractValidator
 {
     protected $_option = null;
 
-    public function __construct(\Chrome_Form_Option_Element_Basic_Interface $option)
+    public function __construct(\Chrome\Form\Option\BasicElement_Interface $option)
     {
         $this->_option = $option;
     }
@@ -40,7 +40,7 @@ class RequiredValidator extends AbstractValidator
     {
         $this->_namespace = 'plugins/validate/form/element';
 
-        if($this->_option instanceof \Chrome_Form_Option_Element_Multiple_Interface)
+        if($this->_option instanceof \Chrome\Form\Option\MultipleElement_Interface)
         {
 
             if(!is_array($this->_data))
@@ -57,7 +57,7 @@ class RequiredValidator extends AbstractValidator
             return true;
         }
 
-        if($this->_option instanceof \Chrome_Form_Option_Element_Interface)
+        if($this->_option instanceof \Chrome\Form\Option\Element_Interface)
         {
             if($this->_option->getIsRequired() === true and $this->_data === null)
             {

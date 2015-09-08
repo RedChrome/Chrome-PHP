@@ -17,14 +17,14 @@
  * @subpackage Chrome.Form
  */
 
+namespace Chrome\Form\Element;
+
 require_once 'text.php';
 
 /**
- * Chrome_Form_Element_Textarea
- *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Textarea extends Chrome_Form_Element_Text implements \Chrome\Form\Element\Interfaces\Textarea
+class Textarea extends \Chrome\Form\Element\Text implements \Chrome\Form\Element\Interfaces\Textarea
 {
 }

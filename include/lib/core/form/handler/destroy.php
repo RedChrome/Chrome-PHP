@@ -18,10 +18,10 @@
  * @package    CHROME-PHP
  * @subpackage Chrome.Form
  */
-if(CHROME_PHP !== true) die();
+
+namespace Chrome\Form\Handler;
 
 /**
- * Chrome_Form_Handler_Destroy
  *
  * destorys the input and other data, if the form is getting destroyed
  *
@@ -31,7 +31,7 @@ if(CHROME_PHP !== true) die();
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Handler_Destroy implements Chrome_Form_Handler_Interface
+class Destroy implements \Chrome\Form\Handler\Handler_Interface
 {
     protected $_form = null;
 
@@ -42,12 +42,12 @@ class Chrome_Form_Handler_Destroy implements Chrome_Form_Handler_Interface
         }
     }
 
-    public function is(Chrome_Form_Interface $form)
+    public function is(\Chrome\Form\Form_Interface $form)
     {
         $this->_form = $form;
     }
 
-    public function isNot(Chrome_Form_Interface $form)
+    public function isNot(\Chrome\Form\Form_Interface $form)
     {
         $this->_form = $form;
     }

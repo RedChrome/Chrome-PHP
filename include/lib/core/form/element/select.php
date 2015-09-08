@@ -17,10 +17,12 @@
  * @subpackage Chrome.Form
  */
 
+namespace Chrome\Form\Element;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Select extends Chrome_Form_Element_Multiple_Abstract implements Chrome_Form_Element_Storable, \Chrome\Form\Element\Interfaces\Select
+class Select extends \Chrome\Form\Element\AbstractMultipleElement implements \Chrome\Form\Element\Storable_Interface, \Chrome\Form\Element\Interfaces\Select
 {
 }

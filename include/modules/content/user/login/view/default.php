@@ -17,78 +17,64 @@
  * @subpackage Chrome.Content.User
  */
 
+namespace Chrome\View\User;
+
+use \Chrome\View\AbstractListLayout;
+use \Chrome\View\AbstractView;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Content.User
  */
-class Chrome_View_User_Login_Default extends Chrome_View_Strategy_Abstract
+class Login extends AbstractListLayout
 {
 
-    public function alreadyLoggedIn(Chrome_Form_Interface $form, Chrome_View_Form_Element_Factory_Interface $viewFormElementFactory)
+    public function alreadyLoggedIn()
     {
-        $this->showForm($form, $viewFormElementFactory);
+        $this->_views[] = $this->_viewContext->getFactory()->get('\Chrome\View\User\Login\LoggedIn');
     }
 
     public function successfullyLoggedIn()
     {
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Default_SuccessfullyLoggedIn');
+        $this->_views[] = $this->_viewContext->getFactory()->get('\Chrome\View\User\Login\SuccessfullyLoggedIn');
     }
 
-    public function formNotValid()
+    public function displayLogin()
     {
-        $this->_views[] = $this->_viewContext->getFactory()->build('Chrome_View_User_Default_FormNotValid');
-    }
-
-    public function showForm(Chrome_Form_Interface $form, Chrome_View_Form_Element_Factory_Interface $viewFormElementFactory)
-    {
-        $viewForm = Chrome_View_Form_Login::getInstance($form, $this->_viewContext);
-        $viewForm->setElementFactory($viewFormElementFactory);
-        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content($viewForm);
-    }
-
-    public function errorWhileLoggingIn(Chrome_Form_Interface $form, Chrome_View_Form_Element_Factory_Interface $viewFormElementFactory)
-    {
-        $viewForm = Chrome_View_Form_Login::getInstance($form, $this->_viewContext);
-        $viewForm->setElementFactory($viewFormElementFactory);
-        $this->_views[] = new Chrome_View_Form_Renderer_Template_Login_Content($viewForm);
+        $this->_views[] = $this->_viewContext->getFactory()->get('\Chrome\View\User\Login\FormRenderer');
     }
 }
 
-class Chrome_View_User_Default_AlreadyLoggedIn extends Chrome_View_Abstract
+namespace Chrome\View\User\Login;
+
+use \Chrome\View\AbstractView;
+
+class LoggedIn extends AbstractView
 {
     public function render()
     {
+        $template = new \Chrome\Template\PHP();
+        $template->assignTemplate('modules/content/user/login/already_logged_in');
+
         $lang = $this->_viewContext->getLocalization()->getTranslate();
 
-        $template = new \Chrome\Template\PHP();
-        $template->assignTemplate('modules/content/user/login/already_logged_in');
         $template->assign('LANG', $lang);
-        #new Chrome_Language('modules/content/user/login'));
-        $template->assign('FORM', $this->_controller->getForm());
         return $template->render();
     }
 }
 
-class Chrome_View_User_Default_SuccessfullyLoggedIn extends Chrome_View
+class SuccessfullyLoggedIn extends AbstractView
 {
-
     public function render()
     {
         $template = new \Chrome\Template\PHP();
-        $template->assignTemplate('modules/content/user/login/already_logged_in');
+        $template->assignTemplate('modules/content/user/login/successfully_logged_in');
         return $template->render();
     }
 }
-class Chrome_View_User_Default_FormNotValid extends Chrome_View
-{
-    public function render()
-    {
-        return 'form was not valid!';
-    }
-}
 
-class Chrome_View_Form_Renderer_Template_Login_Content extends Chrome_View_Form_Renderer_Template_Abstract
+class FormRenderer extends \Chrome_View_Form_Renderer_Template_Abstract
 {
     protected function _getTemplate()
     {
@@ -96,7 +82,6 @@ class Chrome_View_Form_Renderer_Template_Login_Content extends Chrome_View_Form_
 
         $lang = $this->_viewContext->getLocalization()->getTranslate();
 
-        $template = new \Chrome\Template\PHP();
         $template->assignTemplate('modules/content/user/login/form_log_in');
         $template->assign('LANG', $lang);
 

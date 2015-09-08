@@ -17,12 +17,14 @@
  * @subpackage Chrome.Form
  */
 
+namespace Chrome\Form\Storage;
+
 /**
- * Implementation of {@link Chrome_Form_Storage_Interface}
+ * Implementation of {@link \Chrome\Form\Storage_Interface}
  *
- * This storage uses the implementation of {@link Chrome_Cache_Interface} to store data.
+ * This storage uses the implementation of {@link \Chrome\Cache\Cache_Interface} to store data.
  */
-class Chrome_Form_Storage_Cache implements Chrome_Form_Storage_Interface
+class Cache implements \Chrome\Form\Storage_Interface
 {
     const FORM_NAMESPACE = 'FORM';
 
@@ -30,7 +32,7 @@ class Chrome_Form_Storage_Cache implements Chrome_Form_Storage_Interface
 
     protected $_form = null;
 
-    public function __construct(Chrome_Form_Interface $form, \Chrome\Cache\Cache_Interface $cache)
+    public function __construct(\Chrome\Form\Form_Interface $form, \Chrome\Cache\Cache_Interface $cache)
     {
         $this->_form = $form;
         $this->_cache = $cache;

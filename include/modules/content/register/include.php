@@ -1,10 +1,26 @@
 <?php
 
+/**
+ * CHROME-PHP CMS
+ *
+ * LICENSE
+ *
+ * This source file is subject to the Creative Commons license that is bundled
+ * with this package in the file LICENSE.
+ * It is also available through the world-wide-web at this URL:
+ * http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * If you did not receive a copy of the license AND are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@chrome-php.de so we can send you a copy immediately.
+ *
+ * @package    CHROME-PHP
+ * @subpackage Chrome.View.User
+ */
 use \Chrome\Validator\General\Password\PasswordValidator;
 use \Chrome\Validator\User\NicknameValidator;
 use \Chrome\Validator\Form\Element\YearBirthdayValidator;
 
-class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
+class Chrome_Form_Register_StepOne extends \Chrome\Form\AbstractForm
 {
     protected function _init()
     {
@@ -16,34 +32,34 @@ class Chrome_Form_Register_StepOne extends Chrome_Form_Abstract
         #$lang = $this->getApplicationContext()->getViewContext()->getLocalization()->getTranslate();
         //$lang = new Chrome_Language('modules/content/user/registration');
 
-        $storageSession = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
+        $storageSession = new \Chrome\Form\Storage\Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
 
-        $formElementOption = new Chrome_Form_Option_Element_Form($storageSession);
+        $formElementOption = new \Chrome\Form\Option\Element\Form($storageSession);
         $formElementOption->setMaxAllowedTime(300)->setMinAllowedTime(1);
-        $this->_addElement(new Chrome_Form_Element_Form($this, $this->_id, $formElementOption));
+        $this->_addElement(new \Chrome\Form\Element\Form($this, $this->_id, $formElementOption));
 
-        // $errorOption = new Chrome_Form_Option_Element();
+        // $errorOption = new \Chrome\Form\Option\Element();
         // $errorElement = new Chrome_Form_Element_Error($this, 'error', $errorOption);
         // this->_addElement($errorElement);
 
-        $acceptOption = new Chrome_Form_Option_Element_Multiple();
+        $acceptOption = new \Chrome\Form\Option\MultipleElement();
         $acceptOption->setRequired(array('accepted'))->setAllowedValues(array('accepted'));
 
-        $acceptElement = new Chrome_Form_Element_Checkbox($this, 'accept', $acceptOption);
+        $acceptElement = new \Chrome\Form\Element\Checkbox($this, 'accept', $acceptOption);
         $this->_addElement($acceptElement);
 
-        $submitOption = new Chrome_Form_Option_Element();
+        $submitOption = new \Chrome\Form\Option\Element();
         #$submitOption->setAllowedValue($lang->get('register'));
 
-        $submitElement = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
+        $submitElement = new \Chrome\Form\Element\Submit($this, 'submit', $submitOption);
 
-        $buttonsOption = new Chrome_Form_Option_Element_Buttons();
+        $buttonsOption = new \Chrome\Form\Option\Element\Buttons();
         $buttonsOption->attach($submitElement);
 
-        $buttonsElement = new Chrome_Form_Element_Buttons($this, 'buttons', $buttonsOption);
+        $buttonsElement = new \Chrome\Form\Element\Buttons($this, 'buttons', $buttonsOption);
         $this->_addElement($buttonsElement);
 
-        $storeHandler = new Chrome_Form_Handler_Store($storageSession, new Chrome_Form_Option_Storage(), array('accept'));
+        $storeHandler = new \Chrome\Form\Handler\Store($storageSession, new \Chrome\Form\Option\Storage(), array('accept'));
         $this->setAttribute(self::ATTRIBUTE_STORE, $storeHandler);
     }
 }
@@ -57,7 +73,7 @@ class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
         parent::_initFactories();
     }
 
-    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
+    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
     {
         $lang = $this->_viewContext->getLocalization()->getTranslate();
         //$lang = new Chrome_Language('modules/content/user/registration');
@@ -80,7 +96,7 @@ class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
     }
 }
 
-class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
+class Chrome_Form_Register_StepTwo extends \Chrome\Form\AbstractForm
 {
     protected function _init()
     {
@@ -101,9 +117,7 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
         ));
 
         $birthdayValidator = new YearBirthdayValidator();
-
         $passwordValidator = new PasswordValidator();
-
         $nicknameValidator = new NicknameValidator();
 
         $emailConverter = new \Chrome\Converter\ConverterList();
@@ -112,64 +126,64 @@ class Chrome_Form_Register_StepTwo extends Chrome_Form_Abstract
         $nameConverter = new \Chrome\Converter\ConverterList();
         $nameConverter->setConversion(array('charToHtml', 'stripHtml'));
 
-        $storageSession = new Chrome_Form_Storage_Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
-        $formOption = new Chrome_Form_Option_Element_Form($storageSession);
+        $storageSession = new \Chrome\Form\Storage\Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
+        $formOption = new \Chrome\Form\Option\Element\Form($storageSession);
         $formOption->setMinAllowedTime(1)->setMaxAllowedTime(300);
 
-        $formElement = new Chrome_Form_Element_Form($this, $this->_id, $formOption);
+        $formElement = new \Chrome\Form\Element\Form($this, $this->_id, $formOption);
         $this->_addElement($formElement);
 
-        $backwardButton = new Chrome_Form_Element_Backward($this, 'backward', new Chrome_Form_Option_Element());
+        $backwardButton = new \Chrome\Form\Element\Backward($this, 'backward', new \Chrome\Form\Option\Element());
 
-        $submitOption = new Chrome_Form_Option_Element();
+        $submitOption = new \Chrome\Form\Option\Element();
         $submitOption->setIsRequired(false);#->setAllowedValue($lang->get('register'));
-        $submitButton = new Chrome_Form_Element_Submit($this, 'submit', $submitOption);
+        $submitButton = new \Chrome\Form\Element\Submit($this, 'submit', $submitOption);
 
-        $buttonsOption = new Chrome_Form_Option_Element_Buttons();
+        $buttonsOption = new \Chrome\Form\Option\Element\Buttons();
         $buttonsOption->setIsRequired(true)->setAttachments(array($backwardButton, $submitButton));
 
-        $buttonsElement = new Chrome_Form_Element_Buttons($this, 'buttons', $buttonsOption);
+        $buttonsElement = new \Chrome\Form\Element\Buttons($this, 'buttons', $buttonsOption);
         $this->_addElement($buttonsElement);
 
-        $captchaOption = new Chrome_Form_Option_Element_Captcha($this);
+        $captchaOption = new \Chrome\Form\Option\Element\Captcha($this);
         #$captchaOption->setFrontendOptions(array(\Chrome\Captcha\Captcha_Interface::CHROME_CAPTCHA_ENGINE => 'reCaptcha'));
-        $captchaElement = new Chrome_Form_Element_Captcha($this, 'captcha', $captchaOption);
+        $captchaElement = new \Chrome\Form\Element\Captcha($this, 'captcha', $captchaOption);
         $this->_addElement($captchaElement);
 
-        $birthdayOption = new Chrome_Form_Option_Element();
+        $birthdayOption = new \Chrome\Form\Option\Element();
         $birthdayOption->setIsRequired(true)->setValidator($birthdayValidator);
 
-        $birthdayElement = new Chrome_Form_Element_Date($this, 'birthday', $birthdayOption);
+        $birthdayElement = new \Chrome\Form\Element\Date($this, 'birthday', $birthdayOption);
         $this->_addElement($birthdayElement);
 
-        $emailOption = new Chrome_Form_Option_Element();
+        $emailOption = new \Chrome\Form\Option\Element();
         $emailOption->setIsRequired(true)->setConversion($emailConverter)->setValidator($emailValidator);
 
-        $emailElement = new Chrome_Form_Element_Text($this, 'email', $emailOption);
+        $emailElement = new \Chrome\Form\Element\Text($this, 'email', $emailOption);
         $this->_addElement($emailElement);
 
-        $passwordOption = new Chrome_Form_Option_Element();
+        $passwordOption = new \Chrome\Form\Option\Element();
         $passwordOption->setIsRequired(true)->setValidator($passwordValidator);
 
-        $passwordElement = new Chrome_Form_Element_Password($this, 'password', $passwordOption);
-        $passwordElementSecond = new Chrome_Form_Element_Password($this, 'password2', $passwordOption);
+        $passwordElement = new \Chrome\Form\Element\Password($this, 'password', $passwordOption);
+        $passwordElementSecond = new \Chrome\Form\Element\Password($this, 'password2', $passwordOption);
 
         $this->_addElement($passwordElement);
         $this->_addElement($passwordElementSecond);
 
-        $nicknameOption = new Chrome_Form_Option_Element();
+        $nicknameOption = new \Chrome\Form\Option\Element();
         $nicknameOption->setIsRequired(true)->setValidator($nicknameValidator)->setConversion($nameConverter);
 
-        $nicknameElement = new Chrome_Form_Element_Text($this, 'nickname', $nicknameOption);
+        $nicknameElement = new \Chrome\Form\Element\Text($this, 'nickname', $nicknameOption);
         $this->_addElement($nicknameElement);
 
-        $storeHandler = new Chrome_Form_Handler_Store($storageSession, new Chrome_Form_Option_Storage(), array('nickname', 'birthday', 'email'));
+        $storeHandler = new \Chrome\Form\Handler\Store($storageSession, new \Chrome\Form\Option\Storage(), array('nickname', 'birthday', 'email'));
         $this->setAttribute(self::ATTRIBUTE_STORE, $storeHandler);
     }
 }
 class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
 {
-    protected function _modifyElementOption(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
+    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
     {
         $lang = $this->_viewContext->getLocalization()->getTranslate();
         //$lang = new Chrome_Language('modules/content/user/registration');

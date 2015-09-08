@@ -10,7 +10,7 @@ class ReadonlyTest extends \PHPUnit_Framework_TestCase
     {
         $data = 123;
 
-        $option = M::mock('\Chrome_Form_Option_Element_Interface');
+        $option = M::mock('\Chrome\Form\Option\Element_Interface');
         $option->shouldReceive('getIsReadonly')->withNoArgs()->andReturn(true)->once();
         $validator = new \Chrome\Validator\Form\Element\ReadonlyValidator($option);
 
@@ -24,7 +24,7 @@ class ReadonlyTest extends \PHPUnit_Framework_TestCase
     {
         $data = 123;
 
-        $option = M::mock('\Chrome_Form_Option_Element_Interface');
+        $option = M::mock('\Chrome\Form\Option\Element_Interface');
         $option->shouldReceive('getIsReadonly')->withNoArgs()->andReturn(false)->once();
         $validator = new \Chrome\Validator\Form\Element\ReadonlyValidator($option);
 

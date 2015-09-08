@@ -1,32 +1,46 @@
 <?php
 
-class Chrome_View_Captcha extends Chrome_View_Strategy_Abstract
+/**
+ * CHROME-PHP CMS
+ *
+ * LICENSE
+ *
+ * This source file is subject to the Creative Commons license that is bundled
+ * with this package in the file LICENSE.
+ * It is also available through the world-wide-web at this URL:
+ * http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * If you did not receive a copy of the license AND are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@chrome-php.de so we can send you a copy immediately.
+ *
+ * @package    CHROME-PHP
+ * @subpackage Chrome.View.Captcha
+ */
+
+namespace Chrome\View\Captcha;
+
+use Chrome\View\AbstractListLayout;
+use Chrome\View\AbstractView;
+
+class Captcha extends AbstractListLayout
 {
     public function _setUp()
     {
         $this->addTitle('Captcha Test');
     }
 
-    public function test(Chrome_Form_Interface $form, Chrome_View_Form_Element_Factory_Interface $elementFactory)
+    public function test(\Chrome\Form\Form_Interface $form, \Chrome_View_Form_Element_Factory_Interface $elementFactory)
     {
-        $viewForm = new Chrome_View_Form_Captcha($form, $this->_viewContext);
-        $viewForm->setElementFactory($elementFactory);
-        $this->_views[] = new Chrome_View_Form_Renderer_Captcha($viewForm);
-        #$this->_views[] = new Chrome_View_Captcha_Template($this->_viewContext, $this->_controller);
+        $this->_views[] = $this->_viewContext->getFactory()->get('\Chrome\View\Captcha\FormRenderer');
     }
 
-    public function formValid(Chrome_Form_Interface $form)
+    public function formValid(\Chrome\Form\Form_Interface $form)
     {
-        // this is needed, because even if the captcha was valid, we want to display a new captcha!
-        // normaly, after the captcha is valid, we do not display a captcha again.
-        $captcha = $form->getElements('captcha')->getOption()->getCaptcha();
-        $captcha->create();
-
-        $this->_views[] = new Chrome_View_Captcha_Template_Success($this->_viewContext);
+        $this->_views[] = new CaptchaSuccess($this->_viewContext);
     }
 }
 
-class Chrome_View_Captcha_Template_Success extends Chrome_View
+class CaptchaSuccess extends AbstractView
 {
     public function render()
     {
@@ -34,7 +48,7 @@ class Chrome_View_Captcha_Template_Success extends Chrome_View
     }
 }
 
-class Chrome_View_Form_Renderer_Captcha extends Chrome_View_Form_Renderer_Template_Abstract
+class FormRenderer extends \Chrome_View_Form_Renderer_Template_Abstract
 {
     protected function _getTemplate()
     {

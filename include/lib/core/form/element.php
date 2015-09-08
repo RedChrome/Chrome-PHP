@@ -17,6 +17,8 @@
  * @subpackage Chrome.Form
  */
 
+namespace Chrome\Form\Element;
+
 /**
  * Interface for basic form elements
  *
@@ -30,14 +32,14 @@
  * If you call isValid before isSent, then isSent will automatically get triggered. So you cannot modify the lifetime-cycle!
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Form.Element
+ * @subpackage Chrome.Form
  */
-interface Chrome_Form_Element_Basic_Interface
+interface BasicElement_Interface
 {
     /**
      * Checks whether this form element was successfully created.
      *
-     * If it's not created then {@link Chrome_Form_Element_Interface::create()} must be able to create the form element.
+     * If it's not created then {@link \Chrome\Form\Element\BasicElement_Interface::create()} must be able to create the form element.
      *
      * @return boolean
      */
@@ -132,7 +134,7 @@ interface Chrome_Form_Element_Basic_Interface
      *
      * Every form element belongs to only one form. This form will be returned.
      *
-     * @return Chrome_Form_Interface
+     * @return \Chrome\Form\Form_Interface
      */
     public function getForm();
 }
@@ -141,16 +143,16 @@ interface Chrome_Form_Element_Basic_Interface
  * Interface for form elements
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Form.Element
+ * @subpackage Chrome.Form
  */
-interface Chrome_Form_Element_Interface extends Chrome_Form_Element_Basic_Interface
+interface Element_Interface extends BasicElement_Interface
 {
     /**
      * Returns the option class for this element
      *
      * The option class contains information about this form element.
      *
-     * @return Chrome_Form_Option_Element_Interface
+     * @return \Chrome\Form\Option\Element_Interface
      */
     public function getOption();
 }
@@ -159,16 +161,16 @@ interface Chrome_Form_Element_Interface extends Chrome_Form_Element_Basic_Interf
  * Interface for form element with multiple values
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Form.Element
+ * @subpackage Chrome.Form
  */
-interface Chrome_Form_Element_Multiple_Interface extends Chrome_Form_Element_Basic_Interface
+interface MultipleElement_Interface extends BasicElement_Interface
 {
     /**
      * Returns the option class for this element
      *
      * The option class contains information about this form element.
      *
-     * @return Chrome_Form_Option_Element_Multiple_Interface
+     * @return \Chrome\Form\Option\MultipleElement_Interface
      */
     public function getOption();
 }
@@ -181,15 +183,15 @@ interface Chrome_Form_Element_Multiple_Interface extends Chrome_Form_Element_Bas
  *
  * @todo isnt this a ui interface? if it is, then move it to the view classes.
  * @package CHROME-PHP
- * @subpackage Chrome.Form.Storage
+ * @subpackage Chrome.Form
  */
-interface Chrome_Form_Element_Storable extends Chrome_Form_Element_Interface
+interface Storable_Interface extends \Chrome\Form\Element\BasicElement_Interface
 {
 
     /**
      * Returns the data which can get stored.
      *
-     * This should depend on {@link Chrome_Form_Element_Interface::getData()}. Note that there is no other converting
+     * This should depend on {@link \Chrome\Form\Element\BasicElement_Interface::getData()}. Note that there is no other converting
      * mechanism behind this method. So convert the data appropriatly. (e.g. trim the length and remove html tags)
      *
      * @return mixed
@@ -201,9 +203,9 @@ interface Chrome_Form_Element_Storable extends Chrome_Form_Element_Interface
  * The implementation of a basic form element.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.Form.Storage
+ * @subpackage Chrome.Form
  */
-abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element_Basic_Interface
+abstract class AbstractBasicElement implements BasicElement_Interface
 {
     /**
      * This error will be raised if no input was send.
@@ -220,9 +222,9 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
     protected $_option = null;
 
     /**
-     * instance of the corresponding Chrome_Form_Interface, which uses this element
+     * instance of the corresponding \Chrome\Form\Form_Interface, which uses this element
      *
-     * @var Chrome_Form_Interface
+     * @var \Chrome\Form\Form_Interface
      */
     protected $_form = null;
 
@@ -271,16 +273,14 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
     /**
      * Creates a new form element.
      *
-     * @param Chrome_Form_Interface $form
+     * @param \Chrome\Form\Form_Interface $form
      *        The corresponding form object
      * @param string $id
      *        the id of the form element. must be unique inside of $form
-     * @param Chrome_Form_Option_Element_Basic_Interface $options
+     * @param \Chrome\Form\Option\BasicElement_Interface $options
      *        options for this form element
-     *
-     * @return Chrome_Form_Element_Abstract
      */
-    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Basic_Interface $option)
+    public function __construct(\Chrome\Form\Form_Interface $form, $id, \Chrome\Form\Option\BasicElement_Interface $option)
     {
         $this->_id = $id;
         $this->_form = $form;
@@ -293,13 +293,6 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
         throw new \Chrome\Exception('Method not overwritten!');
     }
 
-    /**
-     * Determines whether this element is created.
-     *
-     * This method is a default implementation of a cache using _isCreated() for validation
-     *
-     * @return boolean
-     */
     public function isCreated()
     {
         // cache
@@ -324,13 +317,6 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
         return true;
     }
 
-    /**
-     * Determines whether this element is sent.
-     *
-     * This method is a default implementation of a cache using _isSent() for validation
-     *
-     * @return boolean
-     */
     public function isSent()
     {
         // cache
@@ -344,13 +330,6 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
         return $this->_isSent;
     }
 
-    /**
-     * Determines whether this element is valid.
-     *
-     * This method is a default implementation of a cache using _isValid() for validation
-     *
-     * @return boolean
-     */
     public function isValid()
     {
         // cache
@@ -408,7 +387,7 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
     /**
      * Returns a validator which contains the validation logic (used in isValid)
      *
-     * @return Validator_Interface
+     * @return \Chrome\Validator\Validator_Interface
      */
     protected function _getValidator()
     {
@@ -453,41 +432,21 @@ abstract class Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element
         return $converter->convert($conversion, $data);
     }
 
-    /**
-     * Returns the option
-     * @return Chrome_Form_Option_Element_Basic_Interface
-     */
     public function getOption()
     {
         return $this->_option;
     }
 
-    /**
-     *
-     * @see Chrome_Form_Element_Interface::getID()
-     * @return string
-     */
     public function getID()
     {
         return $this->_id;
     }
 
-    /**
-     *
-     * @see Chrome_Form_Element_Interface::getErrors()
-     * @return array
-     */
     public function getErrors()
     {
         return $this->_errors;
     }
 
-    /**
-     * Returns the corresponding form object
-     *
-     * @see Chrome_Form_Element_Interface::getForm()
-     * @return Chrome_Form_Interface
-     */
     public function getForm()
     {
         return $this->_form;
@@ -513,23 +472,16 @@ use \Chrome\Validator\Form\Element\SentReadonlyValidator;
 use \Chrome\Validator\Form\Element\CallbackValidator;
 
 /**
- * Chrome_Form_Element_Abstract
- *
  * Abstract class of all form element classes. Implements a default cache for isCreated, isSent and isValid.
  *
- * This call only supports single data. If you want to receive multiple values, use {@link Chrome_Form_Element_Multiple_Abstract}
+ * This call only supports single data. If you want to receive multiple values, use {@link \Chrome\Form\Element\AbstractMultipleElement}
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form.Element
  */
-abstract class Chrome_Form_Element_Abstract extends Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element_Interface
+abstract class AbstractElement extends AbstractBasicElement implements Element_Interface
 {
-    /**
-     * (non-PHPdoc)
-     *
-     * @see Chrome_Form_Element_Basic_Abstract::__construct()
-     */
-    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Interface $option)
+    public function __construct(\Chrome\Form\Form_Interface $form, $id, \Chrome\Form\Option\Element_Interface $option)
     {
         parent::__construct($form, $id, $option);
     }
@@ -554,7 +506,7 @@ abstract class Chrome_Form_Element_Abstract extends Chrome_Form_Element_Basic_Ab
             $andComposition->addValidator(new ContainsValidator(array($allowedValue)));
         }
 
-        if($this->_option instanceof Chrome_Form_Option_Element_Attachable_Interface)
+        if($this->_option instanceof \Chrome\Form\Option\AttachableElement_Interface)
         {
             $andComposition->addValidator(new AttachmentValidator($this->_option, new OrComposition()));
         }
@@ -582,30 +534,17 @@ abstract class Chrome_Form_Element_Abstract extends Chrome_Form_Element_Basic_Ab
         return parent::_isSent();
     }
 
-    /**
-     *
-     * @see Chrome_Form_Element_Interface::destroy()
-     * @return void
-     */
     public function destroy()
     {
+        //TODO: here we could delete the storage
         // do nothing
     }
 
-    /**
-     *
-     * @see Chrome_Form_Element_Interface::renew()
-     * @return void
-     */
     public function renew()
     {
         // do nothing
     }
 
-    /**
-     *
-     * @see Chrome_Form_Element_Interface::create()
-     */
     public function create()
     {
     }
@@ -613,7 +552,7 @@ abstract class Chrome_Form_Element_Abstract extends Chrome_Form_Element_Basic_Ab
     /**
      * Returns the sent data, applies converters (given by option) to the data.
      *
-     * @see Chrome_Form_Element_Interface::getData()
+     * @see \Chrome\Form\Element\BasicElement_Interface::getData()
      * @return mixed
      */
     protected function _getData()
@@ -634,20 +573,20 @@ abstract class Chrome_Form_Element_Abstract extends Chrome_Form_Element_Basic_Ab
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element_Basic_Abstract implements Chrome_Form_Element_Multiple_Interface
+abstract class AbstractMultipleElement extends AbstractBasicElement implements MultipleElement_Interface
 {
     /**
      * Creates a new form element, which supports multiple input values
      *
-     * Note that this class needs a Chrome_Form_Option_Element_Multiple_Interface option!
+     * Note that this class needs a \Chrome\Form\Option\MultipleElement_Interface option!
      *
-     * @param Chrome_Form_Interface $form
+     * @param \Chrome\Form\Form_Interface $form
      * @param string $id
-     * @param Chrome_Form_Option_Element_Multiple_Interface $option
+     * @param \Chrome\Form\Option\MultipleElement_Interface $option
      */
-    public function __construct(Chrome_Form_Interface $form, $id, Chrome_Form_Option_Element_Multiple_Interface $option)
+    public function __construct(\Chrome\Form\Form_Interface $form, $id, \Chrome\Form\Option\MultipleElement_Interface $option)
     {
-        // just ensure, that a Chrome_Form_Option_Element_Multiple_Interface option is given.
+        // just ensure, that a \Chrome\Form\Option\MultipleElement_Interface option is given.
         // thus, this is not a useless method overriding.
         parent::__construct($form, $id, $option);
     }
@@ -671,7 +610,7 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
             $and->addValidator($validator);
         }
 
-        if($this->_option instanceof Chrome_Form_Option_Element_Attachable_Interface)
+        if($this->_option instanceof \Chrome\Form\Option\AttachableElement_Interface)
         {
             $and->addValidator(new AttachmentValidator($this->_option, new OrComposition()));
         }
@@ -719,7 +658,7 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
      *
      * @param string $data
      *        the data, sent by client. You could also use $this->getData()
-     * @return string boolean
+     * @return string|boolean
      */
     public function inlineValidation($data)
     {
@@ -732,11 +671,6 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
         return true;
     }
 
-    /**
-     * Default implementation of {@link Chrome_Form_Element_Interface::create()}
-     *
-     * @return void
-     */
     public function create()
     {
         // do nothing
@@ -752,11 +686,6 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
         return parent::_isSent();
     }
 
-    /**
-     * Default implementation of {@link Chrome_Form_Element_Interface::isCreated()}
-     *
-     * @return boolean
-     */
     public function isCreated()
     {
         return true;
@@ -765,7 +694,7 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
     /**
      * Default implementation of {@link Chrome_Form_Element_Storable::getStorableData()}
      *
-     * This has no effect unless you explicitly implement the Chrome_Form_Element_Storable interface to the class
+     * This has no effect unless you explicitly implement the \Chrome\Form\Element\Storable_Interface interface to the class
      *
      * @return mixed
      */
@@ -774,21 +703,11 @@ abstract class Chrome_Form_Element_Multiple_Abstract extends Chrome_Form_Element
         return $this->getData();
     }
 
-    /**
-     *
-     * @see Chrome_Form_Element_Interface::destroy()
-     * @return void
-     */
     public function destroy()
     {
         // do nothing
     }
 
-    /**
-     *
-     * @see Chrome_Form_Element_Interface::renew()
-     * @return void
-     */
     public function renew()
     {
         // do nothing

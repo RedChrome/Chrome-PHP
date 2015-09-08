@@ -31,7 +31,7 @@ class ElementValidator extends AbstractValidator
 {
     protected $_formElement = null;
 
-    public function __construct(\Chrome_Form_Element_Basic_Interface $formElement)
+    public function __construct(\Chrome\Form\Element\BasicElement_Interface $formElement)
     {
         $this->_formElement = $formElement;
     }

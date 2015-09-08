@@ -36,7 +36,7 @@ class AttachmentValidator extends AbstractValidator
 
     protected $_composition = null;
 
-    public function __construct(\Chrome_Form_Option_Element_Attachable_Interface $option, Composition_Interface $composition)
+    public function __construct(\Chrome\Form\Option\AttachableElement_Interface $option, Composition_Interface $composition)
     {
         $this->_option = $option;
         $this->_composition = $composition;

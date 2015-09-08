@@ -124,7 +124,7 @@ if(!defined('ROOT_URL')) {
     unset($fileLevel, $intFileLevel, $rooturl, $found);
 }
 if(!defined('ROOT')) {
-    define('ROOT', dirname(dirname(__file__)));
+    define('ROOT', dirname(dirname(__FILE__)));
 }
 
 define('CHROME_WD', ROOT);

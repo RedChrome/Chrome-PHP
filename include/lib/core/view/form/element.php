@@ -36,7 +36,7 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
     /**
      * The corresponding form element
      *
-     * @var Chrome_Form_Element_Interface
+     * @var \Chrome\Form\Element\BasicElement_Interface
      */
     protected $_formElement = null;
 
@@ -105,10 +105,10 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
     /**
      * Creates a new view form element and initializes it
      *
-     * @param Chrome_Form_Element_Basic_Interface $formElement
+     * @param \Chrome\Form\Element\BasicElement_Interface $formElement
      * @param Chrome_View_Form_Element_Option_Interface $option
      */
-    public function __construct(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Interface $option)
+    public function __construct(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Interface $option)
     {
         $this->_formElement = $formElement;
 
@@ -396,17 +396,17 @@ abstract class Chrome_View_Form_Element_Abstract extends Chrome_View_Form_Elemen
     /**
      * The option of the coressponding form element.
      *
-     * @var Chrome_Form_Option_Element_Interface
+     * @var \Chrome\Form\Option\Element_Interface
      */
     protected $_elementOption = null;
 
     /**
      * Creates a new instance, using the constructor of {@link Chrome_View_Form_Element_Basic_Abstract::__construct} and setting the form element option
      *
-     * @param Chrome_Form_Element_Interface $formElement
+     * @param \Chrome\Form\Element\BasicElement_Interface $formElement
      * @param Chrome_View_Form_Element_Option_Interface $option
      */
-    public function __construct(Chrome_Form_Element_Interface $formElement, Chrome_View_Form_Element_Option_Interface $option)
+    public function __construct(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Interface $option)
     {
         parent::__construct($formElement, $option);
         $this->_elementOption = $formElement->getOption();
@@ -438,13 +438,13 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
 
     /**
      *
-     * @var Chrome_Form_Option_Element_Multiple_Interface
+     * @var \Chrome\Form\Option\MultipleElement_Interface
      */
     protected $_elementOption = null;
 
     abstract protected function _getNext();
 
-    public function __construct(Chrome_Form_Element_Multiple_Interface $formElement, Chrome_View_Form_Element_Option_Multiple_Interface $option)
+    public function __construct(\Chrome\Form\Element\MultipleElement_Interface $formElement, Chrome_View_Form_Element_Option_Multiple_Interface $option)
     {
         $this->_elementOption = $formElement->getOption();
         parent::__construct($formElement, $option);
@@ -521,14 +521,14 @@ abstract class Chrome_View_Form_Element_Attachable_Abstract extends Chrome_View_
     /**
      * Creates a new attachable view form element.
      *
-     * This uses the default constructor from {@link Chrome_Form_Element_Basic_Interface} and nothing more.
+     * This uses the default constructor from {@link \Chrome\Form\Element\BasicElement_Interface} and nothing more.
      *
      * We need to overwrite this method, since we need a Chrome_View_Form_Element_Option_Attachable_Interface instance as $option.
      *
-     * @param Chrome_Form_Element_Basic_Interface $formElement
+     * @param \Chrome\Form\Element\BasicElement_Interface $formElement
      * @param Chrome_View_Form_Element_Option_Attachable_Interface $option
      */
-    public function __construct(Chrome_Form_Element_Basic_Interface $formElement, Chrome_View_Form_Element_Option_Attachable_Interface $option)
+    public function __construct(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Attachable_Interface $option)
     {
         parent::__construct($formElement, $option);
     }

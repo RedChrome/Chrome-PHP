@@ -17,12 +17,14 @@
  * @subpackage Chrome.Form
  */
 
+namespace Chrome\Form\Element;
+
 /**
  * Info: If you set checked and disabled for the same checkbox, then the browser wont send this checkbox, because its disabled
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-class Chrome_Form_Element_Checkbox extends Chrome_Form_Element_Multiple_Abstract implements Chrome_Form_Element_Storable, \Chrome\Form\Element\Interfaces\Checkbox
+class Checkbox extends \Chrome\Form\Element\AbstractMultipleElement implements \Chrome\Form\Element\Storable_Interface, \Chrome\Form\Element\Interfaces\Checkbox
 {
 }

@@ -18,7 +18,7 @@ class FormIsSentTest extends \Test\Chrome\TestCase
     public function setUp()
     {
         $this->_form = new EmptyForm($this->_appContext);
-        $this->_option = new \Chrome_Form_Option_Element();
+        $this->_option = new \Chrome\Form\Option\Element();
     }
 
     protected function _addElement()
