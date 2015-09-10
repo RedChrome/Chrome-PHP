@@ -99,6 +99,8 @@ interface BasicElement_Interface
      * convert and/or modify the data!
      * Do only use this method, to retrieve data from a form element.
      *
+     * Returns null if element isn't valid or if element didn't receive any data at all.
+     *
      * @return mixed
      */
     public function getData();
@@ -217,7 +219,7 @@ abstract class AbstractBasicElement implements BasicElement_Interface
     /**
      * current option
      *
-     * @var array
+     * @var \Chrome\Form\Option\BasicElement_Interface
      */
     protected $_option = null;
 
@@ -397,6 +399,11 @@ abstract class AbstractBasicElement implements BasicElement_Interface
 
     public function getData()
     {
+        if(!$this->isValid())
+        {
+            return null;
+        }
+
         // cache
         if($this->_data !== null)
         {
@@ -665,7 +672,8 @@ abstract class AbstractMultipleElement extends AbstractBasicElement implements M
         // user can only select one item, but has sent more than one item
         if($this->_option->getSelectMultiple() === false and is_array($data) and count($data) > 1)
         {
-            return 'cannt_select_more_than_one_item';
+            // TODO: constant
+            return 'cannot_select_more_than_one_item';
         }
 
         return true;

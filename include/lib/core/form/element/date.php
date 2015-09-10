@@ -54,8 +54,8 @@ class Date extends \Chrome\Form\Element\AbstractElement implements \Chrome\Form\
     {
         try
         {
-            $this->_date = \DateTime::createFromFormat('!Y-m-d', $this->_form->getSentData($this->_id));
-        } catch(Exception $e)
+            $this->_date = \DateTime::createFromFormat('!Y-m-d', (string) $this->_form->getSentData($this->_id));
+        } catch(\Exception $e)
         {
             $this->_date = null;
         }
@@ -68,6 +68,8 @@ class Date extends \Chrome\Form\Element\AbstractElement implements \Chrome\Form\
         if($data instanceof \DateTime) {
             return true;
         }
+
+        $this->_date = null;
 
         return 'date_was_not_valid';
     }

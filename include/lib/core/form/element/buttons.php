@@ -110,11 +110,13 @@ class Buttons extends \Chrome\Form\Element\AbstractElement implements \Chrome\Fo
         foreach($this->_option->getAttachments() as $button) {
             $button->create();
         }
+
+        return true;
     }
 
     public function getData()
     {
-        // we're using here no converter, because the data is already converted in the particular buttons
+        // we're using here no converter, because the data is already converted in the particular sub-buttons
 
         $array = array();
 

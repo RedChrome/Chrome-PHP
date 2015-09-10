@@ -261,11 +261,6 @@ class Form extends AbstractBasicElement implements \Chrome\Form\Element\Interfac
         return md5(uniqid(mt_rand(), true));
     }
 
-    public function getOption()
-    {
-        return $this->_option;
-    }
-
     protected function _getData()
     {
         return $this->_convert($this->_form->getSentData($this->_option->getTokenNamespace()));

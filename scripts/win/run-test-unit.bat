@@ -1,5 +1,5 @@
 @Echo Off
-call tidyUp.bat
+call clean.bat
 if %1!==! goto noDirGiven
 php ..\..\tests\phpUnit.php --configuration tests\phpUnit\config.xml %1
 pause

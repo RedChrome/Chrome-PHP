@@ -64,7 +64,6 @@ class Store implements \Chrome\Form\Handler\Handler_Interface, \Chrome\Form\Hand
     {
         foreach($this->_whiteList as $elementId)
         {
-
             $element = $form->getElements($elementId);
 
             if(!($element instanceof \Chrome\Form\Element\Storable_Interface))

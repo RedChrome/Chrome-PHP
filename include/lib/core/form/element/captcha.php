@@ -16,12 +16,13 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-
 namespace Chrome\Form\Option\Element;
 
 interface Captcha_Interface extends \Chrome\Form\Option\Element_Interface
 {
+
     /**
+     *
      * @return \Chrome\Captcha\Captcha_Interface
      */
     public function getCaptcha();
@@ -36,6 +37,7 @@ interface Captcha_Interface extends \Chrome\Form\Option\Element_Interface
 
 class Captcha extends \Chrome\Form\Option\Element implements Captcha_Interface
 {
+
     protected $_form = null;
 
     protected $_captcha = null;
@@ -68,8 +70,7 @@ class Captcha extends \Chrome\Form\Option\Element implements Captcha_Interface
 
     public function getCaptcha()
     {
-        if($this->_captcha === null)
-        {
+        if ($this->_captcha === null) {
             $this->_captcha = new \Chrome\Captcha\Captcha($this->_form->getID(), $this->_form->getApplicationContext(), $this->_frontendOptions, $this->_backendOptions);
         }
 
@@ -86,7 +87,6 @@ class Captcha extends \Chrome\Form\Option\Element implements Captcha_Interface
         return $this->_recreateIfInvalid;
     }
 }
-
 namespace Chrome\Form\Element;
 
 /**
@@ -96,26 +96,22 @@ namespace Chrome\Form\Element;
  */
 class Captcha extends \Chrome\Form\Element\AbstractElement implements \Chrome\Form\Element\Interfaces\Captcha
 {
+
     protected $_captcha = null;
 
     protected $_reCreated = false;
+
+    protected $_created = false;
 
     public function __construct(\Chrome\Form\Form_Interface $form, $id, \Chrome\Form\Option\Element\Captcha_Interface $option)
     {
         parent::__construct($form, $id, $option);
         $this->_captcha = $option->getCaptcha();
-        $this->_captcha->create();
     }
 
     public function isCreated()
     {
-        if($this->_captcha instanceof \Chrome\Captcha\Captcha_Interface)
-        {
-            $this->_captcha->create();
-            return true;
-        }
-
-        return false;
+        return $this->_created;
     }
 
     public function isValid()
@@ -123,7 +119,7 @@ class Captcha extends \Chrome\Form\Element\AbstractElement implements \Chrome\Fo
         $isValid = parent::isValid();
 
         // only re-create the captcha one time and only if the option says to recreate it.
-        if($isValid === false AND $this->_reCreated === false AND $this->_option->getRecreateIfInvalid() === true) {
+        if ($isValid === false and $this->_reCreated === false and $this->_option->getRecreateIfInvalid() === true) {
             $this->_captcha->create();
             $this->_reCreated = true;
         }
@@ -138,8 +134,14 @@ class Captcha extends \Chrome\Form\Element\AbstractElement implements \Chrome\Fo
 
     public function create()
     {
-        $this->_captcha->create();
+        if ($this->_captcha instanceof \Chrome\Captcha\Captcha_Interface) {
+            $this->_captcha->create();
 
-        return true;
+            $this->_created = true;
+
+            return true;
+        }
+
+        return false;
     }
 }
