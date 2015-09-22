@@ -39,7 +39,7 @@ class Captcha extends AbstractModule
 
     protected function _execute()
     {
-        $this->_form = new \Chrome_Form_Captcha($this->_applicationContext);
+        $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\Module\Captcha\Captcha');
 
         if(!$this->_form->isCreated()) {
            $this->_form->create();

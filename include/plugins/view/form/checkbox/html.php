@@ -17,24 +17,26 @@
  * @subpackage Chrome.View.Form
  */
 
+namespace Chrome\View\Form\Element\Checkbox;
+
 /**
- *
  * @package CHROME-PHP
- * @subpackage Chrome.Form
+ * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Buttons_Default extends Chrome_View_Form_Element_Attachable_Abstract
+class Html extends \Chrome\View\Form\Element\AbstractMultipleElement
 {
+    private $_int = 0;
+
+    protected function _getNext()
+    {
+        $next = $this->_availableSelections[$this->_int];
+        $this->_int = ++$this->_int % count($this->_availableSelections);
+        return $next;
+    }
+
     protected function _render()
     {
-        $return = '';
-
-        foreach($this->_option->getAttachments() as $button)
-        {
-
-
-            $return .= $button->render();
-        }
-
+        $return = '<input type="checkbox" ' . $this->_renderFlags() . '/>';
         return $return;
     }
 }

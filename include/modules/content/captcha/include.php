@@ -1,6 +1,8 @@
 <?php
 
-class Chrome_Form_Captcha extends \Chrome\Form\AbstractForm
+namespace Chrome\Form\Module\Captcha;
+
+class Captcha extends \Chrome\Form\AbstractForm
 {
     protected function _init()
     {
@@ -29,7 +31,9 @@ class Chrome_Form_Captcha extends \Chrome\Form\AbstractForm
     }
 }
 
-class Chrome_View_Form_Captcha extends Chrome_View_Form_Abstract
+namespace Chrome\View\Form\Module\Captcha;
+
+class Captcha extends \Chrome\View\Form\AbstractForm
 {
 
 }

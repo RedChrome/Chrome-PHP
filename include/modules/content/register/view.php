@@ -78,12 +78,12 @@ class Register extends AbstractViewStrategy
 
 namespace Chrome\View\User\Register\Form\Renderer;
 
-class StepOne extends \Chrome_View_Form_Renderer_Template_Simple_Abstract
+class StepOne extends \Chrome\View\Form\SimpleTemplateRenderer
 {
     protected $_templateFile = 'modules/content/register/stepOne';
 }
 
-class StepTwo extends \Chrome_View_Form_Renderer_Template_Simple_Abstract
+class StepTwo extends \Chrome\View\Form\SimpleTemplateRenderer
 {
     protected $_templateFile = 'modules/content/register/stepTwo';
 }

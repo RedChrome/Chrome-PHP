@@ -18,12 +18,14 @@
  * @todo: add doc
  */
 
+namespace Chrome\View\Form\Option;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option_Interface
+class Element implements Element_Interface
 {
     protected $_internalAttribute = array();
     protected $_storedData = null;
@@ -61,7 +63,7 @@ class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option
         return $this->_label;
     }
 
-    public function setLabel(Chrome_View_Form_Label_Interface $labelObject)
+    public function setLabel(\Chrome\View\Form\Option\Label_Interface $labelObject)
     {
         $this->_label = $labelObject;
         return $this;
@@ -89,7 +91,7 @@ class Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Option_Multiple extends Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option_Multiple_Interface
+class MultipleElement extends Element implements MultipleElement_Interface
 {
 }
 
@@ -98,11 +100,11 @@ class Chrome_View_Form_Element_Option_Multiple extends Chrome_View_Form_Element_
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Option_Attachable extends Chrome_View_Form_Element_Option implements Chrome_View_Form_Element_Option_Attachable_Interface
+class AttachableElement extends Element implements AttachableElement_Interface
 {
     protected $_attachments = array();
 
-    public function attach(Chrome_View_Form_Element_Interface $element)
+    public function attach(\Chrome\View\Form\Element\Element_Interface $element)
     {
         $this->_attachments[] = $element;
     }

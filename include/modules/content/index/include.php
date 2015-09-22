@@ -1,6 +1,8 @@
 <?php
 
-class Chrome_Form_Index extends \Chrome\Form\AbstractForm
+namespace Chrome\Form\Module\Index;
+
+class Index extends \Chrome\Form\AbstractForm
 {
     protected function _init()
     {

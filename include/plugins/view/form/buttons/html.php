@@ -17,24 +17,24 @@
  * @subpackage Chrome.View.Form
  */
 
+namespace Chrome\View\Form\Element\Buttons;
+
 /**
  *
  * @package CHROME-PHP
- * @subpackage Chrome.View.Form
+ * @subpackage Chrome.Form
  */
-class Chrome_View_Form_Element_Radio_Default extends Chrome_View_Form_Element_Multiple_Abstract
+class Html extends \Chrome\View\Form\Element\AbstractAttachableElement
 {
-    private $_int = 0;
-
-    protected function _getNext()
-    {
-        $next = $this->_availableSelections[$this->_int];
-        $this->_int = ++$this->_int % count($this->_availableSelections);
-        return $next;
-    }
-
     protected function _render()
     {
-        return '<input type="radio" ' . $this->_renderFlags() . '/>';
+        $return = '';
+
+        foreach($this->_option->getAttachments() as $button)
+        {
+            $return .= $button->render();
+        }
+
+        return $return;
     }
 }

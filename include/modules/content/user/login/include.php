@@ -17,37 +17,16 @@
  * @subpackage Chrome.User
  */
 
+namespace Chrome\Form\Module\User;
+
 /**
  * Form for an user login
  *
  * @package CHROME-PHP
  * @subpackage Chrome.User
  */
-class Chrome_Form_Login extends \Chrome\Form\AbstractForm
+class Login extends \Chrome\Form\AbstractForm
 {
-    private static $_instance = null;
-
-    /**
-     * Singleton pattern
-     * only one instance of this form
-     *
-     * @return Chrome_Form_Login
-     */
-    public static function getInstance(\Chrome\Context\Application_Interface $appContext)
-    {
-        if(self::$_instance === null)
-        {
-            self::$_instance = new self($appContext);
-        }
-
-        return self::$_instance;
-    }
-
-    /**
-     * Init the form
-     *
-     * @return Chrome_Form_Login
-     */
     protected function _init()
     {
         // get lang obj
@@ -114,21 +93,12 @@ class Chrome_Form_Login extends \Chrome\Form\AbstractForm
         $this->addReceivingHandler(new \Chrome\Form\Handler\Destroy());
     }
 }
-class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
+
+namespace Chrome\View\Form\Module\User;
+
+class Login extends \Chrome\View\Form\AbstractForm
 {
-    private static $_instance = null;
-
-    public static function getInstance(\Chrome\Form\Form_Interface $form, \Chrome\Context\View_Interface $viewContext)
-    {
-        if(self::$_instance === null)
-        {
-            self::$_instance = new self($form, $viewContext);
-        }
-
-        return self::$_instance;
-    }
-
-    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
+    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $viewOption)
     {
         $lang = $this->_viewContext->getLocalization()->getTranslate();
 
@@ -137,21 +107,21 @@ class Chrome_View_Form_Login extends Chrome_View_Form_Abstract
             case 'identity':
                 {
                     $currLang = $lang->get('modules/content/user/login/identity');
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('identity' => $currLang)))->setPlaceholder($currLang);
+                    $viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('identity' => $currLang)))->setPlaceholder($currLang);
 
                     break;
                 }
             case 'password':
                 {
                     $currLang = $lang->get('modules/content/user/login/password');
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('password' => $currLang)))->setPlaceholder($currLang);
+                    $viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('password' => $currLang)))->setPlaceholder($currLang);
                     break;
                 }
 
             case 'stay_loggedin':
                 {
                     $currLang = $lang->get('modules/content/user/login/stay_loggedin');
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('1' => $currLang)));
+                    $viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('1' => $currLang)));
                     break;
                 }
         }

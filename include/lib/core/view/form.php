@@ -17,6 +17,8 @@
  * @subpackage Chrome.View.Form
  */
 
+namespace Chrome\View\Form;
+
 require_once 'form/interfaces.php';
 require_once 'form/manipulators.php';
 require_once 'form/renderer.php';
@@ -25,12 +27,12 @@ require_once 'form/element.php';
 require_once 'form/factory.php';
 
 /**
- * Default implementation of Chrome_View_Form_Interface
+ * Default implementation of \Chrome\View\Form\Form_Interface
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
+abstract class AbstractForm implements \Chrome\View\Form\Form_Interface
 {
     /**
      * The coressponding form
@@ -49,14 +51,14 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     /**
      * A view form element factory
      *
-     * @var Chrome_View_Form_Element_Factory_Interface
+     * @var \Chrome\View\Form\Factory\Element\Element_Interface
      */
     protected $_formElementFactory = null;
 
     /**
      * A view form element option factory
      *
-     * @var Chrome_View_Form_Element_Option_Factory_Interface
+     * @var \Chrome\View\Form\Factory\Element\Option\Option_Interface
      */
     protected $_formElementOptionFactory = null;
 
@@ -72,7 +74,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
      *
      * @var string
      */
-    protected $_formElementOptionFactoryDefault = 'Default';
+    protected $_formElementOptionFactoryDefault = 'Factory';
 
     /**
      * The current view context
@@ -102,35 +104,23 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         return $this->_viewContext;
     }
 
-    /**
-     * @see Chrome_View_Form_Interface::setElementOptionFactory()
-     */
-    public function setElementOptionFactory(Chrome_View_Form_Element_Option_Factory_Interface $elementOptionFactory)
+    public function setElementOptionFactory(\Chrome\View\Form\Factory\Element\Option\Option_Interface $elementOptionFactory)
     {
         $this->_formElementOptionFactory = $elementOptionFactory;
     }
 
-    /**
-     * @see Chrome_View_Form_Interface::setElementFactory()
-     */
-    public function setElementFactory(Chrome_View_Form_Element_Factory_Interface $elementFactory)
+    public function setElementFactory(\Chrome\View\Form\Factory\Element\Element_Interface $elementFactory)
     {
         $this->_formElementFactory = $elementFactory;
 
         $this->_formElements = array();
     }
 
-    /**
-     * @see Chrome_View_Form_Interface::getElementFactory()
-     */
     public function getElementFactory()
     {
         return $this->_formElementFactory;
     }
 
-    /**
-     * @see Chrome_View_Form_Interface::getElementOptionFactory()
-     */
     public function getElementOptionFactory()
     {
         return $this->_formElementOptionFactory;
@@ -143,7 +133,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     {
         if($this->_formElementOptionFactory === null)
         {
-            $class = 'Chrome_View_Form_Element_Option_Factory_' . ucfirst($this->_formElementOptionFactoryDefault);
+            $class = '\\Chrome\\View\\Form\\Factory\\Option\\' . ucfirst($this->_formElementOptionFactoryDefault);
             $this->_formElementOptionFactory = new $class();
         }
     }
@@ -185,7 +175,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
      *
      * @param \Chrome\Form\Element\BasicElement_Interface $formElement
      * @throws \Chrome\Exception
-     * @return Chrome_View_Form_Element_Interface
+     * @return \Chrome\View\Form\Element\Element_Interface
      */
     protected function _setUpElement(\Chrome\Form\Element\BasicElement_Interface $formElement)
     {
@@ -195,15 +185,15 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         $formOption = $this->_modifyElementOption($formElement, $formOption);
 
         // if the modification was not properly executed, throw an exception
-        if( !($formOption instanceof Chrome_View_Form_Element_Option_Basic_Interface) )
+        if( !($formOption instanceof \Chrome\View\Form\Option\BasicElement_Interface) )
         {
-            throw new \Chrome\Exception('Either option factory or _modifyElementOption returned NOT an instanceof Chrome_View_Form_Element_Option_Basic_Interface');
+            throw new \Chrome\Exception('Either option factory or _modifyElementOption returned NOT an instanceof \Chrome\View\Form\Option\BasicElement_Interface');
         }
 
         // if the form element option acceptes attachment, then create for every attach element
         // a coressponding view form element, and attach it to the attachable option.
         // this can only be done, if both options, are able to attach objects.
-        if($formElement->getOption() instanceof \Chrome\Form\Option\AttachableElement_Interface and $formOption instanceof Chrome_View_Form_Element_Option_Attachable_Interface)
+        if($formElement->getOption() instanceof \Chrome\Form\Option\AttachableElement_Interface and $formOption instanceof \Chrome\View\Form\Option\AttachableElement_Interface)
         {
             foreach($formElement->getOption()->getAttachments() as $attachmentElement)
             {
@@ -214,7 +204,7 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
         $element = $this->_formElementFactory->getElement($formElement, $formOption);
 
         // the factory might also return null...
-        if(!($element instanceof Chrome_View_Form_Element_Basic_Interface)) {
+        if(!($element instanceof \Chrome\View\Form\Element\BasicElement_Interface)) {
             throw new \Chrome\Exception('ViewFormFactory has not returned a proper view element');
         }
 
@@ -227,17 +217,14 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
      * Here is the location to put specific, form dependent option manipulation logic.
      *
      * @param \Chrome\Form\Element\BasicElement_Interface $formElement
-     * @param Chrome_View_Form_Element_Option_Basic_Interface $viewOption
-     * @return Chrome_View_Form_Element_Option_Basic_Interface
+     * @param \Chrome\View\Form\Option\BasicElement_Interface $viewOption
+     * @return \Chrome\View\Form\Option\BasicElement_Interface
      */
-    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
+    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $viewOption)
     {
         return $viewOption;
     }
 
-    /**
-     * @see Chrome_View_Form_Interface::getViewElements()
-     */
     public function getViewElements($id = null)
     {
         $this->_setUpViewElements();
@@ -251,13 +238,13 @@ abstract class Chrome_View_Form_Abstract implements Chrome_View_Form_Interface
     }
 }
 
-
+namespace Chrome\View\Form\Option;
 
 /**
  * Basic implementation of the label interface
  *
  */
-class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface
+class Label implements Label_Interface
 {
     protected $_labels = array();
     protected $_position = self::LABEL_POSITION_DEFAULT;
@@ -297,6 +284,8 @@ class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface
     }
 }
 
+namespace Chrome\View\Form\Element\Appender;
+
 /**
  * Appends to the rendered output of a view form element the errors of the form element
  *
@@ -305,7 +294,7 @@ class Chrome_View_Form_Label_Default implements Chrome_View_Form_Label_Interface
  * If a translator was set, the translator is used to translate the error messages
  *
  */
-class Chrome_View_Form_Element_Appender_Error extends Chrome_View_Form_Element_Appender_Abstract implements Chrome_View_Form_Element_Appender_Type_Interface
+class Error extends AbstractAppender implements Type_Interface
 {
     const APPENDER_TYPE = 'ERROR';
 
@@ -339,7 +328,7 @@ class Chrome_View_Form_Element_Appender_Error extends Chrome_View_Form_Element_A
     }
 }
 
-class Chrome_View_Form_Element_Appender_Error_Yaml extends Chrome_View_Form_Element_Appender_Error
+class YamlError extends Error
 {
     public function render()
     {
@@ -374,7 +363,7 @@ class Chrome_View_Form_Element_Appender_Error_Yaml extends Chrome_View_Form_Elem
  *
  * @todo add doc
  */
-class Chrome_View_Form_Element_Appender_Label extends Chrome_View_Form_Element_Appender_Abstract implements Chrome_View_Form_Element_Appender_Type_Interface
+class Label extends AbstractAppender implements Type_Interface
 {
     const APPENDER_TYPE = 'LABEL';
 
@@ -383,14 +372,14 @@ class Chrome_View_Form_Element_Appender_Label extends Chrome_View_Form_Element_A
         return self::APPENDER_TYPE;
     }
 
-    protected function _renderLabel(Chrome_View_Form_Label_Interface $label)
+    protected function _renderLabel(\Chrome\View\Form\Option\Label_Interface $label)
     {
         $isRequired = false;
         $required = '';
 
         $for = $this->_viewFormElement->getId();
 
-        if($this->_viewFormElement instanceof Chrome_View_Form_Element_Multiple_Abstract)
+        if($this->_viewFormElement instanceof \Chrome\View\Form\Element\AbstractMultipleElement)
         {
             $name = $this->_viewFormElement->getCurrent();
 
@@ -429,28 +418,28 @@ class Chrome_View_Form_Element_Appender_Label extends Chrome_View_Form_Element_A
 
         // if position is default and viewFormElement is a checkbox/selection/radio then the
         // label should be rendered behind the values
-        if($label->getPosition() === Chrome_View_Form_Label_Interface::LABEL_POSITION_DEFAULT)
+        if($label->getPosition() === \Chrome\View\Form\Option\Label_Interface::LABEL_POSITION_DEFAULT)
         {
-            if($this->_viewFormElement instanceof Chrome_View_Form_Element_Multiple_Abstract)
+            if($this->_viewFormElement instanceof \Chrome\View\Form\Element\AbstractMultipleElement)
             {
-                $label->setPosition(Chrome_View_Form_Label_Interface::LABEL_POSITION_BEHIND);
+                $label->setPosition(\Chrome\View\Form\Option\Label_Interface::LABEL_POSITION_BEHIND);
             }
         }
 
         switch($label->getPosition())
         {
-            case Chrome_View_Form_Label_Interface::LABEL_POSITION_DEFAULT:
-            case Chrome_View_Form_Label_Interface::LABEL_POSITION_FRONT:
+            case \Chrome\View\Form\Option\Label_Interface::LABEL_POSITION_DEFAULT:
+            case \Chrome\View\Form\Option\Label_Interface::LABEL_POSITION_FRONT:
                 {
                     return $this->_renderLabel($label) . ' ' . $this->_result;
                 }
 
-            case Chrome_View_Form_Label_Interface::LABEL_POSITION_BEHIND:
+            case \Chrome\View\Form\Option\Label_Interface::LABEL_POSITION_BEHIND:
                 {
                     return $this->_result . ' ' . $this->_renderLabel($label);
                 }
 
-            case Chrome_View_Form_Label_Interface::LABEL_POSITION_NONE:
+            case \Chrome\View\Form\Option\Label_Interface::LABEL_POSITION_NONE:
                 {
                     return $this->_result;
                 }

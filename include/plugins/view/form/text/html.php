@@ -17,15 +17,16 @@
  * @subpackage Chrome.View.Form
  */
 
+namespace Chrome\View\Form\Element\Text;
+
 /**
- *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Password_Default extends Chrome_View_Form_Element_Abstract
+class Html extends \Chrome\View\Form\Element\AbstractElement
 {
     protected function _render()
     {
-        return '<input type="password" ' . $this->_renderFlags() . '/>';
+        return '<input type="text" '.$this->_renderFlags().'/>';
     }
 }

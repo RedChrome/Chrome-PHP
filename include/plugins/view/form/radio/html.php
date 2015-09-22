@@ -17,14 +17,26 @@
  * @subpackage Chrome.View.Form
  */
 
+namespace Chrome\View\Form\Element\Radio;
+
 /**
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Text_Default extends Chrome_View_Form_Element_Abstract
+class Html extends \Chrome\View\Form\Element\AbstractMultipleElement
 {
+    private $_int = 0;
+
+    protected function _getNext()
+    {
+        $next = $this->_availableSelections[$this->_int];
+        $this->_int = ++$this->_int % count($this->_availableSelections);
+        return $next;
+    }
+
     protected function _render()
     {
-        return '<input type="text" '.$this->_renderFlags().'/>';
+        return '<input type="radio" ' . $this->_renderFlags() . '/>';
     }
 }

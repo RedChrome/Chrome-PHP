@@ -17,54 +17,37 @@
  * @subpackage Chrome.View
  */
 
+namespace Chrome\View\Plugin;
+
 /**
  * Interface for a view plugin.
  *
- *
- * This interface only provides one central method: getMethods()
- * The actual mapping will be done in {@link Chrome_View_Plugin_Facade_Interface}
+ * Every plugin provides a set of methods, which are accessible for every \Chrome\View\View_Interface object.
+ * Those methods are published by the getMethods function.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-interface Chrome_View_Plugin_Interface
+interface Plugin_Interface
 {
     /**
-     * Chrome_View_Helper_Abstract::getMethods()
-     *
-     * Returns an array of all methods that this helper supply
+     * Returns an array of all methods that are provided by this plugin.
      *
      * @return array
      */
     public function getMethods();
-
-    /**
-     * Chrome_View_Helper_Abstract::getClassName()
-     *
-     * Returns the class name of this heler (for better performance)
-     *
-     * @return string
-     */
-    public function getClassName();
 }
 
 /**
- * Chrome_View_Helper_Abstract
- *
- * Parent class for all view helpers
+ * Parent class for all view plugins
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-abstract class Chrome_View_Plugin_Abstract implements Chrome_View_Plugin_Interface
+abstract class AbstractPlugin implements Plugin_Interface
 {
     protected $_applicationContext = null;
 
-    /**
-     * Chrome_View_Helper_Abstract::__construct()
-     *
-     * @return Chrome_View_Helper_Abstract
-     */
     public function __construct(\Chrome\Context\Application_Interface $appContext)
     {
         $this->_applicationContext = $appContext;
@@ -80,11 +63,9 @@ abstract class Chrome_View_Plugin_Abstract implements Chrome_View_Plugin_Interfa
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-interface Chrome_View_Plugin_Facade_Interface
+interface Facade_Interface
 {
     /**
-     * isCallable()
-     *
      * Checks whether a function is callable
      *
      * @param string $function
@@ -93,8 +74,6 @@ interface Chrome_View_Plugin_Facade_Interface
     public function isCallable($function);
 
     /**
-     * call()
-     *
      * Calls a function
      *
      * @param string $function
@@ -104,25 +83,28 @@ interface Chrome_View_Plugin_Facade_Interface
     public function call($function, array $arguments);
 
     /**
-     * registerPlugin()
+     * Registers a plugin to the facade.
      *
-     * Registers a plugin
+     * This is necessary to publish methods from a Plugin_Interface to the plugin facade.
+     *
+     * After registering the plugin, one is now able to use the call function with these methods.
+     *
+     * Note: In case of conflicts of methods (different plugins provide methods with the same name), then the last added
+     * plugin overwrites the plugin definition from the previous plugin.
      *
      * @param Chrome_View_Helper_Abstract $helper
      * @return void
      */
-    public function registerPlugin(Chrome_View_Plugin_Interface $plugin);
+    public function registerPlugin(Plugin_Interface $plugin);
 }
 
 /**
- * Chrome_View_Plugin_Facade
- *
- * Implementation of Chrome_View_Plugin_Facade_Interface
+ * Implementation of Facade_Interface
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-class Chrome_View_Plugin_Facade implements Chrome_View_Plugin_Facade_Interface
+class Facade implements Facade_Interface
 {
     /**
      * Contains all helpers
@@ -145,13 +127,13 @@ class Chrome_View_Plugin_Facade implements Chrome_View_Plugin_Facade_Interface
     /**
      * Registers a plugin
      *
-     * @param Chrome_View_Plugin_Interface $plugin
+     * @param Plugin_Interface $plugin
      * @return void
      */
-    public function registerPlugin(Chrome_View_Plugin_Interface $plugin)
+    public function registerPlugin(Plugin_Interface $plugin)
     {
         // get class name
-        $name = $plugin->getClassName();
+        $name = get_class($plugin);
 
         // helper already added?
         if(isset($this->_plugins[$name]))

@@ -4,7 +4,7 @@ namespace Test\Chrome\View\Form\Label;
 
 class DefaultLabelTest extends \PHPUnit_Framework_TestCase
 {
-    const CLASS_TO_TEST = '\Chrome_View_Form_Label_Default';
+    const CLASS_TO_TEST = '\Chrome\View\Form\Option\Label';
 
 
     public function testSimpleConstructor()
@@ -13,12 +13,12 @@ class DefaultLabelTest extends \PHPUnit_Framework_TestCase
         $label = new $class();
 
         $this->assertNotNull($label);
-        $this->assertEquals(\Chrome_View_Form_Label_Interface::LABEL_POSITION_DEFAULT, $label->getPosition());
+        $this->assertEquals(\Chrome\View\Form\Option\Label_Interface::LABEL_POSITION_DEFAULT, $label->getPosition());
     }
 
     public function testAdvancedConstructor()
     {
-        $position = \Chrome_View_Form_Label_Interface::LABEL_POSITION_FRONT;
+        $position = \Chrome\View\Form\Option\Label_Interface::LABEL_POSITION_FRONT;
 
         $labels = array('1' => 'first', 2 => 'second', 'third' => 3);
 

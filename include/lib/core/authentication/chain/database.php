@@ -87,7 +87,7 @@ class DatabaseChain extends Chain_Abstract
             return $this->_chain->authenticate($resource);
         }
 
-        $userPw = $this->_model->hashUserPassword($userPw, $array['password_salt']); // Chrome_Hash::getInstance()->hash_algo($userPw, CHROME_USER_HASH_ALGORITHM, $array['password_salt']);
+        $userPw = $this->_model->hashUserPassword($userPw, $array['password_salt']);
 
         // pw was wrong
         if($userPw != $array['password']) {

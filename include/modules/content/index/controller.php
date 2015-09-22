@@ -38,7 +38,7 @@ class Index extends AbstractModule
 
     protected function _execute()
     {
-        $this->_form = new \Chrome_Form_Index($this->_applicationContext);
+        $this->_form = new \Chrome\Form\Module\Index\Index($this->_applicationContext);
 
         #$obj = new \Chrome_Controller_User_Login_Page($this->_applicationContext);
         #$obj->execute();

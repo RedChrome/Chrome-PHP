@@ -16,13 +16,14 @@
  * @subpackage Chrome.View
  */
 
+namespace Chrome\View\Plugin;
+
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-class Chrome_View_Plugin_Decorator extends Chrome_View_Plugin_Abstract
+class Decorator extends AbstractPlugin
 {
-
     public function setViewTitle(\Chrome\View\View_Interface $obj, $title)
     {
         $obj->setVar('view_title', $title);
@@ -34,37 +35,15 @@ class Chrome_View_Plugin_Decorator extends Chrome_View_Plugin_Abstract
 
         if($title === null)
         {
+            return $this->_applicationContext->getViewContext()->getLocalization()->getTranslate()->get('no_title_set');
             return 'No Title set';
         }
 
         return $title;
     }
 
-    public function addStyle(\Chrome\View\View_Interface $obj, $style)
-    {
-
-        // Chrome_Design::getInstance()->getStyle()->addStyle($style);
-    }
-
-    public function setStyle(\Chrome\View\View_Interface $obj, $style)
-    {
-        $styleObj = Chrome_Design::getInstance()->getStyle();
-        $styleObj->removeAllStyles();
-        $styleObj->addStyle($style);
-    }
-
-    public function setAjaxEnvironment(\Chrome\View\View_Interface $obj)
-    {
-        $this->addStyle($obj, 'ajax');
-    }
-
     public function getMethods()
     {
-        return array('setViewTitle', 'getViewTitle', 'setAjaxEnvironment', 'setStyle', 'addStyle');
-    }
-
-    public function getClassName()
-    {
-        return 'Chrome_View_Helper_Decorator';
+        return array('setViewTitle', 'getViewTitle');
     }
 }

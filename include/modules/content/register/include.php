@@ -16,11 +16,14 @@
  * @package    CHROME-PHP
  * @subpackage Chrome.View.User
  */
+
+namespace Chrome\Form\Module\User\Register;
+
 use \Chrome\Validator\General\Password\PasswordValidator;
 use \Chrome\Validator\User\NicknameValidator;
 use \Chrome\Validator\Form\Element\YearBirthdayValidator;
 
-class Chrome_Form_Register_StepOne extends \Chrome\Form\AbstractForm
+class StepOne extends \Chrome\Form\AbstractForm
 {
     protected function _init()
     {
@@ -63,40 +66,8 @@ class Chrome_Form_Register_StepOne extends \Chrome\Form\AbstractForm
         $this->setAttribute(self::ATTRIBUTE_STORE, $storeHandler);
     }
 }
-class Chrome_View_Form_Register_StepOne extends Chrome_View_Form_Abstract
-{
-    protected function _initFactories()
-    {
-        // TODO: inject this class
 
-        #$this->_formElementFactory = new Chrome_View_Form_Element_Factory_Yaml();
-        parent::_initFactories();
-    }
-
-    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
-    {
-        $lang = $this->_viewContext->getLocalization()->getTranslate();
-        //$lang = new Chrome_Language('modules/content/user/registration');
-
-        switch($formElement->getID())
-        {
-            case 'accept':
-                {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $lang->get('rules_agree'))));
-                    break;
-                    // viewOption->setLabelPosition($viewOption::LABEL_POSITION_BEHIND);
-                }
-            case 'submit':
-                {
-                    $formElement->getOption()->setAllowedValue($lang->get('register'));
-                }
-        }
-
-        return $viewOption;
-    }
-}
-
-class Chrome_Form_Register_StepTwo extends \Chrome\Form\AbstractForm
+class StepTwo extends \Chrome\Form\AbstractForm
 {
     protected function _init()
     {
@@ -112,8 +83,8 @@ class Chrome_Form_Register_StepTwo extends \Chrome\Form\AbstractForm
 
         $emailValidator = new \Chrome\Validator\Composition\AndComposition();
         $emailValidator->addValidators(array($emailSyntaxValidator,
-                                                //$emailExistsValidator,
-                                                //$emailBlacklistValidator
+            //$emailExistsValidator,
+            //$emailBlacklistValidator
         ));
 
         $birthdayValidator = new YearBirthdayValidator();
@@ -181,9 +152,46 @@ class Chrome_Form_Register_StepTwo extends \Chrome\Form\AbstractForm
         $this->setAttribute(self::ATTRIBUTE_STORE, $storeHandler);
     }
 }
-class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
+
+namespace Chrome\View\Form\Module\User\Register;
+
+class StepOne extends \Chrome\View\Form\AbstractForm
 {
-    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
+    protected function _initFactories()
+    {
+        // TODO: inject this class
+
+        #$this->_formElementFactory = new Chrome_View_Form_Element_Factory_Yaml();
+        parent::_initFactories();
+    }
+
+    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $viewOption)
+    {
+        $lang = $this->_viewContext->getLocalization()->getTranslate();
+        //$lang = new Chrome_Language('modules/content/user/registration');
+
+        switch($formElement->getID())
+        {
+            case 'accept':
+                {
+                    $viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('accepted' => $lang->get('rules_agree'))));
+                    break;
+                    // viewOption->setLabelPosition($viewOption::LABEL_POSITION_BEHIND);
+                }
+            case 'submit':
+                {
+                    $formElement->getOption()->setAllowedValue($lang->get('register'));
+                }
+        }
+
+        return $viewOption;
+    }
+}
+
+
+class StepTwo extends \Chrome\View\Form\AbstractForm
+{
+    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $viewOption)
     {
         $lang = $this->_viewContext->getLocalization()->getTranslate();
         //$lang = new Chrome_Language('modules/content/user/registration');
@@ -194,42 +202,42 @@ class Chrome_View_Form_Register_StepTwo extends Chrome_View_Form_Abstract
                 {
                     $formElement->getOption()->setAllowedValue($lang->get('register'));
                     break;
-                    // viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $lang->get('rules_agree'))));
+                    // viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('accepted' => $lang->get('rules_agree'))));
                 }
             case 'backward':
                 {
-                    // viewOption->setLabel(new Chrome_View_Form_Label_Default(array('accepted' => $lang->get('rules_agree'))));
+                    // viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('accepted' => $lang->get('rules_agree'))));
                     break;
                 }
             case 'email':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('email' => $lang->get('email'))));
+                    $viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('email' => $lang->get('email'))));
                     break;
                 }
             case 'password':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('password' => $lang->get('password'))));
+                    $viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('password' => $lang->get('password'))));
                     break;
                 }
             case 'password2':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('password2' => $lang->get('password_confirm'))));
+                    $viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('password2' => $lang->get('password_confirm'))));
                     break;
                 }
             case 'nickname':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('nickname' => $lang->get('nickname'))));
+                    $viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('nickname' => $lang->get('nickname'))));
                     break;
                 }
             case 'birthday':
                 {
-                    $viewOption->setLabel(new Chrome_View_Form_Label_Default(array('birthday' => $lang->get('birthday'))));
-                    $viewOption->setDefaultInput(new DateTime());
+                    $viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('birthday' => $lang->get('birthday'))));
+                    $viewOption->setDefaultInput(new \DateTime());
                     break;
                 }
             case 'captcha':
                 {
-                    #$viewOption->setLabel(new Chrome_View_Form_Label_Default(array('captcha' => $lang->get('captcha'))));
+                    #$viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('captcha' => $lang->get('captcha'))));
                     break;
                 }
         }

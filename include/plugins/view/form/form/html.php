@@ -17,13 +17,15 @@
  * @subpackage Chrome.View.Form
  */
 
+namespace Chrome\View\Form\Element\Form;
+
 /**
  * Class responsible for rendering form start/end
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Form_Default extends Chrome_View_Form_Element_Basic_Abstract
+class Html extends \Chrome\View\Form\Element\AbstractBasicElement
 {
     private $_int = 0;
 

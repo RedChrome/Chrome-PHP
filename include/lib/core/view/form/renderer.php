@@ -17,18 +17,20 @@
  * @subpackage Chrome.View.Form
  */
 
+namespace Chrome\View\Form;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-abstract class Chrome_View_Form_Renderer_Abstract implements Chrome_View_Form_Renderer_Interface
+abstract class AbstractRenderer implements Renderer_Interface
 {
     protected $_viewForm = null;
 
     protected $_viewContext = null;
 
-    public function setViewForm(Chrome_View_Form_Interface $viewForm)
+    public function setViewForm(\Chrome\View\Form\Form_Interface $viewForm)
     {
         $this->_viewForm = $viewForm;
     }
@@ -42,7 +44,7 @@ abstract class Chrome_View_Form_Renderer_Abstract implements Chrome_View_Form_Re
     {
     }
 
-    public function __construct(Chrome_View_Form_Interface $viewForm)
+    public function __construct(\Chrome\View\Form\Form_Interface $viewForm)
     {
         $this->setViewForm($viewForm);
         $this->setViewContext($viewForm->getViewContext());
@@ -63,7 +65,7 @@ abstract class Chrome_View_Form_Renderer_Abstract implements Chrome_View_Form_Re
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-abstract class Chrome_View_Form_Renderer_Template_Abstract extends Chrome_View_Form_Renderer_Abstract
+abstract class AbstractTemplateRenderer extends AbstractRenderer
 {
     protected $_formNamespace = 'FORM';
     protected $_template = null;
@@ -90,7 +92,7 @@ abstract class Chrome_View_Form_Renderer_Template_Abstract extends Chrome_View_F
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-abstract class Chrome_View_Form_Renderer_Template_Simple_Abstract extends Chrome_View_Form_Renderer_Template_Abstract
+abstract class SimpleTemplateRenderer extends \Chrome\View\Form\AbstractTemplateRenderer
 {
     protected $_templateFile = '';
 

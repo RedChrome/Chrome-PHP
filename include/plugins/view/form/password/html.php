@@ -13,23 +13,21 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package    CHROME-PHP
- * @subpackage Chrome.View.Form
- */
-
-/**
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Submit_Default extends Chrome_View_Form_Element_Abstract
+
+namespace Chrome\View\Form\Element\Password;
+
+/**
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form
+ */
+class Html extends \Chrome\View\Form\Element\AbstractElement
 {
     protected function _render()
     {
-        $allowedValues = $this->_elementOption->getAllowedValue();
-
-        $this->_attribute->setAttribute('value', $allowedValues);
-        $this->_attribute->remove('required');
-
-        return '<input type="submit" '.$this->_renderFlags().'/>';
+        return '<input type="password" ' . $this->_renderFlags() . '/>';
     }
 }

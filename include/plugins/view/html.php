@@ -17,14 +17,15 @@
  * @subpackage Chrome.View
  */
 
+namespace Chrome\View\Plugin;
+
 use \Chrome\Resource\Resource_Interface;
 
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.View
- *
  */
-class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
+class Html extends AbstractPlugin
 {
     private $_title = '';
     private $_JS = array();
@@ -127,10 +128,5 @@ class Chrome_View_Plugin_HTML extends Chrome_View_Plugin_Abstract
     public function getMethods()
     {
         return array('getTitle', 'addTitle', 'setTitle', 'addJS', 'addCSS', 'setJS', 'setCSS', 'getJS', 'getCSS');
-    }
-
-    public function getClassName()
-    {
-        return 'Chrome_View_Helper_HTML';
     }
 }

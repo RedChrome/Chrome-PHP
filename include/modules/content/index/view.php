@@ -37,9 +37,9 @@ class Chrome_View_Index_STHOTHER extends AbstractView
 
         $formElement = $form->getElements('text');
 
-        $option = new \Chrome_View_Form_Element_Option();
+        $option = new \Chrome\View\Form\Element\Option\Element();
 
-        $option->setLabel(new \Chrome_View_Form_Label_Default(array('text' => 'Text')));
+        $option->setLabel(new \Chrome\View\Form\Option\Label(array('text' => 'Text')));
         $option->setPlaceholder('Text placeholder');
 
         $input = new \Chrome_View_Form_Element_Text_Default($formElement, $option);
@@ -77,42 +77,42 @@ class ToDo extends AbstractView
     }
 }
 
-class Form extends \Chrome_View_Form_Abstract
+class Form extends \Chrome\View\Form\AbstractForm
 {
     protected function _initFactories()
     {
-        $this->_formElementFactory = new \Chrome_View_Form_Element_Factory_Suffix('Default');
-        $this->_formElementOptionFactory = new \Chrome_View_Form_Element_Option_Factory_Default();
+        $this->_formElementFactory = new \Chrome\View\Form\Factory\Element\Suffix('Default');
+        $this->_formElementOptionFactory = new \Chrome\View\Form\Factory\Option\Factory();
         $this->_renderer = new FormRenderer($this);
     }
 
-    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome_View_Form_Element_Option_Basic_Interface $viewOption)
+    protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $viewOption)
     {
         switch($formElement->getID())
         {
             case 'radio':
                 {
-                    $label = new \Chrome_View_Form_Label_Default(array('test' => 'Value1_label', 'test2' => 'VaLUE2_label'));
-                    $label->setPosition(\Chrome_View_Form_Label_Interface::LABEL_POSITION_FRONT);
+                    $label = new \Chrome\View\Form\Option\Label(array('test' => 'Value1_label', 'test2' => 'VaLUE2_label'));
+                    $label->setPosition(\Chrome\View\Form\Option\Label_Interface::LABEL_POSITION_FRONT);
                     $viewOption->setLabel($label);
                     break;
                 }
             case 'password':
                 {
-                    $viewOption->setLabel(new \Chrome_View_Form_Label_Default(array('password' => 'Password_label')))->setPlaceholder('password_placeholder');
+                    $viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('password' => 'Password_label')))->setPlaceholder('password_placeholder');
                     break;
                 }
 
             case 'text':
                 {
-                    $viewOption->setLabel(new \Chrome_View_Form_Label_Default(array('text' => 'Text_label')))->setPlaceholder('text_placeholder');
+                    $viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('text' => 'Text_label')))->setPlaceholder('text_placeholder');
                     break;
                 }
 
             case 'checkbox':
                 {
-                    $label = new \Chrome_View_Form_Label_Default(array('Value1' => 'Value1_label', 'Value2' => 'Value2_Label', 'vAlue3' => 'VALUE3_LABEL'));
-                    $label->setPosition(\Chrome_View_Form_Label_Interface::LABEL_POSITION_BEHIND);
+                    $label = new \Chrome\View\Form\Option\Label(array('Value1' => 'Value1_label', 'Value2' => 'Value2_Label', 'vAlue3' => 'VALUE3_LABEL'));
+                    $label->setPosition(\Chrome\View\Form\Option\Label_Interface::LABEL_POSITION_BEHIND);
 
                     $viewOption->setLabel($label);
                     break;
@@ -121,7 +121,7 @@ class Form extends \Chrome_View_Form_Abstract
             case 'select':
                 {
                     $viewOption->setDefaultInput(array('Value1'));
-                    $viewOption->setLabel(new \Chrome_View_Form_Label_Default(array('select' => 'Meine Auswahl - Test', 'Value1' => 'VALUE1_Label', 'Value2' => 'Value2_Label', 'Value3' => 'v3_Label')));
+                    $viewOption->setLabel(new \Chrome\View\Form\Option\Label(array('select' => 'Meine Auswahl - Test', 'Value1' => 'VALUE1_Label', 'Value2' => 'Value2_Label', 'Value3' => 'v3_Label')));
                     break;
                 }
         }
@@ -130,7 +130,7 @@ class Form extends \Chrome_View_Form_Abstract
     }
 }
 
-class FormRenderer extends \Chrome_View_Form_Renderer_Abstract
+class FormRenderer extends \Chrome\View\Form\AbstractRenderer
 {
     protected function _render()
     {

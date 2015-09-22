@@ -19,16 +19,7 @@
 
 // TODO: captcha factory must be before default factory!
 
-interface Chrome_View_Form_Element_Factory_Decorator_Interface
-{
-    /**
-     * Decorates the given $viewFormElement
-     *
-     * @param Chrome_View_Form_Element_Basic_Interface $viewFormElement
-     * @return Chrome_View_Form_Element_Basic_Interface
-     */
-    public function decorate(Chrome_View_Form_Element_Basic_Interface $viewFormElement);
-}
+namespace Chrome\View\Form\Factory\Element;
 
 /**
  * This class combines two view form element factories to one factory.
@@ -36,23 +27,23 @@ interface Chrome_View_Form_Element_Factory_Decorator_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Factory_Composition implements Chrome_View_Form_Element_Factory_Interface
+class Composition implements \Chrome\View\Form\Factory\Element\Element_Interface
 {
     protected $_delegate = null;
 
     protected $_fallback = null;
 
-    public function __construct(Chrome_View_Form_Element_Factory_Interface $delegate, Chrome_View_Form_Element_Factory_Interface $fallbackFactory)
+    public function __construct(\Chrome\View\Form\Factory\Element\Element_Interface $delegate, \Chrome\View\Form\Factory\Element\Element_Interface $fallbackFactory)
     {
         $this->_delegate = $delegate;
         $this->_fallback = $fallbackFactory;
     }
 
-    public function getElement(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewFormElementOption)
+    public function getElement(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $viewFormElementOption)
     {
         $element = $this->_delegate->getElement($formElement, $viewFormElementOption);
 
-        if(!($element instanceof Chrome_View_Form_Element_Basic_Interface) ) {
+        if(!($element instanceof \Chrome\View\Form\Element\BasicElement_Interface) ) {
             return $this->_fallback->getElement($formElement, $viewFormElementOption);
         } else {
             return $element;
@@ -60,32 +51,29 @@ class Chrome_View_Form_Element_Factory_Composition implements Chrome_View_Form_E
     }
 }
 
-class Chrome_View_Form_Element_Factory_Decorable implements Chrome_View_Form_Element_Factory_Interface
+class Decorable implements \Chrome\View\Form\Factory\Element\Element_Interface
 {
     protected $_decorable = null;
 
     protected $_decorator = null;
 
-    public function __construct(Chrome_View_Form_Element_Factory_Interface $decorable, Chrome_View_Form_Element_Factory_Decorator_Interface $decorator)
+    public function __construct(\Chrome\View\Form\Factory\Element\Element_Interface $decorable, \Chrome\View\Form\Factory\Element\Decorator_Interface $decorator)
     {
         $this->_decorable = $decorable;
         $this->_decorator = $decorator;
     }
 
-    public function getElement(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewFormElementOption)
+    public function getElement(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $viewFormElementOption)
     {
         return $this->_decorator->decorate($this->_decorable->getElement($formElement, $viewFormElementOption));
     }
 }
 
-abstract class Chrome_View_Form_Element_Factory_Abstract implements Chrome_View_Form_Element_Factory_Interface
+abstract class AbstractFactory implements \Chrome\View\Form\Factory\Element\Element_Interface
 {
-    abstract protected function _getClass(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $formOption);
+    abstract protected function _getClass(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $formOption);
 
-    /**
-     * @see Chrome_View_Form_Element_Factory_Interface::getElement()
-     */
-    public function getElement(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $formOption)
+    public function getElement(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $formOption)
     {
         $class = $this->_getClass($formElement, $formOption);
 
@@ -106,7 +94,7 @@ abstract class Chrome_View_Form_Element_Factory_Abstract implements Chrome_View_
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-class Chrome_View_Form_Element_Factory_Suffix extends Chrome_View_Form_Element_Factory_Abstract
+class Suffix extends \Chrome\View\Form\Factory\Element\AbstractFactory
 {
     /**
      * A suffix for creating a view form element
@@ -120,27 +108,27 @@ class Chrome_View_Form_Element_Factory_Suffix extends Chrome_View_Form_Element_F
      *
      * @param string $formElementSuffix
      */
-    public function __construct($formElementSuffix = 'default')
+    public function __construct($formElementSuffix = 'html')
     {
         $this->_suffix = ucfirst($formElementSuffix);
 
-        if($this->_suffix !== '' and $this->_suffix{0} !== '_')
+        if($this->_suffix !== '' and $this->_suffix{0} !== '\\')
         {
-            $this->_suffix = '_' . $this->_suffix;
+            $this->_suffix = '\\' . $this->_suffix;
         }
     }
 
-    protected function _getClass(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $formOption)
+    protected function _getClass(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $formOption)
     {
         if($formElement instanceof \Chrome\Form\Element\Captcha)
         {
             $captcha = $formElement->getOption()->getCaptcha();
             $captchaEngine = $captcha->getFrontendOption(\Chrome\Captcha\Captcha_Interface::CHROME_CAPTCHA_ENGINE);
-            return 'Chrome_View_Form_Element_Captcha_' . $captchaEngine;
+            return '\\Chrome\\View\\Form\\Element\\Captcha\\' . $captchaEngine;
         }
 
         // default class name, without suffix
-        $class = 'Chrome_View_Form_Element_';
+        $class = '\\Chrome\\View\\Form\\Element\\';
 
         // format: Chrome_Form_Element_*
         $formClass = get_class($formElement);
@@ -152,17 +140,17 @@ class Chrome_View_Form_Element_Factory_Suffix extends Chrome_View_Form_Element_F
     }
 }
 
-class Chrome_View_Form_Element_Factory_DefaultAppenderDecorator implements Chrome_View_Form_Element_Factory_Decorator_Interface
+class DefaultAppenderDecorator implements \Chrome\View\Form\Factory\Element\Decorator_Interface
 {
-    public function decorate(Chrome_View_Form_Element_Basic_Interface $viewFormElement)
+    public function decorate(\Chrome\View\Form\Element\BasicElement_Interface $viewFormElement)
     {
-        if( $viewFormElement instanceof Chrome_View_Form_Element_Appendable_Interface) {
+        if( $viewFormElement instanceof \Chrome\View\Form\Element\AppendableElement_Interface) {
 
             // add label and error appender
-            $error = new Chrome_View_Form_Element_Appender_Error($viewFormElement);
+            $error = new \Chrome\View\Form\Element\Appender\Error($viewFormElement);
             $viewFormElement->addAppender($error);
 
-            $label = new Chrome_View_Form_Element_Appender_Label($viewFormElement);
+            $label = new \Chrome\View\Form\Element\Appender\Label($viewFormElement);
             $viewFormElement->addAppender($label);
         }
 
@@ -170,23 +158,23 @@ class Chrome_View_Form_Element_Factory_DefaultAppenderDecorator implements Chrom
     }
 }
 
-class Chrome_View_Form_Element_Factory_DefaultManipulateablesDecorator implements Chrome_View_Form_Element_Factory_Decorator_Interface
+class DefaultManipulateableDecorator implements \Chrome\View\Form\Factory\Element\Decorator_Interface
 {
-    public function decorate(Chrome_View_Form_Element_Basic_Interface $viewFormElement)
+    public function decorate(\Chrome\View\Form\Element\BasicElement_Interface $viewFormElement)
     {
-        if($viewFormElement instanceof Chrome_View_Form_Element_Manipulateable_Interface) {
-            if($viewFormElement instanceof Chrome_View_Form_Element_Multiple_Abstract)
+        if($viewFormElement instanceof \Chrome\View\Form\Element\ManipulateableElement_Interface) {
+            if($viewFormElement instanceof \Chrome\View\Form\Element\AbstractMultipleElement)
             {
-                $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_IdPrefixForMultipleElement());
-                $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForMultipleElement());
+                $viewFormElement->addManipulator(new \Chrome\View\Form\Element\Manipulator\IdPrefixSetterForMultipleElement());
+                $viewFormElement->addManipulator(new \Chrome\View\Form\Element\Manipulator\BasicAttributeSetterForMultipleElement());
 
-            } else if($viewFormElement instanceof Chrome_View_Form_Element_Interface) {
+            } else if($viewFormElement instanceof \Chrome\View\Form\Element\Element_Interface) {
 
-                $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_IdPrefix());
+                $viewFormElement->addManipulator(new \Chrome\View\Form\Element\Manipulator\IdPrefixSetter());
 
                 // exclude the basic form elements, like \Chrome\Form\Element\Form
                 if( ($viewFormElement->getFormElement() instanceof \Chrome\Form\Element\BasicElement_Interface) ) {
-                    $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements());
+                    $viewFormElement->addManipulator(new \Chrome\View\Form\Element\Manipulator\BasicAttributeSetter());
                 }
             }
         }
@@ -195,22 +183,55 @@ class Chrome_View_Form_Element_Factory_DefaultManipulateablesDecorator implement
     }
 }
 
-class Chrome_View_Form_Element_Factory_Captcha extends Chrome_View_Form_Element_Factory_Abstract
+class Captcha extends \Chrome\View\Form\Factory\Element\AbstractFactory
 {
-    protected function _getClass(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $formOption)
+    protected function _getClass(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $formOption)
     {
         if($formElement instanceof \Chrome\Form\Element\Captcha)
         {
             $captcha = $formElement->getOption()->getCaptcha();
             $captchaEngine = $captcha->getFrontendOption(\Chrome\Captcha\Captcha_Interface::CHROME_CAPTCHA_ENGINE);
-            return 'Chrome_View_Form_Element_Captcha_' . $captchaEngine;
+            return '\\Chrome\\View\\Form\\Element\\Captcha\\' . $captchaEngine;
         }
 
         return null;
     }
 }
 
-class Chrome_View_Form_Element_Manipulator_Yaml extends Chrome_View_Form_Element_Manipulator_Abstract
+namespace Chrome\View\Form\Factory\Element;
+
+class YamlDecorator implements \Chrome\View\Form\Factory\Element\Decorator_Interface
+{
+    public function decorate(\Chrome\View\Form\Element\BasicElement_Interface $viewFormElement)
+    {
+        if($viewFormElement instanceof \Chrome\View\Form\Element\AppendableElement_Interface) {
+            // add label and error appender, if object is appendable
+            if($viewFormElement instanceof Chrome_View_Form_Element_Form_Default) {
+                $error = new \Chrome\View\Form\Element\Appender\Error($viewFormElement);
+            } else {
+                $error = new \Chrome\View\Form\Element\Appender\YamlError($viewFormElement);
+            }
+
+            $viewFormElement->addAppender($error);
+
+            $yaml = new \Chrome\View\Form\Element\Appender\Yaml($viewFormElement);
+            $viewFormElement->addAppender($yaml);
+
+            $label = new \Chrome\View\Form\Element\Appender\Label($viewFormElement);
+            $viewFormElement->addAppender($label);
+        }
+
+        if($viewFormElement instanceof \Chrome\View\Form\Element\ManipulateableElement_Interface) {
+            $viewFormElement->addManipulator(new \Chrome\View\Form\Element\Manipulator\Yaml());
+        }
+
+        return $viewFormElement;
+    }
+}
+
+namespace Chrome\View\Form\Element\Manipulator;
+
+class Yaml extends \Chrome\View\Form\Element\Manipulator\AbstractManipulator
 {
     public function manipulate()
     {
@@ -225,7 +246,9 @@ class Chrome_View_Form_Element_Manipulator_Yaml extends Chrome_View_Form_Element
     }
 }
 
-class Chrome_View_Form_Element_Appender_Yaml extends Chrome_View_Form_Element_Appender_Abstract implements Chrome_View_Form_Element_Appender_Type_Interface
+namespace Chrome\View\Form\Element\Appender;
+
+class Yaml extends \Chrome\View\Form\Element\Appender\AbstractAppender implements \Chrome\View\Form\Element\Appender\Type_Interface
 {
     const APPENDER_TYPE = 'YAML';
 
@@ -264,34 +287,8 @@ class Chrome_View_Form_Element_Appender_Yaml extends Chrome_View_Form_Element_Ap
     }
 }
 
-class Chrome_View_Form_Element_Factory_YamlDecorator implements Chrome_View_Form_Element_Factory_Decorator_Interface
-{
-     public function decorate(Chrome_View_Form_Element_Basic_Interface $viewFormElement)
-     {
-        if($viewFormElement instanceof Chrome_View_Form_Element_Appendable_Interface) {
-            // add label and error appender, if object is appendable
-            if($viewFormElement instanceof Chrome_View_Form_Element_Form_Default) {
-                $error = new Chrome_View_Form_Element_Appender_Error($viewFormElement);
-            } else {
-                $error = new Chrome_View_Form_Element_Appender_Error_Yaml($viewFormElement);
-            }
 
-            $viewFormElement->addAppender($error);
-
-            $yaml = new Chrome_View_Form_Element_Appender_Yaml($viewFormElement);
-            $viewFormElement->addAppender($yaml);
-
-            $label = new Chrome_View_Form_Element_Appender_Label($viewFormElement);
-            $viewFormElement->addAppender($label);
-        }
-
-        if($viewFormElement instanceof Chrome_View_Form_Element_Manipulateable_Interface) {
-            $viewFormElement->addManipulator(new Chrome_View_Form_Element_Manipulator_Yaml());
-        }
-
-        return $viewFormElement;
-     }
-}
+namespace Chrome\View\Form\Factory\Option;
 
 /**
  * A view form element option factory, uses the form object instance to retrieve the
@@ -300,22 +297,19 @@ class Chrome_View_Form_Element_Factory_YamlDecorator implements Chrome_View_Form
  * @package CHROME-PHP
  * @subpackage Chrome.View
  */
-class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_Form_Element_Option_Factory_Interface
+class Factory implements \Chrome\View\Form\Factory\Element\Option\Option_Interface
 {
-    /**
-     * @see Chrome_View_Form_Element_Option_Factory_Interface::getElementOption()
-     */
     public function getElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement)
     {
         if($formElement instanceof \Chrome\Form\Element\MultipleElement_Interface)
         {
-            $viewElementOption = new Chrome_View_Form_Element_Option_Multiple();
+            $viewElementOption = new \Chrome\View\Form\Option\MultipleElement();
         } else if($formElement->getOption() instanceof \Chrome\Form\Option\AttachableElement_Interface)
         {
-            $viewElementOption = new Chrome_View_Form_Element_Option_Attachable();
+            $viewElementOption = new \Chrome\View\Form\Option\AttachableElement();
         } else
         {
-            $viewElementOption = new Chrome_View_Form_Element_Option();
+            $viewElementOption = new \Chrome\View\Form\Option\Element();
         }
 
         $this->_setDefaultOptions($formElement, $viewElementOption);
@@ -326,9 +320,9 @@ class Chrome_View_Form_Element_Option_Factory_Default implements Chrome_View_For
      * Sets default options, like adding a storage if needed
      *
      * @param \Chrome\Form\Element\BasicElement_Interface $formElement
-     * @param Chrome_View_Form_Element_Option_Basic_Interface $viewElementOption
+     * @param \Chrome\View\Form\Option\BasicElement_Interface $viewElementOption
      */
-    protected function _setDefaultOptions(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Basic_Interface $viewElementOption)
+    protected function _setDefaultOptions(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $viewElementOption)
     {
         foreach(($formElement->getForm()->getAttribute(\Chrome\Form\Form_Interface::ATTRIBUTE_STORE)) as $handler)
         {

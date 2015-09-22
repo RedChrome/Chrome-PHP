@@ -17,12 +17,14 @@
  * @subpackage Chrome.View.Form
  */
 
+namespace Chrome\View\Form\Element\Select;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Select_Default extends Chrome_View_Form_Element_Multiple_Abstract
+class Html extends \Chrome\View\Form\Element\AbstractMultipleElement
 {
     protected function _getNext()
     {

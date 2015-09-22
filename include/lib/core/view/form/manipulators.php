@@ -17,54 +17,56 @@
  * @subpackage Chrome.View.Form
  */
 
+namespace Chrome\View\Form\Element\Manipulator;
+
 /**
  * Abstract class, implementing the default methods for every manipulator.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form.Manipulator
  */
-abstract class Chrome_View_Form_Element_Manipulator_Abstract implements Chrome_View_Form_Element_Manipulator_Interface
+abstract class AbstractManipulator implements Manipulator_Interface
 {
     /**
      * The object, which gets manipulated
      *
-     * @var Chrome_View_Form_Element_Basic_Interface
+     * @var \Chrome\View\Form\Element\BasicElement_Interface
      */
     protected $_manipulateable = null;
 
     /**
      * Sets the manipulateable
      *
-     * @param Chrome_View_Form_Element_Basic_Interface $manipulateable
+     * @param \Chrome\View\Form\Element\BasicElement_Interface $manipulateable
      */
-    public function setManipulateable(Chrome_View_Form_Element_Basic_Interface $manipulateable)
+    public function setManipulateable(\Chrome\View\Form\Element\BasicElement_Interface $manipulateable)
     {
         $this->_manipulateable = $manipulateable;
     }
 
     public function preRenderManipulate()
     {
-        // nothign to do here, the logic will be overwritten in child classes
+        // nothing to do here, the logic will be overwritten in child classes
     }
 
     public function postRenderManipulate()
     {
-        // nothign to do here, the logic will be overwritten in child classes
+        // nothing to do here, the logic will be overwritten in child classes
     }
 }
 
 /**
- * This manipulators sets the attributes for view form elements.
+ * This manipulators sets the basic attributes for view form elements.
  *
- * The Attributes are visible to the end-user.
+ * The basic attributes of a view form element are those from the view form element option (e.g. readonly, required, ... attributes)
  *
  * This manipulator should get used only for non-multiple elements.
- * Non-multiple elements are elements which allow to send only one value. (E.g. text-input, password)
+ * Non-multiple elements are elements which allow to send only one value. (e.g. text-input, password)
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form.Manipulator
  */
-class Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements extends Chrome_View_Form_Element_Manipulator_Abstract
+class BasicAttributeSetter extends AbstractManipulator
 {
     /**
      * This manipulates the form element by setting the attributes.
@@ -115,7 +117,7 @@ class Chrome_View_Form_Element_Manipulator_AttributesForNonMultipleElements exte
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form.Manipulator
  */
-class Chrome_View_Form_Element_Manipulator_AttributesForMultipleElement extends Chrome_View_Form_Element_Manipulator_Abstract
+class BasicAttributeSetterForMultipleElement extends AbstractManipulator
 {
     /**
      * Contains the mapping between input-name and default value
@@ -212,7 +214,7 @@ class Chrome_View_Form_Element_Manipulator_AttributesForMultipleElement extends 
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form.Manipulator
  */
-class Chrome_View_Form_Element_Manipulator_IdPrefix extends Chrome_View_Form_Element_Manipulator_Abstract
+class IdPrefixSetter extends \Chrome\View\Form\Element\Manipulator\AbstractManipulator
 {
     /**
      * The separator of the created id-prefix
@@ -281,7 +283,7 @@ class Chrome_View_Form_Element_Manipulator_IdPrefix extends Chrome_View_Form_Ele
         $form = $this->_manipulateable->getFormElement()->getForm();
 
         $this->_prefix = $form->getID();
-        // increase the render count. This will actually only take affact one time for every whole form rendering.
+        // increase the render count. This will actually only take effect one time for every whole form rendering.
         $this->_renderCount = (int) $form->getAttribute(self::FORM_ATTRIBUTE_RENDER_COUNT) + 1;
     }
 }
@@ -296,7 +298,7 @@ class Chrome_View_Form_Element_Manipulator_IdPrefix extends Chrome_View_Form_Ele
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form.Manipulator
  */
-class Chrome_View_Form_Element_Manipulator_IdPrefixForMultipleElement extends Chrome_View_Form_Element_Manipulator_IdPrefix
+class IdPrefixSetterForMultipleElement extends IdPrefixSetter
 {
     /**
      * Counter, counts the number for rendered input fields

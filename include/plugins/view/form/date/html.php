@@ -17,24 +17,35 @@
  * @subpackage Chrome.View.Form
  */
 
+namespace Chrome\View\Form\Element\Date;
+
 /**
+ * Class responsible to visualize a date input
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Checkbox_Default extends Chrome_View_Form_Element_Multiple_Abstract
+class Html extends \Chrome\View\Form\Element\AbstractElement
 {
-    private $_int = 0;
-
-    protected function _getNext()
+    protected function _setFlags()
     {
-        $next = $this->_availableSelections[$this->_int];
-        $this->_int = ++$this->_int % count($this->_availableSelections);
-        return $next;
+        parent::_setFlags();
+
+        if($this->_attribute->exists('value'))
+        {
+            return;
+        }
+
+        $inputValue = $this->_attribute->getAttribute('value');
+
+        if($inputValue instanceof \DateTime)
+        {
+            $this->_attribute->setAttribute('value', $inputValue->format('Y-m-d'));
+        }
     }
 
     protected function _render()
     {
-        $return = '<input type="checkbox" ' . $this->_renderFlags() . '/>';
-        return $return;
+        return '<input type="date" ' . $this->_renderFlags() . '/>';
     }
 }

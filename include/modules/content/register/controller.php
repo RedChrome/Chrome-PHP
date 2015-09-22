@@ -88,7 +88,7 @@ class Register extends AbstractModule
         {
             case 2:
                 {
-                    $this->_form = new \Chrome_Form_Register_StepOne($this->_applicationContext);
+                    $this->_form = new \Chrome\Form\Module\User\Register\StepOne($this->_applicationContext);
 
                     if(!$this->_form->isCreated() or !$this->_form->isSent() or !$this->_form->isValid())
                     {
@@ -108,14 +108,14 @@ class Register extends AbstractModule
 
             case 3:
                 {
-                    $this->_form = new \Chrome_Form_Register_StepTwo($this->_applicationContext);
+                    $this->_form = new \Chrome\Form\Module\User\Register\StepTwo($this->_applicationContext);
 
                     $data = $this->_form->getData();
 
                     // go one step back
                     if($this->_form->isSent('buttons') and isset($data['buttons']['backward']))
                     {
-                        $this->_form = new \Chrome_Form_Register_StepOne($this->_applicationContext);
+                        $this->_form = new \Chrome\Form\Module\User\Register\StepOne($this->_applicationContext);
                         $this->_form->create();
                         $this->_stepOne();
                         break;
@@ -189,7 +189,7 @@ class Register extends AbstractModule
 
     private function _stepTwo()
     {
-        if(!($this->_form instanceof Chrome_Form_Register_StepTwo))
+        if(!($this->_form instanceof \Chrome\Form\Module\User\Register\StepTwo))
         {
             $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Register\StepTwo');
         }

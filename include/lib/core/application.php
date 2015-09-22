@@ -99,17 +99,16 @@ interface View_Interface
     /**
      * Sets the plugin facade.
      *
-     * The plugin facade is used to provide additional functionality for displaying views. Thus
-     * the plugin facade is only used in Views
+     * The plugin facade is used to provide additional functionality for displaying views.
      *
-     * @param Chrome_View_Plugin_Facade_Interface $pluginFacade
+     * @param \Chrome\View\Plugin\Facade_Interface $pluginFacade
      */
-    public function setPluginFacade(\Chrome_View_Plugin_Facade_Interface $pluginFacade);
+    public function setPluginFacade(\Chrome\View\Plugin\Facade_Interface $pluginFacade);
 
     /**
      * Returns the plugin facade, set via setPluginFacade
      *
-     * @return Chrome_View_Plugin_Facade_Interface
+     * @return \Chrome\View\Plugin\Facade_Interface
      */
     public function getPluginFacade();
 
@@ -674,7 +673,7 @@ class View implements \Chrome\Context\View_Interface
         return $this->_config;
     }
 
-    public function setPluginFacade(\Chrome_View_Plugin_Facade_Interface $pluginFacade)
+    public function setPluginFacade(\Chrome\View\Plugin\Facade_Interface $pluginFacade)
     {
         $this->_pluginFacade = $pluginFacade;
     }

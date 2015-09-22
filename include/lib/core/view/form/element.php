@@ -17,6 +17,8 @@
  * @subpackage Chrome.View.Form
  */
 
+namespace Chrome\View\Form\Element;
+
 /**
  * @todo: maybe just use a non-secure interface, since it is not used.
  */
@@ -24,14 +26,14 @@ use \Chrome\Misc\Attribute_Secure_Interface;
 use \Chrome\Misc\Attribute_Secure;
 
 /**
- * Implemenatation of Chrome_View_Form_Element_Basic_Interface with several other usefull interfaces
+ * Implemenatation of \Chrome\View\Form\Element\BasicElement_Interface with several other usefull interfaces
  *
  * This element can append Appenders and can get manipulated by a manipulator
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Form_Element_Basic_Interface, Chrome_View_Form_Element_Appendable_Interface, Chrome_View_Form_Element_Manipulateable_Interface
+abstract class AbstractBasicElement implements \Chrome\View\Form\Element\BasicElement_Interface, \Chrome\View\Form\Element\AppendableElement_Interface, \Chrome\View\Form\Element\ManipulateableElement_Interface
 {
     /**
      * The corresponding form element
@@ -50,7 +52,7 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
     /**
      * The options for this view form element.
      *
-     * @var Chrome_View_Form_Element_Option_Interface
+     * @var \Chrome\View\Form\Option\Element_Interface
      */
     protected $_option = null;
 
@@ -70,14 +72,14 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
      *
      * The view form must contain this element!
      *
-     * @var Chrome_View_Form_Interface
+     * @var \Chrome\View\Form\Form_Interface
      */
     protected $_viewForm = null;
 
     /**
      * Contains all appenders for this object
      *
-     * @var array of Chrome_View_Form_Element_Appender_Interface
+     * @var array of \Chrome\View\Form\Element\Appender\Appender_Interface
      */
     protected $_appenders = array();
 
@@ -91,7 +93,7 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
     /**
      * Containing all manipulators
      *
-     * @var array of Chrome_View_Form_Element_Manipulator_Interface
+     * @var array of \Chrome\View\Form\Element\Manipulator\Manipulator_Interface
      */
     protected $_manipulators = array();
 
@@ -106,9 +108,9 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
      * Creates a new view form element and initializes it
      *
      * @param \Chrome\Form\Element\BasicElement_Interface $formElement
-     * @param Chrome_View_Form_Element_Option_Interface $option
+     * @param \Chrome\View\Form\Option\Element_Interface $option
      */
-    public function __construct(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Interface $option)
+    public function __construct(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\Element_Interface $option)
     {
         $this->_formElement = $formElement;
 
@@ -176,7 +178,6 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
      *
      * This initializes the view form element again and applies the manipulators
      *
-     * @see Chrome_View_Form_Element_Basic_Interface::reset()
      */
     public function reset()
     {
@@ -190,76 +191,49 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
         }
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Basic_Interface::getId()
-     */
     public function getId()
     {
         return $this->_attribute->getAttribute('id');
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Basic_Interface::getName()
-     */
     public function getName()
     {
         return $this->_name;
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Basic_Interface::setViewForm()
-     */
-    public function setViewForm(Chrome_View_Form_Interface $viewForm)
+    public function setViewForm(\Chrome\View\Form\Form_Interface $viewForm)
     {
         $this->_viewForm = $viewForm;
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Basic_Interface::getViewForm()
-     */
     public function getViewForm()
     {
         return $this->_viewForm;
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Basic_Interface::getFormElement()
-     */
     public function getFormElement()
     {
         return $this->_formElement;
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Basic_Interface::getAttribute()
-     */
     public function getAttribute()
     {
         return $this->_attribute;
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Basic_Interface::setAttribute()
-     */
     public function setAttribute(Attribute_Secure_Interface $attribute)
     {
         $this->_attribute = $attribute;
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Basic_Interface::getOption()
-     */
     public function getOption()
     {
         return $this->_option;
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Appendable_Interface::addAppender()
-     */
-    public function addAppender(Chrome_View_Form_Element_Appender_Interface $appender)
+    public function addAppender(\Chrome\View\Form\Element\Appender\Appender_Interface $appender)
     {
-        if($appender instanceof Chrome_View_Form_Element_Appender_Type_Interface) {
+        if($appender instanceof \Chrome\View\Form\Element\Appender\Type_Interface) {
             $type = $appender->getType();
             if(in_array($type, $this->_appenderTypes) === true) {
                 return;
@@ -271,17 +245,11 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
         $this->_appenders[] = $appender;
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Appendable_Interface::getAppenders()
-     */
     public function getAppenders()
     {
         return $this->_appenders;
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Appendable_Interface::setAppenders()
-     */
     public function setAppenders(array $appenders)
     {
         $this->_appenders = array();
@@ -314,27 +282,18 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
         return $return;
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Manipulateable_Interface::addManipulator()
-     */
-    public function addManipulator(Chrome_View_Form_Element_Manipulator_Interface $manipulator)
+    public function addManipulator(\Chrome\View\Form\Element\Manipulator\Manipulator_Interface $manipulator)
     {
         $this->_manipulators[] = $manipulator;
         $manipulator->setManipulateable($this);
         $manipulator->manipulate();
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Manipulateable_Interface::getManipulators()
-     */
     public function getManipulators()
     {
         return $this->_manipulators;
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Manipulateable_Interface::setManipulators()
-     */
     public function setManipulators(array $manipulators)
     {
         $this->_manipulators = array();
@@ -384,14 +343,14 @@ abstract class Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Fo
 
 
 /**
- * A implementation of Chrome_View_Form_Element_Interface
+ * An implementation of \Chrome\View\Form\Element\Element_Interface
  *
  * This implementation accepts manipulators and appenders.
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-abstract class Chrome_View_Form_Element_Abstract extends Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Form_Element_Interface
+abstract class AbstractElement extends AbstractBasicElement implements \Chrome\View\Form\Element\Element_Interface
 {
     /**
      * The option of the coressponding form element.
@@ -401,21 +360,18 @@ abstract class Chrome_View_Form_Element_Abstract extends Chrome_View_Form_Elemen
     protected $_elementOption = null;
 
     /**
-     * Creates a new instance, using the constructor of {@link Chrome_View_Form_Element_Basic_Abstract::__construct} and setting the form element option
+     * Creates a new instance, using the constructor of {@link \Chrome\View\Form\Element\AbstractBasicElement::__construct} and setting the form element option
      *
      * @param \Chrome\Form\Element\BasicElement_Interface $formElement
-     * @param Chrome_View_Form_Element_Option_Interface $option
+     * @param \Chrome\View\Form\Option\Element_Interface $option
      */
-    public function __construct(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Interface $option)
+    public function __construct(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\Element_Interface $option)
     {
         parent::__construct($formElement, $option);
         $this->_elementOption = $formElement->getOption();
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Interface::setOption()
-     */
-    public function setOption(Chrome_View_Form_Element_Option_Interface $option)
+    public function setOption(\Chrome\View\Form\Option\Element_Interface $option)
     {
         $this->_option = $option;
     }
@@ -427,7 +383,7 @@ abstract class Chrome_View_Form_Element_Abstract extends Chrome_View_Form_Elemen
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Form_Element_Basic_Abstract implements Chrome_View_Form_Element_Multiple_Interface
+abstract class AbstractMultipleElement extends \Chrome\View\Form\Element\AbstractBasicElement implements \Chrome\View\Form\Element\MultipleElement_Interface
 {
     protected $_current = null;
     protected $_count = 0;
@@ -437,14 +393,13 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
     protected $_attributeCopy = null;
 
     /**
-     *
      * @var \Chrome\Form\Option\MultipleElement_Interface
      */
     protected $_elementOption = null;
 
     abstract protected function _getNext();
 
-    public function __construct(\Chrome\Form\Element\MultipleElement_Interface $formElement, Chrome_View_Form_Element_Option_Multiple_Interface $option)
+    public function __construct(\Chrome\Form\Element\MultipleElement_Interface $formElement, \Chrome\View\Form\Option\MultipleElement_Interface $option)
     {
         $this->_elementOption = $formElement->getOption();
         parent::__construct($formElement, $option);
@@ -499,7 +454,7 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
         return $this->_current;
     }
 
-    public function setOption(Chrome_View_Form_Element_Option_Multiple_Interface $option)
+    public function setOption(\Chrome\View\Form\Option\MultipleElement_Interface $option)
     {
         $this->_option = $option;
     }
@@ -516,19 +471,19 @@ abstract class Chrome_View_Form_Element_Multiple_Abstract extends Chrome_View_Fo
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-abstract class Chrome_View_Form_Element_Attachable_Abstract extends Chrome_View_Form_Element_Basic_Abstract
+abstract class AbstractAttachableElement extends \Chrome\View\Form\Element\AbstractBasicElement
 {
     /**
      * Creates a new attachable view form element.
      *
      * This uses the default constructor from {@link \Chrome\Form\Element\BasicElement_Interface} and nothing more.
      *
-     * We need to overwrite this method, since we need a Chrome_View_Form_Element_Option_Attachable_Interface instance as $option.
+     * We need to overwrite this method, since we need a \Chrome\View\Form\Option\AttachableElement_Interface instance as $option.
      *
      * @param \Chrome\Form\Element\BasicElement_Interface $formElement
-     * @param Chrome_View_Form_Element_Option_Attachable_Interface $option
+     * @param \Chrome\View\Form\Option\AttachableElement_Interface $option
      */
-    public function __construct(\Chrome\Form\Element\BasicElement_Interface $formElement, Chrome_View_Form_Element_Option_Attachable_Interface $option)
+    public function __construct(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\AttachableElement_Interface $option)
     {
         parent::__construct($formElement, $option);
     }
@@ -538,7 +493,7 @@ abstract class Chrome_View_Form_Element_Attachable_Abstract extends Chrome_View_
      *
      * Reset is done by using the parent reset method and reset all attachments
      *
-     * @see Chrome_View_Form_Element_Basic_Abstract::reset()
+     * @see \Chrome\View\Form\Element\AbstractBasicElement::reset()
      */
     public function reset()
     {
@@ -551,20 +506,22 @@ abstract class Chrome_View_Form_Element_Attachable_Abstract extends Chrome_View_
     }
 }
 
+namespace Chrome\View\Form\Element\Appender;
+
 /**
  * Template class for an appender
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-abstract class Chrome_View_Form_Element_Appender_Abstract implements Chrome_View_Form_Element_Appender_Interface
+abstract class AbstractAppender implements Appender_Interface
 {
     /**
      * The view form element.
      *
      * This appender is appended to this view form element.
      *
-     * @var Chrome_View_Form_Element_Basic_Interface
+     * @var \Chrome\View\Form\Element\BasicElement_Interface
      */
     protected $_viewFormElement = null;
 
@@ -580,16 +537,13 @@ abstract class Chrome_View_Form_Element_Appender_Abstract implements Chrome_View
      *
      * The $viewFormElement should be the view form element which will contain this instance as appender
      *
-     * @param Chrome_View_Form_Element_Basic_Interface $viewFormElement
+     * @param \Chrome\View\Form\Element\BasicElement_Interface $viewFormElement
      */
-    public function __construct(Chrome_View_Form_Element_Basic_Interface $viewFormElement)
+    public function __construct(\Chrome\View\Form\Element\BasicElement_Interface $viewFormElement)
     {
         $this->_viewFormElement = $viewFormElement;
     }
 
-    /**
-     * @see Chrome_View_Form_Element_Appender_Interface::setResult()
-     */
     public function setResult($result)
     {
         $this->_result = $result;

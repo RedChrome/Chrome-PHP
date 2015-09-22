@@ -13,28 +13,25 @@
  * obtain it through the world-wide-web, please send an email
  * to license@chrome-php.de so we can send you a copy immediately.
  *
- * @package CHROME-PHP
+ * @package    CHROME-PHP
  * @subpackage Chrome.View.Form
  */
 
+namespace Chrome\View\Form\Element\Submit;
+
 /**
- *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Backward_Default extends Chrome_View_Form_Element_Abstract
+class Html extends \Chrome\View\Form\Element\AbstractElement
 {
     protected function _render()
     {
-        $lang = $this->_getTranslate();
-        //$lang = new Chrome_Language(Chrome_Language::CHROME_LANGUAGE_DEFAULT_LANGUAGE);
+        $allowedValues = $this->_elementOption->getAllowedValue();
 
-        $this->_attribute->setAttribute('value', $lang->get('backward'));
+        $this->_attribute->setAttribute('value', $allowedValues);
         $this->_attribute->remove('required');
 
-        // The attribute "formnovalidate" is crucial!
-        // if the user clicks on the backward button, he may not have filled out the whole form
-        // so we need to disable the html5 validation. This is done by this simple attribute
-        return '<input type="submit" ' . $this->_renderFlags() . ' formnovalidate/>';
+        return '<input type="submit" '.$this->_renderFlags().'/>';
     }
 }

@@ -74,7 +74,7 @@ class SuccessfullyLoggedIn extends AbstractView
     }
 }
 
-class FormRenderer extends \Chrome_View_Form_Renderer_Template_Abstract
+class FormRenderer extends \Chrome\View\Form\AbstractTemplateRenderer
 {
     protected function _getTemplate()
     {

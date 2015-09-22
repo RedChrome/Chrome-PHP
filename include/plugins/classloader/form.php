@@ -63,7 +63,7 @@ class Form extends AbstractResolver
             return $this->_directory->file('element/' . strtolower($matches[1]) . '.php', true);
         }
 
-        if(preg_match('#Chrome_View_Form_Element_(.{1,})#i', $class, $matches))
+        if(preg_match('#Chrome\\\\View\\\\Form\\\\Element\\\\(.{1,})#i', $class, $matches))
         {
             return $this->_pluginDirectory->file(strtolower(str_replace('_', '/', $matches[1])) . '.php', true);
         }

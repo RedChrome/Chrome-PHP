@@ -38,11 +38,11 @@ class Chrome_Controller_User_Login_Page extends AbstractModule
 
     protected function _execute()
     {
-        $this->_form = \Chrome_Form_Login::getInstance($this->_applicationContext);
+        $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\Module\User\Login');
 
         // the login form, will be the first one in Content
-        $viewForm = \Chrome_View_Form_Login::getInstance($this->_form, $this->_applicationContext->getViewContext());
-        $viewForm->setElementFactory($this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Yaml'));
+        $viewForm = $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Module\User\Login');
+
         $this->_view = new \Chrome_View_Form_Renderer_Template_Login_Content($viewForm);
     }
 }

@@ -81,7 +81,7 @@ class Login extends AbstractModule
 
     protected function _execute()
     {
-        $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Login');
+        $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\Module\User\Login');
 
         $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome\View\User\Login');
 

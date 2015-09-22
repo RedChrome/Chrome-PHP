@@ -94,7 +94,6 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\Exception\\Handler\\AuthenticationHandler', 'lib/exception/authentication.php'),
 ('Chrome\\Validator\\AbstractValidator', 'lib/core/validator/validator.php'),
 ('Chrome_View_Helper_HTML', 'plugins/view/html.php'),
-('Chrome_Language', 'lib/core/language.php'),
 ('Chrome_Database_Right_Handler_Interface', 'lib/core/database/right_handler.php'),
 ('Chrome\\Database\\Connection\\Mysql', 'lib/core/database/connection/mysql.php'),
 ('Chrome\\Database\\Connection\\Postgresql', 'lib/core/database/connection/postgresql.php'),
@@ -143,6 +142,7 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\View\\Html\\Head\\CssIncluder', 'modules/html/head/cssIncluder/view.php'),
 ('Chrome\\View\\Html\\Bottom\\JsIncluder', 'modules/html/bottom/jsIncluder/view.php'),
 ('Chrome\\View\\User\\Login\\FormRenderer', 'modules/content/user/login/view/default.php'),
+('Chrome\\View\\Form\\Module\\Captcha\\Captcha', 'modules/content/captcha/include.php'),
 ('Chrome\\Helper\\User\\AuthenticationResolver\\Email', 'lib/modules/user/helpers/authenticationresolver/email.php');
 
 
@@ -343,8 +343,8 @@ INSERT INTO `cpp_autoload` (`name`, `path`, `activated`, `priority`, `is_class_r
 ('\\Chrome\\Classloader\\Resolver\\Converter', 'plugins/classloader/converter.php',TRUE, 4, TRUE),
 ('\\Chrome\\Classloader\\Resolver\\Captcha', 'plugins/classloader/captcha.php', TRUE, 4, TRUE),
 ('\\Chrome\\Classloader\\Resolver\\Theme', 'plugins/classloader/theme.php', TRUE, 4, TRUE),
-('\\Chrome_View_Plugin_HTML', 'plugins/view/html.php', TRUE, 6, FALSE),
-('\\Chrome_View_Plugin_Decorator', 'plugins/view/decorator.php', TRUE, 6, FALSE),
+('\\Chrome\\View\\Plugin\\Html', 'plugins/view/html.php', TRUE, 6, FALSE),
+('\\Chrome\\View\\Plugin\\Decorator', 'plugins/view/decorator.php', TRUE, 6, FALSE),
 ('\\Chrome\\Filter\\Chain\\Preprocessor', 'plugins/filter/chain/preprocessor.php', TRUE, 6, FALSE),
 ('\\Chrome\\Filter\\Chain\\Postprocessor', 'plugins/filter/chain/postprocessor.php', TRUE, 6, FALSE),
 ('\\Chrome\\Exception\Authentication', 'lib/exception/authentication.php', TRUE, 6, FALSE),
@@ -426,13 +426,13 @@ CREATE TABLE IF NOT EXISTS `cpp_route_static` (
 );
 
 INSERT INTO `cpp_route_static` (`resource_id`, `search`, `class`, `POST`, `GET`) VALUES
-(1, '', 'Chrome\\Controller\\Index', '', ''),
-(1, 'index.html', 'Chrome\\Controller\\Index', '', ''),
-(2, 'login.html', 'Chrome\\Controller\\User\\Login', '', ''),
-(3, 'registrieren.html', 'Chrome\\Controller\\User\\Register', '', 'action=register'),
-(4, 'logout.html', 'Chrome\\Controller\\User\\Logout', '', ''),
-(6, 'registrierung_bestaetigen.html', 'Chrome\\Controller\\User\\Register', '', 'action=confirm_registration'),
-(7, 'captcha.html', 'Chrome\\Controller\\Captcha', '', '');
+(1, '', '\\Chrome\\Controller\\Index', '', ''),
+(1, 'index.html', '\\Chrome\\Controller\\Index', '', ''),
+(2, 'login.html', '\\Chrome\\Controller\\User\\Login', '', ''),
+(3, 'registrieren.html', '\\Chrome\\Controller\\User\\Register', '', 'action=register'),
+(4, 'logout.html', '\\Chrome\\Controller\\User\\Logout', '', ''),
+(6, 'registrierung_bestaetigen.html', '\\Chrome\\Controller\\User\\Register', '', 'action=confirm_registration'),
+(7, 'captcha.html', '\\Chrome\\Controller\\Captcha', '', '');
 
 DROP TABLE IF EXISTS `cpp_user`;
 CREATE TABLE IF NOT EXISTS `cpp_user` (

@@ -29,7 +29,7 @@ class Captcha extends AbstractListLayout
         $this->addTitle('Captcha Test');
     }
 
-    public function test(\Chrome\Form\Form_Interface $form, \Chrome_View_Form_Element_Factory_Interface $elementFactory)
+    public function test(\Chrome\Form\Form_Interface $form, \Chrome\View\Form\Factory\Element\Element_Interface $elementFactory)
     {
         $this->_views[] = $this->_viewContext->getFactory()->get('\Chrome\View\Captcha\FormRenderer');
     }
@@ -48,7 +48,7 @@ class CaptchaSuccess extends AbstractView
     }
 }
 
-class FormRenderer extends \Chrome_View_Form_Renderer_Template_Abstract
+class FormRenderer extends \Chrome\View\Form\AbstractTemplateRenderer
 {
     protected function _getTemplate()
     {

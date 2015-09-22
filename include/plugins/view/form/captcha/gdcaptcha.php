@@ -17,12 +17,14 @@
  * @subpackage Chrome.View.Form
  */
 
+namespace Chrome\View\Form\Element\Captcha;
+
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Chrome_View_Form_Element_Captcha_GDCaptcha extends Chrome_View_Form_Element_Abstract
+class GDCaptcha extends \Chrome\View\Form\Element\AbstractElement
 {
     protected function _render()
     {
