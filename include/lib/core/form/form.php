@@ -209,6 +209,13 @@ interface Form_Interface
     public function getData($key = null);
 
     /**
+     * Returns all names of the added form elements
+     *
+     * @return array of string
+     */
+    public function getElementNames();
+
+    /**
      * Returns all elements of this form
      * or if $id is given, the element belonging to this id
      * @param int $id
@@ -584,6 +591,11 @@ abstract class AbstractForm implements Form_Interface
         $this->_elements[$element->getID()] = $element;
     }
 
+    public function getElementNames()
+    {
+        return array_keys($this->_elements);
+    }
+
     public function isCreated($elementName = null)
     {
         // only check whether this element is created!
@@ -891,7 +903,7 @@ abstract class AbstractForm implements Form_Interface
      * $dataSource can be: CHROME_FORM_METHOD_POST, CHROME_FORM_METHOD_GET or anything else
      *
      * METHOD_POST and METHOD_GET use the values set in $_POST, $_GET
-     * anything else uses all available data from the request data.
+     * anything else uses all available data from the request data (not recommended).
      *
      * @param string $dataSource
      */
@@ -925,7 +937,7 @@ abstract class AbstractForm implements Form_Interface
                     $this->_setSentData($value);
                     break;
                 }
-            // TODO: do not implement this, use a router class
+
             case self::ATTRIBUTE_ACTION:
                 {
                     $linker = $this->_applicationContext->getDiContainer()->get('\Chrome\Linker\Linker_Interface');

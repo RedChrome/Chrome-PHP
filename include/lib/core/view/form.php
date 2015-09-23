@@ -63,20 +63,6 @@ abstract class AbstractForm implements \Chrome\View\Form\Form_Interface
     protected $_formElementOptionFactory = null;
 
     /**
-     * The class-suffix of the default view form element factory
-     *
-     * @var string
-     */
-    protected $_formElementFactoryDefault = 'Suffix';
-
-    /**
-     * The class-suffix of the default view form element option factory
-     *
-     * @var string
-     */
-    protected $_formElementOptionFactoryDefault = 'Factory';
-
-    /**
      * The current view context
      *
      * @var \Chrome\Context\View_Interface
@@ -127,18 +113,6 @@ abstract class AbstractForm implements \Chrome\View\Form\Form_Interface
     }
 
     /**
-     * This creates the default factories, if no specific factories were set.
-     */
-    protected function _initFactories()
-    {
-        if($this->_formElementOptionFactory === null)
-        {
-            $class = '\\Chrome\\View\\Form\\Factory\\Option\\' . ucfirst($this->_formElementOptionFactoryDefault);
-            $this->_formElementOptionFactory = new $class();
-        }
-    }
-
-    /**
      * This creates all view form elements.
      *
      * If some view form elements were already created, then this method will skip the creation.
@@ -149,15 +123,13 @@ abstract class AbstractForm implements \Chrome\View\Form\Form_Interface
         {
             return;
         }
-        // todo: remove this method
-        $this->_initFactories();
 
         if($this->_formElementOptionFactory === null) {
-            throw new \Chrome\Exception('No view form element option factory set');
+            throw new \Chrome\Exception('No view form element option factory set for class '.get_class($this));
         }
 
         if($this->_formElementFactory === null) {
-            throw new \Chrome\Exception('No view form element factory set');
+            throw new \Chrome\Exception('No view form element factory set for class '.get_class($this));
         }
 
         foreach($this->_form->getElements() as $formElement)
@@ -243,6 +215,8 @@ namespace Chrome\View\Form\Option;
 /**
  * Basic implementation of the label interface
  *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form.Option
  */
 class Label implements Label_Interface
 {
@@ -293,10 +267,21 @@ namespace Chrome\View\Form\Element\Appender;
  *
  * If a translator was set, the translator is used to translate the error messages
  *
+ * The Type of the appender is ERROR.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form.Option
  */
 class Error extends AbstractAppender implements Type_Interface
 {
     const APPENDER_TYPE = 'ERROR';
+
+    protected $_translator = null;
+
+    public function setTranslator(\Chrome\Localization\Translate_Interface $translator)
+    {
+        $this->_translator = $translator;
+    }
 
     public function getType()
     {
@@ -313,12 +298,9 @@ class Error extends AbstractAppender implements Type_Interface
         {
             $errors = '<ul>';
 
-            // TODO: inject the translator, if nothing was injected, do not translate
-            $translate = $this->_viewFormElement->getViewForm()->getViewContext()->getLocalization()->getTranslate();
-
             foreach($form->getValidationErrors($elementId) as $error)
             {
-                $errors .= '<li>' . $translate->getByMessage($error) . '</li>';
+                $errors .= '<li>' . $this->_translate($error) . '</li>';
             }
 
             return $errors . '</ul>' . $this->_result;
@@ -326,8 +308,22 @@ class Error extends AbstractAppender implements Type_Interface
 
         return $this->_result;
     }
+
+    protected function _translate($key)
+    {
+        return ($this->_translator !== null) ? $this->_translator->getByMessage($key) : $key;
+    }
 }
 
+/**
+ * Appends to the rendered output the corresponding error message (if there is an error)
+ *
+ * This renderes the errors with the yaml css style.
+ *
+ * @see Error
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form.Option
+ */
 class YamlError extends Error
 {
     public function render()
@@ -340,14 +336,12 @@ class YamlError extends Error
         {
             $errors = '<div class="ym-error">';
 
-            $translate = $this->_viewFormElement->getViewForm()->getViewContext()->getLocalization()->getTranslate();
-
             foreach($form->getValidationErrors($elementId) as $error)
             {
-                $errors .= '<p class="ym-message">' . $translate->getByMessage($error) . '</p>';
+                $errors .= '<p class="ym-message">' . $this->_translate($error) . '</p>';
             }
 
-            if($formElement instanceof \Chrome\Form\Element\Form) {
+            if($formElement instanceof \Chrome\Form\Element\Interfaces\Form) {
                 return $this->_result.$errors.'</div>';
             }
 
@@ -360,8 +354,18 @@ class YamlError extends Error
 
 
 /**
+ * Appends to the rendered output of a view form element the labels corresponding to the label settings
  *
- * @todo add doc
+ * If a label is set in the view form element option, it will be rendered behind or in front of the input field.
+ *
+ * If the view form element is an instance of \Chrome\View\Form\Element\MultipleElement_Interface and the label position is set to
+ * default, then the label will automatically rendered behind the input field (this is what one normally expects when rendering a
+ * radio, checkbox,.. input field)
+ *
+ * The Type of the Appender is LABEL.
+ *
+ * @package CHROME-PHP
+ * @subpackage Chrome.View.Form.Option
  */
 class Label extends AbstractAppender implements Type_Interface
 {
@@ -379,7 +383,7 @@ class Label extends AbstractAppender implements Type_Interface
 
         $for = $this->_viewFormElement->getId();
 
-        if($this->_viewFormElement instanceof \Chrome\View\Form\Element\AbstractMultipleElement)
+        if($this->_viewFormElement instanceof \Chrome\View\Form\Element\MultipleElement_Interface)
         {
             $name = $this->_viewFormElement->getCurrent();
 
@@ -420,7 +424,7 @@ class Label extends AbstractAppender implements Type_Interface
         // label should be rendered behind the values
         if($label->getPosition() === \Chrome\View\Form\Option\Label_Interface::LABEL_POSITION_DEFAULT)
         {
-            if($this->_viewFormElement instanceof \Chrome\View\Form\Element\AbstractMultipleElement)
+            if($this->_viewFormElement instanceof \Chrome\View\Form\Element\MultipleElement_Interface)
             {
                 $label->setPosition(\Chrome\View\Form\Option\Label_Interface::LABEL_POSITION_BEHIND);
             }

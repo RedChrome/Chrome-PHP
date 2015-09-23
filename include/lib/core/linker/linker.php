@@ -32,14 +32,15 @@ interface Linker_Interface
      * Returns the link to a resource.
      *
      * @param string $resourceId a resource identificator
-     * @return mixed
+     * @return string
      */
     public function getLink($resourceId);
 
     /**
      * Wrapper for {@link Linker_Interface::getLink}, always returns the link relatively
      *
-     * @param string $resourceId
+     * @param Resource_Interface $resource
+     * @return string
      */
     public function get(Resource_Interface $resource);
 }

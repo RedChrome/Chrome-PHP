@@ -38,20 +38,26 @@ class Index extends AbstractModule
 
     protected function _execute()
     {
-        $this->_form = new \Chrome\Form\Module\Index\Index($this->_applicationContext);
+        #$this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\Module\Index\Index');
 
         #$obj = new \Chrome_Controller_User_Login_Page($this->_applicationContext);
         #$obj->execute();
 
-        $obj = new \Chrome\Controller\User\Login($this->_applicationContext, $this->_applicationContext->getDiContainer()->get('\Chrome\Interactor\User\Login_Interface'));
+        $obj = $this->_applicationContext->getDiContainer()->get('\Chrome\Controller\User\Login');
+
+        #$obj = new \Chrome\Controller\User\Login($this->_applicationContext, $this->_applicationContext->getDiContainer()->get('\Chrome\Interactor\User\Login_Interface'));
         $obj->execute();
 
         $this->_view->addRenderable($obj->getView());
         $this->_view->addRenderable(new \Chrome\View\Index\ToDo($this->_applicationContext->getViewContext()));
-        $view = new \Chrome\View\Index\Form($this->_form, $this->_applicationContext->getViewContext());
+        $viewForm = $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Module\Index\Index');
+        #$view = new \Chrome\View\Index\Form($this->_form, $this->_applicationContext->getViewContext());
 
-        return;
-        $this->_view->addRenderable(new \Chrome\View\Index\FormRenderer($view));
+        #return;
+
+        $renderer = new \Chrome\View\Index\FormRenderer($viewForm);
+
+        $this->_view->addRenderable($renderer);
         return;
         if( $this->_form->isCreated() ) {
 

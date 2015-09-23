@@ -27,6 +27,9 @@ use Chrome\Validator\AbstractValidator;
  * Since the input filed is marked as readonly the browser will not send this input.
  * Well, the browser should not send that data. But if he does, we will not accept it.
  *
+ * This also ensures, that the programmer will not try to use readonly input values, since those are NOT validated
+ * and are also NOT converted (so really unsafe!)
+ *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */

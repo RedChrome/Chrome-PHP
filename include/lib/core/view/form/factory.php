@@ -17,8 +17,6 @@
  * @subpackage Chrome.View.Form
  */
 
-// TODO: captcha factory must be before default factory!
-
 namespace Chrome\View\Form\Factory\Element;
 
 /**
@@ -108,7 +106,7 @@ class Suffix extends \Chrome\View\Form\Factory\Element\AbstractFactory
      *
      * @param string $formElementSuffix
      */
-    public function __construct($formElementSuffix = 'html')
+    public function __construct($formElementSuffix = 'Html')
     {
         $this->_suffix = ucfirst($formElementSuffix);
 
@@ -120,13 +118,6 @@ class Suffix extends \Chrome\View\Form\Factory\Element\AbstractFactory
 
     protected function _getClass(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $formOption)
     {
-        if($formElement instanceof \Chrome\Form\Element\Captcha)
-        {
-            $captcha = $formElement->getOption()->getCaptcha();
-            $captchaEngine = $captcha->getFrontendOption(\Chrome\Captcha\Captcha_Interface::CHROME_CAPTCHA_ENGINE);
-            return '\\Chrome\\View\\Form\\Element\\Captcha\\' . $captchaEngine;
-        }
-
         // default class name, without suffix
         $class = '\\Chrome\\View\\Form\\Element\\';
 
@@ -142,12 +133,21 @@ class Suffix extends \Chrome\View\Form\Factory\Element\AbstractFactory
 
 class DefaultAppenderDecorator implements \Chrome\View\Form\Factory\Element\Decorator_Interface
 {
+    protected $_translator = null;
+
+    public function __construct(\Chrome\Localization\Translate_Interface $translator)
+    {
+        $this->_translator = $translator;
+    }
+
     public function decorate(\Chrome\View\Form\Element\BasicElement_Interface $viewFormElement)
     {
         if( $viewFormElement instanceof \Chrome\View\Form\Element\AppendableElement_Interface) {
 
             // add label and error appender
             $error = new \Chrome\View\Form\Element\Appender\Error($viewFormElement);
+            $error->setTranslator($this->_translator);
+
             $viewFormElement->addAppender($error);
 
             $label = new \Chrome\View\Form\Element\Appender\Label($viewFormElement);
@@ -198,19 +198,21 @@ class Captcha extends \Chrome\View\Form\Factory\Element\AbstractFactory
     }
 }
 
-namespace Chrome\View\Form\Factory\Element;
-
-class YamlDecorator implements \Chrome\View\Form\Factory\Element\Decorator_Interface
+class YamlDecorator extends DefaultAppenderDecorator
 {
     public function decorate(\Chrome\View\Form\Element\BasicElement_Interface $viewFormElement)
     {
         if($viewFormElement instanceof \Chrome\View\Form\Element\AppendableElement_Interface) {
             // add label and error appender, if object is appendable
-            if($viewFormElement instanceof Chrome_View_Form_Element_Form_Default) {
+
+            $formElement = $viewFormElement->getFormElement();
+            if($formElement instanceof \Chrome\Form\Element\Interfaces\Form) {
                 $error = new \Chrome\View\Form\Element\Appender\Error($viewFormElement);
             } else {
                 $error = new \Chrome\View\Form\Element\Appender\YamlError($viewFormElement);
             }
+
+            $error->setTranslator($this->_translator);
 
             $viewFormElement->addAppender($error);
 

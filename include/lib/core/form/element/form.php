@@ -200,9 +200,8 @@ class Form extends AbstractBasicElement implements \Chrome\Form\Element\Interfac
 
     protected function _isSent()
     {
-        if($this->getData() !== null)
+        if($this->_getData() !== null)
         {
-
             return true;
         } else
         {

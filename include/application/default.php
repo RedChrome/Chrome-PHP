@@ -534,6 +534,14 @@ class DefaultApplication implements Application_Interface
             return new \Chrome\Model\Config\Cache($c->get('\Chrome\Model\Config\Database'), $cache);
         }, true);
 
+        $closure->add('\Chrome\Localization\Translate_Interface', function ($c) {
+            return $c->get('\Chrome\Context\Application_Interface')->getViewContext()->getLocalization()->getTranslate();
+        }, true);
+
+        $registry->add('\Chrome\Localization\Localization_Interface', function ($c) {
+            return $c->get('\Chrome\Context\Application_Interface')->getViewContext()->getLocalization();
+        }, true);
+
         $closure->add('\Chrome\Model\Database\Statement_Interface', function ($c) {
             return new \Chrome\Model\Database\JsonStatement($c->get('\Chrome\Cache\Memory\DBStatement'), new \Chrome\Directory(RESOURCE . 'database'));
         });
@@ -545,6 +553,10 @@ class DefaultApplication implements Application_Interface
 
             return new \Chrome\Model\Route\StaticRoute\Cache($c->get('\Chrome_Model_Route_Static_Database'), $cache);
         }, true);
+
+        $closure->add('\Chrome\Exception\Handler_Interface', function ($c) {
+            return new \Chrome\Exception\Handler\HtmlStackTrace();
+        });
 
         $closure->add('\Chrome_Model_Route_Static_Database', function ($c) {
             return $c->get('\Chrome\Model\Route\StaticRoute\Database');
@@ -700,12 +712,12 @@ class DefaultApplication implements Application_Interface
         $closure->add('\Chrome\View\Form\Element\Factory\Default', function ($c) {
 
             $captchaFactory = new \Chrome\View\Form\Factory\Element\Captcha();
-            $elementFactory = new \Chrome\View\Form\Factory\Element\Suffix('Default');
+            $elementFactory = new \Chrome\View\Form\Factory\Element\Suffix('Html');
 
             $compositionFactory = new \Chrome\View\Form\Factory\Element\Composition($captchaFactory, $elementFactory);
 
             $defaultManipulateableDecorator = new \Chrome\View\Form\Factory\Element\DefaultManipulateableDecorator();
-            $defaultAppenderDecorator = new \Chrome\View\Form\Factory\Element\DefaultAppenderDecorator();
+            $defaultAppenderDecorator = new \Chrome\View\Form\Factory\Element\DefaultAppenderDecorator($c->get('\Chrome\Localization\Translate_Interface'));
 
             $defaultDecoratorFactory = new \Chrome\View\Form\Factory\Element\Decorable($compositionFactory, $defaultManipulateableDecorator);
             return new \Chrome\View\Form\Factory\Element\Decorable($defaultDecoratorFactory, $defaultAppenderDecorator);
@@ -714,19 +726,25 @@ class DefaultApplication implements Application_Interface
         $closure->add('\Chrome\View\Form\Element\Factory\Yaml', function ($c) {
 
                 $captchaFactory = new \Chrome\View\Form\Factory\Element\Captcha();
-                $elementFactory = new \Chrome\View\Form\Factory\Element\Suffix();
+                $elementFactory = new \Chrome\View\Form\Factory\Element\Suffix('Html');
 
                 $compositionFactory = new \Chrome\View\Form\Factory\Element\Composition($captchaFactory, $elementFactory);
 
                 $defaultManipulateableDecorator = new \Chrome\View\Form\Factory\Element\DefaultManipulateableDecorator();
-                $yamlDecorator = new \Chrome\View\Form\Factory\Element\YamlDecorator();
+                $yamlDecorator = new \Chrome\View\Form\Factory\Element\YamlDecorator($c->get('\Chrome\Localization\Translate_Interface'));
 
                 $defaultDecoratorFactory = new \Chrome\View\Form\Factory\Element\Decorable($compositionFactory, $defaultManipulateableDecorator);
                 return new \Chrome\View\Form\Factory\Element\Decorable($defaultDecoratorFactory, $yamlDecorator);
         });
 
+        $closure->add('\Chrome\View\Form\Factory\Option\Factory', function ($c) {
+            return new \Chrome\View\Form\Factory\Option\Factory();
+        });
+
         $closure->add('\Chrome\Controller\User\Login', function ($c) {
-            return new \Chrome\Controller\User\Login($c->get('\Chrome\Context\Application_Interface'), $c->get('\Chrome\Interactor\User\Login_Interface'));
+            $controller = new \Chrome\Controller\User\Login($c->get('\Chrome\Context\Application_Interface'), $c->get('\Chrome\Interactor\User\Login_Interface'));
+            $controller->setExceptionHandler($c->get('\Chrome\Exception\Handler_Interface'));
+            return $controller;
         });
 
         $closure->add('\Chrome\Helper\User\AuthenticationResolver_Interface', function ($c) {
@@ -760,7 +778,7 @@ class DefaultApplication implements Application_Interface
         $closure->add('\Chrome\View\Form\Module\User\Login', function ($c) {
             $viewForm = new \Chrome\View\Form\Module\User\Login($c->get('\Chrome\Form\Module\User\Login'), $c->get('\Chrome\Context\View_Interface'));
             $viewForm->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
-
+            $viewForm->setElementOptionFactory($c->get('\Chrome\View\Form\Factory\Option\Factory'));
             return $viewForm;
         }, true);
 
@@ -779,7 +797,7 @@ class DefaultApplication implements Application_Interface
         $closure->add('\Chrome\View\Form\Module\Captcha\Captcha', function ($c) {
             $viewForm = new \Chrome\View\Form\Module\Captcha\Captcha($c->get('\Chrome\Form\Module\Captcha\Captcha'), $c->get('\Chrome\Context\View_Interface'));
             $viewForm->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
-
+            $viewForm->setElementOptionFactory($c->get('\Chrome\View\Form\Factory\Option\Factory'));
             return $viewForm;
         });
 
@@ -789,6 +807,7 @@ class DefaultApplication implements Application_Interface
 
         $closure->add('\Chrome\View\User\Register\Form\StepOne', function ($c) {
             $viewForm = new \Chrome\View\Form\Module\User\Register\StepOne($c->get('\Chrome\Form\User\Register\StepOne'), $c->get('\Chrome\Context\View_Interface'));
+            $viewForm->setElementOptionFactory($c->get('\Chrome\View\Form\Factory\Option\Factory'));
             $viewForm->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
             return $viewForm;
         });
@@ -804,6 +823,7 @@ class DefaultApplication implements Application_Interface
         $closure->add('\Chrome\View\User\Register\Form\StepTwo', function ($c) {
             $formView = new \Chrome\View\Form\Module\User\Register\StepTwo($c->get('\Chrome\Form\User\Register\StepTwo'), $c->get('\Chrome\Context\View_Interface'));
             $formView->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
+            $formView->setElementOptionFactory($c->get('\Chrome\View\Form\Factory\Option\Factory'));
             return $formView;
         });
 
@@ -827,6 +847,17 @@ class DefaultApplication implements Application_Interface
             $interactor = $c->get('\Chrome\Interactor\User\Registration');
             $view = $c->get('\Chrome\View\User\Register');
             return new \Chrome\Controller\User\Register($appContext, $interactor, $view);
+        });
+
+        $closure->add('\Chrome\View\Form\Module\Index\Index', function ($c) {
+            $formView = new \Chrome\View\Index\Form($c->get('\Chrome\Form\Module\Index\Index'), $c->get('\Chrome\Context\View_Interface'));
+            $formView->setElementOptionFactory($c->get('\Chrome\View\Form\Factory\Option\Factory'));
+            $formView->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
+            return $formView;
+        });
+
+        $closure->add('\Chrome\Form\Module\Index\Index', function ($c) {
+            return new \Chrome\Form\Module\Index\Index($c->get('\Chrome\Context\Application_Interface'));
         });
     }
 

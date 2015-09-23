@@ -20,7 +20,6 @@ namespace Chrome\Form\Option\Element;
 
 interface Captcha_Interface extends \Chrome\Form\Option\Element_Interface
 {
-
     /**
      *
      * @return \Chrome\Captcha\Captcha_Interface
@@ -37,7 +36,6 @@ interface Captcha_Interface extends \Chrome\Form\Option\Element_Interface
 
 class Captcha extends \Chrome\Form\Option\Element implements Captcha_Interface
 {
-
     protected $_form = null;
 
     protected $_captcha = null;
@@ -96,7 +94,6 @@ namespace Chrome\Form\Element;
  */
 class Captcha extends \Chrome\Form\Element\AbstractElement implements \Chrome\Form\Element\Interfaces\Captcha
 {
-
     protected $_captcha = null;
 
     protected $_reCreated = false;

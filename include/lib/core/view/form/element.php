@@ -19,9 +19,6 @@
 
 namespace Chrome\View\Form\Element;
 
-/**
- * @todo: maybe just use a non-secure interface, since it is not used.
- */
 use \Chrome\Misc\Attribute_Secure_Interface;
 use \Chrome\Misc\Attribute_Secure;
 
@@ -367,8 +364,8 @@ abstract class AbstractElement extends AbstractBasicElement implements \Chrome\V
      */
     public function __construct(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\Element_Interface $option)
     {
-        parent::__construct($formElement, $option);
         $this->_elementOption = $formElement->getOption();
+        parent::__construct($formElement, $option);
     }
 
     public function setOption(\Chrome\View\Form\Option\Element_Interface $option)
@@ -378,8 +375,10 @@ abstract class AbstractElement extends AbstractBasicElement implements \Chrome\V
 }
 
 /**
+ * An implementation of \Chrome\View\Form\Element\MultipleElement_Interface
  *
- * @todo add doc
+ * This implementation accepts manipulators and appenders.
+ *
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
@@ -397,10 +396,25 @@ abstract class AbstractMultipleElement extends \Chrome\View\Form\Element\Abstrac
      */
     protected $_elementOption = null;
 
+    /**
+     * Returns the next input value which should get rendered
+     *
+     * This should only return values from $_availableSelections
+     *
+     * @return mixed
+     */
     abstract protected function _getNext();
 
+    /**
+     * We need multiple form elements objects instead of "single" element objects, so we overwrite the constructor
+     *
+     * @param \Chrome\Form\Element\MultipleElement_Interface $formElement
+     * @param \Chrome\View\Form\Option\MultipleElement_Interface $option
+     */
     public function __construct(\Chrome\Form\Element\MultipleElement_Interface $formElement, \Chrome\View\Form\Option\MultipleElement_Interface $option)
     {
+        // this needs to be set before the parent constructor gets called, since $_elementOption is used in _init(), and this method
+        // is called in the parent constructor.
         $this->_elementOption = $formElement->getOption();
         parent::__construct($formElement, $option);
     }
@@ -435,8 +449,6 @@ abstract class AbstractMultipleElement extends \Chrome\View\Form\Element\Abstrac
             $manipulator->preRenderManipulate();
         }
 
-        #$this->_setTempFlags();
-
         $return = $this->_renderAppenders($this->_render());
 
         $this->_attribute = $this->_attributeCopy;
@@ -449,6 +461,11 @@ abstract class AbstractMultipleElement extends \Chrome\View\Form\Element\Abstrac
         return $return;
     }
 
+    /**
+     * Returns the currently rendered input value
+     *
+     * @return mixed
+     */
     public function getCurrent()
     {
         return $this->_current;
@@ -457,11 +474,6 @@ abstract class AbstractMultipleElement extends \Chrome\View\Form\Element\Abstrac
     public function setOption(\Chrome\View\Form\Option\MultipleElement_Interface $option)
     {
         $this->_option = $option;
-    }
-
-    protected function _setTempFlags()
-    {
-        $this->_attribute->setAttribute('id', $this->_name . self::SEPARATOR . $this->_count);
     }
 }
 

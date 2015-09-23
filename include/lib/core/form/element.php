@@ -477,6 +477,7 @@ use \Chrome\Validator\Form\Element\ContainsValidator;
 use \Chrome\Validator\Form\Element\AttachmentValidator;
 use \Chrome\Validator\Form\Element\SentReadonlyValidator;
 use \Chrome\Validator\Form\Element\CallbackValidator;
+use \Chrome\Validator\Form\Element\SelectMultipleValidator;
 
 /**
  * Abstract class of all form element classes. Implements a default cache for isCreated, isSent and isValid.
@@ -607,7 +608,7 @@ abstract class AbstractMultipleElement extends AbstractBasicElement implements M
     {
         $and = new AndComposition();
 
-        $and->addValidator(new CallbackValidator(array($this, 'inlineValidation')));
+        $and->addValidator(new SelectMultipleValidator($this->_option));
         $and->addValidator(new SentReadonlyValidator($this->_option));
         $and->addValidator(new RequiredValidator($this->_option));
         $and->addValidator(new ContainsValidator($this->_option->getAllowedValues()));
@@ -655,28 +656,6 @@ abstract class AbstractMultipleElement extends AbstractBasicElement implements M
         }
 
         return $data;
-    }
-
-    /**
-     * A validation for this form element.
-     *
-     * Returns a string (which symbolizes false), if the client is not allowed to send more values, but
-     * he still tried to do so. Otherwise, it returns true.
-     *
-     * @param string $data
-     *        the data, sent by client. You could also use $this->getData()
-     * @return string|boolean
-     */
-    public function inlineValidation($data)
-    {
-        // user can only select one item, but has sent more than one item
-        if($this->_option->getSelectMultiple() === false and is_array($data) and count($data) > 1)
-        {
-            // TODO: constant
-            return 'cannot_select_more_than_one_item';
-        }
-
-        return true;
     }
 
     public function create()

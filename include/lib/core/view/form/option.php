@@ -14,16 +14,16 @@
  * to license@chrome-php.de so we can send you a copy immediately.
  *
  * @package CHROME-PHP
- * @subpackage Chrome.View.Form
- * @todo: add doc
+ * @subpackage Chrome.View.Form.Option
  */
 
 namespace Chrome\View\Form\Option;
 
 /**
+ * Default implementation of Element_Interface
  *
  * @package CHROME-PHP
- * @subpackage Chrome.View.Form
+ * @subpackage Chrome.View.Form.Option
  */
 class Element implements Element_Interface
 {
@@ -87,18 +87,20 @@ class Element implements Element_Interface
 }
 
 /**
+ * Default implementation of MultipleElement_Interface
  *
  * @package CHROME-PHP
- * @subpackage Chrome.View.Form
+ * @subpackage Chrome.View.Form.Option
  */
 class MultipleElement extends Element implements MultipleElement_Interface
 {
 }
 
 /**
+ * Default implementation of AttachableElement_Interface
  *
  * @package CHROME-PHP
- * @subpackage Chrome.View.Form
+ * @subpackage Chrome.View.Form.Option
  */
 class AttachableElement extends Element implements AttachableElement_Interface
 {

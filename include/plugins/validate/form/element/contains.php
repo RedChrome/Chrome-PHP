@@ -30,6 +30,9 @@ use Chrome\Validator\AbstractValidator;
  *
  * The specified input is an array, containing all allowed values for the given data.
  *
+ * Note that null data (the user sent nothing) is treated as the empty set, which is a subset of every allowed input set.
+ * So this validator will return true.
+ *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
  */

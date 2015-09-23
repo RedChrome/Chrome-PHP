@@ -41,6 +41,8 @@ class Captcha extends AbstractModule
     {
         $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\Module\Captcha\Captcha');
 
+        $this->_form->create();
+
         if(!$this->_form->isCreated()) {
            $this->_form->create();
         } else if(!$this->_form->isSent()) {
@@ -55,6 +57,9 @@ class Captcha extends AbstractModule
 
             $this->_view->formValid($this->_form);
         }
+
+        #var_dump($this->_form);
+        #var_dump($this->_form->isSent(), $this->_form->getErrors());
 
         $this->_view->test($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Yaml'));
     }
