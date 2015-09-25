@@ -24,12 +24,12 @@ class RelativeHelper implements Helper_Interface
 {
     public function linkByResource(Resource_Interface $resource)
     {
-        if(strpos($resource->getResourceName(), 'rel:') === 0) {
+        if(strpos($resource->getName(), 'rel:') === 0) {
             // strlen("rel:") = 4
-            return array('link' => substr($resource->getResourceName(), 4));
-        } else if(strpos($resource->getResourceName(), 'relative:') === 0) {
+            return array('link' => substr($resource->getName(), 4));
+        } else if(strpos($resource->getName(), 'relative:') === 0) {
             // strlen("relative:") = 9
-            return array('link' => substr($resource->getResourceName(), 9));
+            return array('link' => substr($resource->getName(), 9));
         } else {
             return false;
         }

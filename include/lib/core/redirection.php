@@ -22,7 +22,6 @@ namespace Chrome\Redirection;
 use \Chrome\Resource\Resource_Interface;
 use Chrome\Response\Handler\HTTP;
 
-// todo: add redirection to dependecy injector
 /**
  *
  * @package CHROME-PHP
@@ -81,8 +80,8 @@ class Redirection implements Redirection_Interface
 
     public function redirectToResource(Resource_Interface $resource)
     {
-        throw new \Chrome\Exception('Not implemented yet');
+        $linker = $this->_applicationContext->getViewContext()->getLinker();
 
-        $this->_redirect($url);
+        $this->_redirect($linker->get($resource));
     }
 }

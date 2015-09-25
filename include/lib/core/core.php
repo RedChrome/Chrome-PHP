@@ -18,11 +18,6 @@
  */
 
 /**
- * load dependency injection container
- */
-require_once 'dependency_injection/container.php';
-
-/**
  * load attribute interfaces
  */
 require_once 'misc/attribute.php';
@@ -162,3 +157,9 @@ require_once 'interactor/result.php';
  * load resource interface
  */
 require_once 'resource.php';
+
+/**
+ * load dependency injection container
+ */
+require_once 'dependency_injection/container.php';
+

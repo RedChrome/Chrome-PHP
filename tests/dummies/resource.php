@@ -6,9 +6,9 @@ use \Chrome\Resource\Resource_Interface;
 
 class Resource implements \Chrome\Resource\Model_Interface
 {
-    public function getResourceId(Resource_Interface $resource)
+    public function getId(Resource_Interface $resource)
     {
-        return $resource->getResourceId();
+        return $resource->getId();
     }
 
     public function getResource($resourceId)

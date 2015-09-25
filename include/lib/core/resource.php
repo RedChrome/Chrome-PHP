@@ -20,24 +20,18 @@ namespace Chrome\Resource;
 
 interface Resource_Interface
 {
-    public function setResourceName($name);
+    public function getName();
 
-    public function setResourceParameters(array $params);
+    public function getParameters();
 
-    public function getResourceName();
-
-    public function getResourceParameters();
-
-    public function setResourceId($id);
-
-    public function getResourceId();
+    public function getId();
 
     public function equals(Resource_Interface $resource);
 
     public function __toString();
 }
 
-class Resource implements Resource_Interface
+abstract class AbstractResource implements Resource_Interface
 {
     /**
      * @var string
@@ -45,7 +39,7 @@ class Resource implements Resource_Interface
     protected $_resourceName = '';
 
     /**
-     * @var string
+     * @var array
      */
     protected $_resourceParams = array();
 
@@ -54,68 +48,19 @@ class Resource implements Resource_Interface
      */
     protected $_resourceId = null;
 
-    public function __construct($resourceName, array $resourceParams = array(), $resourceId = null)
-    {
-        $this->setResourceName($resourceName);
-        $this->setResourceParameters($resourceParams);
-        $this->setResourceId($resourceId);
-    }
-
-    /**
-     * @return string
-     */
-    public function getResourceName()
+    public function getName()
     {
         return $this->_resourceName;
     }
 
-    /**
-     * @param $resourceName
-     */
-    public function setResourceName($resourceName)
-    {
-        $this->_resourceName = $resourceName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getResourceParameters()
+    public function getParameters()
     {
         return $this->_resourceParams;
     }
 
-    /**
-     * @param $resourceParams
-     */
-    public function setResourceParameters(array $resourceParams)
-    {
-        $this->_resourceParams = $resourceParams;
-    }
-
-    /**
-     * @see \Chrome\Resource\Resource_Interface::setResourceId()
-     */
-    public function setResourceId($id)
-    {
-        $this->_resourceId = ($id !== null) ? (int) $id : null;
-    }
-
-    /**
-     * @see \Chrome\Resource\Resource_Interface::getResourceId()
-     */
-    public function getResourceId()
+    public function getId()
     {
         return $this->_resourceId;
-    }
-
-    public function equals(Resource_Interface $resource)
-    {
-        if($this->_resourceId !== null) {
-            return $resource->getResourceId() === $this->_resourceId;
-        } else {
-            return (($resource->getResourceName() === $this->getResourceName()) AND (count(array_diff_assoc($resource->getResourceParameters(), $this->getResourceParameters()))) === 0);
-        }
     }
 
     public function __toString()
@@ -132,6 +77,40 @@ class Resource implements Resource_Interface
     }
 }
 
+class Resource extends AbstractResource
+{
+    public function __construct($resourceName, array $resourceParams = array(), $resourceId = null)
+    {
+        $this->setName($resourceName);
+        $this->setParameters($resourceParams);
+        $this->setId($resourceId);
+    }
+
+    public function setName($resourceName)
+    {
+        $this->_resourceName = $resourceName;
+    }
+
+    public function setParameters(array $resourceParams)
+    {
+        $this->_resourceParams = $resourceParams;
+    }
+
+    public function setId($id)
+    {
+        $this->_resourceId = ($id !== null) ? (int) $id : null;
+    }
+
+    public function equals(Resource_Interface $resource)
+    {
+        if($this->_resourceId !== null) {
+            return $resource->getId() === $this->_resourceId;
+        } else {
+            return (($resource->getName() === $this->getName()) AND (count(array_diff_assoc($resource->getParameters(), $this->getParameters()))) === 0);
+        }
+    }
+}
+
 interface Model_Interface
 {
     /**
@@ -140,7 +119,7 @@ interface Model_Interface
      * @param Resource_Interface $resource a resource object
      * @return int
      */
-    public function getResourceId(Resource_Interface $resource);
+    public function getId(Resource_Interface $resource);
 
     /**
      * Returns for the resource id a resource object
@@ -191,22 +170,22 @@ class Database extends \Chrome\Model\AbstractDatabaseStatement implements Model_
         return $array;
     }
 
-    public function getResourceId(Resource_Interface $resource)
+    public function getId(Resource_Interface $resource)
     {
-        if($resource->getResourceId() !== null) {
-            return $resource->getResourceId();
+        if($resource->getId() !== null) {
+            return $resource->getId();
         }
 
         $db = $this->_getDBInterface();
 
-        $this->_getDBInterface()->loadQuery('resourceGetResourceId')->execute(array($resource->getResourceName(), $this->_convertArrayParamsToString($resource->getResourceParameters())));
+        $this->_getDBInterface()->loadQuery('resourceGetResourceId')->execute(array($resource->getName(), $this->_convertArrayParamsToString($resource->getParameters())));
 
         $result = $db->getResult();
 
         if(!$result->isEmpty()) {
             $array = $result->getNext();
             $id = (int) $array['id'];
-            $resource->setResourceId($id);
+            $resource->setId($id);
             return $id;
         } else {
             return 0;
@@ -238,11 +217,11 @@ class Database extends \Chrome\Model\AbstractDatabaseStatement implements Model_
 
     public function deleteResource(Resource_Interface $resource)
     {
-        $this->_getDBInterface()->loadQuery('resourceDeleteResource')->execute(array($resource->getResourceName(), $this->_convertArrayParamsToString($resource->getResourceParameters())));
+        $this->_getDBInterface()->loadQuery('resourceDeleteResource')->execute(array($resource->getName(), $this->_convertArrayParamsToString($resource->getParameters())));
     }
 
     public function createResource(Resource_Interface $resource)
     {
-        $this->_getDBInterface()->loadQuery('resourceCreateResource')->execute(array($resource->getResourceName(), $this->_convertArrayParamsToString($resource->getResourceParameters())));
+        $this->_getDBInterface()->loadQuery('resourceCreateResource')->execute(array($resource->getName(), $this->_convertArrayParamsToString($resource->getParameters())));
     }
 }

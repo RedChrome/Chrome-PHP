@@ -32,9 +32,6 @@ class Chrome_View_Index_STHOTHER extends AbstractView
     {
         $form = $this->_controller->getForm();
 
-        require_once LIB . 'core/view/form.php';
-        require_once PLUGIN . 'View/form/text/default.php';
-
         $formElement = $form->getElements('text');
 
         $option = new \Chrome\View\Form\Element\Option\Element();

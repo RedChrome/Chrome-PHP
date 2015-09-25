@@ -44,10 +44,10 @@ class Linker implements Linker_Interface
     public function get(Resource_Interface $resource)
     {
         // TODO: finish
-        return $resource->getResourceName();
+        return $resource->getName();
 
-        if($resource->getResourceId() !== null) {
-            return $this->getLink($resource->getResourceId(), $relative);
+        if($resource->getId() !== null) {
+            return $this->getLink($resource->getId(), $relative);
         }
 
         return $this->_noLinkFound($resource, $relative);

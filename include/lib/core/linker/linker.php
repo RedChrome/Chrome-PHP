@@ -158,8 +158,8 @@ class Linker implements Linker_Interface
             }
         }
 
-        if($resource->getResourceId() !== null) {
-            return $this->getLink($resource->getResourceId(), $relative);
+        if($resource->getId() !== null) {
+            return $this->getLink($resource->getId(), $relative);
         }
 
         return $this->_noLinkFound($resource, $relative);

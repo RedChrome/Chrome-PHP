@@ -57,12 +57,6 @@ define('CHROME_LOG_DIR', 'logs/');
 //E_ALL | E_STRICT | E_DEPRECATED | E_USER_DEPRECATED); # Display Errors, set to 0 to supress errors
 define('CHROME_DISPLAY_ERRORS', (E_ALL | E_STRICT));
 
-//########### CACHE ###########
-
-define('CHROME_CACHE_DIR', 'tmp/cache/');
-define('CHROME_CACHE_LIFETIME', 7200);
-define('CHROME_FILE_NAME_PREFIX', null);
-
 //########### SECURITY ###########
 
 // Developer status. ONLY FOR DEVELOPERS!
@@ -82,10 +76,6 @@ define('CHROME_CRYPT_ALGORITHM', 'BLOWFISH');
 // algorithm to hash user pws
 define('CHROME_USER_HASH_ALGORITHM', 'tiger192,3');
 
-//########### AUTHORISATION ########
-define('CHROME_AUTHORISATION_DEFAULT_ADAPTER', 'Chrome_Authorisation_Adapter_Default');
-
-
 //########### OTHERS ###########
 define('CHROME_TIME', time());
 define('CHROME_MTIME', microtime(true));
@@ -96,7 +86,6 @@ define('CHROME_LOCALE_DEFAULT', 'de-DE');
 define('CHROME_TIMEZONE', 'Europe/Berlin');
 define('CHROME_VERSION', '0.1');
 define('CHROME_VERSION_SUFFIX', 'beta');
-define('CHROME_DEFAULT_LANGUAGE', 'ger');
 
 if(!defined('ROOT_URL')) {
     $fileLevel = '';
@@ -143,7 +132,6 @@ define('TMP', BASEDIR . 'tmp/');
 define('CACHE', TMP . 'cache/');
 define('PLUGIN', BASEDIR . 'plugins/');
 define('RESOURCE', BASEDIR.'resources/');
-define('THEME', BASEDIR.'themes/');
 define('APPLICATION', BASEDIR.'application/');
 
 // change the working dir to the CHROME_WD

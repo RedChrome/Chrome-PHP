@@ -164,15 +164,6 @@ namespace Chrome\Model\Route\DynamicRoute;
  */
 class Cache extends \Chrome\Model\AbstractCache
 {
-    const CHROME_MODEL_ROUTER_DYNAMIC_CACHE_CACHE_FILE = 'tmp/cache/router/_dynamic.cache';
-
-    protected function _setUpCache()
-    {
-        $this->_cacheOption = new \Chrome\Cache\Option\File\Serialization();
-        $this->_cacheOption->setCacheFile(CACHE.'router/_dynamic.cache');
-        $this->_cacheInterface = 'serialization';
-    }
-
     public function getResourceByID($id)
     {
         if(($return = $this->_cache->get('getResource_' . $id)) === null)

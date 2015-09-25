@@ -137,8 +137,6 @@ class Message implements Message_Interface
  */
 interface Translate_Interface
 {
-    public function __construct(Localization_Interface $localization);
-
     public function get($key, array $params = array());
 
     public function getByMessage(Message_Interface $message);
@@ -166,8 +164,6 @@ interface L12y
  */
 class Translate_Simple implements Translate_Interface
 {
-    const INCLUDE_DIR = 'translations/';
-
     const MODULE_GENERAL = 'general';
 
     protected $_loadedModules = array();
@@ -176,8 +172,11 @@ class Translate_Simple implements Translate_Interface
 
     protected $_translations = array();
 
-    public function __construct(Localization_Interface $localization)
+    protected $_includePath = null;
+
+    public function __construct(\Chrome\Directory_Interface $includePath, Localization_Interface $localization)
     {
+        $this->_includePath = $includePath;
         $this->_locale = $localization;
         $this->load('general');
     }
@@ -226,7 +225,9 @@ class Translate_Simple implements Translate_Interface
             return;
         }
 
-        $file = new \Chrome\File(RESOURCE.self::INCLUDE_DIR.$this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/'.$submodule.'.ini');
+        $file = $this->_includePath->file($this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/'.$submodule.'.ini', true);
+
+        #$file = new \Chrome\File(RESOURCE.self::INCLUDE_DIR.$this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/'.$submodule.'.ini');
 
         if(!$file->exists())
         {

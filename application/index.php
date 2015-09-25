@@ -34,4 +34,3 @@ require_once APPLICATION . 'default.php';
 $application = new \Chrome\Application\DefaultApplication();
 $application->init();
 $application->execute();
-//TODO: add recpatcha error messages to translate

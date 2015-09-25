@@ -186,7 +186,7 @@ class Database extends \Chrome\Model\AbstractDatabaseStatement implements \Chrom
 
     public function getLinkByResource(\Chrome\Resource\Resource_Interface $resource)
     {
-        $resourceId = $this->_resourceModel->getResourceId($resource);
+        $resourceId = $this->_resourceModel->getId($resource);
 
         $db = $this->_getDBInterface();
 

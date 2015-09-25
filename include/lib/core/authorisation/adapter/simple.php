@@ -146,7 +146,7 @@ class Database extends \Chrome\Model\AbstractDatabaseStatement implements Model_
     public function getResourceGroupByResource(Resource_Interface $resource, $transformation)
     {
         // retrieve the resource id
-        $resourceId = $this->_resourceModel->getResourceId($resource);
+        $resourceId = $this->_resourceModel->getId($resource);
 
         $result = $this->_getDBInterface()->loadQuery('authorisationGetAccessById')->execute(array($resourceId, $transformation));
 

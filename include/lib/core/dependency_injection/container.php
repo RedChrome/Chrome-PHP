@@ -19,6 +19,8 @@
 
 namespace Chrome\DI;
 
+require_once 'loader/loader.php';
+
 interface Container_Interface
 {
     /**

@@ -24,9 +24,9 @@ class UrlHelper implements Helper_Interface
 {
     public function linkByResource(Resource_Interface $resource)
     {
-        if(strpos($resource->getResourceName(), 'url:') === 0) {
+        if(strpos($resource->getName(), 'url:') === 0) {
             // strlen("url:") = 4
-            return array('link' => substr($resource->getResourceName(), 4), 'skip' => true);
+            return array('link' => substr($resource->getName(), 4), 'skip' => true);
         } else {
             return false;
         }
