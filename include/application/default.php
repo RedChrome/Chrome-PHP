@@ -174,7 +174,7 @@ class DefaultApplication implements Application_Interface
         $this->_initClassloader();
 
         $this->_initDatabase();
-        $registryHandler->add('Chrome\Database\Factory\Factory_Interface', $this->_modelContext->getDatabaseFactory());
+        $registryHandler->add('\Chrome\Database\Factory\Factory_Interface', $this->_modelContext->getDatabaseFactory());
 
         require_once LIB . 'core/classloader/model.php';
         require_once LIB.'core/database/facade/model.php';
@@ -513,7 +513,11 @@ class DefaultApplication implements Application_Interface
 
         $structuredDirectoryLoader = new \Chrome\DI\Loader\StructuredDirectory(new \Chrome\Directory(BASEDIR.'application/default/dependency_injection'));
         $structuredDirectoryLoader->setLogger($this->_loggerRegistry->get('application'));
-        $structuredDirectoryLoader->load($this->_diContainer);
+        $classIterator = $structuredDirectoryLoader->load($this->_diContainer);
+
+        $classIteratorLoader = new \Chrome\DI\Loader\ClassIterator($classIterator);
+        $classIteratorLoader->setLogger($this->_loggerRegistry->get('application'));
+        $classIteratorLoader->load($this->_diContainer);
     }
 
     /**

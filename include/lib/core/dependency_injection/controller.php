@@ -16,7 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.DependencyInjection
  */
-
 namespace Chrome\DI\Handler;
 
 use Chrome\DI\Handler_Interface;
@@ -31,18 +30,16 @@ class Controller implements Handler_Interface
 
     public function get($key, Container_Interface $container)
     {
-        if(!is_subclass_of($key, '\Chrome\Controller\Controller_Interface')) {
+        if (! is_subclass_of($key, '\Chrome\Controller\Controller_Interface')) {
             return null;
         }
 
-        try {
-            $obj = new $key($container->get('\Chrome\Context\Application_Interface'));
+        $obj = new $key($container->get('\Chrome\Context\Application_Interface'));
+
+        if ($obj instanceof \Chrome\Controller\AbstractController) {
             $obj->setExceptionHandler($container->get('\Chrome\Exception\Handler_Interface'));
-
-            return $obj;
-
-        } catch(\Chrome\InvalidArgumentException $exception) {
-            throw new \Chrome\Exception('Could not create object '.$key.' with default parameters', 0, $exception);
         }
+
+        return $obj;
     }
 }

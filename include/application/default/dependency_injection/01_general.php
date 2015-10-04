@@ -54,6 +54,13 @@ class General implements Loader_Interface
         {
             return $c->get('\Chrome\Model\Resource\Database');
         }, true);
+
+        $closure->add('\Chrome\Logger\Model', function ($c)
+        {
+            return $c->get('\Chrome\Context\Application_Interface')
+                ->getLoggerRegistry()
+                ->get();
+        }, true);
     }
 
     protected function _localization($closure, $registry)
@@ -143,7 +150,7 @@ class General implements Loader_Interface
     {
         $closure->add('\Chrome\Classloader\Resolver\Model_Interface', function ($c)
         {
-            return new \Chrome\Classloader\Resolver\Model($c->get('\Chrome\Model\Classloader\Model_Interface'), $c);
+            return new \Chrome\Classloader\Resolver\Model($c->get('\Chrome\Model\Classloader\Model_Interface'), $c, new \Chrome\Directory(''));
         });
 
         $closure->add('\Chrome\Classloader\Resolver\Filter', function ($c)

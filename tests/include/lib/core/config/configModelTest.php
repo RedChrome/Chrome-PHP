@@ -8,7 +8,7 @@ class ModelTest extends \Test\Chrome\TestCase
 
     protected function setUp()
     {
-        $this->_config = new \Chrome\Model\Config\Database($this->_diContainer->get('Chrome\Database\Factory\Factory_Interface'), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface'));
+        $this->_config = new \Chrome\Model\Config\Database($this->_diContainer->get('\Chrome\Database\Factory\Factory_Interface'), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface'));
     }
 
     public function testLoadConfig()

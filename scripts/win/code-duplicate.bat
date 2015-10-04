@@ -1,1 +1,1 @@
-phpcpd ../../xinclude
+php ..\..\include\lib\vendor\sebastian\phpcpd\phpcpd ../../include --exclude vendor ../../include/lib

@@ -32,6 +32,7 @@ interface Design_Interface extends \Chrome\Renderable
 
     public function getRenderable();
 }
+
 /**
  *
  * @package CHROME-PHP
@@ -125,7 +126,36 @@ abstract class AbstractFactory implements Factory_Interface
     }
 }
 
+
+/**
+ * @package    CHROME-PHP
+ * @subpackage Chrome.Design
+ */
+class Design implements Design_Interface
+{
+    protected $_renderable = null;
+
+    public function setRenderable(\Chrome\Renderable $renderable)
+    {
+        $this->_renderable = $renderable;
+    }
+
+    public function getRenderable()
+    {
+        return $this->_renderable;
+    }
+
+    public function render()
+    {
+        if($this->_renderable !== null) {
+            return $this->_renderable->render();
+        }
+
+        return '';
+    }
+}
+
+
 // @todo remove those includes, place them anywhere else
 require_once 'renderable/composition.php';
 require_once 'renderable/template.php';
-require_once 'design/default.php';

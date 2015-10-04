@@ -49,8 +49,12 @@ interface Handler_Interface
     /**
      * Gets the dependency, defined as $key
      *
+     * If not found, it return null.
+     * If found, it returns anything else
+     *
      * @param string $key
      * @param Container_Interface $container
+     * @return mixed
      */
     public function get($key, Container_Interface $container);
 
@@ -83,7 +87,7 @@ class Container implements Container_Interface
 
     public function detachHandler($handlerName)
     {
-        if(!$this->_isAttached($handlerName)) {
+        if(!$this->isAttached($handlerName)) {
             return;
         }
 
@@ -107,13 +111,17 @@ class Container implements Container_Interface
 
     public function get($key)
     {
-        foreach($this->_handlers as $handler)
-        {
-            $object = $handler->get($key, $this);
+        try {
+            foreach($this->_handlers as $handler)
+            {
+                $object = $handler->get($key, $this);
 
-            if($object !== null) {
-                return $object;
+                if($object !== null) {
+                    return $object;
+                }
             }
+        } catch(\Crome\Exception $e) {
+            throw new \Chrome\Exception('Could not retrieve object with key "'.$key.'". An exception occured', 0, $e);
         }
 
         throw new \Chrome\Exception('Identifier "'.$key.'" is not defined');

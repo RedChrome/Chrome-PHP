@@ -28,7 +28,7 @@ use Chrome\Localization\Message;
  *
  * A Validator can get autoloaded if the class name has the following structure:
  *
- * Chrome\Validator\Any\Sub\Element\MyClassNameValidator -> file: include/plugins/Validate/any/sub/element/myclassname.php
+ * Chrome\Validator\Any\Sub\Element\MyClassNameValidator -> file: include/plugins/validate/any/sub/element/myclassname.php
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Validator
@@ -154,7 +154,9 @@ interface Composition_Interface extends Validator_Interface
 /**
  * AbstractValidator
  *
- * TODO: doc
+ * Implementation of Validator_Interface
+ *
+ * The validation logic should be placed in _validate().
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
@@ -382,6 +384,16 @@ abstract class AbstractValidator implements Validator_Interface
     }
 }
 
+/**
+ * Implementation of Composition_Interface
+ *
+ * This validator uses other validators to validate data.
+ *
+ * Put the validation logic into _validate()
+ *
+ * @package		CHROME-PHP
+ * @subpackage  Chrome.Validator
+ */
 abstract class AbstractComposition extends AbstractValidator implements Composition_Interface
 {
     protected $_validators = array();

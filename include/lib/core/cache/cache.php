@@ -142,7 +142,7 @@ use Chrome\File\Modifier;
  * @package CHROME-PHP
  * @subpackage Chrome.Cache
  */
-abstract class Strategy implements \Chrome\Cache\Cache_Interface
+abstract class Strategy implements \Chrome\Cache\Cache_Interface, \Chrome\Logger\Loggable_Interface
 {
     /**
      * Key of the timestamp, should never get used via save()
@@ -180,6 +180,13 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
      * @var int
      */
     protected $_lifetime = null;
+
+    /**
+     * A logger
+     *
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $_logger = null;
 
     abstract protected function _encode(array $data);
 
@@ -387,7 +394,9 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
 
         } catch(\Chrome\Exception $e)
         {
-            // todo: hm... how about logging?
+            if($this->_logger !== null) {
+                $this->_logger->info('Could not cache data. Got exception {msg}', array('msg' => $e->getMessage()));
+            }
             return;
         }
     }
@@ -470,5 +479,15 @@ abstract class Strategy implements \Chrome\Cache\Cache_Interface
         {
             $this->_clear();
         }
+    }
+
+    public function setLogger(\Psr\Log\LoggerInterface $logger)
+    {
+        $this->_logger = $logger;
+    }
+
+    public function getLogger()
+    {
+        return $this->_logger;
     }
 }

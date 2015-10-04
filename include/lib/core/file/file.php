@@ -68,6 +68,8 @@ interface File_Interface
 
     public function exists();
 
+    public function requireOnce();
+
     public function getFileHandle();
 
     public function getFileName();
@@ -199,6 +201,15 @@ class File implements File_Interface
             $this->_exists = false;
             throw new \Chrome\FileException('Could not open file '.$this->_fileName, 0, $e);
         }
+    }
+
+    public function requireOnce()
+    {
+        if(!$this->exists()) {
+            throw new \Chrome\Exception('Could not require_once a file which does not exist');
+        }
+
+        require_once $this->_fileName;
     }
 
     public function getOpenMode()

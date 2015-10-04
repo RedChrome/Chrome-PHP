@@ -69,7 +69,6 @@ class ClassIterator implements Loader_Interface, \Chrome\Logger\Loggable_Interfa
     {
         foreach ($this->_iterator as $element) {
             try {
-
                 if (is_string($element) && class_exists($element, false)) {
                     $obj = new $element();
                     $obj->load($diContainer);
@@ -82,6 +81,8 @@ class ClassIterator implements Loader_Interface, \Chrome\Logger\Loggable_Interfa
                         'class' => $element,
                         'message' => $e->getMessage()
                     ));
+                } else {
+                    throw e;
                 }
             }
         }
@@ -109,7 +110,7 @@ class StructuredDirectory implements Loader_Interface, \Chrome\Logger\Loggable_I
         $this->_dir = $structuredDirectory;
     }
 
-    public function load(\Chrome\DI\Container_INterface $diContainer)
+    public function load(\Chrome\DI\Container_Interface $diContainer)
     {
         $fileNameIterator = $this->_dir->getFileIterator();
 
@@ -121,11 +122,7 @@ class StructuredDirectory implements Loader_Interface, \Chrome\Logger\Loggable_I
 
                 $file = $this->_dir->file($fileName, false);
 
-                if (! $file->exists()) {
-                    throw new \Chrome\Exception('The file ' . $file . ' does not exist');
-                }
-
-                require_once $file->getFileName();
+                $file->requireOnce();
 
                 $classIterator->append($this->_fileToClass(basename($fileName)));
             } catch (\Chrome\Exception $e) {
@@ -134,10 +131,14 @@ class StructuredDirectory implements Loader_Interface, \Chrome\Logger\Loggable_I
                         'file' => $fileName,
                         'message' => $e->getMessage()
                     ));
+                } else {
+                    throw $e;
                 }
             }
         }
 
+        return $classIterator;
+        /*
         $loaderClassIterator = new ClassIterator($classIterator);
 
         if ($this->_logger !== null) {
@@ -145,6 +146,7 @@ class StructuredDirectory implements Loader_Interface, \Chrome\Logger\Loggable_I
         }
 
         $loaderClassIterator->load($diContainer);
+        */
     }
 
     protected function _fileToClass($file)

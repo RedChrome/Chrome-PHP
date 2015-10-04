@@ -73,13 +73,6 @@ class Memcache extends AbstractAdapter implements Memcache_Interface
 
     public function has($key)
     {
-        // yeah, this is not really okay...
-        // using $this->set('key', false) will yield a $this->has('key') === false
-        // but, it should return true :/. Since this is just a cache, this should be
-        // covered by the called itself...
-        // return memcache_get($this->_connection, $key) !== false;
-
-
         $flag = false;
         \memcache_get($this->_connection, $key, $flag);
 

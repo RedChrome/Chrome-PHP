@@ -15,7 +15,7 @@ class DatabaseTest extends \Test\Chrome\TestCase
     public function setUp()
     {
         if($this->_model === null) {
-            $this->_model = new \Chrome\Model\Authentication\Database($this->_diContainer->get('Chrome\Database\Factory\Factory_Interface'), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface'));
+            $this->_model = new \Chrome\Model\Authentication\Database($this->_diContainer->get('\Chrome\Database\Factory\Factory_Interface'), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface'));
         }
 
         $this->_chain = new \Chrome\Authentication\Chain\DatabaseChain($this->_model, $this->_updateTime, $this->_setTime);

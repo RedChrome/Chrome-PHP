@@ -54,7 +54,7 @@ class SimpleModelDefaultTest extends \Test\Chrome\TestCase
 
     public function setUp()
     {
-        $this->_model = new \Chrome\Model\Authorisation\Adapter\Simple\Database($this->_diContainer->get('Chrome\Database\Factory\Factory_Interface'), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface'));
+        $this->_model = new \Chrome\Model\Authorisation\Adapter\Simple\Database($this->_diContainer->get('\Chrome\Database\Factory\Factory_Interface'), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface'));
         $this->_model->setResourceModel($this->_diContainer->get('\Chrome\Resource\Model_Interface'));
     }
 

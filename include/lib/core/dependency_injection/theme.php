@@ -33,8 +33,6 @@ class Theme implements Handler_Interface
     {
         if(!is_subclass_of($key, '\Chrome\Design\Theme_Interface')) {
             return null;
-
-            var_dump($key);
         }
 
         $instance = new $key();

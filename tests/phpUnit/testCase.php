@@ -23,6 +23,11 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     {
         return new \PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls($values);
     }
+
+    public function getFaker()
+    {
+        return \Faker\Factory::create();
+    }
 }
 
 class PHPUnit_TextUI_Command_Chrome extends \PHPUnit_TextUI_Command

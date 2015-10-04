@@ -35,7 +35,7 @@ class RegistrationTest extends AbstractModelTestCase
 
     public function _getModel()
     {
-        return new Registration($this->_diContainer->get('Chrome\Database\Factory\Factory_Interface'), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface'));
+        return new Registration($this->_diContainer->get('\Chrome\Database\Factory\Factory_Interface'), $this->_diContainer->get('\Chrome\Model\Database\Statement_Interface'));
     }
 
     public function hasEmailProvider()

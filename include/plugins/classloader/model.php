@@ -66,6 +66,14 @@ class Model implements Model_Interface
     protected $_class = array();
 
     /**
+     * Contains the basedir. This directory will be added to every
+     * resolved class file.
+     *
+     * @var \Chrome\Directory_Interface
+     */
+    protected $_basdir = null;
+
+    /**
      * Determines whether {@see loadRequiredFiles()} was called
      *
      * @var boolean
@@ -81,8 +89,9 @@ class Model implements Model_Interface
      */
     protected $_diContainer = null;
 
-    public function __construct(\Chrome\Model\Model_Interface $model, \Chrome\DI\Container_Interface $diContainer)
+    public function __construct(\Chrome\Model\Model_Interface $model, \Chrome\DI\Container_Interface $diContainer, \Chrome\Directory_Interface $basedir)
     {
+        $this->_basedir = $basedir;
         $this->_model = $model;
         $this->_diContainer = $diContainer;
 
@@ -106,8 +115,7 @@ class Model implements Model_Interface
 
         foreach($this->_require as $value)
         {
-            // TODO: maybe inject \Chrome\File
-            $classloader->loadByFile($value['name'], new \Chrome\File($value['path']));
+            $classloader->loadByFile($value['name'], $this->_basedir->file($value['path'], true));
 
             if($value['is_class_resolver'] == true)
             {
@@ -144,8 +152,7 @@ class Model implements Model_Interface
     {
         if(isset($this->_class[$className]))
         {
-            // TODO: same here, look up.
-            return new \Chrome\File($this->_class[$className]);
+            return $this->_basedir->file($this->_class[$className], true);
         }
 
         return false;
