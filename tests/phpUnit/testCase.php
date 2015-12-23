@@ -85,7 +85,7 @@ class PHPUnit_TextUI_TestRunner_Chrome extends \PHPUnit_TextUI_TestRunner
         return $tests;
     }
 
-    public function doRun(PHPUnit_Framework_Test $suite, array $arguments = array())
+    public function doRun(\PHPUnit_Framework_Test $suite, array $arguments = array())
     {
         parent::run($suite, $arguments);
 
