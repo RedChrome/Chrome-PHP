@@ -53,4 +53,9 @@ class OrComposition extends AbstractComposition
 
         return false;
     }
+
+    public function getAllErrors()
+    {
+        return $this->_errors;
+    }
 }

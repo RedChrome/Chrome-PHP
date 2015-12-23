@@ -20,6 +20,31 @@ namespace Chrome\Linker;
 
 use \Chrome\Resource\Resource_Interface;
 
+interface Link_Interface
+{
+    public function asRelative();
+
+    public function asAbsolute();
+}
+
+class Link implements Link_Interface
+{
+    public function __construct($basepath, $relative)
+    {
+        //@todo implement Link.
+    }
+
+    public function asRelative()
+    {
+
+    }
+
+    public function asAbsolute()
+    {
+
+    }
+}
+
 /**
  * Interface to link resources
  *
@@ -31,25 +56,29 @@ interface Linker_Interface
     /**
      * Returns the link to a resource.
      *
-     * @param string $resourceId a resource identificator
-     * @return string
-     */
-    public function getLink($resourceId);
-
-    /**
-     * Wrapper for {@link Linker_Interface::getLink}, always returns the link relatively
-     *
      * @param Resource_Interface $resource
-     * @return string
+     * @return Link_Interface
      */
     public function get(Resource_Interface $resource);
+
+    /**
+     * Returns the base path. Every linked resource is relative to
+     * the base path.
+     *
+     * @return string
+     */
+    public function getBasepath();
+
+
+    public function diff($serverPath, $clientPath);
+
+    public function normalize($norm, $toBeNormalized);
 }
 
 namespace Chrome\Linker\HTTP;
 
 use \Chrome\Linker\Linker_Interface;
 use \Chrome\Resource\Resource_Interface;
-use \Chrome\Resource\Model_Interface;
 use \Chrome\URI\URI_Interface;
 
 /**
@@ -59,26 +88,30 @@ use \Chrome\URI\URI_Interface;
  */
 class Linker implements Linker_Interface
 {
-    /**
-     * @var boolean
-     */
-    const DEFAULT_LINK_TYPE = null;
+    const PATH_LIMIT = 15;
 
     protected $_absolutePrefix = '';
 
     protected $_relativePrefix = '';
 
-    protected $_model = null;
-
     protected $_resourceHelper = array();
 
-    protected $_resourceIdHelper = array();
+    protected $_basepath = '';
 
-    public function __construct(URI_Interface $requestedURL, Model_Interface $model)
+    public function __construct(URI_Interface $requestedURL)
     {
         $this->setRelative($requestedURL);
         $this->setAbsolute($requestedURL);
-        $this->_model = $model;
+    }
+
+    public function setBasepath($basepath)
+    {
+        $this->_basepath = $basepath;
+    }
+
+    public function getBasepath()
+    {
+        return $this->_basepath;
     }
 
     public function setAbsolute(URI_Interface $currentURL)
@@ -104,106 +137,85 @@ class Linker implements Linker_Interface
         return $this->_absolutePrefix.'404?'.$resource;
     }
 
-    protected function _processUrl($url, $relative)
-    {
-        if($relative === self::DEFAULT_LINK_TYPE || $relative === true ) {
-            return $this->_relativePrefix.ltrim($url, '/');
-        } else {
-            return $this->_absolutePrefix.ltrim($url, '/');
-        }
-    }
-
-    public function getLink($resourceId, $relative = self::DEFAULT_LINK_TYPE)
-    {
-        if(!is_int($resourceId)) {
-            throw new \Chrome\Exception('$resourceId must be of type integer, given '.$resourceId);
-        }
-
-        foreach($this->_resourceIdHelper as $helper)
-        {
-            if( ($link = $helper->linkByResourceId($resourceId)) !== false) {
-
-                if(isset($link['skip']) AND $link['skip'] === true) {
-                    return $link['link'];
-                } else {
-                    return $this->_processUrl($link['link'], $relative);
-                }
-            }
-        }
-
-        return $this->_noLinkFound($resource, $relative);
-    }
-
     public function addResourceHelper(\Chrome\Linker\HTTP\Helper_Interface $helper)
     {
         $this->_resourceHelper[] = $helper;
     }
 
-    public function addResourceIdHelper(\Chrome\Linker\HTTP\Helper_Interface $helper)
-    {
-        $this->_resourceIdHelper[] = $helper;
-    }
-
-    public function get(Resource_Interface $resource, $relative = self::DEFAULT_LINK_TYPE)
+    public function get(Resource_Interface $resource)
     {
         foreach($this->_resourceHelper as $helper)
         {
-            if( ($link = $helper->linkByResource($resource)) !== false) {
-
-                if(isset($link['skip']) AND $link['skip'] === true) {
-                    return $link['link'];
-                } else {
-                    return $this->_processUrl($link['link'], $relative);
-                }
+            if( ($link = $helper->linkByResource($resource, $this)) !== false) {
+                // TODO: FINISH!
+                #var_dump($link);
+                return $link['link'];
             }
         }
 
-        if($resource->getId() !== null) {
-            return $this->getLink($resource->getId(), $relative);
+        return $this->_noLinkFound($resource);
+    }
+
+    public function diff($server, $client)
+    {
+        $serverPaths = explode('/', $this->_norm(strtolower($server)), self::PATH_LIMIT);
+        $clientPaths = explode('/', $this->_norm(strtolower($client)), self::PATH_LIMIT);
+
+        return implode('/', $this->_diff($serverPaths, $clientPaths));
+    }
+
+    public function normalize($norm, $toBeNormalized)
+    {
+        $normPaths = explode('/', $this->_norm(strtolower($norm)), self::PATH_LIMIT);
+        $toBeNormalizedPaths = explode('/', $this->_norm(strtolower($toBeNormalized)), self::PATH_LIMIT);
+
+        $diff = $this->_diff($toBeNormalizedPaths, $normPaths);
+        $count = count($diff);
+
+        return str_repeat('../', $count - 1).implode('/', $this->_diff($normPaths, $toBeNormalizedPaths));
+    }
+
+    protected function _diff(array $serverPaths, array $clientPaths)
+    {
+        foreach($serverPaths as $key => $value)
+        {
+            if(!isset($clientPaths[$key]) OR $value !== $clientPaths[$key]) {
+                return array_slice($serverPaths, $key);
+            }
         }
 
-        return $this->_noLinkFound($resource, $relative);
+        return array();
+    }
+
+    protected function _norm($path)
+    {
+        return $this->_stripResource($this->_stripBasepath($path));
+    }
+
+    protected function _stripBasepath($path)
+    {
+        return substr($path, stripos($path, $this->_basepath));
+    }
+
+    protected function _stripResource($path)
+    {
+        if(substr($path, -1) !== '/') {
+            $end = strrpos($path, '/');
+
+            if($end === false) {
+                return '/';
+            }
+
+            return substr($path, 0, $end+1);
+        } else {
+            return $path;
+        }
     }
 }
 
-
-namespace Chrome\Linker\HTTP;
-
-use \Chrome\Resource\Resource_Interface;
-
 interface Helper_Interface
 {
-    /**
-     * Returns an array, if the resource could get linked,
-     * false if the resource could not get linked.
-     *
-     * If this methods returns an array, then it is assumed, that
-     * the resource can get accessed via this array (URL)
-     *
-     * Structure of the array
-     * array('link' => $link, 'skip' => $boolean),
-     * 'skip' symbolizes, whether $link will be returned (if its true) or
-     * a relativ/absolute prefix will be added (skip = false)
-     *
-     * @param Resource_Interface $resource
-     * @return array|false
-     */
-    public function linkByResource(Resource_Interface $resource);
+    public function linkByResource(Resource_Interface $resource, Linker_Interface $linker);
 
-    /**
-     * Returns an array, if the resource could get linked,
-     * false if the resource could not get linked.
-     *
-     * If this methods returns an array, then it is assumed, that
-     * the resource can get accessed via this array (URL)
-     *
-     * Structure of the array
-     * array('link' => $link, 'skip' => $boolean),
-     * 'skip' symbolizes, whether $link will be returned (if its true) or
-     * a relativ/absolute prefix will be added (skip = false)
-     *
-     * @param int $resource
-     * @return array|false
-     */
     public function linkById($resourceId);
 }

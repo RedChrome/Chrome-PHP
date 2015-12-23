@@ -178,7 +178,7 @@ class Translate_Simple implements Translate_Interface
     {
         $this->_includePath = $includePath;
         $this->_locale = $localization;
-        $this->load('general');
+        $this->load(self::MODULE_GENERAL);
     }
 
     public function get($key, array $params = array())
@@ -295,6 +295,8 @@ class Locale implements Locale_Interface
 
     protected function _parseLocaleString($localeString)
     {
+        // TODO: also consider quality
+
         if(++$this->_localeParseTries >= self::MAX_PARSE_TRIES)
         {
             throw new \Chrome\Exception('The maximum number of tries to parse a locale string was reached');
@@ -309,6 +311,10 @@ class Locale implements Locale_Interface
         {
             $this->_primaryLanguage = strtolower($matches[1]);
             $this->_region = strtoupper($matches[3]);
+            $this->_localeParseTries = 0;
+        } else if(preg_match('~([a-z]{2})(,|;)~i', $actualLocaleString, $matches) === 1) {
+            $this->_primaryLanguage = strtolower($matches[1]);
+            $this->_region = null;
             $this->_localeParseTries = 0;
         } else {
             $this->_parseLocaleString(CHROME_LOCALE_DEFAULT);

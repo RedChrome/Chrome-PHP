@@ -40,17 +40,9 @@ interface Router_Interface extends \Chrome\Router\Route\Route_Interface, \Chrome
  */
 interface Result_Interface
 {
-    public function setFile($file);
-
-    public function getFile();
-
     public function setClass($class);
 
     public function getClass();
-
-    public function setName($name);
-
-    public function getName();
 }
 
 /**
@@ -60,22 +52,10 @@ interface Result_Interface
  */
 class Result implements Result_Interface
 {
-    protected $_file = null;
     protected $_class = null;
-    protected $_name = null;
 
     public function __construct()
     {
-    }
-
-    public function setFile($file)
-    {
-        $this->_file = $file;
-    }
-
-    public function getFile()
-    {
-        return $this->_file;
     }
 
     public function setClass($class)
@@ -86,16 +66,6 @@ class Result implements Result_Interface
     public function getClass()
     {
         return $this->_class;
-    }
-
-    public function getName()
-    {
-        return $this->_name;
-    }
-
-    public function setName($name)
-    {
-        $this->_name = $name;
     }
 }
 
@@ -119,7 +89,7 @@ class Router implements Router_Interface
     {
         if($this->_doMatch($url, $data) !== true OR !$this->_isSuccessfullyMatched()) {
             // this should not happen. The application should set always a route handler which does always find a route. -> FallbackRoute
-            throw new \Chrome\Exception('Could not found adequate controller class!', 2001);
+            throw new \Chrome\Exception('Could match given url', 2001);
         }
     }
 
@@ -151,6 +121,7 @@ class Router implements Router_Interface
     {
         // replace ROOT,
         $path = ltrim(preg_replace('#\A' . ROOT_URL . '#', '', '/'.$url->getPath()), '/');
+        #var_dump($url, $path, $data->getGETData());
         $url->setPath($path);
 
         $this->match($url, $data);

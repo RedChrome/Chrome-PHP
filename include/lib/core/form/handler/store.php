@@ -62,6 +62,11 @@ class Store implements \Chrome\Form\Handler\Handler_Interface, \Chrome\Form\Hand
 
     protected function _store(\Chrome\Form\Form_Interface $form)
     {
+        if($this->_option->getStorageEnabled() === false)
+        {
+            return;
+        }
+
         foreach($this->_whiteList as $elementId)
         {
             $element = $form->getElements($elementId);
@@ -90,11 +95,6 @@ class Store implements \Chrome\Form\Handler\Handler_Interface, \Chrome\Form\Hand
 
     protected function _doStore(\Chrome\Form\Element\Storable_Interface $element)
     {
-        if($this->_option->getStorageEnabled() === false)
-        {
-            return false;
-        }
-
         if($element->isCreated() === false)
         {
             return false;

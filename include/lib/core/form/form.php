@@ -671,7 +671,6 @@ abstract class AbstractForm implements Form_Interface
         // saves all errors in $_errors[$elementId] = $elementError;
         foreach($this->_elements as $formElement)
         {
-
             if($formElement->isValid() === false)
             {
                 $this->_isValid = false;
@@ -856,7 +855,11 @@ abstract class AbstractForm implements Form_Interface
     {
         if($id !== null)
         {
-            return (isset($this->_elements[$id])) ? $this->_elements[$id] : null;
+            if(isset($this->_elements[$id])) {
+                return $this->_elements[$id];
+            }
+
+            throw new \Chrome\InvalidArgumentException('There is no element with id "'.$id.'"');
         }
 
         return $this->_elements;

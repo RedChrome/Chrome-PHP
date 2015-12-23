@@ -211,4 +211,14 @@ class FormTest extends \Test\Chrome\TestCase
 
         $this->assertEquals($this->_option->getToken(), $optionCloned->getToken());
     }
+
+    public function testGetForm()
+    {
+        $formElement = new \Chrome\Form\Element\Form($this->_form, $this->_id, $this->_option);
+
+        $this->_form->addElement($formElement);
+
+        $this->assertEquals($this->_form, $formElement->getForm());
+        $this->assertEquals($formElement, $this->_form->getElements($this->_id));
+    }
 }

@@ -18,12 +18,19 @@
  */
 namespace Chrome;
 
+class DirectoryException extends Exception {
+}
+
 interface Directory_Interface
 {
     const SEPARATOR = '/';
 
     /**
-     * @param string $directory
+     * Returns a new directory object with the given directory.
+     *
+     * If $directory is an array, every element of the array is handled as new directory level.
+     *
+     * @param mixed(string | array) $directory
      * @param bool $useDirectory use this directory as prefix
      *
      * @return \Chrome\Directory_Interface
@@ -85,7 +92,16 @@ interface Directory_Interface
     public function getFileIterator($useDirectory = true);
 
     /**
-     * Returns a directory iterator (only dirs, no files. Also excluding '.' and '..'  see filetype() === 'dir')
+     * Returns a file iterator (like getFileIterator), but the iterator contains \Chrome\File_Interface objects
+     *
+     * @return \Iterator
+     */
+    public function getFileObjectIterator();
+
+    /**
+     * Returns a directory iterator (only dirs, no files. Also excluding '.' and '..')
+     *
+     * Values of the iterator are strings.
      *
      * if $useDirectory = true, then every entry from the iterator is prefix with this directory
      *
@@ -93,6 +109,13 @@ interface Directory_Interface
      * @return \Iterator
      */
     public function getDirectoryIterator($useDirectory = true);
+
+    /**
+     * Returns a directory iterator (like getDirectoryIterator), but the iterator contains \Chrome\Directory_Interface objects
+     *
+     * @return \Iterator
+     */
+    public function getDirectoryObjectIterator();
 
     /**
      * Returns an iterator, which lists every element in the directory (excludes nothing, like scandir())
@@ -179,6 +202,10 @@ class Directory implements Directory_Interface
 
     public function directory($directory, $useDirectory = false)
     {
+        if(is_array($directory)) {
+            $directory = implode(self::SEPARATOR, $directory);
+        }
+
         $prefix = ($useDirectory) ? $this->_directory.self::SEPARATOR : '';
 
         return new self($prefix.$directory);
@@ -248,9 +275,20 @@ class Directory implements Directory_Interface
         return new \Chrome\Directory\FileFilter(new \DirectoryIterator($this->_directory), ($addDirectory) ? $this->_directory.self::SEPARATOR : '');
     }
 
+    public function getFileObjectIterator()
+    {
+        return new \Chrome\Directory\FileObjectFilter(new \DirectoryIterator($this->_directory), $this);
+    }
+
+
     public function getDirectoryIterator($addDirectory = true)
     {
         return new \Chrome\Directory\DirectoryFilter(new \DirectoryIterator($this->_directory), ($addDirectory) ? $this->_directory.self::SEPARATOR : '');
+    }
+
+    public function getDirectoryObjectIterator()
+    {
+        return new \Chrome\Directory\DirectoryObjectFilter(new \DirectoryIterator($this->_directory), $this);
     }
 
     public function getIterator()
@@ -345,8 +383,7 @@ class FileFilter extends \FilterIterator
 
     public function accept()
     {
-        $element = $this->_prefix.$this->getInnerIterator()->current();
-        if(@filetype($element) === 'file') {
+        if($this->getInnerIterator()->isFile()) {
             return true;
         }
 
@@ -359,15 +396,72 @@ class FileFilter extends \FilterIterator
     }
 }
 
-class DirectoryFilter extends FileFilter
+class FileObjectFilter extends \FilterIterator
 {
+    protected $_dir = null;
+
+    public function __construct(\Iterator $iterator, \Chrome\Directory_Interface $dir)
+    {
+        parent::__construct($iterator);
+        $this->_dir = $dir;
+    }
+
     public function accept()
     {
-        $element = $this->_prefix.$this->getInnerIterator()->current();
-        if($element !== '.' && $element !== '..' && @filetype($element) === 'dir') {
+        if($this->getInnerIterator()->isFile()) {
             return true;
         }
 
         return false;
+    }
+
+    public function current()
+    {
+        return $this->_dir->file(parent::current(), true);
+    }
+}
+
+class DirectoryFilter extends FileFilter
+{
+    public function accept()
+    {
+        $iterator = $this->getInnerIterator();
+
+        if(!$iterator->isDot() && $iterator->isDir()) {
+            return true;
+        }
+
+        return false;
+    }
+}
+
+class DirectoryObjectFilter extends \FilterIterator
+{
+    /**
+     * @var \Chrome\Directory_Interface
+     */
+    protected $_dir = null;
+
+    public function __construct(\Iterator $it, \Chrome\Directory_Interface $dir)
+    {
+        parent::__construct($it);
+        $this->_dir = $dir;
+    }
+
+    public function accept()
+    {
+        $iterator = $this->getInnerIterator();
+
+        if(!$iterator->isDot() && $iterator->isDir()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function current()
+    {
+        $dir = parent::current();
+        return $this->_dir->directory($dir, true);
     }
 }

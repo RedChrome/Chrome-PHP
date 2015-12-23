@@ -42,4 +42,13 @@ class RegisterStepOneCest
         $I->see('XX_email:{}_XX', 'main');
         $I->see('XX_register:{}_XX', 'main');
     }
+
+    public function tryToTestRegiser(WebGuy\ChromeSteps $I)
+    {
+        $this->tryToTest($I);
+
+        $I->fillField('email', 'noExisting.com');
+        $I->click('submit');
+        $I->see('nsfdjpönbrgpörejg');
+    }
 }

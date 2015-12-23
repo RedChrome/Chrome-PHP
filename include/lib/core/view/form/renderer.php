@@ -30,6 +30,12 @@ abstract class AbstractRenderer implements Renderer_Interface
 
     protected $_viewContext = null;
 
+    public function __construct(\Chrome\View\Form\Form_Interface $viewForm)
+    {
+        $this->setViewForm($viewForm);
+        $this->setViewContext($viewForm->getViewContext());
+    }
+
     public function setViewForm(\Chrome\View\Form\Form_Interface $viewForm)
     {
         $this->_viewForm = $viewForm;
@@ -39,25 +45,6 @@ abstract class AbstractRenderer implements Renderer_Interface
     {
         $this->_viewContext = $viewContext;
     }
-
-    protected function _setUp()
-    {
-    }
-
-    public function __construct(\Chrome\View\Form\Form_Interface $viewForm)
-    {
-        $this->setViewForm($viewForm);
-        $this->setViewContext($viewForm->getViewContext());
-    }
-
-    public function render()
-    {
-        $this->_setUp();
-
-        return $this->_render();
-    }
-
-    abstract protected function _render();
 }
 
 /**
@@ -72,7 +59,7 @@ abstract class AbstractTemplateRenderer extends AbstractRenderer
 
     abstract protected function _getTemplate();
 
-    protected function _render()
+    public function render()
     {
         $this->_template = $this->_getTemplate();
 

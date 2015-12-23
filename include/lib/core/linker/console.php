@@ -19,6 +19,21 @@ class Linker implements Linker_Interface
 
     protected $_resourceIdHelper = array();
 
+    public function getBasepath()
+    {
+        //TODO
+    }
+
+    public function diff($serverPath, $clientPath)
+    {
+        // TODO
+    }
+
+    public function normalize($norm, $toBeNormalized)
+    {
+        // TODO
+    }
+
     public function __construct(Model_Interface $model)
     {
         $this->_model = $model;

@@ -6,7 +6,7 @@
     },
     
     "require-dev": {
-        "codeception/codeception": "1.8.5",
+        "codeception/codeception": "1.8.7",
         "phpunit/phpunit": "3.7.*",
 		"sebastian/phpcpd": "*",
 		"mockery/mockery": "0.9.4",

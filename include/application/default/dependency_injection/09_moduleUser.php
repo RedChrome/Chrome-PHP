@@ -105,12 +105,12 @@ class ModuleUser implements Loader_Interface
         $closure->add('\Chrome\Form\User\Register\StepOne', function ($c)
         {
             return new \Chrome\Form\Module\User\Register\StepOne($c->get('\Chrome\Context\Application_Interface'));
-        });
+        }, true);
 
         $closure->add('\Chrome\Form\User\Register\StepTwo', function ($c)
         {
             return new \Chrome\Form\Module\User\Register\StepTwo($c->get('\Chrome\Context\Application_Interface'));
-        });
+        }, true);
     }
 
     protected function _models($closure)

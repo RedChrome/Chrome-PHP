@@ -19,10 +19,11 @@
 namespace Chrome\Linker\HTTP;
 
 use \Chrome\Resource\Resource_Interface;
+use \Chrome\Linker\Linker_Interface;
 
 class RelativeHelper implements Helper_Interface
 {
-    public function linkByResource(Resource_Interface $resource)
+    public function linkByResource(Resource_Interface $resource, Linker_Interface $linker)
     {
         if(strpos($resource->getName(), 'rel:') === 0) {
             // strlen("rel:") = 4
@@ -39,4 +40,16 @@ class RelativeHelper implements Helper_Interface
     {
         return false;
     }
+}
+
+namespace Chrome\Resource;
+
+interface Relative_Interface extends Resource_Interface
+{
+
+}
+
+class Relative extends Resource
+{
+
 }

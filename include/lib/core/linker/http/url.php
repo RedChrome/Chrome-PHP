@@ -19,11 +19,16 @@
 namespace Chrome\Linker\HTTP;
 
 use \Chrome\Resource\Resource_Interface;
+use \Chrome\Linker\Linker_Interface;
 
 class UrlHelper implements Helper_Interface
 {
-    public function linkByResource(Resource_Interface $resource)
+    public function linkByResource(Resource_Interface $resource, Linker_Interface $linker)
     {
+        if($resource instanceof \Chrome\Resource\Url_Interface) {
+            return array();
+        }
+
         if(strpos($resource->getName(), 'url:') === 0) {
             // strlen("url:") = 4
             return array('link' => substr($resource->getName(), 4), 'skip' => true);
@@ -35,5 +40,25 @@ class UrlHelper implements Helper_Interface
     public function linkById($resourceId)
     {
         return false;
+    }
+}
+
+namespace Chrome\Resource;
+
+interface Url_Interface extends Resource_Interface
+{
+    /**
+     * @return string
+     */
+    public function getUrl();
+}
+
+class Url extends Resource
+{
+    protected $_url = '';
+
+    public function __construct($url)
+    {
+        $this->_url = $url;
     }
 }

@@ -58,6 +58,22 @@ class Index extends AbstractModule
         $renderer = new \Chrome\View\Index\FormRenderer($viewForm);
 
         $this->_view->addRenderable($renderer);
+
+        /*
+        $this->_applicationContext->getClassloader()->load('\Chrome\Router\Route\DirectoryRoute');
+        $directory = new \Chrome\Directory('include/modules/content');
+        $model = new \Chrome\Model\Route\DirectoryRoute\Model($directory->getDirectoryObjectIterator(), $directory->getDirectory());
+        $route  = new \Chrome\Router\Route\DirectoryRoute($model, $this->_applicationContext->getLoggerRegistry()->get());
+        $route->match(new \Chrome\URI\URI($this->_applicationContext->getRequestHandler()->getRequestData(), true), $this->_applicationContext->getRequestHandler()->getRequestData());
+
+        var_dump($model->getModules());
+
+        */
+
+
+
+
+
         return;
         if( $this->_form->isCreated() ) {
 
@@ -77,6 +93,8 @@ class Index extends AbstractModule
             $this->_view->formNotCreated();
             $this->_form->create();
         }
+
+
 
         $this->_view->doSth();
     }

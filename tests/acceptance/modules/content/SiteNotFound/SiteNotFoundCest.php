@@ -16,7 +16,7 @@ class SiteNotFoundCest
 
         $I->amOnPage('/notExisting');
         $I->seePageNotFound();
-        $I->see('XX_modules/content/SiteNotFound/title:{}_XX', 'title');
-        $I->see('XX_modules/content/SiteNotFound/message:{}_XX', 'main');
+        $I->see('XX_modules/content/routeNotFound/title:{}_XX', 'title');
+        $I->see('XX_modules/content/routeNotFound/message:{}_XX', 'main');
     }
 }

@@ -289,7 +289,12 @@ class DefaultApplication implements Application_Interface
     {
         if($locale === null)
         {
-            $locale = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : CHROME_LOCALE_DEFAULT;
+            $locale = $this->_applicationContext->getRequestHandler()->getRequestData()->getSERVERData('HTTP_ACCEPT_LANGUAGE');
+
+            if($locale === null)
+            {
+                $local = CHROME_LOCALE_DEFAULT;
+            }
         }
 
         try
@@ -301,7 +306,7 @@ class DefaultApplication implements Application_Interface
             // for testing
             if($locale->getPrimaryLanguage() == 'xx' AND $locale->getRegion() == 'XX') {
                 require_once 'tests/dummies/localization/translate/test.php';
-                $translate = new \Chrome\Localization\Translate_Test_XX($localization);
+                $translate = new \Chrome\Localization\Translate_Test_XX(new \Chrome\Directory(''), $localization);
             } else {
                 $translate = new \Chrome\Localization\Translate_Simple(new \Chrome\Directory(RESOURCE.'translations/'), $localization);
             }
@@ -360,7 +365,6 @@ class DefaultApplication implements Application_Interface
         $this->_classloader = new \Chrome\Classloader\Classloader(new \Chrome\Directory(BASEDIR));
         $this->_applicationContext->setClassloader($this->_classloader);
 
-        // $this->_autoloader = new Chrome_Require_Autoloader();
         $this->_classloader->setLogger($this->_loggerRegistry->get('autoloader'));
         $this->_classloader->setExceptionHandler(new \Chrome\Exception\Handler\HtmlStackTrace());
 
@@ -506,10 +510,6 @@ class DefaultApplication implements Application_Interface
 	    $this->_diContainer->attachHandler('view', new \Chrome\DI\Handler\Validator());
 	    $this->_diContainer->attachHandler('validator', new \Chrome\DI\Handler\View());
         $this->_diContainer->attachHandler('theme', new \Chrome\DI\Handler\Theme());
-
-        #$loader = new \Chrome\DI\Loader\Composite();
-        #$loader->add($structuredDirectoryLoader);
-        #$loader->load($this->_diContainer);
 
         $structuredDirectoryLoader = new \Chrome\DI\Loader\StructuredDirectory(new \Chrome\Directory(BASEDIR.'application/default/dependency_injection'));
         $structuredDirectoryLoader->setLogger($this->_loggerRegistry->get('application'));

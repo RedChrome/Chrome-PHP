@@ -278,6 +278,15 @@ class Error extends AbstractAppender implements Type_Interface
 
     protected $_translator = null;
 
+    /**
+     * Indicates whether this appender was already rendered
+     *
+     * Since the view form element: form is rendered twice, it renderes the errors also twice
+     *
+     * @var bool
+     */
+    protected $_rendered = false;
+
     public function setTranslator(\Chrome\Localization\Translate_Interface $translator)
     {
         $this->_translator = $translator;
@@ -294,7 +303,7 @@ class Error extends AbstractAppender implements Type_Interface
         $elementId = $formElement->getID();
         $form = $formElement->getForm();
 
-        if($form->hasValidationErrors($elementId))
+        if($this->_rendered === false AND $form->hasValidationErrors($elementId))
         {
             $errors = '<ul>';
 
@@ -302,6 +311,8 @@ class Error extends AbstractAppender implements Type_Interface
             {
                 $errors .= '<li>' . $this->_translate($error) . '</li>';
             }
+
+            $this->_rendered = true;
 
             return $errors . '</ul>' . $this->_result;
         }
@@ -332,7 +343,7 @@ class YamlError extends Error
         $elementId = $formElement->getID();
         $form = $formElement->getForm();
 
-        if($form->hasValidationErrors($elementId))
+        if($this->_rendered === false AND $form->hasValidationErrors($elementId))
         {
             $errors = '<div class="ym-error">';
 
@@ -344,6 +355,8 @@ class YamlError extends Error
             if($formElement instanceof \Chrome\Form\Element\Interfaces\Form) {
                 return $this->_result.$errors.'</div>';
             }
+
+            $this->_rendered = true;
 
             return $errors .$this->_result.'</div>';
         }

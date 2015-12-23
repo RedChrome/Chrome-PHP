@@ -43,7 +43,7 @@ class PHPUnit_TextUI_TestRunner_Chrome extends PHPUnit_TextUI_TestRunner
         } else
             if($testClass instanceof \Test\Chrome\TestCase) {
                 $testClass->setApplicationContext($this->_appContext);
-                $test->setDIContainer($this->_diContainer);
+                $testClass->setDIContainer($this->_diContainer);
             }
     }
 

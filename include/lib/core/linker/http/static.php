@@ -22,6 +22,7 @@ require_once 'staticInterface.php';
 
 use \Chrome\Resource\Resource_Interface;
 use \Chrome\Linker\HTTP\Model\Static_Interface;
+use \Chrome\Linker\Linker_Interface;
 
 class StaticHelper implements Helper_Interface
 {
@@ -32,7 +33,7 @@ class StaticHelper implements Helper_Interface
         $this->_resourceModel = $resourceModel;
     }
 
-    public function linkByResource(Resource_Interface $resource)
+    public function linkByResource(Resource_Interface $resource, Linker_Interface $linker)
     {
         if($resource instanceof \Chrome\Resource\Static_Interface) {
             return array('link' => $this->_resourceModel->getLinkByResource($resource));

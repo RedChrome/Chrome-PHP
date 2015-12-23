@@ -43,7 +43,7 @@ class GeneralFormTest extends \Test\Chrome\TestCase
         $this->assertTrue($this->_form->isValid());
         $this->assertEquals(array(), $this->_form->getData());
         $this->assertFalse($this->_form->issetSentData('doesNotExist'));
-        $this->assertEquals($this->_form->getElements('doesNotExist'), null);
+
         $this->assertEquals($this->_form->getElements(), array());
         $this->assertEquals($this->_form->getCreationErrors(), array());
         $this->assertEquals($this->_form->getReceivingErrors(), array());
@@ -59,6 +59,12 @@ class GeneralFormTest extends \Test\Chrome\TestCase
         $this->assertFalse($this->_form->hasValidationErrors('notExisting'));
         $this->assertFalse($this->_form->hasErrors('notExisting'));
         $this->assertTrue(is_array($this->_form->getAttribute(\Chrome\Form\Form_Interface::ATTRIBUTE_STORE)));
+    }
+
+    public function testExceptionOnNonExistingElement()
+    {
+        $this->setExpectedException('\Chrome\Exception');
+        $this->assertEquals($this->_form->getElements('doesNotExist'), null);
     }
 
     public function testSetAttributeStoreHandler()

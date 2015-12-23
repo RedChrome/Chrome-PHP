@@ -22,6 +22,8 @@ interface Resource_Interface
 {
     public function getName();
 
+    public function getAbsolute();
+
     public function getParameters();
 
     public function getId();
@@ -48,6 +50,14 @@ abstract class AbstractResource implements Resource_Interface
      */
     protected $_resourceId = null;
 
+    /**
+     * Determins whether the linked resource will be returned as
+     * absolute or relative path.
+     *
+     * @var boolean
+     */
+    protected $_absolute = true;
+
     public function getName()
     {
         return $this->_resourceName;
@@ -61,6 +71,11 @@ abstract class AbstractResource implements Resource_Interface
     public function getId()
     {
         return $this->_resourceId;
+    }
+
+    public function getAbsolute()
+    {
+        return $this->_absolute;
     }
 
     public function __toString()
@@ -79,16 +94,20 @@ abstract class AbstractResource implements Resource_Interface
 
 class Resource extends AbstractResource
 {
-    public function __construct($resourceName, array $resourceParams = array(), $resourceId = null)
+    public function __construct($resourceName, $absolute = true)
     {
         $this->setName($resourceName);
-        $this->setParameters($resourceParams);
-        $this->setId($resourceId);
+        $this->setAbsolute($absolute);
     }
 
     public function setName($resourceName)
     {
         $this->_resourceName = $resourceName;
+    }
+
+    public function setAbsolute($absolute)
+    {
+        $this->_absolute = (bool) $absolute;
     }
 
     public function setParameters(array $resourceParams)

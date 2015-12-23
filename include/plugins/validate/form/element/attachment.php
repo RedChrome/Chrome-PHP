@@ -24,8 +24,7 @@ use Chrome\Validator\Composition_Interface;
 use Chrome\Validator\Form\Element\ElementValidator;
 
 /**
- * a validator which validates all attachments of a form element. If only one attachment is valid, then
- * the whole element is valid
+ * A validator which validates all attachments of a form element using a given composition validator (e.g. Or/And Validator)
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Validator

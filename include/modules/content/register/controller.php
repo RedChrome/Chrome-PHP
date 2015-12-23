@@ -88,11 +88,10 @@ class Register extends AbstractModule
         {
             case 2:
                 {
-                    $this->_form = new \Chrome\Form\Module\User\Register\StepOne($this->_applicationContext);
+                    $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Register\StepOne');
 
-                    if(!$this->_form->isCreated() or !$this->_form->isSent() or !$this->_form->isValid())
+                    if(!$this->_form->isValid())
                     {
-
                         if(!$this->_form->isValid())
                         {
                             $this->_form->create();
@@ -108,14 +107,14 @@ class Register extends AbstractModule
 
             case 3:
                 {
-                    $this->_form = new \Chrome\Form\Module\User\Register\StepTwo($this->_applicationContext);
+                    $this->_form = $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Register\StepTwo');
 
                     $data = $this->_form->getData();
 
                     // go one step back
                     if($this->_form->isSent('buttons') and isset($data['buttons']['backward']))
                     {
-                        $this->_form = new \Chrome\Form\Module\User\Register\StepOne($this->_applicationContext);
+                        $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Register\StepOne');
                         $this->_form->create();
                         $this->_stepOne();
                         break;
@@ -137,19 +136,6 @@ class Register extends AbstractModule
 
                     $this->_interactor->addRegistrationRequest($registrationRequest, $result);
 
-                    /*
-                         $this->_activationKey = $this->_model->generateActivationKey();
-
-                        $this->_model->addRegistrationRequest($this->_form->getData('nickname'), $this->_form->getData('password'), $this->_form->getData('email'), $this->_activationKey);
-
-                        $result = $this->_model->sendRegisterEmail($this->_form->getSentData('email'), $this->_form->getSentData('nickname'), $this->_activationKey);
-
-                        if($result === false)
-                        {
-                        $this->_stepNoEmailSent();
-                        break;
-                        }
-                    */
                     $this->_stepThree();
 
                     break;
@@ -172,7 +158,7 @@ class Register extends AbstractModule
 
     private function _stepOne()
     {
-        if($this->_form == null)
+        if($this->_form === null)
         {
             $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Register\StepOne');
         }

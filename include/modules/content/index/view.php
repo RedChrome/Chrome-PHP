@@ -128,7 +128,7 @@ class Form extends \Chrome\View\Form\AbstractForm
 
 class FormRenderer extends \Chrome\View\Form\AbstractRenderer
 {
-    protected function _render()
+    public function render()
     {
         $return = '<fieldset style="border:dashed">
     <legend>Form</legend>' . "\n";

@@ -94,6 +94,10 @@ interface File_Interface
 
     public function hasExtension($extension);
 
+    public function getDirname();
+
+    public function getBasename($suffix = '');
+
     /**
      * Return the content of the file
      *
@@ -147,8 +151,12 @@ class File implements File_Interface
 
     protected $_context = null;
 
-    public function __construct($fileName)
+    public function __construct($fileName, $ext = null)
     {
+        if($ext !== null) {
+            $fileName .= '.'.$ext;
+        }
+
         $this->_fileName = $fileName;
     }
 
@@ -173,6 +181,16 @@ class File implements File_Interface
     public function getFileHandle()
     {
         return $this->_fileHandle;
+    }
+
+    public function getDirname()
+    {
+        return dirname($this->_fileName);
+    }
+
+    public function getBasename($suffix = '')
+    {
+        return basename($this->_fileName, $suffix);
     }
 
     public function getFileName()

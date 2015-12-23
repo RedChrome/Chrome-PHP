@@ -347,6 +347,7 @@ abstract class AbstractBasicElement implements BasicElement_Interface
 
         $this->_isValid = $validator->isValid();
         $this->_errors = $validator->getAllErrors();
+
         return $this->_isValid;
     }
 
@@ -476,7 +477,6 @@ use \Chrome\Validator\Form\Element\RequiredValidator;
 use \Chrome\Validator\Form\Element\ContainsValidator;
 use \Chrome\Validator\Form\Element\AttachmentValidator;
 use \Chrome\Validator\Form\Element\SentReadonlyValidator;
-use \Chrome\Validator\Form\Element\CallbackValidator;
 use \Chrome\Validator\Form\Element\SelectMultipleValidator;
 
 /**
@@ -511,7 +511,7 @@ abstract class AbstractElement extends AbstractBasicElement implements Element_I
 
         if(($allowedValue = $this->_option->getAllowedValue()) !== null)
         {
-            $andComposition->addValidator(new ContainsValidator(array($allowedValue)));
+            $andComposition->addValidator(new ContainsValidator($allowedValue));
         }
 
         if($this->_option instanceof \Chrome\Form\Option\AttachableElement_Interface)
