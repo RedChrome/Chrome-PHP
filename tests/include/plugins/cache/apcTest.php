@@ -8,7 +8,9 @@ class APCTest extends PHPUnit_Framework_TestCase
 {
 	protected function _skipTests()
 	{
-		if(!extension_loaded('apc')) {
+	    // note that apc has the enabled cli option. Since most test are called
+	    // from cli this check might be neccessary for this test to work
+		if(!extension_loaded('apc') OR ini_get('apc.enabled_cli') == true) {
 			$this->markTestSkipped('Extension APC not loaded. Cannot test implementation');
 		}
 	}
@@ -20,12 +22,12 @@ class APCTest extends PHPUnit_Framework_TestCase
 		$config = new \Chrome\Cache\Option\Apc();
 		$config->setNamespace('testNamespace');
 		$config->setTimeToLive(0);
-	
-		$cache = new \Chrome\Cache\Apc($config);		
-			
+
+		$cache = new \Chrome\Cache\Apc($config);
+
 
 		$config->setNamespace('testNamespace2');
-		$cache2 = new \Chrome\Cache\Apc($config);		
+		$cache2 = new \Chrome\Cache\Apc($config);
 
 		$tests = array('myKey' => 'myValue',
 				'otherKey' => array(1, 4, 10),
@@ -47,12 +49,12 @@ class APCTest extends PHPUnit_Framework_TestCase
 			$this->assertFalse($cache2->has($key));
 			$this->assertNull($cache2->get($key));
 		}
-		
+
 		$cache->remove('notExisting');
 		$cache->remove('2');
 
 		$this->assertFalse($cache->has('notExisting'));
-		$this->assertFalse($cache->has('2'));			
+		$this->assertFalse($cache->has('2'));
 
 
 		$cache->clear();
@@ -67,7 +69,7 @@ class APCTest extends PHPUnit_Framework_TestCase
 		// this cannot be tested. @link{https://bugs.php.net/bug.php?id=58084}
 		$this->markTestSkipped();
 
-		$this->_skipTests();		
+		$this->_skipTests();
 
 		$config = new \Chrome\Cache\Option\Apc();
 		$config->setTimeToLive(-1);

@@ -17,15 +17,15 @@ class MemcacheTest extends PHPUnit_Framework_TestCase
 	{
 		$this->_skipTests();
 
-		$config = new \Chrome\Cache\Option\Apc();
+		$config = new \Chrome\Cache\Option\Memcache();
 		$config->setNamespace('testNamespace');
 		$config->setTimeToLive(0);
-	
-		$cache = new \Chrome\Cache\Apc($config);		
-			
+
+		$cache = new \Chrome\Cache\Memcache($config);
+
 
 		$config->setNamespace('testNamespace2');
-		$cache2 = new \Chrome\Cache\Apc($config);		
+		$cache2 = new \Chrome\Cache\Memcache($config);
 
 		$tests = array('myKey' => 'myValue',
 				'otherKey' => array(1, 4, 10),
@@ -47,12 +47,12 @@ class MemcacheTest extends PHPUnit_Framework_TestCase
 			$this->assertFalse($cache2->has($key));
 			$this->assertNull($cache2->get($key));
 		}
-		
+
 		$cache->remove('notExisting');
 		$cache->remove('2');
 
 		$this->assertFalse($cache->has('notExisting'));
-		$this->assertFalse($cache->has('2'));			
+		$this->assertFalse($cache->has('2'));
 
 
 		$cache->clear();
@@ -67,13 +67,13 @@ class MemcacheTest extends PHPUnit_Framework_TestCase
 		// this cannot be tested. @link{https://bugs.php.net/bug.php?id=58084}
 		$this->markTestSkipped();
 
-		$this->_skipTests();		
+		$this->_skipTests();
 
-		$config = new \Chrome\Cache\Option\Apc();
+		$config = new \Chrome\Cache\Option\Memcache();
 		$config->setTimeToLive(-1);
 		$config->setNamespace('TestTimeToLive');
 
-		$cache = new \Chrome\Cache\Apc($config);
+		$cache = new \Chrome\Cache\Memcache($config);
 		$cache->clear();
 
 		$tests = array('myKey' => 'myValue',

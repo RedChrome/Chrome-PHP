@@ -137,6 +137,6 @@ function setupDatabase(\Chrome\Database\Factory\Factory_Interface $databaseFacto
 
     $fileExecutor->executeSqlFiles($sqlFiles);
 
-    echo PHP_EOL.'Done.';
+    echo PHP_EOL.'Done.'.PHP_EOL;
 
 }
