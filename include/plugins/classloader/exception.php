@@ -20,6 +20,7 @@
 namespace Chrome\Classloader\Resolver;
 
 use \Chrome\Classloader\AbstractResolver;
+use Chrome\Directory_Interface;
 
 /**
  * resolves all classes beginning with 'Chrome_Require_'
@@ -39,7 +40,7 @@ class Exception extends AbstractResolver
     {
         // does the class contain 'Chrome\Exception\'?
         if(preg_match('#Chrome\\\\Exception((?:\\\\[a-z_A-Z0-9]{1,})*)\\\\([a-z_A-Z0-9]{1,})#AD', $class, $matches)) {
-            return $this->_directory->file(substr(strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php')), 1), true);
+            return $this->_directory->file(substr(strtolower(str_replace('\\', Directory_Interface::SEPARATOR, $matches[1].'/'.$matches[2].'.php')), 1), true);
         }
 
         return false;

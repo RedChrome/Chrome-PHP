@@ -20,6 +20,7 @@
 namespace Chrome\Classloader\Resolver;
 
 use \Chrome\Classloader\AbstractResolver;
+use Chrome\Directory_Interface;
 
 /**
  * resolves all classes which are contained in the namespace
@@ -35,7 +36,7 @@ class Theme extends AbstractResolver
         // match classes like Chrome\Validator\My\Sub\Namespace\MyClassNameValidator
         if(preg_match('#Chrome\\\\Design\\\\Theme\\\\([a-z_A-Z0-9]{1,})#AD', $class, $matches))
         {
-            return $this->_directory->file(strtolower(str_replace('\\', '/', $matches[1].'/theme.php')), true);
+            return $this->_directory->file(strtolower(str_replace('\\', Directory_Interface::SEPARATOR, $matches[1].'/theme.php')), true);
         }
 
         return false;

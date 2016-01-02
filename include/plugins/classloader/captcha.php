@@ -20,6 +20,7 @@
 namespace Chrome\Classloader\Resolver;
 
 use Chrome\Classloader\AbstractResolver;
+use Chrome\Directory_Interface;
 
 /**
  * Resolves all classes beginning with '\Chrome\Captcha\'
@@ -38,7 +39,7 @@ class Captcha extends AbstractResolver
     public function resolve($class)
     {
         if(preg_match('#Chrome\\\\Captcha((?:\\\\[a-z_A-Z0-9]{1,})*)\\\\([a-z_A-Z0-9]{1,})?#', $class, $matches)) {
-            return $this->_directory->file(substr(strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php')), 1), true);
+            return $this->_directory->file(substr(strtolower(str_replace('\\', Directory_Interface::SEPARATOR, $matches[1].'/'.$matches[2].'.php')), 1), true);
         }
 
         return false;

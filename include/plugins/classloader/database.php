@@ -20,6 +20,7 @@
 namespace Chrome\Classloader\Resolver;
 
 use \Chrome\Classloader\AbstractResolver;
+use Chrome\Directory_Interface;
 
 /**
  * Resolver for database classes
@@ -40,7 +41,7 @@ class Database extends AbstractResolver
     public function resolve($className)
     {
         if(preg_match('#Chrome\\\\Database((?:\\\\[a-z_A-Z0-9]{1,})*)\\\\([a-z_A-Z0-9]{1,})#AD', $className, $matches)) {
-            return $this->_directory->file(substr(strtolower(str_replace('\\', '/', $matches[1].'/'.$matches[2].'.php')), 1), true);
+            return $this->_directory->file(substr(strtolower(str_replace('\\', Directory_Interface::SEPARATOR, $matches[1].'/'.$matches[2].'.php')), 1), true);
         }
 
         return false;

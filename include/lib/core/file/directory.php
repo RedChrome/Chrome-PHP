@@ -181,6 +181,13 @@ class Directory implements Directory_Interface
 
     public function __construct($directory)
     {
+        if(defined('CHROME_DEVELOPER_STATUS') && CHROME_DEVELOPER_STATUS === true ) {
+            // TODO: Remove on production
+            if(strpos($directory, '\\') !== false) {
+                throw new \Chrome\Exception('\\ is contained in $directory. Not allowed');
+            }
+        }
+
         $array = explode(self::SEPARATOR, trim($directory));
 
         // if a filename was given too, delete it from the array

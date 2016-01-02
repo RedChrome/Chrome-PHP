@@ -20,6 +20,8 @@
 namespace Chrome\Classloader\Resolver;
 
 use \Chrome\Classloader\AbstractResolver;
+use Chrome\File_Interface;
+use Chrome\Directory_Interface;
 
 /**
  * Resolves all classes beginning with 'Chrome_Form_'
@@ -65,7 +67,7 @@ class Form extends AbstractResolver
 
         if(preg_match('#Chrome\\\\View\\\\Form\\\\Element\\\\(.{1,})#i', $class, $matches))
         {
-            return $this->_pluginDirectory->file(strtolower(str_replace('_', '/', $matches[1])) . '.php', true);
+            return $this->_pluginDirectory->file(strtolower(str_replace('\\', Directory_Interface::SEPARATOR, $matches[1])) . '.php', true);
         }
 
         if(preg_match('#Chrome\\\\Form\\\\Handler\\\\(.{1,})#i', $class, $matches))

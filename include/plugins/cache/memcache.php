@@ -153,6 +153,11 @@ class Memcache implements Cache_Interface
         $this->_adapter = $option->getAdapter();
         $this->_flag = $option->getFlag();
         $this->_expire = $option->getExpire();
+
+        if($this->_adapter === null)
+        {
+            throw new \Chrome\InvalidArgumentException('The adapter should not be null');
+        }
     }
 
     public function clear()

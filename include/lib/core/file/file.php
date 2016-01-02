@@ -153,6 +153,13 @@ class File implements File_Interface
 
     public function __construct($fileName, $ext = null)
     {
+        if(defined('CHROME_DEVELOPER_STATUS') && CHROME_DEVELOPER_STATUS === true ) {
+            // TODO: Remove on production
+            if(strpos($fileName, '\\') !== false) {
+                throw new \Chrome\Exception('\\ is contained in $$fileName. Not allowed');
+            }
+        }
+
         if($ext !== null) {
             $fileName .= '.'.$ext;
         }

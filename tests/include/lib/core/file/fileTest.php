@@ -10,7 +10,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     protected $_notExistingFileName = 'test/include/lib/core/file/notTestFile.test';
 
-    protected $_wrongFileName = 'tests/include/lib/core/~file#`´^\\!"§$%&/()=)';
+    protected $_wrongFileName = 'tests/include/lib/core/~file#`´^!"§$%&/()=)';
 
     protected function _getExistingFile()
     {
@@ -49,6 +49,13 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
         $wrongFile = $this->_getWrongFile();
         $this->assertFalse($wrongFile->exists());
+    }
+
+    public function testExceptionOnWrongFileName()
+    {
+        $this->setExpectedException('Chrome\Exception');
+
+        $file = new \Chrome\File($this->_notExistingFileName.'\\subdir.test');
     }
 
     /**

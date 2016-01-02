@@ -20,6 +20,7 @@
 namespace Chrome\Classloader\Resolver;
 
 use Chrome\Classloader\AbstractResolver;
+use Chrome\Directory_Interface;
 
 /**
  * Resolves all classes beginning with '\Chrome\Cache\'
@@ -38,10 +39,7 @@ class Cache extends AbstractResolver
     public function resolve($class)
     {
         if(preg_match('#Chrome\\\\Cache\\\\(Option\\\\)?(.{1,})(_Interface)?#', $class, $matches)) {
-
-            $matches[2] = strtolower(str_replace('\\', '/', $matches[2]));
-
-            return $this->_directory->file($matches[2].'.php', true);
+            return $this->_directory->file(strtolower(str_replace('\\', Directory_Interface::SEPARATOR, $matches[2])).'.php', true);
         }
 
         return false;
