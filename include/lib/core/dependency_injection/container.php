@@ -19,9 +19,20 @@
 
 namespace Chrome\DI;
 
+use \Chrome\DI\Exception\NotFoundException;
+use \Chrome\DI\Exception\ContainerException;
+
 require_once 'loader/loader.php';
 
-interface Container_Interface
+/**
+ * A Dependency injection container using Handlers
+ *
+ * The internal resolving logic is seperated to different dependecy injection handlers.
+ *  *
+ * @package CHROME-PHP
+ * @subpackage Chrome.DependencyInjection
+ */
+interface Container_Interface extends \Interop\Container\ContainerInterface
 {
     /**
      * Attaches a handler.
@@ -38,8 +49,6 @@ interface Container_Interface
     public function getHandler($handlerName);
 
     public function isAttached($handlerName);
-
-    public function get($key);
 
     public function remove($key);
 }
@@ -58,8 +67,19 @@ interface Handler_Interface
      */
     public function get($key, Container_Interface $container);
 
+    /**
+     * Returns true if the container can return an entry for the given identifier.
+     * Returns false otherwise.
+     *
+     * @param string $key Identifier of the entry to look for.
+     * @return boolean
+     */
+    public function has($key);
+
     public function remove($key);
 }
+
+
 
 class Container implements Container_Interface
 {
@@ -98,7 +118,7 @@ class Container implements Container_Interface
     public function getHandler($handlerName)
     {
         if(!$this->isAttached($handlerName)) {
-            throw new \Chrome\InvalidArgumentException('No handler with name "'.$handlerName.'" defined');
+            throw new ContainerException('No handler with name "'.$handlerName.'" defined');
         }
 
         return $this->_handlers[$this->_handlersNames[$handlerName]];
@@ -121,10 +141,22 @@ class Container implements Container_Interface
                 }
             }
         } catch(\Crome\Exception $e) {
-            throw new \Chrome\Exception('Could not retrieve object with key "'.$key.'". An exception occured', 0, $e);
+            throw new ContainerException('Could not retrieve object with key "'.$key.'". An exception occured', 0, $e);
         }
 
-        throw new \Chrome\Exception('Identifier "'.$key.'" is not defined');
+        throw new NotFoundException('Identifier "'.$key.'" is not defined');
+    }
+
+    public function has($key)
+    {
+        foreach($this->_handlers as $handler)
+        {
+            if($handler->has($key)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function remove($key)
@@ -133,4 +165,16 @@ class Container implements Container_Interface
             $handler->remove($key);
         }
     }
+}
+
+namespace Chrome\DI\Exception;
+
+class ContainerException extends \Chrome\Exception implements \Interop\Container\Exception\ContainerException
+{
+
+}
+
+class NotFoundException extends \Chrome\Exception implements \Interop\Container\Exception\NotFoundException
+{
+
 }

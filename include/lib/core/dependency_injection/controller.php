@@ -30,7 +30,7 @@ class Controller implements Handler_Interface
 
     public function get($key, Container_Interface $container)
     {
-        if (! is_subclass_of($key, '\Chrome\Controller\Controller_Interface')) {
+        if (!$this->has($key)) {
             return null;
         }
 
@@ -41,5 +41,10 @@ class Controller implements Handler_Interface
         }
 
         return $obj;
+    }
+
+    public function has($key)
+    {
+       return is_subclass_of($key, '\Chrome\Controller\Controller_Interface');
     }
 }

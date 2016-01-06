@@ -31,7 +31,7 @@ class Theme implements Handler_Interface
 
     public function get($key, Container_Interface $container)
     {
-        if(!is_subclass_of($key, '\Chrome\Design\Theme_Interface')) {
+        if(!$this->has($key)) {
             return null;
         }
 
@@ -39,5 +39,10 @@ class Theme implements Handler_Interface
         $instance->setApplicationContext($container->get('\Chrome\Context\Application_Interface'));
 
         return $instance;
+    }
+
+    public function has($key)
+    {
+        return is_subclass_of($key, '\Chrome\Design\Theme_Interface');
     }
 }

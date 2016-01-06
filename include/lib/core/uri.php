@@ -82,7 +82,7 @@ class URI implements URI_Interface
     {
         if($useCurrentURI === true AND $requestData !== null)
         {
-            $this->setURL('http://' . $requestData->getSERVERData('SERVER_NAME') . $requestData->getSERVERData('REQUEST_URI'));
+            $this->setURL('http://' . $requestData->getSERVERData('HTTP_HOST') . $requestData->getSERVERData('REQUEST_URI'));
         }
     }
 

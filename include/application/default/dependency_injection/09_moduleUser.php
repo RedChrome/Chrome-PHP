@@ -21,7 +21,6 @@ namespace Chrome\DI\Loader;
 
 class ModuleUser implements Loader_Interface
 {
-
     public function load(\Chrome\DI\Container_Interface $diContainer)
     {
         $closure = $diContainer->getHandler('closure');

@@ -31,7 +31,7 @@ class Model implements Handler_Interface
 
     public function get($key, Container_Interface $container)
     {
-        if(!is_subclass_of($key, '\Chrome\Model\AbstractDatabaseStatement')) {
+        if(!$this->has($key)) {
             return null;
         }
 
@@ -39,5 +39,10 @@ class Model implements Handler_Interface
         $model->setLogger($container->get('\Chrome\Logger\Model'));
 
         return $model;
+    }
+
+    public function has($key)
+    {
+        return is_subclass_of($key, '\Chrome\Model\AbstractDatabaseStatement');
     }
 }

@@ -31,10 +31,15 @@ class Validator implements Handler_Interface
 
     public function get($key, Container_Interface $container)
     {
-        if(!is_subclass_of($key, '\Chrome\Validator\Configurable\AbstractConfigurable')) {
+        if(!$this->has($key)) {
             return null;
         }
 
         return new $key($container->get('\Chrome\Config\Config_Interface'));
+    }
+
+    public function has($key)
+    {
+        return is_subclass_of($key, '\Chrome\Validator\Configurable\AbstractConfigurable');
     }
 }

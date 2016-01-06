@@ -25,14 +25,13 @@ class General implements Loader_Interface
     public function load(\Chrome\DI\Container_Interface $diContainer)
     {
         $closure = $diContainer->getHandler('closure');
-        $registry = $diContainer->getHandler('registry');
 
-        $this->_localization($closure, $registry);
-        $this->_model($closure, $registry);
-        $this->_classloader($closure, $registry);
-        $this->_cache($closure, $registry);
-        $this->_linker($closure, $registry);
-        $this->_viewFormFactory($closure, $registry);
+        $this->_localization($closure);
+        $this->_model($closure);
+        $this->_classloader($closure);
+        $this->_cache($closure);
+        $this->_linker($closure);
+        $this->_viewFormFactory($closure);
 
         $closure->add('\Chrome\Exception\Handler_Interface', function ($c)
         {
@@ -63,7 +62,7 @@ class General implements Loader_Interface
         }, true);
     }
 
-    protected function _localization($closure, $registry)
+    protected function _localization($closure)
     {
         $closure->add('\Chrome\Localization\Translate_Interface', function ($c)
         {
@@ -73,7 +72,7 @@ class General implements Loader_Interface
                 ->getTranslate();
         }, true);
 
-        $registry->add('\Chrome\Localization\Localization_Interface', function ($c)
+        $closure->add('\Chrome\Localization\Localization_Interface', function ($c)
         {
             return $c->get('\Chrome\Context\Application_Interface')
                 ->getViewContext()
@@ -81,7 +80,7 @@ class General implements Loader_Interface
         }, true);
     }
 
-    protected function _model($closure, $registry)
+    protected function _model($closure)
     {
         $closure->add('\Chrome\Model\Classloader\Model_Interface', function ($c)
         {
@@ -146,7 +145,7 @@ class General implements Loader_Interface
         }, true);
     }
 
-    protected function _classloader($closure, $registry)
+    protected function _classloader($closure)
     {
         $closure->add('\Chrome\Classloader\Resolver\Model_Interface', function ($c)
         {
@@ -194,7 +193,7 @@ class General implements Loader_Interface
         });
     }
 
-    protected function _cache($closure, $registry)
+    protected function _cache($closure)
     {
         $closure->add('\Chrome\Cache\Memory\DBStatement', function ($c)
         {
@@ -208,7 +207,7 @@ class General implements Loader_Interface
         });
     }
 
-    protected function _linker($closure, $registry)
+    protected function _linker($closure)
     {
         $closure->add('\Chrome\Linker\HTTP\Helper\Model\Static_Interface', function ($c)
         {
@@ -235,7 +234,7 @@ class General implements Loader_Interface
         }, true);
     }
 
-    protected function _viewFormFactory($closure, $registry)
+    protected function _viewFormFactory($closure)
     {
         $closure->add('\Chrome\View\Form\Element\Factory\Default', function ($c)
         {

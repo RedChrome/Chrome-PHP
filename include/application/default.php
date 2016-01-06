@@ -21,7 +21,6 @@
 namespace Chrome\Application;
 
 use Chrome\Authorisation\Adapter\Simple;
-use Recaptcher\Recaptcha;
 use Chrome\View\Plugin\Facade;
 
 /**
@@ -155,9 +154,12 @@ class DefaultApplication implements Application_Interface
         $this->_modelContext = new \Chrome\Context\Model();
         $this->_applicationContext = new \Chrome\Context\Application();
 
+        $this->_initClassloader();
+
         $this->_applicationContext->setLoggerRegistry($this->_loggerRegistry);
         $this->_applicationContext->setViewContext($viewContext);
         $this->_applicationContext->setModelContext($this->_modelContext);
+
 
         $this->_initDiContainer();
         $closureHandler = $this->_diContainer->getHandler('closure');
@@ -171,7 +173,6 @@ class DefaultApplication implements Application_Interface
         $registryHandler->add('\Chrome\View\Factory_Interface', $viewFactory);
         $registryHandler->add('\Chrome\Hash\Hash_Interface', new \Chrome\Hash\Hash());
 
-        $this->_initClassloader();
 
         $this->_initDatabase();
         $registryHandler->add('\Chrome\Database\Factory\Factory_Interface', $this->_modelContext->getDatabaseFactory());

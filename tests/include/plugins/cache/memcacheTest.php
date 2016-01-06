@@ -19,7 +19,6 @@ class MemcacheTest extends PHPUnit_Framework_TestCase
 
 		$config = new \Chrome\Cache\Option\Memcache();
 		$config->setNamespace('testNamespace');
-		$config->setTimeToLive(0);
 
 		$cache = new \Chrome\Cache\Memcache($config);
 

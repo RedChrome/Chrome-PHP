@@ -71,7 +71,6 @@ abstract class Strategy implements \Chrome\Cache\Option\Option_Interface
     }
 }
 
-
 namespace Chrome\Cache;
 
 /**
@@ -130,7 +129,6 @@ namespace Chrome\Cache\File;
 
 use Chrome\File;
 use Chrome\File_Interface;
-use Chrome\File\Modifier;
 
 /**
  * File_Strategy
