@@ -42,67 +42,56 @@ require_once LIB . 'core/core.php';
 class DefaultApplication implements Application_Interface
 {
     /**
-     *
      * @var \Chrome\Registry\Logger\Registry_Interface
      */
     protected $_loggerRegistry = null;
 
     /**
-     *
      * @var \Chrome\Context\Application_Interface
      */
     protected $_applicationContext = null;
 
     /**
-     *
      * @var \Chrome\Context\Model_Interface
      */
     protected $_modelContext = null;
 
     /**
-     *
      * @var \Chrome\Filter\Chain\Preprocessor
      */
     private $_preprocessor = null;
 
     /**
-     *
      * @var \Chrome\Filter\Chain\Postprocessor
      */
     private $_postprocessor = null;
 
     /**
-     *
      * @var \Chrome\Controller\Controller_Interface
      */
     private $_controller = null;
 
     /**
-     *
      * @var \Chrome\Router\Router_Interface
      */
     private $_router = null;
 
     /**
-     *
      * @var \Chrome\Exception\Handler_Interface
      */
     private $_exceptionHandler = null;
 
     /**
-     *
      * @var \Chrome\Exception\Configuration_Interface
      */
     private $_exceptionConfiguration = null;
 
     /**
-     *
      * @var \Chrome\Classloader\Autoloader_Interface
      */
     private $_classloader = null;
 
     /**
-     *
      * @var \Chrome\DI\Container_Interface
      */
     protected $_diContainer = null;
@@ -128,11 +117,11 @@ class DefaultApplication implements Application_Interface
         $this->_exceptionHandler = $exceptionHandler;
     }
 
-    public function init()
+    public function init(Application_Interface $app = null)
     {
         try
         {
-            $this->_init();
+            $this->_init($app);
         } catch(\Chrome\Exception $e)
         {
             $this->_exceptionHandler->exception($e);
@@ -144,7 +133,7 @@ class DefaultApplication implements Application_Interface
      *
      * @return void
      */
-    protected function _init()
+    protected function _init(Application_Interface $app = null)
     {
         $this->_exceptionConfiguration = new \Chrome\Exception\Configuration();
         $this->_exceptionConfiguration->setExceptionHandler($this->_exceptionHandler);
@@ -167,6 +156,7 @@ class DefaultApplication implements Application_Interface
         $registryHandler->add('\Chrome\Context\View_Interface', $viewContext);
         $registryHandler->add('\Chrome\Context\Model_Interface', $this->_modelContext);
         $registryHandler->add('\Chrome\Context\Application_Interface', $this->_applicationContext);
+        $registryHandler->add('\Chrome\Registry\Logger\Registry_Interface', $this->_loggerRegistry);
 
         $viewFactory = new \Chrome\View\Factory($this->_diContainer);
         $viewContext->setFactory($viewFactory);
@@ -177,7 +167,7 @@ class DefaultApplication implements Application_Interface
         $this->_initDatabase();
         $registryHandler->add('\Chrome\Database\Factory\Factory_Interface', $this->_modelContext->getDatabaseFactory());
 
-        require_once LIB . 'core/classloader/model.php';
+        require_once LIB.'core/classloader/model.php';
         require_once LIB.'core/database/facade/model.php';
 
         // init require-class, can be skipped if every class is defined
@@ -186,7 +176,7 @@ class DefaultApplication implements Application_Interface
         $this->_initConfig();
         $registryHandler->add('\Chrome\Config\Config_Interface', $this->_applicationContext->getConfig());
 
-        $this->_initRequestAndResponse();
+        $this->_initRequestAndResponse($app);
 
         // startup filters
         $this->_preprocessor = new \Chrome\Filter\Chain\Preprocessor();
@@ -200,7 +190,10 @@ class DefaultApplication implements Application_Interface
         $pluginFacade = new \Chrome\View\Plugin\Facade();
 	// TODO: remove pluginc facade
         $viewContext->setPluginFacade($pluginFacade);
-        $viewContext->setLinker($this->_diContainer->get('\Chrome\Linker\Linker_Interface'));
+
+        $linker = $this->_diContainer->get('\Chrome\Linker\Linker_Interface');
+        //$linker->setBasepath(ROOT_URL);
+        $viewContext->setLinker($linker);
 
         /**
          * @todo remove them from here
@@ -222,14 +215,14 @@ class DefaultApplication implements Application_Interface
         try
         {
             // get the accessed resource by Router
-            $resource = $this->_router->route(new \Chrome\URI\URI($this->_applicationContext->getRequestHandler()->getRequestData(), true), $this->_applicationContext->getRequestHandler()->getRequestData());
+            $resource = $this->_router->route($this->_applicationContext->getRequestContext()->getRequest());
 
             $this->_classloader->load($resource->getClass());
             $this->_controller = $this->_diContainer->get($resource->getClass());
 
             $this->_controller->setExceptionHandler(new \Chrome\Exception\Handler\HtmlStackTrace());
 
-            $this->_preprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
+            $this->_preprocessor->processFilters($this->_applicationContext->getRequestContext()->getRequest(), $this->_applicationContext->getResponse());
 
             $this->_controller->execute();
 
@@ -237,7 +230,7 @@ class DefaultApplication implements Application_Interface
 
             $this->_applicationContext->getResponse()->write($design->render());
 
-            $this->_postprocessor->processFilters($this->_applicationContext->getRequestHandler()->getRequestData(), $this->_applicationContext->getResponse());
+            $this->_postprocessor->processFilters($this->_applicationContext->getRequestContext()->getRequest(), $this->_applicationContext->getResponse());
 
             $this->_applicationContext->getResponse()->flush();
         } catch(\Chrome\Exception $e)
@@ -290,7 +283,9 @@ class DefaultApplication implements Application_Interface
     {
         if($locale === null)
         {
-            $locale = $this->_applicationContext->getRequestHandler()->getRequestData()->getSERVERData('HTTP_ACCEPT_LANGUAGE');
+            $serverData = $this->_applicationContext->getRequestContext()->getRequest()->getServerParams();
+
+            $locale = isset($serverData['HTTP_ACCEPT_LANGUAGE']) ? $serverData['HTTP_ACCEPT_LANGUAGE'] : null;
 
             if($locale === null)
             {
@@ -381,9 +376,9 @@ class DefaultApplication implements Application_Interface
 
     protected function _initAuthenticationAndAuthorisation()
     {
-        $requestData = $this->_applicationContext->getRequestHandler()->getRequestData();
-        $cookie = $requestData->getCookie();
-        $session = $requestData->getSession();
+        $requestContext = $this->_applicationContext->getRequestContext();
+        $cookie = $requestContext->getCookie();
+        $session = $requestContext->getSession();
 
         // setting up authentication, authorisation service
         $handler = new \Chrome\Exception\Handler\Authentication();
@@ -418,41 +413,27 @@ class DefaultApplication implements Application_Interface
         $this->_applicationContext->setAuthorisation($authorisation);
     }
 
-    protected function _initRequestAndResponse()
+    protected function _initRequestAndResponse(Application_Interface $app = null)
     {
-        // distinct which request is sent
-        $requestFactory = new \Chrome\Request\Factory();
-        // set up the available request handler
+        $request = null;
 
-        // watch out for the right order you add those handlers,
-        // the more stricter handlers are the first, which get added, the less stricter are the last
-        // the last one should _always_ return true in canHandleRequest
-        // $request->addRequestObject();
-        // this handler is always capable of handling a request, so it always returns true in canHandleRequest
-        $hash = $this->_diContainer->get('\Chrome\Hash\Hash_Interface');
-        $requestFactory->addRequestObject(new \Chrome\Request\Handler\HTTPHandler($hash, new \Chrome\Directory(TMP.CHROME_SESSION_SAVE_PATH)));
-        #$requestFactory->addRequestObject(new \Chrome\Request\Handler\ConsoleHandler($hash));
+        if($app !== null) {
+            $context = $app->getApplicationContext()->getRequestContext();
+            if($context !== null) {
+                $request = $context->getRequest();
+            }
+        }
 
-        $reqHandler = $requestFactory->getRequest();
-        $this->_applicationContext->setRequestHandler($requestFactory->getRequest());
+        if($request === null) {
+            $request = $this->_diContainer->get('\Psr\Http\Message\ServerRequestInterface');
+        }
 
-        // distinct which response gets send
-        $responseFactory = new \Chrome\Response\Factory();
-        // set up the available response handlers
-
-        $responseFactory->addResponseHandler(new \Chrome\Response\Handler\JSONHandler($reqHandler));
-        $responseFactory->addResponseHandler(new \Chrome\Response\Handler\HTTPHandler($reqHandler));
-        #$responseFactory->addResponseHandler(new \Chrome\Response\Handler\ConsoleHandler($reqHandler));
-
-        $response = $responseFactory->getResponse();
-        $this->_applicationContext->setResponse($response);
+        $this->_applicationContext->setRequestContext($this->_diContainer->get('\Chrome\Request\RequestContext_Interface'));
+        $this->_applicationContext->setResponse(new \Chrome\Response\HTTP($request->getServerParams()['SERVER_PROTOCOL']));
     }
 
     protected function _initConfig()
     {
-        // configuration
-        $closure = $this->_diContainer->getHandler('closure');
-
         $config = new \Chrome\Config\Config($this->_diContainer->get('\Chrome\Model\Config'));
         $this->_applicationContext->setConfig($config);
     }
@@ -461,6 +442,7 @@ class DefaultApplication implements Application_Interface
     {
         $this->_router = new \Chrome\Router\Router();
         $this->_router->setExceptionHandler(new \Chrome\Exception\Handler\HtmlStackTrace());
+        $this->_router->setBasepath(ROOT_URL);
         // enable route matching
 
         $routerLogger = $this->_loggerRegistry->get('router');
@@ -504,6 +486,9 @@ class DefaultApplication implements Application_Interface
 	    require_once LIB . 'core/dependency_injection/view.php';
         require_once LIB . 'core/dependency_injection/theme.php';
 
+        #require_once LIB . 'core/dependency_injection/invoker/loggable.php';
+        require_once LIB . 'core/dependency_injection/invoker/processable.php';
+
         $this->_diContainer->attachHandler('registry', new \Chrome\DI\Handler\Registry());
         $this->_diContainer->attachHandler('closure', new \Chrome\DI\Handler\Closure());
         $this->_diContainer->attachHandler('controller', new \Chrome\DI\Handler\Controller());
@@ -511,6 +496,9 @@ class DefaultApplication implements Application_Interface
 	    $this->_diContainer->attachHandler('view', new \Chrome\DI\Handler\Validator());
 	    $this->_diContainer->attachHandler('validator', new \Chrome\DI\Handler\View());
         $this->_diContainer->attachHandler('theme', new \Chrome\DI\Handler\Theme());
+
+        #$this->_diContainer->attachInvoker('loggable', new \Chrome\DI\Invoker\LoggableInterfaceInvoker());
+        $this->_diContainer->attachInvoker('processable', new \Chrome\DI\Invoker\ProcessableInterfaceInvoker());
 
         $structuredDirectoryLoader = new \Chrome\DI\Loader\StructuredDirectory(new \Chrome\Directory(BASEDIR.'application/default/dependency_injection'));
         $structuredDirectoryLoader->setLogger($this->_loggerRegistry->get('application'));

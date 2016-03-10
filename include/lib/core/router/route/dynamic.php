@@ -45,9 +45,11 @@ class DynamicRoute extends AbstractRoute
 
     private $_resourceID = null;
 
-    public function match(\Chrome\URI\URI_Interface $url, \Chrome\Request\Data_Interface $data)
+    public function match(\Psr\Http\Message\ServerRequestInterface $request, $normalizedPath)
     {
-        $array = explode('/', $url->getPath(), self::CHROME_ROUTE_REGEX_MAX_LEVEL);
+
+
+        $array = explode('/', $request->getUri()->getPath(), self::CHROME_ROUTE_REGEX_MAX_LEVEL);
 
         if(count($array) <= 1)
         {
@@ -69,6 +71,7 @@ class DynamicRoute extends AbstractRoute
 
             $this->_result = new \Chrome\Router\Result();
             $this->_result->setClass($resource['class']);
+            $this->_result->setRequest($this->_applyGetAndPost($request, $resource['GET'], $resource['POST']));
 
             return true;
         } else

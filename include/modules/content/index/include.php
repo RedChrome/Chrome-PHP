@@ -24,7 +24,7 @@ class Index extends \Chrome\Form\AbstractForm
         $textValidators->addValidators(array($emptyValidator, $lengthValidator));
 
         // form
-        $storageSession = new \Chrome\Form\Storage\Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
+        $storageSession = new \Chrome\Form\Storage\Session($this->_applicationContext->getRequestContext()->getSession(), $this->_id);
         $formElementOption = new \Chrome\Form\Option\Element\Form($storageSession);
         $formElementOption->setMaxAllowedTime(30)->setMinAllowedTime(1);
 

@@ -29,9 +29,6 @@ require_once 'include/config.php';
 require_once 'include/application/default.php';
 require_once 'tests/phpUnit/dbsetup.php';
 require_once 'tests/phpUnit/testsetup.php';
-// TODO: fix Request Console Handler
-#$application = new \Chrome\Application\DefaultApplication();
-#$application->init();
 
 $app = new \Test\Chrome\TestSetup();
 $app->testDb();

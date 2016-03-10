@@ -8,21 +8,25 @@ class Simple
     {
         require_once LIB.'captcha/captcha.php';
 
-        $requestData =  $appContext->getRequestHandler()->getRequestData();
-        $session = $requestData->getSession();
+        $requestData =  $appContext->getRequestContext()->getRequest();
+        $session = $appContext->getRequestContext()->getSession();
 
-        $key = $session['CAPTCHA_'.$requestData->getGETData('name')];
+        try {
+            $key = $session['CAPTCHA_'.$requestData->getQueryParams()['name']];
+        } catch(\Chrome\Exception $e) {
+            $key = null;
+        }
 
         if($key === null) {
             return null;
         }
 
-        if($requestData->getGETData('renew') !== null) {
+        if(isset($requestData->getQueryParams()['renew'])) {
 
-            $captcha = new \Chrome\Captcha\Captcha($requestData->getGETData('name'), $appContext, array(), array());
+            $captcha = new \Chrome\Captcha\Captcha($requestData->getQueryParams()['name'], $appContext, array(), array());
 
             $captcha->renew();
-            $key = $session['CAPTCHA_'.$requestData->getGETData('name')];
+            $key = $session['CAPTCHA_'.$requestData->getQueryParams()['name']];
 
             if($key === null) {
                 return null;

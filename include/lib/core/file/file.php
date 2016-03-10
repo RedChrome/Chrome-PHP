@@ -106,7 +106,9 @@ interface File_Interface
      * @param int $offset The offset where the reading starts on the original stream.
      * @param int $maxlen Maximum length of data read. -1 reads until end of file.
      *
-     * @return string
+     * Returns false if there was an error
+     *
+     * @return string|bool
      */
     public function getContent($offset = -1, $maxlen = -1);
 
@@ -176,7 +178,8 @@ class File implements File_Interface
     {
         if($this->_exists === null) {
             try {
-                $this->_exists = (@filetype($this->_fileName) === 'file');
+                $this->_exists = @file_exists($this->_fileName);
+                //$this->_exists = (@filetype($this->_fileName) === 'file');
             } catch(\Chrome\Exception $exp) {
                 $this->_exists = false;
             }

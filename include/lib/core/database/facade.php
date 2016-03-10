@@ -183,6 +183,8 @@ interface Decorator_Interface extends Facade_Interface
 
 abstract class AbstractFacade implements Facade_Interface
 {
+    use \Chrome\Logger\LoggableTrait;
+
     protected $_query = null;
 
     protected $_adapter = null;
@@ -194,8 +196,6 @@ abstract class AbstractFacade implements Facade_Interface
     protected $_sentQuery = null;
 
     protected $_statementRegistry = null;
-
-    protected $_logger = null;
 
     public function __construct(\Chrome\Database\Adapter\Adapter_Interface $adapter, \Chrome\Database\Result\Result_Interface $result, \Chrome\Database\Registry\Statement_Interface $statementRegistry)
     {
@@ -332,16 +332,6 @@ abstract class AbstractFacade implements Facade_Interface
         }
 
         return vsprintf($statement, $this->_params);
-    }
-
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->_logger = $logger;
-    }
-
-    public function getLogger()
-    {
-        return $this->_logger;
     }
 }
 

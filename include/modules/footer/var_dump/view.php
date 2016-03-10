@@ -51,9 +51,7 @@ class VarDump extends \Chrome\View\AbstractView
             <tr><td>SESSION</td><td>'.$this->exportArray($this->_session->get(null)).'</td></tr>
             <tr><td>SERVER</td><td>'.$this->exportArray($data['SERVER']).'</td></tr>
 
-            <tr><td>REQUEST</td><td>'.$this->exportArray($data['REQUEST']).'</td></tr>
-
-            <tr><td>ENV</td><td>'.$this->exportArray($data['ENV']).'</td></tr>
+            <tr><td>HEADERS</td><td>'.$this->exportArray($data['HEADERS']).'</td></tr>
 
         </table>';
     }

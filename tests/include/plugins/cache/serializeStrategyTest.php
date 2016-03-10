@@ -2,8 +2,6 @@
 
 namespace Test\Chrome\Cache;
 
-use Mockery as M;
-
 class SerializeStrategyTest extends JsonStrategyTest
 {
     protected function _getOption()

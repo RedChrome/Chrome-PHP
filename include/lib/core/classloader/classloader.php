@@ -182,23 +182,13 @@ class Autoloader implements Autoloader_Interface
  */
 class Classloader implements Classloader_Interface
 {
-    /**
-     *
-     * @var \Chrome\Exception\Handler_Interface
-     */
-    protected $_exceptionHandler = null;
+    use \Chrome\Exception\ProcessableTrait, \Chrome\Logger\LoggableTrait;
 
     /**
      *
      * @var string
      */
     protected $_currentWorkingDir = '';
-
-    /**
-     *
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $_logger = null;
 
     /**
      *
@@ -404,25 +394,5 @@ class Classloader implements Classloader_Interface
         } else {
             return $class;
         }
-    }
-
-    public function setExceptionHandler(\Chrome\Exception\Handler_Interface $handler)
-    {
-        $this->_exceptionHandler = $handler;
-    }
-
-    public function getExceptionHandler()
-    {
-        return $this->_exceptionHandler;
-    }
-
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->_logger = $logger;
-    }
-
-    public function getLogger()
-    {
-        return $this->_logger;
     }
 }

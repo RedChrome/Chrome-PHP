@@ -40,21 +40,15 @@ class DefaultTestApplication extends \Chrome\Application\DefaultApplication
 
     protected function _initRequestAndResponse()
     {
-        // distinct which request is sent
-        $requestFactory = new \Chrome\Request\Factory();
-        // set up the available request handler
+        $hash = $this->_diContainer->get('\Chrome\Hash\Hash');
 
-        $hash = new \Chrome\Hash\Hash();
-        $requestFactory->addRequestObject(new \Chrome\Request\Handler\ConsoleHandler($hash, new \Chrome\Directory(TMP.CHROME_SESSION_SAVE_PATH)));
+        $request = \Zend\Diactoros\ServerRequestFactory::fromGlobals(array_merge($_SERVER, array('HTTP_USER_AGENT' => 'Chrome', 'REMOTE_ADDR' => '127.0.0.1')), $_GET, $_POST, $_COOKIE, $_FILES);
+        $cookie = new \Chrome\Request\Cookie\Cookie($request, $hash);
+        $session = new \Chrome\Request\Session\Session($cookie, $request, $hash, new \Chrome\Directory(TMP.CHROME_SESSION_SAVE_PATH));
 
-        $reqHandler = $requestFactory->getRequest();
-        $this->_applicationContext->setRequestHandler($requestFactory->getRequest());
+        $this->_applicationContext->setRequestContext(new \Chrome\Request\Context($request, $cookie, $session));
 
-        $responseFactory = new \Chrome\Response\Factory();
-
-        $responseFactory->addResponseHandler(new \Chrome\Response\Handler\ConsoleHandler($reqHandler));
-
-        $response = $responseFactory->getResponse();
+        $response = new \Chrome\Response\Console();
         $this->_applicationContext->setResponse($response);
     }
 

@@ -87,11 +87,13 @@ class Html extends AbstractPlugin
 
     public function addCSS(\Chrome\View\View_Interface $obj, Resource_Interface $resource)
     {
+        die();
         $this->_CSS[] =  $this->_applicationContext->getDiContainer()->get('\Chrome\Linker\Linker_Interface')->get($resource);
     }
 
     public function setCSS(\Chrome\View\View_Interface $obj, array $css)
     {
+        die(var_dump(debug_backtrace()));
         $this->_CSS = $css;
     }
 

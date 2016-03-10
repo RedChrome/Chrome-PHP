@@ -50,7 +50,7 @@ require_once LIB.'core/response/response.php';
 /**
  * load URI class
  */
-require_once LIB.'core/uri.php';
+#require_once LIB.'core/uri.php';
 
 /**
  * load application interfaces
@@ -128,7 +128,7 @@ class ResourceApplication implements \Chrome\Application\Application_Interface
      *
      * @return void
      */
-    public function init()
+    public function init(Application_Interface $app = null)
     {
         $this->_exceptionConfiguration = new \Chrome\Exception\Configuration();
         $this->_exceptionConfiguration->setExceptionHandler($this->_exceptionHandler);
@@ -141,30 +141,37 @@ class ResourceApplication implements \Chrome\Application\Application_Interface
         $this->_applicationContext->setViewContext($viewContext);
         $this->_applicationContext->setModelContext($this->_modelContext);
 
-        // distinct which request is sent
-        $requestFactory = new \Chrome\Request\Factory();
-        // set up the available request handler
-
-        require_once LIB . 'core/request/request/http.php';
+        #require_once LIB . 'core/request/request/http.php';
         require_once LIB . 'core/response/response/http.php';
 
-        $requestFactory->addRequestObject(new \Chrome\Request\Handler\HTTPHandler(new \Chrome\Hash\Hash(), new \Chrome\Directory(TMP.CHROME_SESSION_SAVE_PATH)));
+        $hash = new \Chrome\Hash\Hash();
 
-        $reqHandler = $requestFactory->getRequest();
-        $requestData = $requestFactory->getRequestDataObject();
+        $request = \Zend\Diactoros\ServerRequestFactory::fromGlobals($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES);
+        $cookie = new \Chrome\Request\Cookie\Cookie($request, $hash);
+        $session = new \Chrome\Request\Session\Session($cookie, $request, $hash, new \Chrome\Directory(TMP.CHROME_SESSION_SAVE_PATH));
+
+        $this->_applicationContext->setRequestContext(new \Chrome\Request\Context($request, $cookie, $session));
+
+        $response = new \Chrome\Response\HTTP($request->getServerParams()['SERVER_PROTOCOL']);
+        $this->_applicationContext->setResponse($response);
+
+        #$requestFactory->addRequestObject(new \Chrome\Request\Handler\HTTPHandler(new \Chrome\Hash\Hash(), new \Chrome\Directory(TMP.CHROME_SESSION_SAVE_PATH)));
+
+       # $reqHandler = $requestFactory->getRequest();
+        #$requestData = $requestFactory->getRequestDataObject();
 
         $this->_initClassloader();
 
-        $this->_applicationContext->setRequestHandler($reqHandler);
-        $session = $requestData->getSession();
-        $cookie = $requestData->getCookie();
+       # $this->_applicationContext->setRequestHandler($reqHandler);
+        #$session = $requestData->getSession();
+        #$cookie = $requestData->getCookie();
 
-        $responseFactory = new \Chrome\Response\Factory();
+        #$responseFactory = new \Chrome\Response\Factory();
 
-        $responseFactory->addResponseHandler(new \Chrome\Response\Handler\HTTPHandler($reqHandler));
+        #$responseFactory->addResponseHandler(new \Chrome\Response\Handler\HTTPHandler($reqHandler));
 
-        $response = $responseFactory->getResponse();
-        $this->_applicationContext->setResponse($response);
+        #$response = $responseFactory->getResponse();
+        #$this->_applicationContext->setResponse($response);
     }
 
     protected function _initClassloader()

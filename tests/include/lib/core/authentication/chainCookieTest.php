@@ -164,7 +164,7 @@ class CookieTest extends \Test\Chrome\TestCase
      */
     public function testAuthenticateWithDefaultCookieInterface()
     {
-        $this->_options['cookie_instance'] = $this->_appContext->getRequestHandler()->getRequestData()->getCookie();
+        $this->_options['cookie_instance'] = $this->_appContext->getRequestContext()->getCookie();
         $this->_resetCookie = false;
         $this->setUp();
         $this->testUpdate();

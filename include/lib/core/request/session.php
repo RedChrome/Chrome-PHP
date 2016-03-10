@@ -105,7 +105,6 @@ namespace Chrome\Request\Session;
 
 use \Chrome\Request\Session_Interface;
 use \Chrome\Hash\Hash_Interface;
-use \Chrome\Request\Data_Interface;
 use \Chrome\Request\Cookie_Interface;
 
 /**
@@ -181,9 +180,9 @@ class Session implements Session_Interface
     /**
      * The request data
      *
-     * @var \Chrome\Request\Data_Interface
+     * @var \Psr\Http\Message\ServerRequestInterface
      */
-    protected $_requestData = null;
+    protected $_request = null;
 
     /**
      * Directory to the saved sessions
@@ -197,11 +196,11 @@ class Session implements Session_Interface
      *
      * @return Chrome_Session
      */
-    public function __construct(Cookie_Interface $cookie, Data_Interface $requestData, Hash_Interface $hash, \Chrome\Directory_Interface $path)
+    public function __construct(Cookie_Interface $cookie, \Psr\Http\Message\ServerRequestInterface $request, Hash_Interface $hash, \Chrome\Directory_Interface $path)
     {
         $this->_cookie = $cookie;
         $this->_hash   = $hash;
-        $this->_requestData = $requestData;
+        $this->_request = $request;
 
         // garbace collector should never run... we have an own implementation
         @ini_set('session.gc_probability', 0);
@@ -363,8 +362,8 @@ class Session implements Session_Interface
         // create new ID AND salt
         $uniqid = $this->_hash->hash(uniqid(mt_rand(), true));
         $salt = $this->_hash->hash(uniqid(mt_rand(), true));
-        $userAgent = $this->_hash->hash($this->_requestData->getSERVERData('HTTP_USER_AGENT'), $salt);
-        $remoteAddr = $this->_hash->hash($this->_requestData->getSERVERData('REMOTE_ADDR'), $salt);
+        $userAgent = $this->_hash->hash($this->_request->getServerParams()['HTTP_USER_AGENT'], $salt);
+        $remoteAddr = $this->_hash->hash($this->_request->getServerParams()['REMOTE_ADDR'], $salt);
 
         // start session AND set cookie
         session_id($uniqid);
@@ -395,8 +394,8 @@ class Session implements Session_Interface
         // create new ID and salt
         $uniqid = $this->_hash->hash(uniqid(mt_rand(), true));
         $salt = $this->_hash->hash(uniqid(mt_rand(), true));
-        $userAgent = $this->_hash->hash($this->_requestData->getSERVERData('HTTP_USER_AGENT'), $salt);
-        $remoteAddr = $this->_hash->hash($this->_requestData->getSERVERData('REMOTE_ADDR'), $salt);
+        $userAgent = $this->_hash->hash($this->_request->getServerParams()['HTTP_USER_AGENT'], $salt);
+        $remoteAddr = $this->_hash->hash($this->_request->getServerParams()['REMOTE_ADDR'], $salt);
 
         // start session AND set cookie
         session_id($uniqid);

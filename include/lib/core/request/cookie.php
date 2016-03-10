@@ -95,7 +95,6 @@ interface Cookie_Interface extends \ArrayAccess
 namespace Chrome\Request\Cookie;
 
 use \Chrome\Request\Cookie_Interface;
-use \Chrome\Request\Data_Interface;
 use \Chrome\Hash\Hash_Interface;
 
 /**
@@ -143,24 +142,20 @@ class Cookie implements Cookie_Interface
     /**
      * The request data
      *
-     * @var \Chrome\Request\Data_Interface
+     * @var \Psr\Http\Message\ServerRequestInterface
      */
-    protected $_requestData = null;
+    protected $_request = null;
 
     /**
      * Chrome_cookie::__construct()
      *
      * @return Chrome_cookie
      */
-    public function __construct(Data_Interface $requestData, Hash_Interface $hash)
+    public function __construct(\Psr\Http\Message\ServerRequestInterface $request, Hash_Interface $hash)
     {
         $this->_hash = $hash;
-        $this->_requestData = $requestData;
-        $this->_cookie = $requestData->getCOOKIEData();
-
-        if(!is_array($this->_cookie)) {
-            $this->_cookie = array();
-        }
+        $this->_request = $request;
+        $this->_cookie = $request->getCookieParams();
 
         $this->_validateCookie();
     }
@@ -266,7 +261,6 @@ class Cookie implements Cookie_Interface
     }
 
     /**
-     *
      * Creates a validation code AND returns this
      * The code should always be the same for the same user, (so no timestamp OR anything like that!)
      *
@@ -279,9 +273,10 @@ class Cookie implements Cookie_Interface
         }
 
         // you can modifie this, so you get a better protection against session hijacking
+        $serverData = $this->_request->getServerParams();
+        $agent = isset($serverData['HTTP_USER_AGENT']) ? $serverData['HTTP_USER_AGENT'] : '123';
 
-        $serverData = $this->_requestData->getSERVERData('HTTP_USER_AGENT');
-        $string = 'random_string.' . $serverData . $serverData{2} . $serverData{0};
+        $string = 'random_string.' . $agent . $agent{2} . $agent{0};
 
         $this->_validationCode  = $this->_hash->hash($string);
 

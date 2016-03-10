@@ -20,17 +20,32 @@
 
 namespace Chrome\Router;
 
-use \Chrome\URI\URI_Interface;
 /**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-interface Router_Interface extends \Chrome\Router\Route\Route_Interface, \Chrome\Exception\Processable_Interface
+interface Router_Interface extends \Chrome\Exception\Processable_Interface
 {
-    public function route(URI_Interface $url, \Chrome\Request\Data_Interface $data);
+    /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @return Result_Interface
+     */
+    public function route(\Psr\Http\Message\ServerRequestInterface $request);
 
     public function addRoute(\Chrome\Router\Route\Route_Interface $obj);
+
+    /**
+     * Sets the base path for routing.
+     *
+     * @param string $basepath
+     */
+    public function setBasepath($basepath);
+
+    /**
+     * @return \Chrome\Router\Result_Interface
+     */
+    public function getResult();
 }
 
 /**
@@ -43,6 +58,8 @@ interface Result_Interface
     public function setClass($class);
 
     public function getClass();
+
+    public function getRequest();
 }
 
 /**
@@ -54,6 +71,11 @@ class Result implements Result_Interface
 {
     protected $_class = null;
 
+    /**
+     * @var \Psr\Http\Message\ServerRequestInterface
+     */
+    protected $_request = null;
+
     public function __construct()
     {
     }
@@ -63,9 +85,19 @@ class Result implements Result_Interface
         $this->_class = $class;
     }
 
+    public function setRequest(\Psr\Http\Message\ServerRequestInterface $request)
+    {
+        $this->_request = $request;
+    }
+
     public function getClass()
     {
         return $this->_class;
+    }
+
+    public function getRequest()
+    {
+        return $this->_request;
     }
 }
 
@@ -76,34 +108,42 @@ class Result implements Result_Interface
  */
 class Router implements Router_Interface
 {
+    use \Chrome\Exception\ProcessableTrait;
+
     protected $_routeInstance = null;
     protected $_routerClasses = array();
     protected $_result = null;
-    protected $_exceptionHandler = null;
+    protected $_basepath = '';
 
     public function __construct()
     {
     }
 
-    public function match(URI_Interface $url, \Chrome\Request\Data_Interface $data)
+    public function setBasepath($basepath)
     {
-        if($this->_doMatch($url, $data) !== true OR !$this->_isSuccessfullyMatched()) {
+        $this->_basepath = (string) $basepath;
+    }
+
+    /*
+    public function match(\Psr\Http\Message\ServerRequestInterface $request)
+    {
+        if($this->_doMatch($request) !== true OR !$this->_isSuccessfullyMatched()) {
             // this should not happen. The application should set always a route handler which does always find a route. -> FallbackRoute
             throw new \Chrome\Exception('Could match given url', 2001);
         }
     }
-
+    */
     protected function _isSuccessfullyMatched()
     {
         return $this->_result != null AND ($this->_result instanceof \Chrome\Router\Result_Interface);
     }
 
-    protected function _doMatch(URI_Interface $url, \Chrome\Request\Data_Interface $data)
+    protected function _doMatch(\Psr\Http\Message\ServerRequestInterface $request, $normalizedPath)
     {
         try {
             foreach($this->_routerClasses as $router)
             {
-                if($router->match($url, $data) === true)
+                if($router->match($request, $normalizedPath) === true)
                 {
                     $this->_result = $router->getResult();
                     return true;
@@ -117,14 +157,12 @@ class Router implements Router_Interface
         return false;
     }
 
-    public function route(URI_Interface $url, \Chrome\Request\Data_Interface $data)
+    public function route(\Psr\Http\Message\ServerRequestInterface $request)
     {
         // replace ROOT,
-        $path = ltrim(preg_replace('#\A' . ROOT_URL . '#', '', '/'.$url->getPath()), '/');
-        #var_dump($url, $path, $data->getGETData());
-        $url->setPath($path);
+        $path = preg_replace('#\A' . $this->_basepath . '#', '', $request->getUri()->getPath());
 
-        $this->match($url, $data);
+        $this->_doMatch($request, $path);
 
         return $this->_result;
     }
@@ -138,16 +176,6 @@ class Router implements Router_Interface
     {
         $this->_routerClasses[] = $obj;
     }
-
-    public function setExceptionHandler(\Chrome\Exception\Handler_Interface $obj)
-    {
-        $this->_exceptionHandler = $obj;
-    }
-
-    public function getExceptionHandler()
-    {
-        return $this->_exceptionHandler;
-    }
 }
 
 
@@ -155,7 +183,6 @@ namespace Chrome\Router\Route;
 
 use \Chrome\Logger\Loggable_Interface;
 use \Psr\Log\LoggerInterface;
-use \Chrome\URI\URI_Interface;
 
 /**
  *
@@ -164,7 +191,7 @@ use \Chrome\URI\URI_Interface;
  */
 interface Route_Interface
 {
-    public function match(URI_Interface $url, \Chrome\Request\Data_Interface $data);
+    public function match(\Psr\Http\Message\ServerRequestInterface $request, $normalizedPath);
 
     /**
      * @return \Chrome\Router\Result_Interface
@@ -175,7 +202,8 @@ interface Route_Interface
 
 abstract class AbstractRoute implements Route_Interface, Loggable_Interface
 {
-    protected $_logger = null;
+    use \Chrome\Logger\LoggableTrait;
+
     protected $_model = null;
     protected $_result = null;
 
@@ -185,18 +213,21 @@ abstract class AbstractRoute implements Route_Interface, Loggable_Interface
         $this->setLogger($logger);
     }
 
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->_logger = $logger;
-    }
-
-    public function getLogger()
-    {
-        return $this->_logger;
-    }
-
     public function getResult()
     {
         return $this->_result;
+    }
+
+    protected function _applyGetAndPost(\Psr\Http\Message\ServerRequestInterface $request, $get, $post)
+    {
+        if($get !== null) {
+            $request = $request->withQueryParams($get);
+        }
+
+        if($post !== null) {
+            $request = $request->withParsedBody($post);
+        }
+
+        return $request;
     }
 }

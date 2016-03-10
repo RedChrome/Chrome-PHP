@@ -23,22 +23,19 @@ use \Chrome\Linker\Linker_Interface;
 
 class RelativeHelper implements Helper_Interface
 {
-    public function linkByResource(Resource_Interface $resource, Linker_Interface $linker)
+    public function getLink(\Chrome\Resource\Resource_Interface $resource, Linker_Interface $linker)
     {
-        if(strpos($resource->getName(), 'rel:') === 0) {
-            // strlen("rel:") = 4
-            return array('link' => substr($resource->getName(), 4));
-        } else if(strpos($resource->getName(), 'relative:') === 0) {
-            // strlen("relative:") = 9
-            return array('link' => substr($resource->getName(), 9));
-        } else {
-            return false;
-        }
-    }
+        if($resource instanceof \Chrome\Resource\Relative_Interface) {
 
-    public function linkById($resourceId)
-    {
-        return false;
+            $uri = $linker->getReferenceUri();
+            $path = $uri->getPath();
+
+            $new = $uri->withPath($path.$resource->getRelative());
+
+            return new \Chrome\Linker\Link($new->__toString());
+        }
+
+        return null;
     }
 }
 
@@ -46,10 +43,20 @@ namespace Chrome\Resource;
 
 interface Relative_Interface extends Resource_Interface
 {
-
+    public function getRelative();
 }
 
-class Relative extends Resource
+class Relative extends Resource implements Relative_Interface
 {
+    protected $_rel = '';
 
+    public function __construct($relative)
+    {
+        $this->_rel = $relative;
+    }
+
+    public function getRelative()
+    {
+        return $this->_rel;
+    }
 }

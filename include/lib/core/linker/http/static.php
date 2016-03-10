@@ -33,19 +33,26 @@ class StaticHelper implements Helper_Interface
         $this->_resourceModel = $resourceModel;
     }
 
+    public function getLink(Resource_Interface $resource, Linker_Interface $linker)
+    {
+        return new \Chrome\Linker\Link((string) $resource->getId());
+    }
+
     public function linkByResource(Resource_Interface $resource, Linker_Interface $linker)
     {
+        return false;
+
         if($resource instanceof \Chrome\Resource\Static_Interface) {
             return array('link' => $this->_resourceModel->getLinkByResource($resource));
         }
 
-        if(strpos($resource->getName(), 'static:') === 0) {
+        if(strpos($resource->getId(), 'static:') === 0) {
 
             $resourceClone = clone $resource;
 
             // remove "static:"
             // strlen("static:") = 7
-            $resourceClone->setName(substr($resourceClone->getName(), 7));
+            $resourceClone->setId(substr($resourceClone->getId(), 7));
 
             $link = $this->_resourceModel->getLinkByResource($resourceClone);
 

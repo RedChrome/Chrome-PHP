@@ -46,7 +46,7 @@ class Login extends \Chrome\Form\AbstractForm
 
         // this element has to be set in every form!
         // max time, this form is valid is 300 sec
-        $formElementOption = new \Chrome\Form\Option\Element\Form(new \Chrome\Form\Storage\Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id));
+        $formElementOption = new \Chrome\Form\Option\Element\Form(new \Chrome\Form\Storage\Session($this->_applicationContext->getRequestContext()->getSession(), $this->_id));
         $formElementOption->setMaxAllowedTime(300)->setMinAllowedTime(0);
 
         $formElement = new \Chrome\Form\Element\Form($this, $this->_id, $formElementOption);

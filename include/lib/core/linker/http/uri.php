@@ -20,32 +20,25 @@ namespace Chrome\Linker\HTTP;
 
 use \Chrome\Resource\Resource_Interface;
 use \Chrome\Linker\Linker_Interface;
+use Chrome\Resource\Url_Interface;
+use Chrome\Linker\Link;
 
-class UrlHelper implements Helper_Interface
+class UriHelper implements Helper_Interface
 {
-    public function linkByResource(Resource_Interface $resource, Linker_Interface $linker)
+    public function getLink(\Chrome\Resource\Resource_Interface $resource, \Chrome\Linker\Linker_Interface $linkter)
     {
-        if($resource instanceof \Chrome\Resource\Url_Interface) {
-            return array();
+        if($resource instanceof Uri_Interface)
+        {
+            return new Link($resource->getUrl());
         }
 
-        if(strpos($resource->getName(), 'url:') === 0) {
-            // strlen("url:") = 4
-            return array('link' => substr($resource->getName(), 4), 'skip' => true);
-        } else {
-            return false;
-        }
-    }
-
-    public function linkById($resourceId)
-    {
-        return false;
+        return null;
     }
 }
 
 namespace Chrome\Resource;
 
-interface Url_Interface extends Resource_Interface
+interface Uri_Interface extends Resource_Interface
 {
     /**
      * @return string
@@ -53,7 +46,7 @@ interface Url_Interface extends Resource_Interface
     public function getUrl();
 }
 
-class Url extends Resource
+class Uri extends Resource
 {
     protected $_url = '';
 

@@ -28,15 +28,13 @@ class DirectoryRoute extends AbstractRoute
 {
     protected $_prefix = '';
 
-    public function match(\Chrome\URI\URI_Interface $url, \Chrome\Request\Data_Interface $data)
+    public function match(\Psr\Http\Message\ServerRequestInterface $request, $normalizedPath)
     {
         $modules = $this->_model->getModules();
 
-        //
-        $path = ltrim(preg_replace('#\A' . ROOT_URL . '#', '', '/'.$url->getPath()), '/');
-        #var_dump($url, $path, $data->getGETData());
-        $url->setPath($path);
-        //
+
+        // TODO: finish.
+        return false;
 
 
         $path = $this->_prefix.$url->getPath();

@@ -39,7 +39,7 @@ class Recaptcha implements Engine_Interface
     public function __construct($name, Captcha_Interface $obj, \Chrome\Context\Application_Interface $appContext, array $backendOptions)
     {
         $this->_appContext = $appContext;
-        $this->_reqData = $appContext->getRequestHandler()->getRequestData();
+        $this->_reqData = $appContext->getRequestContext()->getRequest();
 
         $backendOptions[Captcha_Interface::CHROME_CAPTCHA_NAME] = $name;
         $this->_backendOptions = array_merge($this->_backendOptions, $backendOptions);
@@ -54,8 +54,12 @@ class Recaptcha implements Engine_Interface
     {
         $recaptcha = $this->_appContext->getDiContainer()->get('\Recaptcher\RecaptchaInterface');
 
-        $recaptchaChallengeValue = $this->_reqData->getPOSTData($recaptcha->getChallengeField());
-        $recaptchaResponseValue  = $this->_reqData->getPOSTData($recaptcha->getResponseField());
+        try {
+            $recaptchaChallengeValue = $this->_reqData->getParsedBody()[$recaptcha->getChallengeField()];
+            $recaptchaResponseValue  = $this->_reqData->getParsedBody()[$recaptcha->getResponseField()];
+        } catch(\Chrome\Exception $e) {
+            return false;
+        }
 
         $isValid = false;
 

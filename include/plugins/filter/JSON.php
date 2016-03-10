@@ -25,7 +25,7 @@ namespace Chrome\Filter;
  */
 class JSON implements Filter_Interface
 {
-    public function execute(\Chrome\Request\Data_Interface $req, \Chrome\Response\Response_Interface $res)
+    public function execute(\Psr\Http\Message\ServerRequestInterface $req, \Chrome\Response\Response_Interface $res)
     {
         $res->setBody(json_encode($res->getBody()));
     }

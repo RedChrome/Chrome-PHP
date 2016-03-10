@@ -38,9 +38,11 @@ interface Application_Interface extends \Chrome\Exception\Processable_Interface
     /**
      * init()
      *
+     *
+     * @param Application_Interface $parentApplication [optional]
      * @return void
      */
-    public function init();
+    public function init(Application_Interface $parentApplication = null);
 
     /**
      * execute()
@@ -257,21 +259,21 @@ interface Application_Interface
     public function getDiContainer();
 
     /**
-     * Sets the request handler
+     * Sets the request context
      *
-     * The request handler handles a request (e.g. http, json, console) and provides a
-     * request data object, which contains all parameters from the client
+     * The request context contains all data of the current request from the client, including session
+     * and cookie data
      *
-     * @param \Chrome\Request\Handler_Interface $reqHandler
+     * @param \Chrome\Request\RequestContext_Interface
      */
-    public function setRequestHandler(\Chrome\Request\Handler_Interface $reqHandler);
+    public function setRequestContext(\Chrome\Request\RequestContext_Interface $context);
 
     /**
-     * Returns the request handler
+     * Returns the request context
      *
-     * @return \Chrome\Request\Handler_Interface
+     * @return \Chrome\Request\RequestContext_Interface
      */
-    public function getRequestHandler();
+    public function getRequestContext();
 
     /**
      * Sets the authentication service
@@ -435,7 +437,7 @@ interface Application_Interface
 
 class Application implements Application_Interface
 {
-    protected $_requestHandler = null;
+    protected $_requestContext = null;
     protected $_authentication = null;
     protected $_authorisation = null;
     protected $_response = null;
@@ -513,14 +515,14 @@ class Application implements Application_Interface
         return $this->_modelContext;
     }
 
-    public function setRequestHandler(\Chrome\Request\Handler_Interface $reqHandler)
+    public function setRequestContext(\Chrome\Request\RequestContext_Interface $context)
     {
-        $this->_requestHandler = $reqHandler;
+        $this->_requestContext = $context;
     }
 
-    public function getRequestHandler()
+    public function getRequestContext()
     {
-        return $this->_requestHandler;
+        return $this->_requestContext;
     }
 
     public function setAuthentication(\Chrome\Authentication\Authentication_Interface $auth)

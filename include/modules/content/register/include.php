@@ -37,7 +37,7 @@ class StepOne extends \Chrome\Form\AbstractForm
         $this->setAttribute(self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST);
         $this->setAttribute(self::ATTRIBUTE_ID, $this->_id);
 
-        $storageSession = new \Chrome\Form\Storage\Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
+        $storageSession = new \Chrome\Form\Storage\Session($this->_applicationContext->getRequestContext()->getSession(), $this->_id);
 
         $formElementOption = new \Chrome\Form\Option\Element\Form($storageSession);
         $formElementOption->setMaxAllowedTime(300)->setMinAllowedTime(1);
@@ -101,7 +101,7 @@ class StepTwo extends \Chrome\Form\AbstractForm
         $nameConverter = new \Chrome\Converter\ConverterList();
         $nameConverter->setConversion(array('charToHtml', 'stripHtml'));
 
-        $storageSession = new \Chrome\Form\Storage\Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
+        $storageSession = new \Chrome\Form\Storage\Session($this->_applicationContext->getRequestContext()->getSession(), $this->_id);
         $formOption = new \Chrome\Form\Option\Element\Form($storageSession);
         $formOption->setMinAllowedTime(1)->setMaxAllowedTime(300);
 

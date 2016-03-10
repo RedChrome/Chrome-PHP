@@ -392,19 +392,19 @@ interface Form_Interface
     public function getCreationHandlers($class = null);
 
     /**
-     * Sets a request data object, to get sent data from it
+     * Sets a request object, to get sent data from it
      *
-     * @param \Chrome\Request\Data_Interface $obj
+     * @param \Psr\Http\Message\ServerRequestInterface $obj
      * @return void
      */
-    public function setRequestData(\Chrome\Request\Data_Interface $obj);
+    public function setRequest(\Psr\Http\Message\ServerRequestInterface $obj);
 
     /**
      * Returns the request data
      *
-     * @return \Chrome\Request\Data_Interface
+     * @return \Psr\Http\Message\ServerRequestInterface
      */
-    public function getRequestData();
+    public function getRequest();
 
     /**
      * Returns the current application context
@@ -532,9 +532,9 @@ abstract class AbstractForm implements Form_Interface
     /**
      * Request data object, contains the sent data from user
      *
-     * @var \Chrome\Request\Data_Interface
+     * @var \Psr\Http\Message\ServerRequestInterface
      */
-    protected $_requestDataObject = null;
+    protected $_request = null;
 
     /**
      * Contains the current application context
@@ -566,7 +566,7 @@ abstract class AbstractForm implements Form_Interface
     public function __construct(\Chrome\Context\Application_Interface $appContext)
     {
         $this->_applicationContext = $appContext;
-        $this->_requestDataObject = $appContext->getRequestHandler()->getRequestData();
+        $this->_request = $appContext->getRequestContext()->getRequest();
         $this->_init();
     }
 
@@ -905,8 +905,7 @@ abstract class AbstractForm implements Form_Interface
      *
      * $dataSource can be: CHROME_FORM_METHOD_POST, CHROME_FORM_METHOD_GET or anything else
      *
-     * METHOD_POST and METHOD_GET use the values set in $_POST, $_GET
-     * anything else uses all available data from the request data (not recommended).
+     * METHOD_POST and METHOD_GET use the values set in $_POST, $_GET.
      *
      * @param string $dataSource
      */
@@ -916,17 +915,17 @@ abstract class AbstractForm implements Form_Interface
         {
             case self::CHROME_FORM_METHOD_POST:
                 {
-                    $this->setSentData($this->getRequestData()->getPOSTData());
+                    $this->setSentData($this->getRequest()->getParsedBody());
                     break;
                 }
             case self::CHROME_FORM_METHOD_GET:
                 {
-                    $this->setSentData($this->getRequestData()->getGETData());
+                    $this->setSentData($this->getRequest()->getQueryParams());
                     break;
                 }
             default:
                 {
-                    $this->setSentData($this->getRequestData()->getData());
+                    throw new \Chrome\Exception('No form method set.');
                 }
         }
     }
@@ -1106,14 +1105,14 @@ abstract class AbstractForm implements Form_Interface
         return $return;
     }
 
-    public function setRequestData(\Chrome\Request\Data_Interface $obj)
+    public function setRequest(\Psr\Http\Message\ServerRequestInterface $obj)
     {
-        $this->_requestDataObject = $obj;
+        $this->_request = $obj;
     }
 
-    public function getRequestData()
+    public function getRequest()
     {
-        return $this->_requestDataObject;
+        return $this->_request;
     }
 
     public function getApplicationContext()
@@ -1138,6 +1137,6 @@ abstract class AbstractForm implements Form_Interface
 
     protected function _getFormStorage()
     {
-        return new \Chrome\Form\Storage\Session($this->_applicationContext->getRequestHandler()->getRequestData()->getSession(), $this->_id);
+        return new \Chrome\Form\Storage\Session($this->_applicationContext->getRequestContext()->getSession(), $this->_id);
     }
 }

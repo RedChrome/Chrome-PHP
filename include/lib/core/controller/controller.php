@@ -58,6 +58,7 @@ interface Controller_Interface extends Processable_Interface
  */
 abstract class AbstractController implements Controller_Interface
 {
+    use \Chrome\Exception\ProcessableTrait;
 
     /**
      * Contains the context to the current application
@@ -65,19 +66,6 @@ abstract class AbstractController implements Controller_Interface
      * @var \Chrome\Context\Application_Interface
      */
     protected $_applicationContext = null;
-
-    /**
-     * exceptionHandler class which takes care of thrown exceptions
-     * <code>
-     * ...
-     * catch(\Chrome\Exception $e) {
-     *  $this->_exceptionHandler->exception($e);
-     * }
-     * </code>
-     *
-     * @var \Chrome\Exception\Handler_Interface
-     */
-    protected $_exceptionHandler = null;
 
     /**
      * Requires all classes/files
@@ -126,15 +114,15 @@ abstract class AbstractController implements Controller_Interface
 
     /**
      *
-     * @var \Chrome\Request\Handler_Interface
+     * @var \Chrome\Request\RequestContext_Interface
      */
-    protected $_requestHandler = null;
+    protected $_requestContext = null;
 
     /**
      *
-     * @var \Chrome\Request\Data_Interface
+     * @var \Psr\Http\Message\ServerRequestInterface
      */
-    protected $_requestData = null;
+    protected $_request = null;
 
     /**
      * _initialize()
@@ -161,7 +149,7 @@ abstract class AbstractController implements Controller_Interface
     {
         $this->setApplicationContext($appContext);
 
-        $this->_setRequestHandler($appContext->getRequestHandler());
+        $this->_setRequestContext($appContext->getRequestContext());
     }
 
     /**
@@ -211,20 +199,10 @@ abstract class AbstractController implements Controller_Interface
         return $this->_view;
     }
 
-    protected function _setRequestHandler(\Chrome\Request\Handler_Interface $obj)
+    protected function _setRequestContext(\Chrome\Request\RequestContext_Interface $obj)
     {
-        $this->_requestHandler = $obj;
-        $this->_requestData = $obj->getRequestData();
-    }
-
-    public function setExceptionHandler(\Chrome\Exception\Handler_Interface $obj)
-    {
-        $this->_exceptionHandler = $obj;
-    }
-
-    public function getExceptionHandler()
-    {
-        return $this->_exceptionHandler;
+        $this->_requestContext = $obj;
+        $this->_request = $obj->getRequest();
     }
 
     public function setApplicationContext(\Chrome\Context\Application_Interface $appContext)

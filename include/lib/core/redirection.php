@@ -48,7 +48,7 @@ class Redirection implements Redirection_Interface
     {
         $resp = $this->_applicationContext->getResponse();
 
-        if($resp instanceof HTTP) {
+        if($resp instanceof \Chrome\Response\HTTP) {
             $resp->setStatus('303 Temporary Redirect');
             $resp->addHeader('Location', $site);
         }
@@ -61,15 +61,21 @@ class Redirection implements Redirection_Interface
 
     public function getPreviousPage()
     {
-        $requestData = $this->_applicationContext->getRequestHandler()->getRequestData();
+        $request = $this->_applicationContext->getRequestContext()->getRequest();
+        $data = $request->getServerParams();
 
-        if(($return = $requestData->getSERVERData('HTTP_REFERER')) != null)
+        $return = isset($data['HTTP_REFERER']) ? $data['HTTP_REFERER'] : null;
+
+        if($return != null)
         {
             return $return;
         } else
         {
+            // TODO: use the linker!
             // we dont know where the user came, so get to the index.php
-            return 'http://' . $requestData->getSERVERData('HTTP_HOST') . ROOT_URL;
+            $linker = $this->_applicationContext->getViewContext()->getLinker();
+            return $linker->get(new \Chrome\Resource\Resource('rel:'));
+            #return 'http://' . $request->getServerParams()['HTTP_HOST'] . ROOT_URL;
         }
     }
 

@@ -22,26 +22,34 @@ use \Chrome\Resource\Resource_Interface;
 
 interface Link_Interface
 {
-    public function asRelative();
+    /**
+     * @return string
+     */
+    public function getHref();
 
-    public function asAbsolute();
+    /**
+     * @see getHref()
+     */
+    public function __toString();
 }
 
 class Link implements Link_Interface
 {
-    public function __construct($basepath, $relative)
+    protected $_href = '';
+
+    public function __construct($href)
     {
-        //@todo implement Link.
+        $this->_href = $href;
     }
 
-    public function asRelative()
+    public function getHref()
     {
-
+        return $this->_href;
     }
 
-    public function asAbsolute()
+    public function __toString()
     {
-
+        return $this->_href;
     }
 }
 
@@ -62,13 +70,17 @@ interface Linker_Interface
     public function get(Resource_Interface $resource);
 
     /**
-     * Returns the base path. Every linked resource is relative to
-     * the base path.
+     * Returns the uri, which is the reference to all Link_Interface objects
      *
-     * @return string
+     * This uri is used to calculate the relative path of all links, i.e.
+     * all relative paths are relative to this uri.
+     *
+     * Usually this will be the uri to the requested resource from the client,
+     * i.e. from $_SERVER['REQUEST_URI'] and $_SERVER['HTTP_HOST']
+     *
+     * @return \Psr\Http\Message\UriInterface
      */
-    public function getBasepath();
-
+    public function getReferenceUri();
 
     public function diff($serverPath, $clientPath);
 
@@ -88,53 +100,18 @@ use \Chrome\URI\URI_Interface;
  */
 class Linker implements Linker_Interface
 {
-    const PATH_LIMIT = 15;
-
-    protected $_absolutePrefix = '';
-
-    protected $_relativePrefix = '';
-
     protected $_resourceHelper = array();
 
-    protected $_basepath = '';
+    protected $_referenceUri = null;
 
-    public function __construct(URI_Interface $requestedURL)
+    public function __construct(\Psr\Http\Message\UriInterface $referenceUri)
     {
-        $this->setRelative($requestedURL);
-        $this->setAbsolute($requestedURL);
+        $this->_referenceUri = $referenceUri;
     }
 
-    public function setBasepath($basepath)
+    public function getReferenceUri()
     {
-        $this->_basepath = $basepath;
-    }
-
-    public function getBasepath()
-    {
-        return $this->_basepath;
-    }
-
-    public function setAbsolute(URI_Interface $currentURL)
-    {
-        $authority = $currentURL->getAuthority();
-        $host = $authority[URI_Interface::CHROME_URI_AUTHORITY_HOST];
-
-        // do not add http: or https:, since // is for both
-        $this->_absolutePrefix = '//'.$host.'/'.trim(ROOT_URL, '/').'/';
-    }
-
-    public function setRelative(URI_Interface $currentURL)
-    {
-        $remainingPath = ltrim(str_replace(ROOT_URL, '', '/'.$currentURL->getPath()), '/');
-
-        $relativeLevel = substr_count($remainingPath, '/');
-
-        $this->_relativePrefix = str_repeat('../', $relativeLevel);
-    }
-
-    protected function _noLinkFound($resource, $relative)
-    {
-        return $this->_absolutePrefix.'404?'.$resource;
+        return $this->_referenceUri;
     }
 
     public function addResourceHelper(\Chrome\Linker\HTTP\Helper_Interface $helper)
@@ -146,14 +123,16 @@ class Linker implements Linker_Interface
     {
         foreach($this->_resourceHelper as $helper)
         {
-            if( ($link = $helper->linkByResource($resource, $this)) !== false) {
+            if( ($link = $helper->getLink($resource, $this)) !== null) {
                 // TODO: FINISH!
+
                 #var_dump($link);
-                return $link['link'];
+                #return $this->_basepath.$link['link'];
+                return $link;
             }
         }
 
-        return $this->_noLinkFound($resource);
+        throw new \Chrome\Exception('Could not get a link to the given resource');
     }
 
     public function diff($server, $client)
@@ -215,7 +194,10 @@ class Linker implements Linker_Interface
 
 interface Helper_Interface
 {
-    public function linkByResource(Resource_Interface $resource, Linker_Interface $linker);
-
-    public function linkById($resourceId);
+    /**
+     * @param Resource_Interface $resource
+     * @param Linker_Interface $linker
+     * @return \Chrome\Linker\Link_Interface|null
+     */
+    public function getLink(Resource_Interface $resource, Linker_Interface $linker);
 }

@@ -354,8 +354,6 @@ INSERT INTO `cpp_autoload` (`name`, `path`, `activated`, `priority`, `is_class_r
 ('\\Chrome\\Router\\Route\\StaticRoute', 'lib/core/router/route/static.php', TRUE, 6, FALSE),
 ('\\Chrome\\Router\\Route\\DynamicRoute', 'lib/core/router/route/dynamic.php', TRUE, 6, FALSE),
 ('\\Chrome\\Router\\Route\\FallbackRoute', 'lib/core/router/route/fallback.php', TRUE, 6, FALSE),
-('\\Chrome\\Request\\Handler\\ConsoleHandler', 'lib/core/request/request/console.php', TRUE, 6, FALSE),
-('\\Chrome\\Request\\Handler\\HTTPHandler', 'lib/core/request/request/http.php', TRUE, 6, FALSE),
 ('\\Chrome\\Response\\Handler\\HTTPHandler', 'lib/core/response/response/http.php', TRUE, 6, FALSE),
 ('\\Chrome\\Response\\Handler\\JSONHandler', 'lib/core/response/response/json.php', TRUE, 6, FALSE),
 ('\\Chrome\\Response\\Handler\\ConsoleHandler', 'lib/core/response/response/console.php', TRUE, 6, FALSE),
@@ -423,13 +421,13 @@ CREATE TABLE IF NOT EXISTS `cpp_route_static` (
 );
 
 INSERT INTO `cpp_route_static` (`resource_id`, `search`, `class`, `POST`, `GET`) VALUES
-(1, '', '\\Chrome\\Controller\\Index', '', ''),
-(1, 'index.html', '\\Chrome\\Controller\\Index', '', ''),
-(2, 'login.html', '\\Chrome\\Controller\\User\\Login', '', ''),
-(3, 'registrieren.html', '\\Chrome\\Controller\\User\\Register', '', 'action=register'),
-(4, 'logout.html', '\\Chrome\\Controller\\User\\Logout', '', ''),
-(6, 'registrierung_bestaetigen.html', '\\Chrome\\Controller\\User\\Register', '', 'action=confirm_registration'),
-(7, 'captcha.html', '\\Chrome\\Controller\\Captcha', '', '');
+(1, '/', '\\Chrome\\Controller\\Index', '', ''),
+(1, '/index.html', '\\Chrome\\Controller\\Index', '', ''),
+(2, '/login.html', '\\Chrome\\Controller\\User\\Login', '', ''),
+(3, '/registrieren.html', '\\Chrome\\Controller\\User\\Register', '', 'action=register'),
+(4, '/logout.html', '\\Chrome\\Controller\\User\\Logout', '', ''),
+(6, '/registrierung_bestaetigen.html', '\\Chrome\\Controller\\User\\Register', '', 'action=confirm_registration'),
+(7, '/captcha.html', '\\Chrome\\Controller\\Captcha', '', '');
 
 DROP TABLE IF EXISTS `cpp_user`;
 CREATE TABLE IF NOT EXISTS `cpp_user` (

@@ -134,6 +134,24 @@ interface Processable_Interface
     public function getExceptionHandler();
 }
 
+trait ProcessableTrait
+{
+    /**
+     * @var Handler_Interface
+     */
+    protected $_exceptionHandler = null;
+
+    public function setExceptionHandler(Handler_Interface $obj)
+    {
+        $this->_exceptionHandler = $obj;
+    }
+
+    public function getExceptionHandler()
+    {
+        return $this->_exceptionHandler;
+    }
+}
+
 /**
  * Interface for error/exception configuration
  *

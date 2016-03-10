@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CHROME-PHP CMS
  *
@@ -19,6 +20,8 @@
  */
 namespace Chrome\DI\Loader;
 
+use Psr\Http\Message\UriInterface;
+
 class General implements Loader_Interface
 {
 
@@ -26,6 +29,7 @@ class General implements Loader_Interface
     {
         $closure = $diContainer->getHandler('closure');
 
+        $this->_request($closure);
         $this->_localization($closure);
         $this->_model($closure);
         $this->_classloader($closure);
@@ -56,27 +60,53 @@ class General implements Loader_Interface
 
         $closure->add('\Chrome\Logger\Model', function ($c)
         {
-            return $c->get('\Chrome\Context\Application_Interface')
-                ->getLoggerRegistry()
-                ->get();
+            return $c->get('\Chrome\Context\Application_Interface')->getLoggerRegistry()->get();
         }, true);
+    }
+
+    protected function _request($closure)
+    {
+        $closure->add('\Psr\Http\Message\ServerRequestInterface', function ($c)
+        {
+            return \Zend\Diactoros\ServerRequestFactory::fromGlobals($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES);
+        }, true);
+
+        $closure->add('\Psr\Http\Message\UriInterface', function ($c)
+        {
+            return new \Zend\Diactoros\Uri();
+        });
+
+        $closure->add('\Chrome\Request\RequestContext_Interface', function ($c)
+        {
+            return new \Chrome\Request\Context($c->get('\Psr\Http\Message\ServerRequestInterface'), $c->get('\Chrome\Request\Cookie_Interface'), $c->get('\Chrome\Request\Session_Interface'));
+        }, true);
+
+        $closure->add('\Chrome\Request\Cookie_Interface', function ($c)
+        {
+            return new \Chrome\Request\Cookie\Cookie($c->get('\Psr\Http\Message\ServerRequestInterface'), $c->get('\Chrome\Hash\Hash_Interface'));
+        }, true);
+
+        $closure->add('\Chrome\Request\Session_Interface', function ($c)
+        {
+            return new \Chrome\Request\Session\Session($c->get('\Chrome\Request\Cookie_Interface'), $c->get('\Psr\Http\Message\ServerRequestInterface'), $c->get('\Chrome\Hash\Hash_Interface'), $c->get('\Chrome\Request\Session\SavePath'));
+        }, true);
+
+        $closure->add('\Chrome\Request\Session\SavePath', function ($c)
+        {
+            return new \Chrome\Directory(TMP . CHROME_SESSION_SAVE_PATH);
+        });
     }
 
     protected function _localization($closure)
     {
         $closure->add('\Chrome\Localization\Translate_Interface', function ($c)
         {
-            return $c->get('\Chrome\Context\Application_Interface')
-                ->getViewContext()
-                ->getLocalization()
-                ->getTranslate();
+            return $c->get('\Chrome\Context\Application_Interface')->getViewContext()->getLocalization()->getTranslate();
         }, true);
 
         $closure->add('\Chrome\Localization\Localization_Interface', function ($c)
         {
-            return $c->get('\Chrome\Context\Application_Interface')
-                ->getViewContext()
-                ->getLocalization();
+            return $c->get('\Chrome\Context\Application_Interface')->getViewContext()->getLocalization();
         }, true);
     }
 
@@ -216,19 +246,21 @@ class General implements Loader_Interface
             return $model;
         }, true);
 
+        $closure->add('\Chrome\Linker\LinkerReferenceUri', function ($c) {
+            return $c->get('\Psr\Http\Message\UriInterface')->withPath(ROOT_URL . '/');
+        }, true);
+
         $closure->add('\Chrome\Linker\Linker_Interface', function ($c)
         {
-            $linker = new \Chrome\Linker\HTTP\Linker(new \Chrome\URI\URI($c->get('\Chrome\Context\Application_Interface')
-                ->getRequestHandler()
-                ->getRequestData(), true), $c->get('\Chrome\Resource\Model_Interface'));
+            $linker = new \Chrome\Linker\HTTP\Linker($c->get('\Chrome\Linker\LinkerReferenceUri'));
 
             require_once LIB . 'core/linker/http/relative.php';
-            require_once LIB . 'core/linker/http/url.php';
+            require_once LIB . 'core/linker/http/uri.php';
             require_once LIB . 'core/linker/http/static.php';
 
             $linker->addResourceHelper(new \Chrome\Linker\HTTP\RelativeHelper());
             $linker->addResourceHelper(new \Chrome\Linker\HTTP\StaticHelper($c->get('\Chrome\Linker\HTTP\Helper\Model\Static_Interface')));
-            $linker->addResourceHelper(new \Chrome\Linker\HTTP\UrlHelper());
+            $linker->addResourceHelper(new \Chrome\Linker\HTTP\UriHelper());
 
             return $linker;
         }, true);

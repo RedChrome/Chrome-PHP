@@ -39,6 +39,24 @@ interface Loggable_Interface extends LoggerAwareInterface
     public function getLogger();
 }
 
+trait LoggableTrait
+{
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $_logger = null;
+
+    public function setLogger(\Psr\Log\LoggerInterface $logger)
+    {
+        $this->_logger = $logger;
+    }
+
+    public function getLogger()
+    {
+        return $this->_logger;
+    }
+}
+
 namespace Chrome\Registry\Logger;
 
 use \Psr\Log\LoggerInterface;

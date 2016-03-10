@@ -45,11 +45,11 @@ abstract class AbstractChain
      *
      * run through all filters
      *
-     * @param \Chrome\Request\Data_Interface $req
+     * @param \Psr\Http\Message\ServerRequestInterface $req
      * @param \Chrome\Response\Response_Interface $res
      * @return void
      */
-    public function processFilters(\Chrome\Request\Data_Interface $req, \Chrome\Response\Response_Interface $res)
+    public function processFilters(\Psr\Http\Message\ServerRequestInterface $req, \Chrome\Response\Response_Interface $res)
     {
         // loop through every filter
         foreach($this->_filters as $filter) {
@@ -69,9 +69,9 @@ interface Filter_Interface
     /**
      * execute()
      *
-     * @param Chrome_Request_Abstract $req
-     * @param Chrome_Response_Abstract $res
+     * @param \Psr\Http\Message\ServerRequestInterface $req
+     * @param \Chrome\Response\Response_Interface $res
      * @return void
      */
-    public function execute(\Chrome\Request\Data_Interface $req, \Chrome\Response\Response_Interface $res);
+    public function execute(\Psr\Http\Message\ServerRequestInterface $req, \Chrome\Response\Response_Interface $res);
 }

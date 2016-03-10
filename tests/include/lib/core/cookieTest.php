@@ -3,22 +3,31 @@ namespace Test\Chrome\Request\Cookie;
 
 use \Chrome\Request\Cookie\Cookie;
 
+use Mockery as M;
+
 class CookieTest extends \Test\Chrome\TestCase
 {
-
     public function setUp()
     {
-        $this->_cookie = new Cookie(new \Test\Chrome\Request\DummyData(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
+        $this->_cookie = new Cookie($this->_appContext->getRequestContext()->getRequest(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
     }
 
     public function testConstruct()
     {
-        $this->_cookie = new Cookie(new \Test\Chrome\Request\DummyData(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
+        $this->_cookie = new Cookie($this->_appContext->getRequestContext()->getRequest(), $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
 
         $this->assertTrue($this->_cookie instanceof \Chrome\Request\Cookie_Interface);
 
         $this->assertNotNull($this->_cookie->getCookie(Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY));
         $this->assertNull($this->_cookie->getCookie('anyKey-shouldNotExist'));
+    }
+
+    protected function _getRequest()
+    {
+        $mock = M::mock('\Psr\Http\Message\ServerRequestInterface');
+        $mock->shouldReceive('getServerParams')->andReturn(array());
+
+        return $mock;
     }
 
     public function testSetGetCookie()
@@ -122,12 +131,13 @@ class CookieTest extends \Test\Chrome\TestCase
 
     public function testValidationWithWrongValues()
     {
-        $requestData = new \Test\Chrome\Request\DummyData();
-        $requestData->_COOKIEData = array(
+        $request = $this->_getRequest();
+        $request->shouldReceive('getCookieParams')->andReturn(array(
             Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY => 'anInvalidKey',
             'anotherKey' => 'anyValue'
-        );
-        $this->_cookie = new \Chrome\Request\Cookie\Cookie($requestData, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
+        ));
+
+        $this->_cookie = new \Chrome\Request\Cookie\Cookie($request, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
 
         $this->assertNull($this->_cookie->getCookie('anotherKey'));
 
@@ -138,16 +148,19 @@ class CookieTest extends \Test\Chrome\TestCase
 
     public function testValidationWithRightValues()
     {
+        $request = $this->_getRequest();
+        $request->shouldReceive('getCookieParams')->andReturn(array());
 
-        // the environment for the cookie class is set up properly
-        $requestData = new \Test\Chrome\Request\DummyData();
-        $requestData->_COOKIEData = array(
+        $this->_cookie = new \Chrome\Request\Cookie\Cookie($request, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
+
+        // a new request with the validation cookie should be accepted!
+        $request = $this->_getRequest();
+        $request->shouldReceive('getCookieParams')->andReturn(array(
             Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY => $this->_cookie->getCookie(Cookie::CHROME_COOKIE_COOKIE_VALIDATION_KEY),
             'testKey' => 'anyTestValue'
-        );
+        ));
 
-        $this->_cookie = new \Chrome\Request\Cookie\Cookie($requestData, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
-
+        $this->_cookie = new \Chrome\Request\Cookie\Cookie($request, $this->_diContainer->get('\Chrome\Hash\Hash_Interface'));
         $this->assertEquals('anyTestValue', $this->_cookie->getCookie('testKey'));
     }
 }

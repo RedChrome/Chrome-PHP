@@ -29,10 +29,10 @@ class ModelTest extends \PHPUnit_Framework_TestCase
         return m::mock('\Chrome\Model\Database\Statement_Interface');
     }
 
-    protected function _getRequestHandler()
+    protected function _getRequestContext()
     {
-        $mock = m::mock('\Chrome\Request\Handler_Interface');
-        $mock->shouldReceive('getRequestData')->andReturnNull();
+        $mock = m::mock('\Chrome\Request\RequestContext_Interface');
+        $mock->shouldReceive('getRequest')->andReturnNull();
 
         return $mock;
     }
@@ -40,7 +40,7 @@ class ModelTest extends \PHPUnit_Framework_TestCase
     protected function _getAppContext()
     {
         $mock = m::mock('\Chrome\Context\Application_Interface');
-        $mock->shouldReceive('getRequestHandler')->andReturn($this->_getRequestHandler());
+        $mock->shouldReceive('getRequestContext')->andReturn($this->_getRequestContext());
 
         return $mock;
     }

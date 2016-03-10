@@ -20,7 +20,7 @@ class Register extends AbstractModule
     public function __construct(\Chrome\Context\Application_Interface $appContext, \Chrome\Interactor\User\Registration $interactor, \Chrome\View\User\Register $view)
     {
         $this->_applicationContext = $appContext;
-        $this->_setRequestHandler($appContext->getRequestHandler());
+        $this->_setRequestContext($appContext->getRequestContext());
         $this->_interactor = $interactor;
         $this->_view = $view;
     }
@@ -35,13 +35,13 @@ class Register extends AbstractModule
             return;
         }
 
-        $this->_session = $this->_requestHandler->getRequestData()->getSession();
+        $this->_session = $this->_requestContext->getSession();
 
-        if($this->_requestData->getGETData('action') === 'register')
+        if(!isset($this->_request->getQueryParams()['action']) OR $this->_request->getQueryParams()['action'] === 'register')
         {
             $this->_handleRegisterAction();
 
-        } else if($this->_requestData->getGET('action') === 'confirm_registration')
+        } else if($this->_request->getQueryParams()['action'] === 'confirm_registration')
         {
             $this->_handleRegisterConfirmAction();
         }
@@ -49,17 +49,14 @@ class Register extends AbstractModule
 
     protected function _handleRegisterConfirmAction()
     {
-        // if($this->requestData->getGET('activationKey'))
-        // validate activation key
-
-        $result = $this->_model->checkRegistration($this->_requestData->getGET('activationKey'));
+        $result = $this->_model->checkRegistration($this->_request->getQueryParams()['actionKey']);
 
         if($result === false)
         {
             $this->_view->registrationFailed();
         } else
         {
-            $success = $this->_model->finishRegistration($result['name'], $result['pass'], $result['pw_salt'], $result['email'], $this->_requestData->getGET('activationKey'));
+            $success = $this->_model->finishRegistration($result['name'], $result['pass'], $result['pw_salt'], $result['email'], $this->_request->getQueryParams()['actionKey']);
 
             // user successfully registered
             if($success === true)

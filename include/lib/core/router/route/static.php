@@ -26,10 +26,8 @@ namespace Chrome\Router\Route;
  */
 class StaticRoute extends AbstractRoute
 {
-    public function match(\Chrome\URI\URI_Interface $url, \Chrome\Request\Data_Interface $data)
+    public function match(\Psr\Http\Message\ServerRequestInterface $request, $normalizedPath)
     {
-        $path = trim($url->getPath());
-
         /*
          * This enables/disabled, that urls may end with .html but still get mapped to the same resource
          */
@@ -42,7 +40,7 @@ class StaticRoute extends AbstractRoute
             }
         */
 
-        $row = $this->_model->getRoute($path);
+        $row = $this->_model->getRoute($normalizedPath);
 
         if($row == false)
         {
@@ -51,16 +49,7 @@ class StaticRoute extends AbstractRoute
 
         $this->_result = new \Chrome\Router\Result();
         $this->_result->setClass($row['class']);
-
-        if(count($row['GET']) > 0)
-        {
-            $data->setGETData($row['GET']);
-        }
-
-        if(count($row['POST']) > 0)
-        {
-            $data->setPOSTData($row['POST']);
-        }
+        $this->_result->setRequest($this->_applyGetAndPost($request, $row['GET'], $row['POST']));
 
         return true;
     }
@@ -82,7 +71,6 @@ class Cache extends \Chrome\Model\AbstractCache
     {
         if(($return = $this->_cache->get(self::CACHE_NAMESPACE_GET_ROUTE . $search)) === null)
         {
-
             $return = $this->_decorable->getRoute($search);
 
             if($return !== false)
@@ -154,7 +142,14 @@ class Database extends \Chrome\Model\AbstractDatabaseStatement implements \Chrom
                 $get[$keyValue[0]] = $keyValue[1];
             }
         }
+
         $row['GET'] = $get;
+
+        if(count($get) == 0) {
+            $row['GET'] = null;
+        }
+
+
 
         $post = array();
         if(!empty($row['POST']))
@@ -168,7 +163,12 @@ class Database extends \Chrome\Model\AbstractDatabaseStatement implements \Chrom
                 $post[$keyValue[0]] = $keyValue[1];
             }
         }
+
         $row['POST'] = $post;
+
+        if(count($post) == 0) {
+            $row['POST'] = null;
+        }
 
         return $row;
     }

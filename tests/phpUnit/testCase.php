@@ -15,8 +15,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     {
         $this->_appContext = $appContext;
 
-        $this->_session = $this->_appContext->getRequestHandler()->getRequestData()->getSession();
-        $this->_cookie = $this->_appContext->getRequestHandler()->getRequestData()->getCookie();
+        $this->_session = $this->_appContext->getRequestContext()->getSession();
+        $this->_cookie = $this->_appContext->getRequestContext()->getCookie();
     }
 
     public static function returnValues(array $values)

@@ -55,7 +55,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $container->attachHandler('handler', $handler);
 
-        $this->setExpectedException('\Chrome\InvalidArgumentException');
+        $this->setExpectedException('Chrome\DI\Exception\ContainerException');
         $container->getHandler('handler2');
     }
 

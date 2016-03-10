@@ -18,7 +18,7 @@
  * @category CHROME-PHP
  * @package CHROME-PHP
  * @author Alexander Book <alexander.book@gmx.de>
- * @copyright 2014 Chrome - PHP <alexander.book@gmx.de>
+ * @copyright 2016 Chrome - PHP <alexander.book@gmx.de>
  */
 
 define('ROOT_URL', dirname(dirname($_SERVER['PHP_SELF'])));
@@ -26,12 +26,8 @@ define('ROOT', dirname(dirname($_SERVER['SCRIPT_FILENAME'])));
 define('FILE_LEVEL', '');
 
 require_once '../include/chrome.php';
+require_once APPLICATION.'web.php';
 
-require_once APPLICATION.'resource.php';
-
-require_once MODULE.'misc/captcha/application.php';
-
-$application = new \Chrome\Application\ResourceApplication();
-$application->setApplication('Chrome\Application\Captcha\Application');
+$application = new \Chrome\Application\WebApplication();
 $application->init();
 $application->execute();

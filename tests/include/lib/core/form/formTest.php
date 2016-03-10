@@ -2,28 +2,7 @@
 
 namespace Test\Chrome\Form;
 
-class Request_Data_Form extends \Chrome\Request\DataAbstract
-{
-
-    public function __construct()
-    {
-    }
-
-    public function getPOSTData($key = null)
-    {
-        return array('POST' => 'testPOST');
-    }
-
-    public function getGETData($key = null)
-    {
-        return array('GET' => 'testGET');
-    }
-
-    public function getData()
-    {
-        throw new \Chrome\Exception('I was called!!!', 1);
-    }
-}
+use Mockery as M;
 
 class GeneralFormTest extends \Test\Chrome\TestCase
 {
@@ -32,6 +11,15 @@ class GeneralFormTest extends \Test\Chrome\TestCase
     public function setUp()
     {
         $this->_form = new EmptyForm($this->_appContext);
+    }
+
+    protected function _getRequest()
+    {
+        $mock = M::mock('\Psr\Http\Message\ServerRequestInterface');
+        $mock->shouldReceive('getQueryParams')->andReturn(array('1' => 'testGET'));
+        $mock->shouldReceive('getParsedBody')->andReturn(array('1' => 'testPOST'));
+
+        return $mock;
     }
 
     public function testIfNoElementsAreAdded()
@@ -53,7 +41,7 @@ class GeneralFormTest extends \Test\Chrome\TestCase
         $this->assertEquals($this->_form->getValidationErrors('notExisting'), array());
         $this->assertEquals($this->_form->getErrors(), array());
         $this->assertEquals($this->_form->getAttribute('doesNotExist'), null);
-        $this->assertInstanceOf('\Chrome\Request\Data_Interface', $this->_form->getRequestData());
+        $this->assertInstanceOf('\Psr\Http\Message\ServerRequestInterface', $this->_form->getRequest());
         $this->assertFalse($this->_form->hasReceivingErrors('notExisting'));
         $this->assertFalse($this->_form->hasCreationErrors('notExisting'));
         $this->assertFalse($this->_form->hasValidationErrors('notExisting'));
@@ -69,7 +57,7 @@ class GeneralFormTest extends \Test\Chrome\TestCase
 
     public function testSetAttributeStoreHandler()
     {
-        $storage = new \Chrome\Form\Storage\Session($this->_appContext->getRequestHandler()->getRequestData()->getSession(), 'testForm');
+        $storage = new \Chrome\Form\Storage\Session($this->_session, 'testForm');
         $option = new \Chrome\Form\Option\Storage();
         $storeHandler = new \Chrome\Form\Handler\Store($storage, $option, array());
         $storeHandler2 = new \Chrome\Form\Handler\Store($storage, $option, array());
@@ -136,12 +124,12 @@ class GeneralFormTest extends \Test\Chrome\TestCase
 
     public function testFormWithRequestData()
     {
-        $this->_form->setRequestData(new Request_Data_Form());
+        $this->_form->setRequest($this->_getRequest());
         $this->_form->setAttribute(\Chrome\Form\AbstractForm::ATTRIBUTE_METHOD, \Chrome\Form\AbstractForm::CHROME_FORM_METHOD_GET);
-        $this->assertTrue($this->_form->issetSentData('GET'));
+        $this->assertTrue($this->_form->issetSentData('1'));
         $this->_form->setAttribute(\Chrome\Form\AbstractForm::ATTRIBUTE_METHOD, \Chrome\Form\AbstractForm::CHROME_FORM_METHOD_POST);
-        $this->assertTrue($this->_form->issetSentData('POST'));
-        $this->setExpectedException('\Chrome\Exception', '', 1);
+        $this->assertTrue($this->_form->issetSentData('1'));
+        $this->setExpectedException('\Chrome\Exception', '', 0);
         $this->_form->setAttribute(\Chrome\Form\AbstractForm::ATTRIBUTE_METHOD, 'anyMethod...');
     }
 }

@@ -38,7 +38,7 @@ class GDCaptcha implements Engine_Interface
     {
         $backendOptions[Captcha_Interface::CHROME_CAPTCHA_NAME] = $name;
         $this->_captchaObj = $obj;
-        $this->_session = $appContext->getRequestHandler()->getRequestData()->getSession();
+        $this->_session = $appContext->getRequestContext()->getSession();
         $this->_backendOptions = array_merge($this->_backendOptions, $backendOptions);
     }
 

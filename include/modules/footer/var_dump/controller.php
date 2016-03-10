@@ -34,7 +34,10 @@ class VarDump extends AbstractModule
     protected function _execute()
     {
         $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome\View\Footer\VarDump');
-	//$this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Footer_VarDump', $this);
-        $this->_view->setData($this->_requestData->getData(), $this->_requestData->getCookie(), $this->_requestData->getSession());
+
+        $this->_view->setData(
+                array('GET' => $this->_request->getQueryParams(), 'POST' => $this->_request->getParsedBody(), 'FILES' => $this->_request->getUploadedFiles(),
+                        'SERVER' => $this->_request->getServerParams(), 'HEADERS' => $this->_request->getHeaders()
+                ), $this->_requestContext->getCookie(), $this->_requestContext->getSession());
     }
 }

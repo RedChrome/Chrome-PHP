@@ -29,16 +29,15 @@ class FallbackRoute implements Route_Interface
     protected $_result = null;
     protected $_config = null;
 
-
     public function __construct(\Chrome\Config\Config_Interface $config) {
         $this->_config = $config;
     }
 
-    public function match(\Chrome\URI\URI_Interface $url, \Chrome\Request\Data_Interface $data)
+    public function match(\Psr\Http\Message\ServerRequestInterface $request, $normalizedPath)
     {
         $this->_result = new \Chrome\Router\Result();
-        $fallbackClass = $this->_config->getConfig('Chrome/Router', 'fallback_class');
-        $this->_result->setClass($fallbackClass);
+        $this->_result->setClass($this->_config->getConfig('Chrome/Router', 'fallback_class'));
+        $this->_result->setRequest($request);
 
         // always return true, since this is the fallback for finding at least one route..
         return true;

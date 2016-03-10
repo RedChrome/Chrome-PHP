@@ -45,6 +45,10 @@ require_once 'mime.php';
 /**
  * load date class
  */
+if(version_compare(PHP_VERSION, '5.5.0', '<')) {
+    require_once 'datetimeinterface.php';
+}
+
 require_once 'date.php';
 
 /**
@@ -107,11 +111,6 @@ require_once 'request/request.php';
  * load response factory
  */
 require_once 'response/response.php';
-
-/**
- * load URI class
- */
-require_once 'uri.php';
 
 /**
  * load filter class

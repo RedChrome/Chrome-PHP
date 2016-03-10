@@ -20,10 +20,6 @@ namespace Chrome\Resource;
 
 interface Resource_Interface
 {
-    public function getName();
-
-    public function getAbsolute();
-
     public function getParameters();
 
     public function getId();
@@ -36,32 +32,14 @@ interface Resource_Interface
 abstract class AbstractResource implements Resource_Interface
 {
     /**
-     * @var string
-     */
-    protected $_resourceName = '';
-
-    /**
      * @var array
      */
     protected $_resourceParams = array();
 
     /**
-     * @var int
+     * @var string
      */
     protected $_resourceId = null;
-
-    /**
-     * Determins whether the linked resource will be returned as
-     * absolute or relative path.
-     *
-     * @var boolean
-     */
-    protected $_absolute = true;
-
-    public function getName()
-    {
-        return $this->_resourceName;
-    }
 
     public function getParameters()
     {
@@ -71,11 +49,6 @@ abstract class AbstractResource implements Resource_Interface
     public function getId()
     {
         return $this->_resourceId;
-    }
-
-    public function getAbsolute()
-    {
-        return $this->_absolute;
     }
 
     public function __toString()
@@ -88,45 +61,32 @@ abstract class AbstractResource implements Resource_Interface
 
         $str = implode('/', $params);
 
-        return $this->_resourceName.'/'.$str;
+        return $this->_resourceId.'/'.$str;
     }
 }
 
 class Resource extends AbstractResource
 {
-    public function __construct($resourceName, $absolute = true)
+    public function __construct($id)
     {
-        $this->setName($resourceName);
-        $this->setAbsolute($absolute);
-    }
-
-    public function setName($resourceName)
-    {
-        $this->_resourceName = $resourceName;
-    }
-
-    public function setAbsolute($absolute)
-    {
-        $this->_absolute = (bool) $absolute;
+        $this->_resourceId = $id;
     }
 
     public function setParameters(array $resourceParams)
     {
         $this->_resourceParams = $resourceParams;
+        return $this;
     }
 
     public function setId($id)
     {
-        $this->_resourceId = ($id !== null) ? (int) $id : null;
+        $this->_resourceId = ($id !== null) ? $id : null;
+        return $this;
     }
 
     public function equals(Resource_Interface $resource)
     {
-        if($this->_resourceId !== null) {
-            return $resource->getId() === $this->_resourceId;
-        } else {
-            return (($resource->getName() === $this->getName()) AND (count(array_diff_assoc($resource->getParameters(), $this->getParameters()))) === 0);
-        }
+        return $this->_resourceId === $resource->getId() AND count(array_diff_assoc($resource->getParameters(), $this->getParameters())) === 0;
     }
 }
 
