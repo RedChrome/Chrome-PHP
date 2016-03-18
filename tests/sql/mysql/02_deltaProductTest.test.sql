@@ -43,9 +43,9 @@ INSERT INTO `cp1_user_regist` (`id`, `name`, `pass`, `pw_salt`, `email`, `time`,
 (NULL, 'myName', 'examplePW', 'examplePWSalt', 'RegistrationTest_testEMAIL', '123', 'activationKey5');
 
 INSERT INTO `cp1_resource` (`id`, `name`) VALUES
-(1000, 'test'),
-(1001, 'test2'),
-(1002, 'testIsAllowed');
+(1000, 'res:test|'),
+(1001, 'res:test2|'),
+(1002, 'res:testIsAllowed|');
 
 INSERT INTO `cp1_authorisation_resource_default` (`resource_id`, `transformation`, `resource_group`) VALUES
 (1000, 'read', 1234666),
