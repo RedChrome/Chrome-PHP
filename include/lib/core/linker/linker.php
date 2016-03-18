@@ -82,8 +82,23 @@ interface Linker_Interface
      */
     public function getReferenceUri();
 
+    /**
+     * Appends the given $path to the reference uri.
+     *
+     * @todo this should not be here. -> URI Helper?
+     * @param string $path
+     * @return string
+     */
+    public function appendPathToReferenceUri($path);
+
+    /*
+     * @todo: needed?
+     */
     public function diff($serverPath, $clientPath);
 
+    /*
+     * @todo: needed?
+     */
     public function normalize($norm, $toBeNormalized);
 }
 
@@ -109,6 +124,17 @@ class Linker implements Linker_Interface
         $this->_referenceUri = $referenceUri;
     }
 
+    public function appendPathToReferenceUri($append)
+    {
+        $append = ltrim($append, '/');
+
+        $path = $this->_referenceUri->getPath();
+
+        $new = $this->_referenceUri->withPath($path.$append);
+
+        return $new->__toString();
+    }
+
     public function getReferenceUri()
     {
         return $this->_referenceUri;
@@ -124,10 +150,6 @@ class Linker implements Linker_Interface
         foreach($this->_resourceHelper as $helper)
         {
             if( ($link = $helper->getLink($resource, $this)) !== null) {
-                // TODO: FINISH!
-
-                #var_dump($link);
-                #return $this->_basepath.$link['link'];
                 return $link;
             }
         }

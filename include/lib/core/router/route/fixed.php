@@ -24,7 +24,7 @@ namespace Chrome\Router\Route;
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class StaticRoute extends AbstractRoute
+class FixedRoute extends AbstractRoute
 {
     public function match(\Psr\Http\Message\ServerRequestInterface $request, $normalizedPath)
     {
@@ -40,7 +40,7 @@ class StaticRoute extends AbstractRoute
             }
         */
 
-        $row = $this->_model->getRoute($normalizedPath);
+        $row = $this->_model->findRouteByName($normalizedPath);
 
         if($row == false)
         {
@@ -55,7 +55,7 @@ class StaticRoute extends AbstractRoute
     }
 }
 
-namespace Chrome\Model\Route\StaticRoute;
+namespace Chrome\Model\Route\FixedRoute;
 
 /**
  *
@@ -99,16 +99,11 @@ class Cache extends \Chrome\Model\AbstractCache
 }
 
 /**
- * load \Chrome\Linker\HTTP\Helper\Model\Static_Interface interface
- */
-require_once LIB.'core/linker/http/staticInterface.php';
-
-/**
  *
  * @package CHROME-PHP
  * @subpackage Chrome.Router
  */
-class Database extends \Chrome\Model\AbstractDatabaseStatement implements \Chrome\Linker\HTTP\Model\Static_Interface
+class Database extends \Chrome\Model\AbstractDatabaseStatement
 {
     protected $_resourceModel = null;
 
@@ -117,11 +112,11 @@ class Database extends \Chrome\Model\AbstractDatabaseStatement implements \Chrom
         $this->_resourceModel = $resourceModel;
     }
 
-    public function getRoute($search)
+    public function findRouteByName($search)
     {
         $db = $this->_getDBInterface();
 
-        $result = $db->loadQuery('routeStaticGetRoute')->execute(array($search));
+        $result = $db->loadQuery('routeFixedGetRoute')->execute(array($search));
 
         $row = $result->getNext();
 
@@ -150,7 +145,6 @@ class Database extends \Chrome\Model\AbstractDatabaseStatement implements \Chrom
         }
 
 
-
         $post = array();
         if(!empty($row['POST']))
         {
@@ -171,6 +165,36 @@ class Database extends \Chrome\Model\AbstractDatabaseStatement implements \Chrom
         }
 
         return $row;
+    }
+
+    public function findLinkByIdentifier($identifier)
+    {
+        $db = $this->_getDBInterface();
+
+        $result = $db->loadQuery('routeFixedFindResourceByIdentifier')->execute(array($identifier));
+
+        if(!$result->isEmpty()) {
+            $row = $result->getNext();
+
+            return $row['link'];
+        }
+
+        return false;
+    }
+
+    public function findLinkByName($name)
+    {
+        $db = $this->_getDBInterface();
+
+        $result = $db->loadQuery('routeFixedFindResource')->execute(array($name));
+
+        if(!$result->isEmpty()) {
+            $row = $result->getNext();
+
+            return $row['link'];
+        }
+
+        return false;
     }
 
     public function findRoute($name)

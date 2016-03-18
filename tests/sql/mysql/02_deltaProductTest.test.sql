@@ -1,19 +1,9 @@
 SET FOREIGN_KEY_CHECKS=0;
-TRUNCATE `cp1_admin_navi`;
-TRUNCATE `cp1_authorisation_rbac`;
 TRUNCATE `cp1_authorisation_resource_default`;
 TRUNCATE `cp1_authorisation_user_default`;
-TRUNCATE `cp1_rbac_group`;
-TRUNCATE `cp1_rbac_group_role`;
-TRUNCATE `cp1_rbac_role`;
-TRUNCATE `cp1_rbac_role_transaction`;
-TRUNCATE `cp1_rbac_transaction`;
-TRUNCATE `cp1_rbac_transformation`;
-TRUNCATE `cp1_rbac_user_group`;
-TRUNCATE `cp1_rbac_user_role`;
 TRUNCATE `cp1_route_administration`;
 TRUNCATE `cp1_route_dynamic`;
-TRUNCATE `cp1_route_static`;
+TRUNCATE `cp1_route_fixed`;
 TRUNCATE `cp1_user`;
 TRUNCATE `cp1_user_regist`;
 

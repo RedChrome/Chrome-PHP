@@ -150,8 +150,12 @@ class Database extends \Chrome\Model\AbstractDatabaseStatement implements Model_
 
         $result = $this->_getDBInterface()->loadQuery('authorisationGetAccessById')->execute(array($resourceId, $transformation));
 
-        $return = $result->getNext();
-        return (int) $return['resource_group'];
+        if(!$result->isEmpty()) {
+            $return = $result->getNext();
+            return (int) $return['resource_group'];
+        }
+
+        return 0;
     }
 
     public function getUserGroupById($id)

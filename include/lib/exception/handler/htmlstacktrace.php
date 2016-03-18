@@ -107,6 +107,7 @@ class HtmlStackTrace implements Handler_Interface
             if( ($prev instanceof \Exception) AND (!($prev instanceof \Chrome\Exception) OR CHROME_DEVELOPER_STATUS === true)) {
 
                 $return .= '<h4>Caused by '.$prev->getFile().'('.$prev->getLine().')</h4>';
+                $return .= '<h5>'.$prev->getMessage().'</h5>';
 
                 $return .= $this->_printExceptionTrace($prev, true);
             }

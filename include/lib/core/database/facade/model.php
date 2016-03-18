@@ -173,7 +173,7 @@ namespace Chrome\Database\Facade;
  * @package CHROME-PHP
  * @subpackage Chrome.Database
  */
-interface Model_Interface
+interface Model_Interface extends Facade_Interface
 {
     /**
      * Loads a query from the model.

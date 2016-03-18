@@ -7,27 +7,6 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
-
-DROP TABLE IF EXISTS `cpp_admin_navi`;
-CREATE TABLE IF NOT EXISTS `cpp_admin_navi` (
-  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `parentid` INTEGER NOT NULL,
-  `isparent` INTEGER NOT NULL,
-  `name` VARCHAR(100) NOT NULL,
-  `action` VARCHAR(100) NOT NULL,
-  `url` VARCHAR(100) NOT NULL,
-  `access` INTEGER NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
-
-INSERT INTO `cpp_admin_navi` (`parentid`, `isparent`, `name`, `action`, `url`, `access`) VALUES
-( 0, 1, 'Gallery', 'Gallery', 'gallery/gallery.php', 2),
-(1, 0, 'Events', 'Gallery_Events', 'gallery/events.php', 2),
-(1, 0, 'Bilder', 'Gallery_Images', 'gallery/images.php', 2),
-(0, 1, 'News', 'News', 'news/news.php', 2),
-(4, 0, 'Hinzuf&uuml;gen', 'News_add', 'news/news_add.php', 2),
-(1, 0, 'Bild Hochladen', 'Gallery_Image_Upload', 'gallery/upload_image.php', 2);
-
 DROP TABLE IF EXISTS `cpp_authenticate` CASCADE;
 CREATE TABLE IF NOT EXISTS `cpp_authenticate` (
   `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -45,17 +24,6 @@ ALTER TABLE `cpp_authenticate` AUTO_INCREMENT = 1;
 INSERT INTO `cpp_authenticate` (`id`, `password`, `password_salt`, `cookie_token`, `time`) VALUES
 (NULL, '1873e707e31706b141d1199fb3c8da179b1395db492ede8b', 'Gd{|Yw"BA4z4,czCw~g0', '5e4869588d85631bb513bcfd7a4d811469836f20a6cc05a0', 1374572687);
  -- password is tiger
-
-DROP TABLE IF EXISTS `cpp_authorisation_rbac`;
-CREATE TABLE IF NOT EXISTS `cpp_authorisation_rbac` (
-  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` INTEGER NOT NULL,
-  `group` VARCHAR(256) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
-INSERT INTO `cpp_authorisation_rbac` (`id`, `user_id`, `group`) VALUES
-(1, 1, 'user');
 
 DROP TABLE IF EXISTS `cpp_authorisation_resource_default`;
 CREATE TABLE IF NOT EXISTS `cpp_authorisation_resource_default` (
@@ -93,8 +61,6 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\Converter\\ConverterList', 'lib/core/converter/converter.php'),
 ('Chrome\\Exception\\Handler\\AuthenticationHandler', 'lib/exception/authentication.php'),
 ('Chrome\\Validator\\AbstractValidator', 'lib/core/validator/validator.php'),
-('Chrome_View_Helper_HTML', 'plugins/view/html.php'),
-('Chrome_Database_Right_Handler_Interface', 'lib/core/database/right_handler.php'),
 ('Chrome\\Database\\Connection\\Mysql', 'lib/core/database/connection/mysql.php'),
 ('Chrome\\Database\\Connection\\Postgresql', 'lib/core/database/connection/postgresql.php'),
 ('Chrome\\Form\\AbstractForm', 'lib/core/form/form.php'),
@@ -106,7 +72,6 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\Router\\Route\\DirectoryRoute', 'lib/core/router/route/directory.php'),
 ('Chrome\\Captcha\\Captcha_Interface', 'lib/captcha/captcha.php'),
 ('Chrome\\Captcha\\Captcha', 'lib/captcha/captcha.php'),
-('Chrome_RBAC', 'lib/rbac/rbac.php'),
 ('Chrome\\Model\\Authentication\\Database', 'lib/core/authentication/chain/database.php'),
 ('Chrome\\Authentication\\Chain\\DatabaseChain', 'lib/core/authentication/chain/database.php'),
 ('Chrome\\Authentication\\Chain\\SessionChain', 'lib/core/authentication/chain/session.php'),
@@ -120,7 +85,7 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\Redirection\\Redirection', 'lib/core/redirection.php'),
 ('Chrome\\Model\\Database\\JsonStatement', 'lib/core/database/facade/model.php'),
 ('Chrome\\Controller\\Index', 'modules/content/index/controller.php'),
-('Chrome\\Controller\\User\\Register', 'modules/content/register/controller.php'),
+('Chrome\\Controller\\User\\Register', 'modules/content/user/register/controller.php'),
 ('Chrome\\Controller\\User\\Logout', 'modules/content/user/logout/controller.php'),
 ('Chrome\\Controller\\User\\Login', 'modules/content/user/login/controller.php'),
 ('Chrome\\Controller\\Captcha', 'modules/content/captcha/controller.php'),
@@ -212,7 +177,7 @@ INSERT INTO `cpp_design_static` (`name`, `class`, `position`, `type`, `theme`, `
 ('right_box', '\\Chrome\\View\\Test\\Test', 'rightBox', 'view', 'chrome', 2),
 ('right_box', '\\Chrome\\View\\Test\\Test', 'rightBox', 'view', 'chrome', 3),
 ('left_box', '\\Chrome\\View\\Test\\Test', 'leftBox', 'view', 'chrome', 1),
-('Benchmark', 'Chrome\\View\\Footer\\Benchmark', 'footer', 'view', 'chrome', 1),
+('Benchmark', '\\Chrome\\View\\Footer\\Benchmark', 'footer', 'view', 'chrome', 1),
 ('Header', '\\Chrome\\View\\Header\\Header', 'preBodyIn', 'view', 'chrome', 1),
 ('Login', '\\Chrome\\Controller\\Box\\Login', 'leftBox', 'controller', 'chrome', 0),
 ('cssIncluder', '\\Chrome\\View\\Html\\Head\\CssIncluder', 'head', 'view', 'chrome', 0),
@@ -222,104 +187,12 @@ INSERT INTO `cpp_design_static` (`name`, `class`, `position`, `type`, `theme`, `
 ('right_box', '\\Chrome\\View\\Test\\Test', 'rightBox', 'view', 'chrome_one_sidebar', 2),
 ('right_box', '\\Chrome\\View\\Test\\Test', 'rightBox', 'view', 'chrome_one_sidebar', 3),
 ('left_box', '\\Chrome\\View\\Test\\Test', 'rightBox', 'view', 'chrome_one_sidebar', 1),
-('Benchmark', 'Chrome\\View\\Footer\\Benchmark', 'footer', 'view', 'chrome_one_sidebar', 1),
+('Benchmark', '\\Chrome\\View\\Footer\\Benchmark', 'footer', 'view', 'chrome_one_sidebar', 1),
 ('Header', '\\Chrome\\View\\Header\\Header', 'preBodyIn', 'view', 'chrome_one_sidebar', 1),
 ('Login', '\\Chrome\\Controller\\Box\\Login', 'rightBox', 'controller', 'chrome_one_sidebar', 0),
 ('cssIncluder', '\\Chrome\\View\\Html\\Head\\CssIncluder', 'head', 'view', 'chrome_one_sidebar', 0),
 ('VarDump', '\\Chrome\\Controller\\Footer\\VarDump', 'footer', 'controller', 'chrome_one_sidebar', 2),
 ('jsIncluder', '\\Chrome\\View\\Html\\Bottom\\JsIncluder', 'postBodyIn', 'view', 'chrome_one_sidebar', 0);
-
-DROP TABLE IF EXISTS `cpp_rbac_group`;
-CREATE TABLE IF NOT EXISTS `cpp_rbac_group` (
-  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(256) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
-INSERT INTO `cpp_rbac_group` (`id`, `name`) VALUES
-(1, 'guest'),
-(2, 'user'),
-(3, 'superUser'),
-(4, 'admin');
-
-DROP TABLE IF EXISTS `cpp_rbac_group_role`;
-CREATE TABLE IF NOT EXISTS `cpp_rbac_group_role` (
-  `group_id` INTEGER NOT NULL,
-  `role_id` INTEGER NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-INSERT INTO `cpp_rbac_group_role` (`group_id`, `role_id`) VALUES
-(1, 1),
-(4, 3);
-
-DROP TABLE IF EXISTS `cpp_rbac_role`;
-CREATE TABLE IF NOT EXISTS `cpp_rbac_role` (
-  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(256) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
-INSERT INTO `cpp_rbac_role` (`id`, `name`) VALUES
-(1, 'news'),
-(2, 'news_comment'),
-(3, 'news_moderator'),
-(4, 'news_special');
-
-DROP TABLE IF EXISTS `cpp_rbac_role_transaction`;
-CREATE TABLE IF NOT EXISTS `cpp_rbac_role_transaction` (
-  `role_id` INTEGER NOT NULL,
-  `transaction_id` INTEGER NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-INSERT INTO `cpp_rbac_role_transaction` (`role_id`, `transaction_id`) VALUES
-(1, 1),
-(3, 2);
-
-DROP TABLE IF EXISTS `cpp_rbac_transaction`;
-CREATE TABLE IF NOT EXISTS `cpp_rbac_transaction` (
-  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(256) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
-INSERT INTO `cpp_rbac_transaction` (`id`, `name`) VALUES
-(1, 'news'),
-(2, 'news_modify'),
-(3, 'news_mark');
-
-DROP TABLE IF EXISTS `cpp_rbac_transformation`;
-CREATE TABLE IF NOT EXISTS `cpp_rbac_transformation` (
-  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  `transaction_id` INTEGER NOT NULL,
-  `transformation` VARCHAR(256) NOT NULL,
-  `right` INTEGER NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
-INSERT INTO `cpp_rbac_transformation` (`id`, `transaction_id`, `transformation`, `right`) VALUES
-(1, 1, 'read', 1),
-(2, 1, 'write', 0),
-(3, 2, 'read', 1),
-(4, 2, 'write', 1),
-(5, 3, 'mark', 1);
-
-DROP TABLE IF EXISTS `cpp_rbac_user_group`;
-CREATE TABLE IF NOT EXISTS `cpp_rbac_user_group` (
-  `user_id` INTEGER NOT NULL,
-  `group_id` INTEGER NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-INSERT INTO `cpp_rbac_user_group` (`user_id`, `group_id`) VALUES
-(1, 4);
-
-DROP TABLE IF EXISTS `cpp_rbac_user_role`;
-CREATE TABLE IF NOT EXISTS `cpp_rbac_user_role` (
-  `user_id` INTEGER NOT NULL,
-  `role_id` INTEGER NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-INSERT INTO `cpp_rbac_user_role` (`user_id`, `role_id`) VALUES
-(1, 4);
 
 DROP TABLE IF EXISTS `cpp_autoload`;
 CREATE TABLE IF NOT EXISTS `cpp_autoload` (
@@ -351,7 +224,7 @@ INSERT INTO `cpp_autoload` (`name`, `path`, `activated`, `priority`, `is_class_r
 ('\\Chrome\\Authentication\\Chain\\SessionChain', 'lib/core/authentication/chain/session.php', TRUE, 6, FALSE),
 ('\\Chrome\\Authorisation\\Authorisation', 'lib/core/authorisation/authorisation.php', TRUE, 6, FALSE),
 ('\\Chrome\\Authorisation\\Adapter\\Simple', 'lib/core/authorisation/adapter/simple.php', TRUE, 6, FALSE),
-('\\Chrome\\Router\\Route\\StaticRoute', 'lib/core/router/route/static.php', TRUE, 6, FALSE),
+('\\Chrome\\Router\\Route\\FixedRoute', 'lib/core/router/route/fixed.php', TRUE, 6, FALSE),
 ('\\Chrome\\Router\\Route\\DynamicRoute', 'lib/core/router/route/dynamic.php', TRUE, 6, FALSE),
 ('\\Chrome\\Router\\Route\\FallbackRoute', 'lib/core/router/route/fallback.php', TRUE, 6, FALSE),
 ('\\Chrome\\Response\\Handler\\HTTPHandler', 'lib/core/response/response/http.php', TRUE, 6, FALSE),
@@ -384,35 +257,28 @@ DROP TABLE IF EXISTS `cpp_resource`;
 CREATE TABLE IF NOT EXISTS `cpp_resource` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
-  `parameter` varchar(130) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQUE` (`name`,`parameter`)
+  UNIQUE KEY `UNIQUE` (`name`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- Daten für Tabelle `cpp_resource`
 --
 
-INSERT INTO `cpp_resource` (`id`, `name`, `parameter`) VALUES (0, '', '');
+INSERT INTO `cpp_resource` (`id`, `name`) VALUES (0, '');
 UPDATE `cpp_resource` SET `id` = 0;
 ALTER TABLE `cpp_resource` AUTO_INCREMENT = 1;
 
-INSERT INTO `cpp_resource` (`id`, `name`, `parameter`) VALUES
-(1, 'index', ''),
-(2, 'login', ''),
-(3, 'register', ''),
-(4, 'logout', ''),
-(5, 'siteNotFound', ''),
-(6, 'registrationConfirm', ''),
-(7, 'testCaptcha', '');
+INSERT INTO `cpp_resource` (`id`, `name`) VALUES
+(3, 'iden:\\Chrome\\Controller\\User\\Register|');
 
 INSERT INTO `cpp_route_dynamic` (`id`, `name`, `class`, `GET`, `POST`) VALUES
 (1, 'news_show', 'Chrome_Controller_News', 'action=show', '');
 
-DROP TABLE IF EXISTS `cpp_route_static`;
-CREATE TABLE IF NOT EXISTS `cpp_route_static` (
+DROP TABLE IF EXISTS `cpp_route_fixed`;
+CREATE TABLE IF NOT EXISTS `cpp_route_fixed` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `resource_id` int(11) NOT NULL,
+  `name` varchar(256) NOT NULL,
   `search` varchar(256) NOT NULL,
   `class` varchar(256) NOT NULL,
   `POST` varchar(512) NOT NULL,
@@ -420,14 +286,14 @@ CREATE TABLE IF NOT EXISTS `cpp_route_static` (
   PRIMARY KEY (`id`)
 );
 
-INSERT INTO `cpp_route_static` (`resource_id`, `search`, `class`, `POST`, `GET`) VALUES
-(1, '/', '\\Chrome\\Controller\\Index', '', ''),
-(1, '/index.html', '\\Chrome\\Controller\\Index', '', ''),
-(2, '/login.html', '\\Chrome\\Controller\\User\\Login', '', ''),
-(3, '/registrieren.html', '\\Chrome\\Controller\\User\\Register', '', 'action=register'),
-(4, '/logout.html', '\\Chrome\\Controller\\User\\Logout', '', ''),
-(6, '/registrierung_bestaetigen.html', '\\Chrome\\Controller\\User\\Register', '', 'action=confirm_registration'),
-(7, '/captcha.html', '\\Chrome\\Controller\\Captcha', '', '');
+INSERT INTO `cpp_route_fixed` (`name`, `search`, `class`, `POST`, `GET`) VALUES
+('index', '/', '\\Chrome\\Controller\\Index', '', ''),
+('index', '/index.html', '\\Chrome\\Controller\\Index', '', ''),
+('login', '/login.html', '\\Chrome\\Controller\\User\\Login', '', ''),
+('register', '/registrieren.html', '\\Chrome\\Controller\\User\\Register', '', 'action=register'),
+('logout', '/logout.html', '\\Chrome\\Controller\\User\\Logout', '', ''),
+('registrationConfirm', '/registrierung_bestaetigen.html', '\\Chrome\\Controller\\User\\Register', '', 'action=confirm_registration'),
+('testCaptcha', '/captcha.html', '\\Chrome\\Controller\\Captcha', '', '');
 
 DROP TABLE IF EXISTS `cpp_user`;
 CREATE TABLE IF NOT EXISTS `cpp_user` (

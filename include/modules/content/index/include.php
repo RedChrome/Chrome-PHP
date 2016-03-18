@@ -11,7 +11,7 @@ class Index extends \Chrome\Form\AbstractForm
         $this->setAttribute(self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_GET);
         // this sets $this->_id to 'Index'
         $this->setAttribute(self::ATTRIBUTE_ID, 'Index');
-        $this->setAttribute(self::ATTRIBUTE_ACTION, new \Chrome\Resource\Resource('static:index'));
+        $this->setAttribute(self::ATTRIBUTE_ACTION, new \Chrome\Resource\Fixed('index'));
 
         $lengthValidator = new \Chrome\Validator\String\LengthValidator();
         $lengthValidator->setOptions(array(\Chrome\Validator\String\LengthValidator::OPTION_MAX_LENGTH => 35,

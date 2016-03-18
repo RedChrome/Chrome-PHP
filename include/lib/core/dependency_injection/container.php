@@ -172,7 +172,7 @@ class Container implements Container_Interface
                     return $object;
                 }
             }
-        } catch(\Crome\Exception $e) {
+        } catch(\Chrome\Exception $e) {
             throw new ContainerException('Could not retrieve object with key "'.$key.'". An exception occured', 0, $e);
         }
 

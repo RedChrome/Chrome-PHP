@@ -27,12 +27,9 @@ class RelativeHelper implements Helper_Interface
     {
         if($resource instanceof \Chrome\Resource\Relative_Interface) {
 
-            $uri = $linker->getReferenceUri();
-            $path = $uri->getPath();
+            $path = $linker->appendPathToReferenceUri($resource->getRelative());
 
-            $new = $uri->withPath($path.$resource->getRelative());
-
-            return new \Chrome\Linker\Link($new->__toString());
+            return new \Chrome\Linker\Link($path);
         }
 
         return null;
@@ -48,15 +45,10 @@ interface Relative_Interface extends Resource_Interface
 
 class Relative extends Resource implements Relative_Interface
 {
-    protected $_rel = '';
-
-    public function __construct($relative)
-    {
-        $this->_rel = $relative;
-    }
+    protected $_prefix = 'relative:';
 
     public function getRelative()
     {
-        return $this->_rel;
+        return $this->_resourceId;
     }
 }

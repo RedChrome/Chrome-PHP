@@ -21,14 +21,15 @@
     "requireSetClass": "INSERT INTO cpp_class(`id`, `name`, `file`) VALUES ('', \"?\", \"?\")",
 
     "routeDynamicGetResourceById": "SELECT `name`, `class`, `GET`, `POST` FROM cpp_route_dynamic WHERE `id` = ? LIMIT 0,1",
-    "routeStaticGetRoute": "SELECT `class`, `POST`, `GET` FROM cpp_route_static WHERE `search` = \"?\" LIMIT 0,1",
-    "routeStaticFindResource": "SELECT `search` AS `link` FROM cpp_route_static WHERE `resource_id` = ? ORDER BY `id` DESC LIMIT 0,1",
+    "routeFixedGetRoute": "SELECT `class`, `POST`, `GET` FROM cpp_route_fixed WHERE `search` = \"?\" LIMIT 0,1",
+    "routeFixedFindResource": "SELECT `search` AS `link` FROM `cpp_route_fixed` WHERE `name` = \"?\" LIMIT 0,1",
+    "routeFixedFindResourceByIdentifier": "SELECT `search` AS `link` FROM `cpp_route_fixed` WHERE `class` = \"?\" LIMIT 0,1",
 
     "designLoaderStaticGetViewsByPosition": "SELECT  `class`, `type` FROM cpp_design_static WHERE `position` = \"?\" AND `theme` = \"?\"  ORDER BY `order` ASC",
     
-    "resourceGetResourceId": "SELECT `id` FROM cpp_resource WHERE `name` = \"?\" AND `parameter` = \"?\"",
-    "resourceGetResource": "SELECT `name`, `parameter` FROM cpp_resource WHERE `id` = ?",
-    "resourceCreateResource": "INSERT INTO cpp_resource VALUES (NULL, \"?\", \"?\")",
-    "resourceDeleteResource": "DELETE FORM cpp_resource WHERE `name` = \"?\" AND `parameter` = \"?\"",
+    "resourceGetResourceId": "SELECT `id` FROM cpp_resource WHERE `name` = \"?\"",
+    "resourceGetResource": "SELECT `name` FROM cpp_resource WHERE `id` = ?",
+    "resourceCreateResource": "INSERT INTO cpp_resource VALUES (NULL, \"?\")",
+    "resourceDeleteResource": "DELETE FORM cpp_resource WHERE `name` = \"?\" ",
     "resourceDeleteResourceId": "DELETE FROM cpp_resource WHERE `id` = ?"
 }

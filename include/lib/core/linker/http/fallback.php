@@ -16,11 +16,15 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Linker
  */
-namespace Chrome\Linker\HTTP\Model;
+namespace Chrome\Linker\HTTP;
 
 use \Chrome\Resource\Resource_Interface;
+use \Chrome\Linker\Linker_Interface;
 
-interface Static_Interface
+class FallbackHelper implements Helper_Interface
 {
-    public function getLinkByResource(Resource_Interface $resource);
+    public function getLink(\Chrome\Resource\Resource_Interface $resource, Linker_Interface $linker)
+    {
+        return new \Chrome\Linker\Link('404.html');
+    }
 }

@@ -29,7 +29,7 @@ class Register extends AbstractModule
     {
         $authorisation = $this->_applicationContext->getAuthorisation();
 
-        if($authorisation->isAllowed(new \Chrome\Authorisation\Resource\Resource(new \Chrome\Resource\Resource('register'), 'register')) === false)
+        if($authorisation->isAllowed(new \Chrome\Authorisation\Resource\Resource(new \Chrome\Resource\Identifier(__CLASS__), 'register')) === false)
         {
             $this->_view->alreadyRegistered();
             return;

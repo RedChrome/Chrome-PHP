@@ -54,11 +54,11 @@ class ToDo extends AbstractView
         return '<br><br>
                 <h4>Working modules so far:</h4>
                 <ul>
-                    <li><a href="'.$linker->get(new \Chrome\Resource\Resource('static:index')).'">Index</a></li>
-                    <li><a href="'.$linker->get(new \Chrome\Resource\Resource('static:login')).'">Login</a></li>
-                    <li><a href="'.$linker->get(new \Chrome\Resource\Resource('static:logout')).'">Logout</a></li>
-                    <li><a href="'.$linker->get(new \Chrome\Resource\Resource('static:register')).'">Register</a></li>
-                    <li><a href="'.$linker->get(new \Chrome\Resource\Resource('static:testCaptcha')).'">Captcha</a></li>
+                    <li><a href="'.$linker->get(new \Chrome\Resource\Identifier('\Chrome\Controller\Index')).'">Index</a></li>
+                    <li><a href="'.$linker->get(new \Chrome\Resource\Identifier('\Chrome\Controller\User\Login')).'">Login</a></li>
+                    <li><a href="'.$linker->get(new \Chrome\Resource\Identifier('\Chrome\Controller\User\Logout')).'">Logout</a></li>
+                    <li><a href="'.$linker->get(new \Chrome\Resource\Identifier('\Chrome\Controller\User\Register')).'">Register</a></li>
+                    <li><a href="'.$linker->get(new \Chrome\Resource\Identifier('\Chrome\Controller\Captcha')).'">Captcha</a></li>
                 </ul>
                 <br>
                 <div align="left">TODO LIST:<br>

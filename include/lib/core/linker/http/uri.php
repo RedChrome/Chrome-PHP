@@ -29,7 +29,7 @@ class UriHelper implements Helper_Interface
     {
         if($resource instanceof Uri_Interface)
         {
-            return new Link($resource->getUrl());
+            return new Link($resource->getUri());
         }
 
         return null;
@@ -43,15 +43,15 @@ interface Uri_Interface extends Resource_Interface
     /**
      * @return string
      */
-    public function getUrl();
+    public function getUri();
 }
 
-class Uri extends Resource
+class Uri extends Resource implements Uri_Interface
 {
-    protected $_url = '';
+    protected $_prefix = 'uri:';
 
-    public function __construct($url)
+    public function getUri()
     {
-        $this->_url = $url;
+        return $this->_resourceId;
     }
 }

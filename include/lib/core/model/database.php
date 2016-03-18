@@ -112,7 +112,7 @@ abstract class AbstractDatabaseStatement extends \Chrome\Model\AbstractDatabase
     }
 
     /**
-     * @return Chrome\Database\Facade\Model_Interface
+     * @return \Chrome\Database\Facade\Model_Interface
      */
     protected function _getDBInterface($clear = true)
     {

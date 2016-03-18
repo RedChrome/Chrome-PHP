@@ -38,9 +38,9 @@ class DefaultTestApplication extends \Chrome\Application\DefaultApplication
         $this->_model = $modelContext;
     }
 
-    protected function _initRequestAndResponse()
+    protected function _initRequestAndResponse(\Chrome\Application\Application_Interface $app = null)
     {
-        $hash = $this->_diContainer->get('\Chrome\Hash\Hash');
+        $hash = $this->_diContainer->get('\Chrome\Hash\Hash_Interface');
 
         $request = \Zend\Diactoros\ServerRequestFactory::fromGlobals(array_merge($_SERVER, array('HTTP_USER_AGENT' => 'Chrome', 'REMOTE_ADDR' => '127.0.0.1')), $_GET, $_POST, $_COOKIE, $_FILES);
         $cookie = new \Chrome\Request\Cookie\Cookie($request, $hash);
@@ -55,8 +55,8 @@ class DefaultTestApplication extends \Chrome\Application\DefaultApplication
     protected function _initDiContainer()
     {
         parent::_initDiContainer();
-        $this->_diContainer->getHandler('closure')->add('\Chrome\Linker\Linker_Interface', function ($c) {
-            return new \Chrome\Linker\Console\Linker($c->get('\Chrome\Resource\Model_Interface'));
-        });
+        #$this->_diContainer->getHandler('closure')->add('\Chrome\Linker\Linker_Interface', function ($c) {
+        #    return new \Chrome\Linker\Console\Linker($c->get('\Chrome\Resource\Model_Interface'));
+        #});
     }
 }

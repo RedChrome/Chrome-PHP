@@ -15,6 +15,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         return m::mock('\Chrome\DI\Handler_Interface');
     }
 
+    protected function _getInvoker()
+    {
+        return m::mock('\Chrome\DI\Invoker_Interface');
+    }
+
     public function testHandlers()
     {
         $faker = \Faker\Factory::create();
@@ -24,18 +29,90 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $handlerName = $faker->name;
 
-        $this->assertFalse($container->isAttached($handlerName));
+        $this->assertFalse($container->isAttachedHandler($handlerName));
 
         $container->attachHandler($handlerName, $handler);
 
-        $this->assertTrue($container->isAttached($handlerName));
+        $this->assertTrue($container->isAttachedHandler($handlerName));
         $this->assertSame($handler, $container->getHandler($handlerName));
 
         $container->detachHandler($handlerName);
-        $this->assertFalse($container->isAttached($handlerName));
+        $this->assertFalse($container->isAttachedHandler($handlerName));
 
         $container->detachHandler($handlerName);
-        $this->assertFalse($container->isAttached($handlerName));
+        $this->assertFalse($container->isAttachedHandler($handlerName));
+    }
+
+    public function testInvokers()
+    {
+        $faker = \Faker\Factory::create();
+
+        $container = $this->_getContainer();
+        $invoker = $this->_getInvoker();
+
+        $invokerName = $faker->name;
+
+        $this->assertFalse($container->isAttachedInvoker($invokerName));
+
+        $container->attachInvoker($invokerName, $invoker);
+
+        $this->assertTrue($container->isAttachedInvoker($invokerName));
+        $this->assertSame($invoker, $container->getInvoker($invokerName));
+
+        $container->detachInvoker($invokerName);
+        $this->assertFalse($container->isAttachedInvoker($invokerName));
+
+        // is still okay.
+        $container->detachInvoker($invokerName);
+    }
+
+    public function testInvokerNotDefinedThrowsException()
+    {
+        $faker = \Faker\Factory::create();
+
+        $container = $this->_getContainer();
+        $name = $faker->name;
+        $this->assertFalse($container->isAttachedInvoker($name));
+
+        $this->setExpectedException('\Chrome\Exception');
+        $container->getInvoker($name);
+    }
+
+    public function testInvokersAreActuallyInvoked()
+    {
+        $object = new \Exception();
+
+        $faker = \Faker\Factory::create();
+
+        $container = $this->_getContainer();
+        $handler = $this->_getHandler();
+
+        $invoker[] = $this->_getInvoker();
+        $invoker[] = $this->_getInvoker();
+        $invoker[] = $this->_getInvoker();
+
+        $container->attachHandler($faker->name, $handler);
+
+        $handler->shouldReceive('get')->andReturn($object);
+
+
+        foreach($invoker as $key => $inv) {
+            $inv->shouldReceive('invoke')->withArgs(array($object, $container))->andReturnNull();
+            $container->attachInvoker((string) $key, $inv);
+        }
+
+        $container->get($faker->name);
+    }
+
+    public function testAttachInvokerWithNoString()
+    {
+        $container = $this->_getContainer();
+        $invoker = $this->_getInvoker();
+
+        $this->setExpectedException('\Chrome\InvalidArgumentException');
+
+        $container->attachInvoker(function() {}, $invoker);
+
     }
 
     public function testAttachHandlerWithNoString()
@@ -93,7 +170,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $handler->shouldReceive('get')->andReturnNull();
         $container->attachHandler('handler', $handler);
 
-        $this->setExpectedException('\Chrome\Exception');
+        $this->setExpectedException('\Chrome\DI\Exception\NotFoundException');
 
         $container->get($faker->name);
     }
@@ -105,7 +182,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $handler->shouldReceive('get')->andThrow('\Chrome\InvalidArgumentException');
         $container->attachHandler('handler', $handler);
 
-        $this->setExpectedException('\Chrome\Exception');
+        $this->setExpectedException('\Chrome\DI\Exception\ContainerException');
 
         $container->get('key');
     }

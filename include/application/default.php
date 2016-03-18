@@ -449,7 +449,7 @@ class DefaultApplication implements Application_Interface
         // import(array('\Chrome\Router\Route\StaticRoute', '\Chrome\Router\Route\DynamicRoute') );
         // matches static routes
 
-        $this->_router->addRoute(new \Chrome\Router\Route\StaticRoute($this->_diContainer->get('\Chrome\Model\Route\Static_Interface'), $routerLogger));
+        $this->_router->addRoute(new \Chrome\Router\Route\FixedRoute($this->_diContainer->get('\Chrome\Model\Route\Static_Interface'), $routerLogger));
         // matches dynamic created routes
         $this->_router->addRoute(new \Chrome\Router\Route\DynamicRoute($this->_diContainer->get('\Chrome\Model\Route\Dynamic'), $routerLogger));
 

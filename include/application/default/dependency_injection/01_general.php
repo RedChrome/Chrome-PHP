@@ -157,12 +157,12 @@ class General implements Loader_Interface
             $cacheOption->setCacheFile(new \Chrome\File(CACHE . 'router/_static.cache'));
             $cache = new \Chrome\Cache\File\Serialization($cacheOption);
 
-            return new \Chrome\Model\Route\StaticRoute\Cache($c->get('\Chrome\Model\Route\Static\Database'), $cache);
+            return new \Chrome\Model\Route\FixedRoute\Cache($c->get('\Chrome\Model\Route\Fixed\Database'), $cache);
         }, true);
 
-        $closure->add('\Chrome\Model\Route\Static\Database', function ($c)
+        $closure->add('\Chrome\Model\Route\Fixed\Database', function ($c)
         {
-            return $c->get('\Chrome\Model\Route\StaticRoute\Database');
+            return $c->get('\Chrome\Model\Route\FixedRoute\Database');
         }, true);
 
         $closure->add('\Chrome\Model\Design\StaticLoader_Interface', function ($c)
@@ -241,7 +241,7 @@ class General implements Loader_Interface
     {
         $closure->add('\Chrome\Linker\HTTP\Helper\Model\Static_Interface', function ($c)
         {
-            $model = $c->get('\Chrome\Model\Route\Static\Database');
+            $model = $c->get('\Chrome\Model\Route\Fixed\Database');
             $model->setResourceModel($c->get('\Chrome\Resource\Model_Interface'));
             return $model;
         }, true);
@@ -256,11 +256,15 @@ class General implements Loader_Interface
 
             require_once LIB . 'core/linker/http/relative.php';
             require_once LIB . 'core/linker/http/uri.php';
-            require_once LIB . 'core/linker/http/static.php';
+            require_once LIB . 'core/linker/http/fixed.php';
+            require_once LIB . 'core/linker/http/identifier.php';
+            require_once LIB . 'core/linker/http/fallback.php';
 
             $linker->addResourceHelper(new \Chrome\Linker\HTTP\RelativeHelper());
-            $linker->addResourceHelper(new \Chrome\Linker\HTTP\StaticHelper($c->get('\Chrome\Linker\HTTP\Helper\Model\Static_Interface')));
+            $linker->addResourceHelper(new \Chrome\Linker\Http\IdentifierHelper($c->get('\Chrome\Linker\HTTP\Helper\Model\Static_Interface')));
+            $linker->addResourceHelper(new \Chrome\Linker\HTTP\FixedHelper($c->get('\Chrome\Linker\HTTP\Helper\Model\Static_Interface')));
             $linker->addResourceHelper(new \Chrome\Linker\HTTP\UriHelper());
+            $linker->addResourceHelper(new \Chrome\Linker\HTTP\FallbackHelper());
 
             return $linker;
         }, true);

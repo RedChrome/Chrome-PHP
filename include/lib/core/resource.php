@@ -18,6 +18,11 @@
  */
 namespace Chrome\Resource;
 
+/**
+ * Forbidden input chars are: | ~ and =
+ *
+ *
+ */
 interface Resource_Interface
 {
     public function getParameters();
@@ -26,7 +31,17 @@ interface Resource_Interface
 
     public function equals(Resource_Interface $resource);
 
+    public function toString();
+
     public function __toString();
+
+    /**
+     *
+     * @param string $string
+     * @return void
+     * @throws \Chrome\Exception
+     */
+    public function fromString($string);
 }
 
 abstract class AbstractResource implements Resource_Interface
@@ -53,20 +68,29 @@ abstract class AbstractResource implements Resource_Interface
 
     public function __toString()
     {
-        $params = array();
+        return $this->toString();
+    }
 
-        foreach($this->_resourceParams as $key => $param) {
-            $params[] = $key.'='.$param;
+    /**
+     * If the string could not get parsed, an exception is thrown
+     *
+     * @param unknown $keyValueString
+     */
+    protected function _parseKeyValuePairString($keyValueString)
+    {
+        $keyAndValue = explode('=', $keyValueString);
+        if(count($keyAndValue) === 2) {
+            return array($keyAndValue[0] => $keyAndValue[1]);
         }
 
-        $str = implode('/', $params);
-
-        return $this->_resourceId.'/'.$str;
+        throw new \Chrome\Exception('Could not parse key-value-string.');
     }
 }
 
 class Resource extends AbstractResource
 {
+    protected $_prefix = 'res:';
+
     public function __construct($id)
     {
         $this->_resourceId = $id;
@@ -82,6 +106,38 @@ class Resource extends AbstractResource
     {
         $this->_resourceId = ($id !== null) ? $id : null;
         return $this;
+    }
+
+    public function toString()
+    {
+        $params = array();
+
+        foreach($this->_resourceParams as $key => $param) {
+            $params[] = $key.'='.$param;
+        }
+
+        $str = implode('|', $params);
+
+        return $this->_prefix.$this->_resourceId.'|'.$str;
+    }
+
+    public function fromString($string)
+    {
+        if(!preg_match('#^'.$this->_prefix.'(.*)#', $string, $matches) === 1) {
+            if(($pos = strpos($matches[1], '|') ) !== false) {
+                $id = substr($matches[1], 0, $pos);
+                $paramstring = substr($matches[1], $pos);
+                $params = explode('|', $paramstring);
+
+                foreach($params as $parameter)
+                {
+                    $keyValue = $this->_parseKeyValuePairString($parameter);
+                    $this->_resourceParams[key($keyValue)] = current($keyValue);
+                }
+
+                $this->_resourceId = $id;
+            }
+        }
     }
 
     public function equals(Resource_Interface $resource)
@@ -123,56 +179,27 @@ use Chrome\Resource\Resource;
 
 class Database extends \Chrome\Model\AbstractDatabaseStatement implements Model_Interface
 {
-    protected function _convertArrayParamsToString(array $params)
-    {
-        foreach($params as $key => $param) {
-            $params[$key] = $key.'='.$param;
-        }
-
-        return implode('/', $params);
-    }
-
-    protected function _convertStringParamsToArray($params)
-    {
-        $keyValuePairs = explode('/', $params);
-
-        $array = array();
-
-        foreach($keyValuePairs as $keyValuePair)
-        {
-            $keyValue = explode('=', $keyValuePair);
-            if(count($keyValue) === 2) {
-                $array[$keyValue[0]] = $keyValue[1];
-            }
-        }
-
-        return $array;
-    }
-
     public function getId(Resource_Interface $resource)
     {
-        if($resource->getId() !== null) {
-            return $resource->getId();
-        }
-
         $db = $this->_getDBInterface();
 
-        $this->_getDBInterface()->loadQuery('resourceGetResourceId')->execute(array($resource->getName(), $this->_convertArrayParamsToString($resource->getParameters())));
+        $db->loadQuery('resourceGetResourceId')->execute(array($resource->toString()));
 
         $result = $db->getResult();
 
         if(!$result->isEmpty()) {
-            $array = $result->getNext();
-            $id = (int) $array['id'];
-            $resource->setId($id);
-            return $id;
-        } else {
-            return 0;
+            $row = $result->getNext();
+            return (int) $row['id'];
         }
+
+        return 0;
     }
 
     public function getResource($resourceId)
     {
+        // FIXME: what to do?
+        throw new \Chrome\Exception('Not finished');
+
         $resourceId = (int) $resourceId;
 
         $db = $this->_getDBInterface();
@@ -196,11 +223,11 @@ class Database extends \Chrome\Model\AbstractDatabaseStatement implements Model_
 
     public function deleteResource(Resource_Interface $resource)
     {
-        $this->_getDBInterface()->loadQuery('resourceDeleteResource')->execute(array($resource->getName(), $this->_convertArrayParamsToString($resource->getParameters())));
+        $this->_getDBInterface()->loadQuery('resourceDeleteResource')->execute(array($resource->getName()));
     }
 
     public function createResource(Resource_Interface $resource)
     {
-        $this->_getDBInterface()->loadQuery('resourceCreateResource')->execute(array($resource->getName(), $this->_convertArrayParamsToString($resource->getParameters())));
+        $this->_getDBInterface()->loadQuery('resourceCreateResource')->execute(array($resource->getName()));
     }
 }
