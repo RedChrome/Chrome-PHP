@@ -23,40 +23,31 @@ use \Chrome\Controller\AbstractModule;
 class Login extends AbstractModule
 {
 
-    public function __construct(\Chrome\Interactor\User\Login $interactor)
+    public function __construct(\Chrome\Interactor\User\Login $interactor, \Chrome\Form\Module\User\Login $form, \Chrome\View\User\Login $view)
     {
         $this->_interactor = $interactor;
+        $this->_form = $form;
+        $this->_view = $view;
     }
 
     protected function _execute()
-    {
-        $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\Module\User\Login');
-        $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome\View\User\Login');
-
-        $this->_handleForm();
-    }
-
-    protected function _handleForm()
     {
         if($this->_applicationContext->getAuthentication()->isUser() === true)
         {
             $this->_view->alreadyLoggedIn();
             return;
         }
+
         $this->_form->create();
 
-        if($this->_form->isSent())
+        if($this->_form->isSent() and $this->_form->isValid())
         {
-            if($this->_form->isValid())
+            $this->_interactor->login($this->_form->getData('identity'), $this->_form->getData('password'), $this->_form->getData('stay_loggedin'));
+
+            if($this->_interactor->isLoggedIn() === true)
             {
-
-                $this->_interactor->login($this->_form->getData('identity'), $this->_form->getData('password'), $this->_form->getData('stay_loggedin'));
-
-                if($this->_interactor->isLoggedIn() === true)
-                {
-                    $this->_view->successfullyLoggedIn();
-                    return;
-                }
+                $this->_view->successfullyLoggedIn();
+                return;
             }
         }
 

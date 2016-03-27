@@ -84,9 +84,7 @@ class ModuleUser implements Loader_Interface
 
         $closure->add('\Chrome\Controller\User\Login', function ($c)
         {
-            $controller = new \Chrome\Controller\User\Login($c->get('\Chrome\Interactor\User\Login'));
-            $controller->setExceptionHandler($c->get('\Chrome\Exception\Handler_Interface'));
-            return $controller;
+            return new \Chrome\Controller\User\Login($c->get('\Chrome\Interactor\User\Login'), $c->get('\Chrome\Form\Module\User\Login'), $c->get('\Chrome\View\User\Login'));
         });
     }
 

@@ -104,7 +104,7 @@ class DB2 extends AbstractConnection
 
     public function getDefaultAdapter()
     {
-        return 'Chrome_Database_Adapter_Db2';
+        return '\Chrome\Database\Adapter\DB2';
     }
 
     public function getDatabaseName()

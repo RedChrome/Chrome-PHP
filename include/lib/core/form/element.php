@@ -183,7 +183,6 @@ interface MultipleElement_Interface extends BasicElement_Interface
  * This is usefull if the client sent invalid data and you don't want the client to type all the data into the form again.
  * Or if you're setting up a multi form input with backward buttons. Then the data from the previous forms should get saved.
  *
- * @todo isnt this a ui interface? if it is, then move it to the view classes.
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */

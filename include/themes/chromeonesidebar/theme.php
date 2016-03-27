@@ -75,8 +75,7 @@ class ChromeOneSidebar extends AbstractTheme
             $option->setPosition($key);
             $composition->setOption($option);
             $loader = $diContainer->get('\Chrome\Design\Loader_Interface');
-            // TODO: change name of the sidebar (-> db)
-            $loader->setTheme('chrome_one_sidebar');
+            $loader->setTheme('chromeonesidebar');
 
             $loader->addComposition($composition);
             $loader->load();

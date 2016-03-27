@@ -31,17 +31,21 @@ interface Redirection_Interface
 {
     public function redirectToPreviousPage();
 
-    public function redirectToWebsite($website);
+    public function reload($sec);
 
     public function redirectToResource(Resource_Interface $resource);
 }
+
 class Redirection implements Redirection_Interface
 {
     protected $_applicationContext = null;
 
+    protected $_linker = null;
+
     public function __construct(\Chrome\Context\Application_Interface $context)
     {
         $this->_applicationContext = $context;
+        $this->_linker = $context->getViewContext()->getLinker();
     }
 
     protected function _redirect($site)
@@ -51,6 +55,15 @@ class Redirection implements Redirection_Interface
         if($resp instanceof \Chrome\Response\HTTP) {
             $resp->setStatus('303 Temporary Redirect');
             $resp->addHeader('Location', $site);
+        }
+    }
+
+    public function reload($sec)
+    {
+        $resp = $this->_applicationContext->getResponse();
+
+        if($resp instanceof \Chrome\Response\HTTP) {
+            $resp->addHeader('Refresh', (int) $sec);
         }
     }
 
@@ -71,23 +84,12 @@ class Redirection implements Redirection_Interface
             return $return;
         } else
         {
-            // TODO: use the linker!
-            // we dont know where the user came, so get to the index.php
-            $linker = $this->_applicationContext->getViewContext()->getLinker();
-            return $linker->get(new \Chrome\Resource\Resource('rel:'));
-            #return 'http://' . $request->getServerParams()['HTTP_HOST'] . ROOT_URL;
+            return $this->_linker->get(new \Chrome\Resource\Relative(''));
         }
-    }
-
-    public function redirectToWebsite($website)
-    {
-        $this->_redirect($website);
     }
 
     public function redirectToResource(Resource_Interface $resource)
     {
-        $linker = $this->_applicationContext->getViewContext()->getLinker();
-
-        $this->_redirect($linker->get($resource));
+        $this->_redirect($this->_linker->get($resource));
     }
 }

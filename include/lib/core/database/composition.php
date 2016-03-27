@@ -21,7 +21,6 @@
 
 namespace Chrome\Database;
 
-// TODO: remove setInterface and setResult
 interface Composition_Interface
 {
     public function merge(Composition_Interface $requiredComp, Composition_Interface $comp = null);
@@ -32,8 +31,6 @@ interface Composition_Interface
 
     public function setConnection($connection);
 
-    public function setResult($result);
-
     public function getAdapter();
 
     public function getFacade();
@@ -43,7 +40,6 @@ interface Composition_Interface
     public function getResult();
 }
 
-// TODO: proper ucfirst: model_test -> Model_Test
 class Composition implements Composition_Interface
 {
     protected $_result = null;
@@ -57,9 +53,10 @@ class Composition implements Composition_Interface
     public function __construct($facade = null, $result = null, $adapter = null, $connection = null)
     {
         $this->setFacade($facade);
-        $this->setResult($result);
         $this->setAdapter($adapter);
         $this->setConnection($connection);
+
+        $this->_result = $result;
     }
 
     public function merge(Composition_Interface $requiredComp, Composition_Interface $comp = null)
@@ -79,7 +76,6 @@ class Composition implements Composition_Interface
 
     protected function _empty($string)
     {
-
         if(empty($string)) {
             return null;
         }
@@ -100,11 +96,6 @@ class Composition implements Composition_Interface
     public function setConnection($connection)
     {
         $this->_connection = $this->_empty($connection);
-    }
-
-    public function setResult($result)
-    {
-        $this->_result = $this->_empty($result);
     }
 
     protected function _getMergedFacade(Composition_Interface $requiredComp, Composition_Interface $comp = null)
@@ -182,7 +173,7 @@ class Composition implements Composition_Interface
 
     public function getFacade()
     {
-        return ($this->_facade === null) ? null : ucfirst($this->_facade);
+        return ($this->_facade === null) ? null : $this->_facade;
     }
 
     public function getConnection()
@@ -192,11 +183,11 @@ class Composition implements Composition_Interface
 
     public function getAdapter()
     {
-        return ($this->_adapter === null) ? null : ucfirst($this->_adapter);
+        return ($this->_adapter === null) ? null : $this->_adapter;
     }
 
     public function getResult()
     {
-        return ($this->_result === null) ? null : ucfirst($this->_result);
+        return ($this->_result === null) ? null : $this->_result;
     }
 }

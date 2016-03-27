@@ -19,7 +19,6 @@
 
 namespace Chrome\Design\Theme;
 
-use \Chrome\Design\Design_Interface;
 use \Chrome\Design\AbstractTheme;
 
 /**
@@ -35,7 +34,6 @@ class Chrome extends AbstractTheme
 
         require_once LIB . 'core/design/loader/static.php';
 
-        // @todo use another exception handler
         $exceptionHandler = new \Chrome\Exception\Handler\HtmlStackTrace();
 
         $template = new \Chrome\Template\PHP();
