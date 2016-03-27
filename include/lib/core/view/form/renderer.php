@@ -30,15 +30,18 @@ abstract class AbstractRenderer implements Renderer_Interface
 
     protected $_viewContext = null;
 
-    public function __construct(\Chrome\View\Form\Form_Interface $viewForm)
+    public function __construct(\Chrome\View\Form\Form_Interface $viewForm = null)
     {
-        $this->setViewForm($viewForm);
-        $this->setViewContext($viewForm->getViewContext());
+        if($viewForm !== null) {
+            $this->setViewForm($viewForm);
+        }
     }
 
     public function setViewForm(\Chrome\View\Form\Form_Interface $viewForm)
     {
         $this->_viewForm = $viewForm;
+        // this _must_ be done, in order to always use the right view context.
+        $this->setViewContext($viewForm->getViewContext());
     }
 
     public function setViewContext(\Chrome\Context\View_Interface $viewContext)

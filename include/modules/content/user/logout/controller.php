@@ -30,10 +30,9 @@ class Logout extends AbstractModule
 {
     protected $_logout = null;
 
-    public function __construct(Application_Interface $app, \Chrome\Interactor\User\Logout $logout)
+    public function __construct(\Chrome\Interactor\User\Logout $logout)
     {
         $this->_logout = $logout;
-        parent::__construct($app);
     }
 
     protected function _execute()

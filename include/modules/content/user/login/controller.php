@@ -20,73 +20,46 @@ namespace Chrome\Controller\User;
 
 use \Chrome\Controller\AbstractModule;
 
-/**
- *
- * @package CHROME-PHP
- * @subpackage Chrome.User
- */
 class Login extends AbstractModule
 {
 
-    protected $_controller;
-
-    public function __construct(\Chrome\Context\Application_Interface $appContext, \Chrome\Interactor\User\Login $interactor)
+    public function __construct(\Chrome\Interactor\User\Login $interactor)
     {
-        parent::__construct($appContext);
         $this->_interactor = $interactor;
-    }
-
-    protected function _initialize()
-    {
-        $this->_require = array(
-            'file' => array(
-                CONTENT . 'user/login/include.php',
-                CONTENT . 'user/login/view/default.php',
-                CONTENT . 'user/login/model.php'
-            )
-        );
-    }
-
-    protected function _handleForm()
-    {
-        if ($this->_applicationContext->getAuthentication()->isUser() === true) {
-            $this->_view->alreadyLoggedIn();
-            return;
-        }
-
-        try {
-            if ($this->_form->isSent()) {
-                if ($this->_form->isValid()) {
-                    $this->_interactor->login($this->_form->getData('identity'), $this->_form->getData('password'), $this->_form->getData('stay_loggedin'));
-
-                    if ($this->_interactor->isLoggedIn() === true) {
-                        $this->_view->successfullyLoggedIn();
-                    } else {
-                        $this->_view->displayLogin();
-                        /*$this->_view->errorWhileLoggingIn($this->_form, $this->_applicationContext->getDiContainer()
-                            ->get('\Chrome\View\Form\Element\Factory\Yaml'));*/
-                    }
-                } else {
-                    $this->_form->destroy();
-                    $this->_form->create();
-                    $this->_view->displayLogin();
-                }
-            } else {
-                $this->_view->displayLogin();
-            }
-        } catch (\Chrome\Exception $e) {
-            $this->_exceptionHandler->exception($e);
-        }
     }
 
     protected function _execute()
     {
         $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\Module\User\Login');
-
         $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome\View\User\Login');
 
+        $this->_handleForm();
+    }
+
+    protected function _handleForm()
+    {
+        if($this->_applicationContext->getAuthentication()->isUser() === true)
+        {
+            $this->_view->alreadyLoggedIn();
+            return;
+        }
         $this->_form->create();
 
-        $this->_handleForm();
+        if($this->_form->isSent())
+        {
+            if($this->_form->isValid())
+            {
+
+                $this->_interactor->login($this->_form->getData('identity'), $this->_form->getData('password'), $this->_form->getData('stay_loggedin'));
+
+                if($this->_interactor->isLoggedIn() === true)
+                {
+                    $this->_view->successfullyLoggedIn();
+                    return;
+                }
+            }
+        }
+
+        $this->_view->displayLogin($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Module\User\Login'));
     }
 }

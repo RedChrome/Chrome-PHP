@@ -29,7 +29,6 @@ use \Chrome\View\AbstractView;
  */
 class Login extends AbstractListLayout
 {
-
     public function alreadyLoggedIn()
     {
         $this->_views[] = $this->_viewContext->getFactory()->get('\Chrome\View\User\Login\LoggedIn');
@@ -40,9 +39,14 @@ class Login extends AbstractListLayout
         $this->_views[] = $this->_viewContext->getFactory()->get('\Chrome\View\User\Login\SuccessfullyLoggedIn');
     }
 
-    public function displayLogin()
+    public function displayLogin(\Chrome\Form\Module\User\Login $form, \Chrome\View\Form\Module\User\Login $viewForm)
     {
-        $this->_views[] = $this->_viewContext->getFactory()->get('\Chrome\View\User\Login\FormRenderer');
+        $viewForm->setForm($form);
+
+        $renderer = $this->_viewContext->getFactory()->get('\Chrome\View\User\Login\FormRenderer');
+        $renderer->setViewForm($viewForm);
+
+        $this->_views[] = $renderer;
     }
 }
 

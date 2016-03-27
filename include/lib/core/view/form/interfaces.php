@@ -35,13 +35,25 @@ namespace Chrome\View\Form;
 interface Form_Interface
 {
     /**
-     * Creates a new \Chrome\View\Form\Form_Interface instance using any given $form. The view context supplies additional
+     * Creates a new \Chrome\View\Form\Form_Interface instance. The view context supplies additional
      * display functionality.
      *
-     * @param \Chrome\Form\Form_Interface $form a form object
+     * The form for this view form may be set via setForm
+     *
      * @param \Chrome\Context\View_Interface $viewContext a view context
+     * @param \Chrome\Form\Form_Interface $form [optional], calls setForm immediately.
      */
-    public function __construct(\Chrome\Form\Form_Interface $form, \Chrome\Context\View_Interface $viewContext);
+    public function __construct(\Chrome\Context\View_Interface $viewContext, \Chrome\Form\Form_Interface $form = null);
+
+    /**
+     * Sets the form. This should be called immediately after the constructor.
+     *
+     * After calling getViewElements(), this method must throw an exception.
+     *
+     * @param \Chrome\Form\Form_Interface $form
+     * @return void
+     */
+    public function setForm(\Chrome\Form\Form_Interface $form);
 
     /**
      * Sets a factory to create \Chrome\View\Form\Element\Element_Interface objects.
@@ -89,6 +101,7 @@ interface Form_Interface
 
     /**
      * Returns the view context, set in __construct
+     *
      * @return \Chrome\Context\View_Interface
      */
     public function getViewContext();

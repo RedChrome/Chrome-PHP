@@ -511,7 +511,7 @@ abstract class AbstractElement extends AbstractBasicElement implements Element_I
 
         if(($allowedValue = $this->_option->getAllowedValue()) !== null)
         {
-            $andComposition->addValidator(new ContainsValidator($allowedValue));
+            $andComposition->addValidator(new ContainsValidator((array) $allowedValue));
         }
 
         if($this->_option instanceof \Chrome\Form\Option\AttachableElement_Interface)

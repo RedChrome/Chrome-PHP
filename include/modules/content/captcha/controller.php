@@ -21,9 +21,6 @@ namespace Chrome\Controller;
 
 use \Chrome\Controller\AbstractModule;
 
-require_once 'view.php';
-require_once 'include.php';
-
 /**
  * Class for controlling captcha test page
  *
@@ -32,14 +29,10 @@ require_once 'include.php';
  */
 class Captcha extends AbstractModule
 {
-    protected function _initialize()
-    {
-        $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome\View\Captcha\Captcha');
-    }
-
     protected function _execute()
     {
-        $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\Module\Captcha\Captcha');
+        $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome\View\Captcha\Captcha');
+        $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\Module\Captcha\Captcha'.'+Config');
 
         $this->_form->create();
 
@@ -55,12 +48,9 @@ class Captcha extends AbstractModule
             //$captcha = $this->_form->getElements('captcha')->getOption()->getCaptcha();
             //$captcha->create();
 
-            $this->_view->formValid($this->_form);
+            $this->_view->formValid();
         }
 
-        #var_dump($this->_form);
-        #var_dump($this->_form->isSent(), $this->_form->getErrors());
-
-        $this->_view->test($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Element\Factory\Yaml'));
+        $this->_view->displayForm($this->_form, $this->_applicationContext->getDiContainer()->get('\Chrome\View\Form\Module\Captcha\Captcha'.'+Config'));
     }
 }

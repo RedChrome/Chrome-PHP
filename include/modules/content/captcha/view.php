@@ -29,12 +29,16 @@ class Captcha extends AbstractListLayout
         $this->addTitle('Captcha Test');
     }
 
-    public function test(\Chrome\Form\Form_Interface $form, \Chrome\View\Form\Factory\Element\Element_Interface $elementFactory)
+    public function displayForm(\Chrome\Form\Module\Captcha\Captcha $form, \Chrome\View\Form\Module\Captcha\Captcha $viewForm)
     {
-        $this->_views[] = $this->_viewContext->getFactory()->get('\Chrome\View\Captcha\FormRenderer');
+        $viewForm->setForm($form);
+        $renderer = $this->_viewContext->getFactory()->get('\Chrome\View\Captcha\FormRenderer');
+        $renderer->setViewForm($viewForm);
+
+        $this->_views[] = $renderer;
     }
 
-    public function formValid(\Chrome\Form\Form_Interface $form)
+    public function formValid()
     {
         $this->_views[] = new CaptchaSuccess($this->_viewContext);
     }

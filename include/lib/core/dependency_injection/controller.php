@@ -34,13 +34,14 @@ class Controller implements Handler_Interface
             return null;
         }
 
-        $obj = new $key($container->get('\Chrome\Context\Application_Interface'));
+        return new $key();
+        #$obj = new $key($container->get('\Chrome\Context\Application_Interface'));
 
-        if ($obj instanceof \Chrome\Controller\AbstractController) {
-            $obj->setExceptionHandler($container->get('\Chrome\Exception\Handler_Interface'));
-        }
+        #if ($obj instanceof \Chrome\Controller\AbstractController) {
+        #    $obj->setExceptionHandler($container->get('\Chrome\Exception\Handler_Interface'));
+        #}
 
-        return $obj;
+        #return $obj;
     }
 
     public function has($key)

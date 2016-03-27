@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CHROME-PHP CMS
  *
@@ -21,26 +22,32 @@ namespace Chrome\DI\Loader;
 
 class ModuleCaptcha implements Loader_Interface
 {
+
     public function load(\Chrome\DI\Container_Interface $diContainer)
     {
         $closure = $diContainer->getHandler('closure');
 
+        $closure->add('\Chrome\Form\Module\Captcha\Captcha'.'+Config', function ($c)
+        {
+            return $c->get('\Chrome\Form\Module\Captcha\Captcha');
+        }, true);
+
+        $closure->add('\Chrome\View\Form\Module\Captcha\Captcha'.'+Config', function ($c)
+        {
+            $viewForm = new \Chrome\View\Form\Module\Captcha\Captcha($c->get('\Chrome\Context\View_Interface'));
+            $viewForm->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
+            $viewForm->setElementOptionFactory($c->get('\Chrome\View\Form\Factory\Option\Factory'));
+            return $viewForm;
+        });
+
         $closure->add('\Chrome\View\Captcha\FormRenderer', function ($c)
         {
-            return new \Chrome\View\Captcha\FormRenderer($c->get('\Chrome\View\Form\Module\Captcha\Captcha'));
+            return new \Chrome\View\Captcha\FormRenderer();
         });
 
         $closure->add('\Chrome\Form\Module\Captcha\Captcha', function ($c)
         {
             return new \Chrome\Form\Module\Captcha\Captcha($c->get('\Chrome\Context\Application_Interface'));
-        });
-
-        $closure->add('\Chrome\View\Form\Module\Captcha\Captcha', function ($c)
-        {
-            $viewForm = new \Chrome\View\Form\Module\Captcha\Captcha($c->get('\Chrome\Form\Module\Captcha\Captcha'), $c->get('\Chrome\Context\View_Interface'));
-            $viewForm->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
-            $viewForm->setElementOptionFactory($c->get('\Chrome\View\Form\Factory\Option\Factory'));
-            return $viewForm;
         });
     }
 }

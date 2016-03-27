@@ -69,22 +69,25 @@ abstract class AbstractForm implements \Chrome\View\Form\Form_Interface
      */
     protected $_viewContext = null;
 
-    /**
-     * Simple constructor
-     *
-     * @param \Chrome\Form\Form_Interface $form
-     * @param \Chrome\Context\View_Interface $viewContext
-     */
-    public function __construct(\Chrome\Form\Form_Interface $form, \Chrome\Context\View_Interface $viewContext)
+    public function __construct(\Chrome\Context\View_Interface $viewContext, \Chrome\Form\Form_Interface $form = null)
     {
         $this->_viewContext = $viewContext;
+
+        if($form !== null) {
+            $this->setForm($form);
+        }
+    }
+
+    public function setForm(\Chrome\Form\Form_Interface $form)
+    {
+        // _setUpViewElements called?
+        if(count($this->_formElements) > 0) {
+            throw new \Chrome\Exception('setForm cannot be used anymore.');
+        }
+
         $this->_form = $form;
     }
 
-    /**
-     * Returns the view context, set in __construct
-     * @return \Chrome\Context\View_Interface
-     */
     public function getViewContext()
     {
         return $this->_viewContext;
@@ -342,6 +345,9 @@ class YamlError extends Error
         $formElement = $this->_viewFormElement->getFormElement();
         $elementId = $formElement->getID();
         $form = $formElement->getForm();
+
+        #var_dump($form);
+        #var_dump($form->getErrors($elementId), $elementId);
 
         if($this->_rendered === false AND $form->hasValidationErrors($elementId))
         {

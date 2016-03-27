@@ -488,6 +488,7 @@ class DefaultApplication implements Application_Interface
 
         #require_once LIB . 'core/dependency_injection/invoker/loggable.php';
         require_once LIB . 'core/dependency_injection/invoker/processable.php';
+        require_once LIB . 'core/dependency_injection/invoker/controller.php';
 
         $this->_diContainer->attachHandler('registry', new \Chrome\DI\Handler\Registry());
         $this->_diContainer->attachHandler('closure', new \Chrome\DI\Handler\Closure());
@@ -499,6 +500,7 @@ class DefaultApplication implements Application_Interface
 
         #$this->_diContainer->attachInvoker('loggable', new \Chrome\DI\Invoker\LoggableInterfaceInvoker());
         $this->_diContainer->attachInvoker('processable', new \Chrome\DI\Invoker\ProcessableInterfaceInvoker());
+        $this->_diContainer->attachInvoker('controller', new \Chrome\DI\Invoker\ControllerInvoker($this->_applicationContext));
 
         $structuredDirectoryLoader = new \Chrome\DI\Loader\StructuredDirectory(new \Chrome\Directory(BASEDIR.'application/default/dependency_injection'));
         $structuredDirectoryLoader->setLogger($this->_loggerRegistry->get('application'));

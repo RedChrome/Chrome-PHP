@@ -27,34 +27,17 @@ use Chrome\Controller\AbstractController;
  */
 abstract class AbstractModule extends AbstractController
 {
-    public function __construct(\Chrome\Context\Application_Interface $appContext)
-    {
-        parent::__construct($appContext);
-
-        $this->_initialize();
-
-        $this->_require();
-    }
-
     final public function execute()
     {
-        $this->_execute();
-
-        $this->_shutdown();
-    }
-
-    protected function _initialize()
-    {
-
-    }
-
-    protected function _execute()
-    {
-
-    }
-
-    protected function _shutdown()
-    {
-
+        try {
+            $this->_execute();
+        } catch(\Chrome\Exception $e) {
+            if($this->_exceptionHandler !== null)
+            {
+                $this->_exceptionHandler->exception($e);
+            } else {
+                throw $e;
+            }
+        }
     }
 }

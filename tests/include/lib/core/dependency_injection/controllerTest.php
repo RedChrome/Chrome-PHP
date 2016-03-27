@@ -56,7 +56,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
 
         $obj = $handler->get('\Test\Chrome\DI\ControllerTestClass', $container);
         $this->assertInstanceOf('\Chrome\Controller\Controller_Interface', $obj);
-        $this->assertInstanceOf('\Chrome\Exception\Handler_Interface', $obj->getExceptionHandler());
+        // this will now be injected by the invoker, same goes for the application context.
+        //$this->assertInstanceOf('\Chrome\Exception\Handler_Interface', $obj->getExceptionHandler());
 
         $this->assertNull($handler->get('\Test\Chrome\DI\NotExistingControllerTestClass', $container));
     }

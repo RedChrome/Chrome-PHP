@@ -105,7 +105,18 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\View\\Html\\Bottom\\JsIncluder', 'modules/html/bottom/jsincluder/view.php'),
 ('Chrome\\View\\User\\Login\\FormRenderer', 'modules/content/user/login/view/default.php'),
 ('Chrome\\View\\Form\\Module\\Captcha\\Captcha', 'modules/content/captcha/include.php'),
-('Chrome\\Helper\\User\\AuthenticationResolver\\Email', 'lib/modules/user/helpers/authenticationresolver/email.php');
+('Chrome\\Helper\\User\\AuthenticationResolver\\Email', 'lib/modules/user/helpers/authenticationresolver/email.php'),
+('Chrome\\View\\Captcha\\Captcha', 'modules/content/captcha/view.php'),
+('Chrome\\Form\\Module\\Captcha\\Captcha', 'modules/content/captcha/include.php'),
+('Chrome\\Controller\\RouteNotFound', 'modules/content/routenotfound/controller.php'),
+('Chrome\\View\\RouteNotFound\\RouteNotFound', 'modules/content/routenotfound/view.php'),
+('Chrome\\Form\\Module\\User\\Login', 'modules/content/user/login/include.php'),
+('Chrome\\View\\Form\\Module\\User\\Login', 'modules/content/user/login/include.php'),
+('Chrome\\View\\User\\Login', 'modules/content/user/login/view/default.php'),
+('Chrome\\View\\User\\UserMenu', 'modules/box/login/view.php'),
+('Chrome\\View\\User\\Register', 'modules/content/user/register/view.php'),
+('Chrome\\Form\\Module\\User\\Register\\StepOne', 'modules/content/user/register/include.php'),
+('Chrome\\Form\\Module\\User\\Register\\StepTwo', 'modules/content/user/register/include.php');
 
 
 DROP TABLE IF EXISTS `cpp_config`;

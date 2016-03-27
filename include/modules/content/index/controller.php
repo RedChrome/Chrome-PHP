@@ -28,16 +28,13 @@ require_once 'include.php';
 
 class Index extends AbstractModule
 {
-    protected function _initialize()
+    protected function _execute()
     {
         $factory = $this->_applicationContext->getViewContext()->getFactory();
         $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome\View\Index\Index');
 
         $this->_model = new \Chrome\Model\Index\Index();
-    }
 
-    protected function _execute()
-    {
         #$this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\Module\Index\Index');
 
         #$obj = new \Chrome_Controller_User_Login_Page($this->_applicationContext);

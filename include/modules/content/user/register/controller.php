@@ -4,9 +4,6 @@ namespace Chrome\Controller\User;
 
 use \Chrome\Controller\AbstractModule;
 
-require_once 'view.php';
-require_once 'include.php';
-
 /**
  * @todo This class has two actions (register and confirm_registration). Every controller is
  *
@@ -17,10 +14,8 @@ class Register extends AbstractModule
     protected $_session;
     protected $_authorisation = null;
 
-    public function __construct(\Chrome\Context\Application_Interface $appContext, \Chrome\Interactor\User\Registration $interactor, \Chrome\View\User\Register $view)
+    public function __construct(\Chrome\Interactor\User\Registration $interactor, \Chrome\View\User\Register $view)
     {
-        $this->_applicationContext = $appContext;
-        $this->_setRequestContext($appContext->getRequestContext());
         $this->_interactor = $interactor;
         $this->_view = $view;
     }

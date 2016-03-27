@@ -224,16 +224,21 @@ class Form extends AbstractBasicElement implements \Chrome\Form\Element\Interfac
             $this->_option->setToken($this->_createToken());
         }
 
-        $data = array(self::CHROME_FORM_ELEMENT_FORM_TIME => $this->_option->getTime(), self::CHROME_FORM_ELEMENT_FORM_TOKEN => $this->_option->getToken());
+        $time = 0;
+        $storedData = array();
 
-        $this->_storage->set($this->_id, $data);
+        if(!$this->_storage->has($this->_id) || (($storedData = $this->_storage->get($this->_id)) AND !isset($storedData[self::CHROME_FORM_ELEMENT_FORM_TIME]))) {
+            $time = $this->_option->getTime();
+        } else {
+            $time = $storedData[self::CHROME_FORM_ELEMENT_FORM_TIME];
+        }
+
+        $this->_storage->set($this->_id, array(self::CHROME_FORM_ELEMENT_FORM_TIME => $time, self::CHROME_FORM_ELEMENT_FORM_TOKEN => $this->_option->getToken()));
     }
 
     public function renew()
     {
         $token = $this->_createToken();
-
-        $formData = $this->_storage->get($this->_id);
 
         $time = $this->_option->getTime();
 

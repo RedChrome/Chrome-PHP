@@ -37,7 +37,7 @@ class UserMenu extends AbstractViewStrategy
 
     public function displayLogin()
     {
-        $this->setViewTitle('Login');
+        $this->setViewTitle('Login!');
         $this->_view = $this->_viewContext->getFactory()->get('\Chrome\View\User\UserMenu\FormRenderer');
     }
 }

@@ -21,25 +21,8 @@ namespace Chrome\Controller\Box;
 
 use \Chrome\Controller\AbstractModule;
 
-/**
- * Class for controlling login box
- *
- * @package CHROME-PHP
- * @subpackage Chrome.User
- */
 class Login extends AbstractModule
 {
-    /**
-     * initialize the controller
-     *
-     * @return void
-     */
-    protected function _initialize()
-    {
-        // just load some files... view
-        $this->_require = array('file' => array(VIEW.'box/login/view.php', MODULE.'content/user/login/include.php'));
-    }
-
     /**
      * Run the Controller
      *
@@ -47,15 +30,9 @@ class Login extends AbstractModule
      */
     protected function _execute()
     {
-        // setting up
-
-
-        //$this->_model = new Chrome_Model_Login($this->_applicationContext, null);
         $this->_view = $this->_applicationContext->getDiContainer()->get('\Chrome\View\User\UserMenu');
-	   //$this->_applicationContext->getViewContext()->getFactory()->build('Chrome_View_Box_Login', $this);
 
-
-        $login = $this->_applicationContext->getDiContainer()->get('\Chrome\Interactor\User\Login_Interface');
+        $login = $this->_applicationContext->getDiContainer()->get('\Chrome\Interactor\User\Login');
         #$login = new \Chrome\Interactor\User\Login($this->_applicationContext->getAuthentication());
 
         // if the user is logged in, then show the user menu

@@ -116,7 +116,7 @@ class Captcha extends \Chrome\Form\Element\AbstractElement implements \Chrome\Fo
         $isValid = parent::isValid();
 
         // only re-create the captcha one time and only if the option says to recreate it.
-        if ($isValid === false and $this->_reCreated === false and $this->_option->getRecreateIfInvalid() === true) {
+        if ($this->_reCreated === false and $this->_option->getRecreateIfInvalid() === true) {
             $this->_captcha->create();
             $this->_reCreated = true;
         }

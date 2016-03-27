@@ -49,14 +49,14 @@ class ModuleUser implements Loader_Interface
             return $return;
         });
 
-        $closure->add('\Chrome\Interactor\User\Login_Interface', function ($c)
+        $closure->add('\Chrome\Interactor\User\Login', function ($c)
         {
             return new \Chrome\Interactor\User\Login($c->get('\Chrome\Authentication\Authentication_Interface'), $c->get('\Chrome\Helper\User\AuthenticationResolver_Interface'));
         });
 
         $closure->add('\Chrome\Interactor\User\Logout', function ($c)
         {
-            return new \Chrome\Interactor\User\Logout($c->get('\Chrome\Interactor\User\Login_Interface'), $c->get('\Chrome\Redirection\Redirection_Interface'));
+            return new \Chrome\Interactor\User\Logout($c->get('\Chrome\Interactor\User\Login'), $c->get('\Chrome\Redirection\Redirection_Interface'));
         });
 
         $closure->add('\Chrome\Interactor\User\Registration', function ($c)
@@ -72,20 +72,19 @@ class ModuleUser implements Loader_Interface
     {
         $closure->add('\Chrome\Controller\User\Register', function ($c)
         {
-            $appContext = $c->get('\Chrome\Context\Application_Interface');
             $interactor = $c->get('\Chrome\Interactor\User\Registration');
             $view = $c->get('\Chrome\View\User\Register');
-            return new \Chrome\Controller\User\Register($appContext, $interactor, $view);
+            return new \Chrome\Controller\User\Register($interactor, $view);
         });
 
         $closure->add('\Chrome\Controller\User\Logout', function ($c)
         {
-            return new \Chrome\Controller\User\Logout($c->get('\Chrome\Context\Application_Interface'), $c->get('\Chrome\Interactor\User\Logout'));
+            return new \Chrome\Controller\User\Logout($c->get('\Chrome\Interactor\User\Logout'));
         });
 
         $closure->add('\Chrome\Controller\User\Login', function ($c)
         {
-            $controller = new \Chrome\Controller\User\Login($c->get('\Chrome\Context\Application_Interface'), $c->get('\Chrome\Interactor\User\Login_Interface'));
+            $controller = new \Chrome\Controller\User\Login($c->get('\Chrome\Interactor\User\Login'));
             $controller->setExceptionHandler($c->get('\Chrome\Exception\Handler_Interface'));
             return $controller;
         });
@@ -138,7 +137,7 @@ class ModuleUser implements Loader_Interface
 
         $closure->add('\Chrome\View\User\Register\Form\StepOne', function ($c)
         {
-            $viewForm = new \Chrome\View\Form\Module\User\Register\StepOne($c->get('\Chrome\Form\User\Register\StepOne'), $c->get('\Chrome\Context\View_Interface'));
+            $viewForm = new \Chrome\View\Form\Module\User\Register\StepOne($c->get('\Chrome\Context\View_Interface'), $c->get('\Chrome\Form\User\Register\StepOne'));
             $viewForm->setElementOptionFactory($c->get('\Chrome\View\Form\Factory\Option\Factory'));
             $viewForm->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
             return $viewForm;
@@ -164,7 +163,7 @@ class ModuleUser implements Loader_Interface
     {
         $closure->add('\Chrome\View\Form\Module\User\Login', function ($c)
         {
-            $viewForm = new \Chrome\View\Form\Module\User\Login($c->get('\Chrome\Form\Module\User\Login'), $c->get('\Chrome\Context\View_Interface'));
+            $viewForm = new \Chrome\View\Form\Module\User\Login($c->get('\Chrome\Context\View_Interface'), $c->get('\Chrome\Form\Module\User\Login'));
             $viewForm->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
             $viewForm->setElementOptionFactory($c->get('\Chrome\View\Form\Factory\Option\Factory'));
             return $viewForm;
@@ -172,7 +171,7 @@ class ModuleUser implements Loader_Interface
 
         $closure->add('\Chrome\View\User\Register\Form\StepTwo', function ($c)
         {
-            $formView = new \Chrome\View\Form\Module\User\Register\StepTwo($c->get('\Chrome\Form\User\Register\StepTwo'), $c->get('\Chrome\Context\View_Interface'));
+            $formView = new \Chrome\View\Form\Module\User\Register\StepTwo($c->get('\Chrome\Context\View_Interface'), $c->get('\Chrome\Form\User\Register\StepTwo'));
             $formView->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
             $formView->setElementOptionFactory($c->get('\Chrome\View\Form\Factory\Option\Factory'));
             return $formView;

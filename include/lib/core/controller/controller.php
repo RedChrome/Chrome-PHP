@@ -49,6 +49,13 @@ interface Controller_Interface extends Processable_Interface
      * @return \Chrome\Context\Application_Interface
      */
     public function getApplicationContext();
+
+    /**
+     * Returns the view for the controller (if set)
+     *
+     * @return \Chrome\View\View_Interface|null
+     */
+    public function getView();
 }
 
 /**
@@ -68,16 +75,6 @@ abstract class AbstractController implements Controller_Interface
     protected $_applicationContext = null;
 
     /**
-     * Requires all classes/files
-     *
-     * structure:
-     * array('class' => array('class1', 'class2'), 'file' => array('include/lib/file.php'))
-     *
-     * @var array
-     */
-    protected $_require = array();
-
-    /**
      * An instance of an interactor
      *
      * @var \Chrome\Interactor\Interactor_Interface
@@ -85,26 +82,9 @@ abstract class AbstractController implements Controller_Interface
     protected $_interactor = null;
 
     /**
-     * contains an instance of \Chrome\Model\Model_Interface
-     *
-     * @var \Chrome\Model\Model_Interface
-     */
-    protected $_model = array();
-
-    /**
      * @var Chrome_View_Interface
      */
     protected $_view = null;
-
-    /**
-     * array of filters
-     *
-     * structure:
-     * array('filterChainName' => array($filterObj), $filterChainObj => array($filterObj2, $filterObj3))
-     *
-     * @var array
-     */
-    protected $_filter = null;
 
     /**
      *
@@ -124,94 +104,25 @@ abstract class AbstractController implements Controller_Interface
      */
     protected $_request = null;
 
-    /**
-     * _initialize()
-     *
-     * @return void
-     */
-    abstract protected function _initialize();
-
-    /**
-     * _execute()
-     *
-     * @return void
-     */
-    abstract protected function _execute();
-
-    /**
-     * _shutdown()
-     *
-     * @retrun void
-     */
-    abstract protected function _shutdown();
-
-    public function __construct(\Chrome\Context\Application_Interface $appContext)
-    {
-        $this->setApplicationContext($appContext);
-
-        $this->_setRequestContext($appContext->getRequestContext());
-    }
-
-    /**
-     * _require()
-     *
-     * @return void
-     */
-    protected function _require()
-    {
-        if(isset($this->_require['file']))
-        {
-            foreach($this->_require['file'] as $fileName)
-            {
-                $file = new \Chrome\File($fileName);
-
-                if($file->exists())
-                {
-                    require_once $file->getFileName();
-                } else
-                {
-                    throw new \Chrome\Exception('Could not require file '.$file.'! The file does not exist in \Chrome\Controller\AbstractController::_require()!');
-                }
-            }
-        }
-
-        if(isset($this->_require['class']))
-        {
-            foreach($this->_require['class'] as $class)
-            {
-                loadClass($class);
-            }
-        }
-    }
-
-    public function getModel()
-    {
-        return $this->_model;
-    }
-
-    public function getForm()
-    {
-        return $this->_form;
-    }
-
     public function getView()
     {
         return $this->_view;
+    }
+
+    public function setApplicationContext(\Chrome\Context\Application_Interface $appContext)
+    {
+        $this->_applicationContext = $appContext;
+        $this->_setRequestContext($appContext->getRequestContext());
+    }
+
+    public function getApplicationContext()
+    {
+        return $this->_applicationContext;
     }
 
     protected function _setRequestContext(\Chrome\Request\RequestContext_Interface $obj)
     {
         $this->_requestContext = $obj;
         $this->_request = $obj->getRequest();
-    }
-
-    public function setApplicationContext(\Chrome\Context\Application_Interface $appContext)
-    {
-        $this->_applicationContext = $appContext;
-    }
-
-    public function getApplicationContext()
-    {
-        return $this->_applicationContext;
     }
 }

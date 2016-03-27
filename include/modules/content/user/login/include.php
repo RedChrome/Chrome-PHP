@@ -19,12 +19,6 @@
 
 namespace Chrome\Form\Module\User;
 
-/**
- * Form for an user login
- *
- * @package CHROME-PHP
- * @subpackage Chrome.User
- */
 class Login extends \Chrome\Form\AbstractForm
 {
     protected function _init()

@@ -32,7 +32,9 @@ class GDCaptcha extends \Chrome\View\Form\Element\AbstractElement
 
         $captchaName = $this->_formElement->getOption()->getCaptcha()->getFrontendOption(\Chrome\Captcha\Captcha_Interface::CHROME_CAPTCHA_NAME);
 
-        $linker = $this->_formElement->getForm()->getApplicationContext()->getDiContainer()->get('\Chrome\Linker\Linker_Interface');
+        // TODO: use linker.
+
+        #$linker = $this->_formElement->getForm()->getApplicationContext()->getDiContainer()->get('\Chrome\Linker\Linker_Interface');
 
         $img = '<img src="' . _PUBLIC . 'captcha/default/?name=' . $captchaName . '" id="captcha_' . $this->_formElement->getForm()->getID() . '"/>';
 
