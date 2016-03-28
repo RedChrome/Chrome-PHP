@@ -153,6 +153,11 @@ require_once 'interactor/result.php';
 require_once 'resource.php';
 
 /**
+ * load action interface
+ */
+require_once 'action.php';
+
+/**
  * load dependency injection container
  */
 require_once 'dependency_injection/container.php';

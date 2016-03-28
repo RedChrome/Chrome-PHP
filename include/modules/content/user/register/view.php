@@ -66,13 +66,13 @@ class Register extends AbstractViewStrategy
     public function registrationFinished()
     {
         $this->addTitle($this->_translate->get('modules/content/user/register/title_finished'));
-        $this->_view = $this->_viewContext->getFactory()->build('\Chrome\View\User\Register\RegistrationFinished');
+        $this->_view = $this->_viewContext->getFactory()->get('\Chrome\View\User\Register\RegistrationFinished');
     }
 
     public function registrationFailed()
     {
         $this->addTitle($this->_translate->get('modules/content/user/register/title_failed'));
-        $this->_view = $this->_viewContext->getFactory()->build('\Chrome\View\User\Register\RegistrationFailed');
+        $this->_view = $this->_viewContext->getFactory()->get('\Chrome\View\User\Register\RegistrationFailed');
     }
 }
 

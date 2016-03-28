@@ -32,6 +32,8 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
 {
     const MAX_RETRIES_FOR_ACTIVATIONKEY = 10;
 
+    const PW_SALT_LENGTH = 15;
+
     protected $_config = null;
 
     protected $_model = null;
@@ -61,6 +63,14 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
         $this->_validatorsForAddingRegistrationRequestSet = true;
     }
 
+    /**
+     * On success, an activationKey will be returned.
+     *
+     * @param Request_Interface $registrationRequest
+     * @param Result_Interface $result
+     * @throws \Chrome\IllegalStateException
+     * @return void|string
+     */
     public function addRegistrationRequest(Request_Interface $registrationRequest, Result_Interface $result)
     {
         if($this->_validatorsForAddingRegistrationRequestSet !== true)
@@ -74,7 +84,8 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
         $name  = $registrationRequest->getName();
         $password = $registrationRequest->getPassword();
 
-        if($this->_emailValidator->isValidData($email) !== true) {
+        if($this->_emailValidator->isValidData($email) !== true)
+        {
             $result->failed();
             $result->setErrors('email', $this->_emailValidator->getAllErrors());
         }
@@ -82,13 +93,13 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
         if($this->_nameValidator->isValidData($name) !== true)
         {
             $result->failed();
-            $result->setErrors('name', $this->_emailValidator->getAllErrors());
+            $result->setErrors('name', $this->_nameValidator->getAllErrors());
         }
 
         if($this->_passwordValidator->isValidData($password) !== true)
         {
             $result->failed();
-            $result->setErrors('password', $this->_emailValidator->getAllErrors());
+            $result->setErrors('password', $this->_passwordValidator->getAllErrors());
         }
 
         if($result->hasFailed()) {
@@ -97,7 +108,7 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
 
         try {
 
-            $passwordSalt = $this->_hash->randomChars(self::CHROME_MODEL_REGISTER_PW_SALT_LENGTH);
+            $passwordSalt = $this->_hash->randomChars(self::PW_SALT_LENGTH);
             $password = $this->_hash->hash($password, $passwordSalt, CHROME_USER_HASH_ALGORITHM);
 
             $activationKey = $this->_generateActivationKey();
@@ -109,6 +120,8 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
             $this->_sendEmail($email, $activationKey);
 
             $result->succeeded();
+
+            return $activationKey;
 
         } catch(\Chrome\Exception $e) {
 
@@ -136,7 +149,7 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
 
         $key = $this->_hash->createKey();
 
-        if(!$this->_model->hasActivationKey($key)) {
+        if($this->_model->getRegistrationRequestByActivationKey($key) === null) {
             return $key;
         }
 

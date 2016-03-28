@@ -70,6 +70,6 @@ class BlacklistValidator extends AbstractConfigurable
             return $this->_options[self::OPTION_BLACKLIST_HOSTS];
         }
 
-        return $config->getConfig('general', 'blacklist_host');
+        return $this->_config->getConfig('general', 'blacklist_host');
     }
 }

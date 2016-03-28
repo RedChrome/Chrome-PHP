@@ -466,6 +466,8 @@ abstract class AbstractComposer extends AbstractValidator
         $validator = $this->_getValidator();
         $validator->setData($this->_data);
         $validator->validate();
+        // set the errors of the validator as it's own...
+        $this->_errors = $validator->getAllErrors();
 
         return $validator->isValid();
     }

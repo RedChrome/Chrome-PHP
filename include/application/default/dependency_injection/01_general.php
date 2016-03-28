@@ -62,6 +62,14 @@ class General implements Loader_Interface
         {
             return $c->get('\Chrome\Context\Application_Interface')->getLoggerRegistry()->get();
         }, true);
+
+        $closure->add('\Chrome\Helper\Authentication\Creation_Interface', function ($c) {
+            return new \Chrome\Helper\Authentication\Creation($c->get('\Chrome\Authentication\Authentication_Interface'));
+        }, true);
+
+        $closure->add('\Chrome\Interactor\Result_Interface', function ($c) {
+            return new \Chrome\Interactor\Result();
+        });
     }
 
     protected function _request($closure)

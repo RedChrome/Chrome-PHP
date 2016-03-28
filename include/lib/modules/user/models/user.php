@@ -32,11 +32,7 @@ class User extends \Chrome\Model\AbstractDatabaseStatement implements User_Inter
 
     public function hasEmail($email)
     {
-        $db = $this->_getDBInterface();
-
-        $result = $db->loadQuery('emailExists')->execute(array($email));
-
-        return !$result->isEmpty();
+        return !$this->_getDBInterface()->loadQuery('emailExists')->execute(array($email))->isEmpty();
     }
 
     public function addUser($name, $email, $authenticationId)

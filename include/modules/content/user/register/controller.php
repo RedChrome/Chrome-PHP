@@ -36,35 +36,6 @@ class Register extends AbstractModule
         {
             $this->_handleRegisterAction();
 
-        } else if($this->_request->getQueryParams()['action'] === 'confirm_registration')
-        {
-            $this->_handleRegisterConfirmAction();
-        }
-    }
-
-    protected function _handleRegisterConfirmAction()
-    {
-        $result = $this->_model->checkRegistration($this->_request->getQueryParams()['actionKey']);
-
-        if($result === false)
-        {
-            $this->_view->registrationFailed();
-        } else
-        {
-            $success = $this->_model->finishRegistration($result['name'], $result['pass'], $result['pw_salt'], $result['email'], $this->_request->getQueryParams()['actionKey']);
-
-            // user successfully registered
-            if($success === true)
-            {
-
-                $this->_view->registrationFinished();
-
-                // activationKey is invalid
-            } else
-            {
-
-                $this->_view->registrationFailed();
-            }
         }
     }
 

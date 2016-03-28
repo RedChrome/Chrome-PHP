@@ -74,6 +74,7 @@ interface Handler_Interface
 namespace Chrome\Form;
 
 use Chrome\Form\Handler\Handler_Interface;
+use Chrome\Action\Action_Interface;
 
 /**
  * \Chrome\Form\Form_Interface
@@ -81,7 +82,7 @@ use Chrome\Form\Handler\Handler_Interface;
  * @package CHROME-PHP
  * @subpackage Chrome.Form
  */
-interface Form_Interface
+interface Form_Interface extends Action_Interface
 {
     /**
      * ATTRIBUTE_METHOD: tells where the data comes from, post or get?

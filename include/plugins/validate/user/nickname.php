@@ -27,7 +27,7 @@ use Chrome\Validator\String\LengthValidator;
  * be a valid nickname:
  *
  * Length in [3, 50]
- * Uses only "a-z",  "_", "-", "0-9" case-insensitive.
+ * Uses only "a-z", " '.:", "0-9" case-insensitive.
  *
  * @package		CHROME-PHP
  * @subpackage  Chrome.Validator
@@ -42,8 +42,7 @@ class NicknameValidator extends AbstractValidator
         $lengthValidator->setOptions(array(LengthValidator::OPTION_MAX_LENGTH => 50, LengthValidator::OPTION_MIN_LENGTH => 3));
         $this->_validateWithUsingData($lengthValidator, $this->_data);
 
-        // nickname contains only a-z, 0-9 AND "-", "_"
-        if(preg_match('#[^a-z_\-0-9]#i', $this->_data)) {
+        if(preg_match('#[^a-z_\-0-9 \'\.:]#i', $this->_data)) {
             $this->_setError('nickname_contains_forbidden_chars');
         }
     }

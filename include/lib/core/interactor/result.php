@@ -110,6 +110,10 @@ class Result implements Result_Interface
 
     public function setErrors($key, array $errors)
     {
+        if(count($errors) === 0) {
+            $this->_errors[$key] = true;
+        }
+
         foreach($errors as $error)
         {
             $this->_errors[$key][] = $error;

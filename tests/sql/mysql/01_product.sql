@@ -78,6 +78,7 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\Authentication\\Chain\\CookieChain', 'lib/core/authentication/chain/cookie.php'),
 ('Chrome\\Authentication\\Authentication', 'lib/core/authentication/authentication.php'),
 ('Chrome\\Authentication\\Authentication_Interface', 'lib/core/authentication/authentication.php'),
+('Chrome\\Helper\\Authentication\\Creation', 'lib/core/authentication/helper.php'),
 ('Chrome\\Authorisation\\Authorisation', 'lib/core/authorisation/authorisation.php'),
 ('Chrome\\Authorisation\\Adapter\\Adapter_Interface', 'lib/core/authorisation/authorisation.php'),
 ('Chrome\\Authorisation\\Adapter\\Simple', 'lib/core/authorisation/adapter/simple.php'),
@@ -86,6 +87,7 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\Model\\Database\\JsonStatement', 'lib/core/database/facade/model.php'),
 ('Chrome\\Controller\\Index', 'modules/content/index/controller.php'),
 ('Chrome\\Controller\\User\\Register', 'modules/content/user/register/controller.php'),
+('Chrome\\Controller\\User\\Register\\Confirm', 'modules/content/user/register/confirm/controller.php'),
 ('Chrome\\Controller\\User\\Logout', 'modules/content/user/logout/controller.php'),
 ('Chrome\\Controller\\User\\Login', 'modules/content/user/login/controller.php'),
 ('Chrome\\Controller\\Captcha', 'modules/content/captcha/controller.php'),
@@ -116,7 +118,8 @@ INSERT INTO `cpp_class` (`name`, `file`) VALUES
 ('Chrome\\View\\User\\UserMenu', 'modules/box/login/view.php'),
 ('Chrome\\View\\User\\Register', 'modules/content/user/register/view.php'),
 ('Chrome\\Form\\Module\\User\\Register\\StepOne', 'modules/content/user/register/include.php'),
-('Chrome\\Form\\Module\\User\\Register\\StepTwo', 'modules/content/user/register/include.php');
+('Chrome\\Form\\Module\\User\\Register\\StepTwo', 'modules/content/user/register/include.php'),
+('Chrome\\Action\\User\\Register\\Confirm', 'lib/modules/user/actions/registration/confirm.php');
 
 
 DROP TABLE IF EXISTS `cpp_config`;
@@ -303,7 +306,7 @@ INSERT INTO `cpp_route_fixed` (`name`, `search`, `class`, `POST`, `GET`) VALUES
 ('login', '/login.html', '\\Chrome\\Controller\\User\\Login', '', ''),
 ('register', '/registrieren.html', '\\Chrome\\Controller\\User\\Register', '', 'action=register'),
 ('logout', '/logout.html', '\\Chrome\\Controller\\User\\Logout', '', ''),
-('registrationConfirm', '/registrierung_bestaetigen.html', '\\Chrome\\Controller\\User\\Register', '', 'action=confirm_registration'),
+('registrationConfirm', '/registrierung_bestaetigen.html', '\\Chrome\\Controller\\User\\Register\\Confirm', '', 'action=confirm_registration'),
 ('testCaptcha', '/captcha.html', '\\Chrome\\Controller\\Captcha', '', ''),
 ('testCaptcha2', '/captcha/test/', '\\Chrome\\Controller\\Captcha', '', '');
 

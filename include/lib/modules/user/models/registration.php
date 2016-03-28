@@ -26,7 +26,7 @@ class Registration extends \Chrome\Model\AbstractDatabaseStatement implements Re
 {
     protected function _setDatabaseOptions()
     {
-        $this->_dbResult = 'assoc';
+        $this->_dbResult = '\Chrome\Database\Result\Assoc';
         $this->_dbStatementModel->setNamespace('register');
     }
 

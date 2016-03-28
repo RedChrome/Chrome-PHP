@@ -31,6 +31,7 @@ class ModuleUser implements Loader_Interface
         $this->_models($closure);
         $this->_views($closure);
         $this->_viewForms($closure);
+        $this->_actions($closure);
 
         $this->_misc($closure);
     }
@@ -75,6 +76,10 @@ class ModuleUser implements Loader_Interface
             $interactor = $c->get('\Chrome\Interactor\User\Registration');
             $view = $c->get('\Chrome\View\User\Register');
             return new \Chrome\Controller\User\Register($interactor, $view);
+        });
+
+        $closure->add('\Chrome\Controller\User\Register\Confirm', function ($c) {
+            return new \Chrome\Controller\User\Register\Confirm($c->get('\Chrome\Action\User\Register\Confirm'), $c->get('\Chrome\Interactor\User\Registration'), $c->get('\Chrome\View\User\Register'));
         });
 
         $closure->add('\Chrome\Controller\User\Logout', function ($c)
@@ -193,6 +198,13 @@ class ModuleUser implements Loader_Interface
         $closure->add('\Chrome\Helper\User\AuthenticationResolver_Interface', function ($c)
         {
             return new \Chrome\Helper\User\AuthenticationResolver\Email($c->get('\Chrome\Model\User\User_Interface'));
+        });
+    }
+
+    protected function _actions($closure)
+    {
+        $closure->add('\Chrome\Action\User\Register\Confirm', function ($c) {
+            return new \Chrome\Action\User\Register\Confirm($c->get('\Psr\Http\Message\ServerRequestInterface'));
         });
     }
 }
