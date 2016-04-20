@@ -23,7 +23,7 @@ class RegistrationTest extends \Test\Chrome\TestCase
 
         $interactor->addRegistrationRequest($request, $result);
 
-        $activationKey = $result->getReturn();
+        $activationKey = $result->getReturn()->getActivationKey();
 
         $this->assertTrue($result->hasSucceeded());
         $this->assertNotNull($activationKey);
@@ -35,7 +35,7 @@ class RegistrationTest extends \Test\Chrome\TestCase
         $this->assertSame($addedRequest->getName(), $name);
         $this->assertSame($addedRequest->getEmail(), $email);
         $this->assertTrue($registrationModel->hasEmail($email));
-        $registrationModel->discardRegistrationRequestByActivationKey($activationKey);
+        $registrationModel->discardRegistrationRequest($addedRequest);
         $this->assertFalse($registrationModel->hasEmail($email));
         $this->assertNull($registrationModel->getRegistrationRequestByActivationKey($activationKey));
     }
@@ -79,13 +79,21 @@ class RegistrationTest extends \Test\Chrome\TestCase
         $request->setPassword($faker->password);
 
         $interactor->addRegistrationRequest($request, $result);
-        $activationKey = $result->getReturn();
+        $activationKey = $result->getReturn()->getActivationKey();
 
-        $interactor->activateRegistrationRequest($activationKey, $diContainer->get('\Chrome\Model\User\User_Interface'), $diContainer->get('\Chrome\Helper\Authentication\Creation_Interface'), $result);
         $this->assertTrue($result->hasSucceeded());
 
-        $addedRequest = $registrationModel->getRegistrationRequestByActivationKey($activationKey);
-        $this->assertNull($addedRequest);
+        $result = $diContainer->get('\Chrome\Interactor\Result_Interface');
+        $request = $interactor->getRegistrationRequest($activationKey, $result);
+        $this->assertTrue($result->hasSucceeded());
+
+        $interactor->activateRegistrationRequest($request, $diContainer->get('\Chrome\Model\User\User_Interface'), $diContainer->get('\Chrome\Helper\Authentication\Creation_Interface'), $result);
+        $this->assertTrue($result->hasSucceeded());
+
+
+        $result = $diContainer->get('\Chrome\Interactor\Result_Interface');
+        $request = $interactor->getRegistrationRequest($activationKey, $result);
+        $this->assertFalse($result->hasSucceeded());
     }
 
 }

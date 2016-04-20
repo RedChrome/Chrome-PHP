@@ -206,7 +206,7 @@ class Form extends AbstractBasicElement implements \Chrome\Form\Element\Interfac
         } else
         {
             $this->_renewTimer();
-            #$this->_errors[] = self::ERROR_NOT_SENT;
+            $this->_errors[] = self::ERROR_NOT_SENT;
 
             return false;
         }

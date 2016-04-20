@@ -22,9 +22,11 @@ namespace Chrome\Model\User;
 
 interface Registration_Interface
 {
+    public function hasName($name);
+
     public function hasEmail($email);
 
-    public function discardRegistrationRequestByActivationKey($activationKey);
+    public function discardRegistrationRequest(\Chrome\Model\User\Registration\Request_Interface $request);
 
     /**
      * @param string $activationKey
@@ -34,7 +36,8 @@ interface Registration_Interface
 
     public function addRegistration($email, $password, $passwordSalt, $activationKey, $name, $time);
 
-    public function hasName($name);
+    public function addRegistrationRequest(\Chrome\Model\User\Registration\Request_Interface $registrationRequest);
+
 }
 
 namespace Chrome\Model\User\Registration;
@@ -68,13 +71,13 @@ class Request implements Request_Interface
 
     protected $_passwordSalt = '';
 
-    protected $_activationKey = '';
+    protected $_activationKey = null;
 
     protected $_time = 0;
 
     public function getTime()
     {
-        return $this->_time;
+        return ($this->_time > 0) ? $this->_time : CHROME_TIME;
     }
 
     public function setTime($time)

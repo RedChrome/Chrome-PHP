@@ -60,9 +60,20 @@ class Registration extends \Chrome\Model\AbstractDatabaseStatement implements Re
         return $registrationRequest;
     }
 
-    public function discardRegistrationRequestByActivationKey($activationKey)
+    public function discardRegistrationRequest(\Chrome\Model\User\Registration\Request_Interface $request)
     {
-        $this->_getDBInterface()->loadQuery('removeRegistrationWithActivationKey')->execute(array($activationKey));
+        $activationKey = $request->getActivationKey();
+
+        if($activationKey !== null) {
+            $this->_getDBInterface()->loadQuery('removeRegistrationWithActivationKey')->execute(array($activationKey));
+        } else {
+            $this->_getDBInterface()->loadQuery('removeRegistrationWithEmail')->execute(array($request->getEmail()));
+        }
+    }
+
+    public function addRegistrationRequest(\Chrome\Model\User\Registration\Request_Interface $request)
+    {
+        $this->addRegistration($request->getEmail(), $request->getPassword(), $request->getPasswordSalt(), $request->getActivationKey(), $request->getName(), $request->getTime());
     }
 
     public function addRegistration($email, $password, $passwordSalt, $activationKey, $name, $time)

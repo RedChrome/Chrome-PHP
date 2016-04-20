@@ -302,21 +302,14 @@ class Database extends \Chrome\Model\AbstractDatabaseStatement
             ->execute(array(CHROME_TIME, $id));
     }
 
-    public function createAuthentication($credential, $salt = null)
+    public function createAuthentication($credential, $salt)
     {
-        if($salt === null) {
-            $hashObj = new \Chrome\Hash\Hash();
-
-            $salt = $hashObj->randomChars(12);
-            $hash = $hashObj->hash($credential, $salt);
-        } else {
-            $hash = $credential;
-        }
+        $hash = $credential;
 
         $db = $this->_getDBInterface();
 
         $db->loadQuery('authenticationCreateAuthentication')
-            ->execute(array($hash, $salt, CHROME_TIME));
+            ->execute(array($credential, $salt, CHROME_TIME));
 
         return $db->getResult()->getLastInsertId();
     }

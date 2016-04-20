@@ -48,7 +48,7 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
 
     protected $_successfulAddRegistrationTrigger = null;
 
-    protected $_successfulActivateRegistration = null;
+    protected $_successfulActivateRegistrationTrigger = null;
 
     private $_validatorsForAddingRegistrationRequestSet = false;
 
@@ -74,30 +74,92 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
 
     public function onSuccessfulActivateRegistration(\Chrome\Trigger_Interface $trigger)
     {
-        $this->_successfulActivateRegistration = $trigger;
+        $this->_successfulActivateRegistrationTrigger = $trigger;
     }
 
     /**
-     * On success, an activationKey will be returned.
+     * Adds a new Registration request. Returns the updated registration request inside the Result_Interface
      *
      * @param Request_Interface $registrationRequest
      * @param Result_Interface $result
      * @throws \Chrome\IllegalStateException
      * @triggers onSuccessfulAddRegistration
-     * @return void
      */
     public function addRegistrationRequest(Request_Interface $registrationRequest, Result_Interface $result)
+    {
+        if(!$this->isRequestValid($registrationRequest, $result)) {
+            return;
+        }
+
+        $requestAdded = false;
+
+        try {
+            $passwordSalt = $this->_hash->randomChars(self::PW_SALT_LENGTH);
+            $password = $this->_hash->hash($registrationRequest->getPassword(), $passwordSalt, CHROME_USER_HASH_ALGORITHM);
+
+            $activationKey = $this->_generateActivationKey();
+
+            $request = clone $registrationRequest;
+            $result->setReturn($request);
+
+            $request->setActivationKey($activationKey);
+            $request->setPasswordSalt($passwordSalt);
+            $request->setPassword($password);
+
+            $this->_model->addRegistrationRequest($request);
+
+            $requestAdded = true;
+
+            $this->_successfulAddRegistrationTrigger->set($registrationRequest)->trigger($result);
+
+            $result->succeeded();
+
+        } catch(\Chrome\Exception $e) {
+
+            // got an error while, so delte the request, such that
+            // the user can register again with the same email.
+            if($requestAdded === true) {
+                $this->_discardRegistrationRequest($registrationRequest, $result);
+            }
+
+            $result->failed();
+            $result->setException($e);
+            $result->setError('action', 'could_not_add_request');
+        }
+    }
+
+    public function getRegistrationRequest($activationKey, Result_Interface $result)
+    {
+        $request = $this->_model->getRegistrationRequestByActivationKey($activationKey);
+
+        if(!($request instanceof \Chrome\Model\User\Registration\Request_Interface)) {
+            $result->failed();
+            $result->setError('action', 'could_not_retrieve_registration_request');
+            return;
+        }
+
+        $result->succeeded();
+        return $request;
+    }
+
+    /**
+     * Checks whether the given request is valid or not, using the defined validators
+     *
+     * @param Request_Interface $request
+     * @param Result_Interface $result
+     * @throws \Chrome\IllegalStateException
+     * @return boolean
+     */
+    public function isRequestValid(Request_Interface $request, Result_Interface $result)
     {
         if($this->_validatorsForAddingRegistrationRequestSet !== true)
         {
             throw new \Chrome\IllegalStateException('No validators set');
         }
 
-        $requestAdded = false;
-
-        $email = $registrationRequest->getEmail();
-        $name  = $registrationRequest->getName();
-        $password = $registrationRequest->getPassword();
+        $email = $request->getEmail();
+        $name  = $request->getName();
+        $password = $request->getPassword();
 
         if($this->_emailValidator->isValidData($email) !== true)
         {
@@ -117,39 +179,72 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
             $result->setErrors('password', $this->_passwordValidator->getAllErrors());
         }
 
-        if($result->hasFailed()) {
+        if(!$result->hasFailed()) {
+            $result->succeeded();
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Activates a registration request. At this point, there is no validation of the registration request any more. So
+     * be sure you want to activate this request.
+     *
+     * Activating a request, retrieved by getRegistrationRequest, which was added by addRegistrationRequest, is always save.
+     *
+     * @param unknown $activationKey
+     * @param User_Interface $userModel
+     * @param Creation_Interface $authHelper
+     * @param Result_Interface $result
+     * @triggers onSuccessfulActivateRegistration
+     */
+    public function activateRegistrationRequest(Request_Interface $request, User_Interface $userModel, Creation_Interface $authHelper, Result_Interface $result)
+    {
+        if($this->isRegistrationRequestActivateable($request, $result) !== true) {
+            $this->_discardRegistrationRequest($request, $result);
+            return;
+        }
+
+        // first create the authentication.
+        $creationContainer = $authHelper->createAuthentication($request->getEmail(), $request->getPassword(), $request->getPasswordSalt());
+
+        // hm, we couldnt create an authentication for the user...
+        if(!$creationContainer->isSuccessful()) {
+            $result->failed();
+            $result->setError('action', 'could_not_create_authentication');
             return;
         }
 
         try {
+            $userModel->addUser($request->getName(), $request->getEmail(), $creationContainer->getID());
 
-            $passwordSalt = $this->_hash->randomChars(self::PW_SALT_LENGTH);
-            $password = $this->_hash->hash($password, $passwordSalt, CHROME_USER_HASH_ALGORITHM);
+            $this->_successfulActivateRegistrationTrigger->set($request, $creationContainer)->trigger($result);
 
-            $activationKey = $this->_generateActivationKey();
-
-            $result->setReturn($activationKey);
-
-            $this->_model->addRegistration($email, $password, $passwordSalt, $activationKey, $name, CHROME_TIME);
-
-            $requestAdded = true;
-
-            $this->_successfulAddRegistrationTrigger->set($registrationRequest)->trigger($result);
+            $this->_discardRegistrationRequest($request, $result);
 
             $result->succeeded();
 
         } catch(\Chrome\Exception $e) {
-
-            // got an error while sending email, so delte the request, such that
-            // the user can register again with the same email.
-            if($requestAdded === true) {
-                $this->_discardRegistrationRequestByActivationKey($activationKey, $result);
-            }
-
             $result->failed();
             $result->setException($e);
-            $result->setError('action', 'could_not_add_request');
+            $result->setError('action', 'could_not_add_user');
         }
+    }
+
+    public function isRegistrationRequestActivateable(Request_Interface $request, Result_Interface $result)
+    {
+        if($this->_config->getConfig('registration', 'request_has_expiration') === true) {
+            if($this->_config->getConfig('registration', 'request_expiration') + $request->getTime() < CHROME_TIME) {
+                // registration request is too old
+                $result->failed();
+                $result->setError('action', 'registration_request_expired');
+                return false;
+            }
+        }
+
+        $result->succeeded();
+        return true;
     }
 
     protected function _generateActivationKey($retryTimes = 0)
@@ -166,70 +261,6 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
 
         // another try
         return $this->generateActivationKey($retryTimes++);
-    }
-
-    public function activateRegistrationRequest($activationKey, User_Interface $userModel, Creation_Interface $authHelper, Result_Interface $result)
-    {
-        $request = $this->_model->getRegistrationRequestByActivationKey($activationKey);
-
-        if(!($request instanceof \Chrome\Model\User\Registration\Request_Interface)) {
-            $result->failed();
-            $result->setError('action', 'could_not_retrieve_registration_request');
-            return;
-        }
-
-        if($this->_validateRegistrationRequest($request, $activationKey) !== true) {
-            // discards the registration request, so the user can retry to register with the same data (email, name, ...)
-            $this->_discardRegistrationRequestByActivationKey($activationKey, $result);
-
-            $result->failed();
-            $result->setError('action', 'registration_request_not_valid');
-            return;
-        }
-
-        if($this->isRegistrationRequestActivateable($request) !== true) {
-            $this->_model->discardRegistrationRequestByActivationKey($activationKey);
-
-            $result->failed();
-            $result->setError('action', 'registration_request_expired');
-        }
-
-        // first create the authentication.
-        $creationContainer = $authHelper->createAuthentication($request->getEmail(), $request->getPassword(), $request->getPasswordSalt());
-
-        // hm, we couldnt create an authentication for the user...
-        if(!$creationContainer->isSuccessful()) {
-            $result->failed();
-            $result->setError('action', 'could_not_create_authentication');
-            return;
-        }
-
-        try {
-            $userModel->addUser($request->getName(), $request->getEmail(), $creationContainer->getID());
-
-            $this->_successfulActivateRegistration->set($activationKey, $request, $creationContainer)->trigger($result);
-
-            $this->_discardRegistrationRequestByActivationKey($activationKey, $result);
-
-            $result->succeeded();
-
-        } catch(\Chrome\Exception $e) {
-            $result->failed();
-            $result->setException($e);
-            $result->setError('action', 'could_not_add_user');
-        }
-    }
-
-    public function isRegistrationRequestActivateable(\Chrome\Model\User\Registration\Request_Interface $request)
-    {
-        if($this->_config->getConfig('registration', 'request_has_expiration') === true) {
-            if($this->_config->getConfig('registration', 'request_expiration') + $request->getTime() < CHROME_TIME) {
-                // registration request is too old
-                return false;
-            }
-        }
-
-        return true;
     }
 
     protected function _validateRegistrationRequest(\Chrome\Model\User\Registration\Request_Interface $regRequest, $activationKey)
@@ -254,10 +285,10 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
         return true;
     }
 
-    protected function _discardRegistrationRequestByActivationKey($activationKey, \Chrome\Interactor\Result_Interface $result)
+    protected function _discardRegistrationRequest(Request_Interface $request, \Chrome\Interactor\Result_Interface $result)
     {
         try {
-            $this->_model->discardRegistrationRequestByActivationKey($activationKey);
+            $this->_model->discardRegistrationRequest($request);
         } catch(\Chrome\Exception $e) {
             $result->failed();
             $result->setError('action', 'could_not_discard_registration_request');

@@ -10,5 +10,6 @@
 	"nameExists": "SELECT `name` FROM `cpp_user_regist` WHERE `name` = '?' LIMIT 0,1",
 	"getRegistration": "SELECT `id`, `name`, `pass`, `pw_salt`, `email`, `time` FROM cpp_user_regist WHERE `key` = '?'",
 	"removeRegistrationWithActivationKey": "DELETE FROM `cpp_user_regist` WHERE `key` = '?'",
+	"removeRegistrationWithEmail": "DELETE FROM `cpp_user_regist` WHERE `email` = '?'",
 	"addRegistration": "INSERT INTO `cpp_user_regist` (`email`, `pass`, `pw_salt`, `key`, `name`, `time`)  VALUES(\"?\",\"?\",\"?\",\"?\",\"?\",\"?\")"
 }

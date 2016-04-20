@@ -23,12 +23,19 @@ class Confirm extends AbstractModule
         }
 
         $result = new \Chrome\Interactor\Result();
+
+        $request = $this->_interactor->getRegistrationRequest($this->_action->getActivationKey(), $result);
+
+        if($result->hasFailed()) {
+            $this->_view->registrationFailed();
+            return;
+        }
+
         $userModel = $this->_applicationContext->getDiContainer()->get('\Chrome\Model\User\User_Interface');
         $authHelper = $this->_applicationContext->getDiContainer()->get('\Chrome\Helper\Authentication\Creation_Interface');
+        $result = new \Chrome\Interactor\Result();
 
-        $activationKey = $this->_action->getActivationKey();
-
-        $this->_interactor->activateRegistrationRequest($activationKey, $userModel, $authHelper, $result);
+        $this->_interactor->activateRegistrationRequest($request, $userModel, $authHelper, $result);
 
         if($result->hasFailed())
         {
