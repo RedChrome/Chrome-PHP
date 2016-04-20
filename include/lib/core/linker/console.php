@@ -24,16 +24,6 @@ class Linker implements Linker_Interface
         //TODO
     }
 
-    public function diff($serverPath, $clientPath)
-    {
-        // TODO
-    }
-
-    public function normalize($norm, $toBeNormalized)
-    {
-        // TODO
-    }
-
     public function __construct(Model_Interface $model)
     {
         $this->_model = $model;

@@ -46,6 +46,10 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
 
     protected $_hash = null;
 
+    protected $_successfulAddRegistrationTrigger = null;
+
+    protected $_successfulActivateRegistration = null;
+
     private $_validatorsForAddingRegistrationRequestSet = false;
 
     public function __construct(\Chrome\Config\Config_Interface $config, Registration_Interface $registrationModel, Hash_Interface $hash)
@@ -63,13 +67,24 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
         $this->_validatorsForAddingRegistrationRequestSet = true;
     }
 
+    public function onSuccessfulAddRegistration(\Chrome\Trigger_Interface $trigger)
+    {
+        $this->_successfulAddRegistrationTrigger = $trigger;
+    }
+
+    public function onSuccessfulActivateRegistration(\Chrome\Trigger_Interface $trigger)
+    {
+        $this->_successfulActivateRegistration = $trigger;
+    }
+
     /**
      * On success, an activationKey will be returned.
      *
      * @param Request_Interface $registrationRequest
      * @param Result_Interface $result
      * @throws \Chrome\IllegalStateException
-     * @return void|string
+     * @triggers onSuccessfulAddRegistration
+     * @return void
      */
     public function addRegistrationRequest(Request_Interface $registrationRequest, Result_Interface $result)
     {
@@ -113,15 +128,15 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
 
             $activationKey = $this->_generateActivationKey();
 
+            $result->setReturn($activationKey);
+
             $this->_model->addRegistration($email, $password, $passwordSalt, $activationKey, $name, CHROME_TIME);
 
             $requestAdded = true;
 
-            $this->_sendEmail($email, $activationKey);
+            $this->_successfulAddRegistrationTrigger->set($registrationRequest)->trigger($result);
 
             $result->succeeded();
-
-            return $activationKey;
 
         } catch(\Chrome\Exception $e) {
 
@@ -132,13 +147,9 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
             }
 
             $result->failed();
-            $result->setError('action', 'unknown_error');
+            $result->setException($e);
+            $result->setError('action', 'could_not_add_request');
         }
-    }
-
-    protected function _sendEmail($email, $activationKey)
-    {
-        //TODO: implement
     }
 
     protected function _generateActivationKey($retryTimes = 0)
@@ -195,17 +206,18 @@ class Registration implements \Chrome\Interactor\Interactor_Interface
 
         try {
             $userModel->addUser($request->getName(), $request->getEmail(), $creationContainer->getID());
+
+            $this->_successfulActivateRegistration->set($activationKey, $request, $creationContainer)->trigger($result);
+
+            $this->_discardRegistrationRequestByActivationKey($activationKey, $result);
+
+            $result->succeeded();
+
         } catch(\Chrome\Exception $e) {
             $result->failed();
-            $result->setError('action', 'unknown_error');
-            return;
+            $result->setException($e);
+            $result->setError('action', 'could_not_add_user');
         }
-
-        // TODO: add authorisation group
-
-        $this->_discardRegistrationRequestByActivationKey($activationKey, $result);
-
-        return true;
     }
 
     public function isRegistrationRequestActivateable(\Chrome\Model\User\Registration\Request_Interface $request)

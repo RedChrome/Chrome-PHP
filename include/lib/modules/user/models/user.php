@@ -35,6 +35,11 @@ class User extends \Chrome\Model\AbstractDatabaseStatement implements User_Inter
         return !$this->_getDBInterface()->loadQuery('emailExists')->execute(array($email))->isEmpty();
     }
 
+    public function hasName($name)
+    {
+        return !$this->_getDBInterface()->loadQuery('nameExists')->execute(array(strtolower($name)))->isEmpty();
+    }
+
     public function addUser($name, $email, $authenticationId)
     {
         $this->_getDBInterface()->loadQuery('addUser')->execute(array($name, $email, CHROME_TIME, $authenticationId));
@@ -51,5 +56,10 @@ class User extends \Chrome\Model\AbstractDatabaseStatement implements User_Inter
 
             return (int) $row['authentication_id'];
         }
+    }
+
+    public function deleteByAuthenticationId($authenticationId)
+    {
+        $this->_getDBInterface()->loadQuery('deleteUserByAuthId')->execute(array((int) $authenticationId));
     }
 }

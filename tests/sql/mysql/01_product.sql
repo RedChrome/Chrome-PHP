@@ -142,7 +142,8 @@ INSERT INTO `cpp_config` (`name`, `subclass`, `value`, `type`, `modul`, `hidden`
 ('email_sender', 'Registration', 'registration@localhost.de', 'string', '', FALSE),
 ('email_sender_name', 'Registration', 'Registrierung', 'string', '', FALSE),
 ('email_subject', 'Registration', 'Registrierung auf Localhost!', 'string', '', FALSE),
-('expiration', 'Registration', '604800', 'integer', '', FALSE),
+('request_expiration', 'registration', '604800', 'integer', '', FALSE),
+('request_has_expiration', 'registration', 'true', 'boolean', '', FALSE),
 ('Gallery_Page_Limit', 'Gallery', '9', 'integer', '', FALSE),
 ('Meta_Desc', 'Site', '', 'string', '', FALSE),
 ('Meta_Keywords', 'Site', '', 'string', '', FALSE),
@@ -304,9 +305,9 @@ INSERT INTO `cpp_route_fixed` (`name`, `search`, `class`, `POST`, `GET`) VALUES
 ('index', '/', '\\Chrome\\Controller\\Index', '', ''),
 ('index', '/index.html', '\\Chrome\\Controller\\Index', '', ''),
 ('login', '/login.html', '\\Chrome\\Controller\\User\\Login', '', ''),
-('register', '/registrieren.html', '\\Chrome\\Controller\\User\\Register', '', 'action=register'),
+('register', '/registrieren.html', '\\Chrome\\Controller\\User\\Register', '', ''),
 ('logout', '/logout.html', '\\Chrome\\Controller\\User\\Logout', '', ''),
-('registrationConfirm', '/registrierung_bestaetigen.html', '\\Chrome\\Controller\\User\\Register\\Confirm', '', 'action=confirm_registration'),
+('registrationConfirm', '/registrierung_bestaetigen.html', '\\Chrome\\Controller\\User\\Register\\Confirm', '', ''),
 ('testCaptcha', '/captcha.html', '\\Chrome\\Controller\\Captcha', '', ''),
 ('testCaptcha2', '/captcha/test/', '\\Chrome\\Controller\\Captcha', '', '');
 

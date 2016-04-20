@@ -90,23 +90,12 @@ interface Linker_Interface
      * @return string
      */
     public function appendPathToReferenceUri($path);
-
-    /*
-     * @todo: needed?
-     */
-    public function diff($serverPath, $clientPath);
-
-    /*
-     * @todo: needed?
-     */
-    public function normalize($norm, $toBeNormalized);
 }
 
 namespace Chrome\Linker\HTTP;
 
 use \Chrome\Linker\Linker_Interface;
 use \Chrome\Resource\Resource_Interface;
-use \Chrome\URI\URI_Interface;
 
 /**
  *
@@ -155,62 +144,6 @@ class Linker implements Linker_Interface
         }
 
         throw new \Chrome\Exception('Could not get a link to the given resource');
-    }
-
-    public function diff($server, $client)
-    {
-        $serverPaths = explode('/', $this->_norm(strtolower($server)), self::PATH_LIMIT);
-        $clientPaths = explode('/', $this->_norm(strtolower($client)), self::PATH_LIMIT);
-
-        return implode('/', $this->_diff($serverPaths, $clientPaths));
-    }
-
-    public function normalize($norm, $toBeNormalized)
-    {
-        $normPaths = explode('/', $this->_norm(strtolower($norm)), self::PATH_LIMIT);
-        $toBeNormalizedPaths = explode('/', $this->_norm(strtolower($toBeNormalized)), self::PATH_LIMIT);
-
-        $diff = $this->_diff($toBeNormalizedPaths, $normPaths);
-        $count = count($diff);
-
-        return str_repeat('../', $count - 1).implode('/', $this->_diff($normPaths, $toBeNormalizedPaths));
-    }
-
-    protected function _diff(array $serverPaths, array $clientPaths)
-    {
-        foreach($serverPaths as $key => $value)
-        {
-            if(!isset($clientPaths[$key]) OR $value !== $clientPaths[$key]) {
-                return array_slice($serverPaths, $key);
-            }
-        }
-
-        return array();
-    }
-
-    protected function _norm($path)
-    {
-        return $this->_stripResource($this->_stripBasepath($path));
-    }
-
-    protected function _stripBasepath($path)
-    {
-        return substr($path, stripos($path, $this->_basepath));
-    }
-
-    protected function _stripResource($path)
-    {
-        if(substr($path, -1) !== '/') {
-            $end = strrpos($path, '/');
-
-            if($end === false) {
-                return '/';
-            }
-
-            return substr($path, 0, $end+1);
-        } else {
-            return $path;
-        }
     }
 }
 

@@ -5,7 +5,9 @@
 	"userUserExists": "SELECT `id` FROM cpp_user WHERE `id` = '?' OR `name` = '?' OR `email` = '?' LIMIT 1",
 	
 	"emailExists": "SELECT `email` FROM cpp_user WHERE `email` = '?'", 
-	"addUser": "INSERT INTO `cpp_user(`name`, `email`, `time`, `authentication_id`) VALUES ('?', '?', '?', ?)",
+	"nameExists": "SELECT `name` FROM cpp_user WHERE `name` = '?'", 
+	"addUser": "INSERT INTO `cpp_user` (`name`, `email`, `time`, `authentication_id`) VALUES ('?', '?', '?', '?')",
+	"deleteUserByAuthId": "DELETE FROM `cpp_user` WHERE `authentication_id` = '?' LIMIT 1",
 	
 	"getAuthenticationIDbyEmail": "SELECT `authentication_id` FROM cpp_user WHERE `email` = '?'"
 }

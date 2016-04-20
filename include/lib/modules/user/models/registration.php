@@ -35,6 +35,11 @@ class Registration extends \Chrome\Model\AbstractDatabaseStatement implements Re
         return !$this->_getDBInterface()->loadQuery('emailExists')->execute(array($email))->isEmpty();
     }
 
+    public function hasName($name)
+    {
+        return !$this->_getDBInterface()->loadQuery('nameExists')->execute(array(strtolower($name)))->isEmpty();
+    }
+
     public function getRegistrationRequestByActivationKey($activationKey)
     {
         $result = $this->_getDBInterface()->loadQuery('getRegistration')->execute(array($activationKey));

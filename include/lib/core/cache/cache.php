@@ -502,9 +502,6 @@ abstract class AbstractCacheItemPool implements CacheItemPoolInterface, LoggerAw
         }
 
         throw new InvalidArgumentException('Given key is not valid. It must consit only of a-z, A-Z, 0-9, _, .');
-
-        // TODO: only allow A-Z, a-z, 0-9, _, . -> if not, throw InvalidArgumentException
-        #return true;
     }
 }
 

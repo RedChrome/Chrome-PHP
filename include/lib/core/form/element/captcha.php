@@ -108,20 +108,31 @@ class Captcha extends \Chrome\Form\Element\AbstractElement implements \Chrome\Fo
 
     public function isCreated()
     {
+        if($this->_created === false) {
+            $this->_errors[] = 'captcha_not_created';
+        }
+
         return $this->_created;
     }
 
-    public function isValid()
+    protected function _isValid()
     {
-        $isValid = parent::isValid();
+        $isValid = parent::_isValid();
 
         // only re-create the captcha one time and only if the option says to recreate it.
-        if ($this->_reCreated === false and $this->_option->getRecreateIfInvalid() === true) {
+        if ($this->_created AND $this->_reCreated === false AND !$isValid AND $this->_option->getRecreateIfInvalid() === true) {
             $this->_captcha->create();
             $this->_reCreated = true;
         }
 
         return $isValid;
+    }
+
+    public function renew()
+    {
+        if($this->_created) {
+            $this->_captcha->create();
+        }
     }
 
     protected function _getValidator()

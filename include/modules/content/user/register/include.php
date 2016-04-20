@@ -83,17 +83,11 @@ class StepTwo extends \Chrome\Form\AbstractForm
         $this->setAttribute(self::ATTRIBUTE_METHOD, self::CHROME_FORM_METHOD_POST);
         $this->setAttribute(self::ATTRIBUTE_ID, $this->_id);
 
-        $emailSyntaxValidator = new \Chrome\Validator\Email\SyntaxValidator();
-
-        $emailValidator = new \Chrome\Validator\Composition\AndComposition();
-        $emailValidator->addValidators(array($emailSyntaxValidator,
-            //$emailExistsValidator,
-            //$emailBlacklistValidator
-        ));
-
         $birthdayValidator = new YearBirthdayValidator();
-        $passwordValidator = new PasswordValidator();
-        $nicknameValidator = new NicknameValidator();
+
+        $passwordValidator = $this->_applicationContext->getDiContainer()->get('\Chrome\Validator\General\Password\PasswordValidator');
+        $emailValidator = $this->_applicationContext->getDiContainer()->get('\Chrome\Validator\User\Registration\EmailValidator');
+        $nicknameValidator = $this->_applicationContext->getDiContainer()->get('\Chrome\Validator\User\NameValidator');
 
         $emailConverter = new \Chrome\Converter\ConverterList();
         $emailConverter->setConversion(array('charToHtml', 'stripHtml', 'strToLower', 'trim'));

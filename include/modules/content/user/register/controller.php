@@ -1,17 +1,32 @@
 <?php
 
+/**
+ * CHROME-PHP CMS
+ *
+ * LICENSE
+ *
+ * This source file is subject to the Creative Commons license that is bundled
+ * with this package in the file LICENSE.
+ * It is also available through the world-wide-web at this URL:
+ * http://creativecommons.org/licenses/by-nc-sa/3.0/
+ * If you did not receive a copy of the license AND are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@chrome-php.de so we can send you a copy immediately.
+ *
+ * @package    CHROME-PHP
+ * @subpackage Chrome.User
+ */
 namespace Chrome\Controller\User;
 
 use \Chrome\Controller\AbstractModule;
 
-/**
- * @todo This class has two actions (register and confirm_registration). Every controller is
- *
- */
 class Register extends AbstractModule
 {
+
     const CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE = 'REGISTER';
+
     protected $_session;
+
     protected $_authorisation = null;
 
     public function __construct(\Chrome\Interactor\User\Registration $interactor, \Chrome\View\User\Register $view)
@@ -24,41 +39,30 @@ class Register extends AbstractModule
     {
         $authorisation = $this->_applicationContext->getAuthorisation();
 
-        if($authorisation->isAllowed(new \Chrome\Authorisation\Resource\Resource(new \Chrome\Resource\Identifier(__CLASS__), 'register')) === false)
-        {
+        if ($authorisation->isAllowed(new \Chrome\Authorisation\Resource\Resource(new \Chrome\Resource\Identifier(__CLASS__), 'register')) === false) {
             $this->_view->alreadyRegistered();
             return;
         }
 
         $this->_session = $this->_requestContext->getSession();
 
-        if(!isset($this->_request->getQueryParams()['action']) OR $this->_request->getQueryParams()['action'] === 'register')
-        {
-            $this->_handleRegisterAction();
-
-        }
+        $this->_handleRegisterAction();
     }
 
     protected function _handleRegisterAction()
     {
-        if(!isset($this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE]))
-        {
+        if (! isset($this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE])) {
             $this->_stepOne();
             return;
         }
 
-        switch($this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE]['step'])
-        {
+        switch ($this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE]['step']) {
             case 2:
                 {
                     $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Register\StepOne');
+                    $this->_form->create();
 
-                    if(!$this->_form->isValid())
-                    {
-                        if(!$this->_form->isValid())
-                        {
-                            $this->_form->create();
-                        }
+                    if (! $this->_form->isValid()) {
 
                         $this->_stepOne();
                         break;
@@ -70,13 +74,13 @@ class Register extends AbstractModule
 
             case 3:
                 {
-                    $this->_form = $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Register\StepTwo');
+                    $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Register\StepTwo');
+                    $this->_form->create();
 
                     $data = $this->_form->getData();
 
                     // go one step back
-                    if($this->_form->isSent('buttons') and isset($data['buttons']['backward']))
-                    {
+                    if ($this->_form->isSent('buttons') and isset($data['buttons']['backward'])) {
                         $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Register\StepOne');
                         $this->_form->create();
                         $this->_stepOne();
@@ -84,16 +88,16 @@ class Register extends AbstractModule
                     }
 
                     // process the errors
-                    if(!$this->_form->isCreated() or !$this->_form->isSent() or !$this->_form->isValid())
-                    {
+                    if (! $this->_form->isValid()) {
                         $this->_stepTwo();
+
                         break;
                     }
 
                     $registrationRequest = new \Chrome\Model\User\Registration\Request();
                     $registrationRequest->setEmail($this->_form->getSentData('email'))
-                                        ->setName($this->_form->getSentData('nickname'))
-                                        ->setPassword($this->_form->getSentData('password'));
+                        ->setName($this->_form->getSentData('nickname'))
+                        ->setPassword($this->_form->getSentData('password'));
 
                     $result = new \Chrome\Interactor\Result();
 
@@ -113,7 +117,9 @@ class Register extends AbstractModule
             default:
                 {
                     // should never happen
-                    $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = array('step' => 2);
+                    $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = array(
+                        'step' => 2
+                    );
                     throw new \Chrome\Exception('Undefined step in registration!');
                 }
         }
@@ -121,25 +127,24 @@ class Register extends AbstractModule
 
     private function _stepOne()
     {
-        if($this->_form === null)
-        {
+        if ($this->_form === null) {
             $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Register\StepOne');
         }
 
-        if(!$this->_form->isCreated())
-        {
+        if (! $this->_form->isCreated()) {
             $this->_form->create();
         }
 
         $this->_view->setStepOne();
 
-        $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = array('step' => 2);
+        $this->_session[self::CHROME_CONTROLLER_REGISTER_SESSION_NAMESPACE] = array(
+            'step' => 2
+        );
     }
 
     private function _stepTwo()
     {
-        if(!($this->_form instanceof \Chrome\Form\Module\User\Register\StepTwo))
-        {
+        if (! ($this->_form instanceof \Chrome\Form\Module\User\Register\StepTwo)) {
             $this->_form = $this->_applicationContext->getDiContainer()->get('\Chrome\Form\User\Register\StepTwo');
         }
 

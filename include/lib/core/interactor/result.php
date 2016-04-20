@@ -18,6 +18,8 @@
  */
 namespace Chrome\Interactor;
 
+require_once 'trigger.php';
+
 interface Interactor_Interface
 {
 
@@ -57,10 +59,26 @@ interface Error_Interface
      * @return \Iterator
      */
     public function getErrors();
+
+    public function setException(\Chrome\Exception $exception);
+
+    /**
+     * @return \Chrome\Exception
+     */
+    public function getException();
+
+    /**
+     * @return bool
+     */
+    public function hasException();
 }
 
 interface Result_Interface extends State_Interface, Error_Interface
 {
+    public function setReturn($return);
+
+    public function getReturn();
+
     /**
      * Resets everything
      */
@@ -72,6 +90,20 @@ class Result implements Result_Interface
     protected $_state = null;
 
     protected $_errors = array();
+
+    protected $_exception = null;
+
+    protected $_return;
+
+    public function setReturn($return)
+    {
+        $this->_return = $return;
+    }
+
+    public function getReturn()
+    {
+        return $this->_return;
+    }
 
     public function failed()
     {
@@ -151,45 +183,25 @@ class Result implements Result_Interface
         return new \ArrayIterator($array);
     }
 
-    public function reset()
+    public function setException(\Chrome\Exception $e)
     {
-        $this->_state = null;
-        $this->_errors = array();
-    }
-}
-
-class ExceptionResult extends Result
-{
-    protected $_exception = null;
-
-    public function __construct(\Chrome\Exception $e) {
         $this->_exception = $e;
-        $this->failed();
     }
 
-    /**
-     * @return \Chrome\Exception
-     */
     public function getException()
     {
         return $this->_exception;
     }
-}
 
-class FailedResult extends Result
-{
-    public function __construct($key, array $errors)
+    public function hasException()
     {
-        $this->failed();
-        $this->setErrors($key, $errors);
+        return $this->_exception !== null;
+    }
+
+    public function reset()
+    {
+        $this->_state = null;
+        $this->_errors = array();
+        $this->_exception = null;
     }
 }
-
-class SucceededResult extends Result
-{
-    public function __construct()
-    {
-        $this->succeeded();
-    }
-}
-

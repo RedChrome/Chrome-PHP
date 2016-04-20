@@ -2,7 +2,7 @@
     "require": {
 		"php": ">=5.5.0",
         "monolog/monolog": "1.6.*",
-        "swiftmailer/swiftmailer": "v5.2.0",
+        "swiftmailer/swiftmailer": "5.4.*",
         "dmishh/recaptcher": "1.0.0",
 		"psr/cache": "1.0.0",
 		"psr/http-message": "1.0",

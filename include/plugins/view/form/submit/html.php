@@ -32,6 +32,6 @@ class Html extends \Chrome\View\Form\Element\AbstractElement
         $this->_attribute->setAttribute('value', $allowedValues);
         $this->_attribute->remove('required');
 
-        return '<input type="submit" '.$this->_renderFlags().'/>';
+        return '<input type="submit" '.$this->_renderFlags().' formnovalidate/>';
     }
 }

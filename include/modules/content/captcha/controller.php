@@ -45,9 +45,10 @@ class Captcha extends AbstractModule
         } else {
             // this is needed, because even if the captcha was valid, we want to display a new captcha!
             // normaly, after the captcha is valid, we do not display a captcha again.
-            //$captcha = $this->_form->getElements('captcha')->getOption()->getCaptcha();
-            //$captcha->create();
-
+            #$captcha = $this->_form->getElements('captcha')->getOption()->getCaptcha();
+            #$captcha->create();
+            // we need to call renew, since we want to display the form again (even though it was valid)
+            $this->_form->renew();
             $this->_view->formValid();
         }
 

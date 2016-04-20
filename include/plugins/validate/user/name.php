@@ -22,9 +22,19 @@ namespace Chrome\Validator\User;
 
 class NameValidator extends \Chrome\Validator\Composer\AbstractComposer
 {
+    protected $_uniqueVal = null;
+
+    public function __construct(UniqueNameValidator $validator)
+    {
+        $this->_uniqueVal = $validator;
+    }
+
     protected function _getValidator()
     {
-        // TODO: maybe add a "name unique" validator
-        return new NicknameValidator();
+        $and = new \Chrome\Validator\Composition\AndComposition();
+        $and->addValidator(new NicknameValidator());
+        $and->addValidator($this->_uniqueVal);
+
+        return $and;
     }
 }

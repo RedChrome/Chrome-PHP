@@ -139,11 +139,6 @@ class ConverterList implements List_Interface
      */
     protected $_position = 0;
 
-    public function __construct()
-    {
-        $this->_conversions = array();
-    }
-
     public function current()
     {
         return $this->_conversions[$this->_position];

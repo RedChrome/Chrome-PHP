@@ -105,6 +105,12 @@ class Buttons extends \Chrome\Form\Element\AbstractElement implements \Chrome\Fo
         return false;
     }
 
+    public function isValid()
+    {
+        // is this okay?
+        return true;
+    }
+
     public function create()
     {
         foreach($this->_option->getAttachments() as $button) {
