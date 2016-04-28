@@ -1,1 +1,1 @@
-Sie können sich nicht erneut registrieren, wenn sie bereits angemeldet sind!
+Sie k&ouml;nnen sich nicht erneut registrieren, wenn sie bereits angemeldet sind!

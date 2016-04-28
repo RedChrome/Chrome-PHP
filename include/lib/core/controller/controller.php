@@ -75,6 +75,14 @@ abstract class AbstractController implements Controller_Interface
     protected $_applicationContext = null;
 
     /**
+     * Just a quick access to the dependency injection container.
+     * Can also get accessed via $_applicationContext.
+     *
+     * @var \Chrome\DI\Container_Interface
+     */
+    protected $_diContainer = null;
+
+    /**
      * An instance of an interactor
      *
      * @var \Chrome\Interactor\Interactor_Interface
@@ -112,6 +120,7 @@ abstract class AbstractController implements Controller_Interface
     public function setApplicationContext(\Chrome\Context\Application_Interface $appContext)
     {
         $this->_applicationContext = $appContext;
+        $this->_diContainer = $appContext->getDiContainer();
         $this->_setRequestContext($appContext->getRequestContext());
     }
 

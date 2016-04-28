@@ -59,10 +59,11 @@
 </footer>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"></script>
 <script type="text/javascript" src="<?php echo $LINKER->get(new \Chrome\Resource\Relative('public/javascript/dojo.js'));?>"></script>
-<script type="text/javascript" src="<?php echo $LINKER->get(new \Chrome\Resource\Relative('public/javascript/ganalytics.js'));?>"></script>
 <script type="text/javascript" src="<?php echo $LINKER->get(new \Chrome\Resource\Relative('public/javascript/form_utility.js'));?>"></script>
+<script type="text/javascript" src="<?php echo $LINKER->get(new \Chrome\Resource\Relative('public/javascript/third-party/jstz.min.js'));?>"></script>
+<script type="text/javascript" src="<?php echo $LINKER->get(new \Chrome\Resource\Relative('public/javascript/timezone.js'));?>"></script>
 <?php try { echo $VIEW->getRenderable(5)->render(); } catch(\Chrome\Exception $e) {$exceptionHandler->exception($e); }?>
 <!--<script type="text/javascript" src="'._PUBLIC.'javascript/Framework/dojo.js" djConfig="parseOnLoad:true, isDebug: true"></script>-->
 </body>

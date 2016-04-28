@@ -79,7 +79,6 @@ class Form extends \Chrome\View\Form\AbstractForm
     {
         $this->_formElementFactory = new \Chrome\View\Form\Factory\Element\Suffix('Default');
         $this->_formElementOptionFactory = new \Chrome\View\Form\Factory\Option\Factory();
-        #$this->_renderer = new FormRenderer($this);
     }
 
     protected function _modifyElementOption(\Chrome\Form\Element\BasicElement_Interface $formElement, \Chrome\View\Form\Option\BasicElement_Interface $viewOption)

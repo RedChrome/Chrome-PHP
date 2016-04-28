@@ -73,10 +73,10 @@ class Registration extends \Chrome\Model\AbstractDatabaseStatement implements Re
 
     public function addRegistrationRequest(\Chrome\Model\User\Registration\Request_Interface $request)
     {
-        $this->addRegistration($request->getEmail(), $request->getPassword(), $request->getPasswordSalt(), $request->getActivationKey(), $request->getName(), $request->getTime());
+        $this->_addRegistration($request->getEmail(), $request->getPassword(), $request->getPasswordSalt(), $request->getActivationKey(), $request->getName(), $request->getTime());
     }
 
-    public function addRegistration($email, $password, $passwordSalt, $activationKey, $name, $time)
+    protected function _addRegistration($email, $password, $passwordSalt, $activationKey, $name, $time)
     {
         $this->_getDBInterface()->loadQuery('addRegistration')->execute(array($email, $password, $passwordSalt, $activationKey, $name, $time));
     }

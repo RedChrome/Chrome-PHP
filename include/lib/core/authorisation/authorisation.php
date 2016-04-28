@@ -215,11 +215,11 @@ use \Chrome\Authorisation\Resource\Resource_Interface;
 interface Authorisation_Interface
 {
     /**
-     * Sets the user id, for which the authorisation will be checked
+     * Sets the authentication id, for which the authorisation will be checked
      *
-     * @param int $userId
+     * @param int $authId
      */
-    public function setUserId($userId);
+    public function setAuthenticationId($authId);
 
     /**
      * Returns a new authorisation instance
@@ -266,11 +266,11 @@ class Authorisation implements Authorisation_Interface
     private $_adapter = null;
 
     /**
-     * The user id
+     * The authentication id
      *
      * @var int
      */
-    protected $_userId = 0;
+    protected $_authId = 0;
 
     /**
      * Chrome_Authorisation::__construct()
@@ -282,12 +282,9 @@ class Authorisation implements Authorisation_Interface
         $this->_adapter = $adapter;
     }
 
-    /**
-     * @see \Chrome\Authorisation\Authorisation_Interface::setUserId()
-     */
-    public function setUserId($userId)
+    public function setAuthenticationId($authId)
     {
-        $this->_userId = (int) $userId;
+        $this->_authId = (int) $authId;
     }
 
     /**
@@ -319,6 +316,6 @@ class Authorisation implements Authorisation_Interface
             }
         }
 
-        return $this->_adapter->isAllowed($resource, $this->_userId);
+        return $this->_adapter->isAllowed($resource, $this->_authId);
     }
 }

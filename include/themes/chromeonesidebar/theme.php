@@ -19,7 +19,6 @@
 
 namespace Chrome\Design\Theme;
 
-use \Chrome\Design\Design_Interface;
 use \Chrome\Design\AbstractTheme;
 
 /**
@@ -37,9 +36,8 @@ class ChromeOneSidebar extends AbstractTheme
 
         $exceptionHandler = new \Chrome\Exception\Handler\HtmlStackTrace();
 
-        $template = new \Chrome\Template\PHP();
-        $template->assignTemplate('design/chromeOneSidebar/layout.tpl');
-        $template->assign('LINKER', $diContainer->get('\Chrome\Linker\Linker_Interface'));
+        $template = new \Chrome\Template\PHP(new \Chrome\File('design/chromeOneSidebar/layout.tpl'));
+        $template->injectViewContext($this->_appContext->getViewContext());
 
         // this list needs 7 renderables
         $htmlList = new \Chrome\Renderable\RenderableList();

@@ -88,9 +88,8 @@ abstract class SimpleTemplateRenderer extends \Chrome\View\Form\AbstractTemplate
 
     protected function _getTemplate()
     {
-        $template = new \Chrome\Template\PHP();
-        $template->assignTemplate($this->_templateFile);
-        $template->assign('LANG', $this->_viewContext->getLocalization()->getTranslate());
+        $template = new \Chrome\Template\PHP(new \Chrome\File($this->_templateFile));
+        $template->injectViewContext($this->_viewContext);
         return $template;
     }
 }

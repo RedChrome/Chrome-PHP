@@ -34,8 +34,6 @@ interface Registration_Interface
      */
     public function getRegistrationRequestByActivationKey($activationKey);
 
-    public function addRegistration($email, $password, $passwordSalt, $activationKey, $name, $time);
-
     public function addRegistrationRequest(\Chrome\Model\User\Registration\Request_Interface $registrationRequest);
 
 }

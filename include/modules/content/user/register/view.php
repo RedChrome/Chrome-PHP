@@ -80,12 +80,12 @@ namespace Chrome\View\User\Register\Form\Renderer;
 
 class StepOne extends \Chrome\View\Form\SimpleTemplateRenderer
 {
-    protected $_templateFile = 'modules/content/register/stepOne';
+    protected $_templateFile = 'modules/content/register/stepOne.tpl';
 }
 
 class StepTwo extends \Chrome\View\Form\SimpleTemplateRenderer
 {
-    protected $_templateFile = 'modules/content/register/stepTwo';
+    protected $_templateFile = 'modules/content/register/stepTwo.tpl';
 }
 
 namespace Chrome\View\User\Register;
@@ -94,30 +94,29 @@ use Chrome\View\AbstractView;
 
 class StepThree extends \Chrome\View\AbstractTemplate
 {
-    protected $_templateFile = 'modules/content/register/stepThree';
+    protected $_templateFile = 'modules/content/register/stepThree.tpl';
 }
 
 class AlreadyRegistered extends \Chrome\View\AbstractTemplate
 {
-    protected $_templateFile = 'modules/content/register/alreadyRegistered';
+    protected $_templateFile = 'modules/content/register/alreadyRegistered.tpl';
 }
 
 class RegistrationFinished extends \Chrome\View\AbstractTemplate
 {
-    protected $_templateFile = 'modules/content/register/registrationFinished';
+    protected $_templateFile = 'modules/content/register/registrationFinished.tpl';
 }
 
 class RegistrationFailed extends \Chrome\View\AbstractTemplate
 {
-    protected $_templateFile = 'modules/content/register/registrationFailed';
+    protected $_templateFile = 'modules/content/register/registrationFailed.tpl';
 }
 
 class EmailNotSent extends AbstractView
 {
     public function render()
     {
-        $template = new \Chrome\Template\PHP();
-        $template->assignTemplate('modules/content/register/emailNotSent');
+        $template = new \Chrome\Template\PHP(new \Chrome\File('modules/content/register/emailNotSent.tpl'));
         $template->assign('activationKey', $this->_controller->getActivationKey());
         return $template->render();
     }

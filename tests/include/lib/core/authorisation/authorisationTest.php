@@ -26,17 +26,17 @@ class AuthorisationTest extends \Test\Chrome\TestCase
         $this->assertSame($this->_authAdapter, $this->_auth->getAuthorisationAdapter());
     }
 
-    public function testSetUserId()
+    public function testSetAuthenticationId()
     {
-        $userId = 142;
+        $authId = 142;
 
         $resource = M::mock('\Chrome\Authorisation\Resource\Resource_Interface');
         $resource->shouldIgnoreMissing(null);
 
-        $this->_authAdapter->shouldIgnoreMissing(false)->shouldReceive('isAllowed')->with($resource, $userId)->once()->andReturn(true);
+        $this->_authAdapter->shouldIgnoreMissing(false)->shouldReceive('isAllowed')->with($resource, $authId)->once()->andReturn(true);
 
         $this->assertFalse($this->_auth->isAllowed($resource));
-        $this->_auth->setUserId($userId);
+        $this->_auth->setAuthenticationId($authId);
         $this->assertTrue($this->_auth->isAllowed($resource));
     }
 

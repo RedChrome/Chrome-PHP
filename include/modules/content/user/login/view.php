@@ -20,7 +20,6 @@
 namespace Chrome\View\User;
 
 use \Chrome\View\AbstractListLayout;
-use \Chrome\View\AbstractView;
 
 /**
  *
@@ -52,43 +51,17 @@ class Login extends AbstractListLayout
 
 namespace Chrome\View\User\Login;
 
-use \Chrome\View\AbstractView;
-
-class LoggedIn extends AbstractView
+class LoggedIn extends \Chrome\View\AbstractTemplate
 {
-    public function render()
-    {
-        $template = new \Chrome\Template\PHP();
-        $template->assignTemplate('modules/content/user/login/already_logged_in');
-
-        $lang = $this->_viewContext->getLocalization()->getTranslate();
-
-        $template->assign('LANG', $lang);
-        return $template->render();
-    }
+    protected $_templateFile = 'modules/content/user/login/already_logged_in.tpl';
 }
 
-class SuccessfullyLoggedIn extends AbstractView
+class SuccessfullyLoggedIn extends \Chrome\View\AbstractTemplate
 {
-    public function render()
-    {
-        $template = new \Chrome\Template\PHP();
-        $template->assignTemplate('modules/content/user/login/successfully_logged_in');
-        return $template->render();
-    }
+    protected $_templateFile = 'modules/content/user/login/successfully_logged_in.tpl';
 }
 
-class FormRenderer extends \Chrome\View\Form\AbstractTemplateRenderer
+class FormRenderer extends \Chrome\View\Form\SimpleTemplateRenderer
 {
-    protected function _getTemplate()
-    {
-        $template = new \Chrome\Template\PHP();
-
-        $lang = $this->_viewContext->getLocalization()->getTranslate();
-
-        $template->assignTemplate('modules/content/user/login/form_log_in');
-        $template->assign('LANG', $lang);
-
-        return $template;
-    }
+    protected $_templateFile = 'modules/content/user/login/form_log_in.tpl';
 }

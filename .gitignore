@@ -7,4 +7,5 @@ include/tmp/
 composer.lock
 include/lib/vendor
 public/css/yaml
+public/javascript/third-party
 tests/_log/*

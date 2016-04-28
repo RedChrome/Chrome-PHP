@@ -22,6 +22,7 @@
 namespace Chrome\Action;
 
 use Psr\Http\Message\ServerRequestInterface;
+
 interface Action_Interface
 {
     public function isSent();

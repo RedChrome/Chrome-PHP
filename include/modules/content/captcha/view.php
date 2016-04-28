@@ -52,12 +52,7 @@ class CaptchaSuccess extends AbstractView
     }
 }
 
-class FormRenderer extends \Chrome\View\Form\AbstractTemplateRenderer
+class FormRenderer extends \Chrome\View\Form\SimpleTemplateRenderer
 {
-    protected function _getTemplate()
-    {
-        $template = new \Chrome\Template\PHP();
-        $template->assignTemplate('modules/content/captcha/captcha_test');
-        return $template;
-    }
+    protected $_templateFile = 'modules/content/captcha/captcha_test.tpl';
 }

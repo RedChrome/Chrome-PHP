@@ -82,7 +82,11 @@ define('CHROME_MTIME', microtime(true));
 define('CHROME_MEMORY_USAGE', memory_get_usage());
 define('CHROME_MEMORY_LIMIT', ini_get('memory_limit'));
 // charset, UTF-8, ISO-8859-1 http://www.iana.org/assignments/character-sets
-define('CHROME_LOCALE_DEFAULT', 'de-DE');
+
+// the following will result in 'de-de' as locale
+define('CHROME_LOCALE_DEFAULT_PRIMARY', 'de');
+define('CHROME_LOCALE_DEFAULT_REGION', 'de');
+
 define('CHROME_TIMEZONE', 'Europe/Berlin');
 define('CHROME_VERSION', '0.1');
 define('CHROME_VERSION_SUFFIX', 'beta');

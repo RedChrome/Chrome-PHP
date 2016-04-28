@@ -2,10 +2,9 @@
 
 namespace Chrome\View\RouteNotFound;
 
-use Chrome\View\AbstractView;
-
-class RouteNotFound extends AbstractView
+class RouteNotFound extends \Chrome\View\AbstractTemplate
 {
+    protected $_templateFile = 'modules/content/routeNotFound/routeNotFound.tpl';
 
     public function _setUp()
     {
@@ -13,15 +12,5 @@ class RouteNotFound extends AbstractView
         // $lang = new Chrome_Language('modules/content/SiteNotFound.ini');
         $lang = $this->_viewContext->getLocalization()->getTranslate();
         $this->addTitle($lang->get('modules/content/routeNotFound/title'));
-    }
-
-    public function render()
-    {
-        $tpl = new \Chrome\Template\PHP();
-
-        $tpl->assignTemplate('modules/content/routeNotFound/routeNotFound.tpl');
-        $tpl->assign('LANG', $lang = $this->_viewContext->getLocalization()->getTranslate());
-
-        return $tpl->render();
     }
 }

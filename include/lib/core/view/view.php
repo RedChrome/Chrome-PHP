@@ -179,8 +179,8 @@ abstract class AbstractTemplate extends AbstractView
 
     public function render()
     {
-        $template = new \Chrome\Template\PHP();
-        $template->assignTemplate($this->_templateFile);
+        $template = new \Chrome\Template\PHP(new \Chrome\File($this->_templateFile));
+        $template->injectViewContext($this->_viewContext);
         return $template->render();
     }
 }

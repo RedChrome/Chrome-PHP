@@ -19,9 +19,6 @@
 
 namespace Chrome\Template;
 
-
- // TODO: add template to DI, make static member vars un-static
- // but let the functionality working
 /**
  * @package CHROME-PHP
  * @subpackage Chrome.Template
@@ -36,13 +33,23 @@ interface Template_Interface extends \Chrome\Renderable
 
     public function assignArrayGlobal(array $array);
 
-    public function assignTemplate($name, $path = '');
+    public function assignFile(\Chrome\File_Interface $file);
 
     public function _isset($name);
 
+    public function injectViewContext(\Chrome\Context\View_Interface $viewContext);
+
+    /**
+     * Loads a template file, uses the currently set variables & view context and renderes immediately
+     * the tempate.
+     *
+     * @param \Chrome\File_Interface $file
+     * @return string
+     */
+    public function load(\Chrome\File_Interface $file);
+
     public function get($name, $global = true);
 
-    public function render();
 }
 
 /**
@@ -57,7 +64,24 @@ abstract class AbstractTemplate implements Template_Interface
             'BASEDIR' => BASEDIR, 'BASE' => BASE, 'ADMIN' => ADMIN, 'LIB' => LIB, 'TEMPLATE' => TEMPLATE, 'TMP' => TMP,
             'CACHE' => CACHE);
 
+    /**
+     * @var \Chrome\Directory_Interface
+     */
+    protected static $_templateDir = null;
+
     protected $_file = null;
+
+    protected $_viewContext = null;
+
+    public static function setTemplateDirectory(\Chrome\Directory_Interface $dir)
+    {
+        self::$_templateDir = $dir;
+    }
+
+    public static function getTemplateDirectory()
+    {
+        return self::$_templateDir;
+    }
 
     public function assign($name, $value)
     {
@@ -79,29 +103,30 @@ abstract class AbstractTemplate implements Template_Interface
         self::$_globalVar += $array;
     }
 
-    public function assignTemplate($name, $path = '')
+    public function injectViewContext(\Chrome\Context\View_Interface $viewContext)
     {
-        if(empty($name)) {
-            throw new \Chrome\Exception('No template file given!');
+        $this->_viewContext = $viewContext;
+
+        $this->assign('CONTEXT', $viewContext);
+        $this->assign('LANG', $viewContext->getLocalization()->getTranslate());
+        $this->assign('LINKER', $viewContext->getLinker());
+    }
+
+    /**
+     *
+     * @param \Chrome\File_Interface $file
+     * @throws \Chrome\Exception
+     */
+    public function assignFile(\Chrome\File_Interface $file)
+    {
+        $file = self::$_templateDir->file($file, true);
+
+        if(!$file->hasExtension('tpl')) {
+            throw new \Chrome\Exception('Every template file must have the extension .tpl');
         }
-
-        if(strstr($name, '.tpl') === false) {
-            $name .= '.tpl';
-        }
-
-        if($path !== '') {
-            // add a "/" at the end of the path
-            $path .= ($path{strlen($path)-1} !== '/') ? '/' : '';
-
-            $file = $path.$name;
-        } else {
-            $file = TEMPLATE.$name;
-        }
-
-        $file = new \Chrome\File($file);
 
         if(!$file->exists()) {
-            throw new \Chrome\Exception('Cannot assign a template file '.$file.' that does not exist in Chrome_Tepmate_Engine_Abstract::assignTemplate()!');
+            throw new \Chrome\Exception('Cannot assign a template file '.$file.' that does not exist');
         }
 
         $this->_file = $file;
@@ -130,17 +155,23 @@ abstract class AbstractTemplate implements Template_Interface
  */
 class PHP extends AbstractTemplate
 {
+    public function __construct(\Chrome\File_Interface $file)
+    {
+        $this->assignFile($file);
+    }
+
     public function render()
     {
-        if($this->_file === null) {
-            throw new \Chrome\IllegalStateException('Did not call assignTemplate');
-        }
-
-        // here we need to set vars, so that php knows the content of the tmpl-vars!!
+        /* This code is equivalent to extract($this->_var);
         foreach($this->_var as $key => $value)
         {
             $$key = $value;
         }
+        */
+
+        // here we need to set vars, so that php knows the content of the tmpl-vars!!
+        extract($this->_var);
+        extract((array) $this);
 
         ob_start();
 
@@ -153,5 +184,22 @@ class PHP extends AbstractTemplate
         // all assigned vars get destroyed automatically
 
         return $return;
+    }
+
+    public function load(\Chrome\File_Interface $file, array $vars = array())
+    {
+        $template = new self($file);
+
+        if($this->_viewContext !== null) {
+            $template->injectViewContext($this->_viewContext);
+        }
+
+        $template->assignArray($this->_var);
+
+        if(count($vars) > 0) {
+            $template->assignArray($vars);
+        }
+
+        return $template->render();
     }
 }

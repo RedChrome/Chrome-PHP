@@ -36,9 +36,8 @@ class Chrome extends AbstractTheme
 
         $exceptionHandler = new \Chrome\Exception\Handler\HtmlStackTrace();
 
-        $template = new \Chrome\Template\PHP();
-        $template->assignTemplate('design/chrome/design.tpl');
-        $template->assign('LINKER', $diContainer->get('\Chrome\Linker\Linker_Interface'));
+        $template = new \Chrome\Template\PHP(new \Chrome\File('design/chrome/design.tpl'));
+        $template->injectViewContext($this->_appContext->getViewContext());
 
         // this list needs 7 renderables
         $htmlList = new \Chrome\Renderable\RenderableList();

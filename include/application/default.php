@@ -203,6 +203,8 @@ class DefaultApplication implements Application_Interface
 
         $this->_initConverter();
         $this->_initLocalization();
+
+        \Chrome\Template\PHP::setTemplateDirectory(new \Chrome\Directory(TEMPLATE));
     }
 
     /**
@@ -279,44 +281,42 @@ class DefaultApplication implements Application_Interface
          */
     }
 
-    protected function _initLocalization($locale = null)
+    protected function _initLocalization()
     {
-        if($locale === null)
-        {
-            $serverData = $this->_applicationContext->getRequestContext()->getRequest()->getServerParams();
+        $serverData = $this->_applicationContext->getRequestContext()
+            ->getRequest()
+            ->getServerParams();
 
-            $locale = isset($serverData['HTTP_ACCEPT_LANGUAGE']) ? $serverData['HTTP_ACCEPT_LANGUAGE'] : null;
+        $locale = isset($serverData['HTTP_ACCEPT_LANGUAGE']) ? $serverData['HTTP_ACCEPT_LANGUAGE'] : null;
 
-            if($locale === null)
-            {
-                $local = CHROME_LOCALE_DEFAULT;
-            }
+        #$locale = null;
+
+        $localeFactory = new \Chrome\Localization\LocaleFactory($this->_applicationContext->getRequestContext()->getCookie());
+        $localeFactory->addLocale('de', 'de');
+        $localeFactory->addLocale('xx', 'xx');
+        $localeFactory->setAcceptLanguage($locale);
+
+        $locale = $localeFactory->factory();
+
+        // $locale = new \Chrome\Localization\Locale($locale);
+        $localization = new \Chrome\Localization\Localization();
+        $localization->setLocale($locale);
+
+        // for testing
+        if ($locale->getPrimaryLanguage() == 'xx' and $locale->getRegion() == 'xx') {
+            require_once 'tests/dummies/localization/translate/test.php';
+            $translate = new \Chrome\Localization\Translate_Test_XX(new \Chrome\Directory(''), $localization);
+        } else {
+            $translate = new \Chrome\Localization\Translate_Simple(new \Chrome\Directory(RESOURCE . 'translations/'), $localization);
         }
 
-        try
-        {
-            $locale = new \Chrome\Localization\Locale($locale);
-            $localization = new \Chrome\Localization\Localization();
-            $localization->setLocale($locale);
+        // load default validate messages
+        $translate->load('validate');
+        // require_once 'tests/dummies/localization/translate/test.php';
+        // $translate = new \Chrome\Localization\Translate_Test_XX($localization);
+        $localization->setTranslate($translate);
+        $this->_applicationContext->getViewContext()->setLocalization($localization);
 
-            // for testing
-            if($locale->getPrimaryLanguage() == 'xx' AND $locale->getRegion() == 'XX') {
-                require_once 'tests/dummies/localization/translate/test.php';
-                $translate = new \Chrome\Localization\Translate_Test_XX(new \Chrome\Directory(''), $localization);
-            } else {
-                $translate = new \Chrome\Localization\Translate_Simple(new \Chrome\Directory(RESOURCE.'translations/'), $localization);
-            }
-
-            // load default validate messages
-            $translate->load('validate');
-            #require_once 'tests/dummies/localization/translate/test.php';
-            #   $translate = new \Chrome\Localization\Translate_Test_XX($localization);
-            $localization->setTranslate($translate);
-            $this->_applicationContext->getViewContext()->setLocalization($localization);
-        } catch(\Chrome\Exception $e)
-        {
-            $this->_initLocalization(CHROME_LOCALE_DEFAULT);
-        }
     }
 
     protected function _initLoggers()
@@ -407,7 +407,8 @@ class DefaultApplication implements Application_Interface
         // set authorisation service
         // Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB())); // better one, but not finished ;)
         $adapter = new \Chrome\Authorisation\Adapter\Simple($this->_diContainer->get('\Chrome\Model\Authorisation\Simple\Model_Interface'));
-        $authorisation = new \Chrome\Authorisation\Authorisation($adapter, $authentication->getAuthenticationID());
+        $authorisation = new \Chrome\Authorisation\Authorisation($adapter);
+        $authorisation->setAuthenticationId($authentication->getAuthenticationID());
 
         $this->_applicationContext->setAuthentication($authentication);
         $this->_applicationContext->setAuthorisation($authorisation);

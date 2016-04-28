@@ -16,7 +16,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Localization
  */
-
 namespace Chrome\Localization;
 
 require_once 'registry.php';
@@ -28,9 +27,11 @@ require_once 'registry.php';
  */
 interface Localization_Interface
 {
+
     public function getLocale();
 
     /**
+     *
      * @return \Chrome\Localization\Translate_Interface
      */
     public function getTranslate();
@@ -48,22 +49,27 @@ interface Localization_Interface
 
 interface Message_Interface
 {
+
     /**
+     *
      * @return string
      */
     public function getMessage();
 
     /**
+     *
      * @return array
      */
     public function getParameters();
 
     /**
+     *
      * @return string
      */
     public function getNamespace();
 
     /**
+     *
      * @param string $string
      */
     public function setNamespace($string);
@@ -71,8 +77,11 @@ interface Message_Interface
 
 class Message implements Message_Interface
 {
+
     protected $_message = '';
+
     protected $_params = array();
+
     protected $_namespace = '';
 
     public function __construct($message, array $params = array(), $namespace = '')
@@ -105,18 +114,17 @@ class Message implements Message_Interface
 
     public function __toString()
     {
-        return $this->_namespace.':'.$this->_message.'{'.$this->_exportParams().'}';
+        return $this->_namespace . ':' . $this->_message . '{' . $this->_exportParams() . '}';
     }
 
     protected function _exportParams()
     {
         $return = '';
 
-        foreach($this->_params as $parameter)
-        {
-            $return .= gettype($parameter).':';
+        foreach ($this->_params as $parameter) {
+            $return .= gettype($parameter) . ':';
 
-            if(is_object($parameter) ) {
+            if (is_object($parameter)) {
                 $return .= var_export($parameter, true);
             } else {
                 $return .= $parameter;
@@ -125,8 +133,7 @@ class Message implements Message_Interface
             $return .= ',';
         }
 
-        return substr($return, 0, strlen($return)-1);
-
+        return substr($return, 0, strlen($return) - 1);
     }
 }
 
@@ -137,6 +144,7 @@ class Message implements Message_Interface
  */
 interface Translate_Interface
 {
+
     public function get($key, array $params = array());
 
     public function getByMessage(Message_Interface $message);
@@ -148,10 +156,10 @@ interface Translate_Interface
 
 /**
  * localizability, L12y
- *
  */
 interface L12y
 {
+
     public function setLocale(Localization_Interface $localization);
 
     public function getLocale();
@@ -164,6 +172,7 @@ interface L12y
  */
 class Translate_Simple implements Translate_Interface
 {
+
     const MODULE_GENERAL = 'general';
 
     protected $_loadedModules = array();
@@ -183,25 +192,23 @@ class Translate_Simple implements Translate_Interface
 
     public function get($key, array $params = array())
     {
-        if(!is_string($key)) {
+        if (! is_string($key)) {
             throw new \Chrome\InvalidArgumentException('The argument $key must be of type string');
         }
 
         // assume that 1. key is $key and 2. key is $params
-        if(is_array($key) AND isset($key[0]) AND is_string($key[0]) AND isset($key[1]) AND is_array($key[1])) {
+        if (is_array($key) and isset($key[0]) and is_string($key[0]) and isset($key[1]) and is_array($key[1])) {
             $params = $key[1];
             $key = $key[0];
         }
 
-        if(!isset($this->_translations[$key]))
-        {
+        if (! isset($this->_translations[$key])) {
             return $key;
         }
 
         $replacements = array();
-        foreach($params as $keyName => $value)
-        {
-            $replacements['{'.$keyName.'}'] = $value;
+        foreach ($params as $keyName => $value) {
+            $replacements['{' . $keyName . '}'] = $value;
         }
 
         return strtr($this->_translations[$key], $replacements);
@@ -214,44 +221,41 @@ class Translate_Simple implements Translate_Interface
 
     public function load($module, $submodule = null)
     {
-        if($submodule === null)
-        {
+        if ($submodule === null) {
             $submodule = 'locale';
         }
 
         // module already loaded
-        if(in_array($module.'/'.$submodule, $this->_loadedModules) === true)
-        {
+        if (in_array($module . '/' . $submodule, $this->_loadedModules) === true) {
             return;
         }
 
-        $file = $this->_includePath->file($this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/'.$submodule.'.ini', true);
+        $file = $this->_includePath->file($this->_locale->getLocale()
+            ->getPrimaryLanguage() . '/' . $module . '/' . $submodule . '.ini', true);
 
-        #$file = new \Chrome\File(RESOURCE.self::INCLUDE_DIR.$this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/'.$submodule.'.ini');
+        // $file = new \Chrome\File(RESOURCE.self::INCLUDE_DIR.$this->_locale->getLocale()->getPrimaryLanguage().'/'.$module.'/'.$submodule.'.ini');
 
-        if(!$file->exists())
-        {
-            throw new \Chrome\Exception('Could not load module '.$module.'/'.$submodule.'. File '.$file.' does not exist');
+        if (! $file->exists()) {
+            throw new \Chrome\Exception('Could not load module ' . $module . '/' . $submodule . '. File ' . $file . ' does not exist');
         }
 
         $parsed = parse_ini_file($file->getFileName(), true);
 
-        foreach($parsed as $section => $translations)
-        {
+        foreach ($parsed as $section => $translations) {
             $this->_loadedModules[] = $section;
             $this->_translations = $this->_translations + $translations;
 
             $newTranslation = array();
 
-            foreach($translations as $key => $value) {
-                $key = $section.'/'.$key;
+            foreach ($translations as $key => $value) {
+                $key = $section . '/' . $key;
                 $newTranslation[$key] = $value;
             }
 
             $this->_translations = $this->_translations + $newTranslation;
         }
 
-        $this->_loadedModules[] = $module.'/'.$submodule;
+        $this->_loadedModules[] = $module . '/' . $submodule;
     }
 
     public function getLocale()
@@ -261,6 +265,7 @@ class Translate_Simple implements Translate_Interface
 }
 
 /**
+ *
  * @todo add other methods
  */
 interface Locale_Interface
@@ -271,10 +276,142 @@ interface Locale_Interface
 
     public function getRegion();
 
+    /**
+     * @return \DateTimeZone
+     */
     public function getTimezone();
 }
 
+class LocaleFactory
+{
+    protected $_supportedLocales = array();
+
+    protected $_parsedAcceptLanguage = array();
+
+    protected $_cookie = null;
+
+    public function __construct(\Chrome\Request\Cookie_Interface $cookie)
+    {
+        $this->_cookie = $cookie;
+    }
+
+    public function addLocale($primary, $region = '')
+    {
+        $this->addLocales(array(array($primary, $region)));
+    }
+
+    /**
+     * Expected structure of $locales:
+     *  array(
+     *      array($primary, $region), //or
+     *      array($primary)
+     *  )
+     *
+     * @param array $locales
+     */
+    public function addLocales(array $locales)
+    {
+        foreach($locales as $locale)
+        {
+            if(isset($locale[1]) AND !empty($locale[1])) {
+                $this->_supportedLocales[] = array(strtolower($locale[0]), strtolower($locale[1]));
+            } else {
+                $this->_supportedLocales[] = array(strtolower($locale[0]));
+            }
+        }
+    }
+
+    public function setAcceptLanguage($acceptLanguage)
+    {
+        $this->_parsedAcceptLanguage = $this->parseAcceptLanguage($acceptLanguage);
+    }
+
+    public function parseAcceptLanguage($localeString)
+    {
+        $localeString = preg_replace('/\s+/', '', $localeString);
+
+        preg_match_all('~(([a-z]{1,8})((-|_)[a-z]{1,8}){0,3}|\*)(;q=(1\.0{0,3}|0\.\d{0,3}))?(,|$)~i', $localeString, $hits, PREG_SET_ORDER);
+
+        $locales = array();
+
+        foreach ($hits as $hit) {
+            $language = strtolower($hit[1]);
+            $quality = $hit[6];
+
+            if (empty($quality)) {
+                $quality = 1;
+            }
+
+            // if the user _has_ specified a region in his locale string, e.g. en-US;q=1
+            // (region is US) then this is "a little bit" better thatn just en;q=1
+            // since the region is more accurate.
+            // since https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.9 states, that
+            // one should only consider 3 digits after the decimal point, this has no influence on the
+            // actual qvalue. So we can rank the locales using normal sorting algorithms.
+            if (! empty($hit[3])) {
+                $quality += 0.0001;
+            }
+
+            $locales[$language] = (float) $quality;
+        }
+
+        arsort($locales, SORT_NUMERIC);
+
+        $rank = array();
+
+        foreach($locales as $key => $value)
+        {
+            $rank[] = explode('-', $key, 4);
+        }
+
+        return $rank;
+    }
+
+    public function factory()
+    {
+        if(count($this->_supportedLocales) == 0) {
+            throw new \Chrome\Exception('No locale supported');
+        }
+
+        $selectedLocale = $this->_supportedLocales[0];
+
+        foreach($this->_parsedAcceptLanguage as $userChoice)
+        {
+            if(($match = $this->_isSupported($userChoice)) !== null)
+            {
+                $selectedLocale = $match;
+                break;
+            }
+        }
+
+        $locale = new \Chrome\Localization\Locale();
+        $locale->setLocale($selectedLocale[0], $selectedLocale[1]);
+        $locale->setTimezone($this->_cookie->getCookie('CHROME_TIMEZONE'));
+
+        return $locale;
+    }
+
+    protected function _isSupported(array $locale)
+    {
+        foreach($this->_supportedLocales as $supLocale)
+        {
+            if($supLocale[0] === $locale[0]) {
+                if(isset($locale[1]) AND !empty($locale[1])) {
+                    if($locale[1] === $supLocale[1]) {
+                        return $supLocale;
+                    }
+                } else {
+                    return $supLocale;
+                }
+            }
+        }
+
+        return null;
+    }
+}
+
 /**
+ *
  * @todo re-implement this class, just a dummy
  *
  */
@@ -284,41 +421,34 @@ class Locale implements Locale_Interface
 
     protected $_region = '';
 
-    private $_localeParseTries = 0;
+    protected $_timezone = null;
 
-    const MAX_PARSE_TRIES = 2;
-
-    public function __construct($localeString)
+    public function __construct()
     {
-        $this->_parseLocaleString($localeString);
+        $this->_primaryLanguage = CHROME_LOCALE_DEFAULT_PRIMARY;
+        $this->_region = CHROME_LOCALE_DEFAULT_REGION;
+        $this->_timezone = new \DateTimeZone(CHROME_TIMEZONE);
     }
 
-    protected function _parseLocaleString($localeString)
+    public function setLocale($primary, $region)
     {
-        // TODO: also consider quality
+        $this->_primaryLanguage = $primary;
+        $this->_region = $region;
+    }
 
-        if(++$this->_localeParseTries >= self::MAX_PARSE_TRIES)
+    public function setTimezone($timezone)
+    {
+        try {
+            $this->_timezone = new \DateTimeZone($timezone);
+        } catch(\Exception $e)
         {
-            throw new \Chrome\Exception('The maximum number of tries to parse a locale string was reached');
+            // ignore...
         }
+    }
 
-        // only use the first 5 chars: e.g. de-DE, en-US
-        $actualLocaleString = substr($localeString, 0, 5);
-        $matches = array();
-
-        // string was ok
-        if(preg_match('~([a-z]{2})(-|_)([a-z]{2})~i', $actualLocaleString, $matches) === 1)
-        {
-            $this->_primaryLanguage = strtolower($matches[1]);
-            $this->_region = strtoupper($matches[3]);
-            $this->_localeParseTries = 0;
-        } else if(preg_match('~([a-z]{2})(,|;)~i', $actualLocaleString, $matches) === 1) {
-            $this->_primaryLanguage = strtolower($matches[1]);
-            $this->_region = null;
-            $this->_localeParseTries = 0;
-        } else {
-            $this->_parseLocaleString(CHROME_LOCALE_DEFAULT);
-        }
+    public function setTimezoneObject(\DateTimeZone $timezone)
+    {
+        $this->_timezone = $timezone;
     }
 
     public function getPrimaryLanguage()
@@ -333,19 +463,25 @@ class Locale implements Locale_Interface
 
     public function getTimezone()
     {
-        return CHROME_TIMEZONE;
+        return $this->_timezone;
     }
 
     public function getLocaleString($useUnderscore = false)
     {
         $separation = ($useUnderscore === true) ? '_' : '-';
 
-        return $this->_primaryLanguage.$separation.$this->_region;
+        return $this->_primaryLanguage . $separation . $this->_region;
+    }
+
+    public function __toString()
+    {
+        return $this->getLocaleString();
     }
 }
 
 class Localization implements Localization_Interface
 {
+
     protected $_translate = null;
 
     protected $_locale = null;
@@ -371,27 +507,17 @@ class Localization implements Localization_Interface
     }
 
     public function getDate()
-    {
-
-    }
+    {}
 
     public function getCurrency()
-    {
-
-    }
+    {}
 
     public function getNumberFormatter()
-    {
-
-    }
+    {}
 
     public function getCalendar()
-    {
-
-    }
+    {}
 
     public function getTimeZone()
-    {
-
-    }
+    {}
 }
