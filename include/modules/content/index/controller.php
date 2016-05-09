@@ -56,8 +56,6 @@ class Index extends AbstractModule
 
         $this->_view->addRenderable($renderer);
 
-        var_dump($this->_applicationContext->getViewContext()->getLocalization()->getLocale());
-
         /*
         $this->_applicationContext->getClassloader()->load('\Chrome\Router\Route\DirectoryRoute');
         $directory = new \Chrome\Directory('include/modules/content');

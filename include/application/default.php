@@ -22,6 +22,7 @@ namespace Chrome\Application;
 
 use Chrome\Authorisation\Adapter\Simple;
 use Chrome\View\Plugin\Facade;
+use Chrome\Localization\LocaleConfigurator;
 
 /**
  * loads dependencies from composer
@@ -283,40 +284,16 @@ class DefaultApplication implements Application_Interface
 
     protected function _initLocalization()
     {
-        $serverData = $this->_applicationContext->getRequestContext()
-            ->getRequest()
-            ->getServerParams();
-
-        $locale = isset($serverData['HTTP_ACCEPT_LANGUAGE']) ? $serverData['HTTP_ACCEPT_LANGUAGE'] : null;
-
-        #$locale = null;
-
-        $localeFactory = new \Chrome\Localization\LocaleFactory($this->_applicationContext->getRequestContext()->getCookie());
-        $localeFactory->addLocale('de', 'de');
-        $localeFactory->addLocale('xx', 'xx');
-        $localeFactory->setAcceptLanguage($locale);
-
-        $locale = $localeFactory->factory();
-
-        // $locale = new \Chrome\Localization\Locale($locale);
         $localization = new \Chrome\Localization\Localization();
-        $localization->setLocale($locale);
-
-        // for testing
-        if ($locale->getPrimaryLanguage() == 'xx' and $locale->getRegion() == 'xx') {
-            require_once 'tests/dummies/localization/translate/test.php';
-            $translate = new \Chrome\Localization\Translate_Test_XX(new \Chrome\Directory(''), $localization);
-        } else {
-            $translate = new \Chrome\Localization\Translate_Simple(new \Chrome\Directory(RESOURCE . 'translations/'), $localization);
-        }
-
-        // load default validate messages
-        $translate->load('validate');
-        // require_once 'tests/dummies/localization/translate/test.php';
-        // $translate = new \Chrome\Localization\Translate_Test_XX($localization);
-        $localization->setTranslate($translate);
         $this->_applicationContext->getViewContext()->setLocalization($localization);
 
+        $tzConfigurator = new \Chrome\Localization\TimeZoneConfigurator($this->_applicationContext->getRequestContext()->getCookie());
+        $localeConfigurator = new \Chrome\Localization\LocaleConfigurator($this->_applicationContext->getRequestContext());
+        $translateConfigurator = new \Chrome\Localization\TranslateConfigurator();
+
+        $tzConfigurator->configure($localization);
+        $localeConfigurator->configure($localization);
+        $translateConfigurator->configure($localization);
     }
 
     protected function _initLoggers()

@@ -19,6 +19,7 @@
 namespace Chrome\Localization;
 
 require_once 'registry.php';
+require_once 'configurator.php';
 
 /**
  *
@@ -27,7 +28,6 @@ require_once 'registry.php';
  */
 interface Localization_Interface
 {
-
     public function getLocale();
 
     /**
@@ -44,6 +44,9 @@ interface Localization_Interface
 
     public function getCalendar();
 
+    /**
+     * @return \DateTimeZone
+     */
     public function getTimeZone();
 }
 
@@ -77,7 +80,6 @@ interface Message_Interface
 
 class Message implements Message_Interface
 {
-
     protected $_message = '';
 
     protected $_params = array();
@@ -144,7 +146,6 @@ class Message implements Message_Interface
  */
 interface Translate_Interface
 {
-
     public function get($key, array $params = array());
 
     public function getByMessage(Message_Interface $message);
@@ -159,7 +160,6 @@ interface Translate_Interface
  */
 interface L12y
 {
-
     public function setLocale(Localization_Interface $localization);
 
     public function getLocale();
@@ -172,7 +172,6 @@ interface L12y
  */
 class Translate_Simple implements Translate_Interface
 {
-
     const MODULE_GENERAL = 'general';
 
     protected $_loadedModules = array();
@@ -264,36 +263,36 @@ class Translate_Simple implements Translate_Interface
     }
 }
 
-/**
- *
- * @todo add other methods
- */
 interface Locale_Interface
 {
+    /**
+     * Returns the locale as proposed in
+     * https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html
+     *
+     * @return string
+     */
     public function getLocaleString($useUnderscore = false);
 
+    /**
+     * Returns the primary language in lower case
+     *
+     * @return string
+     */
     public function getPrimaryLanguage();
 
-    public function getRegion();
-
     /**
-     * @return \DateTimeZone
+     * Returns the region in lower case
+     *
+     * @return string
      */
-    public function getTimezone();
+    public function getRegion();
 }
 
-class LocaleFactory
+class LocaleParser
 {
     protected $_supportedLocales = array();
 
     protected $_parsedAcceptLanguage = array();
-
-    protected $_cookie = null;
-
-    public function __construct(\Chrome\Request\Cookie_Interface $cookie)
-    {
-        $this->_cookie = $cookie;
-    }
 
     public function addLocale($primary, $region = '')
     {
@@ -321,12 +320,12 @@ class LocaleFactory
         }
     }
 
-    public function setAcceptLanguage($acceptLanguage)
+    public function parseAcceptLanguage($acceptLanguage)
     {
-        $this->_parsedAcceptLanguage = $this->parseAcceptLanguage($acceptLanguage);
+        $this->_parsedAcceptLanguage = $this->parse($acceptLanguage);
     }
 
-    public function parseAcceptLanguage($localeString)
+    public function parse($localeString)
     {
         $localeString = preg_replace('/\s+/', '', $localeString);
 
@@ -367,7 +366,7 @@ class LocaleFactory
         return $rank;
     }
 
-    public function factory()
+    public function selectLocale()
     {
         if(count($this->_supportedLocales) == 0) {
             throw new \Chrome\Exception('No locale supported');
@@ -386,7 +385,6 @@ class LocaleFactory
 
         $locale = new \Chrome\Localization\Locale();
         $locale->setLocale($selectedLocale[0], $selectedLocale[1]);
-        $locale->setTimezone($this->_cookie->getCookie('CHROME_TIMEZONE'));
 
         return $locale;
     }
@@ -410,45 +408,23 @@ class LocaleFactory
     }
 }
 
-/**
- *
- * @todo re-implement this class, just a dummy
- *
- */
+
 class Locale implements Locale_Interface
 {
     protected $_primaryLanguage = '';
 
     protected $_region = '';
 
-    protected $_timezone = null;
-
     public function __construct()
     {
         $this->_primaryLanguage = CHROME_LOCALE_DEFAULT_PRIMARY;
         $this->_region = CHROME_LOCALE_DEFAULT_REGION;
-        $this->_timezone = new \DateTimeZone(CHROME_TIMEZONE);
     }
 
     public function setLocale($primary, $region)
     {
         $this->_primaryLanguage = $primary;
         $this->_region = $region;
-    }
-
-    public function setTimezone($timezone)
-    {
-        try {
-            $this->_timezone = new \DateTimeZone($timezone);
-        } catch(\Exception $e)
-        {
-            // ignore...
-        }
-    }
-
-    public function setTimezoneObject(\DateTimeZone $timezone)
-    {
-        $this->_timezone = $timezone;
     }
 
     public function getPrimaryLanguage()
@@ -459,11 +435,6 @@ class Locale implements Locale_Interface
     public function getRegion()
     {
         return $this->_region;
-    }
-
-    public function getTimezone()
-    {
-        return $this->_timezone;
     }
 
     public function getLocaleString($useUnderscore = false)
@@ -481,10 +452,16 @@ class Locale implements Locale_Interface
 
 class Localization implements Localization_Interface
 {
+    protected $_timezone = null;
 
     protected $_translate = null;
 
     protected $_locale = null;
+
+    public function __construct()
+    {
+        $this->_timezone = new \DateTimeZone(CHROME_TIMEZONE);
+    }
 
     public function setTranslate(Translate_Interface $translate)
     {
@@ -518,6 +495,13 @@ class Localization implements Localization_Interface
     public function getCalendar()
     {}
 
+    public function setTimeZone(\DateTimeZone $timezone)
+    {
+        $this->_timezone = $timezone;
+    }
+
     public function getTimeZone()
-    {}
+    {
+        return $this->_timezone;
+    }
 }
