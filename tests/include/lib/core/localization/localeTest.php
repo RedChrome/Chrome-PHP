@@ -6,9 +6,9 @@ class LocaleFactoryTest extends \Test\Chrome\TestCase
 
     public function testParseLocaleStringAccordingToQuality()
     {
-        $locale = new \Chrome\Localization\LocaleFactory($this->_cookie);
+        $locale = new \Chrome\Localization\LocaleParser();
 
-        $ranking = $locale->parseAcceptLanguage('es;q=0.002,es-ES;q=0.002,de-DE,de;q=0.8,en-US  ;q=0.6,en;q=0.4, fr    ');
+        $ranking = $locale->parse('es;q=0.002,es-ES;q=0.002,de-DE,de;q=0.8,en-US  ;q=0.6,en;q=0.4, fr    ');
 
         $this->assertSame(array(
             array(
@@ -40,9 +40,9 @@ class LocaleFactoryTest extends \Test\Chrome\TestCase
 
     public function testParseLocaleString()
     {
-        $locale = new \Chrome\Localization\LocaleFactory($this->_cookie);
+        $locale = new \Chrome\Localization\LocaleParser();
 
-        $ranking = $locale->parseAcceptLanguage('de-DE');
+        $ranking = $locale->parse('de-DE');
 
        $this->assertSame(array(array('de', 'de')), $ranking);
     }
