@@ -341,12 +341,14 @@ class LocaleParser
                 $quality = 1;
             }
 
-            // if the user _has_ specified a region in his locale string, e.g. en-US;q=1
-            // (region is US) then this is "a little bit" better thatn just en;q=1
-            // since the region is more accurate.
-            // since https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.9 states, that
-            // one should only consider 3 digits after the decimal point, this has no influence on the
-            // actual qvalue. So we can rank the locales using normal sorting algorithms.
+            /*
+             * if the user _has_ specified a region in his locale string, e.g. "en-US;q=1"
+             * (region is US) then this is "a little bit" better thatn just en;q=1
+             * since the region is more accurate.
+             * since https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.9 states, that
+             * one should only consider 3 digits after the decimal point, this has no influence on the
+             * actual qvalue. So we can rank the locales using normal sorting algorithms.
+             */
             if (! empty($hit[3])) {
                 $quality += 0.0001;
             }

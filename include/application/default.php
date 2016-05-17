@@ -223,7 +223,7 @@ class DefaultApplication implements Application_Interface
             $this->_classloader->load($resource->getClass());
             $this->_controller = $this->_diContainer->get($resource->getClass());
 
-            $this->_controller->setExceptionHandler(new \Chrome\Exception\Handler\HtmlStackTrace());
+            $this->_controller->setExceptionHandler($this->_diContainer->get('\Chrome\Exception\Handler\DefaultController'));
 
             $this->_preprocessor->processFilters($this->_applicationContext->getRequestContext()->getRequest(), $this->_applicationContext->getResponse());
 
@@ -339,7 +339,7 @@ class DefaultApplication implements Application_Interface
         $this->_applicationContext->setClassloader($this->_classloader);
 
         $this->_classloader->setLogger($this->_loggerRegistry->get('autoloader'));
-        $this->_classloader->setExceptionHandler(new \Chrome\Exception\Handler\HtmlStackTrace());
+        $this->_classloader->setExceptionHandler($this->_exceptionHandler);
 
         require_once PLUGIN . 'classloader/database.php';
         require_once PLUGIN . 'classloader/cache.php';
@@ -382,7 +382,6 @@ class DefaultApplication implements Application_Interface
         $authentication->authenticate();
 
         // set authorisation service
-        // Chrome_Authorisation::setAuthorisationAdapter(Chrome_RBAC::getInstance(new Chrome_Model_RBAC_DB())); // better one, but not finished ;)
         $adapter = new \Chrome\Authorisation\Adapter\Simple($this->_diContainer->get('\Chrome\Model\Authorisation\Simple\Model_Interface'));
         $authorisation = new \Chrome\Authorisation\Authorisation($adapter);
         $authorisation->setAuthenticationId($authentication->getAuthenticationID());
@@ -419,7 +418,9 @@ class DefaultApplication implements Application_Interface
     protected function _initRouter()
     {
         $this->_router = new \Chrome\Router\Router();
-        $this->_router->setExceptionHandler(new \Chrome\Exception\Handler\HtmlStackTrace());
+
+        $this->_router->setExceptionHandler($this->_diContainer->get('\Chrome\Exception\Handler\DefaultRouter'));
+
         $this->_router->setBasepath(ROOT_URL);
         // enable route matching
 
@@ -480,13 +481,14 @@ class DefaultApplication implements Application_Interface
         $this->_diContainer->attachInvoker('processable', new \Chrome\DI\Invoker\ProcessableInterfaceInvoker());
         $this->_diContainer->attachInvoker('controller', new \Chrome\DI\Invoker\ControllerInvoker($this->_applicationContext));
 
-        $structuredDirectoryLoader = new \Chrome\DI\Loader\StructuredDirectory(new \Chrome\Directory(BASEDIR.'application/default/dependency_injection'));
-        $structuredDirectoryLoader->setLogger($this->_loggerRegistry->get('application'));
-        $classIterator = $structuredDirectoryLoader->load($this->_diContainer);
+        $diLoader = new \Chrome\DI\Loader\Composite();
+        $this->_diContainer->getHandler('registry')->add('\Chrome\DI\Loader\Composite', $diLoader);
 
-        $classIteratorLoader = new \Chrome\DI\Loader\ClassIterator($classIterator);
-        $classIteratorLoader->setLogger($this->_loggerRegistry->get('application'));
-        $classIteratorLoader->load($this->_diContainer);
+        $directoryLoader = new \Chrome\DI\Loader\StructuredDirectoryLoader(new \Chrome\Directory(BASEDIR.'application/default/dependency_injection'));
+        $directoryLoader->setLogger($this->_loggerRegistry->get('application'));
+        $diLoader->add($directoryLoader);
+
+        $diLoader->load($this->_diContainer);
     }
 
     /**

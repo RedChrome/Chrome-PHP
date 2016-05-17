@@ -20,8 +20,7 @@
  * @author    Alexander Book <alexander.book@gmx.de>
  * @copyright 2012 Chrome - PHP <alexander.book@gmx.de>
  * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
- * @version   $Id: 0.1 beta <!-- phpDesigner :: Timestamp [14.04.2013 17:18:14] --> $
- * @link      http://chrome-php.de
+ * @version   $Id: 0.1 beta$
  */
 
 if(!defined('CHROME_PHP')) {

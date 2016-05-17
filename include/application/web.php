@@ -63,7 +63,14 @@ class WebApplication implements Application_Interface
 
     protected function _initDiContainer()
     {
-        $closure = $this->_diContainer->getHandler('closure');
+        $this->_diContainer = new \Chrome\DI\Container();
+        $this->_appContext->setDiContainer($this->_diContainer);
+
+        require_once LIB.'core/dependency_injection/closure.php';
+
+        $closure = new \Chrome\DI\Handler\Closure();
+
+        $this->_diContainer->attachHandler('closure', $closure);
 
         $closure->add('\Chrome\Application\DefaultApplication', function ($c)
         {
@@ -81,20 +88,11 @@ class WebApplication implements Application_Interface
             $application->setApplication('Chrome\Application\Captcha\Application');
             return $application;
         });
-
     }
 
     public function init(Application_Interface $app = null)
     {
         $this->_appContext = new \Chrome\Context\Application();
-
-        $this->_diContainer = new \Chrome\DI\Container();
-
-        $this->_appContext->setDiContainer($this->_diContainer);
-
-        require_once LIB.'core/dependency_injection/closure.php';
-
-        $this->_diContainer->attachHandler('closure', new \Chrome\DI\Handler\Closure());
 
         $this->_initDiContainer();
 

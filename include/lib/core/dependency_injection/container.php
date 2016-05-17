@@ -116,11 +116,6 @@ class Container implements Container_Interface
 
     protected $_currentInvoker = 0;
 
-    public function __construct()
-    {
-
-    }
-
     public function attachHandler($handlerName, Handler_Interface $handler)
     {
         if(!is_string($handlerName)) {

@@ -18,7 +18,9 @@
  */
 namespace Chrome\DI\Loader;
 
-use Psr\Log\LoggerInterface;
+use Chrome\Logger\LoggableTrait;
+use Chrome\Utils\Iterator\Mapper\MapToGraphIterator;
+use Chrome\Utils\Iterator\Mapper\StructuredPhpFileToClassIterator;
 
 /**
  * Interface to load dependency injection definitions
@@ -28,6 +30,7 @@ use Psr\Log\LoggerInterface;
  */
 interface Loader_Interface
 {
+
     /**
      * Loads dependency injection definitions into $diContainer
      *
@@ -54,81 +57,42 @@ class Composite implements Loader_Interface
     }
 }
 
-class ClassIterator implements Loader_Interface, \Chrome\Logger\Loggable_Interface
+class StructuredFileIteratorLoader implements Loader_Interface, \Chrome\Logger\Loggable_Interface
 {
+    use LoggableTrait;
+
     protected $_iterator = null;
 
-    protected $_logger = null;
-
-    public function __construct(\Iterator $iterator)
-    {
-        $this->_iterator = $iterator;
-    }
-
-    public function load(\Chrome\DI\Container_Interface $diContainer)
-    {
-        foreach ($this->_iterator as $element) {
-            try {
-                if (is_string($element) && class_exists($element, false)) {
-                    $obj = new $element();
-                    $obj->load($diContainer);
-                } else {
-                    throw new \Chrome\Exception('Class does not exist or is not valid');
-                }
-            } catch (\Chrome\Exception $e) {
-                if ($this->_logger !== null) {
-                    $this->_logger->warning('Could not load dependency definition from class {class} with exception message {message}', array(
-                        'class' => $element,
-                        'message' => $e->getMessage()
-                    ));
-                } else {
-                    throw e;
-                }
-            }
-        }
-    }
-
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->_logger = $logger;
-    }
-
-    public function getLogger()
-    {
-        return $this->_logger;
-    }
-}
-
-class StructuredDirectory implements Loader_Interface, \Chrome\Logger\Loggable_Interface
-{
     protected $_dir = null;
 
-    protected $_logger = null;
-
-    public function __construct(\Chrome\Directory_Interface $structuredDirectory)
+    public function __construct(\Iterator $fileIterator, \Chrome\Directory_Interface $commonParentDirectory)
     {
-        $this->_dir = $structuredDirectory;
+        $this->_iterator = $fileIterator;
+        $this->_dir = $commonParentDirectory;
     }
 
     public function load(\Chrome\DI\Container_Interface $diContainer)
     {
-        $fileNameIterator = $this->_dir->getFileIterator();
+        $iterator = new MapToGraphIterator(new StructuredPhpFileToClassIterator($this->_iterator, '\\Chrome\\DI\\Loader\\'));
 
-        $fileIterator = new \ArrayIterator();
-        $classIterator = new \ArrayIterator();
-
-        foreach ($fileNameIterator as $fileName) {
+        foreach ($iterator as $fileAndClass) {
             try {
+                $file = $fileAndClass[0];
+                $class = $fileAndClass[1];
 
-                $file = $this->_dir->file($fileName, false);
+                $fileObj = $this->_dir->file($file, true);
+                $fileObj->requireOnce();
 
-                $file->requireOnce();
-
-                $classIterator->append($this->_fileToClass(basename($fileName)));
+                if (is_string($class) && class_exists($class, false)) {
+                    $obj = new $class();
+                    $obj->load($diContainer);
+                } else {
+                    throw new \Chrome\Exception('Class "'.$class.'" does not exist');
+                }
             } catch (\Chrome\Exception $e) {
                 if ($this->_logger !== null) {
-                    $this->_logger->warning('Could not load file {file} with error message {message}', array(
-                        'file' => $fileName,
+                    $this->_logger->warning('Could not load dependency definition from class "{class}" with exception message "{message}"', array(
+                        'class' => $class,
                         'message' => $e->getMessage()
                     ));
                 } else {
@@ -136,37 +100,28 @@ class StructuredDirectory implements Loader_Interface, \Chrome\Logger\Loggable_I
                 }
             }
         }
+    }
+}
 
-        return $classIterator;
-        /*
-        $loaderClassIterator = new ClassIterator($classIterator);
+class StructuredDirectoryLoader implements Loader_Interface, \Chrome\Logger\Loggable_Interface
+{
+    use LoggableTrait;
 
-        if ($this->_logger !== null) {
-            $loaderClassIterator->setLogger($this->_logger);
+    protected $_dir = null;
+
+    public function __construct(\Chrome\Directory_Interface $directory)
+    {
+        $this->_dir = $directory;
+    }
+
+    public function load(\Chrome\DI\Container_Interface $diContainer)
+    {
+        $loader = new StructuredFileIteratorLoader($this->_dir->getFileIterator(false), $this->_dir);
+
+        if($this->_logger !== null) {
+            $loader->setLogger($this->_logger);
         }
 
-        $loaderClassIterator->load($diContainer);
-        */
-    }
-
-    protected function _fileToClass($file)
-    {
-        $matches = array();
-
-        if (preg_match('~([0-9]{1,})_(\w{1,}).php~i', $file, $matches) > 0) {
-            return ucfirst('\\Chrome\\DI\\Loader\\' . $matches[2]);
-        } else {
-            throw new \Chrome\Exception('File "' . $file . '" does not have the correct format');
-        }
-    }
-
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->_logger = $logger;
-    }
-
-    public function getLogger()
-    {
-        return $this->_logger;
+        $loader->load($diContainer);
     }
 }

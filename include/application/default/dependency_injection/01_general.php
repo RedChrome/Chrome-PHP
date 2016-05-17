@@ -70,6 +70,14 @@ class General implements Loader_Interface
         $closure->add('\Chrome\Interactor\Result_Interface', function ($c) {
             return new \Chrome\Interactor\Result();
         });
+
+        $closure->add('\Chrome\Exception\Handler\DefaultController', function ($c) {
+            return new \Chrome\Exception\Handler\HtmlStackTrace();
+        });
+
+        $closure->add('\Chrome\Exception\Handler\DefaultRouter', function ($c) {
+            return new \Chrome\Exception\Handler\HtmlStackTrace();
+        });
     }
 
     protected function _request($closure)

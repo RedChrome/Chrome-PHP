@@ -18,7 +18,13 @@
  */
 
 /**
+ * load usefule iterators
+ */
+require_once 'utils/iterator.php';
+
+/**
  * load attribute interfaces
+ * @todo: merge this into utils
  */
 require_once 'misc/attribute.php';
 
@@ -52,13 +58,13 @@ if(version_compare(PHP_VERSION, '5.5.0', '<')) {
 require_once 'date.php';
 
 /**
- * load Chrome_File, Chrome_Directory classes, for easy file and dir manipulation
+ * load file and directory classes, for easy file and dir manipulation
  */
 require_once 'file/file.php';
 require_once 'file/directory.php';
 
 /**
- * load Chrome_Hash for easy hashing
+ * load hash class for easy hashing
  */
 require_once 'hash/hash.php';
 
