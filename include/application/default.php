@@ -189,7 +189,7 @@ class DefaultApplication implements Application_Interface
         $this->_initRouter();
 
         $pluginFacade = new \Chrome\View\Plugin\Facade();
-	// TODO: remove pluginc facade
+	    // TODO: remove pluginc facade
         $viewContext->setPluginFacade($pluginFacade);
 
         $linker = $this->_diContainer->get('\Chrome\Linker\Linker_Interface');
@@ -328,6 +328,10 @@ class DefaultApplication implements Application_Interface
         $databaseLogger = new \Monolog\Logger('database');
         $databaseLogger->pushHandler($streamDatabase);
         $this->_loggerRegistry->set('database', $databaseLogger);
+
+        $nullLogger = new \Monolog\Logger('null');
+        $nullLogger->pushHandler(new \Monolog\Handler\NullHandler());
+        $this->_loggerRegistry->set('null', $nullLogger);
 
         $this->_loggerRegistry->set(\Chrome\Registry\Logger\Registry::DEFAULT_LOGGER, $this->_loggerRegistry->get('application'));
     }

@@ -23,6 +23,7 @@ namespace Chrome\Database\Factory;
 
 use \Chrome\Logger\Loggable_Interface;
 use \Psr\Log\LoggerInterface;
+use Chrome\Logger\LoggableTrait;
 
 /**
  * Interface for all database factories
@@ -166,11 +167,11 @@ interface Factory_Interface extends Loggable_Interface
  */
 abstract class AbstractFactory implements Factory_Interface
 {
+    use LoggableTrait;
+
     protected $_connectionRegistry = null;
 
     protected $_statementRegistry  = null;
-
-    protected $_logger = null;
 
     public function __construct(\Chrome\Database\Registry\Connection_Interface $connectionRegistry, \Chrome\Database\Registry\Statement_Interface $statementRegistry)
     {
@@ -196,16 +197,6 @@ abstract class AbstractFactory implements Factory_Interface
     public function getStatementRegistry()
     {
         return $this->_statementRegistry;
-    }
-
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->_logger = $logger;
-    }
-
-    public function getLogger()
-    {
-        return $this->_logger;
     }
 }
 

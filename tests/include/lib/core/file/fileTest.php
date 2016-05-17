@@ -64,7 +64,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testFileHandle()
     {
         $existingFile = $this->_getExistingFile();
-        $this->assertNotInternalType('resource', $existingFile->getFileHandle());
+        $this->assertNotTrue(is_resource($existingFile->getFileHandle()));
         $this->assertFalse($existingFile->isOpen());
 
         // opening twice should work fine..
@@ -75,10 +75,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
         $existingFile->close();
         $this->assertFalse($existingFile->isOpen());
-        $this->assertNotInternalType('resource', $existingFile->getFileHandle());
+        $this->assertNotTrue(is_resource($existingFile->getFileHandle()));
 
         $notExistingFile = $this->_getNotExistingFile();
-        $this->assertNotInternalType('resource', $notExistingFile->getFileHandle());
+        $this->assertNotTrue(is_resource($notExistingFile->getFileHandle()));
 
         try {
             $notExistingFile->open(\Chrome\File_Interface::FILE_OPEN_BEGINNING_READ);
