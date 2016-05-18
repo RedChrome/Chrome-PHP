@@ -24,9 +24,8 @@ require_once 'utils/iterator.php';
 
 /**
  * load attribute interfaces
- * @todo: merge this into utils
  */
-require_once 'misc/attribute.php';
+require_once 'utils/attribute.php';
 
 /**
  * load registry for objects
@@ -49,12 +48,8 @@ require_once 'error/error.php';
 require_once 'mime.php';
 
 /**
- * load date class
+ * tools for date handling
  */
-if(version_compare(PHP_VERSION, '5.5.0', '<')) {
-    require_once 'datetimeinterface.php';
-}
-
 require_once 'date.php';
 
 /**

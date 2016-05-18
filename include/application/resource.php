@@ -18,52 +18,51 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Application
  */
-
 namespace Chrome\Application;
 
 /**
  * load error & exception classes
  */
-require_once LIB.'core/error/error.php';
+require_once LIB . 'core/error/error.php';
 
 /**
  * load file functions
  */
-require_once LIB.'core/file/file.php';
-require_once LIB.'core/file/directory.php';
+require_once LIB . 'core/file/file.php';
+require_once LIB . 'core/file/directory.php';
 
 /**
  * load Chrome_Hash for easy hashing
  */
-require_once LIB.'core/hash/hash.php';
+require_once LIB . 'core/hash/hash.php';
 
 /**
  * load request factory
  */
-require_once LIB.'core/request/request.php';
+require_once LIB . 'core/request/request.php';
 
 /**
  * load response factory
  */
-require_once LIB.'core/response/response.php';
+require_once LIB . 'core/response/response.php';
 
 /**
  * load URI class
  */
-#require_once LIB.'core/uri.php';
+// require_once LIB.'core/uri.php';
 
 /**
  * load application interfaces
  */
-require_once LIB.'core/application.php';
+require_once LIB . 'core/application.php';
 
 /**
  * loads dependencies from composer
  */
 require_once LIB . 'vendor/autoload.php';
-require_once LIB.'core/registry/object.php';
-require_once LIB.'core/log/log.php';
-require_once LIB.'core/classloader/classloader.php';
+require_once LIB . 'core/registry/object.php';
+require_once LIB . 'core/log/log.php';
+require_once LIB . 'core/classloader/classloader.php';
 
 /**
  *
@@ -72,6 +71,7 @@ require_once LIB.'core/classloader/classloader.php';
  */
 class ResourceApplication implements \Chrome\Application\Application_Interface
 {
+
     /**
      * Contains the application class
      *
@@ -115,8 +115,8 @@ class ResourceApplication implements \Chrome\Application\Application_Interface
 
     public function __construct(\Chrome\Exception\Handler_Interface $handler = null)
     {
-        if($handler === null) {
-            require_once LIB.'exception/handler/htmlstacktrace.php';
+        if ($handler === null) {
+            require_once LIB . 'exception/handler/htmlstacktrace.php';
             $handler = new \Chrome\Exception\Handler\HtmlStackTrace();
         }
 
@@ -141,37 +141,37 @@ class ResourceApplication implements \Chrome\Application\Application_Interface
         $this->_applicationContext->setViewContext($viewContext);
         $this->_applicationContext->setModelContext($this->_modelContext);
 
-        #require_once LIB . 'core/request/request/http.php';
+        // require_once LIB . 'core/request/request/http.php';
         require_once LIB . 'core/response/response/http.php';
 
         $hash = new \Chrome\Hash\Hash();
 
         $request = \Zend\Diactoros\ServerRequestFactory::fromGlobals($_SERVER, $_GET, $_POST, $_COOKIE, $_FILES);
         $cookie = new \Chrome\Request\Cookie\Cookie($request, $hash);
-        $session = new \Chrome\Request\Session\Session($cookie, $request, $hash, new \Chrome\Directory(TMP.CHROME_SESSION_SAVE_PATH));
+        $session = new \Chrome\Request\Session\Session($cookie, $request, $hash, new \Chrome\Directory(TMP . CHROME_SESSION_SAVE_PATH));
 
         $this->_applicationContext->setRequestContext(new \Chrome\Request\Context($request, $cookie, $session));
 
         $response = new \Chrome\Response\HTTP($request->getServerParams()['SERVER_PROTOCOL']);
         $this->_applicationContext->setResponse($response);
 
-        #$requestFactory->addRequestObject(new \Chrome\Request\Handler\HTTPHandler(new \Chrome\Hash\Hash(), new \Chrome\Directory(TMP.CHROME_SESSION_SAVE_PATH)));
+        // $requestFactory->addRequestObject(new \Chrome\Request\Handler\HTTPHandler(new \Chrome\Hash\Hash(), new \Chrome\Directory(TMP.CHROME_SESSION_SAVE_PATH)));
 
-       # $reqHandler = $requestFactory->getRequest();
-        #$requestData = $requestFactory->getRequestDataObject();
+        // $reqHandler = $requestFactory->getRequest();
+        // $requestData = $requestFactory->getRequestDataObject();
 
         $this->_initClassloader();
 
-       # $this->_applicationContext->setRequestHandler($reqHandler);
-        #$session = $requestData->getSession();
-        #$cookie = $requestData->getCookie();
+        // $this->_applicationContext->setRequestHandler($reqHandler);
+        // $session = $requestData->getSession();
+        // $cookie = $requestData->getCookie();
 
-        #$responseFactory = new \Chrome\Response\Factory();
+        // $responseFactory = new \Chrome\Response\Factory();
 
-        #$responseFactory->addResponseHandler(new \Chrome\Response\Handler\HTTPHandler($reqHandler));
+        // $responseFactory->addResponseHandler(new \Chrome\Response\Handler\HTTPHandler($reqHandler));
 
-        #$response = $responseFactory->getResponse();
-        #$this->_applicationContext->setResponse($response);
+        // $response = $responseFactory->getResponse();
+        // $this->_applicationContext->setResponse($response);
     }
 
     protected function _initClassloader()
@@ -180,16 +180,15 @@ class ResourceApplication implements \Chrome\Application\Application_Interface
         $this->_classloader = new \Chrome\Classloader\Classloader(new \Chrome\Directory(BASEDIR));
         $this->_applicationContext->setClassloader($this->_classloader);
 
-        #$this->_classloader->setLogger($this->_loggerRegistry->get('autoloader'));
+        // $this->_classloader->setLogger($this->_loggerRegistry->get('autoloader'));
         $this->_classloader->setExceptionHandler(new \Chrome\Exception\Handler\HtmlStackTrace());
 
-        require_once PLUGIN.'classloader/captcha.php';
+        require_once PLUGIN . 'classloader/captcha.php';
 
         $this->_classloader->appendResolver(new \Chrome\Classloader\Resolver\Captcha(new \Chrome\Directory('plugins/captcha')));
 
         $autoloader = new \Chrome\Classloader\Autoloader($this->_classloader);
     }
-
 
     public function setApplication($appClass)
     {
@@ -199,16 +198,14 @@ class ResourceApplication implements \Chrome\Application\Application_Interface
     public function execute()
     {
         try {
-            if(!class_exists($this->_appClass, false)) {
-                throw new \Chrome\Exception('Could not find application class '.$this->_appClass);
+            if (! class_exists($this->_appClass, false)) {
+                throw new \Chrome\Exception('Could not find application class ' . $this->_appClass);
             }
 
             $class = new $this->_appClass($this);
 
             $class->execute();
-
-        } catch(\Chrome\Exception $e)
-        {
+        } catch (\Chrome\Exception $e) {
             $this->_exceptionHandler->exception($e);
         }
     }

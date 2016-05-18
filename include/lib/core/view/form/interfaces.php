@@ -463,7 +463,7 @@ interface Label_Interface
 
 namespace Chrome\View\Form\Element;
 
-use Chrome\Misc\Attribute_Secure_Interface;
+use Chrome\Utils\SecureAttribute_Interface;
 
 /**
  * Basic interface for a form element.
@@ -519,7 +519,7 @@ interface BasicElement_Interface extends \Chrome\Renderable
      * @param Chrome_View_Form_Attribute_Interface $attribute
      * @return void
      */
-    public function setAttribute(Attribute_Secure_Interface $attribute);
+    public function setAttribute(SecureAttribute_Interface $attribute);
 
     /**
      * Sets the view form. This view form should contain this element

@@ -14,7 +14,7 @@ function failure( response ) {
 
 function exception( response, exception ) {
 	message_show("Keine AJAX-Anfrage an " + response.url
-    + " möglich: " + exception);
+    + " mï¿½glich: " + exception);
 }
 
 function handle( dataOrError, ioArgs)

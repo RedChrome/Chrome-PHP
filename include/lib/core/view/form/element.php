@@ -19,8 +19,8 @@
 
 namespace Chrome\View\Form\Element;
 
-use \Chrome\Misc\Attribute_Secure_Interface;
-use \Chrome\Misc\Attribute_Secure;
+use \Chrome\Utils\SecureAttribute_Interface;
+use \Chrome\Utils\SecureAttribute;
 
 /**
  * Implemenatation of \Chrome\View\Form\Element\BasicElement_Interface with several other usefull interfaces
@@ -60,7 +60,7 @@ abstract class AbstractBasicElement implements \Chrome\View\Form\Element\BasicEl
      *
      * The attributes are needed to render the html input field properly
      *
-     * @var Attribute_Secure_Interface
+     * @var SecureAttribute_Interface
      */
     protected $_attribute = null;
 
@@ -165,7 +165,7 @@ abstract class AbstractBasicElement implements \Chrome\View\Form\Element\BasicEl
      */
     protected function _init()
     {
-        $this->_attribute = new Attribute_Secure();
+        $this->_attribute = new SecureAttribute();
         $this->_attribute->setAttribute('name', $this->_name);
         $this->_attribute->setAttribute('id', $this->_name);
     }
@@ -218,7 +218,7 @@ abstract class AbstractBasicElement implements \Chrome\View\Form\Element\BasicEl
         return $this->_attribute;
     }
 
-    public function setAttribute(Attribute_Secure_Interface $attribute)
+    public function setAttribute(SecureAttribute_Interface $attribute)
     {
         $this->_attribute = $attribute;
     }

@@ -20,23 +20,6 @@
 namespace Chrome\Form\Option;
 
 /**
- * Interface for attributes
- *
- * @package CHROME-PHP
- * @subpackage Chrome.Form.Option
- */
-interface Attribute_Interface
-{
-    public function setAttribute($key, $value);
-
-    public function getAttribute($key);
-
-    public function getAttributes();
-
-    public function hasAttribute($key);
-}
-
-/**
  * The basic form element option interface
  *
  * @package CHROME-PHP

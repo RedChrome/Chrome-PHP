@@ -26,8 +26,7 @@ class Recaptcha implements Loader_Interface
     {
         $closure = $diContainer->getHandler('closure');
 
-        $closure->add('\Recaptcher\RecaptchaInterface', function ($c)
-        {
+        $closure->add('\Recaptcher\RecaptchaInterface', function ($c) {
             $config = $c->get('\Chrome\Config\Config_Interface');
             $privateKey = $config->getConfig('Captcha/Recaptcha', 'private_key');
             $publicKey = $config->getConfig('Captcha/Recaptcha', 'public_key');

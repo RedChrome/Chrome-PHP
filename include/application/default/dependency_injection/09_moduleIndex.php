@@ -21,20 +21,19 @@ namespace Chrome\DI\Loader;
 
 class ModuleIndex implements Loader_Interface
 {
+
     public function load(\Chrome\DI\Container_Interface $diContainer)
     {
         $closure = $diContainer->getHandler('closure');
 
-        $closure->add('\Chrome\View\Form\Module\Index\Index', function ($c)
-        {
+        $closure->add('\Chrome\View\Form\Module\Index\Index', function ($c) {
             $formView = new \Chrome\View\Index\Form($c->get('\Chrome\Context\View_Interface'), $c->get('\Chrome\Form\Module\Index\Index'));
             $formView->setElementOptionFactory($c->get('\Chrome\View\Form\Factory\Option\Factory'));
             $formView->setElementFactory($c->get('\Chrome\View\Form\Element\Factory\Yaml'));
             return $formView;
         });
 
-        $closure->add('\Chrome\Form\Module\Index\Index', function ($c)
-        {
+        $closure->add('\Chrome\Form\Module\Index\Index', function ($c) {
             return new \Chrome\Form\Module\Index\Index($c->get('\Chrome\Context\Application_Interface'));
         });
     }

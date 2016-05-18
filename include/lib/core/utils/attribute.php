@@ -17,7 +17,7 @@
  * @subpackage Chrome.Misc
  */
 
-namespace Chrome\Misc;
+namespace Chrome\Utils;
 
 /**
  * Interface for attributes
@@ -76,7 +76,7 @@ interface Attribute_Interface extends \IteratorAggregate
  * @package CHROME-PHP
  * @subpackage Chrome.Misc
  */
-interface Attribute_Secure_Interface extends Attribute_Interface
+interface SecureAttribute_Interface extends Attribute_Interface
 {
     /**
      * Sets an attribute
@@ -103,7 +103,7 @@ interface Attribute_Secure_Interface extends Attribute_Interface
  * @package CHROME-PHP
  * @subpackage Chrome.View.Form
  */
-class Attribute_Secure implements Attribute_Secure_Interface
+class SecureAttribute implements SecureAttribute_Interface
 {
     protected $_attributes = array();
     protected $_notOverwriteableAttributes = array();

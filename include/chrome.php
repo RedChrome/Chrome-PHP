@@ -22,9 +22,9 @@
  * @license   http://creativecommons.org/licenses/by-nc-sa/3.0/ Creative Commons
  * @version   $Id: 0.1 beta$
  */
-
-if(!defined('CHROME_PHP')) {
+if (! defined('CHROME_PHP')) {
     /**
+     *
      * @var boolean
      */
     define('CHROME_PHP', true);

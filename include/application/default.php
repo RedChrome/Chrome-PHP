@@ -17,7 +17,6 @@
  * @package CHROME-PHP
  * @subpackage Chrome.Application
  */
-
 namespace Chrome\Application;
 
 use Chrome\Authorisation\Adapter\Simple;
@@ -42,62 +41,75 @@ require_once LIB . 'core/core.php';
  */
 class DefaultApplication implements Application_Interface
 {
+
     /**
+     *
      * @var \Chrome\Registry\Logger\Registry_Interface
      */
     protected $_loggerRegistry = null;
 
     /**
+     *
      * @var \Chrome\Context\Application_Interface
      */
     protected $_applicationContext = null;
 
     /**
+     *
      * @var \Chrome\Context\Model_Interface
      */
     protected $_modelContext = null;
 
     /**
+     *
      * @var \Chrome\Filter\Chain\Preprocessor
      */
     private $_preprocessor = null;
 
     /**
+     *
      * @var \Chrome\Filter\Chain\Postprocessor
      */
     private $_postprocessor = null;
 
     /**
+     *
      * @var \Chrome\Controller\Controller_Interface
      */
     private $_controller = null;
 
     /**
+     *
      * @var \Chrome\Router\Router_Interface
      */
     private $_router = null;
 
     /**
+     *
      * @var \Chrome\Exception\Handler_Interface
      */
     private $_exceptionHandler = null;
 
     /**
+     *
      * @var \Chrome\Exception\Configuration_Interface
      */
     private $_exceptionConfiguration = null;
 
     /**
+     *
      * @var \Chrome\Classloader\Autoloader_Interface
      */
     private $_classloader = null;
 
     /**
+     *
      * @var \Chrome\DI\Container_Interface
      */
     protected $_diContainer = null;
 
     /**
+     *
      * @return \Chrome\Controller\Controller_Interface
      */
     public function getController()
@@ -109,8 +121,7 @@ class DefaultApplication implements Application_Interface
     {
         $this->_initLoggers();
 
-        if($exceptionHandler === null)
-        {
+        if ($exceptionHandler === null) {
             require_once LIB . 'exception/handler/frontcontroller.php';
             $exceptionHandler = new \Chrome\Exception\Handler\HtmlStackTrace($this->_loggerRegistry->get('application'));
         }
@@ -120,11 +131,9 @@ class DefaultApplication implements Application_Interface
 
     public function init(Application_Interface $app = null)
     {
-        try
-        {
+        try {
             $this->_init($app);
-        } catch(\Chrome\Exception $e)
-        {
+        } catch (\Chrome\Exception $e) {
             $this->_exceptionHandler->exception($e);
         }
     }
@@ -150,7 +159,6 @@ class DefaultApplication implements Application_Interface
         $this->_applicationContext->setViewContext($viewContext);
         $this->_applicationContext->setModelContext($this->_modelContext);
 
-
         $this->_initDiContainer();
         $closureHandler = $this->_diContainer->getHandler('closure');
         $registryHandler = $this->_diContainer->getHandler('registry');
@@ -164,12 +172,11 @@ class DefaultApplication implements Application_Interface
         $registryHandler->add('\Chrome\View\Factory_Interface', $viewFactory);
         $registryHandler->add('\Chrome\Hash\Hash_Interface', new \Chrome\Hash\Hash());
 
-
         $this->_initDatabase();
         $registryHandler->add('\Chrome\Database\Factory\Factory_Interface', $this->_modelContext->getDatabaseFactory());
 
-        require_once LIB.'core/classloader/model.php';
-        require_once LIB.'core/database/facade/model.php';
+        require_once LIB . 'core/classloader/model.php';
+        require_once LIB . 'core/database/facade/model.php';
 
         // init require-class, can be skipped if every class is defined
         $this->_classloader->prependResolver($this->_diContainer->get('\Chrome\Classloader\Resolver\Model_Interface'));
@@ -189,14 +196,15 @@ class DefaultApplication implements Application_Interface
         $this->_initRouter();
 
         $pluginFacade = new \Chrome\View\Plugin\Facade();
-	    // TODO: remove pluginc facade
+        // TODO: remove pluginc facade
         $viewContext->setPluginFacade($pluginFacade);
 
         $linker = $this->_diContainer->get('\Chrome\Linker\Linker_Interface');
-        //$linker->setBasepath(ROOT_URL);
+        // $linker->setBasepath(ROOT_URL);
         $viewContext->setLinker($linker);
 
         /**
+         *
          * @todo remove them from here
          */
         $pluginFacade->registerPlugin(new \Chrome\View\Plugin\Html($this->_applicationContext));
@@ -215,17 +223,18 @@ class DefaultApplication implements Application_Interface
      */
     public function execute()
     {
-        try
-        {
+        try {
             // get the accessed resource by Router
-            $resource = $this->_router->route($this->_applicationContext->getRequestContext()->getRequest());
+            $resource = $this->_router->route($this->_applicationContext->getRequestContext()
+                ->getRequest());
 
             $this->_classloader->load($resource->getClass());
             $this->_controller = $this->_diContainer->get($resource->getClass());
 
             $this->_controller->setExceptionHandler($this->_diContainer->get('\Chrome\Exception\Handler\DefaultController'));
 
-            $this->_preprocessor->processFilters($this->_applicationContext->getRequestContext()->getRequest(), $this->_applicationContext->getResponse());
+            $this->_preprocessor->processFilters($this->_applicationContext->getRequestContext()
+                ->getRequest(), $this->_applicationContext->getResponse());
 
             $this->_controller->execute();
 
@@ -233,11 +242,11 @@ class DefaultApplication implements Application_Interface
 
             $this->_applicationContext->getResponse()->write($design->render());
 
-            $this->_postprocessor->processFilters($this->_applicationContext->getRequestContext()->getRequest(), $this->_applicationContext->getResponse());
+            $this->_postprocessor->processFilters($this->_applicationContext->getRequestContext()
+                ->getRequest(), $this->_applicationContext->getResponse());
 
             $this->_applicationContext->getResponse()->flush();
-        } catch(\Chrome\Exception $e)
-        {
+        } catch (\Chrome\Exception $e) {
             $this->_exceptionHandler->exception($e);
         }
     }
@@ -245,7 +254,7 @@ class DefaultApplication implements Application_Interface
     protected function _initDesign()
     {
         // use the design from the controller, but only if he set one design
-        if(($design = $this->_applicationContext->getDesign()) !== null) {
+        if (($design = $this->_applicationContext->getDesign()) !== null) {
             return $design;
         }
 
@@ -272,13 +281,13 @@ class DefaultApplication implements Application_Interface
         $this->_modelContext->setDatabaseFactory($factory);
         /*
          * Testing...
-              define('POSTGRESQL_HOST', 'localhost'); define('POSTGRESQL_USER', 'test'); define('POSTGRESQL_PASS', 'chrome');
-              define('POSTGRESQL_DB', 'chrome_db'); define('POSTGRESQL_SCHEMA', 'chrome'); // 5433 -> 9.1, 5432 -> 9.2, 5434 -> 9.3
-              define('POSTGRESQL_PORT', 5433); $dbRegistry = $factory->getConnectionRegistry();
-              $postgresqlTestConnection = new \Chrome\Database\Connection\Postgresql();
-              $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
-              $postgresqlTestConnection->connect(); $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
-              $dbRegistry->addConnection(Chrome\Database\Registry\Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
+         * define('POSTGRESQL_HOST', 'localhost'); define('POSTGRESQL_USER', 'test'); define('POSTGRESQL_PASS', 'chrome');
+         * define('POSTGRESQL_DB', 'chrome_db'); define('POSTGRESQL_SCHEMA', 'chrome'); // 5433 -> 9.1, 5432 -> 9.2, 5434 -> 9.3
+         * define('POSTGRESQL_PORT', 5433); $dbRegistry = $factory->getConnectionRegistry();
+         * $postgresqlTestConnection = new \Chrome\Database\Connection\Postgresql();
+         * $postgresqlTestConnection->setConnectionOptions(POSTGRESQL_HOST, POSTGRESQL_USER, POSTGRESQL_PASS, POSTGRESQL_DB, POSTGRESQL_PORT, POSTGRESQL_SCHEMA);
+         * $postgresqlTestConnection->connect(); $dbRegistry->addConnection('postgresql_test', $postgresqlTestConnection);
+         * $dbRegistry->addConnection(Chrome\Database\Registry\Connection::DEFAULT_CONNECTION, $postgresqlTestConnection, true);
          */
     }
 
@@ -315,10 +324,13 @@ class DefaultApplication implements Application_Interface
 
         $this->_loggerRegistry = new \Chrome\Registry\Logger\Registry();
 
-        $loggers = array('application', 'router', 'autoloader');
+        $loggers = array(
+            'application',
+            'router',
+            'autoloader'
+        );
 
-        foreach($loggers as $loggerName)
-        {
+        foreach ($loggers as $loggerName) {
             $logger = new \Monolog\Logger($loggerName);
             $logger->pushHandler($stream);
 
@@ -374,7 +386,9 @@ class DefaultApplication implements Application_Interface
         // set authentication chains in the right order
         // the first chain should be session, because its the fastest one
         // the last should be the slowest, thats the db
-        $authentication->addChain($cookieAuth)->addChain($sessionAuth)->addChain($dbAuth);
+        $authentication->addChain($cookieAuth)
+            ->addChain($sessionAuth)
+            ->addChain($dbAuth);
 
         // first authentication
         // user gets authenticated if session or cookie is set
@@ -398,14 +412,14 @@ class DefaultApplication implements Application_Interface
     {
         $request = null;
 
-        if($app !== null) {
+        if ($app !== null) {
             $context = $app->getApplicationContext()->getRequestContext();
-            if($context !== null) {
+            if ($context !== null) {
                 $request = $context->getRequest();
             }
         }
 
-        if($request === null) {
+        if ($request === null) {
             $request = $this->_diContainer->get('\Psr\Http\Message\ServerRequestInterface');
         }
 
@@ -438,7 +452,7 @@ class DefaultApplication implements Application_Interface
 
         $this->_router->addRoute(new \Chrome\Router\Route\FallbackRoute($this->_diContainer->get('\Chrome\Config\Config_Interface')));
         // matches routes to administration site
-        //$this->_router->addRoute(new Chrome_Route_Administration(new Chrome_Model_Route_Administration($this->_modelContext), $routerLogger));
+        // $this->_router->addRoute(new Chrome_Route_Administration(new Chrome_Model_Route_Administration($this->_modelContext), $routerLogger));
     }
 
     protected function _initConverter()
@@ -466,10 +480,10 @@ class DefaultApplication implements Application_Interface
         require_once LIB . 'core/dependency_injection/controller.php';
         require_once LIB . 'core/dependency_injection/model.php';
         require_once LIB . 'core/dependency_injection/validator.php';
-	    require_once LIB . 'core/dependency_injection/view.php';
+        require_once LIB . 'core/dependency_injection/view.php';
         require_once LIB . 'core/dependency_injection/theme.php';
 
-        #require_once LIB . 'core/dependency_injection/invoker/loggable.php';
+        // require_once LIB . 'core/dependency_injection/invoker/loggable.php';
         require_once LIB . 'core/dependency_injection/invoker/processable.php';
         require_once LIB . 'core/dependency_injection/invoker/controller.php';
 
@@ -477,18 +491,18 @@ class DefaultApplication implements Application_Interface
         $this->_diContainer->attachHandler('closure', new \Chrome\DI\Handler\Closure());
         $this->_diContainer->attachHandler('controller', new \Chrome\DI\Handler\Controller());
         $this->_diContainer->attachHandler('model', new \Chrome\DI\Handler\Model());
-	    $this->_diContainer->attachHandler('view', new \Chrome\DI\Handler\Validator());
-	    $this->_diContainer->attachHandler('validator', new \Chrome\DI\Handler\View());
+        $this->_diContainer->attachHandler('view', new \Chrome\DI\Handler\Validator());
+        $this->_diContainer->attachHandler('validator', new \Chrome\DI\Handler\View());
         $this->_diContainer->attachHandler('theme', new \Chrome\DI\Handler\Theme());
 
-        #$this->_diContainer->attachInvoker('loggable', new \Chrome\DI\Invoker\LoggableInterfaceInvoker());
+        // $this->_diContainer->attachInvoker('loggable', new \Chrome\DI\Invoker\LoggableInterfaceInvoker());
         $this->_diContainer->attachInvoker('processable', new \Chrome\DI\Invoker\ProcessableInterfaceInvoker());
         $this->_diContainer->attachInvoker('controller', new \Chrome\DI\Invoker\ControllerInvoker($this->_applicationContext));
 
         $diLoader = new \Chrome\DI\Loader\Composite();
         $this->_diContainer->getHandler('registry')->add('\Chrome\DI\Loader\Composite', $diLoader);
 
-        $directoryLoader = new \Chrome\DI\Loader\StructuredDirectoryLoader(new \Chrome\Directory(BASEDIR.'application/default/dependency_injection'));
+        $directoryLoader = new \Chrome\DI\Loader\StructuredDirectoryLoader(new \Chrome\Directory(BASEDIR . 'application/default/dependency_injection'));
         $directoryLoader->setLogger($this->_loggerRegistry->get('application'));
         $diLoader->add($directoryLoader);
 
@@ -496,6 +510,7 @@ class DefaultApplication implements Application_Interface
     }
 
     /**
+     *
      * @param \Chrome\Exception\Handler_Interface $obj
      */
     public function setExceptionHandler(\Chrome\Exception\Handler_Interface $obj)
@@ -504,6 +519,7 @@ class DefaultApplication implements Application_Interface
     }
 
     /**
+     *
      * @return \Chrome\Exception\Handler_Interface
      */
     public function getExceptionHandler()

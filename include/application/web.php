@@ -47,16 +47,19 @@ class WebApplication implements Application_Interface
     protected $_request = null;
 
     /**
+     *
      * @var Router_Interface
      */
     protected $_router = null;
 
     /**
+     *
      * @var Container_Interface
      */
     protected $_diContainer = null;
 
     /**
+     *
      * @var \Chrome\Context\Application_Interface
      */
     protected $_appContext = null;
@@ -66,23 +69,21 @@ class WebApplication implements Application_Interface
         $this->_diContainer = new \Chrome\DI\Container();
         $this->_appContext->setDiContainer($this->_diContainer);
 
-        require_once LIB.'core/dependency_injection/closure.php';
+        require_once LIB . 'core/dependency_injection/closure.php';
 
         $closure = new \Chrome\DI\Handler\Closure();
 
         $this->_diContainer->attachHandler('closure', $closure);
 
-        $closure->add('\Chrome\Application\DefaultApplication', function ($c)
-        {
-            require_once APPLICATION.'default.php';
+        $closure->add('\Chrome\Application\DefaultApplication', function ($c) {
+            require_once APPLICATION . 'default.php';
 
             return new \Chrome\Application\DefaultApplication();
         });
 
-        $closure->add('\Chrome\Application\CaptchaApplication', function ($c)
-        {
-            require_once APPLICATION.'resource.php';
-            require_once MODULE.'misc/captcha/application.php';
+        $closure->add('\Chrome\Application\CaptchaApplication', function ($c) {
+            require_once APPLICATION . 'resource.php';
+            require_once MODULE . 'misc/captcha/application.php';
 
             $application = new \Chrome\Application\ResourceApplication();
             $application->setApplication('Chrome\Application\Captcha\Application');
@@ -101,7 +102,7 @@ class WebApplication implements Application_Interface
         $context = new \Chrome\Request\Context($this->_request);
         $this->_appContext->setRequestContext($context);
 
-        require_once LIB.'core/router/route/application.php';
+        require_once LIB . 'core/router/route/application.php';
 
         $model = new \Chrome\Model\Route\ApplicationModel\Model();
         $model->addApplicationResolve('/public/captcha', '\Chrome\Application\CaptchaApplication');
@@ -118,7 +119,7 @@ class WebApplication implements Application_Interface
 
         $application = $this->_diContainer->get($resource->getClass());
 
-        if($application instanceof Application_Interface) {
+        if ($application instanceof Application_Interface) {
             $application->init($this);
             $application->execute();
         } else {

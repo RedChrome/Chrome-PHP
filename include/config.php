@@ -18,46 +18,49 @@
  * @package   CHROME-PHP
  * @subpackage Chrome.Core
  */
-
-if(!defined('CHROME_PHP'))
+if (! defined('CHROME_PHP'))
     die();
 
-//########### DATABASE ###########
+// ########### DATABASE ###########
 
-/**#@!
+/**
+ * #@!
+ *
  * @ignore
+ *
  */
-
-//Database... default: MySQLi
+// Database... default: MySQLi
 define('CHROME_DATABASE', 'mysqli');
-//SQL-Host
+// SQL-Host
 define('DB_HOST', '127.0.0.1');
-//SQL-Password
+// SQL-Password
 define('DB_PASS', 'chrome-php-password');
-//SQL-Username
+// SQL-Username
 define('DB_USER', 'chrome-php');
-//SQL-Name = Databasename
+// SQL-Name = Databasename
 define('DB_NAME', 'chrome_2');
-//SQL-Prefix
+// SQL-Prefix
 define('DB_PREFIX', 'cp1');
 
-/**#@!*/
-//########## ERROR MANAGEMENT #########
+/**
+ * #@!
+ */
+// ########## ERROR MANAGEMENT #########
 
-if(!defined('E_DEPRECATED')) {
+if (! defined('E_DEPRECATED')) {
     define('E_DEPRECATED', 8192);
 }
 
-if(!defined('E_USER_DEPRECATED')) {
+if (! defined('E_USER_DEPRECATED')) {
     define('E_USER_DEPRECATED', 16384);
 }
 
 // log path
 define('CHROME_LOG_DIR', 'logs/');
-//E_ALL | E_STRICT | E_DEPRECATED | E_USER_DEPRECATED); # Display Errors, set to 0 to supress errors
+// E_ALL | E_STRICT | E_DEPRECATED | E_USER_DEPRECATED); # Display Errors, set to 0 to supress errors
 define('CHROME_DISPLAY_ERRORS', (E_ALL | E_STRICT));
 
-//########### SECURITY ###########
+// ########### SECURITY ###########
 
 // Developer status. ONLY FOR DEVELOPERS!
 define('CHROME_DEVELOPER_STATUS', true);
@@ -76,7 +79,7 @@ define('CHROME_CRYPT_ALGORITHM', 'BLOWFISH');
 // algorithm to hash user pws
 define('CHROME_USER_HASH_ALGORITHM', 'tiger192,3');
 
-//########### OTHERS ###########
+// ########### OTHERS ###########
 define('CHROME_TIME', time());
 define('CHROME_MTIME', microtime(true));
 define('CHROME_MEMORY_USAGE', memory_get_usage());
@@ -91,22 +94,22 @@ define('CHROME_TIMEZONE', 'Europe/Berlin');
 define('CHROME_VERSION', '0.1');
 define('CHROME_VERSION_SUFFIX', 'beta');
 
-if(!defined('ROOT_URL')) {
+if (! defined('ROOT_URL')) {
     $fileLevel = '';
-    $rooturl   = $_SERVER['SCRIPT_NAME'];
+    $rooturl = $_SERVER['SCRIPT_NAME'];
 
-    $found     = false;
-    for($intFileLevel = 0; $intFileLevel < 10; ++$intFileLevel) {
+    $found = false;
+    for ($intFileLevel = 0; $intFileLevel < 10; ++ $intFileLevel) {
 
-        if(file_exists($fileLevel . 'include/config.php')) {
+        if (file_exists($fileLevel . 'include/config.php')) {
             $found = true;
             break;
         }
         $fileLevel .= '../';
-        $rooturl    = dirname($rooturl);
+        $rooturl = dirname($rooturl);
     }
 
-    if($found == false) {
+    if ($found == false) {
         die('Could not locate config.php file!');
     }
 
@@ -116,17 +119,17 @@ if(!defined('ROOT_URL')) {
     // not needed anymore
     unset($fileLevel, $intFileLevel, $rooturl, $found);
 }
-if(!defined('ROOT')) {
+if (! defined('ROOT')) {
     define('ROOT', dirname(dirname(__FILE__)));
 }
 
 define('CHROME_WD', ROOT);
-define('_PUBLIC', FILE_LEVEL.'public/');
-define('IMAGE', _PUBLIC.'image/');
+define('_PUBLIC', FILE_LEVEL . 'public/');
+define('IMAGE', _PUBLIC . 'image/');
 define('VIEW', FILE_LEVEL . 'include/modules/');
 define('MODULE', VIEW);
 define('CONTENT', VIEW . 'content/');
-define('BASEDIR', FILE_LEVEL.'include/');
+define('BASEDIR', FILE_LEVEL . 'include/');
 define('BASE', FILE_LEVEL);
 define('ADMIN', BASEDIR . 'admin/');
 define('LIB', BASEDIR . 'lib/');
@@ -135,8 +138,8 @@ define('TEMPLATE', BASEDIR . 'template/');
 define('TMP', BASEDIR . 'tmp/');
 define('CACHE', TMP . 'cache/');
 define('PLUGIN', BASEDIR . 'plugins/');
-define('RESOURCE', BASEDIR.'resources/');
-define('APPLICATION', BASEDIR.'application/');
+define('RESOURCE', BASEDIR . 'resources/');
+define('APPLICATION', BASEDIR . 'application/');
 
 // change the working dir to the CHROME_WD
 chdir(CHROME_WD);
